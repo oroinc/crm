@@ -130,6 +130,45 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($email->isPrimary());
     }
 
+    public function testAddEmailShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $email = new ContactEmail('email@example.com');
+        $email->setPrimary(true);
+        $email2 = new ContactEmail('email2@example.com');
+        $email2->setPrimary(true);
+
+        $contact->addEmail($email);
+        $contact->addEmail($email2);
+
+        $primaryElements = $contact->getEmails()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($email, $contact->getPrimaryEmail());
+        $this->assertCount(1, $primaryElements);
+    }
+
+    public function testResetEmailsShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $email = new ContactEmail('email@example.com');
+        $email->setPrimary(true);
+        $email2 = new ContactEmail('email2@example.com');
+        $email2->setPrimary(true);
+
+        $contact->resetEmails([$email, $email2]);
+
+        $primaryElements = $contact->getEmails()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($email, $contact->getPrimaryEmail());
+        $this->assertCount(1, $primaryElements);
+    }
+
     public function testPhones()
     {
         $phoneOne = new ContactPhone('06001122334455');
@@ -182,6 +221,45 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($phone2, $contact->getPrimaryPhone());
         $this->assertFalse($phone->isPrimary());
+    }
+
+    public function testAddPhoneShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $phone = new ContactPhone('06001122334455');
+        $phone->setPrimary(true);
+        $phone2 = new ContactPhone('22001122334455');
+        $phone->setPrimary(true);
+
+        $contact->addPhone($phone);
+        $contact->addPhone($phone2);
+
+        $primaryElements = $contact->getPhones()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($phone, $contact->getPrimaryPhone());
+        $this->assertCount(1, $primaryElements);
+    }
+
+    public function testResetPhonesShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $phone = new ContactPhone('06001122334455');
+        $phone->setPrimary(true);
+        $phone2 = new ContactPhone('22001122334455');
+        $phone->setPrimary(true);
+
+        $contact->resetPhones([$phone, $phone2]);
+
+        $primaryElements = $contact->getPhones()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($phone, $contact->getPrimaryPhone());
+        $this->assertCount(1, $primaryElements);
     }
 
     public function testAddresses()
@@ -240,6 +318,45 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($newPrimary, $contact->getPrimaryAddress());
 
         $this->assertFalse($address->isPrimary());
+    }
+
+    public function testAddAddressShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $address = new ContactAddress();
+        $address->setPrimary(true);
+        $address2 = new ContactAddress();
+        $address->setPrimary(true);
+
+        $contact->addAddress($address);
+        $contact->addAddress($address2);
+
+        $primaryElements = $contact->getAddresses()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($address, $contact->getPrimaryAddress());
+        $this->assertCount(1, $primaryElements);
+    }
+
+    public function testResetAddressesShouldNotAllowMultiplePrimaries()
+    {
+        $contact = new Contact();
+
+        $address = new ContactAddress();
+        $address->setPrimary(true);
+        $address2 = new ContactAddress();
+        $address->setPrimary(true);
+
+        $contact->resetAddresses([$address, $address2]);
+
+        $primaryElements = $contact->getAddresses()->filter(function ($element) {
+            return $element->isPrimary();
+        });
+
+        $this->assertSame($address, $contact->getPrimaryAddress());
+        $this->assertCount(1, $primaryElements);
     }
 
     public function testGetAddressByTypeName()
