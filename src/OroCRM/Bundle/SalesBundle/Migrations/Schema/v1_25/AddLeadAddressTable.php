@@ -87,7 +87,10 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
      */
     protected function addMigrationQueries(QueryBag $queries)
     {
-        $sql = 'INSERT INTO orocrm_sales_lead_address SELECT null, lead.id, addr.region_code, addr.country_code,' .
+        $sql = 'INSERT INTO orocrm_sales_lead_address(owner_id, region_code, country_code, is_primary, label, street,' .
+               ' street2, city, postal_code, organization, region_text, name_prefix, first_name, middle_name,' .
+               ' last_name, name_suffix, created, updated)' .
+               'SELECT lead.id, addr.region_code, addr.country_code,' .
                ' \'1\', addr.label, addr.street, addr.street2, addr.city, addr.postal_code, addr.organization,' .
                ' addr.region_text, addr.name_prefix, addr.first_name, addr.middle_name, addr.last_name,' .
                ' addr.name_suffix, addr.created, addr.updated FROM oro_address as addr' .
