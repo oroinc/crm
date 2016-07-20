@@ -533,6 +533,11 @@ datagrid:
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
+        mass_actions:
+            merge:
+                type: merge
+                entity_name: %orocrm_contact.entity.class%
+                data_identifier: c.id
         options:
             entityHint: contact
             export: true

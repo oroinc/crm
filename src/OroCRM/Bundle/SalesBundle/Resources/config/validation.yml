@@ -31,18 +31,28 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - Length:
                 max: 255
         firstName:
-            - NotBlank: ~
             - Length:
                 max: 255
         lastName:
-            - NotBlank: ~
             - Length:
                 max: 255
         dataChannel:
             - NotBlank: ~
-        email:
-            - Email: ~
+        emails:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: One of emails must be set as primary.
         organization:
+            - NotBlank: ~
+
+OroCRM\Bundle\SalesBundle\Entity\LeadAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+    properties:
+        street:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        postalCode:
             - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
