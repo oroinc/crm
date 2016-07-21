@@ -299,6 +299,7 @@ oro_dashboard_config:
                     type: oro_type_widget_sort_by
                     show_on_widget: true
                     options:
+                        required: false
                         class_name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         label: oro.dashboard.widget.sort_by.label
         leads_list:
@@ -335,5 +336,6 @@ oro_dashboard_config:
                     type: oro_type_widget_sort_by
                     show_on_widget: true
                     options:
+                        required: false
                         class_name: OroCRM\Bundle\SalesBundle\Entity\Lead
                         label: oro.dashboard.widget.sort_by.label
