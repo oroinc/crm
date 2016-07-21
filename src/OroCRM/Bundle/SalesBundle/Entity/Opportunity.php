@@ -75,6 +75,11 @@ class Opportunity extends ExtendOpportunity implements
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
     /**
+     * The key in system config for probability - status map
+     */
+    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
+
+    /**
      * @var int
      *
      * @ORM\Id

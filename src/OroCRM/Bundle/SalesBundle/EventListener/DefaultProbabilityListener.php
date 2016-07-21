@@ -111,7 +111,7 @@ class DefaultProbabilityListener
         }
 
         $statusId = $opportunity->getStatus()->getId();
-        $probabilities = $this->configManager->get('oro_crm_sales.default_opportunity_probabilities');
+        $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
 
         if (isset($probabilities[$statusId])) {
             return $probabilities[$statusId];

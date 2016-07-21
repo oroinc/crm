@@ -12,8 +12,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  */
 class ProbabilityProvider
 {
-    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
-
     /** @var ConfigManager */
     protected $configManager;
 
@@ -54,6 +52,6 @@ class ProbabilityProvider
      */
     public function getAll()
     {
-        return $this->configManager->get(self::PROBABILITIES_CONFIG_KEY);
+        return $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
     }
 }

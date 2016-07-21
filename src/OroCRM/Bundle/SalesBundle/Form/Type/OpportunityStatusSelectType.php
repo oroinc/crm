@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
 class OpportunityStatusSelectType extends AbstractType
 {
     /** @var ConfigManager $configManager */
@@ -35,9 +37,7 @@ class OpportunityStatusSelectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'probabilities' => $this->configManager->get(
-                'oro_crm_sales.default_opportunity_probabilities'
-            )
+            'probabilities' => $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY)
         ]);
     }
 

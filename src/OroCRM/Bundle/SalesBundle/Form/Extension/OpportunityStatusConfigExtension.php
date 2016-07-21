@@ -10,6 +10,8 @@ use Symfony\Component\Form\FormEvents;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
 /**
  * Handle the additional 'probability' field added to Opportunity Enum Options.
  * Maps probability per opportunity status
@@ -17,8 +19,6 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
  */
 class OpportunityStatusConfigExtension extends AbstractTypeExtension
 {
-    const CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
-
     /** @var ConfigManager */
     protected $configManager;
 
@@ -50,7 +50,7 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
     public function onPreSetData(FormEvent $event)
     {
         $data = $event->getData();
-        $probabilityConfig = $this->configManager->get(self::CONFIG_KEY);
+        $probabilityConfig = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
 
         if (empty($data['enum'])) {
             return;
@@ -91,7 +91,7 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
             $value[$id] = isset($enum_option['probability']) ? $enum_option['probability'] : null;
         }
 
-        $this->configManager->set(self::CONFIG_KEY, $value);
+        $this->configManager->set(Opportunity::PROBABILITIES_CONFIG_KEY, $value);
         $this->configManager->flush();
     }
 
