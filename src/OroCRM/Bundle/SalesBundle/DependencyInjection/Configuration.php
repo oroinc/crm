@@ -22,12 +22,13 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
 
         $defaults = [
-            'lost'                  => 0,
-            'in_progress'           => 0.1,
-            'needs_analysis'        => 0.2,
-            'solution_development'  => 0.5,
-            'negotiation'           => 0.8,
-            'won'                   => 1,
+            'lost'                      => 0,
+            'in_progress'               => 0.1,
+            'needs_analysis'            => 0.2,
+            'identification_alignment'  => 0.3,
+            'solution_development'      => 0.5,
+            'negotiation'               => 0.8,
+            'won'                       => 1,
         ];
 
         SettingsBuilder::append(
