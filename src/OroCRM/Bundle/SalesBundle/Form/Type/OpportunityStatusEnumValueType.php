@@ -19,7 +19,7 @@ class OpportunityStatusEnumValueType extends EnumValueType
     /**
      * @var array List of statuses which have non-editable probability
      */
-    public static $immutableStatuses = ['won', 'lost'];
+    public static $immutableProbabilityStatuses = ['won', 'lost'];
 
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class OpportunityStatusEnumValueType extends EnumValueType
     public function preSetData(FormEvent $event)
     {
         $data = $event->getData();
-        $disabled = isset($data['id']) && in_array($data['id'], self::$immutableStatuses);
+        $disabled = isset($data['id']) && in_array($data['id'], self::$immutableProbabilityStatuses);
 
         $form = $event->getForm();
         $form->add(

@@ -239,6 +239,6 @@ class OpportunityType extends AbstractType
         $enumCode = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
         $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
 
-        return array_shift($defaultStatuses);
+        return reset($defaultStatuses);
     }
 }
