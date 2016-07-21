@@ -5,7 +5,7 @@ layout:
         - '@setOption':
             id:          embedded_form
             optionName:  preferred_fields
-            optionValue: [firstName, lastName, emailAddress, phone]
+            optionValue: '=["firstName", "lastName", "emailAddress", "phone"]'
         - '@add':
             id:          name_group
             parentId:    embedded_form
@@ -17,7 +17,4 @@ layout:
             id:       embedded_form_lastName
             parentId: name_group
 
-    conditions:
-        '@eq':
-            - $context.embedded_form_type
-            - 'orocrm_contact_us.embedded_form'
+    conditions: 'context["embedded_form_type"] == "orocrm_contact_us.embedded_form"'
