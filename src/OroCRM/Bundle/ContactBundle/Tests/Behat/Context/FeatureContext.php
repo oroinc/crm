@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Exception\ExpectationException;
 use Doctrine\Common\Inflector\Inflector;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
@@ -28,26 +27,22 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
         $labelSelector = sprintf("label:contains('%s')", ucfirst(Inflector::pluralize($field)));
         /** @var NodeElement $label */
         $label = $this->getSession()->getPage()->find('css', $labelSelector);
+        self::assertNotNull($label, sprintf('Label "%s" not found', $field));
         $contactElements = $label->getParent()->findAll('css', '.contact-collection-element');
 
         /** @var NodeElement $contactElement */
         foreach ($contactElements as $contactElement) {
-            if (false !== strpos($contactElement->getText(), $value)) {
-                if ($contactElement->hasClass('primary')) {
-                    return;
-                } else {
-                    throw new ExpectationException(
-                        sprintf('Value "%s" was found but it is not primary', $value),
-                        $this->getSession()->getDriver()
-                    );
-                }
+            if (false !== stripos($contactElement->getText(), $value)) {
+                self::assertTrue(
+                    $contactElement->hasClass('primary'),
+                    sprintf('Value "%s" was found but it is not primary', $value)
+                );
+
+                return;
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Value "%s" in "%s" field not found', $value, $field),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Value "%s" in "%s" field not found', $value, $field));
     }
 
     /**
@@ -69,10 +64,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Address "%s" not found', $address),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Address "%s" not found', $address));
     }
 
     /**
@@ -90,15 +82,10 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
             if (false !== strpos($actualAddress->getText(), $address)) {
                 $removeButton = $actualAddress->find('css', '.item-remove-button');
 
-                if (null === $removeButton) {
-                    throw new ExpectationException(
-                        sprintf(
-                            'Found address "%s" but it has\'t delete button. Maybe it\'s primary address?',
-                            $address
-                        ),
-                        $this->getSession()->getDriver()
-                    );
-                }
+                self::assertNotNull(
+                    $removeButton,
+                    sprintf('Found address "%s" but it has\'t delete button. Maybe it\'s primary address?', $address)
+                );
 
                 $removeButton->click();
 
@@ -106,10 +93,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Address "%s" not found', $address),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Address "%s" not found', $address));
     }
 
     /**
@@ -121,12 +105,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     {
         $img = $this->getSession()->getPage()->find('css', 'div.customer-info div.visual img');
 
-        if (false === strpos($img->getAttribute('src'), 'info-user.png')) {
-            throw new ExpectationException(
-                'Avatar is not default avatar',
-                $this->getSession()->getDriver()
-            );
-        }
+        self::assertNotFalse(stripos($img->getAttribute('src'), 'info-user.png'), 'Avatar is not default avatar');
     }
 
     /**
@@ -139,12 +118,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     {
         $img = $this->getSession()->getPage()->find('css', 'div.customer-info div.visual img');
 
-        if (false === strpos($img->getAttribute('src'), $imgName)) {
-            throw new ExpectationException(
-                sprintf('Avatar is "%s" image', $imgName),
-                $this->getSession()->getDriver()
-            );
-        }
+        self::assertNotFalse(stripos($img->getAttribute('src'), $imgName), sprintf('Avatar is "%s" image', $imgName));
     }
 
     /**
@@ -164,12 +138,10 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
         }, $accounts);
 
         foreach ([$acc1, $acc2] as $acc) {
-            if (false === in_array($acc, $accounts, true)) {
-                throw new ExpectationException(
-                    sprintf('Value "%s" not found in "%s" accounts', $acc, implode(', ', $accounts)),
-                    $this->getSession()->getDriver()
-                );
-            }
+            self::assertTrue(
+                in_array($acc, $accounts, true),
+                sprintf('Value "%s" not found in "%s" accounts', $acc, implode(', ', $accounts))
+            );
         }
     }
 
@@ -198,23 +170,16 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
         }
 
         foreach ($table->getRows() as list($networkName, $networkLink)) {
-            if (false === array_key_exists($networkName, $socialNetworks)) {
-                throw new ExpectationException(
-                    sprintf('%s not found in social networks', $networkName),
-                    $this->getSession()->getDriver()
-                );
-            }
-            if ($socialNetworks[$networkName] !== $networkLink) {
-                throw new ExpectationException(
-                    sprintf(
-                        '%s expect to be "%s" but got "%s"',
-                        $networkName,
-                        $networkLink,
-                        $socialNetworks[$networkName]
-                    ),
-                    $this->getSession()->getDriver()
-                );
-            }
+            self::assertArrayHasKey(
+                $networkName,
+                $socialNetworks,
+                sprintf('%s not found in social networks', $networkName)
+            );
+            self::assertEquals(
+                $networkLink,
+                $socialNetworks[$networkName],
+                sprintf('%s expect to be "%s" but got "%s"', $networkName, $networkLink, $socialNetworks[$networkName])
+            );
         }
     }
 
@@ -230,14 +195,12 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     public function assertAddressCount($count)
     {
         $addresses = $this->getSession()->getPage()->findAll('css', 'div.map-address-list .map-item');
-        $currentCount = count($addresses);
 
-        if ($currentCount !== $this->getCount($count)) {
-            throw new ExpectationException(
-                sprintf('Expect %s addresses but found %s', $count, $currentCount),
-                $this->getSession()->getDriver()
-            );
-        }
+        self::assertCount(
+            $this->getCount($count),
+            $addresses,
+            sprintf('Expect %s addresses but found %s', $count, count($addresses))
+        );
     }
 
     /**
@@ -253,22 +216,18 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
 
         /** @var NodeElement $actualAddress */
         foreach ($addresses as $actualAddress) {
-            if (false !== strpos($actualAddress->getText(), $address)) {
-                if ('Primary' === $actualAddress->find('css', 'ul.inline')->getText()) {
-                    return;
-                } else {
-                    throw new ExpectationException(
-                        sprintf('Address "%s" was found but it is not primary', $address),
-                        $this->getSession()->getDriver()
-                    );
-                }
+            if (false !== stripos($actualAddress->getText(), $address)) {
+                self::assertEquals(
+                    'Primary',
+                    $actualAddress->find('css', 'ul.inline')->getText(),
+                    sprintf('Address "%s" was found but it is not primary', $address)
+                );
+
+                return;
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Address "%s" not found', $address),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Address "%s" not found', $address));
     }
 
     /**
