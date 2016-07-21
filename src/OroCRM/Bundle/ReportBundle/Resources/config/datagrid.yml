@@ -430,9 +430,9 @@ datagrid:
                 ownerName:
                     type: choice-tree
                     data_name: o.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 inProgressCount:
                     type:      number-range
                     data_name: inProgressCount

@@ -153,16 +153,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
@@ -402,16 +400,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         options:
             entityHint: account
 
