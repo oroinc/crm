@@ -635,6 +635,10 @@ class OroCRMSalesBundleInstaller implements
      */
     protected function addOrocrmSalesOpportunityStatusField(Schema $schema, QueryBag $queries)
     {
+        $immutableCodes = ['in_progress', 'won', 'lost'];
+
+        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $immutableCodes);
+
         $statuses = [
             'identification_alignment' => 'Identification & Alignment',
             'needs_analysis' => 'Needs Analysis',
@@ -645,22 +649,7 @@ class OroCRMSalesBundleInstaller implements
             'lost' => 'Closed Lost',
         ];
 
-        $immutable = [
-            'in_progress',
-            'won',
-            'lost',
-        ];
-
-        $defaultValue = 'in_progress';
-
-        AddOpportunityStatus::addStatusField(
-            $schema,
-            $this->extendExtension,
-            $queries,
-            $statuses,
-            $immutable,
-            $defaultValue
-        );
+        AddOpportunityStatus::addEnumValues($queries, $statuses);
     }
 
     /**
