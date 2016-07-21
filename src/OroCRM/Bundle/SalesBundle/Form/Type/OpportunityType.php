@@ -20,7 +20,6 @@ use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
-    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
 
     /** @var ProbabilityProvider */
     protected $probabilityProvider;
@@ -145,7 +144,7 @@ class OpportunityType extends AbstractType
                     'constraints' => [new NotNull()]
                 ]
             );
-        
+
         $this->addListeners($builder);
     }
 
