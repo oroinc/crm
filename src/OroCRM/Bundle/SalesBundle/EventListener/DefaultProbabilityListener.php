@@ -123,7 +123,7 @@ class DefaultProbabilityListener
     /**
      * @param LifecycleEventArgs $args
      */
-    private function recomputeChangeSet(LifecycleEventArgs $args)
+    protected function recomputeChangeSet(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
