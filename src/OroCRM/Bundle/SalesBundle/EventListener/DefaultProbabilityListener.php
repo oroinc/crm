@@ -13,10 +13,10 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class DefaultProbabilityListener
 {
     /** @var ConfigManager $configManager */
-    private $configManager;
+    protected $configManager;
 
     /** @var RestrictionManager $restrictionManager */
-    private $restrictionManager;
+    protected $restrictionManager;
 
     /**
      * @param ConfigManager      $configManager
@@ -86,22 +86,17 @@ class DefaultProbabilityListener
      * Checks if opportunity has an restriction of probability field
      *
      * @param  Opportunity $opportunity
-     * @return boolean
+     * @return bool
      */
-    private function hasWorkflowRestriction(Opportunity $opportunity)
+    protected function hasWorkflowRestriction(Opportunity $opportunity)
     {
         if (!$this->restrictionManager->hasEntityClassRestrictions(Opportunity::class)) {
             return false;
         }
 
-        $restrictions = $this->restrictionManager->getEntityRestrictions($opportunity);
-        foreach ($restrictions as $restriction) {
-            if ('probability' === $restriction['field']) {
-                return true;
-            }
-        }
+        $restrictions = (array) $this->restrictionManager->getEntityRestrictions($opportunity);
 
-        return false;
+        return in_array('probability', array_column($restrictions, 'field'));
     }
 
     /**
@@ -109,24 +104,20 @@ class DefaultProbabilityListener
      *
      * @return float|null
      */
-    private function getDefaultProbability(Opportunity $opportunity)
+    protected function getDefaultProbability(Opportunity $opportunity)
     {
         if (!$opportunity->getStatus()) {
             return null;
         }
 
-        $probabilities = $this->configManager->get(
-            'oro_crm_sales.default_opportunity_probabilities'
-        );
- 
         $statusId = $opportunity->getStatus()->getId();
-        $probabilities = $this->configManager->get(
-            'oro_crm_sales.default_opportunity_probabilities'
-        );
- 
+        $probabilities = $this->configManager->get('oro_crm_sales.default_opportunity_probabilities');
+
         if (isset($probabilities[$statusId])) {
             return $probabilities[$statusId];
         }
+
+        return null;
     }
 
     /**
