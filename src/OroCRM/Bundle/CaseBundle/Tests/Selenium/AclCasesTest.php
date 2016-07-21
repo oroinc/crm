@@ -37,7 +37,7 @@ class AclCasesTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $page = $this->login()->openUsers('Oro\Bundle\UserBundle')->add();
-        /* @var Users $login */
+        /** @var Users $login */
         $page->assertTitle('Create User - Users - User Management - System')
             ->setUsername($username)
             ->enable()
@@ -47,7 +47,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setFirstName('First_'.$username)
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
-            ->setRoles(['Administrator']);
+            ->setRoles(['Label_' . $role]);
         if ($page->hasBusinessUnitOrganizationChoice()) {
             $page->setBusinessUnitOrganization(['OroCRM']);
         }
