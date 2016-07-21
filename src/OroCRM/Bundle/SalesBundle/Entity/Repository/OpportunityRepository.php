@@ -592,14 +592,7 @@ class OpportunityRepository extends EntityRepository
         array $owners = []
     ) {
         $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateFilterProcessor, $dateRange, $owners);
-        $qb->addSelect(
-            "SUM(
-                    CASE WHEN o.status = 'won' 
-                        THEN o.closeRevenue 
-                        ELSE o.budgetAmount
-                    END
-                ) as value"
-        );
+        $qb->addSelect("SUM(CASE WHEN o.status = 'won' THEN o.closeRevenue ELSE o.budgetAmount END) as value");
 
         return $aclHelper->apply($qb)->getArrayResult();
     }
