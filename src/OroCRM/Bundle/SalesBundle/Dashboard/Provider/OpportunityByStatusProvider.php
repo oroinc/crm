@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Dashboard\Provider;
 
+use Doctrine\ORM\Query\Expr AS Expr;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
@@ -61,6 +63,7 @@ class OpportunityByStatusProvider
 
         // Ignore filters by opportunities, if filters by date exists.
         $where = $qb->getDQLPart('where');
+
         if ($where) {
             $qb->where(
                 $qb->expr()->orX(
@@ -70,15 +73,42 @@ class OpportunityByStatusProvider
             );
         }
 
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        // move previously applied conditions into join
+        // since we don't want to exclude any statuses from result
+        $joinConditions = $qb->getDQLPart('where');
+        if ($joinConditions) {
+            $whereParts = (string) $joinConditions;
+            $qb->resetDQLPart('where');
+
+            $join = $qb->getDQLPart('join')['s'][0];
+            $qb->resetDQLPart('join');
+
+            $qb->add(
+                'join',
+                [
+                    's' => new Expr\Join(
+                        $join->getJoinType(),
+                        $join->getJoin(),
+                        $join->getAlias(),
+                        $join->getConditionType(),
+                        sprintf('%s AND (%s)', $join->getCondition(), $whereParts),
+                        $join->getIndexBy()
+                    )
+                ],
+                true
+            );
+        }
+
         if ($excludedStatuses) {
             $qb->andWhere(
                 $qb->expr()->notIn('s.id', $excludedStatuses)
             );
         }
 
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
