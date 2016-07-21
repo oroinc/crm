@@ -25,6 +25,8 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as Sales
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -98,7 +100,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_24';
+        return 'v1_25';
     }
 
     /**
@@ -114,6 +116,8 @@ class OroCRMSalesBundleInstaller implements
         $this->createOrocrmSalesOpportCloseRsnTable($schema);
         $this->createOrocrmSalesLeadTable($schema);
         $this->createOrocrmSalesB2bCustomerTable($schema);
+        $this->createOrocrmLeadPhoneTable($schema);
+        $this->createOrocrmSalesLeadEmailTable($schema);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);
@@ -124,6 +128,9 @@ class OroCRMSalesBundleInstaller implements
         $this->addOrocrmSalesLeadForeignKeys($schema);
         $this->addOrocrmSalesB2bCustomerForeignKeys($schema);
         $this->addOroEmailMailboxProcessorForeignKeys($schema);
+        $this->addOrocrmLeadPhoneForeignKeys($schema);
+        $this->addOrocrmSalesLeadEmailForeignKeys($schema);
+
 
         /** Apply extensions */
         SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
@@ -142,6 +149,8 @@ class OroCRMSalesBundleInstaller implements
 
         SalesOrganizations::addOrganization($schema);
         AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
+        AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
+        AddLeadAddressTable::createLeadAddressTable($schema);
     }
 
     /**
@@ -279,18 +288,15 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('first_name', 'string', ['length' => 255]);
+        $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('last_name', 'string', ['length' => 255]);
+        $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('job_title', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('company_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('website', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('number_of_employees', 'integer', ['notnull' => false]);
@@ -298,6 +304,8 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
+        $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);
 
         $this->extendExtension->addEnumField(
             $schema,
@@ -315,7 +323,6 @@ class OroCRMSalesBundleInstaller implements
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
 
-        $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
         $table->addIndex(['data_channel_id'], 'IDX_73DB4633BDC09B73', []);
@@ -409,6 +416,41 @@ class OroCRMSalesBundleInstaller implements
                 ]
             ]
         );
+    }
+
+    /**
+     * Create orocrm_lead_phone table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmLeadPhoneTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_sales_lead_phone');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('phone', 'string', ['length' => 255]);
+        $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['owner_id'], 'IDX_8475907F7E3C61F9', []);
+        $table->addIndex(['phone', 'is_primary'], 'lead_primary_phone_idx', []);
+        $table->addIndex(['phone'], 'lead_phone_idx');
+    }
+
+    /**
+     * Create orocrm_sales_lead_email table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmSalesLeadEmailTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_sales_lead_email');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('email', 'string', ['length' => 255]);
+        $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['owner_id'], 'IDX_9F15A0937E3C61F9', []);
+        $table->addIndex(['email', 'is_primary'], 'lead_primary_email_idx', []);
     }
 
     /**
@@ -563,12 +605,6 @@ class OroCRMSalesBundleInstaller implements
             'FK_73DB4633BDC09B73'
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead_status'),
-            ['status_name'],
-            ['name'],
-            ['onUpdate' => null, 'onDelete' => null]
-        );
-        $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
             ['workflow_item_id'],
             ['id'],
@@ -663,6 +699,38 @@ class OroCRMSalesBundleInstaller implements
             ['lead_owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add orocrm_lead_phone foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmLeadPhoneForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_lead_phone');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_lead'),
+            ['owner_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add orocrm_sales_lead_email foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmSalesLeadEmailForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_lead_email');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_lead'),
+            ['owner_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 }

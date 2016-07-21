@@ -1,3 +1,4 @@
+"New Contact Information": "New Contact Information"
 oro:
     dashboard:
         my_sales_flow:
@@ -169,6 +170,10 @@ orocrm:
                 update:   Update
                 delete:   Delete
                 columns.metric_name: Metric Name
+                views:
+                    open:            Open Opportunities
+                    overdue:         Overdue Opportunities
+                    recently_closed: Recently Closed Opportunities
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -195,7 +200,9 @@ orocrm:
             name_suffix.label:    Name suffix
             job_title.label:      Job title
             phone_number.label:   Phone number
+            phones.label:         Phones
             email.label:          Email
+            emails.label:         Emails
             company_name.label:   Company name
             website.label:        Website
             number_of_employees.label: Number of employees
@@ -204,13 +211,18 @@ orocrm:
             contact.label:        Contact
             owner.label:          Owner
             address.label:        Address
+            addresses.label:      Address
+            add_address.label:    Add Address
             details.label:        Lead Details
             source.label:         Source
             notes.label:          Additional comments
+            twitter.label:        Twitter
+            linked_in.label:      LinkedIn
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
+            contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
             customer.label:       Business Customer
@@ -220,6 +232,10 @@ orocrm:
                 unclassified:     Unclassified
                 others:           Others
                 none:             None
+            status:
+                change_error_message:  Unable to change lead status.
+            convert:
+                 error:           Unable to convert lead to opportunity
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -231,6 +247,62 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+                views:
+                    open:            Open Leads
+
+        #
+        # Entity oroCRM\Bundle\SalesBundle\Entity\LeadAddress
+        #
+        leadaddress:
+            city.label:          City
+            country.label:       Country
+            entity_description:  Represent lead's address
+            entity_label:        Lead Address
+            entity_plural_label: Lead Addresses
+            first_name.label:    First name
+            id.label:            Id
+            label.label:         Label
+            last_name.label:     Last name
+            middle_name.label:   Middle name
+            name_prefix.label:   Name prefix
+            name_suffix.label:   Name suffix
+            organization.label:  Organization
+            owner.label:         Owner
+            postal_code.label:   Zip/postal code
+            primary.label:       Primary
+            region.label:        State
+            region_text.label:   State
+            street.label:        Street
+            street2.label:       Street 2
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
+
+        #
+        # Entity OroCRM/Bundle/SalesBundle/Entity/LeadPhone.php
+        #
+        leadphone:
+            entity_description:  Represent lead's phone
+            entity_label:        Lead Phone
+            entity_plural_label: Lead Phones
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
+
+        #
+        # Entity OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+        #
+        leademail:
+            email.label:         Email
+            entity_description:  Represent lead's email
+            entity_label:        Lead Email
+            entity_plural_label: Lead Emails
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
 
         salesfunnel:
             entity_label:         Sales Process

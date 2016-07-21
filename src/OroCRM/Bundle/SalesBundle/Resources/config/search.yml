@@ -36,9 +36,13 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             target_type:            text
             target_fields:          [companyName]
         -
-            name:                   email
-            target_type:            text
-            target_fields:          [email]
+            name:                   emails
+            relation_type:          one-to-many
+            relation_fields:
+                -
+                    name:           email
+                    target_type:    text
+                    target_fields:  [email]
         -
             name:                  dataChannel
             relation_type:         many-to-one
