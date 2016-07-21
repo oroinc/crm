@@ -20,7 +20,7 @@ class OpportunityProbabilityType extends AbstractType
     /**
      * @var array List of statuses which have non-editable probability
      */
-    public static $immutableStatuses = ['won', 'lost'];
+    public static $immutableProbabilityStatuses = ['won', 'lost'];
 
     /** @var EnumTypeHelper */
     protected $typeHelper;
@@ -60,7 +60,7 @@ class OpportunityProbabilityType extends AbstractType
         $constraint = new Range(['min' => 0, 'max' => 100]);
         // Generate a probability field for each status
         foreach ($this->enumStatuses as $status) {
-            $disabled = in_array($status->getId(), self::$immutableStatuses);
+            $disabled = in_array($status->getId(), self::$immutableProbabilityStatuses);
 
             $builder
                 ->add(

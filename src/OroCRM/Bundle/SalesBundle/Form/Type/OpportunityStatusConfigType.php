@@ -7,7 +7,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
 use Oro\Bundle\EntityConfigBundle\Form\Type\ConfigScopeType;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\PropertyConfigContainer;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -28,13 +31,13 @@ class OpportunityStatusConfigType extends AbstractType
     /** @var ConfigManager */
     protected $configManager;
 
-    /** @var \Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface */
+    /** @var ConfigIdInterface */
     protected $configId;
 
-    /** @var \Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel */
+    /** @var FieldConfigModel */
     protected $configModel;
 
-    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider */
+    /** @var ConfigProvider */
     protected $enumProvider;
 
     /**

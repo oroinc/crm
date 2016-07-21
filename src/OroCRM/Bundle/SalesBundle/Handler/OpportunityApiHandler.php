@@ -11,7 +11,7 @@ class OpportunityApiHandler extends AbstractEntityApiHandler
     const ENTITY_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
 
     /** @var PropertyAccess **/
-    private $accessor;
+    protected $accessor;
 
     public function __construct()
     {

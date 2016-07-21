@@ -52,7 +52,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
         $constraint = new Range(['min' => 0, 'max' => 100]);
         $counter = 0;
         foreach ($enumOptions as $status) {
-            $disabled = in_array($status->getId(), $type::$immutableStatuses);
+            $disabled = in_array($status->getId(), $type::$immutableProbabilityStatuses);
             $builder->expects($this->at($counter))
                 ->method('add')
                 ->with(
