@@ -1,0 +1,4 @@
+# todo 'address' field is hidden here until it's removed
+oro_entity_hidden_fields:
+    OroCRM\Bundle\SalesBundle\Entity\Lead:
+        address: true

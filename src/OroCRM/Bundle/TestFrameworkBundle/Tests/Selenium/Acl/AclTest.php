@@ -36,6 +36,7 @@ class AclTest extends Selenium2TestCase
             ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setCapability(['Update User Profile'], 'System')
             ->save()
             ->assertMessage('Role saved');
 
@@ -65,8 +66,8 @@ class AclTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
+            ->setBusinessUnitOrganization(array('OroCRM'))
             ->setBusinessUnit()
-            ->setOrganization('OroCRM')
             ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')

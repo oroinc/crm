@@ -10,11 +10,13 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroCRMSalesBundle implements Migration
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        // Increase migration version, do not update existing DB
-        // Only for new installations: Add a new default Opportunity status 'Open' instead of 'In Progress'
+        $table = $schema->getTable('orocrm_sales_lead');
+
+        $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);
     }
 }

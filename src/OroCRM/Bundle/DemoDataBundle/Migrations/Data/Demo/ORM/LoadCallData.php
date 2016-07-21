@@ -90,9 +90,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
             $call->setOrganization($this->organization);
             $call->setOwner($contact->getOwner());
             $call->setSubject($this->subjects[array_rand($this->subjects)]);
-            $call->setDuration(
-                new \DateTime(rand(0, 1) . ':' . rand(0, 59) . ':' . rand(0, 59), new \DateTimeZone('UTC'))
-            );
+            $call->setDuration(rand(0, 4800));
 
             if ($call->supportActivityTarget(get_class($contact->getOwner()))) {
                 $call->addActivityTarget($contact->getOwner());
