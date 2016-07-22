@@ -74,10 +74,11 @@ class B2bCustomerPhoneHandler
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($submitData);
 
-            if ($this->form->isValid() && $this->request->request->get('b2bCustomerId')) {
+            $b2bCustomerId = $this->request->request->get('entityId');
+            if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
                     'OroCRMSalesBundle:B2bCustomer',
-                    $this->request->request->get('b2bCustomerId')
+                    $b2bCustomerId
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $customer)) {
                     throw new AccessDeniedException();
@@ -115,7 +116,7 @@ class B2bCustomerPhoneHandler
             $em->remove($b2bCustomerPhone);
             $em->flush();
         } else {
-            throw new \Exception("oro.b2bcustomer.phone.error.delete.more_one", 500);
+            throw new \Exception("orocrm.sales.phone.error.delete.more_one", 500);
         }
     }
 
