@@ -60,7 +60,6 @@ class CartControllerTest extends AbstractController
         $this->assertContains('Open', $result->getContent());
         $this->assertContains('web site', $result->getContent());
         $this->assertContains('demo store', $result->getContent());
-        $this->assertContains('Log call', $result->getContent());
         $this->assertContains('Send email', $result->getContent());
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());

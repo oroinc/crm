@@ -2,18 +2,17 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Behat\Context;
 
-use Behat\Mink\Exception\ExpectationException;
-use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Mink\Element\NodeElement;
+use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 
-class FeatureContext extends RawMinkContext
+class FeatureContext extends OroFeatureContext
 {
     /**
      * @Then /^(?P<contactsCount>(?:|one|two|\d+)) contacts added to form$/
      */
     public function assertCountContactsAddedToForm($contactsCount)
     {
-        expect($this->getFormContacts())->toHaveCount($this->getCount($contactsCount));
+        self::assertCount($this->getCount($contactsCount), $this->getFormContacts());
     }
 
     /**
@@ -21,8 +20,10 @@ class FeatureContext extends RawMinkContext
      */
     public function assertCountOfContacts($contactsCount)
     {
-        expect($this->getSession()->getPage()->findAll('css', '.contact-box'))
-            ->toHaveCount($this->getCount($contactsCount));
+        self::assertCount(
+            $this->getCount($contactsCount),
+            $this->getSession()->getPage()->findAll('css', '.contact-box')
+        );
     }
 
     /**
@@ -35,16 +36,12 @@ class FeatureContext extends RawMinkContext
         /** @var NodeElement $box */
         foreach ($contactBoxes as $box) {
             if (false !== strpos($box->getText(), $name)) {
-                expect($box->getText())
-                    ->toMatch('/Default Contact/i');
+                self::assertRegExp('/Default Contact/i', $box->getText());
                 return;
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
 
@@ -61,10 +58,7 @@ class FeatureContext extends RawMinkContext
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
     /**
@@ -80,10 +74,7 @@ class FeatureContext extends RawMinkContext
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
     /**

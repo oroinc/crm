@@ -116,7 +116,7 @@ services:
         parent: orocrm_channel.autocomplete.channel_limitation_handler
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
-            - ["name", "dataChannel.id"]
+            - ["name", "account.name", "dataChannel.id"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers_with_channel, acl_resource: orocrm_sales_b2bcustomer_view }
         lazy: true
@@ -232,6 +232,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
+
+    orocrm_sales.event_listener.datagrid.widget_sort_by:
+        parent: oro_dashboard.event_listener.widget_sort_by
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-opportunity-grid, method: onResultBeforeQuery }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-lead-grid, method: onResultBeforeQuery }
 
     orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener

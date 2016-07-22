@@ -33,7 +33,6 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('Order items', $result->getContent());
         $this->assertContains('Activity', $result->getContent());
         $this->assertContains('Send email', $result->getContent());
-        $this->assertContains('Log call', $result->getContent());
         $this->assertContains('Sync Data', $result->getContent());
         $this->assertContains('$4.40', $result->getContent());
         $this->assertContains('open', $result->getContent());

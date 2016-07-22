@@ -117,6 +117,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             foreach ($customers as $customer) {
                 if ($customer['entity'] === $className && $customer['id'] === $id) {
                     $resultItem['channel'] = $customer['channelId'];
+                    $resultItem['accountName'] = $customer['accountName'];
                     break;
                 }
             }
@@ -146,11 +147,12 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             $subQb = $em->getRepository($customerClass)->createQueryBuilder('e')
                 ->select(
                     sprintf(
-                        'channel.id AS channelId, e.id AS entityId, \'%s\' AS entityClass',
+                        'channel.id AS channelId, e.id AS entityId, \'%s\' AS entityClass, account.name as accountName',
                         str_replace('\'', '\'\'', $customerClass)
                     )
                 )
-                ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel');
+                ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel')
+                ->leftJoin('e.account', 'account');
             $subQb->where($subQb->expr()->in('e.id', $customerIds));
 
             $subQuery = $subQb->getQuery();
@@ -160,10 +162,11 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             if (empty($selectStmt)) {
                 $mapping    = QueryUtils::parseQuery($subQuery)->getResultSetMapping();
                 $selectStmt = sprintf(
-                    'entity.%s AS channelId, entity.%s as entityId, entity.%s AS entityClass',
+                    'entity.%s AS channelId, entity.%s as entityId, entity.%s AS entityClass, entity.%s as accountName',
                     QueryUtils::getColumnNameByAlias($mapping, 'channelId'),
                     QueryUtils::getColumnNameByAlias($mapping, 'entityId'),
-                    QueryUtils::getColumnNameByAlias($mapping, 'entityClass')
+                    QueryUtils::getColumnNameByAlias($mapping, 'entityClass'),
+                    QueryUtils::getColumnNameByAlias($mapping, 'accountName')
                 );
             }
         }
@@ -172,7 +175,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
         $rsm
             ->addScalarResult('channelId', 'channelId', 'integer')
             ->addScalarResult('entityId', 'id', 'integer')
-            ->addScalarResult('entityClass', 'entity');
+            ->addScalarResult('entityClass', 'entity')
+            ->addScalarResult('accountName', 'accountName');
         $qb = new SqlQueryBuilder($em, $rsm);
         $qb
             ->select($selectStmt)
