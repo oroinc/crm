@@ -88,7 +88,7 @@ class AddOpportunityStatus implements
      * @param ExtendExtension $extendExtension
      * @param array $immutableCodes
      */
-    public static function addStatusField( Schema $schema, ExtendExtension $extendExtension, array $immutableCodes) {
+    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, array $immutableCodes) {
         $enumTable = $extendExtension->addEnumField(
             $schema,
             'orocrm_sales_opportunity',
