@@ -1,0 +1,5 @@
+{% extends "OroAddressBundle:widget:addressBook.html.twig" %}
+{% set addressListUrl = path('oro_api_get_lead_addresses', {'leadId': entity.id}) %}
+{% set addressCreateUrl = path('orocrm_sales_lead_address_create', {'leadId': entity.id}) %}
+{% set addressUpdateRoute = 'orocrm_sales_lead_address_update' %}
+{% set ownerParam = 'leadId' %}

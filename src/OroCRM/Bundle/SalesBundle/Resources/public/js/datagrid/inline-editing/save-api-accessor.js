@@ -1,13 +1,13 @@
-/** @lends SalesApiAccessor */
+/** @lends CollectionApiAccessor */
 define(function(require) {
     'use strict';
 
-    var SalesApiAccessor;
+    var CollectionApiAccessor;
 
     var _ = require('underscore');
     var ApiAccessor = require('oroui/js/tools/api-accessor');
 
-    SalesApiAccessor = ApiAccessor.extend(/** @exports SalesApiAccessor.prototype */{
+    CollectionApiAccessor = ApiAccessor.extend(/** @exports CollectionApiAccessor.prototype */{
         /**
          * Validates url parameters
          *
@@ -20,16 +20,15 @@ define(function(require) {
 
             return this.route.validateParameters(parameters);
         },
-
         send: function(urlParameters, body, headers, options) {
             this.initRoute(urlParameters, body);
 
             if (this.isActiveCreateEntityRoute()) {
-                body.b2bCustomerId = urlParameters.id;
+                body.entityId = urlParameters.id;
                 body.primary = true;
             }
 
-            return SalesApiAccessor.__super__.send.apply(this, arguments);
+            return CollectionApiAccessor.__super__.send.apply(this, arguments);
         },
 
         initRoute: function(urlParameters, body) {
@@ -51,14 +50,8 @@ define(function(require) {
 
         /** @returns {boolean} */
         canSetDeleteEntityRoute: function(data) {
-            if (data) {
-                if (data.email === '') {
-                    return true;
-                }
-
-                if (data.phone === '') {
-                    return true;
-                }
+            if (data && data[this.initialOptions.field_name] === '') {
+                return true;
             }
 
             return false;
@@ -90,5 +83,5 @@ define(function(require) {
         }
     });
 
-    return SalesApiAccessor;
+    return CollectionApiAccessor;
 });
