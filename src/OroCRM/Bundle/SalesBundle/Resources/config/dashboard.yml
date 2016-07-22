@@ -194,6 +194,7 @@ oro_dashboard_config:
                         widgetType: opportunities_by_state
                         entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
                         collapsible: true
+                        collapsed: true
         b2b_statistics_widget:
             label:       oro.dashboard.b2b_statistics_widget.title
             route:       oro_dashboard_itemized_data_widget
