@@ -213,16 +213,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: o.owner
-                    options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
-                    options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         actions:
             view:
                 type:          navigate
@@ -563,9 +561,9 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: l.owner
-                    options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 contactName:
                     type: string
                     data_name: contactName
@@ -574,9 +572,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: l.owner
-                    options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -732,16 +728,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
-                    options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
-                    options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
@@ -1118,9 +1112,9 @@ datagrid:
                     type: choice-tree
                     data_name: c.owner
                     enabled: false                    
-                    options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 accountName:
                     type: string
                     data_name: accountName
