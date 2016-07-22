@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Dashboard\Provider;
 
-use Doctrine\ORM\Query\Expr AS Expr;
+use Doctrine\ORM\Query\Expr as Expr;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -60,18 +60,6 @@ class OpportunityByStatusProvider
         $qb               = $this->getOpportunityRepository()
             ->getGroupedOpportunitiesByStatusQB('o', $orderBy);
         $this->dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
-
-        // Ignore filters by opportunities, if filters by date exists.
-        $where = $qb->getDQLPart('where');
-
-        if ($where) {
-            $qb->where(
-                $qb->expr()->orX(
-                    $where,
-                    $qb->expr()->isNull('o.id')
-                )
-            );
-        }
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
