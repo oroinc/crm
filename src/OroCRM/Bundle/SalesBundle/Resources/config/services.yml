@@ -23,7 +23,6 @@ parameters:
     orocrm_sales.b2bcustomer.manager.api.class:              OroCRM\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
 
     orocrm_sales.event_listener.b2bcustomer_lifetime.class:  OroCRM\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
-    orocrm_sales.event_listener.default_probability.class:   OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener
 
     orocrm_sales.provider.phone.lead.class:                  OroCRM\Bundle\SalesBundle\Provider\LeadPhoneProvider
     orocrm_sales.provider.phone.opportunity.class:           OroCRM\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
@@ -33,7 +32,6 @@ parameters:
     orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
-    orocrm_sales.provider.probability.class:                 OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider
 
     orocrm_sales.opportunity.datagrid_view_list.class:       OroCRM\Bundle\SalesBundle\Datagrid\OpportunityViewList
     orocrm_sales.lead.datagrid_view_list.class:              OroCRM\Bundle\SalesBundle\Datagrid\LeadViewList
@@ -46,8 +44,6 @@ parameters:
 
     orocrm_sales.model.change_lead_status.class: OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus
     orocrm_sales.model.b2b_guesser.class: OroCRM\Bundle\SalesBundle\Model\B2bGuesser
-
-    orocrm_sales.handler.opportunity_api.class:              OroCRM\Bundle\SalesBundle\Handler\OpportunityApiHandler
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -144,7 +140,7 @@ services:
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
     orocrm_sales.event_listener.default_probability:
-        class: %orocrm_sales.event_listener.default_probability.class%
+        class: OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener
         arguments:
             - '@oro_config.user'
             - '@oro_workflow.restriction.manager'
@@ -187,7 +183,7 @@ services:
             - '@oro_user.dashboard.owner_helper'
 
     orocrm_sales.provider.probability:
-        class: %orocrm_sales.provider.probability.class%
+        class: OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider
         arguments:
             - '@oro_config.user'
 
@@ -265,7 +261,7 @@ services:
             - '@oro_user.dashboard.owner_helper'
 
     orocrm_sales.handler.opportunity_api:
-        class: %orocrm_sales.handler.opportunity_api.class%
+        class: OroCRM\Bundle\SalesBundle\Handler\OpportunityApiHandler
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
