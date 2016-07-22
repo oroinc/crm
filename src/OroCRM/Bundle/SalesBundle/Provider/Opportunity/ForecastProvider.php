@@ -2,19 +2,20 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider\Opportunity;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Oro\Bundle\DashboardBundle\Query\FilterQueryBuilder;
+
 use Oro\Bundle\DashboardBundle\Query\FilterQueryProcessor;
-use Oro\Bundle\DashboardBundle\Query\QueryDesignerModel;
-use Oro\Bundle\DataAuditBundle\Entity\Repository\AuditFieldRepository;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+
 use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ForecastProvider
 {
@@ -36,6 +37,7 @@ class ForecastProvider
     /** @var FilterQueryProcessor */
     protected $queryProcessor;
 
+    /** @var array */
     protected static $fieldsAuditMap = [
         'status'       => ['old' => 'oldText', 'new' => 'newText'],
         'owner'        => ['old' => 'oldText', 'new' => 'newText'],
@@ -45,9 +47,10 @@ class ForecastProvider
     ];
 
     /**
-     * @param RegistryInterface $doctrine
-     * @param AclHelper         $aclHelper
-     * @param EnumValueProvider $enumProvider
+     * @param RegistryInterface    $doctrine
+     * @param AclHelper            $aclHelper
+     * @param EnumValueProvider    $enumProvider
+     * @param FilterQueryProcessor $queryProcessor
      *
      * @internal param EnumValueProvider $enumValueProvider
      */
@@ -57,23 +60,35 @@ class ForecastProvider
         EnumValueProvider $enumProvider,
         FilterQueryProcessor $queryProcessor
     ) {
-        $this->doctrine     = $doctrine;
-        $this->aclHelper    = $aclHelper;
-        $this->enumProvider = $enumProvider;
+        $this->doctrine       = $doctrine;
+        $this->aclHelper      = $aclHelper;
+        $this->enumProvider   = $enumProvider;
         $this->queryProcessor = $queryProcessor;
     }
 
+    /**
+     * @param array          $ownerIds
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     * @param \DateTime|null $moment
+     * @param array|null     $queryFilter
+     *
+     * @return array ['inProgressCount' => <int>, 'budgetAmount' => <double>, 'weightedForecast' => <double>]
+     */
     public function getForecastData(
         array $ownerIds,
         \DateTime $start = null,
         \DateTime $end = null,
         \DateTime $moment = null,
-        array $queryFilter = []
+        array $queryFilter = null
     ) {
-        $key = $this->getDataHashKey($ownerIds, $start, $end, $moment);
+        $filters = isset($queryFilter['definition'])
+            ? json_decode($queryFilter['definition'], true)
+            : [];
+        $key = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
         if (!isset($this->data[$key])) {
             if (!$moment) {
-                $this->data[$key] = $this->getCurrentData($ownerIds, $start, $end, $queryFilter);
+                $this->data[$key] = $this->getCurrentData($ownerIds, $start, $end, $filters);
             } else {
                 $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end);
             }
@@ -84,20 +99,25 @@ class ForecastProvider
 
     /**
      * @param array     $ownerIds
-     *
      * @param \DateTime $start
      * @param \DateTime $end
+     * @param array     $filters
      *
      * @return array
      */
-    protected function getCurrentData(array $ownerIds, \DateTime $start = null, \DateTime $end = null, $queryFilter)
-    {
-        $clonedStart = clone $start;
-        $clonedEnd   = clone $end;
-        $alias = 'o';
+    protected function getCurrentData(
+        array $ownerIds,
+        \DateTime $start = null,
+        \DateTime $end = null,
+        array $filters
+    ) {
+        $clonedStart = $start ? clone $start : null;
+        $clonedEnd   = $end ? clone $end : null;
+        $alias       = 'o';
         $qb          = $this->getOpportunityRepository()->getForecastQB($alias);
-        $definition = json_decode($queryFilter['definition'], true);
-        $qb = $this->queryProcessor->process($qb, 'OroCRMSalesBundle:Opportunity', $definition['filters'], $alias);
+
+        $qb = $this->queryProcessor
+            ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
         if (!empty($ownerIds)) {
             $qb->join('o.owner', 'owner');
@@ -252,7 +272,7 @@ class ForecastProvider
             ->getAuditFieldRepository()
             ->createQueryBuilder('af')
             ->join('af.audit', 'a')
-            ->join('OroCrmSalesBundle:Opportunity', 'o', Join::WITH, 'o.id = a.objectId')
+            ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'o.id = a.objectId')
             ->join('o.owner', 'u')
             ->select([
                 'af.field',
@@ -264,9 +284,8 @@ class ForecastProvider
                 'af.newDatetime',
                 'a.loggedAt',
                 'a.objectId',
-                'o.status',
+                'IDENTITY(o.status) AS status',
                 'o.closeDate',
-                'o.owner',
                 'o.budgetAmount',
                 'o.probability',
                 'u.username'
@@ -277,9 +296,11 @@ class ForecastProvider
         $qb
             ->andWhere($qb->expr()->in('af.field', ['status', 'owner', 'closeDate', 'probability', 'budgetAmount']))
             ->setParameter('updateAction', 'update')
-            ->andWhere($qb->expr()->notIn('a.objectId', $excludedIds))
-            ->setParameter('objectClass', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity')
+            ->setParameter('opportunityClass', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity')
             ->orderBy('a.loggedAt', 'ASC');
+        if ($excludedIds) {
+            $qb->andWhere($qb->expr()->notIn('a.objectId', $excludedIds));
+        }
 
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
@@ -439,7 +460,7 @@ class ForecastProvider
     }
 
     /**
-     * @return AuditFieldRepository
+     * @return EntityRepository
      */
     protected function getAuditFieldRepository()
     {
@@ -467,7 +488,8 @@ class ForecastProvider
         array $ownerIds,
         \DateTime $start = null,
         \DateTime $end = null,
-        \DateTime $moment = null
+        \DateTime $moment = null,
+        array $filters
     ) {
         return md5(
             serialize(
@@ -475,7 +497,8 @@ class ForecastProvider
                     'ownerIds' => $ownerIds,
                     'start'    => $start,
                     'end'      => $end,
-                    'moment'   => $moment
+                    'moment'   => $moment,
+                    'filters'  => $filters
                 ]
             )
         );

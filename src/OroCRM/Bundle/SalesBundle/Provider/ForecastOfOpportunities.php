@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
-use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
@@ -10,6 +9,8 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+
+use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 
 /**
  * Class ForecastOfOpportunities
@@ -42,6 +43,7 @@ class ForecastOfOpportunities
      * @param TranslatorInterface $translator
      * @param DateHelper          $dateHelper
      * @param OwnerHelper         $ownerHelper
+     * @param ForecastProvider    $provider
      */
     public function __construct(
         NumberFormatter $numberFormatter,
@@ -80,7 +82,7 @@ class ForecastOfOpportunities
         $compareToDate   = $widgetOptions->get('compareToDate');
         $usePrevious     = !empty($compareToDate['useDate']);
         $dateData        = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
-        $queryFilter     = $widgetOptions->get('queryFilter');
+        $queryFilter     = $widgetOptions->get('queryFilter', []);
         $value           = $this->provider
             ->getForecastData($ownerIds, $dateData['start'], $dateData['end'], null, $queryFilter);
         $result['value'] = $this->formatValue($value[$dataKey], $dataType);
