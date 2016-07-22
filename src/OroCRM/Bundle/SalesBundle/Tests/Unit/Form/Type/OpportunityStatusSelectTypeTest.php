@@ -56,6 +56,17 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testShouldFilterNullProbabilities()
+    {
+        $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0, 'empty' => null]);
+        $resolver = $this->getOptionsResolver();
+
+        $type->configureOptions($resolver);
+        $options = $resolver->resolve();
+
+        $this->assertEquals(['probabilities' => ['won' => 1.0, 'lost' => 0.0]], $options);
+    }
+
     /**
      * @param array $probabilities
      *

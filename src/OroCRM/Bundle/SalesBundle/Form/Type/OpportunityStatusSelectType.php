@@ -36,8 +36,11 @@ class OpportunityStatusSelectType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
         $resolver->setDefaults([
-            'probabilities' => $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY)
+            'probabilities' => array_filter($probabilities, function ($probability) {
+                return null !== $probability;
+            })
         ]);
     }
 
