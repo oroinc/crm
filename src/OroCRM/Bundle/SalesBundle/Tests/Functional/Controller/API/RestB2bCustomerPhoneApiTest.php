@@ -86,7 +86,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(
-            '{"code":500,"message":"oro.b2bcustomer.phone.error.delete.more_one"}',
+            '{"code":500,"message":"orocrm.sales.phone.error.delete.more_one"}',
             $this->client->getResponse()->getContent()
         );
     }

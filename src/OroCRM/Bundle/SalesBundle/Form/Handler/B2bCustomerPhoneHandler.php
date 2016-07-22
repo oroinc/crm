@@ -116,7 +116,7 @@ class B2bCustomerPhoneHandler
             $em->remove($b2bCustomerPhone);
             $em->flush();
         } else {
-            throw new \Exception("oro.b2bcustomer.phone.error.delete.more_one", 500);
+            throw new \Exception("orocrm.sales.phone.error.delete.more_one", 500);
         }
     }
 

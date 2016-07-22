@@ -114,7 +114,7 @@ class B2bCustomerEmailHandler
             $em->remove($customerEmail);
             $em->flush();
         } else {
-            throw new \Exception("oro.b2bcustomer.email.error.delete.more_one", 500);
+            throw new \Exception("orocrm.sales.email.error.delete.more_one", 500);
         }
     }
 
