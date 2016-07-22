@@ -33,6 +33,8 @@ class OroCRMCallBridgeBundle implements Migration, ActivityExtensionAwareInterfa
     public static function addCallActivityRelations(Schema $schema, ActivityExtension $activityExtension)
     {
         $associationTables = [
+            'orocrm_account',
+            'orocrm_contact',
             'orocrm_case',
             'orocrm_contactus_request',
             'orocrm_magento_customer',
