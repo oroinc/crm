@@ -51,9 +51,8 @@ class StoreGridListener
         $datagrid   = $event->getDatagrid();
         $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
-            $parameters = $datagrid->getParameters();
-
             if ($this->securityFacade->isGranted('oro_integration_assign')) {
+                $parameters = $datagrid->getParameters();
                 $channelIds = $parameters->get('channelIds');
                 $dataChannel = $this->getDataChannelById($channelIds);
                 if ($dataChannel) {
@@ -82,8 +81,6 @@ class StoreGridListener
      */
     protected function getDataChannelById($dataChannelId)
     {
-        /** @var Channel $result */
-        $result = $this->entityManager->find($this->dataChannelClass, $dataChannelId);
-        return $result;
+        return $this->entityManager->find($this->dataChannelClass, $dataChannelId);
     }
 }
