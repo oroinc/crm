@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -12,7 +12,7 @@ use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntit
  * @outputBuffering enabled
  * @dbIsolation
  */
-class RestContactEmailApiTest extends WebTestCase
+class RestB2bCustomerEmailApiTest extends WebTestCase
 {
     protected function setUp()
     {
@@ -42,7 +42,7 @@ class RestContactEmailApiTest extends WebTestCase
     {
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::FIRST_ENTITY_NAME);
         $content = json_encode([
-            'contactId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'email' =>'test1@test.test',
             'primary' => true
         ]);
@@ -51,7 +51,7 @@ class RestContactEmailApiTest extends WebTestCase
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 
-    public function testEmptyContactId()
+    public function testEmptyB2bCustomerId()
     {
         $content = json_encode([
             'email' =>'test@test.test',
@@ -66,7 +66,7 @@ class RestContactEmailApiTest extends WebTestCase
     {
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::FIRST_ENTITY_NAME);
         $content = json_encode([
-            'contactId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'primary' => true
         ]);
 
