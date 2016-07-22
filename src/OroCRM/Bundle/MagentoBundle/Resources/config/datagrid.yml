@@ -1363,7 +1363,6 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: oro_integration_assign
             skip_acl_apply: true
             query:
                 select:
@@ -1398,7 +1397,6 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: oro_integration_assign
             skip_acl_apply: true
             query:
                 select:
