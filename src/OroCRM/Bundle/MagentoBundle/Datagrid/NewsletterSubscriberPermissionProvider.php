@@ -81,6 +81,22 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
      */
     protected function isChannelApplicable(ResultRecordInterface $record, $checkExtension = true)
     {
+        $channelId = $this->getChannelId($record);
+
+        if (!$channelId) {
+            return false;
+        }
+
+        return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
+    }
+
+    /**
+     * @param ResultRecordInterface $record
+     *
+     * @return int|null
+     */
+    protected function getChannelId(ResultRecordInterface $record)
+    {
         $channelId = $record->getValue(self::CHANNEL_KEY);
         if (!$channelId) {
             $customer = $record->getValue(self::CUSTOMER);
@@ -88,13 +104,11 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
                 $channel = $customer->getChannel();
                 if ($channel) {
                     $channelId = $customer->getChannel()->getId();
-                } else {
-                    return false;
                 }
             }
         }
 
-        return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
+        return $channelId;
     }
 
     /**
