@@ -28,7 +28,6 @@ class CustomerGroupSelectType extends AbstractType
     public function __construct(SecurityFacade $securityFacade)
     {
         $this->securityFacade = $securityFacade;
-        $this->canAssignChannel = $this->securityFacade->isGranted('oro_integration_assign');
     }
 
     /**
@@ -84,7 +83,7 @@ class CustomerGroupSelectType extends AbstractType
      */
     protected function isReadOnly($options)
     {
-        if (!$this->canAssignChannel) {
+        if (!$this->securityFacade->isGranted('oro_integration_assign')) {
             return true;
         }
         return false;
