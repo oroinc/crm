@@ -6,11 +6,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints\Range;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
-use Symfony\Component\Validator\Constraints\Range;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 {
