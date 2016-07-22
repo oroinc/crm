@@ -129,6 +129,14 @@ class ForecastProvider
         return $this->aclHelper->apply($qb)->getOneOrNullResult();
     }
 
+    /**
+     * @param array          $ownerIds
+     * @param \DateTime      $moment
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return array
+     */
     protected function getMomentData(array $ownerIds, \DateTime $moment, \DateTime $start = null, \DateTime $end = null)
     {
         $clonedMoment     = clone $moment;
@@ -158,6 +166,15 @@ class ForecastProvider
 
     }
 
+    /**
+     * @param array     $notChangedIds
+     * @param \DateTime $moment
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param array     $ownerIds
+     *
+     * @return array
+     */
     protected function getChangedOpportunities(
         array $notChangedIds,
         \DateTime $moment,
@@ -237,6 +254,11 @@ class ForecastProvider
         );
     }
 
+    /**
+     * @param array     $item
+     * @param array     $data
+     * @param \DateTime $moment
+     */
     protected function processHistoryItem(array $item, &$data, \DateTime $moment)
     {
         $id             = $item['id'];
@@ -266,6 +288,11 @@ class ForecastProvider
         }
     }
 
+    /**
+     * @param array $excludedIds
+     *
+     * @return array
+     */
     public function getOpportunitiesHistory(array $excludedIds)
     {
         $qb = $this
@@ -343,6 +370,11 @@ class ForecastProvider
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
+    /**
+     * @param QueryBuilder $qb
+     * @param string       $objectIdField
+     * @param array        $ownerIds
+     */
     protected function applyAuditSubQueryCondition(QueryBuilder $qb, $objectIdField, array $ownerIds)
     {
         $auditSubQuery = $this
@@ -392,6 +424,11 @@ class ForecastProvider
             );
     }
 
+    /**
+     * @param QueryBuilder $rootQB
+     * @param Composite    $composite
+     * @param array        $userIds
+     */
     protected function applyOwnerFieldCondition(QueryBuilder $rootQB, Composite $composite, array $userIds)
     {
         $qb = $this->getUserRepository()
@@ -475,6 +512,11 @@ class ForecastProvider
         return $this->doctrine->getRepository('OroUserBundle:User');
     }
 
+    /**
+     * @param $key
+     *
+     * @return mixed
+     */
     protected function getStatusTextValue($key)
     {
         if (null === $this->statuses) {
@@ -484,6 +526,15 @@ class ForecastProvider
         return $this->statuses[$key];
     }
 
+    /**
+     * @param array          $ownerIds
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     * @param \DateTime|null $moment
+     * @param array          $filters
+     *
+     * @return string
+     */
     protected function getDataHashKey(
         array $ownerIds,
         \DateTime $start = null,

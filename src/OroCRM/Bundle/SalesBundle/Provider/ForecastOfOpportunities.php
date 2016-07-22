@@ -231,8 +231,8 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param array $dateRange
-     * @param       $start
+     * @param array     $dateRange
+     * @param \DateTime $start
      *
      * @return array
      */
