@@ -494,15 +494,15 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: c.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 assignedName:
                     type: choice-tree
                     data_name: c.assignedTo
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                     enabled: false
                 reportsName:
                     type: string
@@ -512,9 +512,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: c.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         actions:
             view:
                 type: navigate
@@ -535,6 +533,11 @@ datagrid:
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
+        mass_actions:
+            merge:
+                type: merge
+                entity_name: %orocrm_contact.entity.class%
+                data_identifier: c.id
         options:
             entityHint: contact
             export: true
@@ -637,16 +640,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
