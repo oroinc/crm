@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use FOS\RestBundle\Util\Codes;
 
@@ -27,7 +27,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
     {
         $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
-            'b2bCustomerId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'phone' => '111',
             'primary' => true
         ]);
@@ -43,7 +43,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
         $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
 
         $content = json_encode([
-            'contactId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'phone' =>'test1@test.test',
             'primary' => true
         ]);
@@ -67,7 +67,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
     {
         $customer = $this->getReference('B2bCustomer_'. LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
-            'contactId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'primary' => true
         ]);
 
