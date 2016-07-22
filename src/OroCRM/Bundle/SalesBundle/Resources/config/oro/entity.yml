@@ -3,3 +3,6 @@ oro_entity:
         Extend\Entity\EV_Opportunity_Status:
             alias:        salesopportunitystatus
             plural_alias: salesopportunitystatuses
+        Extend\Entity\EV_Lead_Status:
+            alias:        salesleadstatus
+            plural_alias: salesleadstatuses

@@ -6,6 +6,11 @@ orocrm_sales_lead_api:
     resource: "@OroCRMSalesBundle/Controller/Api/Rest/LeadController.php"
     type:     rest
 
+orocrm_sales_lead_address_api:
+    resource:     "@OroCRMSalesBundle/Controller/Api/Rest/LeadAddressController.php"
+    type:         rest
+    parent:       orocrm_sales_lead_api
+
 orocrm_sales_salesfunnel_api:
     resource: "@OroCRMSalesBundle/Controller/Api/Rest/SalesFunnelController.php"
     type:     rest
@@ -13,3 +18,12 @@ orocrm_sales_salesfunnel_api:
 orocrm_sales_b2bcustomer_api:
     resource: "@OroCRMSalesBundle/Controller/Api/Rest/B2bCustomerController.php"
     type:     rest
+
+orocrm_sales_lead_phone_api:
+    resource:     "@OroCRMSalesBundle/Controller/Api/Rest/LeadPhoneController.php"
+    type:         rest
+    parent:       orocrm_sales_lead_api
+
+orocrm_sales_lead_email_api:
+    resource:     "@OroCRMSalesBundle/Controller/Api/Rest/LeadEmailController.php"
+    type:         rest

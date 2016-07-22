@@ -58,7 +58,8 @@ class CreateActivityAssociation implements
     public function up(Schema $schema, QueryBag $queries)
     {
         self::enableActivityAssociations($schema);
-        self::addActivityAssociations($schema, $this->activityExtension);
+        self::addEmailAssociations($schema, $this->activityExtension);
+        self::addCallAssociations($schema, $this->activityExtension);
         self::addActivityListAssociationTables($schema, $this->activityListExtension);
     }
 
@@ -78,12 +79,19 @@ class CreateActivityAssociation implements
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension
      */
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    public static function addEmailAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_order');
-
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_cart');
+    }
+
+    /**
+     * @param Schema            $schema
+     * @param ActivityExtension $activityExtension
+     */
+    public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
+    {
+        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_order');
         $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_cart');
     }
 

@@ -40,7 +40,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "merge"={
  *              "enable"=true
@@ -156,7 +157,8 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
-     *              "display"=true
+     *              "display"=true,
+     *              "inverse_display"=false
      *          },
      *          "importexport"={
      *              "order"=40,

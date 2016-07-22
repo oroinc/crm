@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -33,8 +34,13 @@ class LeadController extends Controller
      */
     public function viewAction(Lead $lead)
     {
+        $isDisqualifyAndConvertAllowed = $this
+            ->get('orocrm_sales.provider.lead_to_opportunity')
+            ->isDisqualifyAndConvertAllowed($lead);
+        
         return array(
-            'entity' => $lead
+            'entity' => $lead,
+            'isDisqualifyAndConvertAllowed' => $isDisqualifyAndConvertAllowed
         );
     }
 
@@ -47,18 +53,6 @@ class LeadController extends Controller
     {
         return array(
             'entity'  => $lead
-        );
-    }
-
-    /**
-     * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
-     * @Template()
-     */
-    public function addressBookAction(Lead $lead)
-    {
-        return array(
-            'entity' => $lead
         );
     }
 
@@ -163,6 +157,68 @@ class LeadController extends Controller
             'renderParams' => $request->query->get('renderParams', []),
             'multiselect'  => $request->query->get('multiselect', false)
         ];
+    }
+
+    /**
+     * Change status for lead
+     *
+     * @Route("/disqualify/{id}", name="orocrm_sales_lead_disqualify", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_sales_lead_disqualify",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMSalesBundle:Lead"
+     * )
+     */
+    public function disqualifyAction(Lead $lead)
+    {
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
+            throw new AccessDeniedException();
+        }
+        
+        if ($this->get('orocrm_sales.model.change_lead_status')->disqualify($lead)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.sales.lead.status.change_error_message')
+            );
+        }
+
+        return $this->redirectToRoute('orocrm_sales_lead_view', ['id' => $lead->getId()]);
+    }
+
+    /**
+     * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_sales_lead_convert_to_opportunity",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMSalesBundle:Lead"
+     * )
+     * @Template()
+     */
+    public function convertToOpportunityAction(Lead $lead)
+    {
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
+            throw new AccessDeniedException('Only one conversion per lead is allowed !');
+        }
+
+        $session = $this->get('session');
+        return $this->get('orocrm_sales.lead_to_opportunity.form.handler')->create(
+            $lead,
+            $this->get('oro_form.model.update_handler'),
+            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            function () use ($session) {
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->get('translator')->trans('orocrm.sales.lead.convert.error')
+                );
+            }
+        );
     }
 
     /**

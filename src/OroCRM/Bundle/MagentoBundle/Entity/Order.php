@@ -49,7 +49,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_order_follow_up"
