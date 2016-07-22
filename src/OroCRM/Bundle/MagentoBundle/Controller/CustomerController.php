@@ -71,7 +71,6 @@ class CustomerController extends Controller
 
     /**
      * @Route("/create", name="orocrm_magento_customer_create"))
-     * @AclAncestor("oro_integration_assign")
      * @Acl(
      *      id="orocrm_magento_customer_create",
      *      type="entity",
@@ -82,7 +81,13 @@ class CustomerController extends Controller
      */
     public function createAction()
     {
-        return $this->update(new Customer());
+        $customer = new Customer();
+
+        if (!$this->isGranted($customer, 'oro_integration_assign')) {
+            throw new AccessDeniedHttpException();
+        }
+
+        return $this->update($customer);
     }
 
     /**
