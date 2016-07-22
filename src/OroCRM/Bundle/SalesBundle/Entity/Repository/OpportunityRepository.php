@@ -551,4 +551,26 @@ class OpportunityRepository extends EntityRepository
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
+
+    /**
+     * @param string $alias
+     * @param array  $excludedStatuses
+     *
+     * @return QueryBuilder
+     */
+    public function getForecastQB($alias = 'o', array $excludedStatuses = ['lost', 'won'])
+    {
+        $qb     = $this->createQueryBuilder($alias);
+        $qb->select([
+            sprintf('COUNT(%s.id) as inProgressCount', $alias),
+            sprintf('SUM(%s.budgetAmount) as budgetAmount', $alias),
+            sprintf('SUM(%s.budgetAmount * %s.probability) as weightedForecast', $alias, $alias)
+        ]);
+
+        if ($excludedStatuses) {
+            $qb->andWhere($qb->expr()->notIn(sprintf('%s.status', $alias), $excludedStatuses));
+        }
+
+        return $qb;
+    }
 }
