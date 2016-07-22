@@ -11,6 +11,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType;
 use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
@@ -74,7 +75,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    private function getDefaultProbilities()
+    protected function getDefaultProbabilities()
     {
         return [
             'identification_alignment' => 0.3,
@@ -90,17 +91,18 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @param AbstractEnumValue[] $defaultStatuses
      *
-     * @return OpportunityStatusSelectType
+     * @return OpportunityType
      */
-    private function getFormType(array $defaultStatuses = [])
+    protected function getFormType(array $defaultStatuses = [])
     {
+        /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject $configManager */
         $configManager = $this->getMockBuilder(ConfigManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $configManager->expects($this->any())
             ->method('get')
-            ->willReturn($this->getDefaultProbilities());
+            ->willReturn($this->getDefaultProbabilities());
 
         $probabilityProvider = new ProbabilityProvider($configManager);
 
@@ -112,9 +114,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $enumProvider = new EnumValueProvider($doctrineHelper);
         $helper = $this->getEnumTypeHelperMock();
 
-        $type = new OpportunityType($probabilityProvider, $enumProvider, $helper);
-
-        return $type;
+        return new OpportunityType($probabilityProvider, $enumProvider, $helper);
     }
 
     /**
@@ -122,7 +122,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @return DoctrineHelper
      */
-    private function getDoctrineHelperMock(array $defaultValues)
+    protected function getDoctrineHelperMock(array $defaultValues)
     {
         $repo = $this->getMockBuilder(EnumValueRepository::class)
             ->disableOriginalConstructor()
@@ -140,13 +140,14 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityRepository')
             ->willReturn($repo);
 
+        /** @var DoctrineHelper $doctrine */
         return $doctrine;
     }
 
     /**
      * @return EnumTypeHelper
      */
-    private function getEnumTypeHelperMock()
+    protected function getEnumTypeHelperMock()
     {
         $helper = $this->getMockBuilder(EnumTypeHelper::class)
             ->disableOriginalConstructor()
@@ -156,6 +157,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->method('getEnumCode')
             ->willReturn('opportunity_status');
 
+        /** @var EnumTypeHelper $helper */
         return $helper;
     }
 
@@ -164,7 +166,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @return FormEvent
      */
-    private function getFormEvent($data = null)
+    protected function getFormEvent($data = null)
     {
         $form = $this->getMock(FormInterface::class);
 
@@ -176,7 +178,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @return AbstractEnumValue
      */
-    private function getOpportunityStatus($id)
+    protected function getOpportunityStatus($id)
     {
         return new TestEnumValue($id, $id);
     }
@@ -187,7 +189,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @return Opportunity
      */
-    private function getOpportunity($statusId = null, $probability = null)
+    protected function getOpportunity($statusId = null, $probability = null)
     {
         $opportunity = new Opportunity();
 
