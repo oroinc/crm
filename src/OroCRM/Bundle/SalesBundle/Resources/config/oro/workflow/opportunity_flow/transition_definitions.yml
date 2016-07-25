@@ -27,6 +27,11 @@ workflows:
                         attribute: $close_reason
                     - '@assign_value':
                         - [$close_reason_name, 'won']
+                    - '@call_service_method':
+                        service: orocrm_sales.provider.probability
+                        method: get
+                        method_parameters: [$opportunity.status]
+                        attribute: $opportunity.probability
             close_lost_definition:
                 conditions:
                     '@and':
@@ -47,6 +52,11 @@ workflows:
                         attribute: $close_reason
                     - '@assign_value':
                         - [$close_revenue, 0]
+                    - '@call_service_method':
+                        service: orocrm_sales.provider.probability
+                        method: get
+                        method_parameters: [$opportunity.status]
+                        attribute: $opportunity.probability
             reopen_definition:
                 conditions:
                     '@and':
