@@ -137,9 +137,6 @@ class OroCRMSalesBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_lead');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_b2bcustomer');
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_b2bcustomer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_lead');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_b2bcustomer');
