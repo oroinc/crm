@@ -26,7 +26,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
     {
         $customer = $this->getReference('B2bCustomer_' . LoadB2bCustomerEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
-            'b2bCustomerId' => $customer->getId(),
+            'entityId' => $customer->getId(),
             'email' =>'test@test.test',
             'primary' => true
         ]);
