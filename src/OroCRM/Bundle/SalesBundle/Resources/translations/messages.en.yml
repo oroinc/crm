@@ -381,7 +381,7 @@ orocrm:
         # Entity OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
         #
         b2bcustomerphone:
-            entity_description:  Represent B2b Customer phone
+            entity_description:  Represent Business Customer phone
             entity_label:        B2bCustomer Phone
             entity_plural_label: B2bCustomer Phones
             id.label:            Id
@@ -394,7 +394,7 @@ orocrm:
         #
         b2bcustomeremail:
             email.label:         Email
-            entity_description:  Represent B2b Customer email
+            entity_description:  Represent Business Customer email
             entity_label:        B2bCustomer Email
             entity_plural_label: B2bCustomer Emails
             id.label:            Id
