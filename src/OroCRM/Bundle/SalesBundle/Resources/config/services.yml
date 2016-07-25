@@ -290,4 +290,4 @@ services:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_entity_extend.enum_value_provider'
-            - '@oro_dashboard.query.filter_processor'
+            - '@oro_query_designer.query_designer.filter_processor'
