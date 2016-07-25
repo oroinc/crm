@@ -94,7 +94,8 @@ class ForecastOfOpportunities
                 $ownerIds,
                 $dateData['prev_start'],
                 $dateData['prev_end'],
-                $dateData['prev_moment']
+                $dateData['prev_moment'],
+                $queryFilter
             );
             $result['deviation']     = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');

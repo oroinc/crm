@@ -90,7 +90,7 @@ class ForecastProvider
             if (!$moment) {
                 $this->data[$key] = $this->getCurrentData($ownerIds, $start, $end, $filters);
             } else {
-                $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end);
+                $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end, $filters);
             }
         }
 
@@ -109,7 +109,7 @@ class ForecastProvider
         array $ownerIds,
         \DateTime $start = null,
         \DateTime $end = null,
-        array $filters
+        array $filters = []
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
@@ -134,317 +134,131 @@ class ForecastProvider
      * @param \DateTime      $moment
      * @param \DateTime|null $start
      * @param \DateTime|null $end
+     * @param array          $filters
      *
      * @return array
      */
-    protected function getMomentData(array $ownerIds, \DateTime $moment, \DateTime $start = null, \DateTime $end = null)
-    {
-        $clonedMoment     = clone $moment;
-        $clonedStart      = clone $start;
-        $clonedEnd        = clone $end;
-        $notChanged       = $this->getNotChangedOpportunities($ownerIds, $clonedMoment, $clonedStart, $clonedEnd);
-        $notChangedResult = array_reduce(
-            $notChanged,
-            function ($carry, $item) {
-                $carry['inProgressCount']++;
-                $carry['budgetAmount'] += $item['budgetAmount'];
-                $carry['weightedForecast'] += $item['budgetAmount'] * $item['probability'];
-                $carry['ids'][] = $item['id'];
-
-                return $carry;
-            },
-            ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0, 'ids' => []]
-        );
-        $changed          = $this
-            ->getChangedOpportunities($notChangedResult['ids'], $moment, $clonedStart, $clonedEnd, $ownerIds);
-
-        return [
-            'inProgressCount'  => $changed['inProgressCount'] + $notChangedResult['inProgressCount'],
-            'budgetAmount'     => $changed['budgetAmount'] + $notChangedResult['budgetAmount'],
-            'weightedForecast' => $changed['weightedForecast'] + $notChangedResult['weightedForecast']
-        ];
-
-    }
-
-    /**
-     * @param array     $notChangedIds
-     * @param \DateTime $moment
-     * @param \DateTime $start
-     * @param \DateTime $end
-     * @param array     $ownerIds
-     *
-     * @return array
-     */
-    protected function getChangedOpportunities(
-        array $notChangedIds,
+    protected function getMomentData(
+        array $ownerIds,
         \DateTime $moment,
-        \DateTime $start,
-        \DateTime $end,
-        array $ownerIds
+        \DateTime $start = null,
+        \DateTime $end = null,
+        array $filters = []
     ) {
-        $history = $this->getOpportunitiesHistory($notChangedIds);
-        $result  = ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0];
-        $data    = [];
-        foreach ($history as $item) {
-            $this->processHistoryItem($item, $data, $moment);
+        $qb = $this->getAuditRepository()->createQueryBuilder('a');
+        $qb
+            ->select(<<<SELECT
+(SELECT afps.newFloat FROM OroDataAuditBundle:AuditField afps WHERE afps.id = MAX(afp.id)) AS probability,
+(SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
+SELECT
+            )
+            ->join('a.fields', 'afs', Join::WITH, 'afs.field = :statusField')
+            ->join('a.fields', 'afc', Join::WITH, 'afc.field = :closeDateField')
+            ->join('a.fields', 'afp', Join::WITH, 'afp.field = :probabilityField')
+            ->join('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
+            ->where('a.objectClass = :objectClass AND a.loggedAt < :moment')
+            ->groupBy('a.objectId')
+            ->having(<<<HAVING
+EXISTS(
+    SELECT
+        afsh.newText
+    FROM OroDataAuditBundle:AuditField afsh
+    WHERE
+        afsh.id = MAX(afs.id)
+        AND afsh.newText NOT IN (:excludedStatuses)
+)
+AND EXISTS(
+    SELECT
+        afph.newFloat
+    FROM OroDataAuditBundle:AuditField afph
+    WHERE
+        afph.id = MAX(afp.id)
+        AND (afph.newFloat NOT IN (:excludedProbabilities) or afph.newFloat IS NULL)
+)
+HAVING
+            )
+            ->setParameters([
+                'objectClass' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'statusField' => 'status',
+                'closeDateField' => 'closeDate',
+                'probabilityField' => 'probability',
+                'budgetAmountField' => 'budgetAmount',
+                'excludedProbabilities' => [0, 1],
+                'excludedStatuses' => [
+                    $this->getStatusTextValue('lost'),
+                    $this->getStatusTextValue('won'),
+                ],
+                'moment' => $moment,
+            ]);
+
+        $this->applyHistoryDateFiltering($qb, $start, $end);
+
+        if ($ownerIds) {
+            $qb
+                ->join('a.fields', 'afo', Join::WITH, 'afo.field = :ownerField')
+                ->andHaving(<<<HAVING
+EXISTS(
+    SELECT
+        afoh.newText
+    FROM OroDataAuditBundle:AuditField afoh
+    WHERE
+        afoh.id = MAX(afo.id)
+        AND afoh.newText IN (SELECT u.username FROM OroUserBundle:User u WHERE u.id IN (:ownerIds))
+)
+HAVING
+                )
+                ->setParameter('ownerField', 'owner')
+                ->setParameter('ownerIds', $ownerIds);
         }
-        $wonLostStatuses = [
-            $this->getStatusTextValue('won'),
-            $this->getStatusTextValue('lost')
-        ];
-        $userNames       = [];
-        if (!empty($ownerIds)) {
-            $qb = $this
-                ->getUserRepository()
-                ->createQueryBuilder('u')
-                ->select('u.username');
-            $qb->where($qb->expr()->in('u.id', $ownerIds));
-            $userNames = $qb->getQuery()->getArrayResult();
+
+        if ($filters) {
+            $qb
+                ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
+            $this->queryProcessor
+                ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
+
+        $result = $qb
+            ->getQuery()
+            ->getArrayResult();
 
         return array_reduce(
-            $data,
-            function ($result, $item) use ($wonLostStatuses, $userNames, $start, $end) {
-                $status = empty($item['status'])
-                    ? $this->getStatusTextValue($item['original']['status'])
-                    : $item['status']['value'];
-                if (in_array($status, $wonLostStatuses)) {
-                    return;
-                }
-                if ($userNames) {
-                    $owner = empty($item['owner'])
-                        ? $item['original']['username']
-                        : $item['owner']['value'];
-                    if (!in_array($owner, $userNames)) {
-                        return;
-                    }
-                }
-                if ($userNames) {
-                    $owner = empty($item['owner'])
-                        ? $item['original']['username']
-                        : $item['owner']['value'];
-                    if (!in_array($owner, $userNames)) {
-                        return;
-                    }
-                }
-
-                $closeDate = empty($item['closeDate'])
-                    ? $item['original']['closeDate']
-                    : $item['closeDate']['value'];
-                if ($closeDate < $start || $closeDate > $end) {
-                    return;
-                }
-                $probability = empty($item['probability'])
-                    ? $item['original']['probability']
-                    : $item['probability']['value'];
-
-                if ($probability === 1 || $probability === 0) {
-                    return;
-                }
-                $budgetAmount = empty($item['budgetAmount'])
-                    ? $item['original']['budgetAmount']
-                    : $item['budgetAmount']['value'];
-
+            $result,
+            function ($result, $row) {
                 $result['inProgressCount']++;
+                $result['budgetAmount'] += $row['budgetAmount'];
+                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'];
 
-                $result['budgetAmount'] += $budgetAmount;
-                $result['weightedForecast'] += $budgetAmount * $probability;
+                return $result;
             },
-            $result
+            ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0]
         );
-    }
-
-    /**
-     * @param array     $item
-     * @param array     $data
-     * @param \DateTime $moment
-     */
-    protected function processHistoryItem(array $item, &$data, \DateTime $moment)
-    {
-        $id             = $item['id'];
-        $isFeature      = $item['loggedAt'] >= $moment;
-        $previousValues = null;
-        if (isset($data[$id])) {
-            $previousValues = $data[$id];
-        } else {
-            $data[$id] = ['id' => $id, 'original' => $item];
-        }
-
-        $fields = ['status', 'owner', 'closeDate', 'probability', 'budgetAmount'];
-        foreach ($fields as $field) {
-            if (empty($previousValues[$field]['detected'])) {
-                if ($isFeature) {
-                    $data[$item['id']][$field] = [
-                        'detected' => true,
-                        'value'    => $item[static::$fieldsAuditMap[$field]['old']]
-                    ];
-                } else {
-                    $data[$item['id']][$field] = [
-                        'detected' => false,
-                        'value'    => $item[static::$fieldsAuditMap[$field]['new']]
-                    ];
-                }
-            }
-        }
-    }
-
-    /**
-     * @param array $excludedIds
-     *
-     * @return array
-     */
-    public function getOpportunitiesHistory(array $excludedIds)
-    {
-        $qb = $this
-            ->getAuditFieldRepository()
-            ->createQueryBuilder('af')
-            ->join('af.audit', 'a')
-            ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'o.id = a.objectId')
-            ->join('o.owner', 'u')
-            ->select([
-                'af.field',
-                'af.oldText',
-                'af.newText',
-                'af.oldFloat',
-                'af.newFloat',
-                'af.oldDatetime',
-                'af.newDatetime',
-                'a.loggedAt',
-                'a.objectId',
-                'IDENTITY(o.status) AS status',
-                'o.closeDate',
-                'o.budgetAmount',
-                'o.probability',
-                'u.username'
-            ])
-            ->where('a.objectClass = :opportunityClass')
-            ->andWhere('a.action = :updateAction');
-
-        $qb
-            ->andWhere($qb->expr()->in('af.field', ['status', 'owner', 'closeDate', 'probability', 'budgetAmount']))
-            ->setParameter('updateAction', 'update')
-            ->setParameter('opportunityClass', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity')
-            ->orderBy('a.loggedAt', 'ASC');
-        if ($excludedIds) {
-            $qb->andWhere($qb->expr()->notIn('a.objectId', $excludedIds));
-        }
-
-        return $this->aclHelper->apply($qb)->getArrayResult();
-    }
-
-    /**
-     * @param array     $ownerIds
-     * @param \DateTime $clonedMoment
-     * @param \DateTime $clonedStart
-     * @param \DateTime $clonedEnd
-     *
-     * @return array
-     */
-    protected function getNotChangedOpportunities(
-        array $ownerIds,
-        \DateTime $clonedMoment,
-        \DateTime $clonedStart,
-        \DateTime $clonedEnd
-    ) {
-        $qb = $this
-            ->getOpportunityRepository()
-            ->createQueryBuilder('o')
-            ->select([
-                'o.id',
-                'o.budgetAmount',
-                'o.probability'
-            ]);
-        $qb->andWhere($qb->expr()->notIn('o.status', ['won', 'lost']));
-
-        if (!empty($ownerIds)) {
-            $qb->join('o.owner', 'owner');
-            QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
-        }
-        $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
-        $this->applyProbabilityCondition($qb, 'o');
-        $qb->andWhere('o.createdAt < :date')
-            ->setParameter('date', $clonedMoment);
-
-        $this->applyAuditSubQueryCondition($qb, 'o.id', $ownerIds);
-
-        return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
     /**
      * @param QueryBuilder $qb
-     * @param string       $objectIdField
-     * @param array        $ownerIds
+     * @param \DateTime $start
+     * @param \DateTime $end
      */
-    protected function applyAuditSubQueryCondition(QueryBuilder $qb, $objectIdField, array $ownerIds)
+    protected function applyHistoryDateFiltering(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $auditSubQuery = $this
-            ->getAuditFieldRepository()
-            ->createQueryBuilder('af')
-            ->join('af.audit', 'a')
-            ->where(sprintf('a.objectId = %s AND a.objectClass = :objectClass', $objectIdField));
-
-        $fieldsOrX = $qb->expr()->orX(
-            $qb->expr()->andX(
-                'af.field = :statusField',
-                $qb->expr()->in(
-                    'af.oldText',
-                    [
-                        $this->getStatusTextValue('lost'),
-                        $this->getStatusTextValue('won')
-                    ]
-                )
-            ),
-            $qb->expr()->orX('af.field = :probabilityField'),
-            $qb->expr()->orX('af.field = :budgetAmountField'),
-            $qb->expr()->orX(
-                $qb->expr()->andX(
-                    'af.field = :closeDateField',
-                    $qb->expr()->not(
-                        $qb->expr()->between('af.oldDatetime', ':start', ':end')
-                    )
-                )
-            )
-        );
-
-        if ($ownerIds) {
-            $this->applyOwnerFieldCondition($qb, $fieldsOrX, $ownerIds);
+        if (!$start && !$end) {
+            return;
         }
 
-        $auditSubQuery->andWhere($fieldsOrX);
-        $auditSubQuery->andWhere('a.action = :updateAction');
-        $qb
-            ->setParameter('statusField', 'status')
-            ->setParameter('probabilityField', 'probability')
-            ->setParameter('budgetAmountField', 'budgetAmount')
-            ->setParameter('closeDateField', 'closeDate')
-            ->setParameter('updateAction', 'update')
-            ->setParameter('objectClass', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity')
-            ->andWhere(
-                $qb->expr()->not($qb->expr()->exists($auditSubQuery))
+        $closeDateFieldQb = $this->getAuditFieldRepository()->createQueryBuilder('afch')
+            ->select('afch.newDate')
+            ->where('afch.id = MAX(afc.id)');
+        $this->applyDateFiltering($closeDateFieldQb, 'afch.newDate', $start, $end);
+
+        $qb->andHaving($qb->expr()->exists($closeDateFieldQb->getDQL()));
+        foreach ($closeDateFieldQb->getParameters() as $parameter) {
+            $qb->setParameter(
+                $parameter->getName(),
+                $parameter->getValue(),
+                $parameter->getType()
             );
-    }
-
-    /**
-     * @param QueryBuilder $rootQB
-     * @param Composite    $composite
-     * @param array        $userIds
-     */
-    protected function applyOwnerFieldCondition(QueryBuilder $rootQB, Composite $composite, array $userIds)
-    {
-        $qb = $this->getUserRepository()
-            ->createQueryBuilder('u')
-            ->select('u.username');
-        $qb->where($qb->expr()->in('u.id', $userIds));
-
-        $composite->add(
-            $rootQB->expr()->orX(
-                $rootQB->expr()->andX(
-                    'af.field = :ownerNameField',
-                    $rootQB->expr()->notIn('af.oldText', $qb->getDQL())
-                )
-            )
-        );
-        $rootQB->setParameter('ownerNameField', 'owner');
+        }
     }
 
     /**
@@ -505,6 +319,14 @@ class ForecastProvider
     }
 
     /**
+     * @return EntityRepository
+     */
+    protected function getAuditRepository()
+    {
+        return $this->doctrine->getRepository('OroDataAuditBundle:Audit');
+    }
+
+    /**
      * @return UserRepository
      */
     protected function getUserRepository()
@@ -540,7 +362,7 @@ class ForecastProvider
         \DateTime $start = null,
         \DateTime $end = null,
         \DateTime $moment = null,
-        array $filters
+        array $filters = []
     ) {
         return md5(
             serialize(
