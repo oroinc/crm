@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
-abstract class ExtendB2bCustomer
+class ExtendB2bCustomer
 {
     /**
      * Constructor

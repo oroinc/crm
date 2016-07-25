@@ -23,12 +23,7 @@ parameters:
     orocrm_sales.b2bcustomer.manager.api.class:              OroCRM\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
 
     orocrm_sales.b2bcustomer_phone.entity.class:             OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
-    orocrm_sales.b2bcustomer_phone.manager.api.class:        Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_sales.b2bcustomer_phone.api.handler.class:        OroCRM\Bundle\SalesBundle\Handler\B2bCustomerPhoneApiHandler
-
     orocrm_sales.b2bcustomer_email.entity.class:             OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
-    orocrm_sales.b2bcustomer_email.manager.api.class:        Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_sales.b2bcustomer_email.api.handler.class:        OroCRM\Bundle\SalesBundle\Handler\B2bCustomerEmailApiHandler
 
     orocrm_sales.validator.b2bcustomer_email_delete.class:   OroCRM\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator
     orocrm_sales.validator.b2bcustomer_phone_delete.class:   OroCRM\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator
@@ -270,14 +265,14 @@ services:
             - '@oro_user.dashboard.owner_helper'
 
     orocrm_sales.b2bcustomer_phone.manager.api:
-        class: %orocrm_sales.b2bcustomer_phone.manager.api.class%
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.b2bcustomer_phone.entity.class%
             - "@doctrine.orm.entity_manager"
 
     orocrm_sales.b2bcustomer_phone.api.handler:
-        class: %orocrm_sales.b2bcustomer_phone.api.handler.class%
+        class: OroCRM\Bundle\SalesBundle\Handler\B2bCustomerPhoneApiHandler
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"
@@ -285,14 +280,14 @@ services:
             - { name: oro_entity.form.entity_field.handler }
 
     orocrm_sales.b2bcustomer_email.manager.api:
-        class: %orocrm_sales.b2bcustomer_email.manager.api.class%
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.b2bcustomer_email.entity.class%
             - "@doctrine.orm.entity_manager"
 
     orocrm_sales.b2bcustomer_email.api.handler:
-        class: %orocrm_sales.b2bcustomer_email.api.handler.class%
+        class: OroCRM\Bundle\SalesBundle\Handler\B2bCustomerEmailApiHandler
         arguments:
             - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"

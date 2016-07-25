@@ -304,8 +304,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
      */
     protected $emails;
 
-    protected $firstName;
-
     public function __construct()
     {
         parent::__construct();
@@ -817,6 +815,25 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /** Stub for EmailOwnerInterface */
     public function getLastName()
     {
+        return null;
+    }
+
+    /**
+     * @deprecated Use getPrimaryEmail instead since 1.12 version
+     * Get the primary email address of the related contact or account
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getEmail();
+        }
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getEmail();
+        }
         return null;
     }
 }
