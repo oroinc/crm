@@ -29,7 +29,15 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md"
+ *              "icon"="icon-user-md",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

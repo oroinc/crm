@@ -68,39 +68,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
             'updatedAt'       => ['updatedAt', $date, $date],
         ];
     }
-
-    /**
-     * @return array
-     */
-    public function phonesDataProvider()
-    {
-        return [
-            [
-                [
-                    'first'  => new B2bCustomerPhone('06001122334455'),
-                    'second' => new B2bCustomerPhone('07001122334455'),
-                    'third'  => new B2bCustomerPhone('08001122334455')
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function emailsDataProvider()
-    {
-        return [
-            [
-                [
-                    'first'  => new B2bCustomerEmail('email-one@example.com'),
-                    'second' => new B2bCustomerEmail('email-two@example.com'),
-                    'third'  => new B2bCustomerEmail('email-three@example.com')
-                ]
-            ]
-        ];
-    }
-
+    
     public function testPrePersist()
     {
         $this->assertNull($this->entity->getCreatedAt());
@@ -169,108 +137,150 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(self::TEST_NAME, (string)$this->entity);
     }
 
-    /**
-     * @dataProvider phonesDataProvider
-     * @param $phones
-     */
-    public function testPhones($phones)
+    public function testAddDuplicatePhone()
     {
-        $customerPhones = [$phones['first'], $phones['second']];
         $customer = new B2bCustomer();
-        $this->assertSame($customer, $customer->resetPhones($customerPhones));
+        $firstPhone = new B2bCustomerPhone('06001122334455');
+        $secondPhone = new B2bCustomerPhone('07001122334455');
+        $customerPhones = [$firstPhone, $secondPhone];
+
+        $customer->resetPhones($customerPhones);
 
         $actual = $customer->getPhones();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($customerPhones, $actual->toArray());
-        $this->assertSame($customer, $customer->addPhone($phones['second']));
+        $customer->addPhone($secondPhone);
 
         $actual = $customer->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($customerPhones, $actual->toArray());
-        $this->assertSame($customer, $customer->addPhone($phones['third']));
-
-        $actual = $customer->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([$phones['first'], $phones['second'], $phones['third']], $actual->toArray());
-        $this->assertSame($customer, $customer->removePhone($phones['first']));
-
-        $actual = $customer->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([1 => $phones['second'], 2 => $phones['third']], $actual->toArray());
-        $this->assertSame($customer, $customer->removePhone($phones['first']));
-
-        $actual = $customer->getPhones();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([1 => $phones['second'], 2 => $phones['third']], $actual->toArray());
     }
 
-    /**
-     * @dataProvider phonesDataProvider
-     * @param $phones
-     */
-    public function testGetPrimaryPhone($phones)
+    public function testAddNewPhone()
     {
-        $customer = new B2bCustomer();
-        $this->assertNull($customer->getPrimaryPhone());
-        $customer->addPhone($phones['first']);
-        $this->assertNull($customer->getPrimaryPhone());
-        $customer->setPrimaryPhone($phones['first']);
-        $this->assertSame($phones['first'], $customer->getPrimaryPhone());
-        $customer->addPhone($phones['second']);
-        $customer->setPrimaryPhone($phones['second']);
-        $this->assertSame($phones['second'], $customer->getPrimaryPhone());
-        $this->assertFalse($phones['first']->isPrimary());
+        $customer       = new B2bCustomer();
+        $firstPhone     = new B2bCustomerPhone('06001122334455');
+        $secondPhone    = new B2bCustomerPhone('07001122334455');
+        $thirdPhone     = new B2bCustomerPhone('08001122334455');
+        $customerPhones = [$firstPhone, $secondPhone];
+
+        $customer->resetPhones($customerPhones);
+        $customer->addPhone($thirdPhone);
+        $actual = $customer->getPhones();
+        $this->assertEquals([$firstPhone, $secondPhone, $thirdPhone], $actual->toArray());
     }
 
-    /**
-     * @dataProvider emailsDataProvider
-     * @param $emails
-     */
-    public function testEmails($emails)
+    public function testRemoveExistingPhone()
     {
-        $customerEmails = [$emails['first'], $emails['second']];
+        $customer       = new B2bCustomer();
+        $firstPhone     = new B2bCustomerPhone('06001122334455');
+        $secondPhone    = new B2bCustomerPhone('07001122334455');
+        $customerPhones = [$firstPhone, $secondPhone];
+
+        $customer->resetPhones($customerPhones);
+        $customer->removePhone($secondPhone);
+        $actual = $customer->getPhones();
+        $this->assertEquals([$firstPhone], $actual->toArray());
+    }
+
+    public function testRemoveNonExistingPhone()
+    {
+        $customer       = new B2bCustomer();
+        $firstPhone     = new B2bCustomerPhone('06001122334455');
+        $secondPhone    = new B2bCustomerPhone('07001122334455');
+        $thirdPhone     = new B2bCustomerPhone('08001122334455');
+        $customerPhones = [$firstPhone, $secondPhone];
+
+        $customer->resetPhones($customerPhones);
+        $customer->removePhone($thirdPhone);
+        $actual = $customer->getPhones();
+        $this->assertEquals([$firstPhone, $secondPhone], $actual->toArray());
+    }
+
+    public function testGetPrimaryPhone()
+    {
+        $firstPhone = new B2bCustomerPhone('06001122334455');
+        $secondPhone = new B2bCustomerPhone('07001122334455');
         $customer = new B2bCustomer();
-        $this->assertSame($customer, $customer->resetEmails($customerEmails));
+        $this->assertNull($customer->getPrimaryPhone());
+        $customer->addPhone($firstPhone);
+        $this->assertNull($customer->getPrimaryPhone());
+        $customer->setPrimaryPhone($firstPhone);
+        $this->assertSame($firstPhone, $customer->getPrimaryPhone());
+        $customer->addPhone($secondPhone);
+        $customer->setPrimaryPhone($secondPhone);
+        $this->assertSame($secondPhone, $customer->getPrimaryPhone());
+        $this->assertFalse($firstPhone->isPrimary());
+    }
+
+    public function testAddDuplicateEmail()
+    {
+        $customer = new B2bCustomer();
+        $firstEmail = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail = new B2bCustomerEmail('email-two@example.com');
+        $customerEmails = [$firstEmail, $secondEmail];
+
+        $customer->resetEmails($customerEmails);
 
         $actual = $customer->getEmails();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($customerEmails, $actual->toArray());
-        $this->assertSame($customer, $customer->addEmail($emails['second']));
+        $customer->addEmail($secondEmail);
 
         $actual = $customer->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($customerEmails, $actual->toArray());
-        $this->assertSame($customer, $customer->addEmail($emails['third']));
-
-        $actual = $customer->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([$emails['first'], $emails['second'], $emails['third']], $actual->toArray());
-        $this->assertSame($customer, $customer->removeEmail($emails['first']));
-
-        $actual = $customer->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([1 => $emails['second'], 2 => $emails['third']], $actual->toArray());
-        $this->assertSame($customer, $customer->removeEmail($emails['first']));
-
-        $actual = $customer->getEmails();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
-        $this->assertEquals([1 => $emails['second'], 2 => $emails['third']], $actual->toArray());
     }
 
-    /**
-     * @dataProvider emailsDataProvider
-     * @param $emails
-     */
-    public function testGetPrimaryEmail($emails)
+    public function testAddNewEmail()
+    {
+        $customer       = new B2bCustomer();
+        $firstEmail = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail = new B2bCustomerEmail('email-two@example.com');
+        $thirdEmail     = new B2bCustomerEmail('email-three@example.com');
+        $customerEmails = [$firstEmail, $secondEmail];
+
+        $customer->resetEmails($customerEmails);
+        $customer->addEmail($thirdEmail);
+        $actual = $customer->getEmails();
+        $this->assertEquals([$firstEmail, $secondEmail, $thirdEmail], $actual->toArray());
+    }
+
+    public function testRemoveExistingEmail()
+    {
+        $customer       = new B2bCustomer();
+        $firstEmail     = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail    = new B2bCustomerEmail('email-two@example.com');
+        $customerEmails = [$firstEmail, $secondEmail];
+
+        $customer->resetEmails($customerEmails);
+        $customer->removeEmail($secondEmail);
+        $actual = $customer->getEmails();
+        $this->assertEquals([$firstEmail], $actual->toArray());
+    }
+
+    public function testRemoveNonExistingEmail()
+    {
+        $customer       = new B2bCustomer();
+        $firstEmail     = new B2bCustomerEmail('email-one@example.com');
+        $secondEmail    = new B2bCustomerEmail('email-two@example.com');
+        $thirdEmail     = new B2bCustomerEmail('email-three@example.com');
+        $customerEmails = [$firstEmail, $secondEmail];
+
+        $customer->resetEmails($customerEmails);
+        $customer->removeEmail($thirdEmail);
+        $actual = $customer->getEmails();
+        $this->assertEquals([$firstEmail, $secondEmail], $actual->toArray());
+    }
+
+    public function testGetPrimaryEmail()
     {
         $customer = new B2bCustomer();
         $this->assertNull($customer->getPrimaryEmail());
-        $email = $emails['first'];
+        $email = new B2bCustomerEmail('email-one@example.com');
         $customer->addEmail($email);
         $this->assertNull($customer->getPrimaryEmail());
         $customer->setPrimaryEmail($email);
         $this->assertSame($email, $customer->getPrimaryEmail());
-        $email2 = $emails['second'];
+        $email2 = new B2bCustomerEmail('email-two@example.com');
         $customer->addEmail($email2);
         $customer->setPrimaryEmail($email2);
         $this->assertSame($email2, $customer->getPrimaryEmail());
