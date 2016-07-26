@@ -17,10 +17,15 @@ class OroCRMSalesBundle implements Migration
     {
         $queries->addQuery(new UpdateWorkflowItemStepData());
 
-        //change workflows
-        $old = 'b2b_flow_sales';
-        $new = 'opportunity_flow';
-        $queries->addQuery(new WorkflowActivationMigrationQuery($old, false));
-        $queries->addQuery(new WorkflowActivationMigrationQuery($new, false));
+        // applies only if config has old active workflow
+        $queries->addQuery(
+            new UpdateEntityConfigEntityValueQuery(
+                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'workflow',
+                'active_workflow',
+                'opportunity_flow',
+                'b2b_flow_sales'
+            )
+        );
     }
 }
