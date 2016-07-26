@@ -315,10 +315,12 @@ orocrm:
         system_configuration:
             groups:
                 opportunity_configuration.title:               Opportunity Configuration
-                opportunity_status_probabilities.title:        Default probabilities for opportunity statuses
-                opportunity_status_probabilities.tooltip: >
-                    Manage opportunity statuses and assign default probabilities to them,
-                    except for system statuses Closed Won and Closed Lost.
+                opportunity_status_probabilities:
+                    title:          Probabilities
+                    options.label:  Default probabilities for opportunity statuses
+                    options.tooltip: >
+                        Manage opportunity statuses and assign default probabilities to them,
+                        except for system statuses Closed Won and Closed Lost.
             fields:
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
