@@ -275,12 +275,12 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     {
         $customer = new B2bCustomer();
         $this->assertNull($customer->getPrimaryEmail());
-        $email = $emails['first'];
+        $email = new B2bCustomerEmail('email-one@example.com');
         $customer->addEmail($email);
         $this->assertNull($customer->getPrimaryEmail());
         $customer->setPrimaryEmail($email);
         $this->assertSame($email, $customer->getPrimaryEmail());
-        $email2 = $emails['second'];
+        $email2 = new B2bCustomerEmail('email-two@example.com');
         $customer->addEmail($email2);
         $customer->setPrimaryEmail($email2);
         $this->assertSame($email2, $customer->getPrimaryEmail());
