@@ -45,7 +45,7 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
         $this->logQuery($logger, $sql, $parameters);
 
         $data = $data ? $this->connection->convertToPHPValue($data, Type::TARRAY) : [];
-        $data[$this->scope][$this->code] = $data[$this->scope][$this->oldCode];
+        $data[$this->scope][$this->code] = (array)$data[$this->scope][$this->oldCode];
         unset($data[$this->scope][$this->oldCode]);
         $data = $this->connection->convertToDatabaseValue($data, Type::TARRAY);
 

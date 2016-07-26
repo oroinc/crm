@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_23;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_26;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,16 +14,13 @@ class OroCRMSalesBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery(new UpdateWorkflowItemStepData());
-
-        // applies only if config has old active workflow
         $queries->addQuery(
             new UpdateEntityConfigEntityValueQuery(
                 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'workflow',
                 'active_workflow',
                 'opportunity_flow',
-                'b2b_flow_sales'
+                'active_workflows'
             )
         );
     }
