@@ -1,9 +1,0 @@
-oro_api:
-    entities:
-        OroCRM\Bundle\CallBundle\Entity\Call:
-            fields:
-                direction:
-                    exclude: false # override exclude rule from entity.yml
-        OroCRM\Bundle\CallBundle\Entity\CallDirection:
-            exclude: false # override exclude rule from entity.yml
-        OroCRM\Bundle\CallBundle\Entity\CallStatus: ~
