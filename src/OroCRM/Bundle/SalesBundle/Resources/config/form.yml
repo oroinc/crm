@@ -23,6 +23,7 @@ parameters:
     orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
     orocrm_sales.lead_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
+    orocrm_sales.entity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\EntityDataChannelAwareSelectType
     orocrm_sales.opportunity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
 
 services:
