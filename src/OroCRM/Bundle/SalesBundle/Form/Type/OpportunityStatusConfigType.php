@@ -61,7 +61,8 @@ class OpportunityStatusConfigType extends AbstractType
 
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = [
-            'label' => false,
+            'label' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.label',
+            'tooltip' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.tooltip',
         ];
 
         // replace items type with the extended form that includes 'probability'

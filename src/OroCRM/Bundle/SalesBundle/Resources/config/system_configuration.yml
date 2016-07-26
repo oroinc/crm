@@ -6,7 +6,6 @@ oro_system_configuration:
 
         opportunity_status_probabilities:
             title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
-            tooltip: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.tooltip
             priority: 10
 
     fields:
