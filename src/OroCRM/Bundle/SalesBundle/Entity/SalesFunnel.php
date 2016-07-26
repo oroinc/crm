@@ -43,7 +43,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "grid"={
  *              "default"="sales-funnel-grid"
