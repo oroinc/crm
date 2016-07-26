@@ -4,19 +4,19 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Symfony\Component\Form\FormFactory;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use OroCRM\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-
-class LeadEmailHandler
+class B2bCustomerEmailHandler
 {
-    /** @var FormFactory */
+    /** @var FormInterface */
     protected $form;
 
     /** @var Request */
@@ -25,39 +25,45 @@ class LeadEmailHandler
     /** @var EntityManagerInterface */
     protected $manager;
 
+    /** @var  B2bCustomerEmailDeleteValidator */
+    protected $b2bCustomerEmailDeleteValidator;
+
     /** @var SecurityFacade */
     protected $securityFacade;
 
     /**
-     * @param FormFactory $form
+     * @param FormInterface $form
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator
      * @param SecurityFacade $securityFacade
      */
     public function __construct(
-        FormFactory $form,
+        FormInterface $form,
         Request $request,
         EntityManagerInterface $manager,
+        B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator,
         SecurityFacade $securityFacade
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
+        $this->b2bCustomerEmailDeleteValidator = $b2bCustomerEmailDeleteValidator;
         $this->securityFacade = $securityFacade;
     }
 
     /**
      * Process form
      *
-     * @param LeadEmail $entity
+     * @param B2bCustomerEmail $entity
      *
      * @return bool True on successful processing, false otherwise
      *
      * @throws AccessDeniedException
      */
-    public function process(LeadEmail $entity)
+    public function process(B2bCustomerEmail $entity)
     {
-        $form = $this->form->create('orocrm_sales_lead_email', $entity);
+        $this->form->setData($entity);
 
         $submitData = [
             'email' => $this->request->request->get('email'),
@@ -65,23 +71,23 @@ class LeadEmailHandler
         ];
 
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $form->submit($submitData);
+            $this->form->submit($submitData);
 
-            if ($form->isValid() && $this->request->request->get('entityId')) {
-                /** @var Lead $lead */
-                $lead = $this->manager->find(
-                    'OroCRMSalesBundle:Lead',
-                    $this->request->request->get('entityId')
+            $b2bCustomerId = $this->request->request->get('entityId');
+            if ($this->form->isValid() && $b2bCustomerId) {
+                $customer = $this->manager->find(
+                    'OroCRMSalesBundle:B2bCustomer',
+                    $b2bCustomerId
                 );
-                if (!$this->securityFacade->isGranted('EDIT', $lead)) {
+                if (!$this->securityFacade->isGranted('EDIT', $customer)) {
                     throw new AccessDeniedException();
                 }
 
-                if ($lead->getPrimaryEmail() && $this->request->request->get('primary') === true) {
+                if ($customer->getPrimaryEmail() && $this->request->request->get('primary') === true) {
                     return false;
                 }
 
-                $this->onSuccess($entity, $lead);
+                $this->onSuccess($entity, $customer);
 
                 return true;
             }
@@ -97,15 +103,15 @@ class LeadEmailHandler
      */
     public function handleDelete($id, ApiEntityManager $manager)
     {
-        /** @var LeadEmail $leadEmail */
-        $leadEmail = $manager->find($id);
-        if (!$this->securityFacade->isGranted('EDIT', $leadEmail->getOwner())) {
+        /** @var B2bCustomerEmail $customerEmail */
+        $customerEmail = $manager->find($id);
+        if (!$this->securityFacade->isGranted('EDIT', $customerEmail->getOwner())) {
             throw new AccessDeniedException();
         }
 
-        if ($leadEmail->isPrimary() && $leadEmail->getOwner()->getEmails()->count() === 1) {
+        if ($this->b2bCustomerEmailDeleteValidator->validate($customerEmail)) {
             $em = $manager->getObjectManager();
-            $em->remove($leadEmail);
+            $em->remove($customerEmail);
             $em->flush();
         } else {
             throw new \Exception("orocrm.sales.email.error.delete.more_one", 500);
@@ -113,12 +119,12 @@ class LeadEmailHandler
     }
 
     /**
-     * @param LeadEmail $entity
-     * @param Lead $lead
+     * @param B2bCustomerEmail $entity
+     * @param B2bCustomer $customer
      */
-    protected function onSuccess(LeadEmail $entity, Lead $lead)
+    protected function onSuccess(B2bCustomerEmail $entity, B2bCustomer $customer)
     {
-        $entity->setOwner($lead);
+        $entity->setOwner($customer);
         $this->manager->persist($entity);
         $this->manager->flush();
     }
