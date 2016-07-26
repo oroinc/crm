@@ -104,7 +104,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
         foreach ($searchResult as $item) {
             $this->dispatcher->dispatch(PrepareResultItemEvent::EVENT_NAME, new PrepareResultItemEvent($item));
 
-            $id        = $item->getRecordId();
+            $id        = (int)$item->getRecordId();
             $className = $item->getEntityName();
 
             $resultItem = [
