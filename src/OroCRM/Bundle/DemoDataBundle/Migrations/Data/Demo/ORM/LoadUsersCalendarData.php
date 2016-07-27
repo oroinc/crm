@@ -324,6 +324,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * Returns the list of recurring events.
      *
      * @return array
