@@ -22,6 +22,12 @@ parameters:
     orocrm_sales.b2bcustomer.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
     orocrm_sales.b2bcustomer.manager.api.class:              OroCRM\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
 
+    orocrm_sales.b2bcustomer_phone.entity.class:             OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
+    orocrm_sales.b2bcustomer_email.entity.class:             OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
+
+    orocrm_sales.validator.b2bcustomer_email_delete.class:   OroCRM\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator
+    orocrm_sales.validator.b2bcustomer_phone_delete.class:   OroCRM\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator
+
     orocrm_sales.event_listener.b2bcustomer_lifetime.class:  OroCRM\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
 
     orocrm_sales.provider.phone.lead.class:                  OroCRM\Bundle\SalesBundle\Provider\LeadPhoneProvider
@@ -187,6 +193,12 @@ services:
         tags:
             - { name: oro_entity.name_provider, priority: 100 }
 
+    orocrm_sales.provider.b2bcustomer_entity_name:
+        class: OroCRM\Bundle\SalesBundle\Provider\B2bCustomerEntityNameProvider
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
+
     orocrm_sales.provider.sales_funnel_entity_name:
         class: OroCRM\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
         public: false
@@ -232,6 +244,12 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
 
+    orocrm_sales.event_listener.datagrid.widget_sort_by:
+        parent: oro_dashboard.event_listener.widget_sort_by
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-opportunity-grid, method: onResultBeforeQuery }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-lead-grid, method: onResultBeforeQuery }
+
     orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         tags:
@@ -244,6 +262,42 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
+
+    orocrm_sales.b2bcustomer_phone.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.b2bcustomer_phone.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.b2bcustomer_phone.api.handler:
+        class: OroCRM\Bundle\SalesBundle\Handler\B2bCustomerPhoneApiHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_sales.b2bcustomer_email.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.b2bcustomer_email.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.b2bcustomer_email.api.handler:
+        class: OroCRM\Bundle\SalesBundle\Handler\B2bCustomerEmailApiHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_sales.validator.b2bcustomer_email_delete:
+        class: %orocrm_sales.validator.b2bcustomer_email_delete.class%
+
+    orocrm_sales.validator.b2bcustomer_phone_delete:
+        class: %orocrm_sales.validator.b2bcustomer_phone_delete.class%
 
     orocrm_sales.provider.privilege_category_provider:
         class: %orocrm_sales.provider.privilege_category_provider.class%
