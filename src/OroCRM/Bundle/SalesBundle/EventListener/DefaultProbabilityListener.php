@@ -92,7 +92,7 @@ class DefaultProbabilityListener
         $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
 
         if (isset($probabilities[$statusId])) {
-            return $probabilities[$statusId];
+            return (float) $probabilities[$statusId];
         }
 
         return null;
