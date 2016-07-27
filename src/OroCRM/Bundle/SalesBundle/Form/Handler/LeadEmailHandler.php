@@ -108,7 +108,7 @@ class LeadEmailHandler
             $em->remove($leadEmail);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.lead.email.error.delete.more_one", 500);
+            throw new \Exception("orocrm.sales.email.error.delete.more_one", 500);
         }
     }
 

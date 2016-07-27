@@ -108,16 +108,22 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             [
                 'old_name'      => 'qualify',
                 'new_name'      => 'open',
+                'new_label'     => 'Open',
+                'final'         => false,
                 'workflow_name' => 'opportunity_flow',
             ],
             [
                 'old_name'      => 'develop',
                 'new_name'      => 'won',
+                'new_label'     => 'Won',
+                'final'         => true,
                 'workflow_name' => 'opportunity_flow',
             ],
             [
                 'old_name'      => 'close',
                 'new_name'      => 'lost',
+                'new_label'     => 'Lost',
+                'final'         => true,
                 'workflow_name' => 'opportunity_flow',
             ],
         ];
@@ -125,10 +131,12 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $types = [
             'old_name'      => Type::STRING,
             'new_name'      => Type::STRING,
+            'new_label'     => Type::STRING,
+            'final'         => Type::BOOLEAN,
             'workflow_name' => Type::STRING,
         ];
 
-        $sql = 'UPDATE oro_workflow_step SET name = :new_name' .
+        $sql = 'UPDATE oro_workflow_step SET name = :new_name, label = :new_label, is_final = :final' .
                ' WHERE workflow_name = :workflow_name AND name = :old_name';
         foreach ($params as $param) {
             $this->logQuery($logger, $sql, $param, $types);
@@ -139,6 +147,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
     /**
      * @param LoggerInterface $logger
      * @param bool            $dryRun
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function updateWorkflowTransitionLogs(LoggerInterface $logger, $dryRun)
     {

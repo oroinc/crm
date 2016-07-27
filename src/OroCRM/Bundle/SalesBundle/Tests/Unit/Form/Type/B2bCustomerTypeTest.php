@@ -18,7 +18,8 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(6))
+        // 8 is the number of fields in form
+        $builder->expects($this->exactly(8))
             ->method('add')
             ->will(
                 $this->returnValueMap(

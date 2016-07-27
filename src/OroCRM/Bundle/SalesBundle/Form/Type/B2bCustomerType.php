@@ -49,6 +49,26 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
+            'emails',
+            'oro_email_collection',
+            array(
+                'label'    => 'orocrm.sales.b2bcustomer.emails.label',
+                'type'     => 'oro_email',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail')
+            )
+        );
+        $builder->add(
+            'phones',
+            'oro_phone_collection',
+            array(
+                'label'    => 'orocrm.sales.b2bcustomer.phones.label',
+                'type'     => 'oro_phone',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone')
+            )
+        );
+        $builder->add(
             'dataChannel',
             'orocrm_channel_select_type',
             [
