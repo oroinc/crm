@@ -51,7 +51,7 @@ define(function(require) {
             }
 
             if (probabilities.hasOwnProperty(status.val())) {
-                if (probabilities[status.val()] == probability.val() / 100) {
+                if (probabilities[status.val()] == probability.val()) {
                     shouldChangeProbability = true;
                 }
             }
@@ -62,15 +62,13 @@ define(function(require) {
 
             status.on('change', function(e) {
                 var val = status.val();
-                var defaultProbability;
 
                 if (!shouldChangeProbability) {
                     return;
                 }
 
                 if (probabilities.hasOwnProperty(val)) {
-                    defaultProbability = probabilities[val] * 100;
-                    probability.val(defaultProbability);
+                    probability.val(probabilities[val]);
                 }
             });
         }
