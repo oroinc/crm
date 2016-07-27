@@ -111,7 +111,6 @@ services:
             - '@oro_config.user'
             - '@oro_workflow.restriction.manager'
         tags:
-            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
             - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
 
     orocrm_sales.provider.phone.lead:

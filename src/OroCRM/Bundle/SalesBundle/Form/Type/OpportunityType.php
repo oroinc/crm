@@ -149,7 +149,7 @@ class OpportunityType extends AbstractType
     }
 
     /**
-     * Set default probability based on default enum status value
+     * Set new opportunities default probability based on default enum status value
      *
      * @param FormEvent $event
      */
@@ -157,6 +157,10 @@ class OpportunityType extends AbstractType
     {
         $opportunity = $event->getData();
         if (null === $opportunity) {
+            return;
+        }
+
+        if ($opportunity->getId()) {
             return;
         }
 

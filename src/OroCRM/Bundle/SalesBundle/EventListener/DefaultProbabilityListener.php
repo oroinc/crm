@@ -29,25 +29,6 @@ class DefaultProbabilityListener
     }
 
     /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-        if (!$entity instanceof Opportunity) {
-            return;
-        }
-
-        if ($this->hasWorkflowRestriction($entity)) {
-            return;
-        }
-
-        if ($entity->getProbability() === null) {
-            $entity->setProbability($this->getDefaultProbability($entity));
-        }
-    }
-
-    /**
      * @param PreUpdateEventArgs $args
      */
     public function preUpdate(PreUpdateEventArgs $args)
@@ -61,7 +42,11 @@ class DefaultProbabilityListener
             return;
         }
 
-        $probability = $this->getDefaultProbability($entity);
+        if (null == $entity->getStatus()) {
+            return;
+        }
+
+        $probability = $this->getDefaultProbability($entity->getStatus()->getId());
         if (null === $probability) {
             return;
         }
@@ -70,11 +55,9 @@ class DefaultProbabilityListener
             return;
         }
 
-        if ($args->hasChangedField('probability')) {
-            if (null === $args->getNewValue('probability')) {
-                $args->setNewValue('probability', $probability);
-            }
-
+        // don't change if it's already overwritten
+        $oldProbability = $this->getDefaultProbability($args->getOldValue('status')->getId());
+        if ($oldProbability !== $entity->getProbability()) {
             return;
         }
 
@@ -100,17 +83,12 @@ class DefaultProbabilityListener
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param int $statusId
      *
      * @return float|null
      */
-    protected function getDefaultProbability(Opportunity $opportunity)
+    protected function getDefaultProbability($statusId)
     {
-        if (!$opportunity->getStatus()) {
-            return null;
-        }
-
-        $statusId = $opportunity->getStatus()->getId();
         $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
 
         if (isset($probabilities[$statusId])) {
