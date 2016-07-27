@@ -17,8 +17,6 @@ orocrm:
             lead.label:                     Lead
             calls.label:                    Calls
             emails.label:                   Emails
-            workflow_item.label:            Workflow item
-            workflow_step.label:            Workflow step
             organization_name.label:        Organization name
             preferred_contact_method.label: Preferred contact method
             owner.label:                    Organization
