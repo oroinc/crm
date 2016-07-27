@@ -827,13 +827,16 @@ class B2bCustomer extends ExtendB2bCustomer implements
     }
 
     /**
-     * @deprecated Use getPrimaryEmail instead since 1.12 version
      * Get the primary email address of the related contact or account
      *
      * @return string
      */
     public function getEmail()
     {
+        $primaryEmail = $this->getPrimaryEmail();
+        if ($primaryEmail) {
+            return $primaryEmail->getEmail();
+        }
         $contact = $this->getContact();
         if ($contact) {
             return $contact->getEmail();
