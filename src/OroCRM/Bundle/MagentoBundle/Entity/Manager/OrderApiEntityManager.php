@@ -12,7 +12,7 @@ class OrderApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['workflowItem', 'workflowStep', 'relatedEmails'],
+            'excluded_fields' => ['relatedEmails'],
             'fields'          => [
                 'store'        => ['fields' => 'id'],
                 'dataChannel'  => ['fields' => 'id'],

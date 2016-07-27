@@ -650,14 +650,12 @@ datagrid:
                     - opportunity.budgetAmount as opportunityBudget
                     - opportunity.closeRevenue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
-                    - step.label as stepLabel
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
                     left:
-                        - { join: salesFunnel.workflowStep, alias: step }
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
                         - { join: salesFunnel.dataChannel, alias: channel }
@@ -683,8 +681,6 @@ datagrid:
             opportunityProbability:
                 label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            stepLabel:
-                label: orocrm.sales.salesfunnel.workflow_step.label
             ownerName:
                 label: orocrm.sales.salesfunnel.owner.label
         properties:
@@ -718,8 +714,6 @@ datagrid:
                     data_name: opportunity.closeRevenue
                 opportunityProbability:
                     data_name: opportunity.probability
-                stepLabel:
-                    data_name: step.label
                 ownerName:
                     data_name: ownerName
             default:
@@ -775,14 +769,6 @@ datagrid:
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
-                stepLabel:
-                    type: entity
-                    data_name: salesFunnel.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
-                            translatable_options: false
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
@@ -1237,11 +1223,11 @@ datagrid:
                 accountName:
                     type: string
                     data_name: accountName
-                    enabled: false                    
+                    enabled: false
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false                    
+                    enabled: false
                 baCountryName:
                     type: entity
                     data_name: ba.country
