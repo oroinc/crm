@@ -25,6 +25,7 @@ define(function(require) {
             var status = this.pageComponent('orocrm_sales_opportunity_form_status').view.$el;
             var probability = this.$('input[data-name="field__probability"]:enabled');
             var probabilities = status.data('probabilities');
+            var shouldChangeProbability = false;
 
             customer.on('change', function(e) {
                 if (e.added && e.added['dataChannel.id']) {
@@ -49,9 +50,23 @@ define(function(require) {
                 return;
             }
 
+            if (probabilities.hasOwnProperty(status.val())) {
+                if (probabilities[status.val()] == probability.val() / 100) {
+                    shouldChangeProbability = true;
+                }
+            }
+
+            probability.on('change', function(e) {
+                shouldChangeProbability = false;
+            });
+
             status.on('change', function(e) {
                 var val = status.val();
                 var defaultProbability;
+
+                if (!shouldChangeProbability) {
+                    return;
+                }
 
                 if (probabilities.hasOwnProperty(val)) {
                     defaultProbability = probabilities[val] * 100;

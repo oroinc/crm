@@ -23,10 +23,25 @@ define(function(require) {
             var status = this.$('select[data-name="field__status"]');
             var probability = this.$('input[data-name="field__probability"]');
             var defaultProbabilities = status.data('probabilities');
+            var shouldChangeProbability = false;
+
+            if (defaultProbabilities.hasOwnProperty(status.val())) {
+                if (defaultProbabilities[status.val()] == probability.val() / 100) {
+                    shouldChangeProbability = true;
+                }
+            }
+
+            probability.on('change', function(e) {
+                shouldChangeProbability = false;
+            });
 
             status.on('change', function(e) {
                 var val = status.val();
                 var defaultProbability;
+
+                if (!shouldChangeProbability) {
+                    return;
+                }
 
                 if (defaultProbabilities.hasOwnProperty(val)) {
                     defaultProbability = defaultProbabilities[val] * 100;
