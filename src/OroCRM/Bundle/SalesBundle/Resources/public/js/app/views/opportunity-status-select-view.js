@@ -26,7 +26,7 @@ define(function(require) {
             var shouldChangeProbability = false;
 
             if (defaultProbabilities.hasOwnProperty(status.val())) {
-                if (defaultProbabilities[status.val()] == probability.val() / 100) {
+                if (defaultProbabilities[status.val()] == probability.val()) {
                     shouldChangeProbability = true;
                 }
             }
@@ -37,15 +37,13 @@ define(function(require) {
 
             status.on('change', function(e) {
                 var val = status.val();
-                var defaultProbability;
 
                 if (!shouldChangeProbability) {
                     return;
                 }
 
                 if (defaultProbabilities.hasOwnProperty(val)) {
-                    defaultProbability = defaultProbabilities[val] * 100;
-                    probability.val(defaultProbability);
+                    probability.val(defaultProbabilities[val]);
                 }
             });
         }
