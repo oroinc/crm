@@ -376,8 +376,8 @@ orocrm:
         #
         b2bcustomerphone:
             entity_description:  Represent Business Customer phone
-            entity_label:        B2bCustomer Phone
-            entity_plural_label: B2bCustomer Phones
+            entity_label:        Business Customer Phone
+            entity_plural_label: Business Customer Phones
             id.label:            Id
             owner.label:         Owner
             phone.label:         Phone
@@ -389,8 +389,8 @@ orocrm:
         b2bcustomeremail:
             email.label:         Email
             entity_description:  Represent Business Customer email
-            entity_label:        B2bCustomer Email
-            entity_plural_label: B2bCustomer Emails
+            entity_label:        Business Customer Email
+            entity_plural_label: Business Customer Emails
             id.label:            Id
             owner.label:         Owner
             primary.label:       Primary
