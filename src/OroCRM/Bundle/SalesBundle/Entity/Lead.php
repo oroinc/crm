@@ -80,7 +80,7 @@ class Lead extends ExtendLead implements
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
-    
+
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -229,7 +229,7 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $jobTitle;
-    
+
     /**
      * @var Collection
      *
