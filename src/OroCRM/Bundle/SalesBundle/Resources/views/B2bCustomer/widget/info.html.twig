@@ -2,6 +2,7 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
+{% import 'OroCRMSalesBundle::macros.html.twig' as sales %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -22,6 +23,8 @@
             {%- else -%}
                 {% set contactView = entity.contact ? entity.contact : '' %}
             {%- endif -%}
+            {{ UI.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? sales.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ UI.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? sales.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
 
             {% if entity.billingAddress is not empty %}

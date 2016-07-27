@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use OroCRM\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider;
 
 class B2bCustomerPhoneProviderTest extends \PHPUnit_Framework_TestCase
@@ -20,74 +21,41 @@ class B2bCustomerPhoneProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider->setRootProvider($this->rootProvider);
     }
 
-    public function testGetPhoneNumberNoContact()
-    {
-        $entity = new B2bCustomer();
-
-        $this->rootProvider->expects($this->never())
-            ->method('getPhoneNumber');
-
-        $this->assertNull(
-            $this->provider->getPhoneNumber($entity)
-        );
-    }
-
     public function testGetPhoneNumber()
     {
         $entity = new B2bCustomer();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $entity->setContact($contact);
-        $this->rootProvider->expects($this->once())
-            ->method('getPhoneNumber')
-            ->with($this->identicalTo($contact))
-            ->will($this->returnValue('123-123'));
-
-        $this->assertEquals(
-            '123-123',
+        $this->assertNull(
             $this->provider->getPhoneNumber($entity)
         );
-    }
 
-    public function testGetPhoneNumbersNoContact()
-    {
-        $entity = new B2bCustomer();
-
-        $this->rootProvider->expects($this->never())
-            ->method('getPhoneNumbers');
-
-        $this->assertSame(
-            [],
-            $this->provider->getPhoneNumbers($entity)
+        $phone1 = new B2bCustomerPhone('123-123');
+        $entity->addPhone($phone1);
+        $phone2 = new B2bCustomerPhone('456-456');
+        $phone2->setPrimary(true);
+        $entity->addPhone($phone2);
+        $this->assertEquals(
+            '456-456',
+            $this->provider->getPhoneNumber($entity)
         );
     }
 
     public function testGetPhoneNumbers()
     {
         $entity = new B2bCustomer();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
 
-        $entity->setContact($contact);
-        $this->rootProvider->expects($this->once())
-            ->method('getPhoneNumbers')
-            ->with($this->identicalTo($contact))
-            ->will(
-                $this->returnValue(
-                    [
-                        ['123-123', $contact],
-                        ['456-456', $contact]
-                    ]
-                )
-            );
-
-        $this->assertEquals(
+        $this->assertSame(
+            [],
+            $this->provider->getPhoneNumbers($entity)
+        );
+        $phone1 = new B2bCustomerPhone('123-123');
+        $entity->addPhone($phone1);
+        $phone2 = new B2bCustomerPhone('456-456');
+        $phone2->setPrimary(true);
+        $entity->addPhone($phone2);
+        $this->assertSame(
             [
-                ['123-123', $contact],
-                ['456-456', $contact]
+                ['123-123', $entity],
+                ['456-456', $entity]
             ],
             $this->provider->getPhoneNumbers($entity)
         );
