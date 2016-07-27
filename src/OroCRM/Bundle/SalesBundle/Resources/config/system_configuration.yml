@@ -26,6 +26,7 @@ oro_system_configuration:
                 required: false
                 resettable: true
                 label: false
+                allow_extra_fields: true
                 attr:
                     class: oro-clearfix
     tree:
