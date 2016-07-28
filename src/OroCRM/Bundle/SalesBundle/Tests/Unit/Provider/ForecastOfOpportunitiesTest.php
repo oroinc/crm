@@ -70,7 +70,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->forecastProvider = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
+        $this->forecastProvider = $this
+            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
