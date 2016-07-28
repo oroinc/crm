@@ -52,9 +52,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "group_name"="",
  *              "category"="sales_data"
  *          },
- *          "workflow"={
- *              "active_workflows"={"b2c_flow_order_follow_up"}
- *          },
  *          "grid"={
  *              "default"="magento-order-grid",
  *              "context"="magento-order-for-context-grid"
