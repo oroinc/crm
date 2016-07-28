@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -58,7 +56,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "grid_name"="magento-cart-grid",
  *          },
  *          "workflow"={
- *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *              "active_workflows"={"b2c_flow_abandoned_shopping_cart"}
  *          },
  *          "grid"={
  *              "default"="magento-cart-grid",
@@ -266,22 +264,6 @@ class Cart extends ExtendCart implements
     protected $notes;
 
     /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="status_message", type="string", length=255, nullable=true)
@@ -316,46 +298,6 @@ class Cart extends ExtendCart implements
      * @ORM\Column(type="datetime", name="synced_at", nullable=true)
      */
     protected $syncedAt;
-
-    /**
-     * @param WorkflowItem $workflowItem
-     *
-     * @return Cart
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowStep $workflowStep
-     *
-     * @return Cart
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
 
     public function __construct()
     {
