@@ -46,6 +46,10 @@ class OpportunityRelationsBuilder
         if (!$customer->getOrganization()) {
             $customer->setOrganization($this->opportunity->getOrganization());
         }
+
+        if (!$customer->getContact()) {
+            $customer->setContact($this->opportunity->getContact());
+        }
     }
 
     public function buildAccount()
