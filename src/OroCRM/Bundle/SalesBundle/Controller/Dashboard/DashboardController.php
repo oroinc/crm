@@ -30,11 +30,13 @@ class DashboardController extends Controller
         // prepare chart data
         $dataProvider = $this->get('orocrm_sales.provider.opportunity_by_lead_source');
 
+        $byAmount = (bool) $options->get('byAmount', false);
+
         $data = $dataProvider->getChartData(
             $options->get('dateRange', []),
             $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options),
             (array) $options->get('excludedSources'),
-            (bool) $options->get('byAmount', false)
+            $byAmount
         );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
@@ -47,6 +49,11 @@ class DashboardController extends Controller
                         'label' => ['field_name' => 'source'],
                         'value' => ['field_name' => 'value'],
                     ],
+                    'settings' => [
+                        'showPercentValues' => 1,
+                        'showPercentInTooltip' => 0,
+                        'valuePrefix' => $byAmount ? '$' : '',
+                    ]
                 ]
             )
             ->getView();
