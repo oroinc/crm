@@ -22,6 +22,9 @@ class LeadSourceSelectType extends AbstractType
         $this->enumValueProvider = $enumValueProvider;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $choices = array_merge(
