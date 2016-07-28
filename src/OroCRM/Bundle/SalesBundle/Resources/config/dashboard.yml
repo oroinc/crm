@@ -45,8 +45,10 @@ oro_dashboard_config:
                         configs:
                             placeholder: orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.placeholder
                 byAmount:
-                    type: choice
+                    type: oro_type_widget_choice
                     show_on_widget: true
+                    converter_attributes:
+                        default_selected: 0
                     options:
                         label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.label
                         tooltip: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.tooltip
