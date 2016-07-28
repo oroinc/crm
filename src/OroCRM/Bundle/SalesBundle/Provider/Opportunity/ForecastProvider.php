@@ -108,7 +108,7 @@ class ForecastProvider
         array $ownerIds,
         \DateTime $start = null,
         \DateTime $end = null,
-        array $filters
+        array $filters = []
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
@@ -162,7 +162,6 @@ class ForecastProvider
             'budgetAmount'     => $changed['budgetAmount'] + $notChangedResult['budgetAmount'],
             'weightedForecast' => $changed['weightedForecast'] + $notChangedResult['weightedForecast']
         ];
-
     }
 
     /**
@@ -539,7 +538,7 @@ class ForecastProvider
         \DateTime $start = null,
         \DateTime $end = null,
         \DateTime $moment = null,
-        array $filters
+        array $filters = []
     ) {
         return md5(
             serialize(
