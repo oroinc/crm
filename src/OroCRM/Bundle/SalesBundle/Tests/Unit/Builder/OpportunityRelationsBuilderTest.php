@@ -55,10 +55,18 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($organization, $customer->getOrganization());
     }
 
-    public function testShouldSetCustomerContact()
+    /**
+     * @dataProvider customerRelationIdentifiersProvider
+     *
+     * @param int|null $customerId
+     * @param int|null $contactId
+     */
+    public function testShouldSetCustomerContactIfAtLeastOneOrBothRecordsAreNew($customerId, $contactId)
     {
         $opportunityContact = new Contact();
+        $opportunityContact->setId($contactId);
         $customer = new B2bCustomer();
+        $this->setObjectId($customer, $customerId);
         $opportunity = new Opportunity();
         $opportunity->setCustomer($customer);
         $opportunity->setContact($opportunityContact);
@@ -69,7 +77,16 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($opportunityContact, $customer->getContact());
     }
 
-    public function testShouldNotSetCustomerContactIfExists()
+    public function customerRelationIdentifiersProvider()
+    {
+        return [
+            ['customerId' => 69, 'contactId' => null],
+            ['customerId' => null, 'contactId' => 69],
+            ['customerId' => null, 'contactId' => null],
+        ];
+    }
+
+    public function testShouldNotSetCustomerContactIfAlreadyExists()
     {
         $customerContact = new Contact();
         $opportunityContact = new Contact();
@@ -86,13 +103,29 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($opportunityContact, $customer->getContact());
     }
 
+    public function testShouldNotSetCustomerContactIfBothRecordsAreOld()
+    {
+        $opportunityContact = new Contact();
+        $opportunityContact->setId(1);
+        $customer = new B2bCustomer();
+        $this->setObjectId($customer, 1);
+        $opportunity = new Opportunity();
+        $opportunity->setCustomer($customer);
+        $opportunity->setContact($opportunityContact);
+
+        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder->buildCustomer();
+
+        $this->assertNull($customer->getContact());
+    }
+
     /**
-     * @dataProvider relationIdentifiersProvider
+     * @dataProvider accountRelationIdentifiersProvider
      *
      * @param int|null $accountId
      * @param int|null $contactId
      */
-    public function testShouldAddContactToAccount($accountId, $contactId)
+    public function testShouldAddContactToAccountIfAtLeastOneOrBothRecordsAreNew($accountId, $contactId)
     {
         $contact = new Contact();
         $contact->setId($contactId);
@@ -112,12 +145,24 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($account->getContacts()->contains($contact));
     }
 
-    public function relationIdentifiersProvider()
+    public function accountRelationIdentifiersProvider()
     {
         return [
             ['accountId' => 69, 'contactId' => null],
             ['accountId' => null, 'contactId' => 69],
             ['accountId' => null, 'contactId' => null],
         ];
+    }
+
+    /**
+     * @param object $object
+     * @param int $id
+     */
+    private function setObjectId($object, $id)
+    {
+        $reflection = new \ReflectionObject($object);
+        $propertyReflection = $reflection->getProperty('id');
+        $propertyReflection->setAccessible(true);
+        $propertyReflection->setValue($object, $id);
     }
 }
