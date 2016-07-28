@@ -360,20 +360,10 @@ definitions:
                         - '@not_empty': $.integration
                         - '@equal': [$.integration.enabled, true]
                 actions:
-                    - '@assign_constant_value':
-                        attribute: $.commandName
-                        value: Oro\Bundle\IntegrationBundle\Command\SyncCommand::COMMAND_NAME
-                    - '@format_string':
-                        attribute: $.channelArguments
-                        string: '--integration-id=%integration_id%'
-                        arguments:
-                            integration_id: $.integration.id
-                    - '@create_entity':
-                        class: JMS\JobQueueBundle\Entity\Job
-                        attribute: $.syncJob
-                        arguments:
-                            - $.commandName
-                            - [$.channelArguments]
+                    - '@call_service_method':
+                        service: 'oro_integration.genuine_sync_scheduler'
+                        method: 'schedule'
+                        method_parameters: [$.integration.id]
 
 triggers:
     magento_customer_creation:
@@ -411,5 +401,4 @@ triggers:
         -
             event:    update
             priority: 50
-            queued:   true
             field:    syncStartDate
