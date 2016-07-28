@@ -122,8 +122,6 @@ class WidgetOpportunityByLeadSourceProvider
      */
     protected function processData(array $rows, $excluded = [], $limit = 10)
     {
-        $result = [];
-
         // first sort by value to make sure biggest numbers are not merged to Others (when limit is applied)
         usort(
             $rows,
@@ -155,7 +153,7 @@ class WidgetOpportunityByLeadSourceProvider
         );
 
         // add a slice consisting of the first $limit classified sources
-        $result = array_merge($result, array_slice($named, 0, $limit));
+        $result = array_slice($named, 0, $limit);
 
         // merge the data from sources that left with the excluded sources
         $others = array_merge($others, array_slice($named, $limit));
