@@ -212,7 +212,7 @@ HAVING
         if ($filters) {
             $qb
                 ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
-            $this->queryProcessor
+            $this->filterProcessor
                 ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
