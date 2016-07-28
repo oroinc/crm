@@ -2,96 +2,42 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+
+use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
-use Oro\Bundle\UserBundle\Entity\User;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $doctrine;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $translator;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $numberFormatter;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $dateTimeFormatter;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $aclHelper;
-
-    /**
-     * @var ForecastOfOpportunities
-     */
+    /** @var ForecastOfOpportunities */
     protected $provider;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $opportunityRepository;
+    /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $translator;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $businessUnitRepository;
+    /** @var NumberFormatter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $numberFormatter;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $userRepository;
+    /** @var DateTimeFormatter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dateTimeFormatter;
 
-    /** @var DateHelper|\PHPUnit_Framework_MockObject_MockBuilder */
+    /** @var ForecastProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $forecastProvider;
+
+    /** @var DateHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $dateHelper;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
+    /** @var OwnerHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $ownerHelper;
 
     protected function setUp()
     {
-        $opportunityRepository       = 'OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository';
-        $this->opportunityRepository = $this->getMockBuilder($opportunityRepository)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $businessUnitRepository       = 'Oro\Bundle\OrganizationBundle\Entity\Repository\BusinessUnitRepository';
-        $this->businessUnitRepository = $this->getMockBuilder($businessUnitRepository)
-            ->setMethods(['findById'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->userRepository = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\Repository\UserRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->doctrine = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->doctrine->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValueMap([
-                ['OroCRMSalesBundle:Opportunity', null, $this->opportunityRepository],
-                ['OroOrganizationBundle:BusinessUnit', null, $this->businessUnitRepository],
-                ['OroUserBundle:User', null, $this->userRepository],
-            ]));
-
         $this->translator = $this->getMockBuilder('Oro\Bundle\TranslationBundle\Translation\Translator')
             ->disableOriginalConstructor()
             ->getMock();
@@ -116,191 +62,137 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->will($this->returnArgument(0));
 
-        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->ownerHelper = $this->getMockBuilder('\Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
+        $this->ownerHelper = $this->getMockBuilder('Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        
+
+        $this->forecastProvider = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->ownerHelper->expects($this->any())
+            ->method('getOwnerIds')
+            ->willReturn([]);
+
         $this->provider = new ForecastOfOpportunities(
-            $this->doctrine,
             $this->numberFormatter,
             $this->dateTimeFormatter,
-            $this->aclHelper,
             $this->translator,
             $this->dateHelper,
-            $this->ownerHelper
+            $this->ownerHelper,
+            $this->forecastProvider
         );
     }
 
     public function tearDown()
     {
         unset(
-            $this->doctrine,
             $this->numberFormatter,
             $this->dateTimeFormatter,
-            $this->aclHelper,
             $this->translator,
             $this->dateHelper,
-            $this->ownerHelper
+            $this->ownerHelper,
+            $this->provider
         );
-    }
-
-    public function testForecastOfOpportunitiesValuesWithUserAutoFill()
-    {
-        $user = new User();
-        $user->setId(1);
-        $options = [
-            'owners' => ['users' => [], 'businessUnits' => [], 'roles' => []],
-            'dateRange' => ['start' => null, 'end' => null]
-        ];
-        $widgetOptions = new WidgetOptionBag($options);
-        $this->ownerHelper->expects($this->any())
-            ->method('getOwnerIds')
-            ->willReturn([]);
-
-        $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpportunitiesData')
-            ->with([], null, $this->aclHelper)
-            ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
-
-        $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);
-        $this->assertEquals(['value' => 5], $result);
-
-        $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getTotalForecastValues', 'currency', false);
-        $this->assertEquals(['value' => 1000], $result);
-
-        $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getWeightedForecastValues', 'currency', false);
-        $this->assertEquals(['value' => 500], $result);
     }
 
     public function testForecastOfOpportunitiesValues()
     {
-        $user = new User();
-        $user->setId(1);
-        $options = [
-            'owners' => ['users' => [$user->getId()], 'businessUnits' => [], 'roles' => []],
+        $options       = [
             'dateRange' => ['start' => null, 'end' => null]
         ];
         $widgetOptions = new WidgetOptionBag($options);
-        $this->ownerHelper->expects($this->any())
-            ->method('getOwnerIds')
-            ->willReturn([$user->getId()]);
 
-        $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpportunitiesData')
-            ->with([$user->getId()], null, $this->aclHelper)
+        $this->forecastProvider->expects($this->exactly(3))
+            ->method('getForecastData')
+            ->with([], null, null, null, [])
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'inProgressCount', 'integer', false);
         $this->assertEquals(['value' => 5], $result);
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getTotalForecastValues', 'currency', false);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'budgetAmount', 'currency', false);
         $this->assertEquals(['value' => 1000], $result);
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getWeightedForecastValues', 'currency', false);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'weightedForecast', 'currency', false);
         $this->assertEquals(['value' => 500], $result);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function testForecastOfOpportunitiesValuesWithCompareDate()
     {
-        $this->markTestSkipped('Skipped until CRM-5569 and CRM-5565 will be done');
-        $user = new User();
-        $user->setId(1);
+        $start = new \DateTime();
+        $start->setDate(2016, 6, 1)->setTime(0, 0, 0);
+        $end = clone $start;
+        $end->setDate(2016, 7, 1);
+        $diff      = $start->diff($end);
+        $prevStart = clone $start;
+        $prevStart->sub($diff);
+        $prevEnd = clone $end;
+        $prevEnd->sub($diff);
+        $prevStart->setTime(0, 0, 0);
+        $prevEnd->setTime(23, 59, 59);
 
-        $date = '2015-09-20 00:00:00.000000';
+        $dateRange     = ['start' => $start, 'end' => $end, 'prev_start' => $prevStart, 'prev_end' => $prevEnd];
+        $widgetOptions = new WidgetOptionBag(
+            [
+                'compareToDate' => ['useDate' => true, 'date' => null],
+                'dateRange'     => $dateRange
+            ]
+        );
 
-        $options = [
-            'owners' => ['users' => [$user->getId()]],
-            'businessUnits' => [],
-            'compareToDate' => ['useDate' => true, 'date' => $date]
-        ];
-        $widgetOptions = new WidgetOptionBag($options);
-        $this->ownerHelper->expects($this->any())
-            ->method('getOwnerIds')
-            ->willReturn([$user->getId()]);
-
-        $resultValues = function ($users, $date, $aclHelper) {
-            if ($date === null) {
+        $forecastDataCallback = function ($users, $start, $end, $moment) {
+            if ($moment === null) {
                 return ['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500];
             }
 
             return ['inProgressCount' => 2, 'budgetAmount' => 200, 'weightedForecast' => 50];
         };
+        $this->dateHelper
+            ->expects($this->once())
+            ->method('getCurrentDateTime')
+            ->willReturn(new \DateTime());
 
-        $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpportunitiesData')
-            ->with($this->logicalOr([$user->getId()], $this->logicalOr($date, null), $this->aclHelper))
-            ->will($this->returnCallback($resultValues));
+        $reflection = new \ReflectionObject($this->provider);
+        $method     = $reflection->getMethod('getMoment');
+        $method->setAccessible(true);
+        $prevMoment = $method->invokeArgs($this->provider, [$dateRange, $start]);
 
-        $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);
-
-        $expectedResult = ['value' => 5, 'deviation' => '+3 (+1.5)', 'isPositive' => true, 'previousRange' => $date];
-        $this->assertEquals($expectedResult, $result);
-
-        $expectedResult = ['value' => 1000, 'deviation' => '+800 (+4)', 'isPositive' => 1, 'previousRange' => $date];
-        $result         = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getTotalForecastValues', 'currency', false);
-        $this->assertEquals($expectedResult, $result);
-
-        $expectedResult = ['value' => 500, 'deviation' => '+450 (+9)', 'isPositive' => 1, 'previousRange' => $date];
-        $result         = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getWeightedForecastValues', 'currency', false);
-        $this->assertEquals($expectedResult, $result);
-    }
-
-    public function testForecastOfOpportunitiesValuesWithBusinessUnits()
-    {
-        $user = new User();
-        $user->setId(1);
-
-        $businessUnit = new BusinessUnit();
-        $businessUnit->addUser($user);
-
-        $options = [
-            'owners' => ['businessUnits' => [$businessUnit->getId()]],
-            'dateRange' => ['start' => null, 'end' => null]
-        ];
-        $widgetOptions = new WidgetOptionBag($options);
-        $this->ownerHelper->expects($this->any())
-            ->method('getOwnerIds')
-            ->willReturn([$user->getId()]);
-
-        $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpportunitiesData')
-            ->with([$user->getId()], null, $this->aclHelper)
-            ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
-
-        $this->businessUnitRepository->expects($this->any())
-            ->method('findById')
-            ->will($this->returnValue([$businessUnit]));
+        $this->forecastProvider->expects($this->exactly(6))
+            ->method('getForecastData')
+            ->with(
+                [],
+                $this->logicalOr($start, $prevStart),
+                $this->logicalOr($end, $prevEnd),
+                $this->logicalOr(null, $prevMoment)
+            )
+            ->will($this->returnCallback($forecastDataCallback));
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);
-        $this->assertEquals(['value' => 5], $result);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'inProgressCount', 'integer', false);
+        $this->assertEquals(
+            ['value' => 5, 'deviation' => '+3 (+1.5)', 'isPositive' => true, 'previousRange' => $prevMoment],
+            $result
+        );
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getTotalForecastValues', 'currency', false);
-        $this->assertEquals(['value' => 1000], $result);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'budgetAmount', 'currency', false);
+        $this->assertEquals(
+            ['value' => 1000, 'deviation' => '+800 (+4)', 'isPositive' => 1, 'previousRange' => $prevMoment],
+            $result
+        );
 
         $result = $this->provider
-            ->getForecastOfOpportunitiesValues($widgetOptions, 'getWeightedForecastValues', 'currency', false);
-        $this->assertEquals(['value' => 500], $result);
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'weightedForecast', 'currency', false);
+        $this->assertEquals(
+            ['value' => 500, 'deviation' => '+450 (+9)', 'isPositive' => 1, 'previousRange' => $prevMoment],
+            $result
+        );
     }
 }

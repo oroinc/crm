@@ -9,7 +9,7 @@ use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\DashboardBundle\Query\FilterQueryProcessor;
+use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
@@ -34,8 +34,8 @@ class ForecastProvider
     /** @var  array */
     protected $statuses;
 
-    /** @var FilterQueryProcessor */
-    protected $queryProcessor;
+    /** @var FilterProcessor */
+    protected $filterProcessor;
 
     /** @var array */
     protected static $fieldsAuditMap = [
@@ -47,23 +47,21 @@ class ForecastProvider
     ];
 
     /**
-     * @param RegistryInterface    $doctrine
-     * @param AclHelper            $aclHelper
-     * @param EnumValueProvider    $enumProvider
-     * @param FilterQueryProcessor $queryProcessor
-     *
-     * @internal param EnumValueProvider $enumValueProvider
+     * @param RegistryInterface $doctrine
+     * @param AclHelper         $aclHelper
+     * @param EnumValueProvider $enumProvider
+     * @param FilterProcessor   $filterProcessor
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
         EnumValueProvider $enumProvider,
-        FilterQueryProcessor $queryProcessor
+        FilterProcessor $filterProcessor
     ) {
-        $this->doctrine       = $doctrine;
-        $this->aclHelper      = $aclHelper;
-        $this->enumProvider   = $enumProvider;
-        $this->queryProcessor = $queryProcessor;
+        $this->doctrine        = $doctrine;
+        $this->aclHelper       = $aclHelper;
+        $this->enumProvider    = $enumProvider;
+        $this->filterProcessor = $filterProcessor;
     }
 
     /**
@@ -85,7 +83,7 @@ class ForecastProvider
         $filters = isset($queryFilter['definition'])
             ? json_decode($queryFilter['definition'], true)
             : [];
-        $key = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
+        $key     = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
         if (!isset($this->data[$key])) {
             if (!$moment) {
                 $this->data[$key] = $this->getCurrentData($ownerIds, $start, $end, $filters);
@@ -116,7 +114,7 @@ class ForecastProvider
         $alias       = 'o';
         $qb          = $this->getOpportunityRepository()->getForecastQB($alias);
 
-        $qb = $this->queryProcessor
+        $qb = $this->filterProcessor
             ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
         if (!empty($ownerIds)) {
