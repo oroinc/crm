@@ -9,7 +9,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
