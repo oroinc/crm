@@ -5,16 +5,18 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class CartRepository extends ChannelAwareEntityRepository
 {
+    use WorkflowQueryTrait;
     /**
      * @var array
      */
@@ -34,7 +36,7 @@ class CartRepository extends ChannelAwareEntityRepository
     /**
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
-     * @param Workflow  $workflow
+     * @param Workflow $workflow
      * @param AclHelper $aclHelper
      *
      * @return array
@@ -53,7 +55,7 @@ class CartRepository extends ChannelAwareEntityRepository
 
         // regular and final steps should be calculated separately
         $regularSteps = [];
-        $finalSteps   = [];
+        $finalSteps = [];
         foreach ($steps as $step) {
             if (!in_array($step->getName(), $this->excludedSteps)) {
                 if ($step->isFinal()) {
@@ -66,7 +68,7 @@ class CartRepository extends ChannelAwareEntityRepository
 
         // regular steps should be calculated for whole period, final steps - for specified period
         $regularStepsData = $this->getStepData($regularSteps, null, null, $aclHelper);
-        $finalStepsData   = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
+        $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
 
         // final calculation
         $data = [];
@@ -75,10 +77,10 @@ class CartRepository extends ChannelAwareEntityRepository
             if (!in_array($stepName, $this->excludedSteps)) {
                 if ($step->isFinal()) {
                     $stepValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true];
+                    $data[] = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true];
                 } else {
                     $stepValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
-                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false];
+                    $data[] = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false];
                 }
             }
         }
@@ -87,7 +89,7 @@ class CartRepository extends ChannelAwareEntityRepository
     }
 
     /**
-     * @param array     $steps
+     * @param array $steps
      * @param AclHelper $aclHelper
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
@@ -106,10 +108,12 @@ class CartRepository extends ChannelAwareEntityRepository
             return $stepData;
         }
 
-        $queryBuilder = $this->createQueryBuilder('cart')
-            ->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
+        $queryBuilder = $this->createQueryBuilder('cart');
+        
+        $this->joinWorkflowStep($queryBuilder, 'workflowStep');
+
+        $queryBuilder->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
             ->leftJoin('cart.status', 'status')
-            ->join('cart.workflowStep', 'workflowStep')
             ->groupBy('workflowStep.name');
 
         $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', $steps));
@@ -170,7 +174,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * ]
      *
      * @param Channel $channel
-     * @param string  $status
+     * @param string $status
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -202,7 +206,7 @@ class CartRepository extends ChannelAwareEntityRepository
         $this->applyActiveChannelLimitation($qb);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value['val'] ? : 0;
+        return $value['val'] ?: 0;
     }
 
     /**
@@ -220,7 +224,7 @@ class CartRepository extends ChannelAwareEntityRepository
         $this->applyActiveChannelLimitation($qb);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value['val'] ? : 0;
+        return $value['val'] ?: 0;
     }
 
     /**
@@ -345,17 +349,17 @@ class CartRepository extends ChannelAwareEntityRepository
 
     /**
      * @param string $alias
-     * @param array  $steps
-     * @param array  $excludedStatuses
+     * @param array $steps
+     * @param array $excludedStatuses
      *
      * @return QueryBuilder
      */
     public function getStepDataQB($alias, array $steps, array $excludedStatuses = [])
     {
-        $qb = $this->createQueryBuilder($alias)
-            ->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
+        $qb = $this->createQueryBuilder($alias);
+        $this->joinWorkflowStep($qb, 'workflowStep');
+        $qb->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
             ->leftJoin(sprintf('%s.status', $alias), 'status')
-            ->join(sprintf('%s.workflowStep', $alias), 'workflowStep')
             ->groupBy('workflowStep.name');
 
         $qb->where($qb->expr()->in('workflowStep.name', $steps));
