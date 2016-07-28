@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +16,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
+use Oro\Bundle\CalendarBundle\Entity\Recurrence;
 use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
+use Oro\Bundle\CalendarBundle\Model;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -43,6 +45,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     /** @var SecurityContext */
     protected $securityContext;
+
+    /** @var \DateTimeZone */
+    protected $timeZone;
 
     /**
      * {@inheritdoc}
@@ -160,6 +165,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
+            //recurring events
+            $events['recurring_events'] = $this->getRecurringEvents();
             foreach ($events as $typeEvents) {
                 if (mt_rand(0, 1)) {
                     foreach ($typeEvents as $typeEvent) {
@@ -174,6 +181,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $this->em->flush();
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
+
+        $this->addRecurringEventExceptions();
     }
 
     protected function connectCalendars()
@@ -312,5 +321,195 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $this->securityContext->setToken($token);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
+     * Returns the list of recurring events.
+     *
+     * @return array
+     */
+    protected function getRecurringEvents()
+    {
+        $recurringEvents = [];
+
+        $day = new \DateTime('+2 day', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('Gym Visiting');
+        $day->setTime(19, 0, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(18, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(true);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_DAILY);
+        $recurrence->setInterval(3)
+            ->setTimeZone('America/Los_Angeles')
+            ->setStartTime($day)
+            ->setOccurrences(12);
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        $day = new \DateTime('+1 day', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('Standup meeting');
+        $day->setTime(10, 15, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(10, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(true);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_WEEKLY);
+        $recurrence->setInterval(1)
+            ->setTimeZone('America/Los_Angeles')
+            ->setDayOfWeek([
+                Model\Recurrence::DAY_MONDAY,
+                Model\Recurrence::DAY_TUESDAY,
+                Model\Recurrence::DAY_WEDNESDAY,
+                Model\Recurrence::DAY_THURSDAY,
+                Model\Recurrence::DAY_FRIDAY
+            ])
+            ->setStartTime($day);
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        $day = new \DateTime('-3 day', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('Monthly Team Meeting');
+        $day->setTime(18, 0, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(16, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(false);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTHLY);
+        $recurrence->setInterval(2)
+            ->setTimeZone('America/Los_Angeles')
+            ->setDayOfMonth(1)
+            ->setStartTime($day)
+            ->setEndTime(new \DateTime('Dec 31', $this->getTimeZone()));
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        $day = new \DateTime('+5 day', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('Update News');
+        $day->setTime(14, 0, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(10, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(true);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTH_N_TH);
+        $recurrence->setInterval(2)
+            ->setTimeZone('America/Los_Angeles')
+            ->setInstance(Model\Recurrence::INSTANCE_THIRD)
+            ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY, Model\Recurrence::DAY_SUNDAY])
+            ->setStartTime($day)
+            ->setOccurrences(6);
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        $day = new \DateTime('now', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('Yearly Conference');
+        $day->setTime(19, 0, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(10, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(true);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEARLY);
+        $recurrence->setInterval(12)
+            ->setTimeZone('America/Los_Angeles')
+            ->setDayOfMonth(1)
+            ->setMonthOfYear(4)
+            ->setStartTime($day);
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        $day = new \DateTime('-2 day', $this->getTimeZone());
+        $event = new CalendarEvent();
+        $event->setTitle('New Year Party');
+        $day->setTime(23, 0, 0);
+        $event->setEnd(clone $day);
+        $day->setTime(18, 0, 0);
+        $event->setStart(clone $day);
+        $event->setAllDay(true);
+        $recurrence = new Recurrence();
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEAR_N_TH);
+        $recurrence->setInterval(12)
+            ->setTimeZone('America/Los_Angeles')
+            ->setInstance(Model\Recurrence::INSTANCE_LAST)
+            ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY])
+            ->setMonthOfYear(12)
+            ->setStartTime($day);
+        $event->setRecurrence($recurrence);
+        $recurringEvents[] = $event;
+
+        return $recurringEvents;
+    }
+
+    /**
+     * Adds exceptions to recurring events.
+     */
+    protected function addRecurringEventExceptions()
+    {
+        $event = $this->em->getRepository('OroCalendarBundle:CalendarEvent')->findOneBy(['title' => 'Standup meeting']);
+        $day = new \DateTime('next friday', $this->getTimeZone());
+        $day->setTime(10, 0, 0);
+        $exception = new CalendarEvent();
+        $exception->setTitle('Changed Standup meeting');
+        $exception->setOriginalStart(clone $day);
+        $day->setTime(9, 15, 0);
+        $exception->setEnd(clone $day);
+        $day->setTime(9, 0, 0);
+        $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
+            ->setAllDay(true);
+        $event->addRecurringEventException($exception);
+
+        $day = new \DateTime('next monday', $this->getTimeZone());
+        $day->setTime(10, 0, 0);
+        $exception = new CalendarEvent();
+        $exception->setTitle('Evening Standup meeting');
+        $exception->setOriginalStart(clone $day);
+        $day->setTime(19, 15, 0);
+        $exception->setEnd(clone $day);
+        $day->setTime(19, 0, 0);
+        $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
+            ->setAllDay(false);
+        $event->addRecurringEventException($exception);
+
+        $day = new \DateTime('first wednesday of next month', $this->getTimeZone());
+        $day->setTime(10, 0, 0);
+        $exception = new CalendarEvent();
+        $exception->setTitle('Late meeting');
+        $exception->setOriginalStart(clone $day);
+        $day->setTime(23, 15, 0);
+        $exception->setEnd(clone $day);
+        $day->setTime(23, 0, 0);
+        $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
+            ->setAllDay(false);
+        $event->addRecurringEventException($exception);
+
+        $this->em->persist($event);
+
+        $this->em->flush();
+    }
+
+    /**
+     * @return \DateTimeZone
+     */
+    protected function getTimeZone()
+    {
+        if ($this->timeZone === null) {
+            $this->timeZone = new \DateTimeZone('UTC');
+        }
+
+        return $this->timeZone;
     }
 }
