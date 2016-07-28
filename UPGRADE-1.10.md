@@ -9,6 +9,7 @@ UPGRADE FROM 1.9 to 1.10
 - The OroCRM\Bundle\SalesBundle\Entity\LeadStatus is deprecated due to enum type usage
 - The 'address' field in OroCRM\Bundle\SalesBundle\Entity\Lead is deprecated and will be removed in the next release. Addresses field is used instead now to store a collection of LeadAddress entities.
  If any custom fields were added to the oro_address table, they should be added to LeadAddress entity and migrated to the orocrm_lead_address table.
+- B2bCustomer entity extended with 2 collection fields (emails, phones)
 
 #### OroCRMCallBundle:
 - The `duration` field in `OroCRM\Bundle\CallBundle\Entity\Call` is changed to `duration` DB type 
@@ -19,6 +20,10 @@ Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead o
 ####OroCRMTaskBundle:
 - OroCRMTaskBundle moved to a separate package
 - OroCRMTaskBridgeBundle was added to integrate OroCRMTaskBundle into CRM
+
+####OroCRMTaskBundle:
+- OroCRMCallBundle moved to a separate package
+- OroCRMCallBridgeBundle was added to integrate OroCRMCallBundle into CRM
 
 #### OroCRMChannelBundle:
 - Constructor for `OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider` was changed. New argument: `DateFilterProcessor $filterProcessor`

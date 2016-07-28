@@ -155,8 +155,6 @@ orocrm:
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             organization.label:   Organization
             customer.label:       Account
             data_channel.label:   Channel
@@ -219,8 +217,6 @@ orocrm:
             twitter.label:        Twitter
             linked_in.label:      LinkedIn
             opportunities.label:  Opportunities
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             information:          Lead Information
             contact_information:  Contact Information
             campaign.label:       Campaign
@@ -313,8 +309,6 @@ orocrm:
             lead.label:           Lead
             opportunity.label:    Opportunity
             owner.label:          Owner
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             data_channel.label:   Channel
             organization.label:   Organization
 
@@ -344,13 +338,20 @@ orocrm:
             owner.label:                Owner
             tags.label:                 Tags
             ownership.label:            Ownership
+            emails.label:               Emails
+            phones.label:               Phones
             rating.label:               Rating
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
+            phones.label:               Phones
+            emails.label:               Emails
             employees.label:            Employees
+            email.label:                Email
             organization.label:         Organization
             opportunities.select:       Select opportunities
             leads.select:               Select leads
+            primary_phone.label:        Primary Phone
+            primary_email.label:        Primary Email
             datagrid:
                 view:   View
                 update: Update
@@ -369,6 +370,31 @@ orocrm:
                     shipping_address_street.label:      Shipping Address Street
                     shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
+
+        #
+        # Entity OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
+        #
+        b2bcustomerphone:
+            entity_description:  Represent Business Customer phone
+            entity_label:        Business Customer Phone
+            entity_plural_label: Business Customer Phones
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
+
+        #
+        # Entity oroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
+        #
+        b2bcustomeremail:
+            email.label:         Email
+            entity_description:  Represent Business Customer email
+            entity_label:        Business Customer Email
+            entity_plural_label: Business Customer Emails
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
+
         widgets:
             b2bcustomer_information: Business Customer Information
             leads:                   Leads

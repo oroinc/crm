@@ -1,8 +1,0 @@
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-
-<div class="widget-content">
-    {{ dataGrid.renderGrid('activity-call-grid', {
-        entityClass: oro_class_name(entity, true),
-        entityId: entity.id
-    }) }}
-</div>

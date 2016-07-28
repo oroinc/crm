@@ -1,3 +1,0 @@
-config:
-    paths:
-        'oro/select2-call-phone-component': 'bundles/orocrmcall/js/app/components/select2-call-phone-component.js'

@@ -6,9 +6,13 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
+    use WorkflowQueryTrait;
+
     /** @var EntityManager */
     protected $em;
 
@@ -71,7 +75,7 @@ class MagentoDeleteProvider implements DeleteProviderInterface
             $cartTable,
             $this->channel->getId()
         );
-        $billingAddresses  = sprintf(
+        $billingAddresses = sprintf(
             'SELECT ba.billing_address_id FROM %s ba WHERE ba.channel_id = %s',
             $cartTable,
             $this->channel->getId()
@@ -99,17 +103,28 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-        $workflowMetadata = $this->em->getClassMetadata('OroWorkflowBundle:WorkflowItem');
-        $entityMetadata   = $this->em->getClassMetadata($entityClassName);
+        $subQuery = $this->em->createQueryBuilder()->select('workflowItem.id')->from($entityClassName, 'o');
+        $this->joinWorkflowItem($subQuery, 'workflowItem');
+        $subQuery
+            ->where('o.channel=:channel')
+            ->setParameter('channel', $this->channel);
 
-        $this->em->getConnection()->executeQuery(
-            sprintf(
-                'Delete FROM %s WHERE id IN (SELECT o.workflow_item_id FROM %s o WHERE o.channel_id=%s)',
-                $workflowMetadata->getTableName(),
-                $entityMetadata->getTableName(),
-                $this->channel->getId()
+        $ids = array_filter(
+            array_map(
+                function (array $record) {
+                    return $record['id'];
+                },
+                $subQuery->getQuery()->getResult()
             )
         );
+        if (0 === count($ids)) {
+            return $this;
+        }
+
+        $qbDel = $this->em->createQueryBuilder()->delete()->from(WorkflowItem::class, 'wi');
+        $qbDel->where($qbDel->expr()->in('wi.id', $ids));
+
+        $qbDel->getQuery()->execute();
 
         return $this;
     }
