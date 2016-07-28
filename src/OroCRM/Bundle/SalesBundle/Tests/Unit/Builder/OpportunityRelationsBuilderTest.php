@@ -81,34 +81,6 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($account->getContacts()->contains($contact));
     }
 
-    /**
-     * @dataProvider relationIdentifiersProvider
-     *
-     * @param int|null $accountId
-     * @param int|null $contactId
-     */
-    public function testShouldNotAddContactToAccountWithExistingOpportunity($accountId, $contactId)
-    {
-        $contact = new Contact();
-        $contact->setId($contactId);
-        $account = new Account();
-        $account->setId($accountId);
-
-        $customer = new B2bCustomer();
-        $customer->setAccount($account);
-
-        $opportunity = new Opportunity();
-        $opportunity->setCustomer($customer);
-        $opportunity->setContact($contact);
-
-        $this->setOpportunityId($opportunity, 1);
-
-        $builder = new OpportunityRelationsBuilder($opportunity);
-        $builder->buildAccount();
-
-        $this->assertFalse($account->getContacts()->contains($contact));
-    }
-
     public function relationIdentifiersProvider()
     {
         return [
@@ -116,17 +88,5 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
             ['accountId' => null, 'contactId' => 69],
             ['accountId' => null, 'contactId' => null],
         ];
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     * @param int $id
-     */
-    private function setOpportunityId(Opportunity $opportunity, $id)
-    {
-        $reflection = new \ReflectionObject($opportunity);
-        $propertyReflection = $reflection->getProperty('id');
-        $propertyReflection->setAccessible(true);
-        $propertyReflection->setValue($opportunity, $id);
     }
 }
