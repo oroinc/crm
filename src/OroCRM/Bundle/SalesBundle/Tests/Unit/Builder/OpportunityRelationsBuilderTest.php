@@ -55,6 +55,37 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($organization, $customer->getOrganization());
     }
 
+    public function testShouldSetCustomerContact()
+    {
+        $opportunityContact = new Contact();
+        $customer = new B2bCustomer();
+        $opportunity = new Opportunity();
+        $opportunity->setCustomer($customer);
+        $opportunity->setContact($opportunityContact);
+
+        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder->buildCustomer();
+
+        $this->assertSame($opportunityContact, $customer->getContact());
+    }
+
+    public function testShouldNotSetCustomerContactIfExists()
+    {
+        $customerContact = new Contact();
+        $opportunityContact = new Contact();
+        $customer = new B2bCustomer();
+        $customer->setContact($customerContact);
+        $opportunity = new Opportunity();
+        $opportunity->setCustomer($customer);
+        $opportunity->setContact($opportunityContact);
+
+        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder->buildCustomer();
+
+        $this->assertSame($customerContact, $customer->getContact());
+        $this->assertNotSame($opportunityContact, $customer->getContact());
+    }
+
     /**
      * @dataProvider relationIdentifiersProvider
      *
