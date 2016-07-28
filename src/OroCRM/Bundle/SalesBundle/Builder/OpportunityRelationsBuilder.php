@@ -50,10 +50,6 @@ class OpportunityRelationsBuilder
 
     public function buildAccount()
     {
-        if ($this->opportunity->getId()) {
-            return;
-        }
-
         $customer = $this->opportunity->getCustomer();
         if (!$customer) {
             return;
