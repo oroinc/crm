@@ -47,9 +47,7 @@ class OpportunityRelationsBuilder
             $customer->setOrganization($this->opportunity->getOrganization());
         }
 
-        if (!$customer->getContact()) {
-            $customer->setContact($this->opportunity->getContact());
-        }
+        $this->buildCustomerContact();
     }
 
     public function buildAccount()
@@ -68,6 +66,21 @@ class OpportunityRelationsBuilder
 
         if (!$contact->getId() || !$account->getId()) {
             $account->addContact($contact);
+        }
+    }
+
+    private function buildCustomerContact()
+    {
+        $customer = $this->opportunity->getCustomer();
+        $opportunityContact = $this->opportunity->getContact();
+
+        if (!$customer || !$opportunityContact || $customer->getContact()) {
+            return;
+        }
+
+        // if either object is new, auto set customer contact
+        if (!$customer->getId() || !$opportunityContact->getId()) {
+            $customer->setContact($opportunityContact);
         }
     }
 }
