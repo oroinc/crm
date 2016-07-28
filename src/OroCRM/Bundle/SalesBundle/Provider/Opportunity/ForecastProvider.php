@@ -209,7 +209,7 @@ HAVING
                 ->setParameter('ownerIds', $ownerIds);
         }
 
-        if ($filters) {
+        if (!empty($filters['filters'])) {
             $qb
                 ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
             $this->filterProcessor
