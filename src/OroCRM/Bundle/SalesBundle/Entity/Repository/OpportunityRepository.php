@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
-use DateTime;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -150,7 +148,7 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param array       $ownerIds
-     * @param DateTime    $date
+     * @param \DateTime    $date
      * @param AclHelper   $aclHelper
      *
      * @param string|null $start
@@ -347,16 +345,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return int
      */
     public function getOpportunitiesCount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
@@ -366,16 +364,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return int
      */
     public function getNewOpportunitiesCount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
@@ -384,13 +382,13 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
      * @param int[]    $owners
      *
      * @return QueryBuilder
      */
-    public function createOpportunitiesCountQb(DateTime $start = null, DateTime $end = null, $owners = [])
+    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)');
@@ -414,16 +412,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return double
      */
     public function getTotalServicePipelineAmount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
@@ -455,15 +453,15 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      *
      * @return double
      */
     public function getTotalServicePipelineAmountInProgress(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null
+        \DateTime $start = null,
+        \DateTime $end = null
     ) {
         $qb = $this->createQueryBuilder('o');
 
@@ -489,12 +487,12 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      *
      * @return double
      */
-    public function getWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null)
+    public function getWeightedPipelineAmount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -515,16 +513,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return double
      */
     public function getOpenWeightedPipelineAmount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
@@ -547,16 +545,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return double
      */
     public function getNewOpportunitiesAmount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this
@@ -574,16 +572,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return int
      */
     public function getWonOpportunitiesToDateCount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
@@ -602,16 +600,16 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime  $start
-     * @param DateTime  $end
+     * @param \DateTime  $start
+     * @param \DateTime  $end
      * @param int[]     $owners
      *
      * @return double
      */
     public function getWonOpportunitiesToDateAmount(
         AclHelper $aclHelper,
-        DateTime $start = null,
-        DateTime $end = null,
+        \DateTime $start = null,
+        \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
@@ -630,10 +628,10 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param QueryBuilder $qb
-     * @param DateTime|null $start
-     * @param DateTime|null $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      */
-    protected function setCreationPeriod(QueryBuilder $qb, DateTime $start = null, DateTime $end = null)
+    protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         $qb
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
@@ -643,10 +641,10 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param QueryBuilder $qb
-     * @param DateTime|null $start
-     * @param DateTime|null $end
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
      */
-    protected function setClosedPeriod(QueryBuilder $qb, DateTime $start = null, DateTime $end = null)
+    protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
         $qb
             ->andWhere($qb->expr()->between('o.closeDate', ':dateStart', ':dateEnd'))
@@ -722,6 +720,28 @@ class OpportunityRepository extends EntityRepository
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $qb;
+    }
+
+    /**
+     * @param string $alias
+     * @param array  $excludedStatuses
+     *
+     * @return QueryBuilder
+     */
+    public function getForecastQB($alias = 'o', array $excludedStatuses = ['lost', 'won'])
+    {
+        $qb     = $this->createQueryBuilder($alias);
+        $qb->select([
+            sprintf('COUNT(%s.id) as inProgressCount', $alias),
+            sprintf('SUM(%s.budgetAmount) as budgetAmount', $alias),
+            sprintf('SUM(%s.budgetAmount * %s.probability) as weightedForecast', $alias, $alias)
+        ]);
+
+        if ($excludedStatuses) {
+            $qb->andWhere($qb->expr()->notIn(sprintf('%s.status', $alias), $excludedStatuses));
         }
 
         return $qb;
