@@ -221,9 +221,7 @@ HAVING
                 ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
-        $result = $qb
-            ->getQuery()
-            ->getArrayResult();
+        $result = $qb->getQuery()->getArrayResult();
 
         return array_reduce(
             $result,
