@@ -145,7 +145,9 @@ class LeadRepository extends EntityRepository
      */
     public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end, $owners);
+        $qb = $this
+            ->createLeadsCountQb($start, $end, $owners)
+            ->innerJoin('l.opportunities', 'o');
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -160,9 +162,23 @@ class LeadRepository extends EntityRepository
      */
     public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end, $owners)
-            ->andWhere('l.status = :status')
-            ->setParameter('status', 'new');
+        $qb = $this->createLeadsCountQb($start, $end, $owners);
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param int[] $owners
+     *
+     * @return int
+     */
+    public function getOpenLeadsCount(AclHelper $aclHelper, $owners = [])
+    {
+        $qb = $this->createLeadsCountQb(null, null, $owners);
+        $qb->andWhere(
+            $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
+        );
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -174,13 +190,15 @@ class LeadRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this->createQueryBuilder('l');
+    protected function createLeadsCountQb(
+        \DateTime $start = null,
+        \DateTime $end = null,
+        $owners = []
+    ) {
+        $qb = $this
+            ->createQueryBuilder('l')
+            ->select('COUNT(DISTINCT l.id)');
 
-        $qb
-            ->select('COUNT(DISTINCT l.id)')
-            ->innerJoin('l.opportunities', 'o');
         if ($start) {
             $qb
                 ->andWhere('l.createdAt > :start')
