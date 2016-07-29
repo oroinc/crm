@@ -5,6 +5,22 @@
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
+        {% if (isDisqualifyAndConvertAllowed)  %}
+            {{ UI.button({
+                'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
+                'aCss':  'btn btn-danger action-button',
+                'iCss':  'icon-ban-circle',
+                'label': 'Disqualify',
+                'title': 'Disqualify',
+            }) }}
+            {{ UI.button({
+                'path':  path('orocrm_sales_lead_convert_to_opportunity', {'id': entity.id}),
+                'aCss':  'btn action-button',
+                'iCss':  'icon-usd',
+                'label': 'Convert to Opportunity',
+                'title': 'Convert to Opportunity',
+            }) }}
+        {% endif %}
         {{ UI.editButton({
             'path' : path('orocrm_sales_lead_update', { 'id': entity.id }),
             'entity_label': 'orocrm.sales.lead.entity_label'|trans
@@ -40,10 +56,10 @@
 {% block breadcrumbs %}
     {{ parent() }}
     <div class="pull-left">
-        {% if entity.status.name != 'canceled' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+        {% if entity.status.id != 'canceled' %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}

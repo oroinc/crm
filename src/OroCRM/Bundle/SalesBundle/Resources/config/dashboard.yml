@@ -315,7 +315,13 @@ oro_dashboard_config:
                         default_selected:
                             - won
                             - lost
-
+                sortBy:
+                    type: oro_type_widget_sort_by
+                    show_on_widget: true
+                    options:
+                        required: false
+                        class_name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        label: oro.dashboard.widget.sort_by.label
         leads_list:
             label:       orocrm.sales.dashboard.leads_list.title
             route:       oro_dashboard_widget
@@ -346,3 +352,10 @@ oro_dashboard_config:
                         default_selected:
                             - canceled
                             - qualified
+                sortBy:
+                    type: oro_type_widget_sort_by
+                    show_on_widget: true
+                    options:
+                        required: false
+                        class_name: OroCRM\Bundle\SalesBundle\Entity\Lead
+                        label: oro.dashboard.widget.sort_by.label

@@ -440,6 +440,6 @@ class OroCRMCaseBundleInstaller implements
     protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
-        CreateActivityAssociation::addActivityAssociations($schema, $activityExtension);
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_case');
     }
 }
