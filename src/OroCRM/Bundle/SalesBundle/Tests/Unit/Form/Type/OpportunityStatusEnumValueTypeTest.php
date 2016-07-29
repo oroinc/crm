@@ -35,7 +35,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $type = $this->getFormType();
-        $type->buildForm($builder, []);
+        $type->buildForm($builder, ['allow_multiple_selection' => false]);
     }
 
     /**
