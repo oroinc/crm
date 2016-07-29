@@ -31,20 +31,15 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider probabilitiesDataProvider
-     *
-     * @param array $probabilities
-     */
-    public function testShouldHaveProbabilitiesAsDefaultOption(array $probabilities)
+    public function testShouldHaveProbabilitiesAsDefaultOption()
     {
-        $type = $this->getFormType($probabilities);
+        $type = $this->getFormType(['won' => 1.0, 'lost' => 0.0]);
         $resolver = $this->getOptionsResolver();
 
         $type->configureOptions($resolver);
         $options = $resolver->resolve();
 
-        $this->assertEquals(['probabilities' => $probabilities], $options);
+        $this->assertEquals(['probabilities' => ['won' => 100.0, 'lost' => 0.0]], $options);
     }
 
     public function probabilitiesDataProvider()
@@ -64,7 +59,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
         $type->configureOptions($resolver);
         $options = $resolver->resolve();
 
-        $this->assertEquals(['probabilities' => ['won' => 1.0, 'lost' => 0.0]], $options);
+        $this->assertEquals(['probabilities' => ['won' => 100.0, 'lost' => 0.0]], $options);
     }
 
     /**
