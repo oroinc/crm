@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
+
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
@@ -28,12 +29,19 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      */
     public function getPhoneNumber($object)
     {
-        $contact = $object->getContact();
-        if (!$contact) {
-            return null;
+        $phone = null;
+        $primaryPhone = $object->getPrimaryPhone();
+
+        if ($primaryPhone) {
+            $phone = $primaryPhone->getPhone();
+        } else {
+            $contact = $object->getContact();
+            if ($contact) {
+                $phone = $this->rootProvider->getPhoneNumber($contact);
+            }
         }
 
-        return $this->rootProvider->getPhoneNumber($contact);
+        return $phone;
     }
 
     /**
@@ -45,11 +53,18 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      */
     public function getPhoneNumbers($object)
     {
-        $contact = $object->getContact();
-        if (!$contact) {
-            return [];
+        $result = [];
+        foreach ($object->getPhones() as $phone) {
+            $result[] = [$phone->getPhone(), $object];
         }
 
-        return $this->rootProvider->getPhoneNumbers($contact);
+        if (!$result) {
+            $contact = $object->getContact();
+            if ($contact) {
+                $result = $this->rootProvider->getPhoneNumbers($contact);
+            }
+        }
+        
+        return $result;
     }
 }

@@ -11,7 +11,6 @@ use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -23,11 +22,6 @@ class OpportunityRepository extends EntityRepository
 {
     const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
     const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
-
-    /**
-     * @var WorkflowStep[]
-     */
-    protected $workflowStepsByName;
 
     /**
      * Get opportunities by state by current quarter

@@ -928,3 +928,8 @@ services:
         public: false
         tags:
             - { name: routing.options_resolver }
+
+    orocrm_magento.manager.abandoned_shopping_cart_flow:
+        parent: oro_workflow.abstract.workflow_aware_manager
+        calls:
+            - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]

@@ -106,7 +106,7 @@ class LeadToOpportunityProvider
         $this->changeLeadStatus = $changeLeadStatus;
         $this->validateContactFields();
         $this->isLeadWorkflowEnabled = $workflowRegistry
-            ->hasActiveWorkflowByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
+            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
     }
 
     /**

@@ -254,8 +254,6 @@ orocrm:
             notes.label:               Additional comments
             b2c_flow_abandoned_shopping_cart.step.label: Step
             related_calls.label:       Calls
-            workflow_item.label:       Workflow item
-            workflow_step.label:       Workflow step
             website.label:             Website
             status_message.label:      Status message
             organization.label:        Organization
@@ -398,8 +396,6 @@ orocrm:
             related_emails.label:   Emails
             customer_email.label:   Email
             related_calls.label:    Calls
-            workflow_item.label:    Workflow item
-            workflow_step.label:    Workflow step
             website.label:          Website
             organization.label:     Organization
             sync_state:
