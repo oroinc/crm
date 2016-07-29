@@ -187,8 +187,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $step,
             $salesFunnel,
             $parameters
-        )
-        ) {
+        )) {
             return;
         }
 
@@ -236,7 +235,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     protected function getRandomBoolean()
     {
-        return (bool)mt_rand(0, 1);
+        return (bool) mt_rand(0, 1);
     }
 
     /**
