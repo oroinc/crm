@@ -55,8 +55,13 @@ class DefaultProbabilityListener
             return;
         }
 
+        $oldProbability = $probability;
+
+        if (null !== $args->getOldValue('status')) {
+            $oldProbability = $this->getDefaultProbability($args->getOldValue('status')->getId());
+        }
+
         // don't change if it's already overwritten
-        $oldProbability = $this->getDefaultProbability($args->getOldValue('status')->getId());
         if ($oldProbability !== $entity->getProbability()) {
             return;
         }
