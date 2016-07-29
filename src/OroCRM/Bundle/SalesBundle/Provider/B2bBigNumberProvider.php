@@ -69,6 +69,19 @@ class B2bBigNumberProvider
      *
      * @return int
      */
+    public function getOpenLeadsCount($dateRange, $owners = [])
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMSalesBundle:Lead')
+            ->getOpenLeadsCount($this->aclHelper, $owners);
+    }
+
+    /**
+     * @param array $dateRange
+     * @param int[] $owners
+     *
+     * @return int
+     */
     public function getNewOpportunitiesCount($dateRange, $owners = [])
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
@@ -121,5 +134,51 @@ class B2bBigNumberProvider
         return $this->doctrine
             ->getRepository('OroCRMSalesBundle:Opportunity')
             ->getOpenWeightedPipelineAmount($this->aclHelper, $start, $end, $owners);
+    }
+
+    /**
+     * @param array $dateRange
+     * @param int[] $owners
+     *
+     * @return double
+     */
+    public function getNewOpportunitiesAmount($dateRange, $owners = [])
+    {
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+
+        return $this->doctrine
+            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getNewOpportunitiesAmount($this->aclHelper, $start, $end, $owners);
+    }
+
+
+    /**
+     * @param array $dateRange
+     * @param int[] $owners
+     *
+     * @return int
+     */
+    public function getWonOpportunitiesToDateCount($dateRange, $owners = [])
+    {
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+
+        return $this->doctrine
+            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getWonOpportunitiesToDateCount($this->aclHelper, $start, $end, $owners);
+    }
+
+    /**
+     * @param array $dateRange
+     * @param int[] $owners
+     *
+     * @return double
+     */
+    public function getWonOpportunitiesToDateAmount($dateRange, $owners = [])
+    {
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+
+        return $this->doctrine
+            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getWonOpportunitiesToDateAmount($this->aclHelper, $start, $end, $owners);
     }
 }
