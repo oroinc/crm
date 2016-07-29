@@ -23,6 +23,7 @@ orocrm:
 
         sections:
             general:                General
+            website_activity:       Website Activity
         form:
             choose_account:         Choose an account...
             select_contacts:        Select contacts

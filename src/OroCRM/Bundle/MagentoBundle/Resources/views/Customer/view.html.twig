@@ -114,6 +114,10 @@
     {% endset %}
     {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
 
+    {% set websiteActivityTabsWidget %}
+        {% placeholder orocrm_website_activity with {'customers': [entity], byChannel: false} %}
+    {% endset %}
+
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
@@ -124,6 +128,13 @@
             'title': 'orocrm.magento.customer.sales.label'|trans,
             'subblocks': [
                 {'data' : [salesTabsWidget] }
+            ]
+        },
+        {
+            'title': 'orocrm.magento.website_activity.label'|trans,
+            'priority': 1050,
+            'subblocks': [
+                {'data' : [websiteActivityTabsWidget] }
             ]
         }
     ] %}

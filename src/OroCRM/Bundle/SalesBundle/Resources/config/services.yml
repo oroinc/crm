@@ -171,12 +171,13 @@ services:
     orocrm_sales.provider.forecast_of_opportunities:
         class: %orocrm_sales.provider.forecast_of_opportunity.class%
         arguments:
+            - '@doctrine'
             - '@oro_locale.formatter.number'
             - '@oro_locale.formatter.date_time'
+            - '@oro_security.acl_helper'
             - '@translator'
             - '@oro_dashboard.datetime.helper'
             - '@oro_user.dashboard.owner_helper'
-            - '@orocrm_sales.provider.opportunity.forecast'
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%
@@ -263,15 +264,6 @@ services:
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
 
-    orocrm_sales.provider.opportunity_by_lead_source:
-        class: OroCRM\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider
-        arguments:
-            - '@doctrine'
-            - '@oro_security.acl_helper'
-            - '@oro_dashboard.filter.date_filter_processor'
-            - '@translator'
-            - '@oro_entity_extend.twig.extension.enum'
-
     orocrm_sales.b2bcustomer_phone.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         parent: oro_soap.manager.entity_manager.abstract
@@ -347,10 +339,11 @@ services:
             - "@orocrm_sales.model.change_lead_status"
             - "@oro_workflow.registry"
 
-    orocrm_sales.provider.opportunity.forecast:
-        class: OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider
+    orocrm_sales.provider.opportunity_by_lead_source:
+        class: OroCRM\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
-            - '@oro_entity_extend.enum_value_provider'
-            - '@oro_query_designer.query_designer.filter_processor'
+            - '@oro_dashboard.filter.date_filter_processor'
+            - '@translator'
+            - '@oro_entity_extend.twig.extension.enum'

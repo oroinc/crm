@@ -164,8 +164,6 @@ orocrm:
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             organization.label:   Organization
             customer.label:       Account
             data_channel.label:   Channel
@@ -228,8 +226,6 @@ orocrm:
             twitter.label:        Twitter
             linked_in.label:      LinkedIn
             opportunities.label:  Opportunities
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             information:          Lead Information
             contact_information:  Contact Information
             campaign.label:       Campaign
@@ -322,8 +318,6 @@ orocrm:
             lead.label:           Lead
             opportunity.label:    Opportunity
             owner.label:          Owner
-            workflow_item.label:  Workflow Item
-            workflow_step.label:  Step
             data_channel.label:   Channel
             organization.label:   Organization
 
