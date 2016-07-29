@@ -80,8 +80,8 @@ class ForecastProvider
         \DateTime $moment = null,
         array $queryFilter = null
     ) {
-        $filters = isset($queryFilter['definition'])
-            ? json_decode($queryFilter['definition'], true)
+        $filters = isset($queryFilter['definition']['filters'])
+            ? $queryFilter['definition']['filters']
             : [];
         $key     = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
         if (!isset($this->data[$key])) {
@@ -214,7 +214,7 @@ HAVING
                 ->setParameter('ownerIds', $ownerIds);
         }
 
-        if (!empty($filters['filters'])) {
+        if ($filters) {
             $qb
                 ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
             $this->filterProcessor
