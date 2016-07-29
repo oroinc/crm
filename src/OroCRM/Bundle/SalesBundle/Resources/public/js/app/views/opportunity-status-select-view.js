@@ -26,7 +26,7 @@ define(function(require) {
             var shouldChangeProbability = false;
 
             if (defaultProbabilities.hasOwnProperty(status.val())) {
-                if (defaultProbabilities[status.val()] == probability.val()) {
+                if (defaultProbabilities[status.val()] === probability.val()) {
                     shouldChangeProbability = true;
                 }
             }
