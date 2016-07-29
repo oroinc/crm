@@ -157,7 +157,8 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
-     *              "display"=true
+     *              "display"=true,
+     *              "inverse_display"=false
      *          },
      *          "importexport"={
      *              "order"=40,

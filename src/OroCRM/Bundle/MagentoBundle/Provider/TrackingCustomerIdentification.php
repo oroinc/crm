@@ -23,6 +23,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     const EVENT_ORDER_PLACED          = 'order placed';
     const EVENT_CUSTOMER_LOGIN        = 'user logged in';
     const EVENT_CUSTOMER_LOGOUT       = 'user logged out';
+    const EVENT_VISIT                 = 'visit';
 
     /** @var ObjectManager */
     protected $em;

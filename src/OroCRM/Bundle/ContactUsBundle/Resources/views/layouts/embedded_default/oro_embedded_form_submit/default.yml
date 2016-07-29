@@ -17,7 +17,4 @@ layout:
             id:       embedded_form_lastName
             parentId: name_group
 
-    conditions:
-        '@eq':
-            - $context.embedded_form_type
-            - 'orocrm_contact_us.embedded_form'
+    conditions: 'context["embedded_form_type"] == "orocrm_contact_us.embedded_form"'

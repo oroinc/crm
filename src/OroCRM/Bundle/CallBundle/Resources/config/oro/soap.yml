@@ -1,2 +1,0 @@
-classes:
-  - OroCRM\Bundle\CallBundle\Controller\Api\Soap\CallController

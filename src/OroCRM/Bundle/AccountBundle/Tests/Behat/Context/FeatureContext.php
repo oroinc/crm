@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Behat\Context;
 
-use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Element\NodeElement;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 
@@ -42,10 +41,7 @@ class FeatureContext extends OroFeatureContext
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
 
@@ -62,10 +58,7 @@ class FeatureContext extends OroFeatureContext
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
     /**
@@ -81,10 +74,7 @@ class FeatureContext extends OroFeatureContext
             }
         }
 
-        throw new ExpectationException(
-            sprintf('Can\'t find contact with "%s" name', $name),
-            $this->getSession()->getDriver()
-        );
+        self::fail(sprintf('Can\'t find contact with "%s" name', $name));
     }
 
     /**

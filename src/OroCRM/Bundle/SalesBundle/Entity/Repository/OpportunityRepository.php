@@ -7,10 +7,10 @@ use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -22,11 +22,7 @@ class OpportunityRepository extends EntityRepository
 {
     const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
     const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
-
-    /**
-     * @var WorkflowStep[]
-     */
-    protected $workflowStepsByName;
+    const OPPORTUNITY_STATUS_CLOSED_WON_CODE  = 'won';
 
     /**
      * Get opportunities by state by current quarter
@@ -376,8 +372,7 @@ class OpportunityRepository extends EntityRepository
         DateTime $end = null,
         $owners = []
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end, $owners)
-            ->andWhere('o.closeDate IS NULL');
+        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -534,21 +529,195 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
-        if ($start) {
-            $qb
-                ->andWhere('o.createdAt > :start')
-                ->setParameter('start', $start);
-        }
-        if ($end) {
-            $qb
-                ->andWhere('o.createdAt < :end')
-                ->setParameter('end', $end);
-        }
+
+        $this->setCreationPeriod($qb, $start, $end);
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
+     *
+     * @return double
+     */
+    public function getNewOpportunitiesAmount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
+        $qb = $this
+            ->createQueryBuilder('o')
+            ->select('SUM(o.budgetAmount)');
+
+        $this->setCreationPeriod($qb, $start, $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
+     *
+     * @return int
+     */
+    public function getWonOpportunitiesToDateCount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
+        $qb = $this->createQueryBuilder('o');
+        $qb->select('COUNT(o.id)')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+
+        $this->setClosedPeriod($qb, $start, $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
+     *
+     * @return double
+     */
+    public function getWonOpportunitiesToDateAmount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
+        $qb = $this->createQueryBuilder('o');
+        $qb->select('SUM(o.closeRevenue)')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+
+        $this->setClosedPeriod($qb, $start, $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     */
+    protected function setCreationPeriod(QueryBuilder $qb, DateTime $start = null, DateTime $end = null)
+    {
+        $qb
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param DateTime|null $start
+     * @param DateTime|null $end
+     */
+    protected function setClosedPeriod(QueryBuilder $qb, DateTime $start = null, DateTime $end = null)
+    {
+        $qb
+            ->andWhere($qb->expr()->between('o.closeDate', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+    }
+
+    /**
+     * Returns count of opportunities grouped by lead source
+     *
+     * @param AclHelper $aclHelper
+     * @param DateFilterProcessor $dateFilterProcessor
+     * @param array $dateRange
+     * @param array $owners
+     *
+     * @return array [value, source]
+     */
+    public function getOpportunitiesCountGroupByLeadSource(
+        AclHelper $aclHelper,
+        DateFilterProcessor $dateFilterProcessor,
+        array $dateRange = [],
+        array $owners = []
+    ) {
+        $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateFilterProcessor, $dateRange, $owners);
+        $qb->addSelect('count(o.id) as value');
+
+        return $aclHelper->apply($qb)->getArrayResult();
+    }
+
+    /**
+     * Returns budget amount of opportunities grouped by lead source
+     *
+     * @param AclHelper $aclHelper
+     * @param DateFilterProcessor $dateFilterProcessor
+     * @param array $dateRange
+     * @param array $owners
+     *
+     * @return array [value, source]
+     */
+    public function getOpportunitiesAmountGroupByLeadSource(
+        AclHelper $aclHelper,
+        DateFilterProcessor $dateFilterProcessor,
+        array $dateRange = [],
+        array $owners = []
+    ) {
+        $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateFilterProcessor, $dateRange, $owners);
+        $qb->addSelect("SUM(CASE WHEN o.status = 'won' THEN o.closeRevenue ELSE o.budgetAmount END) as value");
+
+        return $aclHelper->apply($qb)->getArrayResult();
+    }
+
+    /**
+     * Returns opportunities QB grouped by lead source filtered by $dateRange and $owners
+     *
+     * @param DateFilterProcessor $dateFilterProcessor
+     * @param array $dateRange
+     * @param array $owners
+     *
+     * @return QueryBuilder
+     */
+    protected function getOpportunitiesGroupByLeadSourceQueryBuilder(
+        DateFilterProcessor $dateFilterProcessor,
+        array $dateRange = [],
+        array $owners = []
+    ) {
+        $qb = $this->createQueryBuilder('o')
+            ->select('s.id as source')
+            ->leftJoin('o.lead', 'l')
+            ->leftJoin('l.source', 's')
+            ->groupBy('source');
+
+        $dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $qb;
     }
 }
