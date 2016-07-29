@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
@@ -15,18 +14,6 @@ use OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 
 class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testShouldApplyOnlyToOpportunityOnPersist()
-    {
-        $object = new \stdClass();
-        $object->probability = 0.7;
-
-        $eventArguments = $this->getPrePersistEventArguments($object);
-        $listener = $this->getListener();
-        $listener->prePersist($eventArguments);
-
-        $this->assertEquals(0.7, $object->probability);
-    }
-
     public function testShouldApplyOnlyToOpportunityOnUpdate()
     {
         $object = new \stdClass();
@@ -45,28 +32,12 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
      * @param string $statusId
      * @param float $expectedProbability
      */
-    public function testShouldSetProbabilityOnPersist($statusId, $expectedProbability)
-    {
-        $opportunity = $this->getOpportunity($statusId);
-        $eventArguments = $this->getPrePersistEventArguments($opportunity);
-        $listener = $this->getListener();
-        $listener->prePersist($eventArguments);
-
-        $this->assertEquals($expectedProbability, $opportunity->getProbability());
-    }
-
-    /**
-     * @dataProvider statusDataProvider
-     *
-     * @param string $statusId
-     * @param float $expectedProbability
-     */
     public function testShouldSetProbabilityOnUpdate($statusId, $expectedProbability)
     {
-        $opportunity = $this->getOpportunity($statusId);
+        $opportunity = $this->getOpportunity($statusId, $this->getDefaultProbilities()[$statusId]);
         $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
             'status' => [
-                $this->getOpportunityStatus('negotiation'),
+                $this->getOpportunityStatus($statusId),
                 $this->getOpportunityStatus('won')
             ]
         ]);
@@ -74,16 +45,6 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
         $listener->preUpdate($eventArguments);
 
         $this->assertEquals($expectedProbability, $opportunity->getProbability());
-    }
-
-    public function testShouldNotOverwriteProbabilityOnPersist()
-    {
-        $opportunity = $this->getOpportunity('negotiation', 0.25);
-        $eventArguments = $this->getPrePersistEventArguments($opportunity);
-        $listener = $this->getListener();
-        $listener->prePersist($eventArguments);
-
-        $this->assertEquals(0.25, $opportunity->getProbability());
     }
 
     public function testShouldNotOverwriteProbabilityOnUpdate()
@@ -103,28 +64,6 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
     }
 
-    /**
-     * @dataProvider statusDataProvider
-     *
-     * @param string $statusId
-     * @param float $expectedProbability
-     */
-    public function testShouldOverwriteEmptyProbabilityOnUpdate($statusId, $expectedProbability)
-    {
-        $opportunity = $this->getOpportunity($statusId);
-        $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
-            'probability' => [0.1, null],
-            'status' => [
-                $this->getOpportunityStatus('negotiation'),
-                $this->getOpportunityStatus('won')
-            ]
-        ]);
-        $listener = $this->getListener();
-        $listener->preUpdate($eventArguments);
-
-        $this->assertEquals($expectedProbability, $eventArguments->getNewValue('probability'));
-    }
-
     public function testShouldNotSetProbabilityWithoutStatusChangeOnUpdate()
     {
         $opportunity = $this->getOpportunity('negotiation', 0.25);
@@ -136,31 +75,6 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0.25, $opportunity->getProbability());
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
-    }
-
-    public function testShouldNotSetMissingDefaultProbabilityOnPersist()
-    {
-        $opportunity = $this->getOpportunity('unknown', 0.7);
-        $eventArguments = $this->getPrePersistEventArguments($opportunity);
-        $listener = $this->getListener();
-        $listener->prePersist($eventArguments);
-
-        $this->assertEquals(0.7, $opportunity->getProbability());
-    }
-
-    /**
-     * @dataProvider statusDataProvider
-     *
-     * @param string $statusId
-     */
-    public function testShouldNotModifyRestrictedFieldsOnPersist($statusId)
-    {
-        $opportunity = $this->getOpportunity($statusId);
-        $eventArguments = $this->getPrePersistEventArguments($opportunity);
-        $listener = $this->getListener($restricted = true);
-        $listener->prePersist($eventArguments);
-
-        $this->assertNull($opportunity->getProbability());
     }
 
     public function testShouldNotModifyRestrictedFieldsOnUpdate()
@@ -226,20 +140,6 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
         $listener = new DefaultProbabilityListener($configManager, $restrictionManager);
 
         return $listener;
-    }
-
-    /**
-     * @param object $object
-     *
-     * @return LifecycleEventArgs
-     */
-    private function getPrePersistEventArguments($object)
-    {
-        $entityManager = $this->getEntityManagerMock();
-
-        $arguments = new LifecycleEventArgs($object, $entityManager);
-
-        return $arguments;
     }
 
     /**
