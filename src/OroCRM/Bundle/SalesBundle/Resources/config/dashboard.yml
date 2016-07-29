@@ -178,15 +178,6 @@ oro_dashboard_config:
                         label: orocrm.sales.dashboard.forecast_of_opportunities.compareToDate
                         required: false
                         enable_date: false
-                subWidgets:
-                    type: oro_type_widget_items
-                    options:
-                        label: orocrm.sales.dashboard.forecast_of_opportunities.metrics
-                        attr:
-                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
-                        item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
-                        required: false
-                        widget_name: forecast_of_opportunities
                 queryFilter:
                     type: oro_dashboard_query_filter
                     options:
@@ -196,6 +187,15 @@ oro_dashboard_config:
                         entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
                         collapsible: true
                         collapsed: true
+                subWidgets:
+                    type: oro_type_widget_items
+                    options:
+                        label: orocrm.sales.dashboard.forecast_of_opportunities.metrics
+                        attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                        item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
+                        required: false
+                        widget_name: forecast_of_opportunities
         b2b_statistics_widget:
             label:       oro.dashboard.b2b_statistics_widget.title
             route:       oro_dashboard_itemized_data_widget
