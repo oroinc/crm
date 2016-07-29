@@ -206,7 +206,7 @@ oro_dashboard_config:
                         widgetType: forecast_of_opportunities
                         entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
                         collapsible: true
-                        collapsed: true
+                        expand_filled: true
                 subWidgets:
                     type: oro_type_widget_items
                     options:
