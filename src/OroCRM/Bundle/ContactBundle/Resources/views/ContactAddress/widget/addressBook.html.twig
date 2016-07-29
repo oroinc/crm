@@ -1,42 +1,5 @@
-<div class="widget-content">
-    {# JS template for address view #}
-    {% include "OroAddressBundle:Js:address.js.twig" %}
-
-    {# widget container and actions #}
-    <div class="widget-actions">
-        {% if address_edit_acl_resource is not defined or resource_granted(address_edit_acl_resource) %}
-        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'Add Address'|trans }}</button>
-        {% endif %}
-    </div>
-    <div class="list-box map-box" id="address-book"></div>
-
-    <script type="text/javascript">
-    require(['jquery', 'underscore', 'routing', 'oroaddress/js/address-book', 'oroui/js/widget-manager'],
-    function($, _, routing, AddressBook, widgetManager) {
-        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
-            /** @type oroaddress.AddressBook */
-            var addressBook = new AddressBook({
-                el: '#address-book',
-                addressListUrl: {{ path('oro_api_get_contact_addresses', {'contactId': entity.id})|json_encode|raw }},
-                addressCreateUrl: {{ path('orocrm_contact_address_create', {'contactId': entity.id})|json_encode|raw }},
-                addressUpdateUrl: function() {
-                    var address = arguments[0];
-                    return routing.generate(
-                        'orocrm_contact_address_update',
-                        {
-                            'contactId': {{ entity.id|json_encode|raw }},
-                            'id': address.get('id')
-                        }
-                    )
-                }
-            });
-            widget.getAction('add_address', 'adopted', function(action) {
-                action.on('click', _.bind(addressBook.createAddress, addressBook));
-            });
-            addressBook
-                .getCollection()
-                .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
-        });
-    });
-    </script>
-</div>
+{% extends "OroAddressBundle:widget:addressBook.html.twig" %}
+{% set addressListUrl = path('oro_api_get_contact_addresses', {'contactId': entity.id}) %}
+{% set addressCreateUrl = path('orocrm_contact_address_create', {'contactId': entity.id}) %}
+{% set addressUpdateRoute = 'orocrm_contact_address_update' %}
+{% set ownerParam = 'contactId' %}

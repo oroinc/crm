@@ -18,13 +18,10 @@ Scenario: Create new Account
     | Wanda      | Ford      | <email()> |
   And I go to Customers/Accounts
   And I press "Create Account"
-  And press select arrow in Owner field
-  And fill "Ha" in search entity field
-  And must see only one result
-  Then I press on "Harry" in search result
   And I fill "Account" form with:
     | Account Name | Good Company    |
     | Description  | Our new partner |
+    | Owner        | Harry           |
   And I press "Add"
   And check Joan Anderson and Wanda Ford in grid
   When I press "Select"

@@ -13,7 +13,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
@@ -189,7 +189,7 @@ class OpportunityType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'data_class' => Opportunity::class,
                 'intention'  => 'opportunity'
             ]
         );
@@ -213,22 +213,8 @@ class OpportunityType extends AbstractType
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $opportunity = $event->getData();
-
-                if ($opportunity instanceof Opportunity) {
-                    $b2bCustomer = $opportunity->getCustomer();
-                    if ($b2bCustomer && !$b2bCustomer->getDataChannel()) {
-                        // new customer needs a channel
-                        $b2bCustomer->setDataChannel($opportunity->getDataChannel());
-                    }
-
-                    if ($b2bCustomer && !$b2bCustomer->getAccount()) {
-                        // new Account for new B2bCustomer
-                        $account = new Account();
-                        $account->setName($b2bCustomer->getName());
-                        $b2bCustomer->setAccount($account);
-                    }
-                }
+                $relationsBuilder = new OpportunityRelationsBuilder($event->getData());
+                $relationsBuilder->buildAll();
             }
         );
     }
