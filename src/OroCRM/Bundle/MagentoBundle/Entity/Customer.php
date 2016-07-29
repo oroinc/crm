@@ -809,10 +809,14 @@ class Customer extends ExtendCustomer implements
 
     /**
      * @param User $user
+     *
+     * @return Customer
      */
     public function setOwner(User $user)
     {
         $this->owner = $user;
+
+        return $this;
     }
 
     /**
