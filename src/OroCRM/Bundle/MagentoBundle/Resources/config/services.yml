@@ -989,3 +989,11 @@ services:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:
             - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]
+
+    orocrm_magento.async.sync_cart_expiration_integration_processor:
+        class: 'OroCRM\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor'
+        arguments:
+            - '@doctrine'
+            - '@orocrm_magento.provider.cart_expiration_processor'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }

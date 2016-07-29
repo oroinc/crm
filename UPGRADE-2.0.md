@@ -11,6 +11,10 @@ UPGRADE FROM 1.10 to 2.0
 ####OroCRMMagentoBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\MagentoBundle\Entity\Cart`
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\MagentoBundle\Entity\Order`
+- The `CartExpirationProcessor` now implements `SyncProcessorInterface`
+- The command class `CartExpirationSyncCommand` renamed to `SyncCartExpirationCommand`.
+
+
 
 ####OroCRMChannelBundle:
 - The event `orocrm_channel.channel.status_change` was removed. Use message queue topic `orocrm_channel.channel.status_change` instead.

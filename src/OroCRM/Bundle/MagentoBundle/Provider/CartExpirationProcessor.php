@@ -3,19 +3,17 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
-class CartExpirationProcessor
+class CartExpirationProcessor implements SyncProcessorInterface
 {
     const DEFAULT_PAGE_SIZE = 200;
 
@@ -52,11 +50,9 @@ class CartExpirationProcessor
     }
 
     /**
-     * Run cart expiration process for given channel
-     *
-     * @param Channel $channel
+     * {@inheritdoc}
      */
-    public function process(Channel $channel)
+    public function process(Channel $channel, $connector = null, array $connectorParameters = [])
     {
         $this->configure($channel);
 

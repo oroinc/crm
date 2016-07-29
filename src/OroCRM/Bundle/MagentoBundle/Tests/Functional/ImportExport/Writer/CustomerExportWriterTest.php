@@ -52,7 +52,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        var_dump($jobResult->getFailureExceptions());
         $this->assertEmpty($jobResult->getFailureExceptions());
         $this->assertTrue($jobResult->isSuccessful());
 
