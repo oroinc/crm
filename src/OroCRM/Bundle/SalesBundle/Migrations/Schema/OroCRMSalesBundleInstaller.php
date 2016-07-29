@@ -25,6 +25,8 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as Sales
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -148,6 +150,8 @@ class OroCRMSalesBundleInstaller implements
         SalesOrganizations::addOrganization($schema);
 
         $this->addOrocrmSalesOpportunityStatusField($schema, $queries);
+        AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
+        AddLeadAddressTable::createLeadAddressTable($schema);
     }
 
     /**
