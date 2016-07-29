@@ -143,6 +143,11 @@ class ForecastProvider
         \DateTime $end = null,
         array $filters = []
     ) {
+        // clone datetimes as doctrine modifies their timezone which breaks stuff
+        $moment = clone $moment;
+        $start = $start ? clone $start : null;
+        $end = $end ? clone $end : null;
+
         $qb = $this->getAuditRepository()->createQueryBuilder('a');
         $qb
             ->select(<<<SELECT
