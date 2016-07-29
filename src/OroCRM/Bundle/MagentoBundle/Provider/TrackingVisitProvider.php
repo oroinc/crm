@@ -7,9 +7,11 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class TrackingVisitProvider
 {
@@ -111,48 +113,37 @@ class TrackingVisitProvider
     }
 
     /**
-     * @param string $alias
+     * Return total number of visits, last visit date and visits per month
+     * filtered by customers
      *
-     * @return QueryBuilder
-     */
-    public function getVisitedCountQB($alias)
-    {
-        $qb = $this->getTrackingVisitRepository()->createQueryBuilder($alias);
-        $qb
-            ->select(sprintf('COUNT(DISTINCT %s.userIdentifier)', $alias))
-            ->join(sprintf('%s.trackingWebsite', $alias), 'tw')
-            ->join('tw.channel', 'c')
-            ->andWhere('c.channelType = :channel')
-            ->andWhere($qb->expr()->eq('c.status', ':status'))
-            ->setParameters([
-                'channel' => ChannelType::TYPE,
-                'status'  => Channel::STATUS_ACTIVE
-            ]);
-
-        return $qb;
-    }
-
-    /**
-     * @param string $alias
+     * @param Customer[] $customers
      *
-     * @return QueryBuilder
+     * @return array
      */
-    public function getDeeplyVisitedCountQB($alias)
+    public function getAggregates(array $customers)
     {
-        $qb = $this->getTrackingVisitRepository()->createQueryBuilder($alias);
-        $qb
-            ->select(sprintf('COUNT(DISTINCT %s.userIdentifier)', $alias))
-            ->join(sprintf('%s.trackingWebsite', $alias), 'tw')
-            ->join('tw.channel', 'c')
-            ->andWhere('c.channelType = :channel')
-            ->andWhere($qb->expr()->eq('c.status', ':status'))
-            ->setParameters([
-                'channel' => ChannelType::TYPE,
-                'status'  => Channel::STATUS_ACTIVE
-            ])
-            ->andHaving(sprintf('COUNT(%s.userIdentifier) > 1', $alias));
+        $customerAssocName = ExtendHelper::buildAssociationName(Customer::class, 'identifier');
 
-        return $qb;
+        $result = $this->getTrackingVisitRepository()
+            ->createQueryBuilder('t')
+            ->select('COUNT(DISTINCT t.userIdentifier) cnt')
+            ->addSelect('MIN(t.firstActionTime) first')
+            ->addSelect('MAX(t.firstActionTime) last')
+            ->andWhere(sprintf('t.%s in (:customers)', $customerAssocName))
+            ->setParameter('customers', $customers)
+            ->getQuery()
+            ->getSingleResult();
+
+        $count = (int) $result['cnt'];
+        $first = new \DateTimeImmutable($result['first']);
+        $last = new \DateTimeImmutable($result['last']);
+        $monthsDiff = $last->diff($first)->m;
+
+        return [
+            'count' => $count,
+            'last' => $count > 0 ? $result['last'] : null,
+            'monthly' => $monthsDiff > 0 ? $count / $monthsDiff : $count,
+        ];
     }
 
     /**
