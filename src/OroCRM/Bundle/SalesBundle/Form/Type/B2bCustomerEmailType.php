@@ -36,9 +36,17 @@ class B2bCustomerEmailType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'orocrm_b2bcustomer_email';
     }
