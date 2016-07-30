@@ -32,7 +32,7 @@ class InternalTransportSettingsType extends AbstractTransportSettingsType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -47,6 +47,14 @@ class InternalTransportSettingsType extends AbstractTransportSettingsType
      * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return self::NAME;
     }

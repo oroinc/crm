@@ -76,11 +76,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('orocrm_channel_form', $this->type->getName());
     }
 
-    public function testGetParent()
-    {
-        $this->assertEquals('form', $this->type->getParent());
-    }
-
     public function testSetDefaultOptions()
     {
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
