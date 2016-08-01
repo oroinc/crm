@@ -56,19 +56,11 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_status_config }
 
-    orocrm_sales.opportunity_entity_config.form.extension.enum:
-        class: Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension
-        arguments:
-            - '@oro_entity_config.config_manager'
-            - '@translator'
-            - '@oro_entity_extend.enum_synchronizer'
-        tags:
-            - { name: form.type_extension, alias: orocrm_sales_opportunity_status_config }
-
     orocrm_sales.opportunity_status_config.form.extension:
         class: OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension
         arguments:
             - '@oro_config.global'
+            - '@oro_entity_extend.entity_config_type.enum.subscriber'
         tags:
             - { name: form.type_extension, alias: orocrm_sales_opportunity_status_config }
 

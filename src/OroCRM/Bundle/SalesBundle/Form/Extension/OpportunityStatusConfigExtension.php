@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Extension;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -16,18 +17,26 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  * Handle the additional 'probability' field added to Opportunity Enum Options.
  * Maps probability per opportunity status
  * Stores and retrieves the map from the scoped System Config
+ * Manages enum options via EnumFieldConfigSubscriber
+ *
+ * @see Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber
  */
 class OpportunityStatusConfigExtension extends AbstractTypeExtension
 {
     /** @var ConfigManager */
     protected $configManager;
 
+    /** @var EventSubscriberInterface */
+    protected $eventSubscriber;
+
     /**
      * @param ConfigManager $configManager
+     * @param EventSubscriberInterface $eventSubscriber
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, EventSubscriberInterface $eventSubscriber)
     {
         $this->configManager = $configManager;
+        $this->eventSubscriber = $eventSubscriber;
     }
 
     /**
@@ -35,6 +44,8 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // manage enum options (add/remove/reorder/etc.)
+        $builder->addEventSubscriber($this->eventSubscriber);
         // bind before EnumFieldConfigExtension clears the submitted data
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'onSubmit']);
         // bind with lower priority, we need populated 'enum_options'

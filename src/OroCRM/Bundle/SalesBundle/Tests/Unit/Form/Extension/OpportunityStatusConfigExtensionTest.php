@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Extension;
 
+use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
@@ -109,7 +110,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private function getFormExtension(ConfigManager $configManager)
     {
-        return new OpportunityStatusConfigExtension($configManager);
+        return new OpportunityStatusConfigExtension($configManager, $this->getEnumFieldConfigSubscriber());
     }
 
     /**
@@ -141,5 +142,22 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
         $form = $this->getMock(FormInterface::class);
 
         return new FormEvent($form, $data);
+    }
+
+    private function getEnumFieldConfigSubscriber()
+    {
+        $configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $enumSynchronizer = $this->getMockBuilder('Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnArgument(0));
+
+        return new EnumFieldConfigSubscriber($configManager, $translator, $enumSynchronizer);
     }
 }
