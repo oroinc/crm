@@ -2,16 +2,15 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+
+use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 
 /**
  * Class ForecastOfOpportunities
@@ -20,17 +19,11 @@ use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
  */
 class ForecastOfOpportunities
 {
-    /** @var RegistryInterface */
-    protected $doctrine;
-
     /** @var NumberFormatter */
     protected $numberFormatter;
 
     /** @var DateTimeFormatter */
     protected $dateTimeFormatter;
-
-    /** @var AclHelper */
-    protected $aclHelper;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -38,39 +31,39 @@ class ForecastOfOpportunities
     /** @var DateHelper */
     protected $dateHelper;
 
-    /** @var  array */
-    protected $ownersValues;
+    /** @var ForecastProvider */
+    protected $provider;
+
+    /** @var array */
+    protected $moments = [];
 
     /**
-     * @param RegistryInterface   $doctrine
      * @param NumberFormatter     $numberFormatter
      * @param DateTimeFormatter   $dateTimeFormatter
-     * @param AclHelper           $aclHelper
      * @param TranslatorInterface $translator
      * @param DateHelper          $dateHelper
      * @param OwnerHelper         $ownerHelper
+     * @param ForecastProvider    $provider
      */
     public function __construct(
-        RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
-        AclHelper $aclHelper,
         TranslatorInterface $translator,
         DateHelper $dateHelper,
-        OwnerHelper $ownerHelper
+        OwnerHelper $ownerHelper,
+        ForecastProvider $provider
     ) {
-        $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
-        $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
         $this->dateHelper        = $dateHelper;
         $this->ownerHelper       = $ownerHelper;
+        $this->provider = $provider;
     }
 
     /**
      * @param WidgetOptionBag $widgetOptions
-     * @param string          $getterName
+     * @param string          $dataKey
      * @param string          $dataType
      * @param bool            $lessIsBetter
      *
@@ -78,110 +71,45 @@ class ForecastOfOpportunities
      */
     public function getForecastOfOpportunitiesValues(
         WidgetOptionBag $widgetOptions,
-        $getterName,
+        $dataKey,
         $dataType,
         $lessIsBetter = false
     ) {
         $lessIsBetter = (bool)$lessIsBetter;
         $result       = [];
 
-        $ownerIds = $this->ownerHelper->getOwnerIds($widgetOptions);
+        $ownerIds        = $this->ownerHelper->getOwnerIds($widgetOptions);
         $compareToDate   = $widgetOptions->get('compareToDate');
         $usePrevious     = !empty($compareToDate['useDate']);
         $dateData        = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
-        $value           = $this->{$getterName}($ownerIds, $dateData['start'], $dateData['end']);
-        $result['value'] = $this->formatValue($value, $dataType);
+        $queryFilter     = $widgetOptions->get('queryFilter', []);
+        $value           = $this->provider
+            ->getForecastData($ownerIds, $dateData['start'], $dateData['end'], null, $queryFilter);
+        $result['value'] = $this->formatValue($value[$dataKey], $dataType);
         if (!empty($dateData['prev_start'])
             && !empty($dateData['prev_end'])
             && !empty($dateData['prev_moment'])
         ) {
-            $pastResult              = $this->{$getterName}(
+            $pastResult              = $this->provider->getForecastData(
                 $ownerIds,
                 $dateData['prev_start'],
                 $dateData['prev_end'],
-                $dateData['prev_moment']
+                $dateData['prev_moment'],
+                $queryFilter
             );
             $result['deviation']     = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
             $result                  = $this->prepareData(
                 $dataType,
                 $lessIsBetter,
-                $pastResult,
-                $value - $pastResult,
+                $pastResult[$dataKey],
+                $value[$dataKey] - $pastResult[$dataKey],
                 $result
             );
             $result['previousRange'] = $this->dateTimeFormatter->formatDate($dateData['prev_moment']);
         }
 
         return $result;
-    }
-
-    /**
-     * @param array                $ownerIds
-     * @param \DateTime            $start
-     * @param \DateTime            $end
-     * @param \DateTime|string|int $compareToDate
-     *
-     * @return int
-     */
-    protected function getInProgressValues($ownerIds, $start = null, $end = null, $compareToDate = null)
-    {
-        $values = $this->getOwnersValues($ownerIds, $start, $end, $compareToDate);
-
-        return $values && isset($values['inProgressCount']) ? $values['inProgressCount'] : 0;
-    }
-
-    /**
-     * @param array                $ownerIds
-     * @param \DateTime            $start
-     * @param \DateTime            $end
-     * @param \DateTime|string|int $compareToDate
-     *
-     * @return int
-     */
-    protected function getTotalForecastValues($ownerIds, $start = null, $end = null, $compareToDate = null)
-    {
-        $values = $this->getOwnersValues($ownerIds, $start, $end, $compareToDate);
-
-        return $values && isset($values['budgetAmount']) ? $values['budgetAmount'] : 0;
-    }
-
-    /**
-     * @param array                $ownerIds
-     * @param \DateTime            $start
-     * @param \DateTime            $end
-     * @param \DateTime|string|int $compareToDate
-     *
-     * @return int
-     */
-    protected function getWeightedForecastValues($ownerIds, $start = null, $end = null, $compareToDate = null)
-    {
-        $values = $this->getOwnersValues($ownerIds, $start, $end, $compareToDate);
-
-        return $values && isset($values['weightedForecast']) ? $values['weightedForecast'] : 0;
-    }
-
-    /**
-     * @param array                $ownerIds
-     * @param \DateTime            $start
-     * @param \DateTime            $end
-     * @param \DateTime|string|int $date
-     *
-     * @return mixed
-     */
-    protected function getOwnersValues(array $ownerIds, $start = null, $end = null, $date = null)
-    {
-        $dateKey      = $date ? $this->dateTimeFormatter->formatDate($date) : '';
-        $key          = sha1(
-            implode('_', $ownerIds) . 'date' . $dateKey . 'start' . (string)$start . 'end' . (string)$end
-        );
-        if (!isset($this->ownersValues[$key])) {
-            $this->ownersValues[$key] = $this->doctrine
-                ->getRepository('OroCRMSalesBundle:Opportunity')
-                ->getForecastOfOpportunitiesData($ownerIds, $date, $this->aclHelper, $start, $end);
-        }
-
-        return $this->ownersValues[$key];
     }
 
     /**
@@ -283,34 +211,47 @@ class ForecastOfOpportunities
         $start = $dateRange['start'];
         $end   = $dateRange['end'];
         $data  = [
-            'start' => $start ? $start->format('Y-m-d') : null,
-            'end'   => $end ? $end->format('Y-m-d') : null
+            'start' => $start,
+            'end'   => $end
         ];
         if ($usePrevious
             && !empty($dateRange['prev_start'])
             && !empty($dateRange['prev_end'])
         ) {
-            /** @var \DateTime $prevStart */
-            /** @var \DateTime $prevEnd */
-            $prevStart = $dateRange['prev_start'];
-            $prevEnd   = $dateRange['prev_end'];
-            // current moment
-            $now        = $this->dateHelper->getCurrentDateTime();
-            $diff       = $start->diff($now);
-            $prevMoment = clone $prevStart;
-            $prevMoment->add($diff);
-
             $data = array_merge(
                 $data,
                 [
-                    'current_moment' => $now,
-                    'prev_start'     => $prevStart->format('Y-m-d'),
-                    'prev_end'       => $prevEnd->format('Y-m-d'),
-                    'prev_moment'    => $prevMoment
+                    'prev_start'     => $dateRange['prev_start'],
+                    'prev_end'       => $dateRange['prev_end'],
+                    'prev_moment'    => $this->getMoment($dateRange, $start)
                 ]
             );
         }
 
         return $data;
+    }
+
+    /**
+     * @param array     $dateRange
+     * @param \DateTime $start
+     *
+     * @return array
+     */
+    protected function getMoment(array $dateRange, \DateTime $start)
+    {
+        /** @var \DateTime $prevStart */
+        /** @var \DateTime $prevEnd */
+        $prevStart = $dateRange['prev_start'];
+        $key = md5(serialize([$dateRange['prev_start'], $start]));
+        if (!isset($this->moments[$key])) {
+            // current moment
+            $now        = $this->dateHelper->getCurrentDateTime();
+            $diff       = $start->diff($now);
+            $prevMoment = clone $prevStart;
+            $prevMoment->add($diff);
+            $this->moments[$key] = $prevMoment;
+        }
+
+        return $this->moments[$key];
     }
 }

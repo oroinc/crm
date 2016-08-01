@@ -6,13 +6,15 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository
 {
     /**
      * Returns top $limit opportunities grouped by lead source
+     *
+     * @deprecated since 1.10. Use OpportunityRepository::getOpportunitiesCountGroupByLeadSource instead
+     * @see        OpportunityRepository::getOpportunitiesCountGroupByLeadSource
      *
      * @param  AclHelper $aclHelper
      * @param  int       $limit
@@ -43,6 +45,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      * @param int   $limit
      *
@@ -93,6 +98,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      *
      * @return int
@@ -108,6 +116,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      */
     protected function sortByCountReverse(array &$rows)

@@ -28,11 +28,6 @@ class ContactRequestTypeTest extends TypeTestCase
         $this->assertEquals('orocrm_contactus_contact_request', $this->formType->getName());
     }
 
-    public function testParent()
-    {
-        $this->assertEquals('form', $this->formType->getParent());
-    }
-
     public function testImplementEmbeddedFormInterface()
     {
         $this->assertTrue($this->formType instanceof EmbeddedFormInterface);

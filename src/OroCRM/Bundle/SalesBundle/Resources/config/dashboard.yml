@@ -36,6 +36,26 @@ oro_dashboard_config:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                excludedSources:
+                    type: orocrm_type_widget_lead_source_select
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.label
+                        tooltip:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.tooltip
+                        required: false
+                        configs:
+                            placeholder: orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.placeholder
+                byAmount:
+                    type: oro_type_widget_choice
+                    show_on_widget: true
+                    converter_attributes:
+                        default_selected: 0
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.label
+                        tooltip: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.tooltip
+                        required: true
+                        choices:
+                            0: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.count
+                            1: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.amount
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
@@ -137,19 +157,22 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.forecast_of_opportunities.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration_dialog_options:
+                resizable: true
+                minWidth: 780
             data_items:
                 in_progress:
-                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, getInProgressValues, integer)"
+                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, inProgressCount, integer)"
                     label:         orocrm.sales.dashboard.forecast_of_opportunities.in_progress.label
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
                 total_forecast:
-                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, getTotalForecastValues, currency)"
+                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, budgetAmount, currency)"
                     label:         orocrm.sales.dashboard.forecast_of_opportunities.total_forecast.label
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
                 weighted_forecast:
-                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, getWeightedForecastValues, currency)"
+                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, weightedForecast, currency)"
                     label:         orocrm.sales.dashboard.forecast_of_opportunities.weighted_forecast.label
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
@@ -174,6 +197,16 @@ oro_dashboard_config:
                     options:
                         label: orocrm.sales.dashboard.forecast_of_opportunities.compareToDate
                         required: false
+                        enable_date: false
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: forecast_of_opportunities
+                        entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                        collapsible: true
+                        expand_filled: true
                 subWidgets:
                     type: oro_type_widget_items
                     options:
