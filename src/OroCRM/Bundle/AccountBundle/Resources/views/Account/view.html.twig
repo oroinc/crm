@@ -87,6 +87,22 @@
         {% endif %}
     {% endfor %}
 
+    {# Render Website Activity Section if there is at least one applicable customer #}
+    {% set websiteActivity %}
+        {%- placeholder orocrm_website_activity with {'customers': customers, 'byChannel': true} -%}
+    {% endset %}
+    {% if websiteActivity is not empty %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'orocrm.account.sections.website_activity'|trans,
+                'priority': 1050,
+                'subblocks': [
+                    {'data' : [websiteActivity]}
+                ]
+            }
+        ]) %}
+    {% endif %}
+
     {% set id = 'accountView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
 
