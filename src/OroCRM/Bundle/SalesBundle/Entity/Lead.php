@@ -83,8 +83,6 @@ class Lead extends ExtendLead implements
     
     const INTERNAL_STATUS_CODE = 'lead_status';
 
-    const INTERNAL_STATUS_CODE = 'lead_status';
-
     /**
      * @var integer
      *
