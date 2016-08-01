@@ -51,7 +51,7 @@ define(function(require) {
             }
 
             if (probabilities.hasOwnProperty(status.val())) {
-                if (probabilities[status.val()] === probability.val()) {
+                if (parseFloat(probabilities[status.val()]) === parseFloat(probability.val())) {
                     shouldChangeProbability = true;
                 }
             }
