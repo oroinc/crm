@@ -4,9 +4,6 @@ Feature: Activity list feature
   As OroCRM sales rep
   I need to view, filter, paginate activities in activity list
 
-#Background:
-#  Given I login as "admin" user with "admin" password
-
   Scenario: Filter activities by type
     Given I login as "admin" user with "admin" password
     Given I go to Customers/Contacts
@@ -27,16 +24,12 @@ Feature: Activity list feature
     Given the following note:
       | target          | createdAt                       | updatedAt                       |
       | @contactCharlie | <dateTimeBetween("now", "now")> | <dateTimeBetween("now", "now")> |
-#    And I go to Customers/Contacts
-#    And click view Charlie in grid
     And I reset Activity Type filter
     And I shouldn't see "Merry Christmas" email in activity list
     When go to older activities
     Then I should see "Merry Christmas" email in activity list
 
   Scenario: Filter activities by date range
-#    Given I go to Customers/Contacts
-#    And click view Charlie in grid
     Given I go to newer activities
     And there are 10 records in activity list
     And I shouldn't see "Merry Christmas" email in activity list
