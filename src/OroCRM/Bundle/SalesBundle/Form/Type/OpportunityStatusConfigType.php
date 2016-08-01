@@ -17,11 +17,8 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * Manage Opportunity statuses from the System Config
- * FormType is extended by:
- * - EntityExtendBundle::EnumFieldConfigExtension to manage enum options
- * - SalesBundle::OpportunityStatusConfigExtension to manage the probability map
+ * FormType is extended by SalesBundle::OpportunityStatusConfigExtension to manage the probability map
  *
- * @see Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension
  * @see OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension
  */
 class OpportunityStatusConfigType extends AbstractType
@@ -59,14 +56,13 @@ class OpportunityStatusConfigType extends AbstractType
         $config = $this->configManager->getConfig($this->configId);
         $items = $this->enumProvider->getPropertyConfig()->getFormItems(PropertyConfigContainer::TYPE_FIELD, 'enum');
 
+        // replace items type with the extended form that includes 'probability'
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = [
+            'type' => 'orocrm_sales_opportunity_status_enum_value',
             'label' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.label',
             'tooltip' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.tooltip',
         ];
-
-        // replace items type with the extended form that includes 'probability'
-        $items['enum_options']['form']['options']['type'] = 'orocrm_sales_opportunity_status_enum_value';
 
         $builder->add(
             'enum',
@@ -96,6 +92,14 @@ class OpportunityStatusConfigType extends AbstractType
      * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return self::NAME;
     }
