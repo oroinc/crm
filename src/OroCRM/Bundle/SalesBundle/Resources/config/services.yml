@@ -153,6 +153,11 @@ services:
         tags:
             - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
 
+    orocrm_sales.event_listener.config.default_probability:
+        class: OroCRM\Bundle\SalesBundle\EventListener\Config\DefaultProbabilityListener
+        tags:
+            - { name: kernel.event_listener, event: oro_config.get.oro_crm_sales.default_opportunity_probabilities, method: loadConfig }
+
     orocrm_sales.provider.phone.lead:
         class: %orocrm_sales.provider.phone.lead.class%
         tags:
