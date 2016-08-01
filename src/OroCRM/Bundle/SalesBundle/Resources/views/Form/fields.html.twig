@@ -98,13 +98,15 @@
                     title: 'orocrm.sales.system_configuration.fields.opportunity_status_probabilities.probability.tooltip'
                 }
             }) }}
+            <span class="add-on ui-sortable-handle{% if disabled %} disabled{% endif %}"
+                  data-name="sortable-handle"
+                  title="{{ 'oro.entity_extend.enum_options.priority.tooltip'|trans }}">
+                <i class="icon-resize-vertical {% if disabled %} disabled{% endif %}"></i>
+                {{ form_widget(form.priority, {disabled: disabled}) }}
+            </span>
             <label class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.default.tooltip'|trans }}">
                 {{ form_widget(form.is_default, {disabled: disabled}) }}
             </label>
-            <span class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.priority.tooltip'|trans }}">
-                <i class="icon-resize-vertical ui-sortable-handle{% if disabled %} disabled{% endif %}"></i>
-                {{ form_widget(form.priority, {disabled: disabled}) }}
-            </span>
         </div>
         {{ form_errors(form.label) }}
     </div>
