@@ -81,7 +81,7 @@ orocrm:
                 no_available_metrics: No available metrics
                 role: Role
                 owner: Owner
-                compareToDate: Compare to Date
+                compareToDate: Compare to Previous Period
                 business_unit: Business Unit
             opportunities_list:
                 title: Opportunities List

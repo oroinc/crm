@@ -98,9 +98,4 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('order_api_type', $this->type->getName());
     }
-
-    public function testGetParent()
-    {
-        $this->assertEquals('form', $this->type->getParent());
-    }
 }

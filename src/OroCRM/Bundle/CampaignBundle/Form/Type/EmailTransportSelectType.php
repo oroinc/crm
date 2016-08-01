@@ -47,6 +47,14 @@ class EmailTransportSelectType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_campaign_email_transport_select';
     }
 }
