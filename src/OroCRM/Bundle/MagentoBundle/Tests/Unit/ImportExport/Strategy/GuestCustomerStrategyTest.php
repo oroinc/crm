@@ -24,7 +24,8 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
             $this->fieldHelper,
             $this->databaseHelper,
             $this->chainEntityClassNameProvider,
-            $this->translator
+            $this->translator,
+            $this->doctrineHelper
         );
 
         $strategy->setOwnerHelper($this->defaultOwnerHelper);

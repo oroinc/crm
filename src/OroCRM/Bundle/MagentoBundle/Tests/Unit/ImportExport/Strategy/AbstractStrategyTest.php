@@ -16,6 +16,7 @@ use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
@@ -84,6 +85,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $translator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     */
+    protected $doctrineHelper;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -144,6 +150,10 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->logger = new NullLogger();
     }
 
@@ -160,7 +170,8 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             $this->defaultOwnerHelper,
             $this->logger,
             $this->channelHelper,
-            $this->addressHelper
+            $this->addressHelper,
+            $this->doctrineHelper
         );
     }
 
