@@ -2,17 +2,16 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraints\Range;
 
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
-
 /**
  * Extends EnumValueType to add a 'probability' field
  */
-class OpportunityStatusEnumValueType extends EnumValueType
+class OpportunityStatusEnumValueType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity_status_enum_value';
 
@@ -26,8 +25,6 @@ class OpportunityStatusEnumValueType extends EnumValueType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
     }
 
@@ -53,6 +50,11 @@ class OpportunityStatusEnumValueType extends EnumValueType
                 'constraints' => new Range(['min' => 0, 'max' => 100]),
             ]
         );
+    }
+
+    public function getParent()
+    {
+        return 'oro_entity_extend_enum_value';
     }
 
     /**
