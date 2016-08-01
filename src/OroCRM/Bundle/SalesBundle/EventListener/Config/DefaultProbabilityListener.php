@@ -16,8 +16,7 @@ class DefaultProbabilityListener
         $name = $event->getKey();
         $configManager = $event->getConfigManager();
 
-        $value = $configManager->getSettingsDefaults($name, $event->isFull());
-        $value = $configManager->getMergedWithParentValue($value, $name, $event->isFull());
+        $value = $configManager->getMergedWithParentValue($event->getValue(), $name, $event->isFull());
 
         $event->setValue($value);
     }
