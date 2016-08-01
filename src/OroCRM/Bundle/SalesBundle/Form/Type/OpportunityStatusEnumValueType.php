@@ -34,6 +34,7 @@ class OpportunityStatusEnumValueType extends EnumValueType
     /**
      * PRE_SET_DATA event handler
      * Add probability fields for each status
+     * We do it in the listener to disable fields dynamically
      *
      * @param FormEvent $event
      */
@@ -58,6 +59,14 @@ class OpportunityStatusEnumValueType extends EnumValueType
      * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return self::NAME;
     }
