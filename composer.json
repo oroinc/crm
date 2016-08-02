@@ -15,6 +15,12 @@
             "Oro": "src/"
          }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.orocrm.com"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
         "oro/platform": "self.version",
