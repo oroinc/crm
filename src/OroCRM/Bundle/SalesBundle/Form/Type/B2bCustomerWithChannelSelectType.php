@@ -41,6 +41,14 @@ class B2bCustomerWithChannelSelectType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_sales_b2bcustomer_with_channel_select';
     }
 }

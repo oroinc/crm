@@ -42,8 +42,8 @@ class CustomerApiEntityManager extends ApiEntityManager
                 'country' => ['fields' => 'iso2Code'],
                 'region'  => ['fields' => 'combinedCode'],
                 'owner'   => ['fields' => 'id'],
-                'created' => ['fields' => 'date'],
-                'updated' => ['fields' => 'date'],
+                'created' => null,
+                'updated' => null,
                 'types'   => ['fields' => 'name'],
                 'channel' => ['fields' => 'id'],
             ]

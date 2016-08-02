@@ -36,6 +36,14 @@ class SalesFunnelApiType extends SalesFunnelType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_sales_salesfunnel_api';
     }
 }

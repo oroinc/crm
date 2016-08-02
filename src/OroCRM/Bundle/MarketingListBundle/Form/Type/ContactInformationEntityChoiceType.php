@@ -11,6 +11,14 @@ class ContactInformationEntityChoiceType extends EntityChoiceType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_marketing_list_contact_information_entity_choice';
     }
 }

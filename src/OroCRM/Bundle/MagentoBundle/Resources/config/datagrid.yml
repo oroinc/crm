@@ -1971,3 +1971,11 @@ datagrid:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
+
+    magento-customer-tracking-events-widget:
+        extended_entity_name: %oro_tracking.tracking_visit_event.class%
+        acl_resource: oro_tracking_website_view
+        extends: tracking-events-grid
+        # Source config field is modified in TrackingEventsDataGridListener to change
+        # the source table and add filter by customer identifiers
+        # source: ~
