@@ -35,7 +35,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function isProcessingAllowed(Order $order)
     {
         $isProcessingAllowed = true;
-        $customer = $this->findExistingEntity($order->getCustomer());
+        $customer = $this->findExistingCustomer($order);
         $customerOriginId = $order->getCustomer()->getOriginId();
         if (!$customer && $customerOriginId) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
@@ -67,5 +67,32 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         }
 
         return $isProcessingAllowed;
+    }
+
+    /**
+     * Get existing customer or existing guest customer
+     *
+     * @param Order $order
+     * @return null|Customer
+     */
+    protected function findExistingCustomer(Order $order)
+    {
+        $customer = $order->getCustomer();
+        $customerOriginId = $customer->getOriginId();
+
+        /** @var Customer|null $existingEntity */
+        if ($customer->getId() || $customerOriginId) {
+            $existingEntity = $this->findExistingEntity($customer);
+        } else {
+            $existingEntity = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                [
+                    'email' => $order->getCustomerEmail(),
+                    'channel' => $customer->getChannel()
+                ]
+            );
+        }
+
+        return $existingEntity;
     }
 }
