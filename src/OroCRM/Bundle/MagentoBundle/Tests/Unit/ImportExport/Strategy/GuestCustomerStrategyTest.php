@@ -66,6 +66,29 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
         $this->assertNotEmpty($this->getStrategy()->process($customer));
     }
 
+    public function testProcessNotExistingGuestCustomerWithStore()
+    {
+        $store = new Store();
+        $store->setWebsite(new Website());
+
+        $customer = $this->getCustomer();
+        $customer->setGuest(true);
+        $customer->setId(1);
+        $customer->setEmail('test@example.com');
+        $customer->setStore($store);
+
+        $group = new CustomerGroup();
+        $group->setId(0);
+        $customer->setGroup($group);
+
+        /** @var Customer $result */
+        $result = $this->getStrategy()->process($customer);
+
+        $this->assertNotEmpty($result);
+        $this->assertEquals($result->getGroup(), $group);
+        $this->assertTrue($result->isGuest());
+    }
+
     /**
      * @return Customer
      */

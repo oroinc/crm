@@ -9,7 +9,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     /**
      * ID of group for not logged customers
      */
-    const NOT_LOGGED_IN_ID          = 0;
+    const NOT_LOGGED_IN_ID = 0;
 
     /**
      * {@inheritdoc}
@@ -101,5 +101,19 @@ class GuestCustomerStrategy extends AbstractImportStrategy
                 );
             $entity->setGroup($group);
         }
+    }
+
+    /*
+     * @param object $entity
+     * @param array $searchContext
+     * @return null|object|Customer
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        if ($entity instanceof Customer) {
+            return $this->checkExistingCustomer($entity);
+        }
+
+        return parent::findExistingEntity($entity, $searchContext);
     }
 }
