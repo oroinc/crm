@@ -65,15 +65,30 @@ class AddOpportunityStatus implements
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
         $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
-        self::addStatusField($schema, $this->extendExtension, $queries);
+
+        $immutableCodes = ['in_progress', 'won', 'lost'];
+
+        self::addStatusField($schema, $this->extendExtension, $immutableCodes);
+
+        $statuses = [
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'in_progress' => 'In Progress',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost',
+        ];
+
+        self::addEnumValues($queries, $statuses);
     }
 
     /**
      * @param Schema $schema
      * @param ExtendExtension $extendExtension
-     * @param QueryBag $queries
+     * @param array $immutableCodes
      */
-    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, QueryBag $queries)
+    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, array $immutableCodes)
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
@@ -94,24 +109,14 @@ class AddOpportunityStatus implements
         $options->set(
             'enum',
             'immutable_codes',
-            [
-                'in_progress',
-                'won',
-                'lost'
-            ]
+            $immutableCodes
         );
 
         $enumTable->addOption(OroOptions::KEY, $options);
-        $statuses = [
-            'identification_alignment' => 'Identification & Alignment',
-            'needs_analysis' => 'Needs Analysis',
-            'solution_development' => 'Solution Development',
-            'negotiation' => 'Negotiation',
-            'in_progress' => 'In Progress',
-            'won' => 'Closed Won',
-            'lost' => 'Closed Lost'
-        ];
-        $defaultValue = 'in_progress';
+    }
+
+    public static function addEnumValues(QueryBag $queries, array $statuses, $defaultValue = 'in_progress')
+    {
         $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority, is_default)
                   VALUES (:id, :name, :priority, :is_default)';
         $i = 1;
