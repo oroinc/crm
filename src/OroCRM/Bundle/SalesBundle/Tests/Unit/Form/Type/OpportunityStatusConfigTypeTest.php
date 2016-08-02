@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Audit\AuditManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigCache;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
@@ -131,7 +132,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEntityConfigManager()
     {
-        $configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+        $configProvider = $this->getMockBuilder(ConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $configProvider->expects($this->any())
