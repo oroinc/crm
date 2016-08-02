@@ -239,6 +239,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     public function iDeleteAllAddresses($field)
     {
         $collection = $this->elementFactory->createElement('OroForm')->findField(ucfirst(Inflector::pluralize($field)));
+        self::assertNotNull($collection, sprintf('Can\'t find collection field with "%s" locator', $field));
 
         /** @var NodeElement $removeButton */
         while ($removeButton = $collection->find('css', '.removeRow')) {

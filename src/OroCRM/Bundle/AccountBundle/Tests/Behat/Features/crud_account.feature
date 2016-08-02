@@ -4,11 +4,9 @@ Feature: CRUD Account
   As a administrator
   I need have form, grid and actions for Account entity
 
-Background:
-  Given I login as "admin" user with "admin" password
-
 Scenario: Create new Account
-  Given the following contacts:
+  Given I login as "admin" user with "admin" password
+  And the following contacts:
     | First Name | Last Name | Email     |
     | Joan       | Anderson  | <email()> |
     | Craig      | Bishop    | <email()> |
@@ -27,17 +25,17 @@ Scenario: Create new Account
   When I press "Select"
   Then two contacts added to form
   And I select Wanda contact as default
-  When I save and close form
+  When I save form
   And I should see "Account saved" flash message
   And Account Name field should have Good Company value
   And Description field should have Our new partner value
+  And I save and close form
   And I should see two contacts
   And Wanda should be default contact
   And Harry Freeman should be an owner
 
 Scenario: Edit Account
-  Given I go to Customers/Accounts
-  And click edit Good Company in grid
+  Given I'm edit entity
   And press select entity button on Owner field
   Then click on Todd Greene in grid
   And I fill "Account" form with:
@@ -54,8 +52,6 @@ Scenario: Edit Account
   And Todd Greene should be an owner
 
 Scenario: Delete Account
-  Given I go to Customers/Accounts
-  And click view Oro Inc in grid
   And press "Delete Account"
   When confirm deletion
   Then I should see "Account deleted" flash message
