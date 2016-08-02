@@ -7,17 +7,23 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * Apply query modifications to the Opportunity By Status Report
+ * Add enum status class name to the FROM clause
+ * Apply the defined date and datetime filters to JOIN instead of WHERE
+ */
 class OpportunitiesByStatusReportListener
 {
     /**
      * @var array Map of date filters and comparison operators
      */
     public static $comparatorsMap = [
-        AbstractDateFilterType::TYPE_LESS_THAN => '<',
-        AbstractDateFilterType::TYPE_MORE_THAN => '>',
+        AbstractDateFilterType::TYPE_LESS_THAN => '<=',
+        AbstractDateFilterType::TYPE_MORE_THAN => '>=',
         AbstractDateFilterType::TYPE_EQUAL => '=',
         AbstractDateFilterType::TYPE_NOT_EQUAL => '<>',
         AbstractDateFilterType::TYPE_BETWEEN => ['>=', 'AND', '<='],
@@ -25,6 +31,19 @@ class OpportunitiesByStatusReportListener
     ];
 
     public static $joinFilterKeys = ['createdAt', 'updatedAt', 'closeDate'];
+
+    /** @var DateFilterModifier */
+    protected $dateFilterModifier;
+
+    /**
+     * OpportunitiesByStatusReportListener constructor.
+     *
+     * @param DateFilterModifier $dateFilterModifier
+     */
+    public function __construct(DateFilterModifier $dateFilterModifier)
+    {
+        $this->dateFilterModifier = $dateFilterModifier;
+    }
 
     /**
      * @param BuildBefore $event
@@ -53,7 +72,7 @@ class OpportunitiesByStatusReportListener
             return;
         }
 
-        $joinCondition = '';
+        $joinConditions = '';
         $filters = $dataGrid->getParameters()->get('_filter');
         if (!$filters) {
             return;
@@ -61,11 +80,16 @@ class OpportunitiesByStatusReportListener
 
         $filtersConfig = $dataGrid->getConfig()->offsetGetByPath('[filters][columns]');
 
+        // create a map of join filter conditions
         foreach ($filtersConfig as $key => $config) {
             // get date and datetime filters only
-            if (in_array($config['type'], ['date', 'datetime']) && array_key_exists($key, $filters)) {
+            if (in_array($config['type'], ['date', 'datetime'])
+                && array_key_exists($key, $filters)
+                && strpos($config['data_name'], '.') !== false
+            ) {
+                list($alias, $field) = explode('.', $config['data_name']);
                 // build a join clause
-                $joinCondition .= $this->buildDateCondition($filters[$key], $config['data_name']);
+                $joinConditions[$alias][$field][] = $this->buildDateCondition($filters[$key], $config['data_name']);
                 // remove filters so it does not appear in the where clause
                 unset($filters[$key]);
             }
@@ -76,21 +100,31 @@ class OpportunitiesByStatusReportListener
 
         // Prepare new join
         $queryBuilder = $dataSource->getQueryBuilder();
-        $rootAlias = $queryBuilder->getRootAliases()[0];
         $joinParts = $queryBuilder->getDQLPart('join');
 
-        /** @var \Doctrine\ORM\Query\Expr\Join $joinPart */
-        $joinPart = $joinParts[$rootAlias][0];
-
-        // Append $joinCondition to the join part of the query
         $queryBuilder->resetDQLPart('join');
-        $queryBuilder->leftJoin(
-            $joinPart->getJoin(),
-            $joinPart->getAlias(),
-            $joinPart->getConditionType(),
-            $joinPart->getCondition() . $joinCondition,
-            $joinPart->getIndexBy()
-        );
+
+        // readd join parts and append filter conditions to the appropriate joins
+        foreach ($joinParts as $joins) {
+            foreach ($joins as $join) {
+                /** @var \Doctrine\ORM\Query\Expr\Join $join */
+                $alias = $join->getAlias();
+                $fieldCondition = '';
+                // check if there is a column with a join filter on this alias
+                if (array_key_exists($alias, $joinConditions)) {
+                    foreach ($joinConditions[$alias] as $fieldConditions) {
+                        $fieldCondition .= implode($fieldConditions);
+                    }
+                }
+                $queryBuilder->leftJoin(
+                    $join->getJoin(),
+                    $alias,
+                    $join->getConditionType(),
+                    $join->getCondition() . $fieldCondition,
+                    $join->getIndexBy()
+                );
+            }
+        }
     }
 
     /**
@@ -109,20 +143,23 @@ class OpportunitiesByStatusReportListener
             return '';
         }
 
+        $data = $this->dateFilterModifier->modify($options);
+
         $comparator = self::$comparatorsMap[$type];
 
         // date range comparison
         if (is_array($comparator)) {
             return sprintf(
                 ' AND (%s %s %s)',
-                $this->formatComparison($fieldName, $comparator[0], $options['value']['start']),
+                $this->formatComparison($fieldName, $comparator[0], $data['value']['start']),
                 $comparator[1],
-                $this->formatComparison($fieldName, $comparator[2], $options['value']['end'])
+                $this->formatComparison($fieldName, $comparator[2], $data['value']['end'])
             );
         }
 
+        $value = $data['value']['start'] ? $data['value']['start'] : $data['value']['end'];
         // simple date comparison
-        return $this->formatComparison($fieldName, $comparator, $options['value']['start']);
+        return sprintf(' AND (%s)', $this->formatComparison($fieldName, $comparator, $value));
     }
 
     /**

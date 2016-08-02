@@ -24,7 +24,7 @@ services:
     orocrm_report.opportunities.status.listener:
         class: %orocrm_report.opportunities.status.listener.class%
         arguments:
-            - '@oro_migration.db_id_name_generator'
+            - '@oro_filter.utils.date_filter_modifier'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.orocrm_report-opportunities-by_status, method: onBuildBefore }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.orocrm_report-opportunities-by_status, method: onBuildAfter }
