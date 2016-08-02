@@ -68,9 +68,4 @@ class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('customer_address_api_type', $this->type->getName());
     }
-
-    public function testGetParent()
-    {
-        $this->assertEquals('form', $this->type->getParent());
-    }
 }

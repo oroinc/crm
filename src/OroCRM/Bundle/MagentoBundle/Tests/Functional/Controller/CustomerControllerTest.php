@@ -150,7 +150,7 @@ class CustomerControllerTest extends AbstractController
                     'assert' => [
                         'grandTotal' => '$2.54',
                         'statusLabel' => 'Open',
-                        'stepLabel' => 'Open',
+                        'workflowStepLabel' => 'Open',
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -167,7 +167,7 @@ class CustomerControllerTest extends AbstractController
                         'totalAmount' => '$0.00',
                         'totalPaidAmount' => '$17.85',
                         'status' => 'open',
-                        'stepLabel' => 'Not contacted',
+                        'workflowStepLabel' => 'Not contacted',
                     ],
                     'expectedResultCount' => 1
                 ],

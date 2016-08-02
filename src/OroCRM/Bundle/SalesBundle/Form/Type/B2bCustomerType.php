@@ -15,6 +15,14 @@ class B2bCustomerType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_sales_b2bcustomer';
     }
 
@@ -47,6 +55,26 @@ class B2bCustomerType extends AbstractType
                 'label'    => 'orocrm.sales.b2bcustomer.contact.label',
                 'required' => false,
             ]
+        );
+        $builder->add(
+            'emails',
+            'oro_email_collection',
+            array(
+                'label'    => 'orocrm.sales.b2bcustomer.emails.label',
+                'type'     => 'oro_email',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail')
+            )
+        );
+        $builder->add(
+            'phones',
+            'oro_phone_collection',
+            array(
+                'label'    => 'orocrm.sales.b2bcustomer.phones.label',
+                'type'     => 'oro_phone',
+                'required' => false,
+                'options'  => array('data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone')
+            )
         );
         $builder->add(
             'dataChannel',

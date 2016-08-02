@@ -26,8 +26,12 @@ workflows:
                         identifier: 'won'
                         attribute: $close_reason
                     - '@assign_value':
-                        - [$probability, 1]
                         - [$close_reason_name, 'won']
+                    - '@call_service_method':
+                        service: orocrm_sales.provider.probability
+                        method: get
+                        method_parameters: [$opportunity.status]
+                        attribute: $opportunity.probability
             close_lost_definition:
                 conditions:
                     '@and':
@@ -47,8 +51,12 @@ workflows:
                         identifier: $close_reason_name
                         attribute: $close_reason
                     - '@assign_value':
-                        - [$probability, 0]
                         - [$close_revenue, 0]
+                    - '@call_service_method':
+                        service: orocrm_sales.provider.probability
+                        method: get
+                        method_parameters: [$opportunity.status]
+                        attribute: $opportunity.probability
             reopen_definition:
                 conditions:
                     '@and':

@@ -210,16 +210,14 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: o.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         actions:
             view:
                 type:          navigate
@@ -262,16 +260,20 @@ datagrid:
                     - l.lastName
                     - l.createdAt
                     - l.updatedAt
-                    - l.email
-                    - l.phoneNumber
+                    - email.email
+                    - email.id as emailId
+                    - phone.phone
+                    - phone.id as phoneId
                     - l.jobTitle
                     - l.companyName
                     - l.industry
                     - l.website
                     - l.numberOfEmployees
+                    - l.twitter
+                    - l.linkedIn
                     - source.name as sourceName
                     - customer.name as customerName
-                    - status.label as statusLabel
+                    - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -291,8 +293,10 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
-                        - { join: l.address, alias: address }
+                        - { join: l.status, alias: s }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
@@ -309,8 +313,10 @@ datagrid:
                 label:         orocrm.sales.lead.data_channel.label
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -346,9 +352,43 @@ datagrid:
                 renderable: false
             email:
                 label:         orocrm.sales.lead.email.label
-            phoneNumber:
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/text-editor-view
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        field_name: email
+                        route_create_entity:
+                            name: oro_api_post_leademail
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_leademail
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_LeadEmail
+                        route_parameters_rename_map:
+                            emailId: id
+            phone:
                 label:         orocrm.sales.lead.phone_number.label
                 frontend_type: phone
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/text-editor-view
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        field_name: phone
+                        route_create_entity:
+                            name: oro_api_post_lead_phone
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_lead_phone
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_LeadPhone
+                        route_parameters_rename_map:
+                            phoneId: id
             countryName:
                 label:         orocrm.sales.lead.datagrid.country
             regionLabel:
@@ -375,9 +415,19 @@ datagrid:
             contactName:
                 label:         orocrm.sales.lead.contact.label
                 renderable: false
+            twitter:
+                label:         orocrm.sales.lead.twitter.label
+                frontend_type: string
+                renderable:    false
+            linkedIn:
+                label:         orocrm.sales.lead.linked_in.label
+                frontend_type: string
+                renderable:    false
         properties:
             id: ~
             owner: ~
+            emailId: ~
+            phoneId: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_lead_view
@@ -396,8 +446,8 @@ datagrid:
                     data_name: channelName
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
@@ -421,9 +471,9 @@ datagrid:
                 customerName:
                     data_name: customerName
                 email:
-                    data_name: l.email
-                phoneNumber:
-                    data_name: l.phoneNumber
+                    data_name: email.email
+                phone:
+                    data_name: phone.phone
                 countryName:
                     data_name: address.country
                 regionLabel:
@@ -438,6 +488,10 @@ datagrid:
                     data_name: ownerName
                 contactName:
                     data_name: contactName
+                twitter:
+                    data_name: l.twitter
+                linkedIn:
+                    data_name: l.linkedIn
             default:
                 createdAt:  DESC
         actions:
@@ -473,15 +527,10 @@ datagrid:
                             class: OroCRMChannelBundle:Channel
                             property: name
                             translatable_options: false
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: true
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:LeadStatus
-                            property: label
-                            translatable_options: false
+                status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                 firstName:
                     type: string
                     data_name: l.firstName
@@ -527,10 +576,10 @@ datagrid:
                     enabled: false
                 email:
                     type: string
-                    data_name: l.email
-                phoneNumber:
+                    data_name: email.email
+                phone:
                     type: string
-                    data_name: l.phoneNumber
+                    data_name: phone.phone
                 countryName:
                     type: entity
                     data_name: address.country
@@ -562,9 +611,9 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: l.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 contactName:
                     type: string
                     data_name: contactName
@@ -573,9 +622,15 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: l.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                twitter:
+                    type: string
+                    data_name: l.twitter
+                    enabled: false
+                linkedIn:
+                    type: string
+                    data_name: l.linkedIn
+                    enabled: false
         views_list: "@orocrm_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
@@ -595,14 +650,12 @@ datagrid:
                     - opportunity.budgetAmount as opportunityBudget
                     - opportunity.closeRevenue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
-                    - step.label as stepLabel
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
                     left:
-                        - { join: salesFunnel.workflowStep, alias: step }
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
                         - { join: salesFunnel.dataChannel, alias: channel }
@@ -628,8 +681,6 @@ datagrid:
             opportunityProbability:
                 label: orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            stepLabel:
-                label: orocrm.sales.salesfunnel.workflow_step.label
             ownerName:
                 label: orocrm.sales.salesfunnel.owner.label
         properties:
@@ -663,8 +714,6 @@ datagrid:
                     data_name: opportunity.closeRevenue
                 opportunityProbability:
                     data_name: opportunity.probability
-                stepLabel:
-                    data_name: step.label
                 ownerName:
                     data_name: ownerName
             default:
@@ -720,28 +769,18 @@ datagrid:
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
-                stepLabel:
-                    type: entity
-                    data_name: salesFunnel.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
-                            translatable_options: false
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
@@ -787,8 +826,8 @@ datagrid:
                     - lead.name
                     - lead.firstName
                     - lead.lastName
-                    - lead.email
-                    - lead.phoneNumber
+                    - email.email
+                    - phone.phone
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - >
@@ -802,7 +841,9 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: lead }
                 join:
                     left:
-                        - { join: lead.address, alias: address }
+                        - { join: lead.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: lead.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: lead.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                 where:
@@ -820,8 +861,8 @@ datagrid:
                 label: orocrm.sales.lead.last_name.label
             email:
                 label: orocrm.sales.lead.email.label
-            phoneNumber:
-                label: orocrm.sales.lead.phone_number.label
+            phone:
+                label:         orocrm.sales.lead.phone_number.label
                 frontend_type: phone
             countryName:
                 label: orocrm.sales.lead.datagrid.country
@@ -838,9 +879,9 @@ datagrid:
                 lastName:
                     data_name: lead.lastName
                 email:
-                    data_name: lead.email
-                phoneNumber:
-                    data_name: lead.phoneNumber
+                    data_name: email.email
+                phone:
+                    data_name: phone.phone
                 countryName:
                     data_name: address.country
                 regionLabel:
@@ -867,10 +908,10 @@ datagrid:
                      data_name: lead.lastName
                  email:
                      type: string
-                     data_name: lead.email
-                 phoneNumber:
+                     data_name: email.email
+                 phone:
                      type: string
-                     data_name: lead.phoneNumber
+                     data_name: phone.phone
                  countryName:
                      type: entity
                      data_name: address.country
@@ -969,6 +1010,10 @@ datagrid:
                     - c.id
                     - c.name
                     - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
+                    - phone.phone
+                    - phone.id as phoneId
+                    - email.email
+                    - email.id as emailId
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
@@ -977,6 +1022,10 @@ datagrid:
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
+                        - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+        inline_editing:
+            enable: true
         columns:
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
@@ -991,6 +1040,45 @@ datagrid:
             updatedAt:
                 label:          oro.ui.updated_at
                 frontend_type:  datetime
+            phone:
+                label:         orocrm.sales.lead.phone_number.label
+                frontend_type: phone
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/text-editor-view
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        field_name: phone
+                        route_create_entity:
+                            name: oro_api_post_b2bcustomer_phone
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_b2bcustomer_phone
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerPhone
+                        route_parameters_rename_map:
+                            phoneId: id
+            email:
+                label:         orocrm.sales.b2bcustomer.email.label
+                inline_editing:
+                    enable: true
+                    validation_rules:
+                        Email: true
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        field_name: email
+                        route_create_entity:
+                            name: oro_api_post_b2bcustomer_email
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_b2bcustomer_email
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerEmail
+                        route_parameters_rename_map:
+                            emailId: id
         sorters:
             columns:
                 channelName: { data_name: channelName }
@@ -998,6 +1086,8 @@ datagrid:
                 lifetime:    { data_name: c.lifetime }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
+                phone:       { data_name: phone.phone }
+                email:       { data_name: email.email }
             default:
                 name: ASC
         filters:
@@ -1022,8 +1112,16 @@ datagrid:
                  updatedAt:
                     type: datetime
                     data_name: c.updatedAt
+                 phone:
+                    type: string
+                    data_name: phone.phone
+                 email:
+                    type: string
+                    data_name: email.email
         properties:
             id: ~
+            phoneId: ~
+            emailId: ~
         options:
             entity_pagination: true
             export: true
@@ -1119,17 +1217,17 @@ datagrid:
                     type: choice-tree
                     data_name: c.owner
                     enabled: false                    
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 accountName:
                     type: string
                     data_name: accountName
-                    enabled: false                    
+                    enabled: false
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false                    
+                    enabled: false
                 baCountryName:
                     type: entity
                     data_name: ba.country
@@ -1252,9 +1350,9 @@ datagrid:
                     - l.firstName
                     - l.lastName
                     - l.createdAt
-                    - l.email
-                    - l.phoneNumber
-                    - status.label as statusLabel
+                    - email.email
+                    - phone.phone
+                    - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - >
@@ -1269,23 +1367,35 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
-                        - { join: l.address, alias: address }
+                        - { join: l.status, alias: s }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_lead_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_lead_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_lead
+                params:     [ id ]
         filters:
             columns:
                  name:
                     type: string
                     data_name: l.name
-                 statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: false
-                    options:
-                        field_options:
-                          class: OroCRMSalesBundle:LeadStatus
-                          property: label
+                 status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                  firstName:
                     type: string
                     data_name: l.firstName
@@ -1294,10 +1404,30 @@ datagrid:
                     data_name: l.lastName
                  email:
                     type: string
-                    data_name: l.email
-                 phoneNumber:
+                    data_name: email.email
+                 phone:
                     type: string
-                    data_name: l.phoneNumber
+                    data_name: phone.phone
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_lead_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-leads-grid:
         extends: base-sales-b2bcustomer-leads-grid
@@ -1311,8 +1441,10 @@ datagrid:
         columns:
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -1322,7 +1454,7 @@ datagrid:
                 frontend_type: datetime
             email:
                 label:         orocrm.sales.lead.email.label
-            phoneNumber:
+            phone:
                 label:         orocrm.sales.lead.phone_number.label
             countryName:
                 label:         orocrm.sales.lead.datagrid.country
@@ -1334,8 +1466,8 @@ datagrid:
             columns:
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
@@ -1343,9 +1475,9 @@ datagrid:
                 createdAt:
                     data_name: l.createdAt
                 email:
-                    data_name: l.email
-                phoneNumber:
-                    data_name: l.phoneNumber
+                    data_name: email.email
+                phone:
+                    data_name: phone.phone
                 countryName:
                     data_name: address.country
                 regionLabel:
@@ -1434,6 +1566,14 @@ datagrid:
                 type:       url
                 route:      orocrm_sales_opportunity_view
                 params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_opportunity_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_opportunity
+                params:     [ id ]
         actions:
             view:
                 type:          navigate
@@ -1442,6 +1582,18 @@ datagrid:
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_opportunity_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_opportunity_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-opportunities-grid:
         extends: base-sales-b2bcustomer-opportunities-grid
@@ -1508,16 +1660,16 @@ datagrid:
                     - l.name
                     - l.firstName
                     - l.lastName
-                    - l.email
-                    - l.phoneNumber
-                    - status.label as statusLabel
+                    - email.email
+                    - s.id as status
                     - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
                         - { join: l.dataChannel, alias: channel }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
         columns:
@@ -1527,8 +1679,10 @@ datagrid:
                 label:         orocrm.sales.lead.data_channel.label
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -1541,14 +1695,14 @@ datagrid:
                     data_name: channelName
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
                     data_name: l.lastName
                 email:
-                    data_name: l.email
+                    data_name: email.email
             default:
                 createdAt:  DESC
         filters:
@@ -1564,15 +1718,10 @@ datagrid:
                  name:
                     type: string
                     data_name: l.name
-                 statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:LeadStatus
-                            property: label
-                            translatable_options: false
+                 status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                  firstName:
                     type: string
                     data_name: l.firstName
@@ -1581,7 +1730,7 @@ datagrid:
                     data_name: l.lastName
                  email:
                     type: string
-                    data_name: l.email
+                    data_name: email.email
 
     sales-opportunity-for-context-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
@@ -1789,12 +1938,12 @@ datagrid:
                 select:
                     - l.id
                     - l.name
-                    - status.label as statusLabel
+                    - s.id as status
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
         columns:
             name:
                 label: orocrm.sales.lead.name.label
@@ -1802,8 +1951,10 @@ datagrid:
                 type: link
                 route: orocrm_sales_lead_view
                 params: {id: id}
-            statusLabel:
-                label: orocrm.sales.opportunity.status.label
+            status:
+                frontend_type: select
+                label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
         options:
             entityHint: opportunities
             toolbarOptions:

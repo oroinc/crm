@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -35,12 +36,6 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $user         = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
             ->disableOriginalConstructor()
             ->getMock();
-        $workflowItem = $this->getMockBuilder('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $workflowStep = $this->getMockBuilder('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep')
-            ->disableOriginalConstructor()
-            ->getMock();
         $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return array(
@@ -48,8 +43,6 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'lead'         => array('lead', $lead, $lead),
             'opportunity'  => array('opportunity', $opportunity, $opportunity),
             'owner'        => array('owner', $user, $user),
-            'workflowItem' => array('workflowItem', $workflowItem, $workflowItem),
-            'workflowStep' => array('workflowStep', $workflowStep, $workflowStep),
             'createdAt'    => array('createdAt', $now, $now),
             'updatedAt'    => array('updatedAt', $now, $now),
             'dataChannel'  => ['dataChannel', $channel, $channel],
@@ -83,7 +76,9 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
     {
         $salesFunnel = new SalesFunnel();
         $lead = new Lead();
-        $lead->setEmail('test@test.com');
+        $email = new LeadEmail('test@test.com');
+        $email->setPrimary(true);
+        $lead->addEmail($email);
         $salesFunnel->setLead($lead);
 
         $this->assertEquals('test@test.com', $salesFunnel->getEmail());

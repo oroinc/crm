@@ -2,26 +2,26 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LeadStatusSelectType extends AbstractType
 {
     const NAME = 'orocrm_type_widget_lead_status_select';
 
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    /** @var EnumValueProvider */
+    protected $enumValueProvider;
 
     /**
-     * @param EntityManager $entityManager
+     * @param EnumValueProvider $enumValueProvider
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EnumValueProvider $enumValueProvider)
     {
-        $this->entityManager = $entityManager;
+        $this->enumValueProvider = $enumValueProvider;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -30,7 +30,7 @@ class LeadStatusSelectType extends AbstractType
 
         $resolver->setDefaults(
             [
-                'choices'  => $this->getChoices(),
+                'choices'  => $this->enumValueProvider->getEnumChoicesByCode(Lead::INTERNAL_STATUS_CODE),
                 'multiple' => true,
                 'configs'  => [
                     'width'      => '400px',
@@ -41,29 +41,17 @@ class LeadStatusSelectType extends AbstractType
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getChoices()
+    public function getName()
     {
-        $repository = $this->entityManager->getRepository('OroCRMSalesBundle:LeadStatus');
-
-        $result = $repository->createQueryBuilder('ls')
-            ->getQuery()
-            ->getArrayResult();
-
-        $choices = [];
-
-        foreach ($result as $item) {
-            $choices[$item['name']] = $item['label'];
-        }
-
-        return $choices;
+        return $this->getBlockPrefix();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return self::NAME;
     }

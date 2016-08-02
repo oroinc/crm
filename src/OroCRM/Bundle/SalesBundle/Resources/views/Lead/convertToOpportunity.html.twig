@@ -1,0 +1,148 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%lead.name%": name} }) %}
+
+{% set formAction = path('orocrm_sales_lead_convert_to_opportunity', {
+    'id': entity.lead.id
+}) %}
+
+{% block head_script %}
+    {{ parent() }}
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {{ UI.cancelButton(path('orocrm_sales_lead_view', { 'id': entity.lead.id })) }}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_sales_lead_view',
+        'params': {'id': entity.lead.id}
+    }) %}
+    {% if resource_granted('orocrm_sales_lead_convert_to_opportunity') %}
+        {% set html = UI.saveAndCloseButton({
+            'route': 'orocrm_sales_opportunity_view',
+            'params': {'id': '$id'}
+        }) %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% set title = 'oro.ui.convert_entity'|trans({
+        '%name%': name,
+        '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans
+    }) %}
+    {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'opportunity-profile' %}
+
+    {% set formFields = [] %}
+    {% if form.owner is defined %}
+        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+    {% endif %}
+
+    {% set formFields = formFields|merge([
+    form_row(form.name, {attr: {autofocus: true}}),
+    form_row(form.customer),
+    form_row(form.dataChannel) ]) %}
+
+    {% if not form.vars.use_full_contact_form %}
+        {% set formFields = formFields|merge([form_row(form.contact)]) %}
+    {% endif %}
+
+    {% set formFields = formFields|merge([
+    form_row(form.status),
+    form_row(form.probability),
+    form_row(form.budgetAmount),
+    form_row(form.closeDate),
+    form_row(form.closeRevenue),
+    form_row(form.closeReason)
+    ]) %}
+
+    {% set dataBlocks = [{
+    'title': 'Opportunity Information'|trans,
+    'class': 'active',
+    'subblocks': [
+    {
+    'title': 'General'|trans,
+    'data': formFields
+    },
+    {
+    'data':
+    [
+    form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
+    form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
+    form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
+    ]
+    }
+    ]
+    }] %}
+
+    {% set additionalData = [] %}
+    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
+        {% set additionalData = additionalData|merge([form_row(child)]) %}
+    {% endfor %}
+    {% if additionalData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+        'title': 'Additional'|trans,
+        'subblocks': [{
+        'title': '',
+        'useSpan': false,
+        'data' : additionalData
+        }]
+        }] ) %}
+    {% endif %}
+
+    {% if form.vars.use_full_contact_form %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'New Contact Information'|trans,
+            'subblocks': [{
+                'title': 'General'|trans,
+                'data': [
+                    form_row(form.contact.owner),
+                    form_row(form.contact.namePrefix),
+                    form_row(form.contact.firstName),
+                    form_row(form.contact.middleName),
+                    form_row(form.contact.lastName),
+                    form_row(form.contact.nameSuffix),
+                    form_row(form.contact.jobTitle),
+                    form_row(form.contact.description),
+                    form_row(form.contact.birthday),
+                    form_row(form.contact.gender),
+                    form_row(form.contact.picture),
+                    form_row(form.contact.assignedTo),
+                    form_row(form.contact.reportsTo),
+                    form_row(form.contact.source),
+                    form_row(form.contact.method)
+                ]
+            },
+            {
+                'title': 'Contact Details'|trans,
+                'data': [
+                    form_row(form.contact.emails),
+                    form_row(form.contact.phones),
+                    form_row(form.contact.fax),
+                    form_row(form.contact.skype),
+                    form_row(form.contact.twitter),
+                    form_row(form.contact.facebook),
+                    form_row(form.contact.googlePlus),
+                    form_row(form.contact.linkedIn)
+                ]
+            },
+            {
+                'title': 'orocrm.contact.addresses.label'|trans,
+                'data': [form_widget(form.contact.addresses)]
+            }
+        ]
+        }]) %}
+    {% endif %}
+
+    {% set data = {
+    'formErrors': form_errors(form) ? form_errors(form) : null,
+    'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

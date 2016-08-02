@@ -1,0 +1,3 @@
+{% extends "OroAddressBundle:widget:update.html.twig" %}
+{% set addressUpdateUrl = path('orocrm_sales_lead_address_update', { id: form.vars.value.id, leadId: lead.id }) %}
+{% set addressCreateUrl = path('orocrm_sales_lead_address_create', { leadId: lead.id }) %}

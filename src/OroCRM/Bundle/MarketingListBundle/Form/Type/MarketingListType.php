@@ -98,6 +98,14 @@ class MarketingListType extends AbstractQueryDesignerType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_marketing_list';
     }
 }
