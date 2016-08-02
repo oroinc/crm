@@ -1,23 +1,32 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Extension;
+namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
+use Metadata\MetadataFactory;
+
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Audit\AuditManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigCache;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
+use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 
-use OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension;
+use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
 
-class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
+class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testShouldPopulateProbabilityFieldsFromSystemConfig()
     {
-        $configManager = $this->getConfigManagerMock([
-            'won' => 1.0,
-            'in_progress' => 0.1,
-        ]);
+        $configManager = $this->getConfigManager(
+            [
+                'won' => 1.0,
+                'in_progress' => 0.1,
+            ]
+        );
 
         $event = $this->getFormEvent([
             'enum' => [
@@ -47,8 +56,8 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $extension = $this->getFormExtension($configManager);
-        $extension->onPreSetData($event);
+        $formType = $this->getFormType($configManager);
+        $formType->onPreSetData($event);
 
         $this->assertEquals($expectedData, $event->getData());
     }
@@ -58,7 +67,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testShouldSaveProbabilityMapToSystemConfig(array $eventData)
     {
-        $configManager = $this->getConfigManagerMock();
+        $configManager = $this->getConfigManager();
         $event = $this->getFormEvent($eventData);
 
         $expectedData = [
@@ -71,8 +80,8 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('set')
             ->with($this->anything(), $this->equalTo($expectedData));
 
-        $extension = $this->getFormExtension($configManager);
-        $extension->onSubmit($event);
+        $formType = $this->getFormType($configManager);
+        $formType->onSubmit($event);
     }
 
     public function eventDataProvider()
@@ -106,19 +115,65 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param ConfigManager $configManager
      *
-     * @return OpportunityStatusConfigExtension
+     * @return OpportunityStatusConfigType
      */
-    private function getFormExtension(ConfigManager $configManager)
+    protected function getFormType(ConfigManager $configManager)
     {
-        return new OpportunityStatusConfigExtension($configManager, $this->getEnumFieldConfigSubscriber());
+        return new OpportunityStatusConfigType(
+            $this->getEntityConfigManager(),
+            $configManager,
+            $this->getEnumFieldConfigSubscriber()
+        );
+    }
+
+    /**
+     * @return EntityConfigManager
+     */
+    protected function getEntityConfigManager()
+    {
+        $configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configProvider->expects($this->any())
+            ->method('getScope')
+            ->willReturn('enum');
+
+        $eventDispatcher = $this->getMockBuilder(EventDispatcher::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $metadataFactory = $this->getMockBuilder(MetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $modelManager = $this->getMockBuilder(ConfigModelManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $auditManager = $this->getMockBuilder(AuditManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $configCache = $this->getMockBuilder(ConfigCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entityConfigManager = new EntityConfigManager(
+            $eventDispatcher,
+            $metadataFactory,
+            $modelManager,
+            $auditManager,
+            $configCache
+        );
+
+        $entityConfigManager->addProvider($configProvider);
+
+        /** @var EntityConfigManager $entityConfigManager */
+        return $entityConfigManager;
     }
 
     /**
      * @param array $probabilities
      *
-     * @return ConfigManager|\PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigManager
      */
-    private function getConfigManagerMock(array $probabilities = [])
+    protected function getConfigManager(array $probabilities = [])
     {
         $configManager = $this->getMockBuilder(ConfigManager::class)
             ->disableOriginalConstructor()
@@ -128,6 +183,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($probabilities);
 
+        /** @var ConfigManager $configManager */
         return $configManager;
     }
 
@@ -136,7 +192,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
      *
      * @return FormEvent
      */
-    private function getFormEvent(array $data)
+    protected function getFormEvent(array $data)
     {
         /* @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject*/
         $form = $this->getMock(FormInterface::class);
@@ -144,11 +200,11 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
         return new FormEvent($form, $data);
     }
 
-    private function getEnumFieldConfigSubscriber()
+    /**
+     * @return EnumFieldConfigSubscriber
+     */
+    protected function getEnumFieldConfigSubscriber()
     {
-        $configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
-            ->disableOriginalConstructor()
-            ->getMock();
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $enumSynchronizer = $this->getMockBuilder('Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer')
             ->disableOriginalConstructor()
@@ -158,6 +214,6 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('trans')
             ->will($this->returnArgument(0));
 
-        return new EnumFieldConfigSubscriber($configManager, $translator, $enumSynchronizer);
+        return new EnumFieldConfigSubscriber($this->getEntityConfigManager(), $translator, $enumSynchronizer);
     }
 }
