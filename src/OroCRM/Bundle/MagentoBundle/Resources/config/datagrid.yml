@@ -214,7 +214,6 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - cstatus.label as statusLabel
-                    - step.label as stepLabel
                     - channel.name as channelName
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
@@ -226,7 +225,6 @@ datagrid:
                         - { join: c.store, alias: cs }
                         - { join: c.dataChannel, alias: channel }
                         - { join: c.status, alias: cstatus }
-                        - { join: c.workflowStep, alias: step }
                         - { join: c.billingAddress, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
@@ -265,8 +263,6 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_region
             statusLabel:
                 label:            orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label:            orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -288,7 +284,6 @@ datagrid:
                 countryName: { data_name: country.name }
                 regionName:  { data_name: regionName }
                 statusLabel: { data_name: cstatus.label }
-                stepLabel:   { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
@@ -346,14 +341,6 @@ datagrid:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
                             translatable_options: false
-                stepLabel:
-                    type: entity
-                    data_name: c.workflowStep
-                    enabled:   false
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.cart.entity.class%
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -664,7 +651,6 @@ datagrid:
                     - o.lastName
                     - o.subtotalAmount as subTotal
                     - o.totalAmount as grandTotal
-                    - step.label as stepLabel
                     - o.customerEmail as email
                     - channel.name as channelName
                     - cw.name as websiteName
@@ -686,7 +672,6 @@ datagrid:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
-                        - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
@@ -734,8 +719,6 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_region
             status:
                 label:            orocrm.magento.order.status.label
-            stepLabel:
-                label:            orocrm.magento.order.b2c_flow_order_follow_up.step.label
         properties:
             id: ~
             view_link:
@@ -756,7 +739,6 @@ datagrid:
                 status:                 { data_name: o.status }
                 channelName:            { data_name: channelName }
                 websiteName:            { data_name: cw.name }
-                stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
             default:
@@ -818,14 +800,6 @@ datagrid:
                 status:
                     type:             string
                     data_name:        o.status
-                stepLabel:
-                    type:      entity
-                    data_name: o.workflowStep
-                    enabled:   false
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.order.entity.class%
                 guest:
                     label: orocrm.magento.datagrid.columns.order_is_guest.label
                     type: boolean
@@ -971,13 +945,11 @@ datagrid:
                     - o.totalPaidAmount
                     - o.status
                     - o.currency
-                    - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
                     left:
-                        - { join: o.workflowStep, alias: step }
                         - { join: o.items, alias: items }
                 where:
                     and:
@@ -1003,8 +975,6 @@ datagrid:
                 align: right
             status:
                 label: orocrm.magento.order.status.label
-            stepLabel:
-                label: orocrm.magento.order.b2c_flow_order_follow_up.step.label
         sorters:
             columns:
                 incrementId:     { data_name: o.incrementId }
@@ -1012,7 +982,6 @@ datagrid:
                 totalPaidAmount: { data_name: o.totalPaidAmount }
                 totalAmount:     { data_name: o.totalAmount }
                 status:          { data_name: o.status }
-                stepLabel:       { data_name: step.label }
         properties:
             id: ~
             view_link:
@@ -1041,14 +1010,12 @@ datagrid:
                     - c.updatedAt
                     - c.quoteCurrencyCode as currency
                     - MAX(cstatus.label) as statusLabel
-                    - MAX(step.label) as stepLabel
                     - c.itemsCount
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
-                        - { join: c.workflowStep, alias: step }
                 where:
                     and:
                         - c.customer = :customerId AND c.channel = :channelId
@@ -1079,8 +1046,6 @@ datagrid:
                 frontend_type:    datetime
             statusLabel:
                 label:            orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label:            orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -1096,7 +1061,6 @@ datagrid:
                 createdAt:            { data_name: c.createdAt }
                 updatedAt:            { data_name: c.updatedAt }
                 statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  DESC
         actions:
@@ -1123,7 +1087,6 @@ datagrid:
                     - o.totalPaidAmount
                     - o.status
                     - o.currency
-                    - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                     - o.discountAmount
                     - o.discountPercent
@@ -1132,7 +1095,6 @@ datagrid:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
                     left:
-                        - { join: o.workflowStep, alias: step }
                         - { join: o.items, alias: items }
                 where:
                     and:
@@ -1170,8 +1132,6 @@ datagrid:
                 align:            right
             status:
                 label:            orocrm.magento.order.status.label
-            stepLabel:
-                label:            orocrm.magento.order.b2c_flow_order_follow_up.step.label
         filters:
             columns:
                 incrementId:
@@ -1201,13 +1161,6 @@ datagrid:
                 status:
                     type:         string
                     data_name:    o.status
-                stepLabel:
-                    type:         entity
-                    data_name:    o.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.order.entity.class%
                 discountAmount:
                     label:            orocrm.magento.datagrid.columns.discount_amount
                     type:             currency
@@ -1233,7 +1186,6 @@ datagrid:
                 totalPaidAmount: { data_name: o.totalPaidAmount }
                 totalAmount:     { data_name: o.totalAmount }
                 status:          { data_name: o.status }
-                stepLabel:       { data_name: step.label }
             default:
                 incrementId:  DESC
         properties:
@@ -1264,14 +1216,12 @@ datagrid:
                     - c.updatedAt
                     - c.quoteCurrencyCode as currency
                     - MAX(cstatus.label) as statusLabel
-                    - MAX(step.label) as stepLabel
                     - c.itemsCount as itemsCount
                 from:
                     - { table: %orocrm_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
-                        - { join: c.workflowStep, alias: step }
                 where:
                     and:
                         - c.customer = :customerId AND c.channel = :channelId
@@ -1296,8 +1246,6 @@ datagrid:
                 align:            right
             statusLabel:
                 label:            orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label:            orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -1312,7 +1260,6 @@ datagrid:
                 updatedAt:            { data_name: c.updatedAt }
                 grandTotal:           { data_name: c.grandTotal }
                 statusLabel:          { data_name: cstatus.label }
-                stepLabel:            { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
@@ -1340,13 +1287,6 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
-                stepLabel:
-                    type:        entity
-                    data_name:   c.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.cart.entity.class%
         actions:
             view:
                 type:         navigate
@@ -1684,7 +1624,6 @@ datagrid:
                     - o.lastName
                     - o.subtotalAmount as subTotal
                     - o.totalAmount as grandTotal
-                    - step.label as stepLabel
                     - o.customerEmail as email
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
@@ -1694,7 +1633,6 @@ datagrid:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
-                        - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
                         -
                             join: o.addresses
@@ -1733,8 +1671,6 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_region
             status:
                 label:            orocrm.magento.order.status.label
-            stepLabel:
-                label:            orocrm.magento.order.b2c_flow_order_follow_up.step.label
         properties:
             id: ~
             view_link:
@@ -1752,7 +1688,6 @@ datagrid:
                 status:                 { data_name: o.status }
                 channelName:            { data_name: channelName }
                 websiteName:            { data_name: cw.name }
-                stepLabel:              { data_name: step.label }
                 createdAt:              { data_name: o.createdAt }
                 updatedAt:              { data_name: o.updatedAt }
             default:
@@ -1805,14 +1740,6 @@ datagrid:
                 status:
                     type:             string
                     data_name:        o.status
-                stepLabel:
-                    type:      entity
-                    data_name: o.workflowStep
-                    enabled:   false
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.order.entity.class%
                 createdAt:
                     type:             datetime
                     data_name:        o.createdAt
@@ -1846,7 +1773,6 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - cstatus.label as statusLabel
-                    - step.label as stepLabel
                     - channel.name as channelName
                     - cw.name as websiteName
                 from:
@@ -1856,7 +1782,6 @@ datagrid:
                         - { join: c.store, alias: cs }
                         - { join: c.dataChannel, alias: channel }
                         - { join: c.status, alias: cstatus }
-                        - { join: c.workflowStep, alias: step }
                         - { join: c.billingAddress, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
@@ -1888,8 +1813,6 @@ datagrid:
                 frontend_type:    datetime
             statusLabel:
                 label:            orocrm.magento.datagrid.columns.status
-            stepLabel:
-                label:            orocrm.magento.cart.b2c_flow_abandoned_shopping_cart.step.label
         properties:
             id: ~
             view_link:
@@ -1907,7 +1830,6 @@ datagrid:
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
                 statusLabel: { data_name: cstatus.label }
-                stepLabel:   { data_name: step.label }
             default:
                 updatedAt:  DESC
         filters:
@@ -1948,14 +1870,6 @@ datagrid:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
                             translatable_options: false
-                stepLabel:
-                    type: entity
-                    data_name: c.workflowStep
-                    enabled:   false
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.cart.entity.class%
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -1971,3 +1885,11 @@ datagrid:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
+
+    magento-customer-tracking-events-widget:
+        extended_entity_name: %oro_tracking.tracking_visit_event.class%
+        acl_resource: oro_tracking_website_view
+        extends: tracking-events-grid
+        # Source config field is modified in TrackingEventsDataGridListener to change
+        # the source table and add filter by customer identifiers
+        # source: ~

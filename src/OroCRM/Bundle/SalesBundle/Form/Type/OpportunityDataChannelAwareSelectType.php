@@ -11,6 +11,14 @@ class OpportunityDataChannelAwareSelectType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'orocrm_sales_opportunity_data_channel_aware_select';
     }
 

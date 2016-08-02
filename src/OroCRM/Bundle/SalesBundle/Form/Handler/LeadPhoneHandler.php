@@ -109,7 +109,7 @@ class LeadPhoneHandler
             $em->remove($leadPhone);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.lead.phone.error.delete.more_one", 500);
+            throw new \Exception("orocrm.sales.phone.error.delete.more_one", 500);
         }
     }
 

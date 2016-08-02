@@ -6,13 +6,15 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository
 {
     /**
      * Returns top $limit opportunities grouped by lead source
+     *
+     * @deprecated since 1.10. Use OpportunityRepository::getOpportunitiesCountGroupByLeadSource instead
+     * @see        OpportunityRepository::getOpportunitiesCountGroupByLeadSource
      *
      * @param  AclHelper $aclHelper
      * @param  int       $limit
@@ -43,6 +45,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      * @param int   $limit
      *
@@ -93,6 +98,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      *
      * @return int
@@ -108,6 +116,9 @@ class LeadRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 1.10. Used by deprecated getOpportunitiesByLeadSource
+     * @see        LeadRepository::getOpportunitiesByLeadSource
+     *
      * @param array $rows
      */
     protected function sortByCountReverse(array &$rows)
@@ -134,7 +145,9 @@ class LeadRepository extends EntityRepository
      */
     public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end, $owners);
+        $qb = $this
+            ->createLeadsCountQb($start, $end, $owners)
+            ->innerJoin('l.opportunities', 'o');
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -149,9 +162,23 @@ class LeadRepository extends EntityRepository
      */
     public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end, $owners)
-            ->andWhere('l.status = :status')
-            ->setParameter('status', 'new');
+        $qb = $this->createLeadsCountQb($start, $end, $owners);
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param int[] $owners
+     *
+     * @return int
+     */
+    public function getOpenLeadsCount(AclHelper $aclHelper, $owners = [])
+    {
+        $qb = $this->createLeadsCountQb(null, null, $owners);
+        $qb->andWhere(
+            $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
+        );
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -163,13 +190,15 @@ class LeadRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this->createQueryBuilder('l');
+    protected function createLeadsCountQb(
+        \DateTime $start = null,
+        \DateTime $end = null,
+        $owners = []
+    ) {
+        $qb = $this
+            ->createQueryBuilder('l')
+            ->select('COUNT(DISTINCT l.id)');
 
-        $qb
-            ->select('COUNT(DISTINCT l.id)')
-            ->innerJoin('l.opportunities', 'o');
         if ($start) {
             $qb
                 ->andWhere('l.createdAt > :start')
