@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Range;
 
@@ -25,14 +24,6 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
         $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
-
-        $builder->expects($this->once())
-            ->method('addEventListener')
-            ->with(FormEvents::PRE_SET_DATA);
-
-        $builder->expects($this->atLeastOnce())
-            ->method('add')
-            ->willReturnSelf();
 
         $type = $this->getFormType();
         $type->buildForm($builder, ['allow_multiple_selection' => false]);

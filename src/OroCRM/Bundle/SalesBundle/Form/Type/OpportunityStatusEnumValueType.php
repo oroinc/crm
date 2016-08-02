@@ -52,6 +52,9 @@ class OpportunityStatusEnumValueType extends AbstractType
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
         return 'oro_entity_extend_enum_value';
