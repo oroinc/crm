@@ -22,6 +22,10 @@ define(function(require) {
         afterLayoutInit: function() {
             var customer = this.pageComponent('orocrm_sales_opportunity_form_customer').$sourceElement;
             var channel = this.pageComponent('orocrm_sales_opportunity_form_dataChannel').view.$el;
+            var status = this.pageComponent('orocrm_sales_opportunity_form_status').view.$el;
+            var probability = this.$('input[data-name="field__probability"]:enabled');
+            var probabilities = status.data('probabilities');
+            var shouldChangeProbability = false;
 
             customer.on('change', function(e) {
                 if (e.added && e.added['dataChannel.id']) {
@@ -38,6 +42,33 @@ define(function(require) {
                         // Does not reset customer in case when he is not created yet
                         customer.val('').trigger('change.select2');
                     }
+                }
+            });
+
+            // probability field might be missing or disabled
+            if (0 === probability.length) {
+                return;
+            }
+
+            if (probabilities.hasOwnProperty(status.val())) {
+                if (parseFloat(probabilities[status.val()]) === parseFloat(probability.val())) {
+                    shouldChangeProbability = true;
+                }
+            }
+
+            probability.on('change', function(e) {
+                shouldChangeProbability = false;
+            });
+
+            status.on('change', function(e) {
+                var val = status.val();
+
+                if (!shouldChangeProbability) {
+                    return;
+                }
+
+                if (probabilities.hasOwnProperty(val)) {
+                    probability.val(probabilities[val]);
                 }
             });
         }
