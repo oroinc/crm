@@ -1,9 +1,9 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% set name = '' %}
-{% if resource_granted('VIEW', entity, 'name') %}
-    {% set name = entity.name|default('N/A') %}
-{% endif %}
-{% oro_title_set({params : {"%opportunity.name%": name} }) %}
+
+{% oro_title_set({params : {"%opportunity.name%": resource_granted('VIEW', entity, 'name')
+    ? entity.name|default('N/A')
+    : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.sales.opportunity.name.label'|trans}) }})
+%}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -29,7 +29,9 @@
         'entity':      entity,
         'indexPath':   path('orocrm_sales_opportunity_index'),
         'indexLabel': 'orocrm.sales.opportunity.entity_plural_label'|trans,
-        'entityTitle': name
+        'entityTitle': resource_granted('VIEW', entity, 'name')
+            ? entity.name|default('N/A')
+            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.sales.opportunity.name.label'|trans}))
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

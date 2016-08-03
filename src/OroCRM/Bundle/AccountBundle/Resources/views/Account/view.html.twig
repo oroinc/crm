@@ -1,8 +1,9 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
-{% if  resource_granted('VIEW', entity, 'name') %}
-    {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
-{% endif %}
+{% oro_title_set({params : {"%account.name%": resource_granted('VIEW', entity, 'name')
+    ? entity.name|default('N/A')
+    : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}) }})
+%}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -24,15 +25,13 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set entityTitle = '' %}
-    {% if  resource_granted('VIEW', entity, 'name') %}
-        {% set entityTitle = entity.name|default('N/A') %}
-    {% endif %}
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_account_index'),
         'indexLabel': 'orocrm.account.entity_plural_label'|trans,
-        'entityTitle': entityTitle
+        'entityTitle': resource_granted('VIEW', entity, 'name')
+            ? entity.name|default('N/A')
+            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

@@ -8,9 +8,14 @@
 {% set showImage = false %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% set title = entity ? entity.__toString : indexer_item.recordTitle %}
 
 {% set entityType = 'orocrm.sales.opportunity.entity_label'|trans %}
+
+{% if  resource_granted('VIEW', entity, 'name') %}
+    {% set title = entity ? entity.__toString : indexer_item.recordTitle %}
+{% else %}
+    {% set title = 'view %entityName%'|trans({'%entityName%' : entityType}) %}
+{% endif %}
 
 {% set entityInfo = [] %}
 {% if  resource_granted('VIEW', entity, 'createdAt') %}
