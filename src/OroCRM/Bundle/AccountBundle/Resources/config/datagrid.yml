@@ -43,14 +43,14 @@ datagrid:
             contactPhone:
                 label: orocrm.contact.contactphone.phone.label
                 frontend_type: phone
-            fields_acl:
-                columns:
-                    name:
-                        data_name: a.name
-                    contactEmail:
-                        data_name: a.defaultContact
-                    contactPhone:
-                        data_name: a.defaultContact
+        fields_acl:
+            columns:
+                name:
+                    data_name: a.name
+                contactEmail:
+                    data_name: a.defaultContact
+                contactPhone:
+                    data_name: a.defaultContact
         options:
             entityHint: account
             toolbarOptions:
@@ -131,12 +131,18 @@ datagrid:
             columns:
                 name:
                     data_name: a.name
+                contactName:
+                    data_name: a.defaultContact
                 contactEmail:
                     data_name: a.defaultContact
                 contactPhone:
                     data_name: a.defaultContact
                 ownerName:
                     data_name: a.owner
+                createdAt:
+                    data_name: a.createdAt
+                updatedAt:
+                    data_name: a.updatedAt
         sorters:
             columns:
                 name:
