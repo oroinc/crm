@@ -1,5 +1,8 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% set name = entity.name|default('N/A') %}
+{% set name = '' %}
+{% if resource_granted('VIEW', entity, 'name') %}
+    {% set name = entity.name|default('N/A') %}
+{% endif %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 
 {% block navButtons %}
@@ -32,13 +35,17 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {% if resource_granted('VIEW', entity, 'createdAt') %}
+        <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    {% endif %}
+    {% if resource_granted('VIEW', entity, 'updatedAt') %}
+        <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {% endif %}
 {% endblock stats %}
 
 {% block breadcrumbs %}
     {{ parent() }}
-    {% if entity.status %}
+    {% if entity.status and resource_granted('VIEW', entity, 'status') %}
         <div class="pull-left">
             {% if entity.status.id != 'lost' %}
                 <div class="badge badge-enabled status-enabled">

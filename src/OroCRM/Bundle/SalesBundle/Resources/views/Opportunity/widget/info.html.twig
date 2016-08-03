@@ -5,45 +5,71 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
+            {% if resource_granted('VIEW', entity, 'name') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'status') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'channel') %}
+                {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
+            {% endif %}
 
-            {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
+            {% if resource_granted('VIEW', entity, 'contact') %}
+                {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
+                    {% set contactView = ui.renderUrl(path('orocrm_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
+                {%- else -%}
+                    {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
+                {%- endif -%}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
+            {% endif %}
 
-            {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
-                {% set contactView = ui.renderUrl(path('orocrm_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
-            {%- else -%}
-                {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
-            {%- endif -%}
+            {% if resource_granted('VIEW', entity, 'lead') %}
+                {%- if resource_granted('orocrm_sales_lead_view') and entity.lead -%}
+                    {% set leadView = '<a href="' ~ path('orocrm_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
+                {%- else -%}
+                    {% set leadView = entity.lead ? entity.lead|escape : '' %}
+                {%- endif -%}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.lead.label'|trans, leadView) }}
+            {% endif %}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
+            {% if resource_granted('VIEW', entity, 'customer') %}
+                {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
+                    {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
+                {%- else -%}
+                    {% set customerView = entity.customer ? entity.customer|escape : '' %}
+                {%- endif -%}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer.label'|trans, customerView) }}
+            {% endif %}
 
-            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
-                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
-            {%- else -%}
-                {% set customerView = entity.customer ? entity.customer|escape : '' %}
-            {%- endif -%}
-
-            {%- if resource_granted('orocrm_sales_lead_view') and entity.lead -%}
-                {% set leadView = '<a href="' ~ path('orocrm_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
-            {%- else -%}
-                {% set leadView = entity.lead ? entity.lead|escape : '' %}
-            {%- endif -%}
-
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.lead.label'|trans, leadView) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer.label'|trans, customerView) }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
+            {% if resource_granted('VIEW', entity, 'probability') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'budgetAmount') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
+            {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution) }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.close_reason.label'|trans, entity.closeReason) }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.notes.label'|trans, entity.notes) }}
+            {% if resource_granted('VIEW', entity, 'customerNeed') %}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed) }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'proposedSolution') %}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution) }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'closeReason') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.close_reason.label'|trans, entity.closeReason) }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'closeRevenue') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'closeDate') %}
+                {{ ui.renderProperty('orocrm.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
+            {% endif %}
+            {% if resource_granted('VIEW', entity, 'notes') %}
+                {{ ui.renderHtmlProperty('orocrm.sales.opportunity.notes.label'|trans, entity.notes) }}
+            {% endif %}
         </div>
     </div>
 </div>

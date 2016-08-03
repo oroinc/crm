@@ -41,7 +41,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"="",
- *              "category"="account_management"
+ *              "category"="account_management",
+ *              "field_acl_supported" = "true"
  *          },
  *          "merge"={
  *              "enable"=true
