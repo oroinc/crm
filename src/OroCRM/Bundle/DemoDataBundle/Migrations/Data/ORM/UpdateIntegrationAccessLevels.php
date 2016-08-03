@@ -7,7 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
 use Oro\Bundle\UserBundle\Entity\Role;
@@ -16,8 +16,7 @@ class UpdateIntegrationAccessLevels extends AbstractFixture implements
     ContainerAwareInterface,
     DependentFixtureInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
+    use ContainerAwareTrait;
 
     /** @var ObjectManager */
     protected $objectManager;
@@ -31,18 +30,14 @@ class UpdateIntegrationAccessLevels extends AbstractFixture implements
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
+        if (!$this->container->hasParameter('installed') || !$this->container->getParameter('installed')) {
+            return;
+        }
+
         $this->objectManager = $manager;
 
         /** @var AclManager $aclManager */
