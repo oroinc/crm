@@ -108,7 +108,7 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
                 ->with(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem])
                 ->will($this->returnValue(null));
 
-            $manager->expects($this->exactly(2))
+            $manager->expects($this->exactly(1))
                 ->method('persist')
                 ->with($this->isInstanceOf('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'));
         }

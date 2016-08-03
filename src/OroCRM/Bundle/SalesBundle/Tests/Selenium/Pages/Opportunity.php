@@ -49,12 +49,16 @@ class Opportunity extends AbstractPageEntity
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_customerNeed']");
         $this->proposedSolution = $this->test
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_proposedSolution']");
-        $this->closeReason = $this->test->select($this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']"));
+        $this->closeReason = $this->test->select(
+            $this->test
+                ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']")
+        );
         $this->closeRevenue = $this->test
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeRevenue']");
-        $this->closeDate = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeDate']/..".
-            "/following-sibling::input[contains(@class,'datepicker-input')]");
+        $this->closeDate = $this->test->byXpath(
+            "//*[@data-ftid='orocrm_sales_opportunity_form_closeDate']/.." .
+            "/following-sibling::input[contains(@class,'datepicker-input')]"
+        );
 
         return $this;
     }
@@ -107,7 +111,7 @@ class Opportunity extends AbstractPageEntity
                 "Channel autocomplete doesn't return search value"
             );
         }
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$channel}')]")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[starts-with(., '{$channel}')]")->click();
 
         return $this;
     }
