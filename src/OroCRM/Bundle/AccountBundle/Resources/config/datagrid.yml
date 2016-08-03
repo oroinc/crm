@@ -43,6 +43,14 @@ datagrid:
             contactPhone:
                 label: orocrm.contact.contactphone.phone.label
                 frontend_type: phone
+            fields_acl:
+                columns:
+                    name:
+                        data_name: a.name
+                    contactEmail:
+                        data_name: a.defaultContact
+                    contactPhone:
+                        data_name: a.defaultContact
         options:
             entityHint: account
             toolbarOptions:
@@ -119,6 +127,16 @@ datagrid:
             updatedAt:
                 label:         oro.ui.updated_at
                 frontend_type: datetime
+        fields_acl:
+            columns:
+                name:
+                    data_name: a.name
+                contactEmail:
+                    data_name: a.defaultContact
+                contactPhone:
+                    data_name: a.defaultContact
+                ownerName:
+                    data_name: a.owner
         sorters:
             columns:
                 name:
@@ -370,6 +388,18 @@ datagrid:
                 frontend_type: phone
             ownerName:
                 label:   orocrm.account.owner.label
+        fields_acl:
+            columns:
+                name:
+                    data_name: a.name
+                contactName:
+                    data_name: a.defaultContact
+                contactEmail:
+                    data_name: a.defaultContact
+                contactPhone:
+                    data_name: a.defaultContact
+                ownerName:
+                    data_name: a.owner
         sorters:
             columns:
                 name:
@@ -446,6 +476,18 @@ datagrid:
                 frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
+        fields_acl:
+            columns:
+                name:
+                    data_name: a.name
+                contactName:
+                    data_name: a.defaultContact
+                contactEmail:
+                    data_name: a.defaultContact
+                contactPhone:
+                    data_name: a.defaultContact
+                ownerName:
+                    data_name: a.owner
         sorters:
             columns:
                 name:

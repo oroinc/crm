@@ -1,6 +1,8 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
-{% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
+{% if  resource_granted('VIEW', entity, 'name') %}
+    {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
+{% endif %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -22,11 +24,15 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
+    {% set entityTitle = '' %}
+    {% if  resource_granted('VIEW', entity, 'name') %}
+        {% set entityTitle = entity.name|default('N/A') %}
+    {% endif %}
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_account_index'),
         'indexLabel': 'orocrm.account.entity_plural_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+        'entityTitle': entityTitle
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -42,7 +48,7 @@
 
     {% set generalSectionBlocks = [{'data' : [accountInformationWidget]}]%}
 
-    {% if resource_granted('orocrm_contact_view') %}
+    {% if resource_granted('orocrm_contact_view') and resource_granted('VIEW', entity, 'contacts') %}
         {% set contactsInformationWidget %}
             <div class="contact-widget-wrapper">
                 {{ oro_widget_render({
