@@ -98,6 +98,12 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
+                        - '@request_enum_entity': # set status if blank (to satisfy the validator)
+                            conditions:
+                                '@empty': [$status]
+                            enum_code: opportunity_status
+                            identifier: 'in_progress'
+                            attribute: $opportunity.status
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
@@ -127,6 +133,12 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
+                        - '@request_enum_entity': # set status if blank (to satisfy the validator)
+                            conditions:
+                                '@empty': [$status]
+                            enum_code: opportunity_status
+                            identifier: 'in_progress'
+                            attribute: $opportunity.status
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
