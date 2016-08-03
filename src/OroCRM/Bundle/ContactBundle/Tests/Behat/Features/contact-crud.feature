@@ -110,7 +110,7 @@ Scenario: Assert field values of Contact view page after edit
   Then I should see "Charlie2 Sheen2"
   And Phone "+1 415-656-4418" should be primary
   And email "sheen@charlie.com" should be primary
-  And avatar should be "charlie-sheen.jpg"
+  And avatar should not be default avatar
 
 Scenario: Delete contact
   When I press "Delete Contact"
