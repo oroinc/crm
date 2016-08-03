@@ -6,6 +6,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
@@ -35,6 +37,9 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
     /** @var OwnerHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $ownerHelper;
+
+    /** @var FilterDateRangeConverter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $filterDateRangeConverter;
 
     protected function setUp()
     {
@@ -79,13 +84,19 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->method('getOwnerIds')
             ->willReturn([]);
 
+        $this->filterDateRangeConverter = $this
+            ->getMockBuilder('Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->provider = new ForecastOfOpportunities(
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->translator,
             $this->dateHelper,
             $this->ownerHelper,
-            $this->forecastProvider
+            $this->forecastProvider,
+            $this->filterDateRangeConverter
         );
     }
 
@@ -140,7 +151,13 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $prevStart->setTime(0, 0, 0);
         $prevEnd->setTime(23, 59, 59);
 
-        $dateRange     = ['start' => $start, 'end' => $end, 'prev_start' => $prevStart, 'prev_end' => $prevEnd];
+        $dateRange     = [
+            'start' => $start,
+            'end' => $end,
+            'prev_start' => $prevStart,
+            'prev_end' => $prevEnd,
+            'type' => AbstractDateFilterType::TYPE_BETWEEN,
+        ];
         $widgetOptions = new WidgetOptionBag(
             [
                 'compareToDate' => ['useDate' => true, 'date' => null],
@@ -175,24 +192,29 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnCallback($forecastDataCallback));
 
+        $this->filterDateRangeConverter->expects($this->any())
+            ->method('getViewValue')
+            ->with(['start' => $prevStart, 'end' => $prevEnd, 'type' => AbstractDateFilterType::TYPE_BETWEEN])
+            ->will($this->returnValue('prev range'));
+
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'inProgressCount', 'integer', false);
         $this->assertEquals(
-            ['value' => 5, 'deviation' => '+3 (+1.5)', 'isPositive' => true, 'previousRange' => $prevMoment],
+            ['value' => 5, 'deviation' => '+3 (+1.5)', 'isPositive' => true, 'previousRange' => 'prev range'],
             $result
         );
 
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'budgetAmount', 'currency', false);
         $this->assertEquals(
-            ['value' => 1000, 'deviation' => '+800 (+4)', 'isPositive' => 1, 'previousRange' => $prevMoment],
+            ['value' => 1000, 'deviation' => '+800 (+4)', 'isPositive' => 1, 'previousRange' => 'prev range'],
             $result
         );
 
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'weightedForecast', 'currency', false);
         $this->assertEquals(
-            ['value' => 500, 'deviation' => '+450 (+9)', 'isPositive' => 1, 'previousRange' => $prevMoment],
+            ['value' => 500, 'deviation' => '+450 (+9)', 'isPositive' => 1, 'previousRange' => 'prev range'],
             $result
         );
     }
