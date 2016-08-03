@@ -190,6 +190,7 @@ services:
             - '@oro_dashboard.datetime.helper'
             - '@oro_user.dashboard.owner_helper'
             - '@orocrm_sales.provider.opportunity.forecast'
+            - '@oro_dashboard.widget_config_value.date_range.converter'
 
     orocrm_sales.provider.probability:
         class: OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider
