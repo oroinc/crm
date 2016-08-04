@@ -6,6 +6,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\FilterBundle\Filter\DateFilterUtility;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
 
@@ -33,14 +34,21 @@ class OpportunitiesByStatusReportListener
     /** @var DateFilterModifier */
     protected $dateFilterModifier;
 
+    /** @var DateFilterUtility */
+    protected $dateFilterUtility;
+
     /**
      * OpportunitiesByStatusReportListener constructor.
      *
      * @param DateFilterModifier $dateFilterModifier
+     * @param DateFilterUtility $dateFilterUtility
      */
-    public function __construct(DateFilterModifier $dateFilterModifier)
-    {
+    public function __construct(
+        DateFilterModifier $dateFilterModifier,
+        DateFilterUtility $dateFilterUtility
+    ) {
         $this->dateFilterModifier = $dateFilterModifier;
+        $this->dateFilterUtility = $dateFilterUtility;
     }
 
     /**
@@ -87,7 +95,10 @@ class OpportunitiesByStatusReportListener
             ) {
                 list($alias, $field) = explode('.', $config['data_name']);
                 // build a join clause
-                $joinConditions[$alias][$field][] = $this->buildDateCondition($filters[$key], $config['data_name']);
+                $dateCondition = $this->buildDateCondition($filters[$key], $config['data_name'], $config['type']);
+                if ($dateCondition) {
+                    $joinConditions[$alias][$field][] = $dateCondition;
+                }
                 // remove filters so it does not appear in the where clause
                 unset($filters[$key]);
             }
@@ -127,18 +138,25 @@ class OpportunitiesByStatusReportListener
 
     /**
      * Generates SQL date comparison string depending on filter $options
+     * Returns false if date filter options are invalid
      *
      * @param array $options Filter options
      * @param string $fieldName
+     * @param string $filterType date filter type
      *
-     * @return string
+     * @return string|bool
      */
-    protected function buildDateCondition(array $options, $fieldName)
+    protected function buildDateCondition(array $options, $fieldName, $filterType)
     {
+        $data = $this->dateFilterUtility->parseData($fieldName, $options, $filterType);
+        if (!$data) {
+            return false;
+        }
+
         $type = $options['type'];
 
         if (!array_key_exists($type, self::$comparatorsMap)) {
-            return '';
+            return false;
         }
 
         $data = $this->dateFilterModifier->modify($options);
