@@ -122,7 +122,6 @@ class OroCRMMagentoBundleInstaller implements
         $this->createOrocrmMagentoRegionTable($schema);
         $this->createOrocrmMagentoCartAddressTable($schema);
         $this->createOrocrmMagentoOrderTable($schema);
-        $this->createOrocrmMagentoOrderCallsTable($schema);
         $this->createOrocrmMagentoOrderEmailsTable($schema);
         $this->createOrocrmMagentoCustomerGroupTable($schema);
         $this->createOrocrmMagentoCustomerTable($schema);
@@ -135,7 +134,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->createOrocrmMagentoProdToWebsiteTable($schema);
         $this->createOrocrmMagentoWebsiteTable($schema);
         $this->createOrocrmMagentoCartTable($schema);
-        $this->createOrocrmMagentoCartCallsTable($schema);
+       
         $this->createOrocrmMagentoCartEmailsTable($schema);
         $this->createOrocrmMagentoStoreTable($schema);
         $this->createOrocrmMagentoCartStatusTable($schema);
@@ -146,7 +145,7 @@ class OroCRMMagentoBundleInstaller implements
         /** Foreign keys generation **/
         $this->addOrocrmMagentoCartAddressForeignKeys($schema);
         $this->addOrocrmMagentoOrderForeignKeys($schema);
-        $this->addOrocrmMagentoOrderCallsForeignKeys($schema);
+        
         $this->addOrocrmMagentoOrderEmailsForeignKeys($schema);
         $this->addOrocrmMagentoCustomerGroupForeignKeys($schema);
         $this->addOrocrmMagentoCustomerForeignKeys($schema);
@@ -159,7 +158,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->addOrocrmMagentoProdToWebsiteForeignKeys($schema);
         $this->addOrocrmMagentoWebsiteForeignKeys($schema);
         $this->addOrocrmMagentoCartForeignKeys($schema);
-        $this->addOrocrmMagentoCartCallsForeignKeys($schema);
+        
         $this->addOrocrmMagentoCartEmailsForeignKeys($schema);
         $this->addOrocrmMagentoStoreForeignKeys($schema);
         $this->addOrocrmMagentoOrderItemsForeignKeys($schema);
@@ -340,20 +339,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_increment_id_channel_id');
     }
 
-    /**
-     * Create orocrm_magento_order_calls table
-     *
-     * @param Schema $schema
-     */
-    protected function createOrocrmMagentoOrderCallsTable(Schema $schema)
-    {
-        $table = $schema->createTable('orocrm_magento_order_calls');
-        $table->addColumn('order_id', 'integer', []);
-        $table->addColumn('call_id', 'integer', []);
-        $table->addIndex(['order_id'], 'IDX_A885A348D9F6D38', []);
-        $table->addIndex(['call_id'], 'IDX_A885A3450A89B2C', []);
-        $table->setPrimaryKey(['order_id', 'call_id']);
-    }
+    
 
     /**
      * Create orocrm_magento_order_emails table
@@ -477,7 +463,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('product_image_url', 'text', ['notnull' => false]);
         $table->addColumn('product_url', 'text', ['notnull' => false]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
@@ -733,21 +719,6 @@ class OroCRMMagentoBundleInstaller implements
     }
 
     /**
-     * Create orocrm_magento_cart_calls table
-     *
-     * @param Schema $schema
-     */
-    protected function createOrocrmMagentoCartCallsTable(Schema $schema)
-    {
-        $table = $schema->createTable('orocrm_magento_cart_calls');
-        $table->addColumn('cart_id', 'integer', []);
-        $table->addColumn('call_id', 'integer', []);
-        $table->addIndex(['cart_id'], 'IDX_83A847751AD5CDBF', []);
-        $table->addIndex(['call_id'], 'IDX_83A8477550A89B2C', []);
-        $table->setPrimaryKey(['cart_id', 'call_id']);
-    }
-
-    /**
      * Create orocrm_magento_cart_emails table
      *
      * @param Schema $schema
@@ -820,7 +791,7 @@ class OroCRMMagentoBundleInstaller implements
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:percent)']
         );
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('weight', 'float', ['notnull' => false, 'precision' => 0]);
@@ -975,28 +946,6 @@ class OroCRMMagentoBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_4D09F30532C8A3DE'
-        );
-    }
-
-    /**
-     * Add orocrm_magento_order_calls foreign keys.
-     *
-     * @param Schema $schema
-     */
-    protected function addOrocrmMagentoOrderCallsForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_magento_order_calls');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_order'),
-            ['order_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
-            ['call_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
         );
     }
 
@@ -1396,27 +1345,7 @@ class OroCRMMagentoBundleInstaller implements
         );
     }
 
-    /**
-     * Add orocrm_magento_cart_calls foreign keys.
-     *
-     * @param Schema $schema
-     */
-    protected function addOrocrmMagentoCartCallsForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_magento_cart_calls');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_cart'),
-            ['cart_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
-            ['call_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
-        );
-    }
+   
 
     /**
      * Add orocrm_magento_cart_emails foreign keys.
