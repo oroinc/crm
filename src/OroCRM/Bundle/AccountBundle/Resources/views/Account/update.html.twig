@@ -1,6 +1,13 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
-{% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
+{% set name = 'N/A' %}
+{% if entity.name %}
+    {% set name = resource_granted('VIEW', entity, 'name')
+        ? entity.name|default('N/A')
+        : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans})
+    %}
+{% endif %}
+{% oro_title_set({params : {"%account.name%": name }}) %}
 
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
 
@@ -44,11 +51,18 @@
 
 {% block pageHeader %}
     {% if form.vars.value.id %}
+        {% set name = 'N/A' %}
+        {% if form.vars.value.name %}
+            {% set name = resource_granted('VIEW', form.vars.value, 'name')
+            ? form.vars.value.name|default('N/A')
+            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
+            %}
+        {% endif %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_account_index'),
             'indexLabel': 'orocrm.account.entity_plural_label'|trans,
-            'entityTitle': form.vars.value.name|default('N/A')
+            'entityTitle': name
         }
         %}
         {{ parent() }}
