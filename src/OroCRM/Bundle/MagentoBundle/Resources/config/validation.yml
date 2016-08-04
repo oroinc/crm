@@ -211,7 +211,6 @@ OroCRM\Bundle\MagentoBundle\Entity\CartItem:
             - NotBlank: ~
             - Length: { max: 255 }
         sku:
-            - NotBlank: ~
             - Length: { max: 255 }
         name:
             - NotBlank: ~
@@ -282,7 +281,6 @@ OroCRM\Bundle\MagentoBundle\Entity\OrderItem:
             - Length: { max: 255 }
         sku:
             - Length: { max: 255 }
-            - NotBlank: ~
         qty:
             - NotBlank: ~
 
