@@ -460,7 +460,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('product_image_url', 'text', ['notnull' => false]);
         $table->addColumn('product_url', 'text', ['notnull' => false]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
@@ -786,7 +786,7 @@ class OroCRMMagentoBundleInstaller implements
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:percent)']
         );
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('weight', 'float', ['notnull' => false, 'precision' => 0]);
@@ -931,8 +931,6 @@ class OroCRMMagentoBundleInstaller implements
             'FK_4D09F30532C8A3DE'
         );
     }
-
-   
 
     /**
      * Add orocrm_magento_order_emails foreign keys.
