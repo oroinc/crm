@@ -7,6 +7,7 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FilterBundle\Filter\DateFilterUtility;
+use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
 
@@ -88,14 +89,15 @@ class OpportunitiesByStatusReportListener
 
         // create a map of join filter conditions
         foreach ($filtersConfig as $key => $config) {
+            $fieldName = $config[FilterUtility::DATA_NAME_KEY];
+            $filterType = $config['type'];
             // get date and datetime filters only
-            if (in_array($config['type'], ['date', 'datetime'])
-                && array_key_exists($key, $filters)
-                && strpos($config['data_name'], '.') !== false
+            if (in_array($filterType, ['date', 'datetime']) && array_key_exists($key, $filters)
+                && strpos($fieldName, '.') !== false
             ) {
-                list($alias, $field) = explode('.', $config['data_name']);
+                list($alias, $field) = explode('.', $fieldName);
                 // build a join clause
-                $dateCondition = $this->buildDateCondition($filters[$key], $config['data_name'], $config['type']);
+                $dateCondition = $this->buildDateCondition($filters[$key], $config['data_name'], $filterType);
                 if ($dateCondition) {
                     $joinConditions[$alias][$field][] = $dateCondition;
                 }
@@ -150,12 +152,27 @@ class OpportunitiesByStatusReportListener
     {
         // apply variables an normalize
         $data = $this->dateFilterModifier->modify($options);
+
+        if (!empty($data['value']['start'])) {
+            $data['value']['start'] = new \DateTime($data['value']['start']);
+        }
+        if (!empty($data['value']['end'])) {
+            $data['value']['end'] = new \DateTime($data['value']['end']);
+        }
+        if (isset($options['value']['start'])) {
+            $data['value']['start_original'] = $options['value']['start'];
+        }
+        if (isset($options['value']['end'])) {
+            $data['value']['end_original'] = $options['value']['end'];
+        }
+
         $data = $this->dateFilterUtility->parseData($fieldName, $data, $filterType);
 
         if (!$data || (empty($data['date_start']) && empty($data['date_end']))) {
             return false;
         }
 
+        $field = $data['field'];
         $type = $data['type'];
 
         if (!array_key_exists($type, static::$comparatorsMap)) {
@@ -168,15 +185,15 @@ class OpportunitiesByStatusReportListener
         if (is_array($comparator)) {
             return sprintf(
                 ' AND (%s %s %s)',
-                $this->formatComparison($fieldName, $comparator[0], $data['date_start']),
+                $this->formatComparison($field, $comparator[0], $data['date_start']),
                 $comparator[1],
-                $this->formatComparison($fieldName, $comparator[2], $data['date_end'])
+                $this->formatComparison($field, $comparator[2], $data['date_end'])
             );
         }
 
         $value = !empty($data['date_start']) ? $data['date_start'] : $data['date_end'];
         // simple date comparison
-        return sprintf(' AND (%s)', $this->formatComparison($fieldName, $comparator, $value));
+        return sprintf(' AND (%s)', $this->formatComparison($field, $comparator, $value));
     }
 
     /**
@@ -190,6 +207,9 @@ class OpportunitiesByStatusReportListener
      */
     protected function formatComparison($fieldName, $operator, $value)
     {
+        if ($value instanceof \DateTime) {
+            $value = $value->format('Y-m-d H:i');
+        }
         return sprintf('%s %s \'%s\'', $fieldName, $operator, $value);
     }
 }
