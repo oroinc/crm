@@ -27,7 +27,8 @@ define(function(require) {
              * We need to reset changed stuff as this method is called from inline-editing-plugin.js::isEditable
              * which is called because of row.js::delegateEventToCell - mouseenter event
              * which causes incorrect changing route and http method after it is set correctly in "send" method
-             * (this method should be refactored so that it doesn't change any state)
+             *
+             * @todo this method should be refactored in CRM-6003 so that it doesn't change any state
              */
             this.route.set('routeName', originalRouteName);
             this.httpMethod = originalHttpMethod;
