@@ -15,10 +15,24 @@ define(function(require) {
          * @returns {boolean} - true, if parameters are valid and route url could be built
          */
         validateUrlParameters: function(urlParameters) {
+            var originalRouteName = this.route.get('routeName');
+            var originalHttpMethod = this.httpMethod;
+
             this.initRoute(urlParameters);
             var parameters = this.prepareUrlParameters(urlParameters);
 
-            return this.route.validateParameters(parameters);
+            var valid = this.route.validateParameters(parameters);
+
+            /**
+             * We need to reset changed stuff as this method is called from inline-editing-plugin.js::isEditable
+             * which is called because of row.js::delegateEventToCell - mouseenter event
+             * which causes incorrect changing route and http method after it is set correctly in "send" method
+             * (this method should be refactored so that it doesn't change any state)
+             */
+            this.route.set('routeName', originalRouteName);
+            this.httpMethod = originalHttpMethod;
+
+            return valid;
         },
 
         send: function(urlParameters, body, headers, options) {
@@ -30,7 +44,10 @@ define(function(require) {
             }
 
             if (this.isActiveDeleteEntityRoute()) {
-                body = {data: [urlParameters[this.initialOptions.route_delete_entity.entityId]]};
+                var routeOptions = this.initialOptions.route_delete_entity;
+                body = {data: [urlParameters[routeOptions.entityId]]};
+                urlParameters.entity = routeOptions.entity;
+                urlParameters.association = routeOptions.association;
             }
 
             return ContactApiAccessor.__super__.send.call(this, urlParameters, body, headers, options);
