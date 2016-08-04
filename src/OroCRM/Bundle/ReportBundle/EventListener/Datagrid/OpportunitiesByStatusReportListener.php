@@ -30,8 +30,6 @@ class OpportunitiesByStatusReportListener
         AbstractDateFilterType::TYPE_NOT_BETWEEN => ['<=', 'OR', '>='],
     ];
 
-    public static $joinFilterKeys = ['createdAt', 'updatedAt', 'closeDate'];
-
     /** @var DateFilterModifier */
     protected $dateFilterModifier;
 
