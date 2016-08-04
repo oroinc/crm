@@ -213,22 +213,21 @@ HAVING
                 ->setParameter('ownerField', 'owner')
                 ->setParameter('ownerIds', $ownerIds);
         }
-
+        // need to join opportunity to properly apply acl permissions
+        $qb->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
         if ($filters) {
-            $qb
-                ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
             $this->filterProcessor
                 ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return array_reduce(
             $result,
             function ($result, $row) {
                 $result['inProgressCount']++;
                 $result['budgetAmount'] += $row['budgetAmount'];
-                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'];
+                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'] / 100;
 
                 return $result;
             },

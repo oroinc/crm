@@ -20,6 +20,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  */
 class OpportunityStatus
 {
+    const STATUS_LOST        = 'lost';
+    const STATUS_WON         = 'won';
+    const STATUS_IN_PROGRESS = 'won';
+
     /**
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
