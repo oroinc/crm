@@ -28,7 +28,7 @@ class OpportunitiesByStatusReportListener
         AbstractDateFilterType::TYPE_EQUAL => '=',
         AbstractDateFilterType::TYPE_NOT_EQUAL => '<>',
         AbstractDateFilterType::TYPE_BETWEEN => ['>=', 'AND', '<='],
-        AbstractDateFilterType::TYPE_NOT_BETWEEN => ['<=', 'OR', '>='],
+        AbstractDateFilterType::TYPE_NOT_BETWEEN => ['<', 'OR', '>'],
     ];
 
     /** @var DateFilterModifier */
@@ -78,7 +78,7 @@ class OpportunitiesByStatusReportListener
             return;
         }
 
-        $joinConditions = '';
+        $joinConditions = [];
         $filters = $dataGrid->getParameters()->get('_filter');
         if (!$filters) {
             return;
@@ -142,38 +142,39 @@ class OpportunitiesByStatusReportListener
      *
      * @param array $options Filter options
      * @param string $fieldName
-     * @param string $filterType date filter type
+     * @param string $filterType date filter type ('date' or 'datetime')
      *
      * @return string|bool
      */
     protected function buildDateCondition(array $options, $fieldName, $filterType)
     {
-        $data = $this->dateFilterUtility->parseData($fieldName, $options, $filterType);
-        if (!$data) {
-            return false;
-        }
-
-        $type = $options['type'];
-
-        if (!array_key_exists($type, self::$comparatorsMap)) {
-            return false;
-        }
-
+        // apply variables an normalize
         $data = $this->dateFilterModifier->modify($options);
+        $data = $this->dateFilterUtility->parseData($fieldName, $data, $filterType);
 
-        $comparator = self::$comparatorsMap[$type];
+        if (!$data || (empty($data['date_start']) && empty($data['date_end']))) {
+            return false;
+        }
+
+        $type = $data['type'];
+
+        if (!array_key_exists($type, static::$comparatorsMap)) {
+            return false;
+        }
+
+        $comparator = static::$comparatorsMap[$type];
 
         // date range comparison
         if (is_array($comparator)) {
             return sprintf(
                 ' AND (%s %s %s)',
-                $this->formatComparison($fieldName, $comparator[0], $data['value']['start']),
+                $this->formatComparison($fieldName, $comparator[0], $data['date_start']),
                 $comparator[1],
-                $this->formatComparison($fieldName, $comparator[2], $data['value']['end'])
+                $this->formatComparison($fieldName, $comparator[2], $data['date_end'])
             );
         }
 
-        $value = $data['value']['start'] ? $data['value']['start'] : $data['value']['end'];
+        $value = !empty($data['date_start']) ? $data['date_start'] : $data['date_end'];
         // simple date comparison
         return sprintf(' AND (%s)', $this->formatComparison($fieldName, $comparator, $value));
     }
