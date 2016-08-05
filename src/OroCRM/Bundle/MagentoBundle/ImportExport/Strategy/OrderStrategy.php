@@ -185,6 +185,19 @@ class OrderStrategy extends AbstractImportStrategy
             $entity->setName('');
         }
 
+        $existingEntity = $this->findRegionEntity($entity, $existingEntity);
+
+        return $existingEntity;
+    }
+
+    /**
+     * @param $entity
+     * @param $existingEntity
+     *
+     * @return null|object
+     */
+    protected function findRegionEntity($entity, $existingEntity)
+    {
         if (!$existingEntity && $entity instanceof Region) {
             /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
             $magentoRegion = $this->databaseHelper->findOneBy(

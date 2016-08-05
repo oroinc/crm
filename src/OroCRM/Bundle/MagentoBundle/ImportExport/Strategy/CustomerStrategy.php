@@ -136,24 +136,41 @@ class CustomerStrategy extends AbstractImportStrategy
                 }
             }
         } elseif ($entity instanceof Region) {
-            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
-            $magentoRegion = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region',
-                [
-                    'regionId' => $entity->getCombinedCode()
-                ]
-            );
-            if ($magentoRegion) {
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\AddressBundle\Entity\Region',
-                    [
-                        'combinedCode' => $magentoRegion->getCombinedCode()
-                    ]
-                );
-            }
+            $existingEntity = $this->findRegionEntity($entity);
+
         } else {
             /** @var Customer $existingEntity */
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
+        }
+
+        return $existingEntity;
+    }
+
+    /**
+     * @param $entity
+     *
+     * @return null|object
+     */
+    protected function findRegionEntity($entity)
+    {
+        $existingEntity = null;
+
+        /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+        $magentoRegion = $this->databaseHelper->findOneBy(
+            'OroCRM\Bundle\MagentoBundle\Entity\Region',
+            [
+                'regionId' => $entity->getCombinedCode()
+            ]
+        );
+        if ($magentoRegion) {
+            $existingEntity = $this->databaseHelper->findOneBy(
+                'Oro\Bundle\AddressBundle\Entity\Region',
+                [
+                    'combinedCode' => $magentoRegion->getCombinedCode()
+                ]
+            );
+
+            return $existingEntity;
         }
 
         return $existingEntity;
