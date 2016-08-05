@@ -37,6 +37,7 @@ define(function(require) {
         },
 
         send: function(urlParameters, body, headers, options) {
+            urlParameters = _.clone(urlParameters);
             this.initRoute(urlParameters, body);
 
             if (this.isActiveCreateEntityRoute()) {
