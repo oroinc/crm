@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\ReportBundle\EventListener\Datagrid;
 
+use Doctrine\ORM\QueryBuilder;
+
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
@@ -24,8 +27,8 @@ class OpportunitiesByStatusReportListener
      * @var array Map of date filters and comparison operators
      */
     public static $comparatorsMap = [
-        AbstractDateFilterType::TYPE_LESS_THAN => '<=',
-        AbstractDateFilterType::TYPE_MORE_THAN => '>=',
+        AbstractDateFilterType::TYPE_LESS_THAN => '<',
+        AbstractDateFilterType::TYPE_MORE_THAN => '>',
         AbstractDateFilterType::TYPE_EQUAL => '=',
         AbstractDateFilterType::TYPE_NOT_EQUAL => '<>',
         AbstractDateFilterType::TYPE_BETWEEN => ['>=', 'AND', '<='],
@@ -53,6 +56,8 @@ class OpportunitiesByStatusReportListener
     }
 
     /**
+     * event: oro_datagrid.datagrid.build.before.orocrm_report-opportunities-by_status
+     *
      * @param BuildBefore $event
      */
     public function onBuildBefore(BuildBefore $event)
@@ -69,6 +74,8 @@ class OpportunitiesByStatusReportListener
     /**
      * Move the date filters into join clause to avoid filtering statuses from the report
      *
+     * event: oro_datagrid.datagrid.build.after.orocrm_report-opportunities-by_status
+     *
      * @param BuildAfter $event
      */
     public function onBuildAfter(BuildAfter $event)
@@ -78,6 +85,8 @@ class OpportunitiesByStatusReportListener
         if (!$dataSource instanceof OrmDatasource) {
             return;
         }
+
+        $queryBuilder = $dataSource->getQueryBuilder();
 
         $joinConditions = [];
         $filters = $dataGrid->getParameters()->get('_filter');
@@ -97,7 +106,7 @@ class OpportunitiesByStatusReportListener
             ) {
                 list($alias, $field) = explode('.', $fieldName);
                 // build a join clause
-                $dateCondition = $this->buildDateCondition($filters[$key], $config['data_name'], $filterType);
+                $dateCondition = $this->buildDateCondition($filters[$key], $fieldName, $filterType, $queryBuilder);
                 if ($dateCondition) {
                     $joinConditions[$alias][$field][] = $dateCondition;
                 }
@@ -110,7 +119,6 @@ class OpportunitiesByStatusReportListener
         $dataGrid->getParameters()->set('_filter', $filters);
 
         // Prepare new join
-        $queryBuilder = $dataSource->getQueryBuilder();
         $joinParts = $queryBuilder->getDQLPart('join');
 
         $queryBuilder->resetDQLPart('join');
@@ -145,26 +153,17 @@ class OpportunitiesByStatusReportListener
      * @param array $options Filter options
      * @param string $fieldName
      * @param string $filterType date filter type ('date' or 'datetime')
+     * @param QueryBuilder $queryBuilder
      *
      * @return string|bool
      */
-    protected function buildDateCondition(array $options, $fieldName, $filterType)
+    protected function buildDateCondition(array $options, $fieldName, $filterType, QueryBuilder $queryBuilder)
     {
-        // apply variables an normalize
+        // apply variables and normalize
         $data = $this->dateFilterModifier->modify($options);
 
-        if (!empty($data['value']['start'])) {
-            $data['value']['start'] = new \DateTime($data['value']['start']);
-        }
-        if (!empty($data['value']['end'])) {
-            $data['value']['end'] = new \DateTime($data['value']['end']);
-        }
-        if (isset($options['value']['start'])) {
-            $data['value']['start_original'] = $options['value']['start'];
-        }
-        if (isset($options['value']['end'])) {
-            $data['value']['end_original'] = $options['value']['end'];
-        }
+        $data['value']['start_original'] = $options['value']['start'];
+        $data['value']['end_original'] = $options['value']['end'];
 
         $data = $this->dateFilterUtility->parseData($fieldName, $data, $filterType);
 
@@ -183,17 +182,25 @@ class OpportunitiesByStatusReportListener
 
         // date range comparison
         if (is_array($comparator)) {
+            $paramStart = QueryUtils::generateParameterName($fieldName);
+            $queryBuilder->setParameter($paramStart, $data['date_start']);
+            $paramEnd = QueryUtils::generateParameterName($fieldName);
+            $queryBuilder->setParameter($paramEnd, $data['date_end']);
+
             return sprintf(
                 ' AND (%s %s %s)',
-                $this->formatComparison($field, $comparator[0], $data['date_start']),
+                $this->formatComparison($field, $comparator[0], $paramStart),
                 $comparator[1],
-                $this->formatComparison($field, $comparator[2], $data['date_end'])
+                $this->formatComparison($field, $comparator[2], $paramEnd)
             );
         }
 
         $value = !empty($data['date_start']) ? $data['date_start'] : $data['date_end'];
         // simple date comparison
-        return sprintf(' AND (%s)', $this->formatComparison($field, $comparator, $value));
+        $param = QueryUtils::generateParameterName($fieldName);
+        $queryBuilder->setParameter($param, $value);
+
+        return sprintf(' AND (%s)', $this->formatComparison($field, $comparator, $param));
     }
 
     /**
@@ -201,15 +208,12 @@ class OpportunitiesByStatusReportListener
      *
      * @param string $fieldName
      * @param string $operator
-     * @param string $value
+     * @param string $parameterName
      *
      * @return string
      */
-    protected function formatComparison($fieldName, $operator, $value)
+    protected function formatComparison($fieldName, $operator, $parameterName)
     {
-        if ($value instanceof \DateTime) {
-            $value = $value->format('Y-m-d H:i');
-        }
-        return sprintf('%s %s \'%s\'', $fieldName, $operator, $value);
+        return sprintf('%s %s :%s', $fieldName, $operator, $parameterName);
     }
 }
