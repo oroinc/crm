@@ -10,11 +10,12 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
 {
     const CHANNEL_KEY = 'channelId';
     const CUSTOMER_ID = 'customerId';
+    const CUSTOMER    = 'customerData';
     const CUSTOMER_ORIGIN_ID = 'customerOriginId';
     /**
      * @var ChannelSettingsProvider
      */
-    private $channelSettingsProvider;
+    protected $channelSettingsProvider;
 
     /**
      * @param ChannelSettingsProvider $channelSettingsProvider
@@ -33,6 +34,9 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
     protected function isChannelApplicable(ResultRecordInterface $record, $checkExtension = true)
     {
         $channelId = $record->getValue(self::CHANNEL_KEY);
+        if (!$channelId) {
+            return false;
+        }
 
         return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
     }
