@@ -29,6 +29,7 @@ datagrid:
                     - channel.name as channelName
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+                    - customer.id as customerId
                     - customer.name as customerName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -180,6 +181,7 @@ datagrid:
                     data_name: ownerName
             default:
                 createdAt: DESC
+            toolbar_sorting: true
         filters:
             columns:
                 channelName:
@@ -269,6 +271,18 @@ datagrid:
                 icon:          trash
                 link:          delete_link
         views_list: "@orocrm_sales.opportunity.datagrid_view_list"
+        appearances:
+            board:
+                opportunity-by-status:
+                    label: Status Board
+                    group_by:
+                        property: status
+                        order_by:
+                            priority: ASC
+                    card_view: orocrmsales/js/app/views/board/opportunity-card-view
+                    default_transition:
+                        class: orodatagrid/js/app/transitions/update-main-property-transition
+                    acl_resource: orocrm_sales_opportunity_update
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -1277,11 +1291,11 @@ datagrid:
                 accountName:
                     type: string
                     data_name: accountName
-                    enabled: false                    
+                    enabled: false
                 contactName:
                     type: string
                     data_name: contactName
-                    enabled: false                    
+                    enabled: false
                 baCountryName:
                     type: entity
                     data_name: ba.country

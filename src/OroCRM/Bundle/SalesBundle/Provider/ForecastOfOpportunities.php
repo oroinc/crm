@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
@@ -34,16 +35,20 @@ class ForecastOfOpportunities
     /** @var ForecastProvider */
     protected $provider;
 
+    /** @var FilterDateRangeConverter */
+    protected $filterDateRangeConverter;
+
     /** @var array */
     protected $moments = [];
 
     /**
-     * @param NumberFormatter     $numberFormatter
-     * @param DateTimeFormatter   $dateTimeFormatter
-     * @param TranslatorInterface $translator
-     * @param DateHelper          $dateHelper
-     * @param OwnerHelper         $ownerHelper
-     * @param ForecastProvider    $provider
+     * @param NumberFormatter          $numberFormatter
+     * @param DateTimeFormatter        $dateTimeFormatter
+     * @param TranslatorInterface      $translator
+     * @param DateHelper               $dateHelper
+     * @param OwnerHelper              $ownerHelper
+     * @param ForecastProvider         $provider
+     * @param FilterDateRangeConverter $filterDateRangeConverter
      */
     public function __construct(
         NumberFormatter $numberFormatter,
@@ -51,14 +56,16 @@ class ForecastOfOpportunities
         TranslatorInterface $translator,
         DateHelper $dateHelper,
         OwnerHelper $ownerHelper,
-        ForecastProvider $provider
+        ForecastProvider $provider,
+        FilterDateRangeConverter $filterDateRangeConverter
     ) {
-        $this->numberFormatter   = $numberFormatter;
-        $this->dateTimeFormatter = $dateTimeFormatter;
-        $this->translator        = $translator;
-        $this->dateHelper        = $dateHelper;
-        $this->ownerHelper       = $ownerHelper;
-        $this->provider = $provider;
+        $this->numberFormatter          = $numberFormatter;
+        $this->dateTimeFormatter        = $dateTimeFormatter;
+        $this->translator               = $translator;
+        $this->dateHelper               = $dateHelper;
+        $this->ownerHelper              = $ownerHelper;
+        $this->provider                 = $provider;
+        $this->filterDateRangeConverter = $filterDateRangeConverter;
     }
 
     /**
@@ -106,7 +113,11 @@ class ForecastOfOpportunities
                 $value[$dataKey] - $pastResult[$dataKey],
                 $result
             );
-            $result['previousRange'] = $this->dateTimeFormatter->formatDate($dateData['prev_moment']);
+            $result['previousRange'] = $this->filterDateRangeConverter->getViewValue([
+                'start' => $dateData['prev_start'],
+                'end'   => $dateData['prev_end'],
+                'type'  => $widgetOptions->get('dateRange')['type']
+            ]);
         }
 
         return $result;
