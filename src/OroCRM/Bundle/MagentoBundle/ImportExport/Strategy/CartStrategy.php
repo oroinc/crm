@@ -67,27 +67,30 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function isProcessingAllowed(Cart $cart)
     {
-        $customer = $this->findExistingEntity($cart->getCustomer());
         $isProcessingAllowed = true;
 
-        $customerOriginId = $cart->getCustomer()->getOriginId();
-        if (!$customer && $customerOriginId) {
-            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
+        if ($cart->getCustomer()) {
+            $customer = $this->findExistingEntity($cart->getCustomer());
 
-            $isProcessingAllowed = false;
-        }
-
-        if (!$customer && $cart->getIsGuest()) {
-            /** @var MagentoSoapTransport $transport */
-            $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
-            $transport = $channel->getTransport();
-            if ($transport->getGuestCustomerSync()) {
-                $this->appendDataToContext(
-                    'postProcessGuestCustomers',
-                    GuestCustomerDataConverter::extractCustomersValues((array) $this->context->getValue('itemData'))
-                );
+            $customerOriginId = $cart->getCustomer()->getOriginId();
+            if (!$customer && $customerOriginId) {
+                $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
                 $isProcessingAllowed = false;
+            }
+
+            if (!$customer && $cart->getIsGuest()) {
+                /** @var MagentoSoapTransport $transport */
+                $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
+                $transport = $channel->getTransport();
+                if ($transport->getGuestCustomerSync()) {
+                    $this->appendDataToContext(
+                        'postProcessGuestCustomers',
+                        GuestCustomerDataConverter::extractCustomersValues((array)$this->context->getValue('itemData'))
+                    );
+
+                    $isProcessingAllowed = false;
+                }
             }
         }
 

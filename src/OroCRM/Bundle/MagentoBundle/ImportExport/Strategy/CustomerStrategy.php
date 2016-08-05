@@ -147,7 +147,7 @@ class CustomerStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param $entity
+     * @param Region $entity
      *
      * @return null|object
      */
@@ -169,8 +169,6 @@ class CustomerStrategy extends AbstractImportStrategy
                     'combinedCode' => $magentoRegion->getCombinedCode()
                 ]
             );
-
-            return $existingEntity;
         }
 
         return $existingEntity;
