@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -126,7 +125,7 @@ class TrackingVisitProvider
 
         $result = $this->getTrackingVisitRepository()
             ->createQueryBuilder('t')
-            ->select('COUNT(DISTINCT t.userIdentifier) cnt')
+            ->select('COUNT(t.userIdentifier) cnt')
             ->addSelect('MIN(t.firstActionTime) first')
             ->addSelect('MAX(t.firstActionTime) last')
             ->andWhere(sprintf('t.%s in (:customers)', $customerAssocName))
@@ -137,12 +136,12 @@ class TrackingVisitProvider
         $count = (int) $result['cnt'];
         $first = new \DateTimeImmutable($result['first']);
         $last = new \DateTimeImmutable($result['last']);
-        $monthsDiff = $last->diff($first)->m;
+        $daysDiff = $last->diff($first)->d;
 
         return [
             'count' => $count,
             'last' => $count > 0 ? $result['last'] : null,
-            'monthly' => $monthsDiff > 0 ? $count / $monthsDiff : $count,
+            'monthly' => $daysDiff > 0 ? round($count / max(($daysDiff / 30.42), 1)) : $count, // 30.42 = 365/12
         ];
     }
 
