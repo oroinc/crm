@@ -20,7 +20,7 @@ class OpportunityRepository extends EntityRepository
 {
     const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
     const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
-    const OPPORTUNITY_STATUS_CLOSED_WON_CODE  = 'won';
+    const OPPORTUNITY_STATUS_CLOSED_WON_CODE = 'won';
 
     /**
      * Get opportunities by state by current quarter
