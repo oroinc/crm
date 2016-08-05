@@ -4,9 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Entity\Region;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CartStrategy extends AbstractImportStrategy
 {
@@ -35,6 +40,58 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         return parent::beforeProcessEntity($entity);
+    }
+
+    /**
+     * @param Cart $entity
+     *
+     * {@inheritdoc}
+     */
+    public function process($entity)
+    {
+        if (!$this->isProcessingAllowed($entity)) {
+            $this->appendDataToContext(
+                CartWithExistingCustomerStrategy::CONTEXT_CART_POST_PROCESS,
+                $this->context->getValue('itemData')
+            );
+
+            return null;
+        }
+
+        return parent::process($entity);
+    }
+
+    /**
+     * @param Cart $cart
+     * @return bool
+     */
+    protected function isProcessingAllowed(Cart $cart)
+    {
+        $customer = $this->findExistingEntity($cart->getCustomer());
+        $isProcessingAllowed = true;
+
+        $customerOriginId = $cart->getCustomer()->getOriginId();
+        if (!$customer && $customerOriginId) {
+            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
+
+            $isProcessingAllowed = false;
+        }
+
+        if (!$customer && $cart->getIsGuest()) {
+            /** @var MagentoSoapTransport $transport */
+            $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
+            $transport = $channel->getTransport();
+            if ($transport->getGuestCustomerSync()) {
+                $this->appendDataToContext(
+                    'postProcessGuestCustomers',
+                    GuestCustomerDataConverter::extractCustomersValues((array) $this->context->getValue('itemData'))
+                );
+
+                $isProcessingAllowed = false;
+            }
+        }
+
+        return $isProcessingAllowed;
     }
 
     /**
@@ -202,5 +259,35 @@ class CartStrategy extends AbstractImportStrategy
         $cart->setStatus($status);
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        $existingEntity = null;
+
+        if ($entity instanceof Region) {
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            $magentoRegion = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                [
+                    'regionId' => $entity->getCode()
+                ]
+            );
+            if ($magentoRegion) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'Oro\Bundle\AddressBundle\Entity\Region',
+                    [
+                        'combinedCode' => $magentoRegion->getCombinedCode()
+                    ]
+                );
+            }
+        } else {
+            $existingEntity = parent::findExistingEntity($entity, $searchContext);
+        }
+
+        return $existingEntity;
     }
 }

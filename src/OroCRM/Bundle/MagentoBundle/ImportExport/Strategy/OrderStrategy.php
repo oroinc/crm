@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Oro\Bundle\AddressBundle\Entity\Region;
+
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -181,6 +183,24 @@ class OrderStrategy extends AbstractImportStrategy
         if ($entity instanceof OrderItem && is_null($entity->getName())) {
             //name can't be null, so to avoid import job failing empty string is used
             $entity->setName('');
+        }
+
+        if (!$existingEntity && $entity instanceof Region) {
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            $magentoRegion = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                [
+                    'regionId' => $entity->getCode()
+                ]
+            );
+            if ($magentoRegion) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'Oro\Bundle\AddressBundle\Entity\Region',
+                    [
+                        'combinedCode' => $magentoRegion->getCombinedCode()
+                    ]
+                );
+            }
         }
 
         return $existingEntity;

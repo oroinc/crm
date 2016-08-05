@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Oro\Bundle\AddressBundle\Entity\Region;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
@@ -97,6 +99,8 @@ class CustomerStrategy extends AbstractImportStrategy
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {
+        $existingEntity = null;
+
         if ($entity instanceof Customer) {
             $website = $this->databaseHelper->findOneBy(
                 'OroCRM\Bundle\MagentoBundle\Entity\Website',
@@ -130,6 +134,22 @@ class CustomerStrategy extends AbstractImportStrategy
                         $existingEntity->setOriginId($entity->getOriginId());
                     }
                 }
+            }
+        } elseif ($entity instanceof Region) {
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            $magentoRegion = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                [
+                    'regionId' => $entity->getCombinedCode()
+                ]
+            );
+            if ($magentoRegion) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'Oro\Bundle\AddressBundle\Entity\Region',
+                    [
+                        'combinedCode' => $magentoRegion->getCombinedCode()
+                    ]
+                );
             }
         } else {
             /** @var Customer $existingEntity */
