@@ -69,7 +69,7 @@ definitions:
                             - '@create_entity':
                                 class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
                                 attribute: $.caseEntity
-                                flush: true
+                                flush: true # flush is required to allow activity handling later
                                 data:
                                     owner:          $.mailbox.processSettings.owner
                                     assignedTo:     $.mailbox.processSettings.assignTo

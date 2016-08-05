@@ -293,7 +293,6 @@ definitions:
                     - '@create_entity':
                         class: JMS\JobQueueBundle\Entity\Job
                         attribute: $.syncJob
-                        flush: true
                         arguments:
                             - $.commandName
                             - [$.channelArguments]
@@ -337,7 +336,6 @@ definitions:
                     - '@create_entity':
                         class: JMS\JobQueueBundle\Entity\Job
                         attribute: $.syncJob
-                        flush: true
                         arguments:
                             - $.commandName
                             - [$.channelArguments]
