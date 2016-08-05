@@ -591,24 +591,23 @@ class OroCRMMagentoBundleInstaller implements
     protected function createOrocrmMagentoProductTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_magento_product');
-        $table->addColumn('id', 'integer', ['precision' => 0, 'autoincrement' => true]);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('type', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('type', 'string', ['length' => 255]);
         $table->addColumn(
             'special_price',
             'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            ['notnull' => false]
         );
-        $table->addColumn('price', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
-        $table->addColumn('created_at', 'datetime', ['precision' => 0]);
-        $table->addColumn('updated_at', 'datetime', ['precision' => 0]);
-        $table->addColumn('origin_id', 'integer', ['precision' => 0, 'unsigned' => true]);
-        $table->addColumn('cost', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
+        $table->addColumn('price', 'money', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime');
+        $table->addColumn('origin_id', 'integer', ['unsigned' => true]);
+        $table->addColumn('cost', 'money', ['notnull' => false]);
         $table->addIndex(['channel_id'], 'IDX_5A17298272F5A1AA', []);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['sku', 'channel_id'], 'unq_sku_channel_id');
     }
 
     /**
