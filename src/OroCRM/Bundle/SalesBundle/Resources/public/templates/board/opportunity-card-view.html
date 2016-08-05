@@ -1,0 +1,9 @@
+<div class="card-actions" data-placeholder-for="actions"></div>
+<div class="card-title"><a href="<%= view_link %>" data-action="navigate"><%= name %></a></div>
+<% if (budgetAmount !== void 0) { %><div class="card-amount"><%= numberFormatter.formatCurrency(budgetAmount) %></div><% } %>
+<% if (probability !== null) { %><div class="card-probability"><%= numberFormatter.formatPercent(probability) %></div><% } %>
+<div class="card-additional">
+    <% if (customerName !== void 0) { %><div class="card-additional-line"><%= customerName %></div><% } %>
+    <% if (contactName !== void 0) { %><div class="card-additional-line"><%= contactName %></div><% } %>
+</div>
+<div class="card-date"><%= datetimeFormatter.formatDate(updatedAt) %></div>

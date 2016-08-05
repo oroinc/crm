@@ -87,6 +87,32 @@
     </div>
 {% endblock orocrm_sales_lead_widget %}
 
+{% block orocrm_sales_opportunity_status_enum_value_widget %}
+    <div class="float-holder {% if form.label.vars.errors|length > 0 %} validation-error{% endif %}">
+        <div class="input-append input-append-sortable collection-element-primary">
+            {{ form_widget(form.label, {disabled: disabled}) }}
+            {{ form_widget(form.probability, {
+                disabled: disabled or form.probability.vars.disabled,
+                attr: {
+                    class: 'add-on-input',
+                    title: 'orocrm.sales.system_configuration.fields.opportunity_status_probabilities.probability.tooltip'
+                }
+            }) }}
+            <span class="add-on ui-sortable-handle{% if disabled %} disabled{% endif %}"
+                  data-name="sortable-handle"
+                  title="{{ 'oro.entity_extend.enum_options.priority.tooltip'|trans }}">
+                <i class="icon-resize-vertical {% if disabled %} disabled{% endif %}"></i>
+                {{ form_widget(form.priority, {disabled: disabled}) }}
+            </span>
+            <label class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.default.tooltip'|trans }}">
+                {{ form_widget(form.is_default, {disabled: disabled}) }}
+            </label>
+        </div>
+        {{ form_errors(form.label) }}
+    </div>
+    {{ form_rest(form) }}
+{% endblock %}
+
 {% block orocrm_sales_lead_address_widget %}
     {% if form.parent is not empty %}
         <div {{ block('widget_container_attributes') }}>

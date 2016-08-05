@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -82,6 +84,10 @@ class CustomerController extends Controller
      */
     public function createAction()
     {
+        if (!$this->getSecurityFacade()->isGranted('oro_integration_assign')) {
+            throw new AccessDeniedHttpException();
+        }
+
         return $this->update(new Customer());
     }
 
@@ -160,7 +166,7 @@ class CustomerController extends Controller
         $customers = array_filter(
             $customers,
             function ($item) {
-                return $this->get('oro_security.security_facade')->isGranted('VIEW', $item);
+                return $this->getSecurityFacade()->isGranted('VIEW', $item);
             }
         );
 
@@ -239,5 +245,13 @@ class CustomerController extends Controller
     public function addressBookAction(Customer $customer)
     {
         return ['entity' => $customer];
+    }
+
+    /**
+     * @return SecurityFacade
+     */
+    protected function getSecurityFacade()
+    {
+        return $this->get('oro_security.security_facade');
     }
 }

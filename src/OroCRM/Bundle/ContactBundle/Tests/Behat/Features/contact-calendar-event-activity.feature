@@ -3,11 +3,9 @@ Feature: Calendar event activity
   As OroCRM sales rep
   I need to create, edit, view and delete calendar events
 
-Background:
-  Given I login as "admin" user with "admin" password
-
 Scenario: Add calendar event
-  Given there are following users:
+  Given I login as "admin" user with "admin" password
+  And there are following users:
     | firstName | lastName | email              | username | organization  | organizations   | owner          | businessUnits    |
     | Theresa   | Peters   | theresa@peters.com | theresa  | @organization | [@organization] | @business_unit | [@business_unit] |
     | Jeremy    | Zimmer   | jeremy@zimmer.com  | jeremy   | @organization | [@organization] | @business_unit | [@business_unit] |
@@ -33,8 +31,6 @@ Scenario: Add calendar event
   And should see "Contract sign in" calendar event in activity list
 
 Scenario: View Calendar event in User view page
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
   When I collapse "Contract sign in" in activity list
   Then I should see calendar event with:
     | Title         | Contract sign in            |
@@ -42,8 +38,6 @@ Scenario: View Calendar event in User view page
     | All-day event | No                          |
 
 Scenario: View Calendar event in Calendar event view page
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
   When I click "View event" on "Contract sign in" in activity list
   Then the url should match "/calendar/event/view/\d+"
   And I should see calendar event with:
@@ -52,8 +46,7 @@ Scenario: View Calendar event in Calendar event view page
     | All-day event | No                          |
 
 Scenario: Edit Calendar event activity
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
+  Given I move backward one page
   When I click "Update calendar event" on "Contract sign in" in activity list
   And I fill form with:
     | Title       | Discuss about contract        |
@@ -74,8 +67,6 @@ Scenario: Edit Calendar event activity
     | All-day event | No                            |
 
 Scenario: Delete Calendar event activity
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
   When I click "Delete calendar event" on "Discuss about contract" in activity list
   And confirm deletion
   Then I should see "Activity item deleted" flash message

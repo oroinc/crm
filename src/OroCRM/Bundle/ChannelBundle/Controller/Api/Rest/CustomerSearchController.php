@@ -82,6 +82,19 @@ class CustomerSearchController extends RestGetController
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function getSupportedQueryParameters($methodName)
+    {
+        $skipParameters = ['search'];
+
+        return array_diff(
+            parent::getSupportedQueryParameters($methodName),
+            $skipParameters
+        );
+    }
+
+    /**
      * Gets the API entity manager
      *
      * @return CustomerSearchApiEntityManager
