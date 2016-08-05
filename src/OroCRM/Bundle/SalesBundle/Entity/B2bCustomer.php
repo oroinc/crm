@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -28,7 +29,15 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md"
+ *              "icon"="icon-user-md",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -57,9 +66,12 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    EmailHolderInterface,
+    EmailOwnerInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -260,12 +272,54 @@ class B2bCustomer extends ExtendB2bCustomer implements
      */
     protected $updatedAt;
 
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone", mappedBy="owner",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * ))
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=80
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $phones;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=90
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $emails;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->leads         = new ArrayCollection();
         $this->opportunities = new ArrayCollection();
+        $this->phones        = new ArrayCollection();
+        $this->emails        = new ArrayCollection();
     }
 
     /**
@@ -548,22 +602,249 @@ class B2bCustomer extends ExtendB2bCustomer implements
     }
 
     /**
+     * Set phones.
+     *
+     * This method could not be named setPhones because of bug CRM-253.
+     *
+     * @param Collection|B2bCustomerPhone[] $phones
+     *
+     * @return B2bCustomer
+     */
+    public function resetPhones($phones)
+    {
+        $this->phones->clear();
+        foreach ($phones as $phone) {
+            $this->addPhone($phone);
+        }
+        return $this;
+    }
+    /**
+     * Add phone
+     *
+     * @param B2bCustomerPhone $phone
+     *
+     * @return B2bCustomer
+     */
+    public function addPhone(B2bCustomerPhone $phone)
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones->add($phone);
+            $phone->setOwner($this);
+        }
+        return $this;
+    }
+    /**
+     * Remove phone
+     *
+     * @param B2bCustomerPhone $phone
+     *
+     * @return B2bCustomer
+     */
+    public function removePhone(B2bCustomerPhone $phone)
+    {
+        if ($this->phones->contains($phone)) {
+            $this->phones->removeElement($phone);
+        }
+        return $this;
+    }
+    /**
+     * Get phones
+     *
+     * @return Collection|B2bCustomerPhone[]
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+    /**
+     * @param B2bCustomerPhone $phone
+     *
+     * @return bool
+     */
+    public function hasPhone(B2bCustomerPhone $phone)
+    {
+        return $this->getPhones()->contains($phone);
+    }
+    /**
+     * Gets primary phone if it's available.
+     *
+     * @return B2bCustomerPhone|null
+     */
+    public function getPrimaryPhone()
+    {
+        $result = null;
+        foreach ($this->getPhones() as $phone) {
+            if ($phone->isPrimary()) {
+                $result = $phone;
+                break;
+            }
+        }
+        return $result;
+    }
+    /**
+     * @param B2bCustomerPhone $phone
+     *
+     * @return B2bCustomer
+     */
+    public function setPrimaryPhone(B2bCustomerPhone $phone)
+    {
+        if ($this->hasPhone($phone)) {
+            $phone->setPrimary(true);
+            foreach ($this->getPhones() as $otherPhone) {
+                if (!$phone->isEqual($otherPhone)) {
+                    $otherPhone->setPrimary(false);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Set emails.
+     *
+     * This method could not be named setEmails because of bug CRM-253.
+     *
+     * @param Collection|B2bCustomerEmail[] $emails
+     *
+     * @return B2bCustomer
+     */
+    public function resetEmails($emails)
+    {
+        $this->emails->clear();
+        foreach ($emails as $email) {
+            $this->addEmail($email);
+        }
+        return $this;
+    }
+    /**
+     * Add email
+     *
+     * @param B2bCustomerEmail $email
+     *
+     * @return B2bCustomer
+     */
+    public function addEmail(B2bCustomerEmail $email)
+    {
+        if (!$this->emails->contains($email)) {
+            $this->emails->add($email);
+            $email->setOwner($this);
+        }
+        return $this;
+    }
+    /**
+     * Remove email
+     *
+     * @param B2bCustomerEmail $email
+     *
+     * @return B2bCustomer
+     */
+    public function removeEmail(B2bCustomerEmail $email)
+    {
+        if ($this->emails->contains($email)) {
+            $this->emails->removeElement($email);
+        }
+        return $this;
+    }
+    /**
+     * Get emails
+     *
+     * @return Collection|B2bCustomerEmail[]
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+    /**
+     * @param B2bCustomerEmail $email
+     *
+     * @return bool
+     */
+    public function hasEmail(B2bCustomerEmail $email)
+    {
+        return $this->getEmails()->contains($email);
+    }
+    /**
+     * Gets primary email if it's available.
+     *
+     * @return B2bCustomerEmail|null
+     */
+    public function getPrimaryEmail()
+    {
+        $result = null;
+        foreach ($this->getEmails() as $email) {
+            if ($email->isPrimary()) {
+                $result = $email;
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param B2bCustomerEmail $email
+     *
+     * @return B2bCustomer
+     */
+    public function setPrimaryEmail(B2bCustomerEmail $email)
+    {
+        if ($this->hasEmail($email)) {
+            $email->setPrimary(true);
+            foreach ($this->getEmails() as $otherEmail) {
+                if (!$email->isEqual($otherEmail)) {
+                    $otherEmail->setPrimary(false);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /** @inheritdoc  */
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
+    }
+
+    /**
+     * Get names of fields contain email addresses
+     *
+     * @return string[]|null
+     */
+    public function getEmailFields()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getLastName()
+    {
+        return null;
+    }
+
+    /**
      * Get the primary email address of the related contact or account
      *
      * @return string
      */
     public function getEmail()
     {
+        $primaryEmail = $this->getPrimaryEmail();
+        if ($primaryEmail) {
+            return $primaryEmail->getEmail();
+        }
         $contact = $this->getContact();
         if ($contact) {
             return $contact->getEmail();
         }
-
         $account = $this->getAccount();
         if ($account) {
             return $account->getEmail();
         }
-
         return null;
     }
 }

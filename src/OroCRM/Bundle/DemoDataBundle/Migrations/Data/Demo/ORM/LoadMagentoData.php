@@ -38,16 +38,21 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     const TAX              = 0.0838;
-    const INTEGRATION_NAME = 'Demo Web store';
 
     /** @var array */
     protected $users;
 
-    /** @var  Channel */
-    protected $dataChannel;
+    /** @var array */
+    protected static $websiteCodes = ['admin', 'admin2'];
 
-    /** @var Organization */
-    protected $organization;
+    /** @var array */
+    protected static $integrationNames = ['Demo Web store', 'Demo Web store 2'];
+
+    /** @var array */
+    protected static $groupNames = ['General', 'Secondary'];
+
+    /** @var array */
+    protected static $channelNames = ['Magento channel', 'Magento channel 2'];
 
     /**
      * {@inheritdoc}
@@ -64,21 +69,65 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $om)
     {
-        $this->organization = $this->getReference('default_organization');
+        $organization = $this->getReference('default_organization');
         $this->users = $om->getRepository('OroUserBundle:User')->findAll();
 
-        $website = new Website();
-        $website
-            ->setCode('admin')
-            ->setName('Admin');
-        $om->persist($website);
+        $stores = $this->persistDemoStores($om, $organization);
+        foreach ($stores as $store) {
+            $channel = $this->persistDemoChannel($om, $store->getChannel());
+            $group = $this->persistDemoUserGroup($om, $store->getChannel());
+            $customers = $this->persistDemoCustomers($om, $store, $group, $channel, $organization);
+            $carts = $this->persistDemoCarts($om, $customers);
+            $this->persistDemoOrders($om, $carts);
+            $this->persistDemoRFM($om, $channel, $organization);
 
-        $store = new Store();
-        $store
-            ->setCode('admin')
-            ->setName('Admin')
-            ->setWebsite($website);
-        $om->persist($store);
+            $om->flush();
+        }
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Organization $organization
+     *
+     * @return Store[]
+     */
+    protected function persistDemoStores(ObjectManager $om, Organization $organization)
+    {
+        $countOfWebsites = count(static::$websiteCodes);
+        $stores = [];
+
+        for ($i = 0; $i < $countOfWebsites; $i++) {
+            $code = static::$websiteCodes[$i];
+            $integration = $this->persistDemoIntegration($om, $organization);
+
+            $website = new Website();
+            $website
+                ->setCode($code)
+                ->setName(ucfirst($code));
+            $om->persist($website);
+
+            $store = new Store();
+            $store
+                ->setCode($website->getCode())
+                ->setName($website->getName())
+                ->setChannel($integration)
+                ->setWebsite($website);
+            $om->persist($store);
+            $stores[] = $store;
+        }
+
+        return $stores;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Organization $organization
+     *
+     * @return Integration
+     */
+    protected function persistDemoIntegration(ObjectManager $om, Organization $organization)
+    {
+        static $i = 0;
 
         $transport = new MagentoSoapTransport();
         $transport->setApiUser('api_user');
@@ -89,13 +138,30 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $transport->setWsdlUrl('http://magento.domain');
         $om->persist($transport);
 
+        $integrationName = static::$integrationNames[$i++];
+
         $integration = new Integration();
         $integration->setType('magento');
         $integration->setConnectors(['customer', 'cart', 'order', 'newsletter_subscriber']);
-        $integration->setName(self::INTEGRATION_NAME);
+        $integration->setName($integrationName);
         $integration->setTransport($transport);
-        $integration->setOrganization($this->organization);
+        $integration->setOrganization($organization);
         $om->persist($integration);
+
+        return $integration;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Integration $integration
+     *
+     * @return Channel
+     */
+    protected function persistDemoChannel(ObjectManager $om, Integration $integration)
+    {
+        static $i = 0;
+
+        $name = static::$channelNames[$i++];
 
         /** @var $factory BuilderFactory */
         $factory = $this->container->get('orocrm_channel.builder.factory');
@@ -103,35 +169,40 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
         $builder->setStatus($integration->isEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
-        $this->dataChannel = $builder->getChannel();
+        $builder->setName($name);
+        $dataChannel = $builder->getChannel();
+        $om->persist($dataChannel);
 
-        $om->persist($this->dataChannel);
-
-        $group = new CustomerGroup();
-        $group->setName('General');
-        $group->setOriginId(15000);
-        $group->setChannel($integration);
-        $om->persist($group);
-
-        $om->flush();
-
-        $this->persistDemoCustomers($om, $website, $store, $group, $integration);
-        $om->flush();
-
-        $this->persistDemoCarts($om, $store, $integration);
-        $om->flush();
-
-        $this->persistDemoOrders($om, $store, $integration);
-        $om->flush();
-
-        $this->persistDemoRFM($om);
-        $om->flush();
+        return $dataChannel;
     }
 
     /**
      * @param ObjectManager $om
+     * @param Integration $integration
+     *
+     * @return CustomerGroup
      */
-    protected function persistDemoRFM(ObjectManager $om)
+    protected function persistDemoUserGroup(ObjectManager $om, Integration $integration)
+    {
+        static $i = 0;
+
+        $groupName = static::$groupNames[$i++];
+
+        $group = new CustomerGroup();
+        $group->setName($groupName);
+        $group->setOriginId(14999 + $i);
+        $group->setChannel($integration);
+        $om->persist($group);
+
+        return $group;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Channel $dataChannel
+     * @param Organization $organization
+     */
+    protected function persistDemoRFM(ObjectManager $om, Channel $dataChannel, Organization $organization)
     {
         $rfmData = [
             'recency' => [
@@ -161,51 +232,57 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             foreach ($values as $idx => $limits) {
                 $category = new RFMMetricCategory();
                 $category->setCategoryIndex($idx + 1)
-                    ->setChannel($this->dataChannel)
+                    ->setChannel($dataChannel)
                     ->setCategoryType($type)
                     ->setMinValue($limits['min'])
                     ->setMaxValue($limits['max'])
-                    ->setOwner($this->organization);
+                    ->setOwner($organization);
 
                 $om->persist($category);
             }
         }
 
-        $data = $this->dataChannel->getData();
+        $data = $dataChannel->getData();
         $data['rfm_enabled'] = true;
-        $this->dataChannel->setData($data);
-        $om->persist($this->dataChannel);
+        $dataChannel->setData($data);
+        $om->persist($dataChannel);
     }
 
     /**
      * @param ObjectManager $om
-     * @param Store         $store
-     * @param Integration   $integration
+     * @param Customer[] $customers
+     *
+     * @return Cart[]
      */
-    protected function persistDemoCarts(ObjectManager $om, Store $store, Integration $integration)
+    protected function persistDemoCarts(ObjectManager $om, array $customers)
     {
-        /** @var Customer[] $customers */
-        $customers = $om->getRepository('OroCRMMagentoBundle:Customer')->findAll();
         /** @var CartStatus $status */
         $status = $om->getRepository('OroCRMMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
 
+        $carts = [];
         for ($i = 0; $i < 10; ++$i) {
-            $customerRandom = rand(0, count($customers)-1);
-            $cart = $this->generateShoppingCart($om, $store, $integration, $customers[$customerRandom], $status, $i);
+            $customer = $customers[array_rand($customers)];
+            $cart = $this->generateShoppingCart(
+                $om,
+                $customer->getStore(),
+                $customer->getDataChannel(),
+                $customer,
+                $status,
+                $i
+            );
             $this->generateShoppingCartItem($om, $cart);
+            $carts[] = $cart;
         }
+
+        return $carts;
     }
 
     /**
      * @param ObjectManager $om
-     * @param Store         $store
-     * @param Integration   $integration
+     * @param Cart[] $carts
      */
-    protected function persistDemoOrders(ObjectManager $om, Store $store, Integration $integration)
+    protected function persistDemoOrders(ObjectManager $om, array $carts)
     {
-        /** @var Cart[] $carts */
-        $carts = $om->getRepository('OroCRMMagentoBundle:Cart')->findAll();
-
         $paymentMethod = ['Ccsave', 'Checkmo'];
         $paymentMethodDetails = ['Card[MC]', 'Card[AE]', 'N/A'];
         $status = ['Pending', 'Processing', 'Completed', 'Canceled'];
@@ -214,13 +291,13 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             /** @var Cart $cart */
             $order = $this->generateOrder(
                 $om,
-                $store,
-                $integration,
+                $cart->getStore(),
+                $cart->getDataChannel(),
                 $cart->getCustomer(),
-                $status[rand(0, count($status)-1)],
+                $status[array_rand($status)],
                 $cart,
-                $paymentMethod[rand(0, count($paymentMethod)-1)],
-                $paymentMethodDetails[rand(0, count($paymentMethodDetails)-1)],
+                $paymentMethod[array_rand($paymentMethod)],
+                $paymentMethodDetails[array_rand($paymentMethodDetails)],
                 $i++
             );
             $this->generateOrderItem($om, $order, $cart);
@@ -243,7 +320,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     protected function generateOrder(
         ObjectManager $om,
         Store $store,
-        Integration $integration,
+        Channel $channel,
         Customer $customer,
         $status,
         Cart $cart,
@@ -252,8 +329,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $origin
     ) {
         $order = new Order();
-        $order->setOrganization($this->organization);
-        $order->setChannel($integration);
+        $order->setOrganization($customer->getOrganization());
+        $order->setChannel($channel->getDataSource());
         $order->setCustomer($customer);
         $order->setOwner($customer->getOwner());
         $order->setStatus($status);
@@ -267,7 +344,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $order->setCurrency($cart->getBaseCurrencyCode());
         $order->setTotalAmount($cart->getGrandTotal());
         $order->setTotalInvoicedAmount($cart->getGrandTotal());
-        $order->setDataChannel($this->dataChannel);
+        $order->setDataChannel($channel);
         if ($status == 'Completed') {
             $order->setTotalPaidAmount($cart->getGrandTotal());
         }
@@ -324,7 +401,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     /**
      * @param ObjectManager $om
      * @param Store         $store
-     * @param Integration   $integration
+     * @param Channel       $channel
      * @param Customer      $customer
      * @param CartStatus    $status
      * @param int           $origin
@@ -336,7 +413,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     protected function generateShoppingCart(
         ObjectManager $om,
         Store $store,
-        Integration $integration,
+        Channel $channel,
         Customer $customer,
         CartStatus $status,
         $origin,
@@ -344,8 +421,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $rate = 1
     ) {
         $cart = new Cart();
-        $cart->setOrganization($this->organization);
-        $cart->setChannel($integration);
+        $cart->setOrganization($customer->getOrganization());
+        $cart->setChannel($channel->getDataSource());
         $cart->setCustomer($customer);
         $cart->setOwner($customer->getOwner());
         $cart->setStatus($status);
@@ -364,7 +441,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $cart->setCreatedAt($datetime);
         $cart->setUpdatedAt($datetime);
         $cart->setOriginId($origin);
-        $cart->setDataChannel($this->dataChannel);
+        $cart->setDataChannel($channel);
         $om->persist($cart);
 
         return $cart;
@@ -455,28 +532,31 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      * @param Website       $website
      * @param Store         $store
      * @param CustomerGroup $group
-     * @param Integration   $integration
+     * @param Channel       $channel
+     * @param Organization  $organization
+     *
+     * @return Customer[]
      */
     protected function persistDemoCustomers(
         ObjectManager $om,
-        Website $website,
         Store $store,
         CustomerGroup $group,
-        Integration $integration
+        Channel $channel,
+        Organization $organization
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $customers = [];
 
-        $buffer = range(0, 48);
-        shuffle($buffer);
-        for ($i = 0; $i < 49; ++$i) {
+        $buffer = range(0, count($accounts) - 1);
+        for ($i = 0; $i < 25; ++$i) {
             $birthday  = $this->generateBirthday();
 
             /** @var Contact $contact */
             $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
-            $customer->setWebsite($website)
-                ->setChannel($integration)
+            $customer->setWebsite($store->getWebsite())
+                ->setChannel($channel->getDataSource())
                 ->setStore($store)
                 ->setFirstName($contact->getFirstName())
                 ->setLastName($contact->getLastName())
@@ -489,12 +569,15 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setOriginId($i + 1)
                 ->setAccount($accounts[$buffer[$i]])
                 ->setContact($contact)
-                ->setOrganization($this->organization)
-                ->setOwner($this->getRandomOwner());
-            $customer->setDataChannel($this->dataChannel);
+                ->setOrganization($organization)
+                ->setOwner($this->getRandomOwner())
+                ->setDataChannel($channel);
 
             $om->persist($customer);
+            $customers[] = $customer;
         }
+
+        return $customers;
     }
 
     /**

@@ -23,6 +23,7 @@ datagrid:
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
+                    - c AS customerData
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -1302,6 +1303,7 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
+            skip_acl_apply: true
             query:
                 select:
                     - g.id
@@ -1335,6 +1337,7 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
+            skip_acl_apply: true
             query:
                 select:
                     - s.id
@@ -1396,6 +1399,7 @@ datagrid:
                     - newsletterSubscriber.createdAt
                     - newsletterSubscriber.updatedAt
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
+                    - newsletterSubscriber AS customerData
                 from:
                     - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
                 join:
@@ -1881,3 +1885,11 @@ datagrid:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
+
+    magento-customer-tracking-events-widget:
+        extended_entity_name: %oro_tracking.tracking_visit_event.class%
+        acl_resource: oro_tracking_website_view
+        extends: tracking-events-grid
+        # Source config field is modified in TrackingEventsDataGridListener to change
+        # the source table and add filter by customer identifiers
+        # source: ~

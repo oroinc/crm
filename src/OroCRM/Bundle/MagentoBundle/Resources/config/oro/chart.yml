@@ -104,3 +104,20 @@ oro_chart:
                 required: true
                 default_type: boolean
         template: OroChartBundle:Chart:flow.html.twig
+    website_chart:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.website_activity.chart.day
+                required: true
+                default_type: string
+                type: day
+                field_name: date
+            value:
+                name: value
+                label: orocrm.magento.website_activity.chart.event_count
+                required: true
+                default_type: integer
+                field_name: count
+        template: OroChartsBundle:Chart:bar.html.twig

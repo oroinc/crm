@@ -46,6 +46,14 @@ class CaseMailboxProcessSettingsTagType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'case_mailbox_process_settings_tag';
     }
 }
