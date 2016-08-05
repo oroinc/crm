@@ -19,5 +19,9 @@ class SetSkuColumnsOptionsToNull implements Migration
 
         $table = $schema->getTable('orocrm_magento_order_items');
         $table->getColumn('sku')->setOptions(['notnull' => false]);
+
+        $table = $schema->getTable('orocrm_magento_product');
+        $table->getColumn('sku')->setOptions(['notnull' => false]);
+        $table->dropIndex('unq_sku_channel_id');
     }
 }
