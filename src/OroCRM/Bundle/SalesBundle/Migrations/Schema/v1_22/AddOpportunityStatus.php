@@ -71,11 +71,11 @@ class AddOpportunityStatus implements
         self::addStatusField($schema, $this->extendExtension, $immutableCodes);
 
         $statuses = [
+            'in_progress' => 'In Progress',
             'identification_alignment' => 'Identification & Alignment',
             'needs_analysis' => 'Needs Analysis',
             'solution_development' => 'Solution Development',
             'negotiation' => 'Negotiation',
-            'in_progress' => 'In Progress',
             'won' => 'Closed Won',
             'lost' => 'Closed Lost',
         ];
