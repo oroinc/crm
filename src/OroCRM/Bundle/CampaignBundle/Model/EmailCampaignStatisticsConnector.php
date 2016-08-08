@@ -91,7 +91,9 @@ class EmailCampaignStatisticsConnector
         if ($marketingListItem->getId() !== null) {
             $statisticsRecord = $manager->getRepository($this->entityName)
                 ->findOneBy(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem]);
-        } elseif (!empty($this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash])) {
+        }
+
+        if (!empty($this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash])) {
             $statisticsRecord = $this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash];
         }
 
