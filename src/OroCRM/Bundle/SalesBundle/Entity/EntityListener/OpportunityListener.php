@@ -21,7 +21,9 @@ class OpportunityListener
         $unitOfWork   = $em->getUnitOfWork();
         $originalData = $unitOfWork->getOriginalEntityData($opportunity);
         $newStatusId  = $opportunity->getStatus()->getId();
+        $needRecompute = false;
         if ($originalData) {
+            $needRecompute = true;
             $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
             $entityChangeSet = $unitOfWork->getEntityChangeSet($opportunity);
 
@@ -31,7 +33,7 @@ class OpportunityListener
 
             /** @var AbstractEnumValue $oldStatus */
             $oldStatus   = $entityChangeSet['status'][0];
-            $oldStatusId = $oldStatus->getId();
+            $oldStatusId = $oldStatus ? $oldStatus->getId() : null;
 
         } else {
             $oldStatusId = null;
@@ -40,10 +42,14 @@ class OpportunityListener
         $valuableChanges = array_intersect([$oldStatusId, $newStatusId], $closedStatuses);
         if (in_array($newStatusId, $valuableChanges)) {
             $opportunity->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-            $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+            if ($needRecompute) {
+                $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+            }
         } elseif (in_array($oldStatusId, $valuableChanges)) {
             $opportunity->setClosedAt(null);
-            $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+            if ($needRecompute) {
+                $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+            }
         }
     }
 }
