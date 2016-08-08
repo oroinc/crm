@@ -40,9 +40,9 @@
                     {% set opportunityViewGranted = resource_granted('orocrm_sales_opportunity_view') %}
                     {%- for opportunity in entity.opportunities -%}
                         {%- if opportunityViewGranted -%}
-                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': opportunity.id}) }}">{{ opportunity }}</a>
+                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': opportunity.id}) }}">{{ UI.renderEntiViewLabel(opportunity, 'name', 'orocrm.sales.oportunity.entity_label') }}</a>
                         {%- else -%}
-                            {{ opportunity }}
+                            {{ UI.renderEntiViewLabel(opportunity, 'name') }}
                         {%- endif -%}
                         {% if not loop.last %}, {% endif %}
                     {%- endfor -%}
