@@ -46,7 +46,7 @@ class TrackingVisitProvider
 
         try {
             $qb
-                ->select('COUNT(DISTINCT t.userIdentifier)')
+                ->select('COUNT(t.userIdentifier)')
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
@@ -85,7 +85,7 @@ class TrackingVisitProvider
 
         try {
             $qb
-                ->select('COUNT(DISTINCT t.userIdentifier)')
+                ->select('COUNT(t.userIdentifier)')
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
