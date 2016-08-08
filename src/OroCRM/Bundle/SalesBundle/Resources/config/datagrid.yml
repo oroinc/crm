@@ -244,7 +244,7 @@ datagrid:
         appearances:
             board:
                 opportunity-by-status:
-                    label: Status Board
+                    label: Board
                     group_by:
                         property: status
                         order_by:
@@ -1230,7 +1230,7 @@ datagrid:
                 ownerName:
                     type: choice-tree
                     data_name: c.owner
-                    enabled: false                    
+                    enabled: false
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
