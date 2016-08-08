@@ -237,6 +237,8 @@ orocrm:
             customer.label:       Business Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
+            primary_phone.label:  Primary Phone
+            primary_email.label:  Primary Email
             source:
                 unclassified:     No source
                 others:           Others
