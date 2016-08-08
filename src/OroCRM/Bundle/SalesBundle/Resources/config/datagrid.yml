@@ -103,6 +103,36 @@ datagrid:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
+        fields_acl:
+            columns:
+                channelName:
+                    data_name: o.dataChannel
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                updatedAt:
+                    data_name: o.updatedAt
+                contactName:
+                    data_name: o.contact
+                customerName:
+                    data_name: o.customer
+                closeRevenue:
+                    data_name: o.closeRevenue
+                closeReasonLabel:
+                    data_name: o.closeReason
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                status:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
+                ownerName:
+                    data_name: o.owner
         properties:
             id: ~
             owner: ~
@@ -983,6 +1013,16 @@ datagrid:
                 frontend_type: percent
             primaryEmail:
                 label: orocrm.contact.email.label
+        fields_acl:
+            columns:
+                name:
+                    data_name: opportunity.name
+                contactName:
+                    data_name: opportunity.contact
+                probability:
+                    data_name: opportunity.probability
+                primaryEmail:
+                    data_name: opportunity.contact
         properties:
             id: ~
         sorters:
@@ -1573,7 +1613,22 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-
+        fields_acl:
+            columns:
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                statusLabel:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
         properties:
             id: ~
             view_link:
@@ -1789,6 +1844,18 @@ datagrid:
                 label:         orocrm.contact.email.label
             ownerName:
                 label:         orocrm.sales.opportunity.owner.label
+        fields_acl:
+            columns:
+                channelName:
+                    data_name: o.dataChannel
+                name:
+                    data_name: o.name
+                statusLabel:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
+                ownerName:
+                    data_name: o.owner
         sorters:
             columns:
                 channelName:
@@ -1933,6 +2000,18 @@ datagrid:
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+        fields_acl:
+            columns:
+                name:
+                    data_name: o.name
+                budgetAmount:
+                    data_name: o.budgetAmount
+                status:
+                    data_name: o.status
+                probability:
+                    data_name: o.probability
+                closeDate:
+                    data_name: o.closeDate
         options:
             entityHint: opportunities
             toolbarOptions:
