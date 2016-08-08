@@ -18,7 +18,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
- * @ORM\EntityListeners({"OroCRM\Bundle\SalesBundle\Entity\EntityListener\OpportunityListener"})
  * @ORM\Table(
  *      name="orocrm_sales_opportunity",
  *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
