@@ -43,6 +43,8 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
                 message: One of emails must be set as primary.
         organization:
             - NotBlank: ~
+        status:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
