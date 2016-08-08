@@ -18,6 +18,8 @@ UPGRADE FROM 1.9 to 1.10
 from `DateTime` which accepts a (int) duration in seconds.
 Updating Call `duration` field (API POST/PUT, Forms) now accepts strings with formats '*HH*:*MM*:*SS*', '*HH*h *MM*m *SS*s' or `(int)` seconds
 Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead of 'HH:MM:SS' formatted string
+- OroCRMCallBundle moved to a separate package
+- OroCRMCallBridgeBundle was added to integrate OroCRMCallBundle into CRM
 
 ####OroCRMTaskBundle:
 - OroCRMTaskBundle moved to a separate package
@@ -31,5 +33,5 @@ Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead o
 - Constructor for `OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider` was changed. New argument: `DateFilterProcessor $filterProcessor`
 - The constructor of the `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` class was changed.
     Before: `__construct(RegistryInterface $doctrine, NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, AclHelper $aclHelper, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper)`.
-    After: `__construct(NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper, ForecastProvider $provider)`.
+    After: `__construct(NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper, ForecastProvider $provider, FilterDateRangeConverter $filterDateRangeConverter)`.
 - The method `getForecastOfOpportunitiesValues` of `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` class was changed. Argument $getterName was changed to $dataKey.

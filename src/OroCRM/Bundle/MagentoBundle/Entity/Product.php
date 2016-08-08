@@ -16,9 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_product",
- *     uniqueConstraints={@ORM\UniqueConstraint(name="unq_sku_channel_id", columns={"sku", "channel_id"})}
- * )
+ * @ORM\Table(name="orocrm_magento_product")
  * @Config(
  *      defaultValues={
  *          "security"={
@@ -57,7 +55,7 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="sku", type="string", length=255, nullable=false)
+     * @ORM\Column(name="sku", type="string", length=255, nullable=true)
      * @Oro\Versioned
      */
     protected $sku;
