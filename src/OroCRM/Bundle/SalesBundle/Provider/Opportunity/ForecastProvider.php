@@ -185,7 +185,7 @@ HAVING
                 'closeDateField'        => 'closeDate',
                 'probabilityField'      => 'probability',
                 'budgetAmountField'     => 'budgetAmount',
-                'excludedProbabilities' => [0, 100],
+                'excludedProbabilities' => [0, 1],
                 'moment'                => $moment,
             ]);
 
@@ -222,7 +222,7 @@ HAVING
             function ($result, $row) {
                 $result['inProgressCount']++;
                 $result['budgetAmount'] += $row['budgetAmount'];
-                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'] / 100;
+                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'];
 
                 return $result;
             },
