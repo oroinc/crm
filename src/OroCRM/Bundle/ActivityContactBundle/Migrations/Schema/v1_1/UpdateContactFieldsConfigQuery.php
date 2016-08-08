@@ -35,7 +35,6 @@ class UpdateContactFieldsConfigQuery extends ParametrizedMigrationQuery
         $this->migrateConfigs($logger);
     }
 
-
     /**
      * @param LoggerInterface $logger
      * @param bool            $dryRun
