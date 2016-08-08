@@ -1,8 +1,15 @@
 oro_system_configuration:
     groups:
-        opportunity_configuration:
+        crm:
+            icon:  fa-users
+            title: orocrm.sales.system_configuration.groups.crm.title
+
+        sales_pipeline:
+            title: orocrm.sales.system_configuration.groups.sales_pipeline.title
+
+        opportunity:
             icon:  icon-usd
-            title: orocrm.sales.system_configuration.groups.opportunity_configuration.title
+            title: orocrm.sales.system_configuration.groups.opportunity.title
 
         opportunity_status_probabilities:
             title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
@@ -31,11 +38,11 @@ oro_system_configuration:
                     class: oro-clearfix
     tree:
         system_configuration:
-            platform:
+            crm:
                 children:
-                    general_setup:
+                    sales_pipeline:
                         children:
-                            opportunity_configuration:
+                            opportunity:
                                 children:
                                     opportunity_status_probabilities:
                                         children:

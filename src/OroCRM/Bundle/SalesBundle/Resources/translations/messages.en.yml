@@ -423,7 +423,9 @@ orocrm:
 
         system_configuration:
             groups:
-                opportunity_configuration.title:               Opportunity Configuration
+                crm.title: CRM
+                sales_pipeline.title: Sales Pipeline
+                opportunity.title: Opportunity
                 opportunity_status_probabilities:
                     title:          Probabilities
                     options.label:  Default probabilities for opportunity statuses
