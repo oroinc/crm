@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -11,7 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class LeadToOpportunityType
+class LeadToOpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_lead_to_opportunity';
 
