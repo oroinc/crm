@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
@@ -70,7 +71,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     }
 
     /**
-     * Get existing customer or existing guest customer
+     * Get existing registered customer or existing guest customer
      *
      * @param Order $order
      * @return null|Customer
@@ -78,21 +79,77 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function findExistingCustomer(Order $order)
     {
         $customer = $order->getCustomer();
-        $customerOriginId = $customer->getOriginId();
 
-        /** @var Customer|null $existingEntity */
-        if ($customer->getId() || $customerOriginId) {
-            $existingEntity = $this->findExistingEntity($customer);
-        } else {
-            $existingEntity = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+        if ($customer instanceof Customer) {
+            $customerOriginId = $customer->getOriginId();
+
+            // Find from existing registered customers
+            /** @var Customer|null $existingEntity */
+            $existingEntity = null;
+            if ($customer->getId() || $customerOriginId) {
+                $existingEntity = parent::findExistingEntity($customer);
+            }
+
+            if (!$existingEntity) {
+                $searchContext = $this->getSearchContext($order);
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    $searchContext
+                );
+            }
+
+            return $existingEntity;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get search context for Guest customer by email, channel and website if exists
+     *
+     * @param Order $order
+     * @return array
+     */
+    protected function getSearchContext(Order $order)
+    {
+        $customer = $order->getCustomer();
+        $searchContext = [
+            'email' => $order->getCustomerEmail(),
+            'channel' => $customer->getChannel()
+        ];
+
+        if ($customer->getWebsite()) {
+            $website = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Website',
                 [
-                    'email' => $order->getCustomerEmail(),
+                    'originId' => $customer->getWebsite()->getOriginId(),
                     'channel' => $customer->getChannel()
                 ]
             );
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
         }
 
-        return $existingEntity;
+        return $searchContext;
+    }
+
+    /**
+     * Get existing entity
+     * As guest customer entity not exist in Magento as separate entity and saved in order
+     * find guest by customer email
+     *
+     * @param object $entity
+     * @param array $searchContext
+     * @return null|object
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        if ($entity instanceof Customer && (!$entity->getOriginId() && $this->existingEntity)) {
+            $existingEntity = $this->findExistingCustomer($this->existingEntity);
+            return $existingEntity;
+        }
+
+        return parent::findExistingEntity($entity, $searchContext);
     }
 }
