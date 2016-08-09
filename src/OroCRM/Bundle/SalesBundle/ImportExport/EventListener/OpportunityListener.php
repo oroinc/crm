@@ -3,22 +3,21 @@
 namespace OroCRM\Bundle\SalesBundle\ImportExport\EventListener;
 
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 
 class OpportunityListener
 {
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var OpportunityRelationsBuilder */
+    protected $relationsBuilder;
 
     /**
-     * @param SecurityFacade $securityFacade
+     * @param OpportunityRelationsBuilder $relationsBuilder
      */
-    public function __construct(SecurityFacade $securityFacade)
+    public function __construct(OpportunityRelationsBuilder $relationsBuilder)
     {
-        $this->securityFacade = $securityFacade;
+        $this->relationsBuilder = $relationsBuilder;
     }
 
     /**
@@ -28,8 +27,7 @@ class OpportunityListener
     {
         $entity = $event->getEntity();
         if ($entity instanceof Opportunity) {
-            $relationsBuilder = new OpportunityRelationsBuilder($this->securityFacade, $entity);
-            $relationsBuilder->buildAll();
+            $this->relationsBuilder->buildAll($entity);
         }
     }
 }

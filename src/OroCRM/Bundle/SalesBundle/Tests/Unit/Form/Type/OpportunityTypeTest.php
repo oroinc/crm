@@ -14,6 +14,7 @@ use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType;
 use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
@@ -127,7 +128,12 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $enumProvider = new EnumValueProvider($doctrineHelper);
         $helper = $this->getEnumTypeHelperMock();
 
-        return new OpportunityType($probabilityProvider, $enumProvider, $helper, $this->securityFacade);
+        return new OpportunityType(
+            $probabilityProvider,
+            $enumProvider,
+            $helper,
+            new OpportunityRelationsBuilder($this->securityFacade)
+        );
     }
 
     /**

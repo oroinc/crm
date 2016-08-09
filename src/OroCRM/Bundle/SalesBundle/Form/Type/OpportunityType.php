@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
@@ -31,25 +30,25 @@ class OpportunityType extends AbstractType
     /** @var EnumTypeHelper */
     protected $typeHelper;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var OpportunityRelationsBuilder */
+    protected $relationsBuilder;
 
     /**
-     * @param ProbabilityProvider $probabilityProvider
-     * @param EnumValueProvider   $enumValueProvider
-     * @param EnumTypeHelper      $typeHelper
-     * @param SecurityFacade      $securityFacade
+     * @param ProbabilityProvider         $probabilityProvider
+     * @param EnumValueProvider           $enumValueProvider
+     * @param EnumTypeHelper              $typeHelper
+     * @param OpportunityRelationsBuilder $relationsBuilder
      */
     public function __construct(
         ProbabilityProvider $probabilityProvider,
         EnumValueProvider $enumValueProvider,
         EnumTypeHelper $typeHelper,
-        SecurityFacade $securityFacade
+        OpportunityRelationsBuilder $relationsBuilder
     ) {
         $this->probabilityProvider = $probabilityProvider;
         $this->enumValueProvider   = $enumValueProvider;
         $this->typeHelper          = $typeHelper;
-        $this->securityFacade      = $securityFacade;
+        $this->relationsBuilder    = $relationsBuilder;
     }
 
     /**
@@ -227,8 +226,7 @@ class OpportunityType extends AbstractType
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $relationsBuilder = new OpportunityRelationsBuilder($this->securityFacade, $event->getData());
-                $relationsBuilder->buildAll();
+                $this->relationsBuilder->buildAll($event->getData());
             }
         );
     }
@@ -240,7 +238,7 @@ class OpportunityType extends AbstractType
      */
     private function getDefaultStatus()
     {
-        $enumCode = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
+        $enumCode        = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
         $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
 
         return reset($defaultStatuses);
