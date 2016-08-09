@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
@@ -17,6 +19,11 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
      * @var ChannelRepository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $repo;
+
+    /**
+     * @var AclHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $aclHelper;
 
     protected function setUp()
     {
@@ -36,7 +43,14 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
             ->with('OroCRMChannelBundle:Channel')
             ->willReturn($this->repo);
 
-        $this->provider = new ChannelsByEntitiesProvider($doctrineHelper);
+        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->aclHelper->expects($this->any())
+            ->method('apply')
+            ->will($this->returnArgument(0));
+
+        $this->provider = new ChannelsByEntitiesProvider($doctrineHelper, $this->aclHelper);
     }
 
     public function testGetChannelsByEntities()
@@ -76,9 +90,9 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getChannelsByEntities')
             ->with()
             ->willReturnMap([
-                [['Entity1', 'Entity2'], true, $channelsForParams1],
-                [['Entity1'], true, $channelsForParams2],
-                [['Entity1', 'Entity2'], false, $channelsForParams3]
+                [['Entity1', 'Entity2'], true, $this->aclHelper, $channelsForParams1],
+                [['Entity1'], true, $this->aclHelper, $channelsForParams2],
+                [['Entity1', 'Entity2'], false, $this->aclHelper, $channelsForParams3]
 
             ]);
         foreach ($data as $item) {
