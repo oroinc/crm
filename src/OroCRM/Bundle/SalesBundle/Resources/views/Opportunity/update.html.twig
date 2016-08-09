@@ -1,5 +1,11 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% set name = entity.name|default('N/A') %}
+{% set name = 'N/A' %}
+{% if entity.name %}
+    {% set name = resource_granted('VIEW', entity, 'name')
+        ? entity.name|default('N/A')
+        : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.sales.opportunity.name.label'|trans})
+    %}
+{% endif %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 
 {% set pageComponent = {
@@ -53,6 +59,13 @@
 
 {% block pageHeader %}
     {% if form.vars.value.id %}
+        {% set name = 'N/A' %}
+        {% if entity.name %}
+            {% set name = resource_granted('VIEW', entity, 'name')
+                ? entity.name|default('N/A')
+                : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.sales.opportunity.name.label'|trans}))
+            %}
+        {% endif %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_opportunity_index'),
@@ -67,8 +80,12 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {% if  resource_granted('VIEW', entity, 'createdAt') %}
+        <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    {% endif %}
+    {% if  resource_granted('VIEW', entity, 'updatedAt') %}
+        <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {% endif %}
 {% endblock stats %}
 
 {% block breadcrumbs %}

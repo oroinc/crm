@@ -34,6 +34,9 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
     protected function isChannelApplicable(ResultRecordInterface $record, $checkExtension = true)
     {
         $channelId = $record->getValue(self::CHANNEL_KEY);
+        if (!$channelId) {
+            return false;
+        }
 
         return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
     }

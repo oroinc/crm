@@ -81,6 +81,7 @@ services:
 
     orocrm_sales.lead_to_opportunity.form.type:
         class: %orocrm_sales.lead_to_opportunity.form.type.class%
+        parent: orocrm_sales.opportunity.form.type
         tags:
             - { name: form.type, alias: orocrm_sales_lead_to_opportunity }
 
