@@ -71,6 +71,9 @@ class Opportunity extends ExtendOpportunity implements
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
+    const STATUS_LOST = 'lost';
+    const STATUS_WON  = 'won';
+
     /**
      * The key in system config for probability - status map
      */

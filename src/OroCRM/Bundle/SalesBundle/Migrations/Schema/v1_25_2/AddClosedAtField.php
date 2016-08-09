@@ -7,8 +7,6 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-use OroCRM\Bundle\SalesBundle\Migration\FillClosedAtField;
-
 class AddClosedAtField implements Migration
 {
     public function up(Schema $schema, QueryBag $queries)
