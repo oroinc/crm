@@ -83,7 +83,7 @@ class ChannelRepository extends EntityRepository
         $status = Channel::STATUS_ACTIVE,
         AclHelper $aclHelper = null
     ) {
-        $query = $this->getChannelsByEntitiesQB($entities, $status, $aclHelper)->getQuery();
+        $query = $this->getChannelsByEntitiesQB($entities, $status)->getQuery();
 
         if ($aclHelper) {
             return $aclHelper->apply($query)->getResult();
