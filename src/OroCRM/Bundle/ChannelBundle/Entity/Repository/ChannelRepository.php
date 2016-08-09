@@ -72,14 +72,24 @@ class ChannelRepository extends EntityRepository
     }
 
     /**
-     * @param array $entities
-     * @param bool  $status
+     * @param array     $entities
+     * @param bool      $status
+     * @param AclHelper $aclHelper
      *
      * @return array
      */
-    public function getChannelsByEntities(array $entities = [], $status = Channel::STATUS_ACTIVE)
-    {
-        return $this->getChannelsByEntitiesQB($entities, $status)->getQuery()->getResult();
+    public function getChannelsByEntities(
+        array $entities = [],
+        $status = Channel::STATUS_ACTIVE,
+        AclHelper $aclHelper = null
+    ) {
+        $query = $this->getChannelsByEntitiesQB($entities, $status, $aclHelper)->getQuery();
+
+        if ($aclHelper) {
+            return $aclHelper->apply($query)->getResult();
+        }
+
+        return $query->getResult();
     }
 
     /**
