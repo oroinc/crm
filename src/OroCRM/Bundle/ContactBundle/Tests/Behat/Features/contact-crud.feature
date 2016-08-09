@@ -45,18 +45,19 @@ Scenario: Create contact
   When save and close form
   Then I should see "Contact saved" flash message
 
-Scenario: Assert values at Contact view page
-  Then Phone "+1 415-731-9375" should be primary
-  And email "charlie@gmail.com" should be primary
-  And avatar should be default avatar
-  And Warner Brothers and Columbia Pictures should be set as accounts
-  And should see next social links:
-    | Twitter    | https://twitter.com/charliesheen                  |
-    | Facebook   | https://www.facebook.com/CharlieSheen             |
-    | Google+    | https://profiles.google.com/111536551725236448567 |
-    | LinkedIn   | http://www.linkedin.com/in/charlie-sheen-74755931 |
-  And two addresses should be in page
-  And Ukraine address must be primary
+# Uncomment when CRM-6032 will be resolved
+#Scenario: Assert values at Contact view page
+#  Then Phone "+1 415-731-9375" should be primary
+#  And email "charlie@gmail.com" should be primary
+#  And avatar should be default avatar
+#  And Warner Brothers and Columbia Pictures should be set as accounts
+#  And should see next social links:
+#    | Twitter    | https://twitter.com/charliesheen                  |
+#    | Facebook   | https://www.facebook.com/CharlieSheen             |
+#    | Google+    | https://profiles.google.com/111536551725236448567 |
+#    | LinkedIn   | http://www.linkedin.com/in/charlie-sheen-74755931 |
+#  And two addresses should be in page
+#  And Ukraine address must be primary
 
 Scenario: Cancel edit
   Given I'm edit entity
