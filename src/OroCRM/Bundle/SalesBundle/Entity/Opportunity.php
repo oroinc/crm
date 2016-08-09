@@ -41,7 +41,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"="",
- *              "category"="sales_data"
+ *              "category"="sales_data",
+ *              "field_acl_supported" = "true"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",

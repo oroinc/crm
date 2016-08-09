@@ -1,7 +1,7 @@
 {% set entityClassName = oro_class_name(entity, true) %}
 
 <div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="activity-contact-info-title">
-    {{ _self.last_contacted_time(data) }}
+    {{ _self.last_contacted_time(data, entity) }}
 </div>
 
 <script type="text/javascript">
@@ -42,7 +42,7 @@
     });
 </script>
 
-{% macro last_contacted_time(data) %}
+{% macro last_contacted_time(data, entity) %}
     {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
 
     {% set last_contact_date_key     = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
@@ -51,17 +51,22 @@
     {% set contact_count_key         = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
 
     {% if data[contact_count_key] is defined and data[contact_count_key] > 0 %}
-        {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
+        {% set last_datetime = '' %}
+        {% if  resource_granted('VIEW', entity, last_contact_date_key) %}
+            {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
+        {% endif %}
         {% set direction     = '<i class="icon-sign'
             ~ ( data[last_contact_date_in_key] >= data[last_contact_date_out_key] ? 'in' : 'out' )
             ~ '"></i>'
         %}
     <ul class="inline">
-        <li>
-        {{ 'orocrm.activity_contact.info_title_times'|trans({
-            '{{ total_contacted }}': data[contact_count_key]|default(0)
-        })|raw }}
-        </li>
+        {% if  resource_granted('VIEW', entity, contact_count_key) %}
+            <li>
+            {{ 'orocrm.activity_contact.info_title_times'|trans({
+                '{{ total_contacted }}': data[contact_count_key]|default(0)
+            })|raw }}
+            </li>
+        {% endif %}
         <li style="padding-right:0">
         {{ 'orocrm.activity_contact.info_title_last'|trans({
             '{{ direction }}': direction,
