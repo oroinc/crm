@@ -199,7 +199,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $this->assertNull($strategy->process($order));
     }
 
-    public function testProcessOrderWithNotExistingGuestCustomer()
+    public function testProcessOrderWithNewGuestCustomer()
     {
         $customer = new Customer();
         $customer->setGuest(true);
