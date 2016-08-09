@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,9 +10,6 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -1086,19 +1082,6 @@ class Lead extends ExtendLead implements
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
-            $defaultStatus = $em->getReference($enumStatusClass, 'new');
-            $this->setStatus($defaultStatus);
-        }
     }
 
     /**
