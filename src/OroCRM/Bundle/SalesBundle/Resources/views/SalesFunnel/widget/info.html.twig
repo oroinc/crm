@@ -25,7 +25,7 @@
                     entity.opportunity.name)
                 %}
             {%- else -%}
-                {% set opportunityView = UI.renderEntiViewLabel(entity.opportunity, 'name', 'orocrm.sales.oportunity.entity_label') %}
+                {% set opportunityView = ui.renderEntityViewLabel(entity.opportunity, 'name', 'orocrm.sales.oportunity.entity_label') %}
             {%- endif -%}
             {{ ui.renderHtmlProperty('orocrm.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
         </div>
