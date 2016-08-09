@@ -20,9 +20,9 @@
 
             {% if entity.opportunity %}
                 {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
-                    {% set opportunityView = ui.renderUrl(path('orocrm_sales_opportunity_view', {'id': entity.opportunity.id}), UI.renderEntiViewLabel(entity.opportunity, 'name', 'orocrm.sales.oportunity.entity_label')) %}
+                    {% set opportunityView = ui.renderUrl(path('orocrm_sales_opportunity_view', {'id': entity.opportunity.id}), ui.renderEntityViewLabel(entity.opportunity, 'name', 'orocrm.sales.oportunity.entity_label')) %}
                 {%- else -%}
-                    {% set opportunityView = UI.renderEntiViewLabel(entity.opportunity, 'name') %}
+                    {% set opportunityView = ui.renderEntityViewLabel(entity.opportunity, 'name') %}
                 {%- endif -%}
 
                 {{ ui.renderHtmlProperty('orocrm.magento.cart.opportunity.label'|trans, opportunityView) }}
