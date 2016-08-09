@@ -49,7 +49,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ],
         self::LAST_CONTACT_DATE_IN  => [
@@ -69,7 +70,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ],
         self::LAST_CONTACT_DATE_OUT => [
@@ -89,7 +91,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ],
         self::CONTACT_COUNT         => [
@@ -109,7 +112,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ],
         self::CONTACT_COUNT_IN      => [
@@ -129,7 +133,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ],
         self::CONTACT_COUNT_OUT     => [
@@ -149,7 +154,8 @@ class ActivityScope
                 'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
-                'importexport' => ['excluded' => true]
+                'importexport' => ['excluded' => true],
+                'security'     => ['permissions' => 'VIEW']
             ]
         ]
     ];
