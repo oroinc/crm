@@ -36,10 +36,16 @@ class OpportunityListener
                 $valuableChanges = array_intersect([$oldStatusId, $newStatusId], $closedStatuses);
                 if (in_array($newStatusId, $valuableChanges)) {
                     $opportunity->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-                    $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+                    $unitOfWork->recomputeSingleEntityChangeSet(
+                        $em->getClassMetadata(Opportunity::class),
+                        $opportunity
+                    );
                 } elseif (in_array($oldStatusId, $valuableChanges)) {
                     $opportunity->setClosedAt(null);
-                    $unitOfWork->recomputeSingleEntityChangeSet($em->getClassMetadata(Opportunity::class), $opportunity);
+                    $unitOfWork->recomputeSingleEntityChangeSet(
+                        $em->getClassMetadata(Opportunity::class),
+                        $opportunity
+                    );
 
                 }
             }
