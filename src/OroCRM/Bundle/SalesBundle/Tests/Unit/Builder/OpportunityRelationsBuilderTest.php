@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Builder;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -13,6 +15,18 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|SecurityFacade
+     */
+    protected $securityFacade;
+
+    protected function setUp()
+    {
+        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     public function testShouldSetCustomerDataChannel()
     {
         $channel = new Channel();
@@ -21,7 +35,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setDataChannel($channel);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertSame($channel, $customer->getDataChannel());
@@ -29,12 +43,17 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldCreateCustomerAccount()
     {
+        $this->securityFacade->expects($this->once())
+            ->method('isGranted')
+            ->with('CREATE', 'Entity:OroCRM\Bundle\AccountBundle\Entity\Account')
+            ->willReturn(true);
+
         $customer = new B2bCustomer();
         $customer->setName('John Doe');
         $opportunity = new Opportunity();
         $opportunity->setCustomer($customer);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertNotNull($customer->getAccount());
@@ -49,7 +68,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setOrganization($organization);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertSame($organization, $customer->getOrganization());
@@ -71,7 +90,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setContact($opportunityContact);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertSame($opportunityContact, $customer->getContact());
@@ -96,7 +115,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setContact($opportunityContact);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertSame($customerContact, $customer->getContact());
@@ -113,7 +132,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setContact($opportunityContact);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildCustomer();
 
         $this->assertNull($customer->getContact());
@@ -139,7 +158,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunity->setCustomer($customer);
         $opportunity->setContact($contact);
 
-        $builder = new OpportunityRelationsBuilder($opportunity);
+        $builder = new OpportunityRelationsBuilder($this->securityFacade, $opportunity);
         $builder->buildAccount();
 
         $this->assertTrue($account->getContacts()->contains($contact));
