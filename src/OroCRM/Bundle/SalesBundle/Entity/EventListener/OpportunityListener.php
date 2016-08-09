@@ -7,7 +7,6 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 class OpportunityListener
 {
@@ -32,21 +31,20 @@ class OpportunityListener
                 $oldStatus       = $entityChangeSet['status'][0];
                 $oldStatusId     = $oldStatus ? $oldStatus->getId() : null;
                 $newStatusId     = $opportunity->getStatus() ? $opportunity->getStatus()->getId() : null;
-                $closedStatuses  = [OpportunityStatus::STATUS_LOST, OpportunityStatus::STATUS_WON];
+                $closedStatuses  = [Opportunity::STATUS_LOST, Opportunity::STATUS_WON];
                 $valuableChanges = array_intersect([$oldStatusId, $newStatusId], $closedStatuses);
-                if (in_array($newStatusId, $valuableChanges)) {
+                if (in_array($newStatusId, $valuableChanges, true)) {
                     $opportunity->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
                     $unitOfWork->recomputeSingleEntityChangeSet(
                         $em->getClassMetadata(Opportunity::class),
                         $opportunity
                     );
-                } elseif (in_array($oldStatusId, $valuableChanges)) {
+                } elseif (in_array($oldStatusId, $valuableChanges, true)) {
                     $opportunity->setClosedAt(null);
                     $unitOfWork->recomputeSingleEntityChangeSet(
                         $em->getClassMetadata(Opportunity::class),
                         $opportunity
                     );
-
                 }
             }
         }

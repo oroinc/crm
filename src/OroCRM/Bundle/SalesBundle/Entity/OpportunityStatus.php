@@ -8,6 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
+ * @deprecated since 1.10. Enum type is used instead.
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opport_status")
  * @Config(
@@ -20,9 +21,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  */
 class OpportunityStatus
 {
-    const STATUS_LOST        = 'lost';
-    const STATUS_WON         = 'won';
-
     /**
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id

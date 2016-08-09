@@ -172,7 +172,7 @@ orocrm:
             assigned.label:       Assigned
             created_at.label:     Created At
             updated_at.label:     Updated At
-            closed_at.label:        Closed At
+            closed_at.label:      Closed At
             workflow:
                 close_date.label: Close date
             datagrid:
