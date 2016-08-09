@@ -21,10 +21,6 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
         }
 
         foreach ($this->properties as $property) {
-            if ($property === 'account.name') {
-                continue;
-            }
-
             if ($property === 'name') {
                 $result[$property] = $this->getCustomerName($item);
             } else {
