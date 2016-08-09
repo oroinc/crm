@@ -110,22 +110,12 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
         /** @var FormBuilder|\PHPUnit_Framework_MockObject_MockObject $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
-            ->setMethods(['add', 'remove', 'addEventListener'])
+            ->setMethods(['addEventListener'])
             ->getMock();
         $builder
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(1))
             ->method('addEventListener')
             ->will($this->returnSelf());
-
-        $counter = 0;
-        foreach ($fields as $fieldName => $formType) {
-            $builder
-                ->expects($this->at($counter))
-                ->method('add')
-                ->with($fieldName, $formType)
-                ->will($this->returnSelf());
-            $counter++;
-        }
 
         $this->type->buildForm($builder, []);
     }

@@ -2,20 +2,27 @@
 
 namespace OroCRM\Bundle\SalesBundle\Builder;
 
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRelationsBuilder
 {
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
     /** @var Opportunity $opportunity */
-    private $opportunity;
+    protected $opportunity;
 
     /**
-     * @param Opportunity $opportunity
+     * @param SecurityFacade $securityFacade
+     * @param Opportunity    $opportunity
      */
-    public function __construct(Opportunity $opportunity)
+    public function __construct(SecurityFacade $securityFacade, Opportunity $opportunity)
     {
-        $this->opportunity = $opportunity;
+        $this->securityFacade = $securityFacade;
+        $this->opportunity    = $opportunity;
     }
     
     public function buildAll()
@@ -37,10 +44,12 @@ class OpportunityRelationsBuilder
         }
 
         if (!$customer->getAccount()) {
-            // new Account for new B2bCustomer
-            $account = new Account();
-            $account->setName($customer->getName());
-            $customer->setAccount($account);
+            if ($this->securityFacade->isGranted('CREATE', sprintf('Entity:%s', Account::class))) {
+                // new Account for new B2bCustomer
+                $account = new Account();
+                $account->setName($customer->getName());
+                $customer->setAccount($account);
+            }
         }
 
         if (!$customer->getOrganization()) {

@@ -271,6 +271,8 @@ services:
 
     orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
+        arguments:
+            - '@oro_security.security_facade'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 
