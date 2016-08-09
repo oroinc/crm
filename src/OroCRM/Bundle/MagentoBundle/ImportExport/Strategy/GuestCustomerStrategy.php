@@ -145,7 +145,10 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', true)
             && empty($identityValues['originId'])
         ) {
-            $identityValues['email'] = $this->context->getOption('email');
+            $data = $this->context->getValue('itemData');
+            if (isset($data['email'])) {
+                $identityValues['email'] = $data['email'];
+            }
         }
 
         return parent::findEntityByIdentityValues($entityName, $identityValues);
