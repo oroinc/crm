@@ -1097,19 +1097,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
-            $defaultStatus = $em->getReference($enumStatusClass, 'new');
-            $this->setStatus($defaultStatus);
-        }
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
