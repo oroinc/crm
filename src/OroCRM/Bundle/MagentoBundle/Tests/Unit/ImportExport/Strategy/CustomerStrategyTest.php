@@ -78,7 +78,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
                         [
                             'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                             [
-                                'email' => $customerEmail,
+                                'email'   => $customerEmail,
                                 'channel' => $channel,
                                 'website' => $website
                             ],
