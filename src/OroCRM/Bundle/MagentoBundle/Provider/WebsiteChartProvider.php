@@ -10,6 +10,7 @@ use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
 
 use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Provide chart view instance with tracking events data sorted by date.
@@ -26,6 +27,15 @@ abstract class WebsiteChartProvider
      */
     const COLOR_SHADE_PERCENT = 0.2;
 
+    /**
+     * @var array Map of events to legend labels
+     */
+    public static $legendLabelsMap = [
+        TCI::EVENT_CART_ITEM_ADDED => 'orocrm.magento.website_activity.chart.legend.event_cart_item_added',
+        TCI::EVENT_CHECKOUT_STARTED => 'orocrm.magento.website_activity.chart.legend.event_checkout_started',
+        TCI::EVENT_VISIT => 'orocrm.magento.website_activity.chart.legend.event_visit',
+    ];
+
     /** @var TrackingVisitEventProvider */
     protected $visitEventProvider;
 
@@ -35,19 +45,25 @@ abstract class WebsiteChartProvider
     /** @var Container */
     protected $container;
 
+    /** @var TranslatorInterface */
+    protected $translator;
+
     /**
      * @param TrackingVisitEventProvider $visitEventProvider
      * @param ConfigProvider $configProvider
      * @param Container $container
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         TrackingVisitEventProvider $visitEventProvider,
         ConfigProvider $configProvider,
-        Container $container
+        Container $container,
+        TranslatorInterface $translator
     ) {
         $this->visitEventProvider = $visitEventProvider;
         $this->configProvider = $configProvider;
         $this->container = $container;
+        $this->translator = $translator;
     }
 
     /**
@@ -112,6 +128,18 @@ abstract class WebsiteChartProvider
             TCI::EVENT_CHECKOUT_STARTED,
             TCI::EVENT_VISIT,
         ];
+    }
+
+    /**
+     * Get translated legend data group name from the event name
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getLegendLabel($name)
+    {
+        return $this->translator->trans(isset(self::$legendLabelsMap[$name]) ? self::$legendLabelsMap[$name] : $name);
     }
 
     /**
