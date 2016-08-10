@@ -185,4 +185,42 @@ class OrderStrategy extends AbstractImportStrategy
 
         return $existingEntity;
     }
+
+    /**
+     * Add special identifier for entities not existing in Magento
+     * Add customer Email to search context for processing related entity Guest Customer for Order
+     *
+     * @param string $entityName
+     * @param array $identityValues
+     * @return null|object
+     */
+    protected function findEntityByIdentityValues($entityName, array $identityValues)
+    {
+        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', true)
+            && empty($identityValues['originId'])
+            && $this->existingEntity
+        ) {
+            $identityValues['email'] = $this->existingEntity->getCustomerEmail();
+        }
+
+        return parent::findEntityByIdentityValues($entityName, $identityValues);
+    }
+
+    /**
+     * Add special search context for entities not existing in Magento
+     * Add customer Email to search context for Order related entity Guest Customer
+     *
+     * @param object $entity
+     * @param string $entityClass
+     * @param array $searchContext
+     * @return array|null
+     */
+    protected function combineIdentityValues($entity, $entityClass, array $searchContext)
+    {
+        if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
+            $searchContext['email'] = $this->existingEntity->getCustomerEmail();
+        }
+
+        return parent::combineIdentityValues($entity, $entityClass, $searchContext);
+    }
 }

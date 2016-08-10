@@ -37,7 +37,14 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * {@inheritdoc}
+     * Specify channel as identity field
+     *
+     * For local entities created from not existing in Magento entities (as guest customer - without originId)
+     * should be specified additional identities in appropriate strategy
+     *
+     * @param string $entityName
+     * @param array $identityValues
+     * @return null|object
      */
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
@@ -49,7 +56,16 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * {@inheritdoc}
+     * Combine channel with identity values for entity search on local new entities storage
+     *
+     * For local entities created from not existing in Magento entities (as guest customer - without originId)
+     * should be configured special identity fields or search context in appropriate strategy
+     *
+     * @param       $entity
+     * @param       $entityClass
+     * @param array $searchContext
+     *
+     * @return array|null
      */
     protected function combineIdentityValues($entity, $entityClass, array $searchContext)
     {
