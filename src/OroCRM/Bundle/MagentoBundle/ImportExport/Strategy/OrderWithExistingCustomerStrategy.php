@@ -81,12 +81,10 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         $customer = $order->getCustomer();
 
         if ($customer instanceof Customer) {
-            $customerOriginId = $customer->getOriginId();
-
             // Find from existing registered customers
             /** @var Customer|null $existingEntity */
             $existingEntity = null;
-            if ($customer->getId() || $customerOriginId) {
+            if ($customer->getId() || $customer->getOriginId()) {
                 $existingEntity = parent::findExistingEntity($customer);
             }
 
@@ -146,8 +144,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function findExistingEntity($entity, array $searchContext = [])
     {
         if ($entity instanceof Customer && (!$entity->getOriginId() && $this->existingEntity)) {
-            $existingEntity = $this->findExistingCustomer($this->existingEntity);
-            return $existingEntity;
+            return $this->findExistingCustomer($this->existingEntity);
         }
 
         return parent::findExistingEntity($entity, $searchContext);
