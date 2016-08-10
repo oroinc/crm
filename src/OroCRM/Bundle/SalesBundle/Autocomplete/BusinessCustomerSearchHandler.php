@@ -59,7 +59,7 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $this->entityRepository->createQueryBuilder('c');
         $queryBuilder->select('c', 'account');
-        $queryBuilder->leftJoin('c.account', 'account');
+        $queryBuilder->innerJoin('c.account', 'account');
         $queryBuilder->where($queryBuilder->expr()->in('c.' . $this->idFieldName, $entityIds));
 
         return $queryBuilder->getQuery()->getResult();
