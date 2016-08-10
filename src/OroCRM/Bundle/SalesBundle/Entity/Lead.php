@@ -86,7 +86,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    EmailOwnerInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
@@ -1400,22 +1399,6 @@ class Lead extends ExtendLead implements
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
-    {
-        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailFields()
-    {
-        return null;
     }
 
     /**
