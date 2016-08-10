@@ -51,14 +51,10 @@ orocrm:
 
         contact:
             name:                   Contact name
+            first_name:             Contact first name
+            last_name:              Contact last name
             email:                  Contact email
             phone:                  Contact phone
-
-        primary_contact:
-            first_name.label:       Contact First Name
-            last_name.label:        Contact Last Name
-            email.label:            Contact Email
-            phone.label:            Contact Phone
 
         organization:
             label: Organization
