@@ -1590,14 +1590,14 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
-                    - status.name as statusLabel
+                    - s.id as status
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
-                        - { join: o.status, alias: status }
+                        - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         filters:
             columns:
@@ -1616,14 +1616,10 @@ datagrid:
                 probability:
                     type: percent
                     data_name: o.probability
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            multiple: true
+                status:
+                    type:      enum
+                    data_name: status
+                    enum_code: opportunity_status
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -1639,8 +1635,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: o.status
+                status:
+                    data_name: status
                 primaryEmail:
                     data_name: o.contact
         properties:
@@ -1702,8 +1698,10 @@ datagrid:
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         orocrm.contact.email.label
         sorters:
@@ -1718,8 +1716,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: status.label
+                status:
+                    data_name: status
                 primaryEmail:
                     data_name: email.email
             default:
@@ -1832,7 +1830,7 @@ datagrid:
                     - o.id
                     - o.name
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
-                    - status.name as statusLabel
+                    - s.id as status
                     - email.email as primaryEmail
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
@@ -1841,7 +1839,7 @@ datagrid:
                 join:
                     left:
                         - { join: o.contact , alias: contact }
-                        - { join: o.status, alias: status }
+                        - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
@@ -1852,8 +1850,10 @@ datagrid:
                 label:         orocrm.sales.opportunity.data_channel.label
             name:
                 label:         orocrm.sales.opportunity.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         orocrm.contact.email.label
             ownerName:
@@ -1876,8 +1876,8 @@ datagrid:
                     data_name: channelName
                 name:
                     data_name: o.name
-                statusLabel:
-                    data_name: status.label
+                status:
+                    data_name: status
                 primaryEmail:
                     data_name: email.email
                 ownerName:
@@ -1897,15 +1897,10 @@ datagrid:
                 name:
                     type: string
                     data_name: o.name
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            translatable_options: false
-                            multiple: true
+                status:
+                    type:      enum
+                    data_name: status
+                    enum_code: opportunity_status
                 primaryEmail:
                     type: string
                     data_name: email.email
