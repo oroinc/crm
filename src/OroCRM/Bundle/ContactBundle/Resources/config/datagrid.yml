@@ -594,13 +594,13 @@ datagrid:
             name:
                 label:         orocrm.account.name.label
             contactFirstName:
-                label:         orocrm.contact.first_name.label
+                label:         orocrm.account.primary_contact.first_name.label
             contactLastName:
-                label:         orocrm.contact.last_name.label
+                label:         orocrm.account.primary_contact.last_name.label
             contactEmail:
-                label:         orocrm.contact.contactemail.email.label
+                label:         orocrm.account.primary_contact.email.label
             contactPhone:
-                label:         orocrm.contact.contactphone.phone.label
+                label:         orocrm.account.primary_contact.phone.label
                 frontend_type: phone
             ownerName:
                 label:         orocrm.contact.owner.label
