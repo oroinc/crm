@@ -371,6 +371,7 @@ services:
         class: OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider
         arguments:
             - '@oro_entity.doctrine_helper'
+            - '@oro_security.acl_helper'
 
     orocrm_channel.form.extension.single_channel_mode:
         class: OroCRM\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension

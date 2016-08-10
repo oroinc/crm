@@ -11,6 +11,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
@@ -86,6 +87,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
     protected $translator;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     */
+    protected $doctrineHelper;
+
+    /**
      * @var NewEntitiesHelper
      */
     protected $newEntitiesHelper;
@@ -149,6 +155,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
         $this->translator = $this->getMockBuilder('Symfony\Component\Translation\TranslatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->newEntitiesHelper = new NewEntitiesHelper();
         $this->logger = new NullLogger();
     }
@@ -167,6 +178,7 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             $this->logger,
             $this->channelHelper,
             $this->addressHelper,
+            $this->doctrineHelper,
             $this->newEntitiesHelper
         );
     }

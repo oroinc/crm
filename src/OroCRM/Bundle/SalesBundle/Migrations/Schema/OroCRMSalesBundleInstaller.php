@@ -666,11 +666,11 @@ class OroCRMSalesBundleInstaller implements
         AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $immutableCodes);
 
         $statuses = [
+            'in_progress' => 'Open',
             'identification_alignment' => 'Identification & Alignment',
             'needs_analysis' => 'Needs Analysis',
             'solution_development' => 'Solution Development',
             'negotiation' => 'Negotiation',
-            'in_progress' => 'Open',
             'won' => 'Closed Won',
             'lost' => 'Closed Lost',
         ];

@@ -32,7 +32,8 @@ class CartStrategyTest extends AbstractStrategyTest
             $this->databaseHelper,
             $this->chainEntityClassNameProvider,
             $this->translator,
-            $this->newEntitiesHelper
+            $this->newEntitiesHelper,
+            $this->doctrineHelper
         );
 
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
