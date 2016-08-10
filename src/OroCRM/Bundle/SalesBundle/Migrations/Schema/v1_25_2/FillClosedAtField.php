@@ -110,11 +110,11 @@ INNER JOIN
 (
     SELECT
     MAX(af.audit_id) AS max_audit_id,
-    am.logged_at
+    MAX(am.logged_at) AS logged_at
     FROM oro_audit_field af
     INNER JOIN oro_audit am ON am.id = af.audit_id AND am.object_class = :objectClass
     WHERE af.field = :field AND af.new_text IN (:statuses)
-    GROUP BY am.object_id, am.logged_at
+    GROUP BY am.object_id
 ) afm
 ON afm.max_audit_id = a.id
 SET o.closed_at = afm.logged_at
