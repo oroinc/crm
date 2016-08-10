@@ -51,6 +51,8 @@ orocrm:
 
         contact:
             name:                   Contact name
+            first_name:             Contact first name
+            last_name:              Contact last name
             email:                  Contact email
             phone:                  Contact phone
 
