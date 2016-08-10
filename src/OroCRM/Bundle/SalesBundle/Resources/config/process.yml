@@ -90,6 +90,10 @@ definitions:
                                 attribute: $.leadSource
                                 class: Extend\Entity\EV_Lead_Source
                                 identifier: $.mailbox.processSettings.source
+                            - '@request_enum_entity':
+                                enum_code: lead_status
+                                identifier: 'new'
+                                attribute: $.leadStatus
                             - '@create_entity':
                                 class: OroCRM\Bundle\SalesBundle\Entity\Lead
                                 attribute: $.leadEntity
@@ -105,6 +109,7 @@ definitions:
                                     firstName:      $.leadFirstName
                                     lastName:       $.leadLastName
                                     email:          $.email.fromEmailAddress.email
+                                    status:         $.leadStatus
                             - '@add_email_activity_target':
                                 email:              $.email
                                 target_entity:      $.leadEntity
