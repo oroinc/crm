@@ -8,20 +8,16 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Entity\Attachment;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityMergeBundle\Model\MergeModes;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
@@ -105,7 +101,7 @@ class OroCRMAccountBundleInstaller implements
         $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
-        $this->addAttachmentAssociation($schema, $queries);
+        $this->addAttachmentAssociation($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         // update to 1.8
@@ -116,7 +112,7 @@ class OroCRMAccountBundleInstaller implements
     /**
      * Create orocrm_account table
      *
-     * @param Schema $schema
+     * @param Schema   $schema
      * @param QueryBag $queries
      */
     protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
@@ -217,7 +213,7 @@ class OroCRMAccountBundleInstaller implements
         );
     }
 
-    protected function addAttachmentAssociation(Schema $schema, QueryBag $queries)
+    protected function addAttachmentAssociation(Schema $schema)
     {
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
@@ -234,15 +230,8 @@ class OroCRMAccountBundleInstaller implements
                 'application/vnd.ms-powerpoint',
                 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
             ],
-            2
+            2,
+            ['merge' => ['inverse_merge_modes' => [MergeModes::UNITE, MergeModes::REPLACE]],]
         );
-
-        $queries->addQuery(new UpdateEntityConfigFieldValueQuery(
-            Attachment::class,
-            ExtendHelper::buildAssociationName(Account::class),
-            'merge',
-            'inverse_merge_modes',
-            [MergeModes::UNITE, MergeModes::REPLACE]
-        ));
     }
 }
