@@ -22,7 +22,7 @@ class WebsiteChannelChartProvider extends WebsiteChartProvider
      */
     protected function formatGroup(array $row)
     {
-        return $row['channel'] . ' - ' . $row['name'];
+        return $row['channel'] . ' - ' . $this->getLegendLabel($row['name']);
     }
 
     /**

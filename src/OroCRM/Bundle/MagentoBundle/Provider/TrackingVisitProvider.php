@@ -46,7 +46,7 @@ class TrackingVisitProvider
 
         try {
             $qb
-                ->select('COUNT(t.userIdentifier)')
+                ->select('COUNT(DISTINCT t.userIdentifier)')
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
@@ -85,7 +85,7 @@ class TrackingVisitProvider
 
         try {
             $qb
-                ->select('COUNT(t.userIdentifier)')
+                ->select('COUNT(DISTINCT t.userIdentifier)')
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
@@ -125,7 +125,7 @@ class TrackingVisitProvider
 
         $result = $this->getTrackingVisitRepository()
             ->createQueryBuilder('t')
-            ->select('COUNT(t.userIdentifier) cnt')
+            ->select('COUNT(DISTINCT t.userIdentifier) cnt')
             ->addSelect('MIN(t.firstActionTime) first')
             ->addSelect('MAX(t.firstActionTime) last')
             ->andWhere(sprintf('t.%s in (:customers)', $customerAssocName))
