@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\Async;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
@@ -24,13 +25,20 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
     private $localeSettings;
 
     /**
+     * @var JobRunner
+     */
+    private $jobRunner;
+
+    /**
      * @param RegistryInterface $registry
      * @param LocaleSettings $localeSettings
+     * @param JobRunner $jobRunner
      */
-    public function __construct(RegistryInterface $registry, LocaleSettings $localeSettings)
+    public function __construct(RegistryInterface $registry, LocaleSettings $localeSettings, JobRunner $jobRunner)
     {
         $this->registry = $registry;
         $this->localeSettings = $localeSettings;
+        $this->jobRunner = $jobRunner;
     }
 
     /**
@@ -38,22 +46,27 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
      */
     public function process(MessageInterface $message, SessionInterface $session)
     {
-        // TODO CRM-5839 unique job
-
         $body = array_replace([
             'force' => false,
             'clear_table_use_delete' => false
         ], JSON::decode($message->getBody()));
 
-        /** @var LifetimeValueAverageAggregationRepository $repository */
-        $repository  = $this->registry->getRepository(LifetimeValueAverageAggregation::class);
-        if ($body['force']) {
-            $repository->clearTableData($body['clear_table_use_delete']);
-        }
+        $ownerId = $message->getMessageId();
+        $jobName = 'orocrm_channel:aggregate_lifetime_average';
 
-        $repository->aggregate($this->localeSettings->getTimeZone(), $body['force']);
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
+            /** @var LifetimeValueAverageAggregationRepository $repository */
+            $repository  = $this->registry->getRepository(LifetimeValueAverageAggregation::class);
+            if ($body['force']) {
+                $repository->clearTableData($body['clear_table_use_delete']);
+            }
 
-        return self::ACK;
+            $repository->aggregate($this->localeSettings->getTimeZone(), $body['force']);
+
+            return true;
+        });
+
+        return $result ? self::ACK : self::REJECT;
     }
 
     /**

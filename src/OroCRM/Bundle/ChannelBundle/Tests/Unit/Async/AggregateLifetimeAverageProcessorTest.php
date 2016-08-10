@@ -2,19 +2,16 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Async;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use OroCRM\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -42,7 +39,11 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testCouldBeConstructedWithDoctrineAndLocaleSettingsAsArguments()
     {
-        new AggregateLifetimeAverageProcessor($this->createRegistryStub(), $this->createLocaleSettingsMock());
+        new AggregateLifetimeAverageProcessor(
+            $this->createRegistryStub(),
+            $this->createLocaleSettingsMock(),
+            new JobRunner()
+        );
     }
 
     /**
@@ -53,7 +54,8 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $processor = new AggregateLifetimeAverageProcessor(
             $this->createRegistryStub(),
-            $this->createLocaleSettingsMock()
+            $this->createLocaleSettingsMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -85,7 +87,11 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($repositoryMock);
 
-        $processor = new AggregateLifetimeAverageProcessor($registryStub, $localeSettings);
+        $processor = new AggregateLifetimeAverageProcessor(
+            $registryStub,
+            $localeSettings,
+            new JobRunner()
+        );
 
         $message = new NullMessage();
         $message->setBody(JSON::encode([]));
@@ -118,7 +124,11 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($repositoryMock);
 
-        $processor = new AggregateLifetimeAverageProcessor($registryStub, $localeSettings);
+        $processor = new AggregateLifetimeAverageProcessor(
+            $registryStub,
+            $localeSettings,
+            new JobRunner()
+        );
 
         $message = new NullMessage();
         $message->setBody(JSON::encode([
@@ -153,7 +163,11 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($repositoryMock);
 
-        $processor = new AggregateLifetimeAverageProcessor($registryStub, $localeSettings);
+        $processor = new AggregateLifetimeAverageProcessor(
+            $registryStub,
+            $localeSettings,
+            new JobRunner()
+        );
 
         $message = new NullMessage();
         $message->setBody(JSON::encode([
@@ -164,6 +178,52 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
         $status = $processor->process($message, new NullSession());
 
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
+    }
+
+    public function testShouldRunAggregateLifetimeAverageAsUniqueJob()
+    {
+        $localeSettings = $this->createLocaleSettingsMock();
+        $localeSettings
+            ->expects($this->once())
+            ->method('getTimeZone')
+            ->willReturn('theTimeZone')
+        ;
+
+        $repositoryMock = $this->createLifetimeValueAverageAggregationRepositoryMock();
+        $repositoryMock
+            ->expects($this->once())
+            ->method('clearTableData')
+            ->with(true)
+        ;
+        $repositoryMock
+            ->expects($this->once())
+            ->method('aggregate')
+            ->with('theTimeZone', true)
+        ;
+
+        $registryStub = $this->createRegistryStub($repositoryMock);
+
+        $jobRunner = new JobRunner();
+
+        $processor = new AggregateLifetimeAverageProcessor(
+            $registryStub,
+            $localeSettings,
+            $jobRunner
+        );
+
+        $message = new NullMessage();
+        $message->setMessageId('theMessageId');
+        $message->setBody(JSON::encode([
+            'force' => true,
+            'clear_table_use_delete' => true,
+        ]));
+
+        $processor->process($message, new NullSession());
+
+        $uniqueJobs = $jobRunner->getRunUniqueJobs();
+        self::assertCount(1, $uniqueJobs);
+        self::assertEquals('orocrm_channel:aggregate_lifetime_average', $uniqueJobs[0]['jobName']);
+        self::assertEquals('theMessageId', $uniqueJobs[0]['ownerId']);
     }
 
     /**

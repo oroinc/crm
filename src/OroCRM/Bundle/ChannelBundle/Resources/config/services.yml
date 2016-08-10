@@ -402,6 +402,9 @@ services:
 
     orocrm_channel.async.aggregate_lifetime_average_processor:
         class: 'OroCRM\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor'
-        arguments: ['@doctrine', '@oro_locale.settings']
+        arguments:
+            - '@doctrine'
+            - '@oro_locale.settings'
+            - '@oro_message_queue.job.runner'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }

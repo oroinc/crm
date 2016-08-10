@@ -4,10 +4,9 @@ namespace OroCRM\Bundle\ChannelBundle;
 
 use Oro\Bundle\MessageQueueBundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OroCRMChannelBundle extends Bundle
 {
@@ -21,8 +20,8 @@ class OroCRMChannelBundle extends Bundle
 
         $addTopicMetaPass = AddTopicMetaPass::create();
         $addTopicMetaPass
-            ->add(Topics::CHANNEL_STATUS_CHANGED, 'Channel status changed')
-            ->add(Topics::AGGREGATE_LIFETIME_AVERAGE, '')
+            ->add(Topics::CHANNEL_STATUS_CHANGED)
+            ->add(Topics::AGGREGATE_LIFETIME_AVERAGE)
         ;
 
         $container->addCompilerPass($addTopicMetaPass);

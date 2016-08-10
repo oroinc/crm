@@ -5,6 +5,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
@@ -24,13 +25,23 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
     private $doctrine;
 
     /**
+     * @var JobRunner
+     */
+    private $jobRunner;
+
+    /**
      * @param RegistryInterface $doctrine
      * @param CartExpirationProcessor $cartExpirationProcessor
+     * @param JobRunner $jobRunner
      */
-    public function __construct(RegistryInterface $doctrine, CartExpirationProcessor $cartExpirationProcessor)
-    {
+    public function __construct(
+        RegistryInterface $doctrine,
+        CartExpirationProcessor $cartExpirationProcessor,
+        JobRunner $jobRunner
+    ) {
         $this->doctrine = $doctrine;
         $this->cartExpirationProcessor = $cartExpirationProcessor;
+        $this->jobRunner = $jobRunner;
     }
 
     /**
@@ -46,8 +57,6 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
      */
     public function process(MessageInterface $message, SessionInterface $session)
     {
-        // TODO CRM-5839 unique job
-
         $body = JSON::decode($message->getBody());
         $body = array_replace_recursive([
             'integrationId' => null,
@@ -57,22 +66,29 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
             throw new \LogicException('The message invalid. It must have integrationId set');
         }
 
-        /** @var ChannelRepository $repository */
-        $repository = $this->doctrine->getRepository(Channel::class);
-        $channel = $repository->getOrLoadById($body['integrationId']);
-        if (!$channel) {
-            return self::REJECT;
-        }
-        if (!$channel->isEnabled()) {
-            return self::REJECT;
-        }
-        $connectors = $channel->getConnectors() ?: [];
-        if (!in_array('cart', $connectors)) {
-            return self::REJECT;
-        }
+        $ownerId = $message->getMessageId();
+        $jobName = 'orocrm_magento:sync_cart_expiration_integration:'.$body['integrationId'];
 
-        $this->cartExpirationProcessor->process($channel);
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
+            /** @var ChannelRepository $repository */
+            $repository = $this->doctrine->getRepository(Channel::class);
+            $channel = $repository->getOrLoadById($body['integrationId']);
+            if (!$channel) {
+                return false;
+            }
+            if (!$channel->isEnabled()) {
+                return false;
+            }
+            $connectors = $channel->getConnectors() ?: [];
+            if (!in_array('cart', $connectors)) {
+                return false;
+            }
 
-        return self::ACK;
+            $this->cartExpirationProcessor->process($channel);
+
+            return true;
+        });
+
+        return $result ? self::ACK : self::REJECT;
     }
 }
