@@ -2,14 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -75,6 +73,9 @@ class Opportunity extends ExtendOpportunity implements
     use ChannelEntityTrait;
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
+
+    const STATUS_LOST = 'lost';
+    const STATUS_WON  = 'won';
 
     /**
      * The key in system config for probability - status map

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migration;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
 
 use Psr\Log\LoggerInterface;
 
@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\Type;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class FillClosedAtField extends ParametrizedMigrationQuery
 {
@@ -51,7 +51,7 @@ class FillClosedAtField extends ParametrizedMigrationQuery
     {
         $auditInsertSql = <<<SQL
 INSERT INTO oro_audit_field
-(audit_id, FIELD, data_type, new_datetime)
+(audit_id, field, data_type, new_datetime)
 SELECT
     a.id AS audit_id,
     'closedAt' AS field,
@@ -100,7 +100,6 @@ SQL;
     /**
      * @param LoggerInterface $logger
      * @param bool            $dryRun
-     *
      */
     protected function updateOpportunityClosedAtValue(LoggerInterface $logger, $dryRun)
     {
@@ -113,9 +112,9 @@ INNER JOIN
     MAX(af.audit_id) AS max_audit_id,
     MAX(am.logged_at) AS logged_at
     FROM oro_audit_field af
-    INNER JOIN oro_audit am ON am.id = af.audit_id
+    INNER JOIN oro_audit am ON am.id = af.audit_id AND am.object_class = :objectClass
     WHERE af.field = :field AND af.new_text IN (:statuses)
-    GROUP BY am.object_id
+    GROUP BY am.object_id, am.logged_at
 ) afm
 ON afm.max_audit_id = a.id
 SET o.closed_at = afm.logged_at
@@ -125,7 +124,7 @@ SQL;
             'field'       => 'status',
             'statuses'    => ['Closed Lost', 'Closed Won', 'Lost', 'Won'],
             'objectClass' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-            'status_ids'  => [OpportunityStatus::STATUS_WON, OpportunityStatus::STATUS_LOST]
+            'status_ids'  => [Opportunity::STATUS_WON, Opportunity::STATUS_LOST]
         ];
         $types     = [
             'field'       => Type::STRING,
