@@ -37,9 +37,9 @@
                     {% if entity.account %}
                         {% set accountViewGranted = resource_granted('orocrm_account_view') %}
                         {%- if accountViewGranted -%}
-                            <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ UI.renderEntiViewLabel(account, 'name', 'orocrm.account.entity_label') }}</a>
+                            <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ ui.renderEntityViewLabel(entity.account, 'name', 'orocrm.account.entity_label') }}</a>
                         {%- else -%}
-                            {{ UI.renderEntiViewLabel(account, 'name') }}
+                            {{ ui.renderEntityViewLabel(entity.account, 'name') }}
                         {%- endif -%}
                     {% endif %}
                 {%- endset -%}
