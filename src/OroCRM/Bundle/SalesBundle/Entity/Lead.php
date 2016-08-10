@@ -42,7 +42,15 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="icon-phone",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -82,7 +90,7 @@ class Lead extends ExtendLead implements
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
-    
+
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -1190,6 +1198,8 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+
+        return $this;
     }
 
     /**

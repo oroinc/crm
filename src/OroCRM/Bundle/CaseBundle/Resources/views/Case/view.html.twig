@@ -100,10 +100,10 @@
                     {%- if entity.relatedAccount -%}
                         {% if resource_granted('orocrm_account_view') %}
                             <a href="{{ path('orocrm_account_view', {'id': entity.relatedAccount.id}) }}">
-                                {{ UI.renderEntiViewLabel(entity.relatedAccount, 'name', 'orocrm.account.entity_label') }}
+                                {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'orocrm.account.entity_label') }}
                             </a>
                         {% else %}
-                            {{ UI.renderEntiViewLabel(entity.relatedAccount, 'name') }}
+                            {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name') }}
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
