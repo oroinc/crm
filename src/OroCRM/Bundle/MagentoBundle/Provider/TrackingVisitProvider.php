@@ -129,7 +129,9 @@ class TrackingVisitProvider
             ->addSelect('MIN(t.firstActionTime) first')
             ->addSelect('MAX(t.firstActionTime) last')
             ->andWhere(sprintf('t.%s in (:customers)', $customerAssocName))
+            ->andWhere('t.userIdentifier not like :guestId')
             ->setParameter('customers', $customers)
+            ->setParameter('guestId', 'id=guest%')
             ->getQuery()
             ->getSingleResult();
 
