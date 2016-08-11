@@ -101,7 +101,23 @@ class OroCRMAccountBundleInstaller implements
         $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
-        $this->addAttachmentAssociation($schema);
+        $this->attachmentExtension->addAttachmentAssociation(
+            $schema,
+            'orocrm_account',
+            [
+                'image/*',
+                'application/pdf',
+                'application/zip',
+                'application/x-gzip',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            ],
+            2
+        );
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         // update to 1.8
@@ -210,28 +226,6 @@ class OroCRMAccountBundleInstaller implements
             ['contact_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-    }
-
-    protected function addAttachmentAssociation(Schema $schema)
-    {
-        $this->attachmentExtension->addAttachmentAssociation(
-            $schema,
-            'orocrm_account',
-            [
-                'image/*',
-                'application/pdf',
-                'application/zip',
-                'application/x-gzip',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-powerpoint',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-            ],
-            2,
-            ['merge' => ['inverse_merge_modes' => [MergeModes::UNITE, MergeModes::REPLACE]],]
         );
     }
 }

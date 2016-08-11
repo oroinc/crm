@@ -35,16 +35,6 @@ class UpdateEntityMergeOptions implements Migration, ExtendExtensionAwareInterfa
     {
         $queries->addQuery(
             new UpdateEntityConfigFieldValueQuery(
-                Attachment::class,
-                ExtendHelper::buildAssociationName(Account::class),
-                'merge',
-                'inverse_merge_modes',
-                [MergeModes::UNITE, MergeModes::REPLACE]
-            )
-        );
-
-        $queries->addQuery(
-            new UpdateEntityConfigFieldValueQuery(
                 Account::class,
                 'extend_description',
                 'merge',
