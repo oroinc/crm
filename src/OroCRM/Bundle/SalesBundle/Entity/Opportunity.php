@@ -51,7 +51,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "grid_name"="sales-opportunity-grid",
  *          },
  *          "dataaudit"={
- *              "auditable"=true
+ *              "auditable"=true,
+ *              "immutable"=true
  *          },
  *          "grid"={
  *              "default"="sales-opportunity-grid",
