@@ -87,7 +87,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customer',
-                'orocrm_sales_b2bcustomer_with_channel_select',
+                'orocrm_sales_b2bcustomer_with_channel_create_or_select',
                 [
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',

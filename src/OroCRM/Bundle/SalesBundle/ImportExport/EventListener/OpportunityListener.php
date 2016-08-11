@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\ImportExport\EventListener;
 
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 
@@ -26,8 +27,19 @@ class OpportunityListener
     public function onProcessAfter(StrategyEvent $event)
     {
         $entity = $event->getEntity();
-        if ($entity instanceof Opportunity) {
-            $this->relationsBuilder->buildAll($entity);
+        if (!$entity instanceof Opportunity) {
+            return;
         }
+
+        $customer = $entity->getCustomer();
+        if ($customer) {
+            if (!$customer->getAccount()) {
+                // new Account for new B2bCustomer
+                $account = new Account();
+                $account->setName($customer->getName());
+                $customer->setAccount($account);
+            }
+        }
+        $this->relationsBuilder->buildAll($entity);
     }
 }

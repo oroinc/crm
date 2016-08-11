@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SecurityBundle\SecurityFacade;
@@ -10,7 +12,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class B2bCustomerWithChannelSelectType extends AbstractType
+class B2bCustomerWithChannelCreateOrSelectType extends AbstractType
 {
     /** @var SecurityFacade */
     protected $securityFacade;
@@ -26,14 +28,40 @@ class B2bCustomerWithChannelSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->addModelTransformer(
+            new CallbackTransformer(
+                function ($customer) {
+                    return $customer;
+                },
+                function ($customer) use ($options) {
+                    if ($customer instanceof B2bCustomer) {
+                        $account = $customer->getAccount();
+                        if (!$account && !empty($options['configs']['allowCreateNew'])) {
+                            $account = new Account();
+                            $account->setName($customer->getName());
+                            $customer->setAccount($account);
+                        }
+                    }
+
+                    return $customer;
+                }
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             [
                 'configs'            => [
-                    'placeholder'             => 'orocrm.sales.form.choose_b2bcustomer',
-                    'properties'              => ['name'],
-                    'allowCreateNew'          => $this->isGrantedCreateBusinessAccount(),
+                    'placeholder'    => 'orocrm.sales.form.choose_b2bcustomer',
+                    'properties'     => ['name'],
+                    'allowCreateNew' => $this->isGrantedCreateBusinessAccount(),
                 ],
                 'autocomplete_alias' => 'b2b_customers_with_channel',
                 'grid_name'          => 'orocrm-sales-b2bcustomers-select-grid',
@@ -77,6 +105,6 @@ class B2bCustomerWithChannelSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_b2bcustomer_with_channel_select';
+        return 'orocrm_sales_b2bcustomer_with_channel_create_or_select';
     }
 }
