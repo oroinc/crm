@@ -25,7 +25,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
@@ -36,7 +36,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.8, $event->getData()->getProbability());
     }
 
@@ -46,7 +46,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.1, $event->getData()->getProbability());
     }
 
@@ -56,7 +56,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType();
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
@@ -67,7 +67,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
