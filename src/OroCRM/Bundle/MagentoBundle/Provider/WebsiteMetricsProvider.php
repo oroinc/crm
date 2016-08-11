@@ -48,6 +48,7 @@ class WebsiteMetricsProvider
     protected function getEvents()
     {
         return [
+            TCI::EVENT_VISIT,
             TCI::EVENT_CART_ITEM_ADDED,
             TCI::EVENT_CHECKOUT_STARTED,
             TCI::EVENT_CUSTOMER_LOGIN,
@@ -64,13 +65,13 @@ class WebsiteMetricsProvider
     {
         $eventMetrics = $this->getEventMetrics($customers, $this->getEvents());
 
+        $pageViewsCount = $eventMetrics[TCI::EVENT_VISIT]['count'];
         $itemsAddedCount = $eventMetrics[TCI::EVENT_CART_ITEM_ADDED]['count'];
         $lastItem = $eventMetrics[TCI::EVENT_CART_ITEM_ADDED]['last'];
         $checkoutsCount = $eventMetrics[TCI::EVENT_CHECKOUT_STARTED]['count'];
         $lastCheckout = $eventMetrics[TCI::EVENT_CHECKOUT_STARTED]['last'];
         $lastLogin = $eventMetrics[TCI::EVENT_CUSTOMER_LOGIN]['last'];
 
-        $pageViewsCount = $this->visitEventProvider->getCustomerEventsCount($customers);
         $lastViewedPage = $this->visitEventProvider->getLastViewedPage($customers);
         $mostVisitedPage = $this->visitEventProvider->getMostViewedPage($customers);
 

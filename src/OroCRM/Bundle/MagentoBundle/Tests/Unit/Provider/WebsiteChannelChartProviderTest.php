@@ -45,22 +45,22 @@ class WebsiteChannelChartProviderTest extends WebsiteChartProviderTest
         ];
 
         $expectedData = [
-            sprintf('magento - %s', TCI::EVENT_CART_ITEM_ADDED) => [
+            sprintf('magento - %s', WebsiteChannelChartProvider::$legendLabelsMap[TCI::EVENT_CART_ITEM_ADDED]) => [
                 ['count' => 10, 'date' => '2016-05-03'],
                 ['count' => 0, 'date' => '2016-05-04'],
                 ['count' => 0, 'date' => '2016-05-05'],
             ],
-            sprintf('magento - %s', TCI::EVENT_CHECKOUT_STARTED) => [
+            sprintf('magento - %s', WebsiteChannelChartProvider::$legendLabelsMap[TCI::EVENT_CHECKOUT_STARTED]) => [
                 ['count' => 0, 'date' => '2016-05-03'],
                 ['count' => 17, 'date' => '2016-05-04'],
                 ['count' => 0, 'date' => '2016-05-05'],
             ],
-            sprintf('toys store - %s', TCI::EVENT_CART_ITEM_ADDED) => [
+            sprintf('toys store - %s', WebsiteChannelChartProvider::$legendLabelsMap[TCI::EVENT_CART_ITEM_ADDED]) => [
                 ['count' => 188, 'date' => '2016-05-03'],
                 ['count' => 0, 'date' => '2016-05-04'],
                 ['count' => 0, 'date' => '2016-05-05'],
             ],
-            sprintf('toys store - %s', TCI::EVENT_CHECKOUT_STARTED) => [
+            sprintf('toys store - %s', WebsiteChannelChartProvider::$legendLabelsMap[TCI::EVENT_CHECKOUT_STARTED]) => [
                 ['count' => 0, 'date' => '2016-05-03'],
                 ['count' => 69, 'date' => '2016-05-04'],
                 ['count' => 4, 'date' => '2016-05-05'],
@@ -96,8 +96,9 @@ class WebsiteChannelChartProviderTest extends WebsiteChartProviderTest
         $configProvider = $this->getConfigProvider();
         $chartViewBuilder = $this->getChartViewBuilderMock($expectedData, $expectedOptions);
         $container = $this->getContainer($chartViewBuilder);
-        
-        return new WebsiteChannelChartProvider($eventProvider, $configProvider, $container);
+        $translator = $this->getTranslator();
+
+        return new WebsiteChannelChartProvider($eventProvider, $configProvider, $container, $translator);
     }
 
     /**
