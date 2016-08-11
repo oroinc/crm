@@ -70,7 +70,6 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
                 'monthly' => 0,
             ],
             [],
-            0,
             null,
             null
         );
