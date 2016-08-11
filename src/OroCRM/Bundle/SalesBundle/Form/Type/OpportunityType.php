@@ -153,7 +153,7 @@ class OpportunityType extends AbstractType
      *
      * @param FormEvent $event
      */
-    public function onPreSetData(FormEvent $event)
+    public function onFormPreSetData(FormEvent $event)
     {
         $opportunity = $event->getData();
         if (null === $opportunity) {
@@ -216,7 +216,7 @@ class OpportunityType extends AbstractType
      */
     protected function addListeners(FormBuilderInterface $builder)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onFormPreSetData']);
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
