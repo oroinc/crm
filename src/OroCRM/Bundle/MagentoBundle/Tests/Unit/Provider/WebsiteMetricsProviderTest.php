@@ -30,8 +30,11 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
                     'count' => 2000,
                     'last' => '2016-05-03',
                 ],
+                TCI::EVENT_VISIT => [
+                    'count' => 180,
+                    'last' => '2016-05-03',
+                ],
             ],
-            180,
             'http://test.com/',
             'http://stackoverflow.com/'
         );
@@ -97,7 +100,6 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $visitAggregates
      * @param array $visitEventAggregates
-     * @param int $eventsCount
      * @param string $lastViewedPage
      * @param string $mostViewedPage
      *
@@ -106,14 +108,12 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
     protected function getWebsiteMetricsProvider(
         array $visitAggregates,
         array $visitEventAggregates,
-        $eventsCount,
         $lastViewedPage,
         $mostViewedPage
     ) {
         $visitProvider = $this->getTrackingVisitProviderMock($visitAggregates);
         $visitEventProvider = $this->getTrackingVisitEventProviderMock(
             $visitEventAggregates,
-            $eventsCount,
             $lastViewedPage,
             $mostViewedPage
         );
@@ -141,7 +141,6 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $aggregates
-     * @param int $eventsCount
      * @param string $lastViewedPage
      * @param string $mostViewedPage
      *
@@ -149,7 +148,6 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTrackingVisitEventProviderMock(
         array $aggregates,
-        $eventsCount,
         $lastViewedPage,
         $mostViewedPage
     ) {
@@ -160,10 +158,6 @@ class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
         $visitEventProvider->expects($this->any())
             ->method('getCustomerEventAggregates')
             ->willReturn($aggregates);
-
-        $visitEventProvider->expects($this->any())
-            ->method('getCustomerEventsCount')
-            ->willReturn($eventsCount);
 
         $visitEventProvider->expects($this->any())
             ->method('getLastViewedPage')
