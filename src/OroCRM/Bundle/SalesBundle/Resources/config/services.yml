@@ -272,8 +272,6 @@ services:
     orocrm_sales.builder.opportunity_relations:
         class: OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder
         public: false
-        arguments:
-            - '@oro_security.security_facade'
 
     orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener

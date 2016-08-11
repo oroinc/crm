@@ -127,7 +127,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
               'fields' => [
                   'closeReason'  => 'translatable_entity',
                   'contact'  => 'orocrm_contact_select',
-                  'customer' => 'orocrm_sales_b2bcustomer_with_channel_select',
+                  'customer' => 'orocrm_sales_b2bcustomer_with_channel_create_or_select',
                   'name'  => 'text',
                   'dataChannel'  => 'orocrm_channel_select_type',
                   'closeDate'  => 'oro_date',

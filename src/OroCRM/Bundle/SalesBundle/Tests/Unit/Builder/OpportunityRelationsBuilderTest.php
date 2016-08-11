@@ -16,22 +16,13 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SecurityFacade
-     */
-    protected $securityFacade;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|OpportunityRelationsBuilder
      */
     protected $relationsBuilder;
 
     protected function setUp()
     {
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->relationsBuilder = new OpportunityRelationsBuilder($this->securityFacade);
+        $this->relationsBuilder = new OpportunityRelationsBuilder();
     }
 
     public function testShouldSetCustomerDataChannel()
@@ -45,24 +36,6 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->relationsBuilder->buildCustomer($opportunity);
 
         $this->assertSame($channel, $customer->getDataChannel());
-    }
-
-    public function testShouldCreateCustomerAccount()
-    {
-        $this->securityFacade->expects($this->once())
-            ->method('isGranted')
-            ->with('CREATE', 'Entity:OroCRM\Bundle\AccountBundle\Entity\Account')
-            ->willReturn(true);
-
-        $customer = new B2bCustomer();
-        $customer->setName('John Doe');
-        $opportunity = new Opportunity();
-        $opportunity->setCustomer($customer);
-
-        $this->relationsBuilder->buildCustomer($opportunity);
-
-        $this->assertNotNull($customer->getAccount());
-        $this->assertEquals('John Doe', $customer->getAccount()->getName());
     }
 
     public function testShouldSetCustomerOrganization()
