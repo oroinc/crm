@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
 use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
@@ -121,9 +121,9 @@ class DashboardController extends Controller
         $dateTo   = $dateRange['end'];
         $dateFrom = $dateRange['start'];
 
-        /** @var WorkflowManager $workflowManager */
-        $workflowManager = $this->get('oro_workflow.manager');
-        $workflows = $workflowManager->getApplicableWorkflows(SalesFunnel::class);
+        /** @var WorkflowRegistry $workflowRegistry */
+        $workflowRegistry = $this->get('oro_workflow.registry');
+        $workflows = $workflowRegistry->getActiveWorkflowsByEntityClass(SalesFunnel::class);
 
         $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenue'];
 
@@ -133,7 +133,7 @@ class DashboardController extends Controller
         $data = $salesFunnerRepository->getFunnelChartData(
             $dateFrom,
             $dateTo,
-            $workflows ? reset($workflows) : null,
+            $workflows->isEmpty() ? null : $workflows->first(),
             $customStepCalculations,
             $this->get('oro_security.acl_helper')
         );
