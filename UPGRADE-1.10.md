@@ -32,6 +32,7 @@ Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead o
 
 #### OroCRMChannelBundle:
 - Constructor for `OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider` was changed. New argument: `DateFilterProcessor $filterProcessor`
+- Constructor for `OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider` was changed. New argument: `AclHelper $aclHelper`
 - The constructor of the `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` class was changed.
     Before: `__construct(RegistryInterface $doctrine, NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, AclHelper $aclHelper, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper)`.
     After: `__construct(NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper, ForecastProvider $provider, FilterDateRangeConverter $filterDateRangeConverter)`.

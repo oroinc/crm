@@ -5,9 +5,9 @@ oro_api:
         OroCRM\Bundle\MagentoBundle\Entity\CartAddress: ~
         OroCRM\Bundle\MagentoBundle\Entity\CartItem: ~
         OroCRM\Bundle\MagentoBundle\Entity\Customer: ~
-        OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup: ~
-        OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
-        OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
+#        OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup: ~
+#        OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
+#        OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
         OroCRM\Bundle\MagentoBundle\Entity\Order: ~
         OroCRM\Bundle\MagentoBundle\Entity\OrderAddress: ~
         OroCRM\Bundle\MagentoBundle\Entity\OrderItem: ~
@@ -15,3 +15,6 @@ oro_api:
         OroCRM\Bundle\MagentoBundle\Entity\Region: ~
         OroCRM\Bundle\MagentoBundle\Entity\Store: ~
         OroCRM\Bundle\MagentoBundle\Entity\Website: ~
+
+        # remove this exclusion when NewsletterSubscriber entity will be enabled for Data API
+        Extend\Entity\EV_Mage_Subscr_Status: { exclude: true}

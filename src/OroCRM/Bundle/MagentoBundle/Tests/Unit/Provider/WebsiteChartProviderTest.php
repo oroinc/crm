@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 
 use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
+use Symfony\Component\Translation\Translator;
 
 abstract class WebsiteChartProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,5 +66,17 @@ abstract class WebsiteChartProviderTest extends \PHPUnit_Framework_TestCase
         $container->set('oro_chart.view_builder', $chartViewBuilder);
 
         return $container;
+    }
+
+    protected function getTranslator()
+    {
+        $translator = $this->getMockBuilder(Translator::class)
+                    ->disableOriginalConstructor()
+                    ->getMock();
+        $translator->expects($this->any())
+            ->method('trans')
+            ->willReturnArgument(0);
+
+        return $translator;
     }
 }
