@@ -2,51 +2,28 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Command;
 
-use Doctrine\ORM\EntityManager;
-
-use Psr\Log\LoggerInterface;
-
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use OroCRM\Bundle\MagentoBundle\Async\Topics;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-use JMS\JobQueueBundle\Entity\Job;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\SearchBundle\Command\ReindexCommand;
-use Oro\Component\Log\OutputLogger;
-
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
-
-class InitialSyncCommand extends ContainerAwareCommand
+class InitialSyncCommand extends Command implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
+    /**
+     * TODO CRM-5839 remove the const
+     */
     const COMMAND_NAME = 'oro:magento:initial:sync';
-
-    const SYNC_PROCESSOR = 'orocrm_magento.provider.initial_sync_processor';
-
-    const STATUS_SUCCESS = 0;
-    const STATUS_FAILED  = 255;
-
-    /**
-     * List of listeners what will be disabled during sync
-     */
-    protected $disabledOptionalListeners = [
-        'oro_search.index_listener',
-        'oro_entity.event_listener.entity_modify_created_updated_properties_listener'
-    ];
-
-    /**
-     * List of entities we need to reindex after sync
-     */
-    protected $indexedEntities = [
-        'OroCRM\Bundle\MagentoBundle\Entity\Order',
-        'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-        'OroCRM\Bundle\MagentoBundle\Entity\Customer'
-    ];
 
     /**
      * {@inheritdoc}
@@ -54,24 +31,24 @@ class InitialSyncCommand extends ContainerAwareCommand
     public function configure()
     {
         $this
-            ->setName(self::COMMAND_NAME)
+            ->setName('oro:magento:initial:sync')
             ->addOption(
-                'integration-id',
+                'integration',
                 'i',
                 InputOption::VALUE_REQUIRED,
-                'Sync will be performed for given integration id'
-            )
-            ->addOption(
-                'skip-dictionary',
-                null,
-                InputOption::VALUE_NONE,
-                'Skip dictionaries synchronization'
+                'If option exists sync will be performed for given integration id'
             )
             ->addOption(
                 'connector',
                 'con',
                 InputOption::VALUE_OPTIONAL,
                 'If option exists sync will be performed for given connector name'
+            )
+            ->addArgument(
+                'connector-parameters',
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                'Additional connector parameters array. Format - parameterKey=parameterValue',
+                []
             )
             ->setDescription('Run initial synchronization for magento channel.');
     }
@@ -81,177 +58,70 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // Disable search listeners to increase the performance
-        $this->disableOptionalListeners();
+        $connector = $input->getOption('connector');
+        $integrationId = $input->getOption('integration');
+        $connectorParameters = $this->getConnectorParameters($input);
 
-        $skipDictionary = (bool)$input->getOption('skip-dictionary');
-        $integrationId = $input->getOption('integration-id');
-        $logger = $this->getLogger($output);
-        $this->getContainer()->get('oro_integration.logger.strategy')->setLogger($logger);
-        $this->initEntityManager();
+        /** @var ChannelRepository $integrationRepository */
+        $integrationRepository = $this->getEntityManager()->getRepository(Integration::class);
 
-        if ($this->isJobRunning($integrationId)) {
-            $logger->warning('Job already running. Terminating....');
-
-            return self::STATUS_SUCCESS;
+        $integration = $integrationRepository->getOrLoadById($integrationId);
+        if (false == $integration) {
+            throw new \LogicException(sprintf('Integration with given ID "%d" not found', $integrationId));
         }
 
-        $integration = $this->getIntegrationChannelRepository()->getOrLoadById($integrationId);
-        if (!$integration) {
-            $logger->critical(sprintf('Integration with given ID "%d" not found', $integrationId));
+        $output->writeln(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
-            return self::STATUS_FAILED;
-        } elseif (!$integration->isEnabled()) {
-            $logger->warning('Integration is disabled. Terminating....');
+        $this->getMessageProducer()->send(Topics::SYNC_INITIAL_INTEGRATION, [
+            'integration_id' => $integration->getId(),
+            'connector' => $connector,
+            'connector_parameters' => $connectorParameters,
+        ], MessagePriority::VERY_LOW);
 
-            return self::STATUS_SUCCESS;
-        }
-
-        $this->scheduleAnalyticRecalculation($integration);
-
-        $processor = $this->getSyncProcessor($logger);
-        try {
-            $logger->info(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
-
-            $connector = $input->getOption('connector');
-            $result = $processor->process($integration, $connector, ['skip-dictionary' => $skipDictionary]);
-            $exitCode = $result ? self::STATUS_SUCCESS : self::STATUS_FAILED;
-        } catch (\Exception $e) {
-            $logger->critical($e->getMessage(), ['exception' => $e]);
-            $exitCode = self::STATUS_FAILED;
-        }
-
-        if ($exitCode === self::STATUS_SUCCESS) {
-            $this->runReindex();
-        }
-
-        $logger->notice('Completed');
-
-        return $exitCode;
+        $output->writeln('Completed');
     }
 
     /**
-     * @param OutputInterface $output
-     * @return OutputLogger
-     */
-    protected function getLogger(OutputInterface $output)
-    {
-        if ($output->getVerbosity() < OutputInterface::VERBOSITY_VERBOSE) {
-            $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
-        }
-
-        return new OutputLogger($output);
-    }
-
-    /**
-     * Check is job running (from previous schedule)
+     * Get connector additional parameters array from the input
      *
-     * @param null|int $integrationId
+     * @param InputInterface $input
      *
-     * @return bool
+     * @return array key - parameter name, value - parameter value
+     * @throws \LogicException
      */
-    protected function isJobRunning($integrationId)
+    private function getConnectorParameters(InputInterface $input)
     {
-        $running = $this->getIntegrationChannelRepository()
-            ->getRunningSyncJobsCount($this->getName(), $integrationId);
-
-        return $running > 1;
-    }
-
-    protected function initEntityManager()
-    {
-        $this->getEntityManager()->getConnection()->getConfiguration()->setSQLLogger(null);
-    }
-
-    /**
-     * @return EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return $this->getService('doctrine')->getManager();
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     * @return InitialSyncProcessor
-     */
-    protected function getSyncProcessor($logger)
-    {
-        $processor = $this->getService(self::SYNC_PROCESSOR);
-        $processor->getLoggerStrategy()->setLogger($logger);
-
-        return $processor;
-    }
-
-    /**
-     * @return ChannelRepository
-     */
-    protected function getIntegrationChannelRepository()
-    {
-        return $this->getContainer()->get('doctrine')->getRepository('OroIntegrationBundle:Channel');
-    }
-
-    /**
-     * Get service from DI container by id
-     *
-     * @param string $id
-     *
-     * @return object
-     */
-    protected function getService($id)
-    {
-        return $this->getContainer()->get($id);
-    }
-
-    /**
-     * @param Integration $integration
-     */
-    protected function scheduleAnalyticRecalculation(Integration $integration)
-    {
-        $dataChannel = $this->getDataChannelByChannel($integration);
-        /** @var RFMMetricStateManager $rfmStateManager */
-        $rfmStateManager = $this->getService('orocrm_analytics.model.rfm_state_manager');
-        $rfmStateManager->scheduleRecalculation($dataChannel);
-    }
-
-    /**
-     * @param Integration $integration
-     * @return Channel
-     */
-    protected function getDataChannelByChannel(Integration $integration)
-    {
-        return $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
-            ->findOneBy(['dataSource' => $integration]);
-    }
-
-    /**
-     * Turn off listeners to increase the performance
-     */
-    protected function disableOptionalListeners()
-    {
-        $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
-        $knownListeners  = $listenerManager->getListeners();
-        foreach ($this->disabledOptionalListeners as $listenerId) {
-            if (in_array($listenerId, $knownListeners, true)) {
-                $listenerManager->disableListener($listenerId);
+        $result = [];
+        $connectorParameters = $input->getArgument('connector-parameters');
+        if (!empty($connectorParameters)) {
+            foreach ($connectorParameters as $parameterString) {
+                $parameterConfigArray = explode('=', $parameterString);
+                if (!isset($parameterConfigArray[1])) {
+                    throw new \LogicException(sprintf(
+                        'Format for connector parameters is parameterKey=parameterValue. Got `%s`',
+                        $parameterString
+                    ));
+                }
+                $result[$parameterConfigArray[0]] = $parameterConfigArray[1];
             }
         }
+
+        return $result;
     }
 
     /**
-     * Add jobs to reindex magento entities
+     * @return EntityManagerInterface
      */
-    protected function runReindex()
+    private function getEntityManager()
     {
-        /** @var EntityManager $em */
-        $em  = $this->getContainer()->get('doctrine')->getManagerForClass('JMSJobQueueBundle:Job');
-        $jobs = [];
-        foreach ($this->indexedEntities as $entityClass) {
-            $job = new Job(ReindexCommand::COMMAND_NAME, ['class' => $entityClass]);
-            $em->persist($job);
-            $jobs[] = $job;
-        }
-        $em->flush($jobs);
+        return $this->container->get('doctrine')->getManager();
+    }
+
+    /**
+     * @return MessageProducerInterface
+     */
+    private function getMessageProducer()
+    {
+        return $this->container->get('oro_message_queue.message_producer');
     }
 }

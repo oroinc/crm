@@ -995,5 +995,17 @@ services:
         arguments:
             - '@doctrine'
             - '@orocrm_magento.provider.cart_expiration_processor'
+            - '@oro_message_queue.job.runner'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    orocrm_magento.async.sync_initial_integration_processor:
+        class: 'OroCRM\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@orocrm_magento.provider.initial_sync_processor'
+            - '@oro_platform.optional_listeners.manager'
+            - '@orocrm_analytics.model.rfm_state_manager'
+            - '@oro_message_queue.job.runner'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }

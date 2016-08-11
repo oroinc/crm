@@ -15,7 +15,8 @@ class OroCRMMagentoBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $addTopicPass = AddTopicMetaPass::create()
-            ->add(Topics::SYNC_CART_EXPIRATION_INTEGRATION, '')
+            ->add(Topics::SYNC_CART_EXPIRATION_INTEGRATION)
+            ->add(Topics::SYNC_INITIAL_INTEGRATION)
         ;
         $container->addCompilerPass($addTopicPass);
     }
