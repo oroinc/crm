@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
+use OroCRM\Bundle\MagentoBundle\Async\Topics;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
@@ -20,6 +22,11 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
      * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
+
+    /**
+     * @var TraceableMessageProducer
+     */
+    private $messageProducer;
 
     protected function setUp()
     {
@@ -38,8 +45,11 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             $this->logger
         );
 
+        $this->messageProducer = new TraceableMessageProducer($this->getMock(MessageProducerInterface::class));
+
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
         $this->processor->setDoctrineHelper($this->doctrineHelper);
+        $this->processor->setMessageProducer($this->messageProducer);
     }
 
     public function testProcessFirstInitial()
@@ -50,19 +60,25 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $integration = $this->getIntegration($connectors, $syncStartDate);
 
-        $this->em->expects($this->exactly(2))
+        $this->em->expects($this->exactly(1))
             ->method('persist');
-        $this->em->expects($this->exactly(2))
+        $this->em->expects($this->exactly(1))
             ->method('flush');
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob();
 
         $this->processor->process($integration);
+
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'integration_id' => 'testChannel',
+            'connector_parameters' => ['skip-dictionary' => true],
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
     }
 
     public function testProcessExisting()
@@ -93,16 +109,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
-        $this->em->expects($this->once())
-            ->method('persist')
-            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
-        $this->em->expects($this->once())
-            ->method('flush')
-            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
-
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -116,48 +122,15 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
-    }
 
-    public function testProcessJobRunning()
-    {
-        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
-        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
 
-        $connector = 'testConnector';
-        $connectors = [$connector];
-        $integration = $this->getIntegration($connectors, $syncStartDate);
-
-        /** @var MagentoSoapTransport $transport */
-        $transport = $integration->getTransport();
-        $transport->setInitialSyncStartDate($initialStartDate);
-
-        $this->repository->expects($this->never())
-            ->method('getLastStatusForConnector');
-
-        $this->em->expects($this->never())
-            ->method('persist');
-
-        /** Will be called once per connector to save connector's status */
-        $this->em->expects($this->never())
-            ->method('flush');
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
-            ->will($this->returnValue(1));
-
-        $this->assertReloadEntityCall($integration);
-        $this->assertProcessCalls();
-        $this->assertExecuteJob(
-            [
-                'processorAlias' => false,
-                'entityName' => 'testEntity',
-                'channel' => 'testChannel',
-                'channelType' => 'testChannelType',
-                AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
-            ]
-        );
-
-        $this->processor->process($integration);
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'integration_id' => 'testChannel',
+            'connector_parameters' => ['skip-dictionary' => true],
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
     }
 
     public function testProcessJobNotRunning()
@@ -188,17 +161,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
-        $this->em->expects($this->once())
-            ->method('persist')
-            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
-        $this->em->expects($this->once())
-            ->method('flush')
-            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
-            ->will($this->returnValue(0));
-
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -212,6 +174,15 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
+
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'integration_id' => 'testChannel',
+            'connector_parameters' => ['skip-dictionary' => true],
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
     }
 
     public function testProcessInitialSynced()
@@ -243,14 +214,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
-        $this->em->expects($this->never())
-            ->method('persist');
-        $this->em->expects($this->never())
-            ->method('flush');
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
-
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -264,6 +227,10 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
+
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+
+        self::assertCount(0, $traces);
     }
 
     public function testProcessForce()
@@ -318,14 +285,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
-        $this->em->expects($this->atLeastOnce())
-            ->method('persist');
-        $this->em->expects($this->atLeastOnce())
-            ->method('flush');
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
-
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -339,6 +298,10 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration, null, ['force' => true]);
+
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+
+        self::assertCount(0, $traces);
     }
 
     public function testProcessInitialAfterForce()
@@ -366,19 +329,20 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
-        $this->em->expects($this->exactly(2))
-            ->method('persist');
-        $this->em->expects($this->exactly(2))
-            ->method('flush');
-        $this->repository->expects($this->once())
-            ->method('getExistingSyncJobsCount')
-            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
-
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob();
 
         $this->processor->process($integration);
+
+        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'integration_id' => 'testChannel',
+            'connector_parameters' => ['skip-dictionary' => true],
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
     }
 
     /**

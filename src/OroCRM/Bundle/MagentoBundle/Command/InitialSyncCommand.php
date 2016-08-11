@@ -21,11 +21,6 @@ class InitialSyncCommand extends Command implements ContainerAwareInterface
     use ContainerAwareTrait;
 
     /**
-     * TODO CRM-5839 remove the const
-     */
-    const COMMAND_NAME = 'oro:magento:initial:sync';
-
-    /**
      * {@inheritdoc}
      */
     public function configure()

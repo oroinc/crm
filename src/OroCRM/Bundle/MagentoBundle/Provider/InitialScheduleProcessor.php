@@ -3,15 +3,13 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
-use JMS\JobQueueBundle\Entity\Job;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
-
-use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use OroCRM\Bundle\MagentoBundle\Async\Topics;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
@@ -28,6 +26,11 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     protected $doctrineHelper;
 
     /**
+     * @var MessageProducerInterface
+     */
+    private $messageProducer;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
      *
      * @return AbstractInitialProcessor
@@ -37,6 +40,14 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $this->doctrineHelper = $doctrineHelper;
 
         return $this;
+    }
+
+    /**
+     * @param MessageProducerInterface $messageProducer
+     */
+    public function setMessageProducer(MessageProducerInterface $messageProducer)
+    {
+        $this->messageProducer = $messageProducer;
     }
 
     /**
@@ -124,21 +135,6 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     }
 
     /**
-     * @param Integration $integration
-     *
-     * @return bool
-     */
-    protected function isInitialJobRunning(Integration $integration)
-    {
-        $initialJobsRunning = $this->getChannelRepository()->getExistingSyncJobsCount(
-            InitialSyncCommand::COMMAND_NAME,
-            $integration->getId()
-        );
-
-        return $initialJobsRunning > 0;
-    }
-
-    /**
      * In case when initial sync does not started yet, it failed or start sync date was changed - run initial sync.
      *
      * @param Integration $integration
@@ -148,23 +144,17 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $this->saveInitialSyncStartDate($integration);
         /** @var MagentoSoapTransport $transport */
         $transport = $integration->getTransport();
-        if (!$this->isInitialJobRunning($integration)
-            && $this->isInitialSyncRequired(
-                $integration,
-                $transport->getInitialSyncStartDate(),
-                $transport->getSyncStartDate()
-            )
-        ) {
+        if ($this->isInitialSyncRequired(
+            $integration,
+            $transport->getInitialSyncStartDate(),
+            $transport->getSyncStartDate()
+        )) {
             $this->logger->info('Scheduling initial synchronization');
-            $job = new Job(
-                InitialSyncCommand::COMMAND_NAME,
-                [
-                    sprintf('--integration-id=%s', $integration->getId()),
-                    '--skip-dictionary',
-                    '-v'
-                ]
-            );
-            $this->saveEntity($job);
+
+            $this->messageProducer->send(Topics::SYNC_INITIAL_INTEGRATION, [
+                'integration_id' => $integration->getId(),
+                'connector_parameters' => ['skip-dictionary' => true]
+            ], MessagePriority::VERY_LOW);
         }
     }
 
