@@ -132,8 +132,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
             $probabilityProvider,
             $enumProvider,
             $helper,
-            new OpportunityRelationsBuilder($this->securityFacade),
-            $this->securityFacade
+            new OpportunityRelationsBuilder()
         );
     }
 
