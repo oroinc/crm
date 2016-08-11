@@ -73,7 +73,7 @@ class OpportunityRelationsBuilder
         }
     }
 
-    private function buildCustomerContact(Opportunity $opportunity)
+    protected function buildCustomerContact(Opportunity $opportunity)
     {
         $customer           = $opportunity->getCustomer();
         $opportunityContact = $opportunity->getContact();
