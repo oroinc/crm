@@ -3,7 +3,6 @@ orocrm_channel:
        -
           name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
           dependent:
-              - OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
               - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
           navigation_items:
               - application_menu.sales_tab.opportunity_list
@@ -17,8 +16,6 @@ orocrm_channel:
 
        -
           name: OroCRM\Bundle\SalesBundle\Entity\Lead
-          dependent:
-              - OroCRM\Bundle\SalesBundle\Entity\LeadStatus
           navigation_items:
               - application_menu.sales_tab.lead_list
               - shortcuts.shortcut_list_leads

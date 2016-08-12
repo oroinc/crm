@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\SalesBundle\Provider\Opportunity;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
@@ -145,8 +144,8 @@ class ForecastProvider
     ) {
         // clone datetimes as doctrine modifies their timezone which breaks stuff
         $moment = clone $moment;
-        $start = $start ? clone $start : null;
-        $end = $end ? clone $end : null;
+        $start  = $start ? clone $start : null;
+        $end    = $end ? clone $end : null;
 
         $qb = $this->getAuditRepository()->createQueryBuilder('a');
         $qb
@@ -155,20 +154,20 @@ class ForecastProvider
 (SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
 SELECT
             )
-            ->join('a.fields', 'afs', Join::WITH, 'afs.field = :statusField')
-            ->join('a.fields', 'afc', Join::WITH, 'afc.field = :closeDateField')
-            ->join('a.fields', 'afp', Join::WITH, 'afp.field = :probabilityField')
-            ->join('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
+            ->leftJoin('a.fields', 'afca', Join::WITH, 'afca.field = :closedAtField')
+            ->leftJoin('a.fields', 'afc', Join::WITH, 'afc.field = :closeDateField')
+            ->leftJoin('a.fields', 'afp', Join::WITH, 'afp.field = :probabilityField')
+            ->leftJoin('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
             ->where('a.objectClass = :objectClass AND a.loggedAt < :moment')
             ->groupBy('a.objectId')
             ->having(<<<HAVING
-EXISTS(
+NOT EXISTS(
     SELECT
-        afsh.newText
-    FROM OroDataAuditBundle:AuditField afsh
+        afcah.newDatetime
+    FROM OroDataAuditBundle:AuditField afcah
     WHERE
-        afsh.id = MAX(afs.id)
-        AND afsh.newText NOT IN (:excludedStatuses)
+        afcah.id = MAX(afca.id)
+        AND afcah.newDatetime IS NOT NULL
 )
 AND EXISTS(
     SELECT
@@ -181,17 +180,13 @@ AND EXISTS(
 HAVING
             )
             ->setParameters([
-                'objectClass' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                'statusField' => 'status',
-                'closeDateField' => 'closeDate',
-                'probabilityField' => 'probability',
-                'budgetAmountField' => 'budgetAmount',
+                'objectClass'           => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'closedAtField'         => 'closedAt',
+                'closeDateField'        => 'closeDate',
+                'probabilityField'      => 'probability',
+                'budgetAmountField'     => 'budgetAmount',
                 'excludedProbabilities' => [0, 1],
-                'excludedStatuses' => [
-                    $this->getStatusTextValue('lost'),
-                    $this->getStatusTextValue('won'),
-                ],
-                'moment' => $moment,
+                'moment'                => $moment,
             ]);
 
         $this->applyHistoryDateFiltering($qb, $start, $end);
@@ -213,15 +208,14 @@ HAVING
                 ->setParameter('ownerField', 'owner')
                 ->setParameter('ownerIds', $ownerIds);
         }
-
+        // need to join opportunity to properly apply acl permissions
+        $qb->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
         if ($filters) {
-            $qb
-                ->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
             $this->filterProcessor
                 ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
-        $result = $qb->getQuery()->getArrayResult();
+        $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return array_reduce(
             $result,
@@ -238,8 +232,8 @@ HAVING
 
     /**
      * @param QueryBuilder $qb
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param \DateTime    $start
+     * @param \DateTime    $end
      */
     protected function applyHistoryDateFiltering(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
