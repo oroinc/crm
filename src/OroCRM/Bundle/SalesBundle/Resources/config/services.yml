@@ -385,6 +385,11 @@ services:
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
 
+    orocrm_sales.entity.event_litener.opportunity:
+        class: OroCRM\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, priority: 100 }
+
     orocrm_sales.provider.opportunity.indeterminate_forecast:
         class: OroCRM\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
         arguments:
