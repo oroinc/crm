@@ -384,3 +384,8 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
+
+    orocrm_sales.entity.event_litener.opportunity:
+        class: OroCRM\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, priority: 100 }

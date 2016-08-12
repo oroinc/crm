@@ -100,7 +100,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_25_1';
+        return 'v1_25_2';
     }
 
     /**
@@ -193,6 +193,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->addColumn('notes', 'text', ['notnull' => false]);
+        $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $table->addIndex(['contact_id'], 'idx_c0fe4aace7a1254a', []);
         $table->addIndex(['created_at'], 'opportunity_created_idx', []);
         $table->addUniqueIndex(['workflow_item_id'], 'uniq_c0fe4aac1023c4ee');
