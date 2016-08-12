@@ -18,7 +18,6 @@ parameters:
 
     orocrm_analytics.validator.categories.class: OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesValidator
 
-    orocrm_analytics.model.state_manager.class: OroCRM\Bundle\AnalyticsBundle\Model\StateManager
     orocrm_analytics.model.rfm_state_manager.class: OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
 services:
     orocrm_analytics.builder:
@@ -69,11 +68,6 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: orocrm_analytics.categories_validator }
 
-    orocrm_analytics.model.state_manager:
-        class: %orocrm_analytics.model.state_manager.class%
-        arguments:
-            - '@oro_entity.doctrine_helper'
-
     orocrm_analytics.model.rfm_state_manager:
         class: %orocrm_analytics.model.rfm_state_manager.class%
         arguments:
@@ -90,3 +84,25 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
+
+    orocrm_analytics.schedule_calculate_analytics:
+        class: 'OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService'
+        arguments:
+            - '@oro_message_queue.message_producer'
+
+    orocrm_analytics.async.calculate_channel_analytics_processor:
+        class: 'OroCRM\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@orocrm_analytics.builder'
+            - '@oro_message_queue.job.runner'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    orocrm_analytics.async.calculate_all_channels_analytics_processor:
+        class: 'OroCRM\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@orocrm_analytics.schedule_calculate_analytics'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }

@@ -5,13 +5,11 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class LoadEntitiesData extends AbstractFixture implements DependentFixtureInterface
+class LoadCustomerData extends AbstractFixture implements DependentFixtureInterface
 {
     /**
      * @var array
@@ -48,7 +46,7 @@ class LoadEntitiesData extends AbstractFixture implements DependentFixtureInterf
      */
     public function getDependencies()
     {
-        return [__NAMESPACE__ . '\LoadChannelData'];
+        return [LoadChannelData::class];
     }
 
     /**

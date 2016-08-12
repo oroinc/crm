@@ -4,10 +4,11 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Model;
 
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadJobData;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
@@ -19,12 +20,7 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->loadFixtures(
-            [
-                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
-                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadJobData'
-            ]
-        );
+        $this->loadFixtures([LoadCustomerData::class, LoadJobData::class]);
     }
 
     public function tearDown()

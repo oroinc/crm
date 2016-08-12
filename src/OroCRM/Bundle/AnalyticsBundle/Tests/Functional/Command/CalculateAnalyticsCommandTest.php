@@ -2,130 +2,118 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
+use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class CalculateAnalyticsCommandTest extends WebTestCase
 {
     protected function setUp()
     {
-        $this->initClient([], [], true);
-        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
+        parent::setUp();
+
+        $this->initClient();
+        $this->loadFixtures([LoadCustomerData::class]);
+    }
+
+    public function testShouldOutputHelpForTheCommand()
+    {
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--help']);
+
+        self::assertContains("Usage:\n  oro:cron:analytic:calculate [options]", $result);
+    }
+
+    public function testShouldScheduleCalculateAnalyticsForGivenChannel()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
+
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
+
+        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
+        self::assertContains('Completed', $result);
+
+        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'channel_id' => $channel->getId(),
+            'customer_ids' => []
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+    }
+
+    public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
+    {
+        $result = $this->runCommand('oro:cron:analytic:calculate');
+
+        self::assertContains('Schedule analytics calculation for all channels.', $result);
+        self::assertContains('Completed', $result);
+
+        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS);
+
+        self::assertCount(1, $traces);
+    }
+
+    public function testThrowIfCustomerIdsSetWithoutChannelId()
+    {
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
+
+        self::assertContains('[InvalidArgumentException]', $result);
+        self::assertContains('Option "ids" does not work without "channel"', $result);
+    }
+
+    public function testShouldScheduleCalculateAnalyticsForGivenChannelWithCustomerIdsSet()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
+
+        /** @var Customer $customerOne */
+        $customerOne = $this->getReference('Channel.CustomerChannel.Customer');
+
+        /** @var Customer $customerTwo */
+        $customerTwo = $this->getReference('Channel.CustomerChannel.Customer2');
+
+        $result = $this->runCommand('oro:cron:analytic:calculate', [
+            '--channel='.$channel->getId(),
+            '--ids='.$customerOne->getId(),
+            '--ids='.$customerTwo->getId(),
+        ]);
+
+        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
+        self::assertContains('Completed', $result);
+
+        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+
+        self::assertCount(1, $traces);
+        self::assertEquals([
+            'channel_id' => $channel->getId(),
+            'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
+        ], $traces[0]['message']);
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
     }
 
     /**
-     * @param array $parameters
-     * @param array $expects
-     * @param array $notContains
-     *
-     * @dataProvider dataProvider
+     * @return EntityManagerInterface
      */
-    public function testCommand(array $parameters, array $expects = [], array $notContains = [])
+    private function getEntityManager()
     {
-        $options = ['--ids', '--channel'];
-        foreach ($options as $option) {
-            if (!empty($parameters[$option])) {
-                if (is_string($parameters[$option])) {
-                    $parameters[$option] = $this->getReference($parameters[$option])->getId();
-                }
-
-                $parameters[] = sprintf('%s=%s', $option, $parameters[$option]);
-
-                unset($parameters[$option]);
-            }
-        }
-
-        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME, $parameters);
-        foreach ($expects as $expect) {
-            $this->assertContains($expect, $output);
-        }
-        foreach ($notContains as $notContain) {
-            $this->assertNotContains($notContain, $output);
-        }
+        return self::getContainer()->get('doctrine.orm.entity_manager');
     }
 
     /**
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return TraceableMessageProducer
      */
-    public function dataProvider()
+    private function getMessageProducer()
     {
-        return [
-            'one not supported channel' => [
-                [
-                    '--channel' => 'Channel.CustomerIdentity',
-                ],
-                [],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'supported channel' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'non existing id' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                    '--ids' => 42,
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'existing entity' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'ids with wrong channel' => [
-                [
-                    '--channel' => 'Channel.CustomerIdentity',
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'all channels with ids' => [
-                [
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [
-                    'Option "ids" does not work without "channel"',
-                ],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'all channels' => [
-                [],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                    '[Process] Channel: CustomerChannel2',
-                    '[Done] Channel: CustomerChannel2 updated.',
-                ]
-            ]
-        ];
+        return self::getContainer()->get('oro_message_queue.message_producer');
     }
 }

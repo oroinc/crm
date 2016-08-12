@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Builder;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData;
+use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
@@ -20,11 +23,7 @@ class RFMBuilderTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient();
-        $this->loadFixtures([
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData',
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData',
-        ]);
+        $this->loadFixtures([LoadCustomerData::class, LoadRFMMetricCategoryData::class, LoadOrderData::class]);
 
         $this->builder = $this->getContainer()->get('orocrm_analytics.builder.rfm');
     }

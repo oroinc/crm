@@ -72,7 +72,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      */
     public function process(MessageInterface $message, SessionInterface $session)
     {
-        // TODO CRM-5839 unique job
+        // TODO CRM-5838 message could be redelivered on dbal transport if run for a long time.
 
         $body = JSON::decode($message->getBody());
         $body = array_replace_recursive([
@@ -170,7 +170,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      */
     private function scheduleSearchReindex()
     {
-        // TODO CRM-5839 implement this method when search PR is merged
+        // TODO CRM-5838 implement this method when search PR is merged
 
         $indexedEntities = [Order::class, Cart::class, Customer::class];
     }
