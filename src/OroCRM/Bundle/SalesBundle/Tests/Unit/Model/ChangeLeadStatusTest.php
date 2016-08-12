@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
@@ -14,6 +16,11 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
      * @var EntityManager
      */
     protected $entityManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ValidatorInterface
+     */
+    protected $validator;
 
     /**
      * @var ChangeLeadStatus
@@ -36,9 +43,13 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function ($statusClass, $statusCode) {
                 return $statusCode;
             }));
+        
+        $this->validator = $this->getMockForAbstractClass('Symfony\Component\Validator\Validator\ValidatorInterface');
+        $this->validator->expects($this->any())->method('validate')
+            ->willReturn($this->getMockForAbstractClass('\Countable'));
 
         $this->lead = new LeadStub();
-        $this->model = new ChangeLeadStatus($this->entityManager);
+        $this->model = new ChangeLeadStatus($this->entityManager, $this->validator);
     }
 
     public function testDisqualify()
