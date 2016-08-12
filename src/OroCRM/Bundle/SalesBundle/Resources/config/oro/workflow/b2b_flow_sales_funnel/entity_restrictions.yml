@@ -1,14 +1,6 @@
 workflows:
     b2b_flow_sales_funnel:
         entity_restrictions:
-            opportunity_status_creation:
-                attribute: opportunity
-                field: status
-                mode: disallow
-                values:
-                    - 'won'
-                    - 'lost'
-
             opportunity_status_open:
                 attribute: opportunity
                 field: status
@@ -35,14 +27,6 @@ workflows:
                 attribute: opportunity
                 step: lost_opportunity
                 field: status
-
-            lead_status_creation:
-                attribute: lead
-                field: status
-                mode: disallow
-                values:
-                    - 'qualified'
-                    - 'canceled'
 
             lead_status_new:
                 attribute: lead
