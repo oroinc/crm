@@ -36,8 +36,8 @@ class LeadToOpportunityProvider
      */
     protected $changeLeadStatus;
 
-    /** @var bool */
-    protected $isLeadWorkflowEnabled;
+    /** @var WorkflowRegistry */
+    protected $workflowRegistry;
 
     /**
      * @var EntityFieldProvider
@@ -105,8 +105,7 @@ class LeadToOpportunityProvider
         $this->entityFieldProvider = $entityFieldProvider;
         $this->changeLeadStatus = $changeLeadStatus;
         $this->validateContactFields();
-        $this->isLeadWorkflowEnabled = $workflowRegistry
-            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $this->workflowRegistry = $workflowRegistry;
     }
 
     /**
@@ -227,7 +226,6 @@ class LeadToOpportunityProvider
                 ->setName($lead->getName());
 
             $this->b2bGuesser->setCustomer($opportunity, $lead);
-
         } else {
             $opportunity
                 // Set predefined contact entity to have proper validation
@@ -294,8 +292,16 @@ class LeadToOpportunityProvider
      */
     public function isDisqualifyAndConvertAllowed(Lead $lead)
     {
+        $isLeadWorkflowEnabled = $this->workflowRegistry
+            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
+
+        $isSalesFunnelWorkflowEnabled = $this->workflowRegistry
+            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\SalesFunnel');
+
+
         return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
-        !$this->isLeadWorkflowEnabled &&
-        $lead->getOpportunities()->count() === 0;
+               !$isLeadWorkflowEnabled &&
+               !$isSalesFunnelWorkflowEnabled &&
+               $lead->getOpportunities()->count() === 0;
     }
 }
