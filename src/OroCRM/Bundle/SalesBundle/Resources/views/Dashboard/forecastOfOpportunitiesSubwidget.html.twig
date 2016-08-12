@@ -1,5 +1,4 @@
-<span class="title">{{ item.label|trans }}</span>
-<h3 class="value">{{ item.value.value|raw }}</h3>
+{% include 'OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig' %}
 {% if item.value.deviation is defined %}
 <div class="deviation">
     <span class="deviation {% if item.value.isPositive is defined %}{% if item.value.isPositive %}positive{% else %}negative{% endif %}{% endif %}">

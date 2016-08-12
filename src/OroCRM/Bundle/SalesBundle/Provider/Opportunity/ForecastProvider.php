@@ -71,7 +71,13 @@ class ForecastProvider
      * @param \DateTime|null $moment
      * @param array|null     $queryFilter
      *
-     * @return array ['inProgressCount' => <int>, 'budgetAmount' => <double>, 'weightedForecast' => <double>]
+     * @return array [
+     *   'inProgressCount' => <int>,
+     *   'budgetAmount' => <double>,
+     *   'weightedForecast' => <double>,
+     *   'totalIndeterminate' => <double>,
+     *   'weightedIndeterminate' => <double>
+     * ]
      */
     public function getForecastData(
         array $ownerIds,
@@ -90,9 +96,53 @@ class ForecastProvider
             } else {
                 $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end, $filters);
             }
+            $this->data[$key] = array_merge($this->data[$key], $this->getIndeterminateData($ownerIds, $queryFilter));
         }
 
         return $this->data[$key];
+    }
+
+    /**
+     * @param array
+     * @param array
+     *
+     * @return ['totalIndeterminate' => <double>, 'weightedIndeterminate' => <double>]
+     */
+    public function getIndeterminateData(array $ownerIds, array $queryFilter = null)
+    {
+        $cacheKey = md5(serialize(func_get_args()));
+        if (!isset($this->data[$cacheKey])) {
+            $filters = isset($queryFilter['definition']['filters'])
+                ? $queryFilter['definition']['filters']
+                : [];
+
+            $alias = 'o';
+            $qb = $this->filterProcessor
+                ->process(
+                    $this->getOpportunityRepository()
+                        ->getForecastQB($alias)
+                        ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
+                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                    $filters,
+                    $alias
+                );
+
+            if (!empty($ownerIds)) {
+                $qb->join('o.owner', 'owner');
+                QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
+            }
+            $this->applyProbabilityCondition($qb, 'o');
+
+            $result = $this->aclHelper->apply($qb)->getOneOrNullResult()
+                ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
+
+            $this->data[$cacheKey] = [
+                'totalIndeterminate'    => $result['budgetAmount'],
+                'weightedIndeterminate' => $result['weightedForecast'],
+            ];
+        }
+
+        return $this->data[$cacheKey];
     }
 
     /**

@@ -176,6 +176,16 @@ oro_dashboard_config:
                     label:         orocrm.sales.dashboard.forecast_of_opportunities.weighted_forecast.label
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                total_indeterminate_forecast:
+                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, totalIndeterminate, currency)"
+                    label:         orocrm.sales.dashboard.forecast_of_opportunities.total_indeterminate_forecast.label
+                    acl:           orocrm_sales_opportunity_view
+                    template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
+                weighted_indeterminate_forecast:
+                    data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, weightedIndeterminate, currency)"
+                    label:         orocrm.sales.dashboard.forecast_of_opportunities.weighted_indeterminate_forecast.label
+                    acl:           orocrm_sales_opportunity_view
+                    template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
             configuration:
                 owners:
                     type: oro_type_widget_owners
