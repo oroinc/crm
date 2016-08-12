@@ -384,3 +384,12 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
+
+    orocrm_sales.provider.opportunity.indeterminate_forecast:
+        class: OroCRM\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_query_designer.query_designer.filter_processor'
+            - '@oro_locale.formatter.number'
