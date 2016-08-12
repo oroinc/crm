@@ -10,6 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
 
 class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +21,7 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         $strategy = $this->getMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
         /** @var ContextInterface $context */
         $context      = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+
         $organization = new Organization();
         $channel      = new Channel();
         $b2bCustomer  = new B2bCustomer();
@@ -32,7 +34,7 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         $entity->setCustomer($b2bCustomer);
 
         $strategyEvent = new StrategyEvent($strategy, $entity, $context);
-        $listener      = new OpportunityListener();
+        $listener      = new OpportunityListener(new OpportunityRelationsBuilder());
         $listener->onProcessAfter($strategyEvent);
 
         $this->assertSame($channel, $b2bCustomer->getDataChannel());

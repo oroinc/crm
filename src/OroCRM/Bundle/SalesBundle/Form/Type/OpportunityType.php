@@ -13,8 +13,8 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class OpportunityType extends AbstractType
@@ -30,19 +30,25 @@ class OpportunityType extends AbstractType
     /** @var EnumTypeHelper */
     protected $typeHelper;
 
+    /** @var OpportunityRelationsBuilder */
+    protected $relationsBuilder;
+
     /**
-     * @param ProbabilityProvider $probabilityProvider
-     * @param EnumValueProvider $enumValueProvider
-     * @param EnumTypeHelper $typeHelper
+     * @param ProbabilityProvider         $probabilityProvider
+     * @param EnumValueProvider           $enumValueProvider
+     * @param EnumTypeHelper              $typeHelper
+     * @param OpportunityRelationsBuilder $relationsBuilder
      */
     public function __construct(
         ProbabilityProvider $probabilityProvider,
         EnumValueProvider $enumValueProvider,
-        EnumTypeHelper $typeHelper
+        EnumTypeHelper $typeHelper,
+        OpportunityRelationsBuilder $relationsBuilder
     ) {
         $this->probabilityProvider = $probabilityProvider;
-        $this->enumValueProvider = $enumValueProvider;
-        $this->typeHelper = $typeHelper;
+        $this->enumValueProvider   = $enumValueProvider;
+        $this->typeHelper          = $typeHelper;
+        $this->relationsBuilder    = $relationsBuilder;
     }
 
     /**
@@ -81,12 +87,11 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customer',
-                'orocrm_sales_b2bcustomer_with_channel_select',
+                'orocrm_sales_b2bcustomer_with_channel_create_or_select',
                 [
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',
                     'new_item_property_name' => 'name',
-                    'configs'                => ['allowCreateNew' => true],
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
@@ -221,8 +226,7 @@ class OpportunityType extends AbstractType
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $relationsBuilder = new OpportunityRelationsBuilder($event->getData());
-                $relationsBuilder->buildAll();
+                $this->relationsBuilder->buildAll($event->getData());
             }
         );
     }
@@ -234,7 +238,7 @@ class OpportunityType extends AbstractType
      */
     private function getDefaultStatus()
     {
-        $enumCode = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
+        $enumCode        = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
         $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
 
         return reset($defaultStatuses);
