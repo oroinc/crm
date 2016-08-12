@@ -392,7 +392,37 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                     'prop3' => 'prop3Value local'
                 ],
                 'additionalFields' => ['prop3']
-            ]
+            ],
+            'additional boolean field local wins' => [
+                'changeSet'  => [
+                    'propValue' => ['old' => false, 'new' => 1],
+                ],
+                'localData'  => [
+                    'prop_value' => '1',
+                ],
+                'remoteData' => [
+                    'prop_value' => '0',
+                ],
+                'strategy'   => 'local',
+                'expected'   => [
+                    'prop_value'  => 1,
+                ],
+            ],
+            'additional boolean field remote wins' => [
+                'changeSet'  => [
+                    'propValue' => ['old' => false, 'new' => 1],
+                ],
+                'localData'  => [
+                    'prop_value' => '1',
+                ],
+                'remoteData' => [
+                    'prop_value' => '0',
+                ],
+                'strategy'   => 'remote',
+                'expected'   => [
+                    'prop_value'  => 1,
+                ],
+            ],
         ];
     }
 }
