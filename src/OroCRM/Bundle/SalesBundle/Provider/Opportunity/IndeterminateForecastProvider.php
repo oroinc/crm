@@ -13,7 +13,6 @@ use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
-
 class IndeterminateForecastProvider
 {
     /** @var RegistryInterface */
@@ -57,12 +56,12 @@ class IndeterminateForecastProvider
 
     /**
      * @param WidgetOptionBag $widgetOptions
-     * @param string $dataKey
+     * @param string          $dataKey
      *
      * @return string
      */
     public function getForecastOfOpportunitiesValues(WidgetOptionBag $widgetOptions, $dataKey)
-        {
+    {
         $data = $this->getIndeterminateData(
             $this->ownerHelper->getOwnerIds($widgetOptions),
             $widgetOptions->get('queryFilter', [])
