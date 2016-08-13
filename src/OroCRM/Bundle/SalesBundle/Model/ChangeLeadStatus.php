@@ -2,29 +2,32 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
 class ChangeLeadStatus
 {
     const STATUS_QUALIFY    = 'qualified';
     const STATUS_DISQUALIFY = 'canceled';
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     protected $manager;
 
+    /** @var ValidatorInterface */
+    protected $validator;
+
     /**
-     * @param EntityManager $manager
+     * @param EntityManager      $manager
+     * @param ValidatorInterface $validator
      */
-    public function __construct(
-        EntityManager $manager
-    ) {
-        $this->manager = $manager;
+    public function __construct(EntityManager $manager, ValidatorInterface $validator)
+    {
+        $this->manager   = $manager;
+        $this->validator = $validator;
     }
 
     /**
@@ -57,8 +60,13 @@ class ChangeLeadStatus
     {
         try {
             $enumStatusClass = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
-            $status = $this->manager->getReference($enumStatusClass, $statusCode);
+            $status          = $this->manager->getReference($enumStatusClass, $statusCode);
             $lead->setStatus($status);
+
+            $errors = $this->validator->validate($lead);
+            if ($errors->count()) {
+                return false;
+            }
             $this->save($lead);
         } catch (\Exception $e) {
             return false;
