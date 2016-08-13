@@ -76,6 +76,8 @@ orocrm:
                 in_progress.label: In Progress
                 total_forecast.label: Total Forecast
                 weighted_forecast.label: Weighted Forecast
+                total_indeterminate_forecast.label: Total Indeterminate Forecast
+                weighted_indeterminate_forecast.label: Weighted Indeterminate Forecast
                 metrics: Metrics
                 no_changes: No Changes
                 no_available_metrics: No available metrics
