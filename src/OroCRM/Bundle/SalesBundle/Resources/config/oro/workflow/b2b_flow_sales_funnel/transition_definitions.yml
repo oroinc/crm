@@ -27,7 +27,9 @@ workflows:
                             id: $sales_funnel.id
             disqualify_definition:
                 conditions: # if lead.status = "new"
-                    '@equal': [$lead.status.id, 'new']
+                    '@and':
+                        - '@not_equal': [$lead.status.id, 'qualified']
+                        - '@not_equal': [$lead.status.id, 'canceled']
                 post_actions: # set lead.status = "canceled"
                     - '@request_enum_entity':
                         enum_code: lead_status
@@ -45,9 +47,12 @@ workflows:
                         identifier: 'new'
                         attribute: $lead.status
             qualify_definition:
-                pre_conditions:  # if lead.status = "new"
+                pre_conditions:  # if lead.status is not qualified/disqualified
                     '@and':
-                        - '@equal': [$lead.status.id, 'new']
+                        - '@and':
+                            parameters:
+                                - '@not_equal': [$lead.status.id, 'qualified']
+                                - '@not_equal': [$lead.status.id, 'canceled']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     '@or':
@@ -217,13 +222,15 @@ workflows:
                     - '@unset_value':
                         [$new_account, $new_customer]
             develop_definition:
-                pre_conditions: # if opportunity.status = "in_progress"
+                pre_conditions: # if opportunity.status NOT IN ("won", "lost")
                     '@and':
-                        - '@equal':
-                            message: 'Opportunity must be in status "In Progress"'
-                            parameters: [$opportunity.status.id, 'in_progress']
+                        - '@and':
+                            message: 'Opportunity must not be closed.'
+                            parameters:
+                                - '@not_equal': [$opportunity.status.id, 'won']
+                                - '@not_equal': [$opportunity.status.id, 'lost']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
-                conditions: # if opportunity.status = "in_progress"
+                conditions: # if opportunity.status NOT IN ("won", "lost")
                     '@and':
                         - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
@@ -235,10 +242,12 @@ workflows:
                                 - '@less_or_equal': [$probability, 1]
             close_as_won_definition:
                 pre_conditions:
-                    '@equal':
-                        message: 'Opportunity must be in status "In Progress"'
-                        parameters: [$opportunity.status.id, 'in_progress']
-                conditions: # if opportunity.status = "in_progress" and required data is entered
+                    '@and':
+                        message: 'Opportunity must not be closed.'
+                        parameters:
+                            - '@not_equal': [$opportunity.status.id, 'won']
+                            - '@not_equal': [$opportunity.status.id, 'lost']
+                conditions: # if opportunity.status NOT IN ("won", "lost") and required data is entered
                     '@and':
                         - '@not_empty':
                             message: 'Close date must be set'
@@ -262,10 +271,12 @@ workflows:
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
-                pre_conditions: # opportunity.status = "in_progress" and required data is entered
-                    '@equal':
-                        message: 'Opportunity must be in status "In Progress"'
-                        parameters: [$opportunity.status.id, 'in_progress']
+                pre_conditions: # opportunity.status NOT IN ("won", "lost") and required data is entered
+                    '@and':
+                        message: 'Opportunity must not be closed.'
+                        parameters:
+                            - '@not_equal': [$opportunity.status.id, 'won']
+                            - '@not_equal': [$opportunity.status.id, 'lost']
                 conditions:
                     '@and':
                         - '@not_empty':

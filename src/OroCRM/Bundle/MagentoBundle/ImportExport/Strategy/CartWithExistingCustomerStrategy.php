@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
-
 class CartWithExistingCustomerStrategy extends CartStrategy
 {
     const CONTEXT_CART_POST_PROCESS = 'postProcessCarts';
@@ -25,24 +22,5 @@ class CartWithExistingCustomerStrategy extends CartStrategy
         }
 
         return parent::process($importingCart);
-    }
-
-    /**
-     * @param Cart $cart
-     * @return bool
-     */
-    protected function isProcessingAllowed(Cart $cart)
-    {
-        $customer = $this->findExistingEntity($cart->getCustomer());
-        $isProcessingAllowed = true;
-
-        $customerOriginId = $cart->getCustomer()->getOriginId();
-        if (!$customer && $customerOriginId) {
-            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
-
-            $isProcessingAllowed = false;
-        }
-
-        return $isProcessingAllowed;
     }
 }

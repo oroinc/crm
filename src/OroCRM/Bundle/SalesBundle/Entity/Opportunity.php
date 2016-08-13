@@ -49,7 +49,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "grid_name"="sales-opportunity-grid",
  *          },
  *          "dataaudit"={
- *              "auditable"=true
+ *              "auditable"=true,
+ *              "immutable"=true
  *          },
  *          "grid"={
  *              "default"="sales-opportunity-grid",
@@ -71,6 +72,9 @@ class Opportunity extends ExtendOpportunity implements
     use ChannelEntityTrait;
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
+
+    const STATUS_LOST = 'lost';
+    const STATUS_WON  = 'won';
 
     /**
      * The key in system config for probability - status map
@@ -157,7 +161,7 @@ class Opportunity extends ExtendOpportunity implements
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=140,
      *          "short"=true
@@ -191,7 +195,7 @@ class Opportunity extends ExtendOpportunity implements
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=20
      *      }
@@ -213,9 +217,7 @@ class Opportunity extends ExtendOpportunity implements
      *              "constraints"={{"Range":{"min":0, "max":100}}},
      *          }
      *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=30
      *      }
@@ -237,9 +239,7 @@ class Opportunity extends ExtendOpportunity implements
      *              "constraints"={{"Range":{"min":0}}},
      *          }
      *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=40
      *      }
@@ -388,6 +388,19 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $customer;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="closed_at", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
+     *      "importexport"={"excluded"=true, "immutable"=true}
+     *  }
+     * )
+     */
+    protected $closedAt;
 
     /**
      * @return int
@@ -744,5 +757,13 @@ class Opportunity extends ExtendOpportunity implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * @param \DateTime $closedAt
+     */
+    public function setClosedAt(\DateTime $closedAt = null)
+    {
+        $this->closedAt = $closedAt;
     }
 }
