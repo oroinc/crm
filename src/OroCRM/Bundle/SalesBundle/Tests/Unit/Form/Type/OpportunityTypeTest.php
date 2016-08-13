@@ -12,20 +12,34 @@ use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType;
 use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|SecurityFacade
+     */
+    protected $securityFacade;
+
+    protected function setUp()
+    {
+        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     public function testShouldNotOverwriteProbability()
     {
         $opportunity = $this->getOpportunity('negotiation', 0.7);
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
@@ -36,7 +50,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.8, $event->getData()->getProbability());
     }
 
@@ -46,7 +60,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.1, $event->getData()->getProbability());
     }
 
@@ -56,7 +70,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType();
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
@@ -67,7 +81,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $event = $this->getFormEvent($opportunity);
         $type = $this->getFormType(['in_progress']);
 
-        $type->onPreSetData($event);
+        $type->onFormPreSetData($event);
         $this->assertEquals(0.7, $event->getData()->getProbability());
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
@@ -114,7 +128,12 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $enumProvider = new EnumValueProvider($doctrineHelper);
         $helper = $this->getEnumTypeHelperMock();
 
-        return new OpportunityType($probabilityProvider, $enumProvider, $helper);
+        return new OpportunityType(
+            $probabilityProvider,
+            $enumProvider,
+            $helper,
+            new OpportunityRelationsBuilder()
+        );
     }
 
     /**

@@ -17,11 +17,11 @@ class WebsiteEventsChartProviderTest extends WebsiteChartProviderTest
         ];
 
         $expectedData = [
-            TCI::EVENT_CART_ITEM_ADDED => [
+            WebsiteEventsChartProvider::$legendLabelsMap[TCI::EVENT_CART_ITEM_ADDED] => [
                 ['count' => 10, 'date' => '2016-05-03'],
                 ['count' => 0, 'date' => '2016-05-04'],
             ],
-            TCI::EVENT_CHECKOUT_STARTED => [
+            WebsiteEventsChartProvider::$legendLabelsMap[TCI::EVENT_CHECKOUT_STARTED] => [
                 ['count' => 0, 'date' => '2016-05-03'],
                 ['count' => 17, 'date' => '2016-05-04'],
             ],
@@ -56,8 +56,9 @@ class WebsiteEventsChartProviderTest extends WebsiteChartProviderTest
         $configProvider = $this->getConfigProvider();
         $chartViewBuilder = $this->getChartViewBuilderMock($expectedData, $expectedOptions);
         $container = $this->getContainer($chartViewBuilder);
+        $translator = $this->getTranslator();
 
-        return new WebsiteEventsChartProvider($eventProvider, $configProvider, $container);
+        return new WebsiteEventsChartProvider($eventProvider, $configProvider, $container, $translator);
     }
 
     /**

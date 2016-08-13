@@ -1,7 +1,0 @@
-oro_api:
-    entities:
-        OroCRM\Bundle\ChannelBundle\Entity\Channel: ~
-        OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity: ~
-        OroCRM\Bundle\ChannelBundle\Entity\EntityName: ~
-        OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation: ~
-        OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory: ~

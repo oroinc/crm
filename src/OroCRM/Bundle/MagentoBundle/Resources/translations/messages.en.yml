@@ -561,7 +561,10 @@ orocrm:
                 label: User Behaviour
                 day: Days
                 event_count: Number of events
-
+                legend:
+                    event_visit: Page views
+                    event_cart_item_added: Items added
+                    event_checkout_started: Checkouts
         newslettersubscriber:
             label:               Newsletter Subscriber
             entity_label:        Magento Newsletter Subscriber

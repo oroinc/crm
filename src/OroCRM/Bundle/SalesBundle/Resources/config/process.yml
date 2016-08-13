@@ -97,7 +97,7 @@ definitions:
                             - '@create_entity':
                                 class: OroCRM\Bundle\SalesBundle\Entity\Lead
                                 attribute: $.leadEntity
-                                flush: false
+                                flush: true
                                 data:
                                     owner:          $.mailbox.processSettings.owner
                                     dataChannel:    $.mailbox.processSettings.channel
@@ -108,8 +108,14 @@ definitions:
                                     contact:        $.leadContact
                                     firstName:      $.leadFirstName
                                     lastName:       $.leadLastName
-                                    email:          $.email.fromEmailAddress.email
                                     status:         $.leadStatus
+                            - '@create_entity':
+                                class: OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+                                attribute: $.leadEmail
+                                data:
+                                    email: $.email.fromEmailAddress.email
+                                    owner: $.leadEntity
+                                    primary: true
                             - '@add_email_activity_target':
                                 email:              $.email
                                 target_entity:      $.leadEntity

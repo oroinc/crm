@@ -269,8 +269,14 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-opportunity-grid, method: onResultBeforeQuery }
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.dashboard-my-sales-lead-grid, method: onResultBeforeQuery }
 
+    orocrm_sales.builder.opportunity_relations:
+        class: OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder
+        public: false
+
     orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
+        arguments:
+            - '@orocrm_sales.builder.opportunity_relations'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 

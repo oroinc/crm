@@ -208,6 +208,7 @@ services:
             - '@orocrm_magento.provider.tracking_visit_event'
             - '@oro_chart.config_provider'
             - '@service_container'
+            - '@translator'
 
     orocrm_magento.provider.website_events_chart:
         class: %orocrm_magento.provider.website_events_chart.class%

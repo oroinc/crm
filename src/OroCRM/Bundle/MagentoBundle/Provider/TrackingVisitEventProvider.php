@@ -26,19 +26,6 @@ class TrackingVisitEventProvider
 
     /**
      * @param Customer[] $customers
-     * @return int
-     */
-    public function getCustomerEventsCount(array $customers)
-    {
-        $qb = $this->getEventsQueryBuilder($customers);
-
-        $qb->select('COUNT(we) cnt');
-
-        return $qb->getQuery()->getSingleScalarResult();
-    }
-
-    /**
-     * @param Customer[] $customers
      * @param string[] $eventNames
      * @return array
      */
