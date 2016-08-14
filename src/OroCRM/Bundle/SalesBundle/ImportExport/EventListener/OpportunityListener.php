@@ -6,34 +6,40 @@ use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 
 class OpportunityListener
 {
+    /** @var OpportunityRelationsBuilder */
+    protected $relationsBuilder;
+
+    /**
+     * @param OpportunityRelationsBuilder $relationsBuilder
+     */
+    public function __construct(OpportunityRelationsBuilder $relationsBuilder)
+    {
+        $this->relationsBuilder = $relationsBuilder;
+    }
+
     /**
      * @param StrategyEvent $event
      */
     public function onProcessAfter(StrategyEvent $event)
     {
         $entity = $event->getEntity();
-
         if (!$entity instanceof Opportunity) {
             return;
         }
-        $b2bCustomer = $entity->getCustomer();
-        if ($b2bCustomer) {
-            if (!$b2bCustomer->getDataChannel()) {
-                // new customer needs a channel
-                $b2bCustomer->setDataChannel($entity->getDataChannel());
-            }
-            if (!$b2bCustomer->getAccount()) {
+
+        $customer = $entity->getCustomer();
+        if ($customer) {
+            if (!$customer->getAccount()) {
                 // new Account for new B2bCustomer
                 $account = new Account();
-                $account->setName($b2bCustomer->getName());
-                $b2bCustomer->setAccount($account);
-            }
-            if (!$b2bCustomer->getOrganization()) {
-                $b2bCustomer->setOrganization($entity->getOrganization());
+                $account->setName($customer->getName());
+                $customer->setAccount($account);
             }
         }
+        $this->relationsBuilder->buildAll($entity);
     }
 }

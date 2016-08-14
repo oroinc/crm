@@ -71,7 +71,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    EmailOwnerInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -796,55 +795,5 @@ class B2bCustomer extends ExtendB2bCustomer implements
             }
         }
         return $this;
-    }
-
-    /** @inheritdoc  */
-    public function getClass()
-    {
-        return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
-    }
-
-    /**
-     * Get names of fields contain email addresses
-     *
-     * @return string[]|null
-     */
-    public function getEmailFields()
-    {
-        return null;
-    }
-
-    /** Stub for EmailOwnerInterface */
-    public function getFirstName()
-    {
-        return null;
-    }
-
-    /** Stub for EmailOwnerInterface */
-    public function getLastName()
-    {
-        return null;
-    }
-
-    /**
-     * Get the primary email address of the related contact or account
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        $primaryEmail = $this->getPrimaryEmail();
-        if ($primaryEmail) {
-            return $primaryEmail->getEmail();
-        }
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getEmail();
-        }
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getEmail();
-        }
-        return null;
     }
 }

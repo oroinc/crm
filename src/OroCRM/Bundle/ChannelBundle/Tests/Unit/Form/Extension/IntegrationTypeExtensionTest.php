@@ -6,6 +6,7 @@ use OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
 
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
@@ -35,7 +36,8 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
             ->will($this->returnValue($configValue));
         $form = $this->factory->create('oro_integration_channel_form');
         $form->setData($data);
-        $this->assertEquals($expectedChoices, $form->get('type')->getConfig()->getOption('choices'));
+        $typeView = $form->get('type')->createView();
+        $this->assertEquals($expectedChoices, $typeView->vars['choices']);
     }
 
     /**
@@ -61,17 +63,24 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
             'data is null' => [
                 '$config value' => ['type 1'],
                 '$data' => null,
-                '$expectedChoices' => ['type 1' => 'type 1', 'type 2' => 'type 2']
+                '$expectedChoices' => [
+                    new ChoiceView('type 1', 'type 1', 'type 1'),
+                    new ChoiceView('type 2', 'type 2', 'type 2')
+                ]
             ],
             'new entity without id' => [
                 '$config value' => ['type 1'],
                 '$data' => $entity,
-                '$expectedChoices' => ['type 2' => 'type 2']
+                '$expectedChoices' => [
+                    new ChoiceView('type 2', 'type 2', 'type 2')
+                ]
             ],
             'entity with id' => [
                 '$config value' => ['type 1'],
                 '$data' => $entityUpdate,
-                '$expectedChoices' => ['type 2' => 'type 2']
+                '$expectedChoices' => [
+                    new ChoiceView('type 2', 'type 2', 'type 2')
+                ]
             ],
         ];
     }

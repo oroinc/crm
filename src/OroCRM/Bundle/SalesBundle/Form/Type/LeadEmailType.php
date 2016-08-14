@@ -35,9 +35,17 @@ class LeadEmailType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return 'orocrm_sales_lead_email';
     }

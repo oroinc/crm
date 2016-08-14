@@ -37,6 +37,14 @@ class AccountApiType extends AccountType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return 'account';
     }
 }

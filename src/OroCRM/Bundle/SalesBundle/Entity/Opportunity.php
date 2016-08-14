@@ -41,7 +41,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"="",
- *              "category"="sales_data"
+ *              "category"="sales_data",
+ *              "field_acl_supported" = "true"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
@@ -70,6 +71,11 @@ class Opportunity extends ExtendOpportunity implements
     use ChannelEntityTrait;
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
+
+    /**
+     * The key in system config for probability - status map
+     */
+    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
 
     /**
      * @var int

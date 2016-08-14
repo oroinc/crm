@@ -1,5 +1,22 @@
 oro_api:
+    entity_aliases:
+        # move this to "entity.yml" after the OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus entity will be removed
+        # so, the alias for "Extend\Entity\EV_Opportunity_Status" should be "opportunitystatus", not "salesopportunitystatus"
+        Extend\Entity\EV_Opportunity_Status:
+            alias:        opportunitystatus
+            plural_alias: opportunitystatuses
+        # move this to "entity.yml" after the OroCRM\Bundle\SalesBundle\Entity\LeadStatus entity will be removed
+        # so, the alias for "Extend\Entity\EV_Lead_Status" should be "leadstatus", not "salesleadstatus"
+        Extend\Entity\EV_Lead_Status:
+            alias:        leadstatus
+            plural_alias: leadstatuses
+
     entities:
+        # deprecated since 1.10. Enum type is used instead
+        OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus: { exclude: true }
+        # deprecated since 1.10. Enum type is used instead
+        OroCRM\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
+
         OroCRM\Bundle\SalesBundle\Entity\B2bCustomer: ~
         OroCRM\Bundle\SalesBundle\Entity\Lead:
             fields:

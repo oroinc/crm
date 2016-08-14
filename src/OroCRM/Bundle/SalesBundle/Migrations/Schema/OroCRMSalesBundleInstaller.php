@@ -100,7 +100,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_26';
+        return 'v1_27';
     }
 
     /**
@@ -149,7 +149,8 @@ class OroCRMSalesBundleInstaller implements
         OpportunityLeadInheritance::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
-        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
+
+        $this->addOpportunityStatusField($schema, $queries);
         AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
         AddLeadAddressTable::createLeadAddressTable($schema);
     }
@@ -650,6 +651,31 @@ class OroCRMSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * Add opportunity status Enum field and initialize default enum values
+     *
+     * @param Schema $schema
+     * @param QueryBag $queries
+     */
+    protected function addOpportunityStatusField(Schema $schema, QueryBag $queries)
+    {
+        $immutableCodes = ['in_progress', 'won', 'lost'];
+
+        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $immutableCodes);
+
+        $statuses = [
+            'in_progress' => 'Open',
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost',
+        ];
+
+        AddOpportunityStatus::addEnumValues($queries, $statuses);
     }
 
     /**

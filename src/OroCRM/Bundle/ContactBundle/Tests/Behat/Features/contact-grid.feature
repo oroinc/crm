@@ -4,12 +4,10 @@ Feature: Contacts grid
   As administrator
   I need to have grid with filters, sorters, pagination features
 
-Background:
+Scenario: Select records per page
   Given I login as "admin" user with "admin" password
   And I go to Customers/Contacts
-
-Scenario: Select records per page
-  Given number of records should be 30
+  And number of records should be 30
   And number of pages should be 2
   When I select 10 records per page
   Then number of pages should be 3
@@ -33,9 +31,9 @@ Scenario: Sorting grid by created at
 Scenario: Sorting grid by first name
   Given I select 50 records per page
   When sort grid by First Name
-  Then Zyta Zywiec must be first record
-  But when I sort grid by First Name again
   Then Aadi AABERG must be first record
+  But when I sort grid by First Name again
+  Then Zyta Zywiec must be first record
 
 Scenario: Filter grid by plain text
   Given I select 50 records per page
@@ -43,6 +41,8 @@ Scenario: Filter grid by plain text
   When I filter First Name as Contains "Aadi"
   And filter Last Name as Contains "AABERG"
   Then number of records should be 1
+  And I reset First Name filter
+  And I reset Last Name filter
 
 Scenario: Filter grid by date time range
   Given I select 50 records per page

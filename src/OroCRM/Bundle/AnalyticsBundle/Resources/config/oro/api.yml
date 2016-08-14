@@ -1,3 +1,0 @@
-oro_api:
-    entities:
-        OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory: ~

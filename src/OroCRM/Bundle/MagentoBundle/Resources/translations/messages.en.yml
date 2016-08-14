@@ -535,6 +535,36 @@ orocrm:
             default_group_id.label: Default Group
             sort_order.label:       Sort Order
 
+        website_activity:
+            days_ago:   1 day ago|%count% days ago
+            label:      Website Activity
+            summary.label: Summary
+            events.label: Events
+            metrics:
+                label: Metrics
+                data:
+                    site_visit_count.label:         Total site visits
+                    last_visit_date.label:          Last visit on
+                    average_monthly_visits.label:   Average visits per month
+                    page_view_count.label:          Total page views
+                    most_viewed_page.label:         Most viewed page
+                    last_viewed_page.label:         Last viewed page
+                    average_visit_views.label:      Average views per visit
+                    last_login_date.label:          Last login on
+                    item_added_count.label:         Items added to cart
+                    last_item_date.label:           Last added item on
+                    average_visit_items.label:      Average items added per visit
+                    checkout_count.label:           Checkouts entered
+                    last_checkout_date.label:       Last entered checkout on
+                    average_visit_checkouts.label:  Average visits per checkout
+            chart:
+                label: User Behaviour
+                day: Days
+                event_count: Number of events
+                legend:
+                    event_visit: Page views
+                    event_cart_item_added: Items added
+                    event_checkout_started: Checkouts
         newslettersubscriber:
             label:               Newsletter Subscriber
             entity_label:        Magento Newsletter Subscriber

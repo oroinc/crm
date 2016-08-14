@@ -19,7 +19,7 @@ class CartItemsApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('sku', 'text', ['required' => true]);
+        $builder->add('sku', 'text', ['required' => false]);
         $builder->add('name', 'text', ['required' => true]);
         $builder->add('qty', 'number', ['required' => true]);
         $builder->add('price', 'oro_money', ['required' => true]);
@@ -64,6 +64,14 @@ class CartItemsApiType extends AbstractType
      * {@inheritdoc}
      */
     public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
     {
         return self::NAME;
     }

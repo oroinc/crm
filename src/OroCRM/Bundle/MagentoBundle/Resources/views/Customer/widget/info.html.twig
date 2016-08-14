@@ -11,8 +11,10 @@
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
             {% endif %}
 
-            {{ channel.renderChannelProperty(entity, 'orocrm.magento.customer.data_channel.label') }}
-            {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
+            {% if entity.channel %}
+                {{ channel.renderChannelProperty(entity, 'orocrm.magento.customer.data_channel.label') }}
+                {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
+            {% endif %}
 
             {% if entity.website %}
                 {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
@@ -35,9 +37,9 @@
                     {% if entity.account %}
                         {% set accountViewGranted = resource_granted('orocrm_account_view') %}
                         {%- if accountViewGranted -%}
-                            <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account|escape }}</a>
+                            <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ ui.renderEntityViewLabel(entity.account, 'name', 'orocrm.account.entity_label') }}</a>
                         {%- else -%}
-                            {{ entity.account|escape }}
+                            {{ ui.renderEntityViewLabel(entity.account, 'name') }}
                         {%- endif -%}
                     {% endif %}
                 {%- endset -%}

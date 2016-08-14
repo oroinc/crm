@@ -29,6 +29,7 @@ datagrid:
                     - channel.name as channelName
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+                    - customer.id as customerId
                     - customer.name as customerName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -102,6 +103,36 @@ datagrid:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
+        fields_acl:
+            columns:
+                channelName:
+                    data_name: o.dataChannel
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                updatedAt:
+                    data_name: o.updatedAt
+                contactName:
+                    data_name: o.contact
+                customerName:
+                    data_name: o.customer
+                closeRevenue:
+                    data_name: o.closeRevenue
+                closeReasonLabel:
+                    data_name: o.closeReason
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                status:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
+                ownerName:
+                    data_name: o.owner
         properties:
             id: ~
             owner: ~
@@ -150,6 +181,7 @@ datagrid:
                     data_name: ownerName
             default:
                 createdAt: DESC
+            toolbar_sorting: true
         filters:
             columns:
                 channelName:
@@ -239,6 +271,18 @@ datagrid:
                 icon:          trash
                 link:          delete_link
         views_list: "@orocrm_sales.opportunity.datagrid_view_list"
+        appearances:
+            board:
+                opportunity-by-status:
+                    label: Board
+                    group_by:
+                        property: status
+                        order_by:
+                            priority: ASC
+                    card_view: orocrmsales/js/app/views/board/opportunity-card-view
+                    default_transition:
+                        class: orodatagrid/js/app/transitions/update-main-property-transition
+                    acl_resource: orocrm_sales_opportunity_update
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -969,6 +1013,16 @@ datagrid:
                 frontend_type: percent
             primaryEmail:
                 label: orocrm.contact.email.label
+        fields_acl:
+            columns:
+                name:
+                    data_name: opportunity.name
+                contactName:
+                    data_name: opportunity.contact
+                probability:
+                    data_name: opportunity.probability
+                primaryEmail:
+                    data_name: opportunity.contact
         properties:
             id: ~
         sorters:
@@ -1216,7 +1270,7 @@ datagrid:
                 ownerName:
                     type: choice-tree
                     data_name: c.owner
-                    enabled: false                    
+                    enabled: false
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
@@ -1373,6 +1427,20 @@ datagrid:
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_lead_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_lead_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_lead
+                params:     [ id ]
         filters:
             columns:
                  name:
@@ -1394,6 +1462,26 @@ datagrid:
                  phone:
                     type: string
                     data_name: phone.phone
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_lead_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-leads-grid:
         extends: base-sales-b2bcustomer-leads-grid
@@ -1525,12 +1613,35 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-
+        fields_acl:
+            columns:
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                statusLabel:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
         properties:
             id: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_opportunity_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_opportunity_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_opportunity
                 params:     [ id ]
         actions:
             view:
@@ -1540,6 +1651,18 @@ datagrid:
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_opportunity_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_opportunity_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-opportunities-grid:
         extends: base-sales-b2bcustomer-opportunities-grid
@@ -1721,6 +1844,18 @@ datagrid:
                 label:         orocrm.contact.email.label
             ownerName:
                 label:         orocrm.sales.opportunity.owner.label
+        fields_acl:
+            columns:
+                channelName:
+                    data_name: o.dataChannel
+                name:
+                    data_name: o.name
+                statusLabel:
+                    data_name: o.status
+                primaryEmail:
+                    data_name: o.contact
+                ownerName:
+                    data_name: o.owner
         sorters:
             columns:
                 channelName:
@@ -1865,6 +2000,18 @@ datagrid:
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+        fields_acl:
+            columns:
+                name:
+                    data_name: o.name
+                budgetAmount:
+                    data_name: o.budgetAmount
+                status:
+                    data_name: o.status
+                probability:
+                    data_name: o.probability
+                closeDate:
+                    data_name: o.closeDate
         options:
             entityHint: opportunities
             toolbarOptions:

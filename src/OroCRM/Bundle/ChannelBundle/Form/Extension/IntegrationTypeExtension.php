@@ -64,11 +64,26 @@ class IntegrationTypeExtension extends AbstractTypeExtension
                         unset($config['choices'][$sourceType]);
                     }
 
+                    $unsetOptions = ['choice_list'];
+
+                    /**
+                     * @todo: should be removed in scope of BAP-11222
+                     */
+                    /* Check if right now we're using Symfony 2.8+ */
+                    if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') &&
+                        is_callable($config['choice_label'])) {
+                        /* It's undocumented features of Symfony 2.8 that will be removed in Symfony 3.0+  */
+                        foreach ($config['choices'] as $choice => $labelId) {
+                            $config['choices'][$choice] = call_user_func($config['choice_label'], null, $labelId);
+                        }
+                        array_push($unsetOptions, 'choice_label');
+                    }
+
                     FormUtils::replaceField(
                         $form,
                         'type',
                         ['choices' => $config['choices']],
-                        ['choice_list']
+                        $unsetOptions
                     );
                 }
             },
