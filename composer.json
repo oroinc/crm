@@ -23,7 +23,9 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "oro/platform": "1.10.*"
+        "oro/platform": "1.10.*",
+        "oro/crm-task-bundle": "1.0.*",
+        "oro/crm-call-bundle": "1.0.*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
