@@ -27,6 +27,10 @@
         "oro/crm-task-bundle": "1.x-dev",
         "oro/crm-call-bundle": "1.x-dev"
     },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "2.3.*",
+        "phpunit/phpunit": "4.8.*"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
