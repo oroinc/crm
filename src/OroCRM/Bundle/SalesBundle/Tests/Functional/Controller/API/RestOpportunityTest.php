@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -66,7 +67,14 @@ class RestOpportunityTest extends WebTestCase
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
-        $this->assertEquals('Open', $result['status']);
+        // Because api return name of status, that can be different, assert id
+        $status = $this->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getRepository(ExtendHelper::buildEnumValueClassName('opportunity_status'))
+            ->findOneByName($result['status']);
+
+        $this->assertEquals('in_progress', $status->getId());
         // TODO: incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;
