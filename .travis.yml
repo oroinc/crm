@@ -2,6 +2,11 @@ sudo: false
 
 language: php
 
+branches:
+  only:
+    - master
+    - /^1\.\d+$/
+
 php:
     - 5.5
     - 5.6
