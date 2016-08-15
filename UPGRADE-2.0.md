@@ -23,3 +23,7 @@ UPGRADE FROM 1.10 to 2.0
 - `ChannelChangeStatusEvent` was removed.
 - The parameter `orocrm_channel.event_listener.change_integration_status.class` was removed.
 - The parameter `orocrm_channel.event_listener.timezone_change.class` was removed.
+
+####OroCRMAnalyticsBundle:
+- The class `StateManager` and its service `orocrm_analytics.model.state_manager` were removed.
+- The method `RFMMetricStateManager::scheduleRecalculation` was removed. Use appropriate method from `ScheduleCalculateAnalyticsService` service.

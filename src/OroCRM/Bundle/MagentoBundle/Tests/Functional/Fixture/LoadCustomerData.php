@@ -5,24 +5,19 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadCustomerData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
+    use ContainerAwareTrait;
+
     /** @var  ObjectManager */
     protected $em;
-
-    /** @var  ContainerInterface */
-    protected $container;
 
     /** @var  User */
     protected $user;
@@ -30,16 +25,12 @@ class LoadCustomerData extends AbstractFixture implements ContainerAwareInterfac
     /** @var  Organization */
     protected $organization;
 
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function getDependencies()
     {
-        return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
-        ];
+        return [LoadMagentoChannel::class];
     }
 
     /**
@@ -84,5 +75,7 @@ class LoadCustomerData extends AbstractFixture implements ContainerAwareInterfac
         $customer->setOrganization($this->organization);
 
         $this->em->persist($customer);
+
+        $this->setReference('customer_default', $customer);
     }
 }

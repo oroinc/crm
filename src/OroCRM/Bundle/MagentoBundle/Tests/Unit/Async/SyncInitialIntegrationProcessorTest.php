@@ -16,10 +16,10 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
-use OroCRM\Bundle\MagentoBundle\Command\SyncInitialIntegrationProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 /**
@@ -57,7 +57,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             new JobRunner()
         );
     }
@@ -72,7 +72,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             new JobRunner()
         );
 
@@ -92,7 +92,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             new JobRunner()
         );
 
@@ -110,7 +110,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             new JobRunner()
         );
 
@@ -133,7 +133,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             new JobRunner()
         );
 
@@ -171,7 +171,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $registryStub,
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             $jobRunner
         );
 
@@ -214,7 +214,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $registryStub,
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             $jobRunner
         );
 
@@ -245,7 +245,7 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createRFMMetricStateManagerMock(),
+            $this->createScheduleCalculateAnalyticsServiceMock(),
             $jobRunner
         );
 
@@ -285,11 +285,11 @@ class SyncInitialIntegrationProcessorTest extends WebTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|RFMMetricStateManager
+     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
      */
-    private function createRFMMetricStateManagerMock()
+    private function createScheduleCalculateAnalyticsServiceMock()
     {
-        return $this->getMock(RFMMetricStateManager::class, [], [], '', false);
+        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
     }
 
     /**

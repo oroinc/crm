@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,6 +13,11 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|RFMMetricStateManager
      */
     protected $manager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     */
+    protected $scheduler;
 
     /**
      * @var TimezoneChangeListener
@@ -24,7 +30,9 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new TimezoneChangeListener($this->manager);
+        $this->scheduler = $this->createScheduleCalculateAnalyticsServiceMock();
+
+        $this->listener = new TimezoneChangeListener($this->manager, $this->scheduler);
     }
 
     protected function tearDown()
@@ -37,8 +45,8 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->never())
             ->method('resetMetrics');
 
-        $this->manager->expects($this->never())
-            ->method('scheduleRecalculation');
+        $this->scheduler->expects($this->never())
+            ->method('scheduleForAllChannels');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ConfigUpdateEvent $event */
         $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
@@ -68,15 +76,20 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->once())
             ->method('resetMetrics');
 
-        $this->manager->expects($this->once())
-            ->method('scheduleRecalculation');
+        $this->scheduler->expects($this->once())
+            ->method('scheduleForAllChannels');
 
         $this->manager->expects($this->once())
             ->method('resetMetrics');
 
-        $this->manager->expects($this->once())
-            ->method('scheduleRecalculation');
-
         $this->listener->onConfigUpdate($event);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     */
+    private function createScheduleCalculateAnalyticsServiceMock()
+    {
+        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
     }
 }

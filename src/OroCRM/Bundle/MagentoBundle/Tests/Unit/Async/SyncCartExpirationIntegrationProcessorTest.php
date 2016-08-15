@@ -5,6 +5,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
@@ -40,7 +41,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     {
         new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
     }
 
@@ -52,7 +54,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     {
         $processor = new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -69,7 +72,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     {
         $processor = new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -85,7 +89,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -106,7 +111,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -128,7 +134,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
-            $this->createSyncProcessorMock()
+            $this->createSyncProcessorMock(),
+            new JobRunner()
         );
 
         $message = new NullMessage();
@@ -157,7 +164,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
-            $syncProcessorMock
+            $syncProcessorMock,
+            new JobRunner()
         );
 
         $message = new NullMessage();

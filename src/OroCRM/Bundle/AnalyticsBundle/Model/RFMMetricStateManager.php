@@ -2,35 +2,38 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Model;
 
-use JMS\JobQueueBundle\Entity\Job;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class RFMMetricStateManager extends StateManager
+class RFMMetricStateManager
 {
     /**
-     * @var string
+     * @var DoctrineHelper
      */
-    protected $interface;
+    private $doctrineHelper;
 
     /**
      * @var string
      */
-    protected $channelClass;
+    private $interface;
+
+    /**
+     * @var string
+     */
+    private $channelClass;
 
     /**
      * @param DoctrineHelper $doctrineHelper
-     * @param string         $interface
-     * @param string         $channelClass
+     * @param string $interface
+     * @param string $channelClass
      */
-    public function __construct(DoctrineHelper $doctrineHelper, $interface, $channelClass)
-    {
-        parent::__construct($doctrineHelper);
-
+    public function __construct(
+        DoctrineHelper $doctrineHelper,
+        $interface,
+        $channelClass
+    ) {
+        $this->doctrineHelper = $doctrineHelper;
         $this->interface    = $interface;
         $this->channelClass = $channelClass;
     }
@@ -96,58 +99,5 @@ class RFMMetricStateManager extends StateManager
             ->setParameter('dataChannels', $ids);
 
         $qb->getQuery()->execute();
-    }
-
-    /**
-     * @param Channel $channel
-     */
-    public function scheduleRecalculation(Channel $channel = null)
-    {
-        if ($channel) {
-            $argument = sprintf('--channel=%s', $channel->getId());
-
-            if ($this->isJobRunning($argument)) {
-                return;
-            }
-
-            $isActiveChannel = $channel->getStatus() === Channel::STATUS_ACTIVE;
-            $channelData = $channel->getData();
-            $rfmEnabled = !empty($channelData[RFMAwareInterface::RFM_STATE_KEY]);
-
-            if (!$isActiveChannel || !$rfmEnabled) {
-                return;
-            }
-        }
-
-        if ($this->getJob()) {
-            return;
-        }
-
-        $args = [];
-        if ($channel) {
-            $argument = sprintf('--channel=%s', $channel->getId());
-            $channelJob = $this->getJob($argument);
-            if ($channelJob) {
-                return;
-            }
-
-            $args = [$argument];
-        }
-
-        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME, $args);
-        $em = $this->doctrineHelper->getEntityManager($job);
-
-        if (!$channel) {
-            $channelJobs = $this->getJob('--channel');
-
-            if ($channelJobs) {
-                foreach ($channelJobs as $channelJob) {
-                    $em->remove($channelJob);
-                }
-            }
-        }
-
-        $em->persist($job);
-        $em->flush($job);
     }
 }

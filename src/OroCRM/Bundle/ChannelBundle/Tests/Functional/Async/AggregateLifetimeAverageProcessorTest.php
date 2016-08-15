@@ -49,6 +49,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['force' => true, 'clear_table_use_delete' => true]));
+        $message->setMessageId(uniqid('oro', true));
 
         $processor->process($message, new NullSession());
 

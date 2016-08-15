@@ -3,10 +3,10 @@
 namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
@@ -16,6 +16,11 @@ class RFMCategoryListener
      * @var RFMMetricStateManager
      */
     protected $metricStateManager;
+
+    /**
+     * @var ScheduleCalculateAnalyticsService
+     */
+    protected $scheduleCalculateAnalyticsService;
 
     /**
      * @var string
@@ -39,14 +44,20 @@ class RFMCategoryListener
 
     /**
      * @param RFMMetricStateManager $metricStateManager
+     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
      * @param string $categoryClass
      * @param string $channelClass
      */
-    public function __construct(RFMMetricStateManager $metricStateManager, $categoryClass, $channelClass)
-    {
+    public function __construct(
+        RFMMetricStateManager $metricStateManager,
+        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
+        $categoryClass,
+        $channelClass
+    ) {
         $this->metricStateManager = $metricStateManager;
         $this->categoryClass = $categoryClass;
         $this->channelClass = $channelClass;
+        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
     }
 
     /**
@@ -84,7 +95,7 @@ class RFMCategoryListener
             }
 
             $this->metricStateManager->resetMetrics($channel);
-            $this->metricStateManager->scheduleRecalculation($channel);
+            $this->scheduleCalculateAnalyticsService->scheduleForChannel($channel->getId());
         }
 
         $this->channelsToDrop = [];

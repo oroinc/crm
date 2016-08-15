@@ -60,6 +60,7 @@ services:
         class: %orocrm_analytics.event_listener.timezone_change.class%
         arguments:
             - '@orocrm_analytics.model.rfm_state_manager'
+            - '@orocrm_analytics.schedule_calculate_analytics'
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -79,6 +80,7 @@ services:
         class: %orocrm_analytics.event_listener.rfm_category.class%
         arguments:
             - '@orocrm_analytics.model.rfm_state_manager'
+            - '@orocrm_analytics.schedule_calculate_analytics'
             - %orocrm_analytics.entity.rfm_category.class%
             - %orocrm_channel.entity.class%
         tags:

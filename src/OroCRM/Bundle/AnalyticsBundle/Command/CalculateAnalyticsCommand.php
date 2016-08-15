@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\AnalyticsBundle\Command;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,10 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 class CalculateAnalyticsCommand extends Command implements ContainerAwareInterface, CronCommandInterface
 {
     use ContainerAwareTrait;
-
-    // TODO CRM-5838  remove these constants
-    const BATCH_SIZE   = 200;
-    const COMMAND_NAME = 'oro:cron:analytic:calculate';
 
     /**
      * {@inheritdoc}
@@ -64,7 +59,7 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
         } else {
             $output->writeln('Schedule analytics calculation for all channels.');
 
-            $this->getScheduleCalculateAnalyticsService()->scheduleForAllChannels(false);
+            $this->getScheduleCalculateAnalyticsService()->scheduleForAllChannels();
         }
 
         $output->writeln('Completed');

@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
@@ -23,14 +23,22 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $listener;
 
+    /**
+     * @var ScheduleCalculateAnalyticsService
+     */
+    protected $scheduler;
+
     protected function setUp()
     {
         $this->manager = $this->getMockBuilder('OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scheduler = $this->createScheduleCalculateAnalyticsServiceMock();
+
         $this->listener = new RFMCategoryListener(
             $this->manager,
+            $this->scheduler,
             'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
             'OroCRM\Bundle\ChannelBundle\Entity\Channel'
         );
@@ -75,8 +83,8 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->exactly($expectedResetMetrics))
             ->method('resetMetrics');
 
-        $this->manager->expects($this->exactly($expectedScheduleRecalculation))
-            ->method('scheduleRecalculation');
+        $this->scheduler->expects($this->exactly($expectedScheduleRecalculation))
+            ->method('scheduleForChannel');
 
         $args = new OnFlushEventArgs($em);
 
@@ -164,5 +172,13 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $category->setChannel($channel);
 
         return $category;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     */
+    private function createScheduleCalculateAnalyticsServiceMock()
+    {
+        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
     }
 }

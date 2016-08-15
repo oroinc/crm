@@ -12,7 +12,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -37,9 +37,9 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
     private $optionalListenerManager;
 
     /**
-     * @var RFMMetricStateManager
+     * @var ScheduleCalculateAnalyticsService
      */
-    private $rfmMetricStateManager;
+    private $scheduleCalculateAnalyticsService;
 
     /**
      * @var JobRunner
@@ -50,20 +50,20 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      * @param DoctrineHelper $doctrineHelper
      * @param InitialSyncProcessor $initialSyncProcessor
      * @param OptionalListenerManager $optionalListenerManager
-     * @param RFMMetricStateManager $rfmMetricStateManager
+     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
      * @param JobRunner $jobRunner
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         InitialSyncProcessor $initialSyncProcessor,
         OptionalListenerManager $optionalListenerManager,
-        RFMMetricStateManager $rfmMetricStateManager,
+        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
         JobRunner $jobRunner
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->initialSyncProcessor = $initialSyncProcessor;
         $this->optionalListenerManager = $optionalListenerManager;
-        $this->rfmMetricStateManager = $rfmMetricStateManager;
+        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
         $this->jobRunner = $jobRunner;
     }
 
@@ -162,7 +162,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
             ));
         }
 
-        $this->rfmMetricStateManager->scheduleRecalculation($channel);
+        $this->scheduleCalculateAnalyticsService->scheduleForChannel($channel->getId());
     }
 
     /**
