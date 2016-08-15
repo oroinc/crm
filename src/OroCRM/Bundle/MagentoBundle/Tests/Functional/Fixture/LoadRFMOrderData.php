@@ -2,15 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LoadRFMOrderData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -166,8 +165,6 @@ class LoadRFMOrderData extends AbstractFixture implements DependentFixtureInterf
      */
     public function getDependencies()
     {
-        return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
-        ];
+        return [LoadMagentoChannel::class];
     }
 }

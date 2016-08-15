@@ -272,10 +272,10 @@ definitions:
         pre_conditions:
             '@not_empty': $customer
         actions_configuration:
-            '@call_service_method':
+            - '@call_service_method':
                 service: 'orocrm_analytics.schedule_calculate_analytics'
                 method: 'scheduleForChannel'
-                method_parameters: [$channel.id, [$customer.id]]
+                method_parameters: [$dataChannel.id, [$customer.id]]
 
     magento_analytics_customer_calculate_imported:
         label:   'Calculate RFM analytics for Magento Customer on Import'
@@ -289,12 +289,16 @@ definitions:
                 - '@equal': [$channel.type, 'magento']
                 - '@equal': [$connector, 'order']
         actions_configuration:
+            - '@find_entity':
+                parameters:
+                    class: OroCRM\Bundle\ChannelBundle\Entity\Channel
+                    attribute: $.dataChannel
+                    where:
+                        dataSource: $channel.id
             - '@call_service_method':
                 service: 'orocrm_analytics.schedule_calculate_analytics'
                 method: 'scheduleForChannel'
-                method_parameters: [$channel.id]
-
-
+                method_parameters: [$.dataChannel.id]
 
     magento_schedule_integration:
         label:   'Shedule integration'
@@ -347,7 +351,7 @@ triggers:
         -
             event:    update
             priority: 10
-            field:    subtotalAmmount
+            field:    subtotalAmount
 
     magento_schedule_integration:
         -
