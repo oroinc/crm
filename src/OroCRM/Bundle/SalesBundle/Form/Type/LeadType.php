@@ -97,7 +97,7 @@ class LeadType extends AbstractType
                     'type'     => 'orocrm_sales_lead_address',
                     'required' => false,
                     'add_label'  => 'orocrm.sales.lead.add_address.label',
-                    'show_form_when_empty' => false,
+                    'show_form_when_empty' => true,
                     'block_name' => 'address_collection',
                     'options'  => [
                         'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\LeadAddress',
