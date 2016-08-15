@@ -14,8 +14,10 @@
         bootstrap                   = "vendor/autoload.php">
 
     <testsuites>
-        <testsuite name="Project Unit Tests">
-            <directory suffix="Test.php">src/OroCRM/Bundle/*Bundle/Tests/Unit</directory>
+        <testsuite name="unit">
+            <directory suffix="Test.php">src/*/Bundle/*Bundle/Tests/Unit</directory>
+            <directory suffix="Test.php">src/*/Component/*/Tests/Unit</directory>
+            <directory suffix="Test.php">src/*/*/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 
