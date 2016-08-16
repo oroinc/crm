@@ -11,6 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class UpdateEntityMergeOptions implements Migration, ExtendExtensionAwareInterface
 {
@@ -34,6 +35,16 @@ class UpdateEntityMergeOptions implements Migration, ExtendExtensionAwareInterfa
             new UpdateEntityConfigFieldValueQuery(
                 Account::class,
                 'extend_description',
+                'merge',
+                'autoescape',
+                false
+            )
+        );
+
+        $queries->addQuery(
+            new UpdateEntityConfigFieldValueQuery(
+                Contact::class,
+                'description',
                 'merge',
                 'autoescape',
                 false
