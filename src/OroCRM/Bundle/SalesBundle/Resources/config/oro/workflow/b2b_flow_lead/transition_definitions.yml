@@ -2,10 +2,10 @@ workflows:
     b2b_flow_lead:
         transition_definitions:
             __start___definition:
-                pre_conditions:
+                preconditions:
                     '@not_empty': $lead.id
             qualify_definition:
-                pre_conditions:  # if lead.status = "new"
+                preconditions:  # if lead.status = "new"
                     '@and':
                         - '@equal': [$lead.status.id, 'new']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
@@ -15,7 +15,7 @@ workflows:
                             - '@not_empty': $company_name
                             - '@not_empty': $b2bcustomer
                         message: "Company name or customer must be selected."
-                post_actions: # set lead.status = "qualified"
+                actions: # set lead.status = "qualified"
                     - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'qualified'
@@ -183,7 +183,7 @@ workflows:
             cancel_definition: # if lead.status = "new"
                 conditions:
                     '@equal': [$lead.status.id, 'new']
-                post_actions: # set lead.status = "canceled"
+                actions: # set lead.status = "canceled"
                     - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'canceled'
@@ -193,7 +193,7 @@ workflows:
                     '@or':
                         - '@equal': [$lead.status.id, 'qualified']
                         - '@equal': [$lead.status.id, 'canceled']
-                post_actions: # set lead.status = "new"
+                actions: # set lead.status = "new"
                     - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'new'
