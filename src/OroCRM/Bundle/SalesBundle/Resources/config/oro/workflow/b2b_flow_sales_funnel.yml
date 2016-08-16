@@ -3,6 +3,7 @@ imports:
     - { resource: 'b2b_flow_sales_funnel/attributes.yml' }
     - { resource: 'b2b_flow_sales_funnel/transitions.yml' }
     - { resource: 'b2b_flow_sales_funnel/transition_definitions.yml' }
+    - { resource: 'b2b_flow_sales_funnel/entity_restrictions.yml' }
 
 workflows:
     b2b_flow_sales_funnel:
