@@ -31,7 +31,7 @@
     {% if form.vars.value.id or resource_granted('orocrm_contact_group_update') %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'orocrm_contact_group_update',
-            'params': {'id': '$id'}
+            'params': {'id': '$.id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
