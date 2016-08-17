@@ -213,7 +213,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
     {
         $values = array_map(
             function ($data) use ($key) {
-                if (empty($data[$key])) {
+                if (!array_key_exists($key, $data)) {
                     return null;
                 }
 
@@ -222,6 +222,11 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             $changeSet
         );
 
-        return array_filter($values);
+        return array_filter(
+            $values,
+            function ($value) {
+                return $value !== null;
+            }
+        );
     }
 }
