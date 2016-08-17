@@ -64,10 +64,12 @@
 {% endblock %}
 
 {% block oro_entity_create_or_select_inline_js_channel_aware %}
+    {% if form.vars.configs.async_dialogs|default(false) is sameas(true) %}
+        {% set asyncNameSegment = 'async-' %}
+    {% endif %}
     <script type="text/javascript">
-        require(['jquery', 'oroform/js/select-create-inline-type-handler'],
-        function ($, handler) {
-            $(function() {
+        require(['jquery', 'oroform/js/app/components/select-create-inline-type-{{ asyncNameSegment|default('') }}component', 'ready!dom'],
+            function ($, SelectCreateInlineTypeComponent) {
                 var presetChannelId = {{ channel_id|json_encode|raw }};
                 var $formEl = $('#{{ id }}');
                 var $formElContainer = $('#{{ id }}-el');
@@ -92,16 +94,16 @@
                 }) %}
                 {% endif %}
 
-                var configurator = handler(
-                    $formElContainer,
-                    $formEl,
-                    {{ label|trans|json_encode|raw }},
-                    {{ urlParts|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
-                    {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
-                    {{ form.vars.create_enabled|default(false)|json_encode|raw }}
-                ),
+                var selectCreateInlineTypeComponent = new SelectCreateInlineTypeComponent({
+                    _sourceElement: $formElContainer,
+                    inputSelector: '#{{ id }}',
+                    entityLabel: {{ label|trans|json_encode|raw }},
+                    urlParts: {{ urlParts|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
+                    existingEntityGridId: {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
+                    createEnabled: {{ form.vars.create_enabled|default(false)|json_encode|raw }}
+                }),
                 changeHandler = function($el) {
-                    var parts = configurator.getUrlParts(),
+                    var parts = selectCreateInlineTypeComponent.getUrlParts(),
                         channelIds = [],
                         currentVal = $el.val();
 
@@ -128,10 +130,10 @@
 
                 $channelSelector.change(function() {
                     changeHandler($(this));
-                    configurator.setSelection(null);
+                    selectCreateInlineTypeComponent.setSelection(null);
                 });
                 changeHandler($channelSelector);
-            });
-        });
+            }
+        );
     </script>
 {% endblock %}
