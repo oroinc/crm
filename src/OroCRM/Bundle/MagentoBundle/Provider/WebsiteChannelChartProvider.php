@@ -2,15 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-
-use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
-use Oro\Bundle\ChartBundle\Model\ChartView;
-use Oro\Bundle\ChartBundle\Utils\ColorUtils;
-
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
-
 /**
  * {@inheritdoc}
  */
@@ -31,7 +22,7 @@ class WebsiteChannelChartProvider extends WebsiteChartProvider
      */
     protected function formatGroup(array $row)
     {
-        return $row['channel'] . ' - ' . $row['name'];
+        return $row['channel'] . ' - ' . $this->getLegendLabel($row['name']);
     }
 
     /**

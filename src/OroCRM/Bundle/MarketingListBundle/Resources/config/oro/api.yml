@@ -1,7 +1,0 @@
-oro_api:
-    entities:
-        OroCRM\Bundle\MarketingListBundle\Entity\MarketingList: ~
-        OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem: ~
-        OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem: ~
-        OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType: ~
-        OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem: ~

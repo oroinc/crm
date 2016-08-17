@@ -38,29 +38,13 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLeadEmail;
  *      }
  * )
  */
-class LeadEmail extends ExtendLeadEmail implements EmailInterface
+class LeadEmail extends ExtendLeadEmail
 {
     /**
      * @ORM\ManyToOne(targetEntity="Lead", inversedBy="emails")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailField()
-    {
-        return 'email';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailOwner()
-    {
-        return $this->getOwner();
-    }
 
     /**
      * Set lead as owner.

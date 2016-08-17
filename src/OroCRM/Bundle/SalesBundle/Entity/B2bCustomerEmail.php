@@ -38,29 +38,13 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
  *      }
  * )
  */
-class B2bCustomerEmail extends ExtendB2bCustomerEmail implements EmailInterface
+class B2bCustomerEmail extends ExtendB2bCustomerEmail
 {
     /**
      * @ORM\ManyToOne(targetEntity="B2bCustomer", inversedBy="emails")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailField()
-    {
-        return 'email';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailOwner()
-    {
-        return $this->getOwner();
-    }
 
     /**
      * Set contact as owner.

@@ -30,7 +30,7 @@ Scenario: View Call in activity list
   Then I should see call with:
     | Subject             | Proposed Charlie to star in new film |
     | Additional comments | Charlie was in a good mood           |
-    | Call date & time    | Aug 24, 2017, 11:00 AM               |
+    | Call date & time    | Aug 24, 2017,? 11:00 AM              |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
     | Duration            | 5:30                                 |
