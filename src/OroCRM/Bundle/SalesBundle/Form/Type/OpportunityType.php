@@ -82,7 +82,7 @@ class OpportunityType extends AbstractType
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                         'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
-                    ],
+                    ]
                 ]
             )
             ->add(
@@ -92,9 +92,7 @@ class OpportunityType extends AbstractType
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',
                     'new_item_property_name' => 'name',
-                    'configs'                => [
-                        'async_dialogs' => true
-                    ]
+                    'configs'                => ['async_dialogs' => true]
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
