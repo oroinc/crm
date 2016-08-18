@@ -2,25 +2,26 @@ sudo: false
 
 language: php
 
+branches:
+  only:
+    - master
+    - /^1\.\d+$/
+
 php:
     - 5.5
     - 5.6
     - 7.0
 
-env:
-  - SYMFONY_VERSION=2.7.*
-
 cache:
   directories:
-    - $HOME/.composer/cache/files
+    - $HOME/.composer/cache/
 
 before_script:
   - phpenv config-rm xdebug.ini
-  - composer self-update
   - phpenv config-add travis.php.ini
-  - travis_wait composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source --update-no-dev
-  - travis_wait composer require squizlabs/php_codesniffer:2.3.3 --prefer-source --update-no-dev
+  - composer self-update
+  - composer install
 
-script: 
-  - phpunit
+script:
+  - ./vendor/bin/phpunit --verbose --testsuite=unit
   - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=psr2
