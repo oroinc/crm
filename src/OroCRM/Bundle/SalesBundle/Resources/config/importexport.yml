@@ -89,7 +89,10 @@ services:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace:
+        class: OroCRM\Bundle\SalesBundle\ImportExport\Strategy\B2bAddOrReplaceStrategy
         parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+             - [setPropertyAccessor, ["@property_accessor"]]
 
     # Import processor
     orocrm_sales.importexport.processor.import.lead:
