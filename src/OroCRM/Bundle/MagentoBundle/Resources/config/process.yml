@@ -136,7 +136,7 @@ definitions:
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   20
         exclude_definitions: [magento_customer_export, magento_customer_creation]
-        pre_conditions:
+        preconditions:
             '@and':
                 - '@not_empty': $channel
                 - '@equal': [$channel.enabled, true]
@@ -202,7 +202,7 @@ definitions:
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
         order:   20
         exclude_definitions: [magento_customer_address_export, magento_customer_creation]
-        pre_conditions:
+        preconditions:
             '@and':
                 - '@not_empty': $channel
                 - '@equal': [$channel.enabled, true]
@@ -269,7 +269,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
         order:   30
-        pre_conditions:
+        preconditions:
             '@not_empty': $customer
         actions_configuration:
             - '@call_service_method':
@@ -282,7 +282,7 @@ definitions:
         enabled: true
         entity:  Oro\Bundle\IntegrationBundle\Entity\Status
         order:   30
-        pre_conditions:
+        preconditions:
             '@and':
                 - '@equal': [$code, 1]
                 - '@not_empty': $channel
