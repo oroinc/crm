@@ -119,15 +119,6 @@ datagrid:
                             property: name
                             translatable_options: false
                     enabled: false
-                customerGroup:
-                    type: entity
-                    data_name: cg.id
-                    options:
-                        field_options:
-                            class: OroCRMMagentoBundle:CustomerGroup
-                            property: name
-                            translatable_options: false
-                    enabled: false
                 firstName:
                     type: string
                     data_name: c.firstName
@@ -163,6 +154,15 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: c.updatedAt
+                    enabled: false
+                customerGroup:
+                    type: entity
+                    data_name: cg.id
+                    options:
+                        field_options:
+                            class: OroCRMMagentoBundle:CustomerGroup
+                            property: name
+                            translatable_options: false
                     enabled: false
         actions:
             view:
