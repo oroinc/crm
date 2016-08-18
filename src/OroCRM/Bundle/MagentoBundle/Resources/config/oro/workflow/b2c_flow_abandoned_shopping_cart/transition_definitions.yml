@@ -2,23 +2,23 @@ workflows:
     b2c_flow_abandoned_shopping_cart:
         transition_definitions:
             __start___definition:
-                pre_conditions:
+                preconditions:
                     '@not_empty': $cart.id
 
             convert_definition:
-                pre_conditions:
+                preconditions:
                     '@equal': [$cart.status.name, 'open']
-                post_actions: []
+                actions: []
 
             place_order_definition:
-                pre_conditions:
+                preconditions:
                     '@and':
                         - '@equal': [$cart.status.name, 'open']
                         - '@not_empty': [$cart.channel.transport.adminUrl]
                         - '@equal': [$cart.channel.transport.isExtensionInstalled, true]
 
             convert_to_opportunity_definition:
-                pre_conditions:
+                preconditions:
                     '@and':
                         - '@equal': [$cart.status.name, 'open']
                         - '@channel_entity_availiable': [$cart.dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
@@ -30,7 +30,7 @@ workflows:
                         - '@not_empty':
                             parameters: $opportunity_owner
                             message: 'Owner must be set'
-                post_actions:
+                actions:
                     - '@find_entity': # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'converted_to_opportunity'
@@ -52,9 +52,9 @@ workflows:
                             dataChannel: $cart.dataChannel
 
             abandon_definition:
-                pre_conditions:
+                preconditions:
                     '@equal': [$cart.status.name, 'open']
-                post_actions:
+                actions:
                     - '@find_entity': # Set cart status to lost
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'lost'
@@ -65,7 +65,7 @@ workflows:
                     '@or':
                         - '@equal': [$cart.status.name, 'converted_to_opportunity']
                         - '@equal': [$cart.status.name, 'lost']
-                post_actions:
+                actions:
                     - '@assign_value': # Reset latest opportunity data
                         - [$cart.opportunity, ~]
                         - [$opportunity_name, ~]

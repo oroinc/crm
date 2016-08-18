@@ -31,7 +31,7 @@ workflows:
                     attribute_fields:
                         cart_id:
                             form_type: hidden
-                    init_actions:
+                    form_init:
                         - '@assign_value': [$cart_id, $cart.id]
 
             convert_to_opportunity:
@@ -67,7 +67,7 @@ workflows:
                                 required: false
                     attribute_default_values:
                         opportunity_budget: $cart.subTotal
-                    init_actions:
+                    form_init:
                         - '@assign_active_user': $opportunity_owner
                         - '@format_name':
                             attribute: $.result.formattedCustomerName
