@@ -26,6 +26,10 @@ workflows:
                 attribute: opportunity
                 field: closeReason
                 step: open
+            opportunity_close_revenue_open:
+                attribute: opportunity
+                field: closeRevenue
+                step: open
             opportunity_customer_won:
                 attribute: opportunity
                 step: won

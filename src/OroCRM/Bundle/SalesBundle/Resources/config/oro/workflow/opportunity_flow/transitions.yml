@@ -28,7 +28,7 @@ workflows:
                                     - won
                                     - lost
                         probability: ~
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:
@@ -97,7 +97,7 @@ workflows:
                             options:
                                 constraints:
                                     - NotBlank: ~
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity': # set status if blank (to satisfy the validator)
                             conditions:
                                 '@empty': [$status]
@@ -132,7 +132,7 @@ workflows:
                             options:
                                 constraints:
                                     - NotBlank: ~
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity': # set status if blank (to satisfy the validator)
                             conditions:
                                 '@empty': [$status]
@@ -187,7 +187,7 @@ workflows:
                             form_type: oro_resizeable_rich_text
                         notes:
                             form_type: oro_resizeable_rich_text
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:

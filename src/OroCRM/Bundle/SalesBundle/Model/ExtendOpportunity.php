@@ -2,6 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+
+/**
+ * @method AbstractEnumValue getStatus()
+ * @method ExtendOpportunity setStatus(AbstractEnumValue $status)
+ */
 class ExtendOpportunity
 {
     /**

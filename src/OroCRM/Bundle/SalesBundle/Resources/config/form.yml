@@ -46,6 +46,7 @@ services:
             - '@orocrm_sales.provider.probability'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_entity_extend.enum_type_helper'
+            - '@orocrm_sales.builder.opportunity_relations'
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity }
 
@@ -81,7 +82,6 @@ services:
 
     orocrm_sales.lead_to_opportunity.form.type:
         class: %orocrm_sales.lead_to_opportunity.form.type.class%
-        parent: orocrm_sales.opportunity.form.type
         tags:
             - { name: form.type, alias: orocrm_sales_lead_to_opportunity }
 
@@ -227,9 +227,11 @@ services:
             - { name: form.type, alias: orocrm_sales_opportunity_status_select }
 
     orocrm_sales.form.type.b2bcustomer_with_channel_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelSelectType
+        class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelCreateOrSelectType
+        arguments:
+            - '@oro_security.security_facade'
         tags:
-            - { name: form.type, alias: orocrm_sales_b2bcustomer_with_channel_select }
+            - { name: form.type, alias: orocrm_sales_b2bcustomer_with_channel_create_or_select }
 
     orocrm_sales.salesfunnel.form.type:
         class: %orocrm_sales.salesfunnel.form.type.class%
