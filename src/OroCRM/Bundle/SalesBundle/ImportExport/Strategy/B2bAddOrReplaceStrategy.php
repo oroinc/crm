@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\ImportExport\Strategy;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -47,6 +48,11 @@ class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         $entity = parent::afterProcessEntity($entity);
         $this->clearEmptyAddresses($entity);
 
+        $billingAddress = $entity->getBillingAddress();
+        $this->guessRegion($billingAddress);
+        $shippingAddress = $entity->getShippingAddress();
+        $this->guessRegion($shippingAddress);
+
         return $entity;
     }
 
@@ -75,6 +81,29 @@ class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 
         if (!$this->isShippingAddress) {
             $entity->setShippingAddress(null);
+        }
+    }
+
+    /**
+     * @param Address $address
+     */
+    protected function guessRegion($address)
+    {
+        if ($address->getCountry() && $address->getRegionText()
+            && !$address->getRegion()
+        ) {
+            $region = $this->doctrineHelper
+                ->getEntityRepository('OroAddressBundle:Region')
+                ->findOneBy(
+                    [
+                        'country' => $address->getCountry(),
+                        'name'    => $address->getRegionText()
+                    ]
+                );
+            if ($region) {
+                $address->setRegion($region);
+                $address->setRegionText(null);
+            }
         }
     }
 }
