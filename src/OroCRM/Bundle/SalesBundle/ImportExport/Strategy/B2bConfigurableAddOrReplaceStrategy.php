@@ -48,10 +48,8 @@ class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrate
         $entity = parent::afterProcessEntity($entity);
         $this->clearEmptyAddresses($entity);
 
-        $billingAddress = $entity->getBillingAddress();
-        $this->guessRegion($billingAddress);
-        $shippingAddress = $entity->getShippingAddress();
-        $this->guessRegion($shippingAddress);
+        $this->guessRegion($entity->getBillingAddress());
+        $this->guessRegion($entity->getShippingAddress());
 
         return $entity;
     }
