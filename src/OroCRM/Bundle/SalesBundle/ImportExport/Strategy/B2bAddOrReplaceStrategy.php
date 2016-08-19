@@ -2,28 +2,29 @@
 
 namespace OroCRM\Bundle\SalesBundle\ImportExport\Strategy;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
-use Oro\Bundle\AddressBundle\Entity\Address;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
     /**
-     * @var PropertyAccessor
+     * Save state about entity has value Billing Address or not.
+     * Value is updated in function beforeProcessEntity and used
+     * in function afterProcessEntity
+     *
+     * @var bool
      */
-    protected $propertyAccessor;
+    protected $isBillingAddress = true;
 
     /**
-     * @param PropertyAccessor $propertyAccessor
+     * Save state about entity has value Shipping Address or not.
+     * Value is updated in function beforeProcessEntity and used
+     * in function afterProcessEntity
+     *
+     * @var bool
      */
-    public function setPropertyAccessor(PropertyAccessor $propertyAccessor)
-    {
-        $this->propertyAccessor = $propertyAccessor;
-    }
+    protected $isShippingAddress = true;
 
     /**
      * {@inheritdoc}
@@ -32,31 +33,48 @@ class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     {
         /** @var B2bCustomer $entity */
         $entity = parent::beforeProcessEntity($entity);
-
-        // manually set empty addresses to skip merge from existing entities
-        $itemData = $this->context->getValue('itemData');
-
-        $addresses = ['shippingAddress', 'billingAddress'];
-        foreach ($addresses as $addressName) {
-            /** @var Address $address */
-            $address = $this->getPropertyAccessor()->getValue($entity, $addressName);
-            if (!$address) {
-                $itemData[$addressName] = null;
-                $this->context->setValue('itemData', $itemData);
-            }
-        }
+        $this->checkEmptyAddresses($entity);
 
         return $entity;
     }
 
     /**
-     * @return PropertyAccessor
+     * {@inheritdoc}
      */
-    protected function getPropertyAccessor()
+    protected function afterProcessEntity($entity)
     {
-        if (!$this->propertyAccessor) {
-            $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        /** @var B2bCustomer $entity */
+        $entity = parent::afterProcessEntity($entity);
+        $this->clearEmptyAddresses($entity);
+
+        return $entity;
+    }
+
+    /**
+     * @param B2bCustomer $entity
+     */
+    protected function checkEmptyAddresses(B2bCustomer $entity)
+    {
+        if (!$entity->getBillingAddress()) {
+            $this->isBillingAddress = false;
         }
-        return $this->propertyAccessor;
+
+        if (!$entity->getShippingAddress()) {
+            $this->isShippingAddress = false;
+        }
+    }
+
+    /**
+     * @param B2bCustomer $entity
+     */
+    protected function clearEmptyAddresses(B2bCustomer $entity)
+    {
+        if (!$this->isBillingAddress) {
+            $entity->setBillingAddress(null);
+        }
+
+        if (!$this->isShippingAddress) {
+            $entity->setShippingAddress(null);
+        }
     }
 }
