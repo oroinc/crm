@@ -89,7 +89,7 @@ services:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace:
-        class: OroCRM\Bundle\SalesBundle\ImportExport\Strategy\B2bAddOrReplaceStrategy
+        class: OroCRM\Bundle\SalesBundle\ImportExport\Strategy\B2bConfigurableAddOrReplaceStrategy
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     # Import processor
