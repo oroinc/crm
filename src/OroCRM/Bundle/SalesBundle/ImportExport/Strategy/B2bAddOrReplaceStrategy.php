@@ -89,7 +89,8 @@ class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      */
     protected function guessRegion($address)
     {
-        if ($address->getCountry() && $address->getRegionText()
+        if ($address
+            && $address->getCountry() && $address->getRegionText()
             && !$address->getRegion()
         ) {
             $region = $this->doctrineHelper
