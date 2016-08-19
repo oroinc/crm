@@ -8,5 +8,7 @@ workflows:
     b2c_flow_abandoned_shopping_cart:
         label: 'Abandoned Shopping Cart'
         entity: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        defaults: {active: true}
+        priority: 0
         entity_attribute: cart
         start_step: open
