@@ -7,10 +7,10 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrate
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
+class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
     /**
-     * Save state about entity has value Billing Address or not.
+     * Save state about exists Billing Address value in entity or not.
      * Value is updated in function beforeProcessEntity and used
      * in function afterProcessEntity
      *
@@ -19,7 +19,7 @@ class B2bAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     protected $isBillingAddress = true;
 
     /**
-     * Save state about entity has value Shipping Address or not.
+     * Save state about exists Shipping Address value in entity or not.
      * Value is updated in function beforeProcessEntity and used
      * in function afterProcessEntity
      *
