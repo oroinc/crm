@@ -68,7 +68,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container       = $container;
+        $this->container = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
     }
 
@@ -95,14 +95,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $this->em = $manager;
         }
 
-        $this->users         = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->leads         = $this->getRandomEntityRecords('OroCRMSalesBundle:Lead');
+        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->leads = $this->getRandomEntityRecords('OroCRMSalesBundle:Lead');
         $this->opportunities = $this->getRandomEntityRecords('OroCRMSalesBundle:Opportunity');
     }
 
     /**
      * @param string $entityName
-     * @param int    $limit
+     * @param int $limit
      *
      * @return array
      */
@@ -159,22 +159,22 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
     /**
      * @param Lead | Opportunity $entity
-     * @param User               $owner
+     * @param User $owner
      */
     protected function loadSalesFlows($entity, $owner)
     {
         if ($entity instanceof Lead) {
-            $step       = 'start_from_lead';
+            $step = 'start_from_lead';
             $parameters = ['lead' => $entity];
         } else {
-            $step       = 'start_from_opportunity';
+            $step = 'start_from_opportunity';
             $parameters = ['opportunity' => $entity];
         }
 
         $parameters = array_merge(
             [
-                'sales_funnel'            => null,
-                'sales_funnel_owner'      => $owner,
+                'sales_funnel' => null,
+                'sales_funnel_owner' => $owner,
                 'sales_funnel_start_date' => new \DateTime('now'),
             ],
             $parameters
@@ -202,12 +202,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             ->set('new_opportunity_name', $entity->getName())
             ->set('new_company_name', $entity->getName());
 
-        if ($entity instanceof Lead) {
-            if ($this->isTransitionAllowed($salesFunnelItem, 'qualify')) {
-                $this->workflowManager->transit($salesFunnelItem, 'qualify');
-            } else {
-                return;
-            }
+        if ($entity instanceof Lead && !$this->workflowManager->transitIfAllowed($salesFunnelItem, 'qualify')) {
+            return;
         }
 
         if (rand(1, 100) > 10) {
@@ -217,40 +213,21 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
                 ->set('proposed_solution', mt_rand(10, 10000))
                 ->set('probability', $this->probabilities[array_rand($this->probabilities)]);
 
-            if ($this->isTransitionAllowed($salesFunnelItem, 'develop')) {
-                $this->workflowManager->transit($salesFunnelItem, 'develop');
-                if ($this->getRandomBoolean()) {
-                    $salesFunnelItem->getData()
-                        ->set('close_revenue', mt_rand(10, 1000))
-                        ->set('close_date', new \DateTime());
+            if ($this->workflowManager->transitIfAllowed($salesFunnelItem, 'develop') && $this->getRandomBoolean()) {
+                $salesFunnelItem->getData()
+                    ->set('close_revenue', mt_rand(10, 1000))
+                    ->set('close_date', new \DateTime());
 
-                    if ($this->getRandomBoolean()) {
-                        if ($this->isTransitionAllowed($salesFunnelItem, 'close_as_won')) {
-                            $this->workflowManager->transit($salesFunnelItem, 'close_as_won');
-                        }
-                    } else {
-                        $salesFunnelItem->getData()
-                            ->set('close_reason_name', 'cancelled')
-                            ->set('close_date', new \DateTime('now', new \DateTimeZone('UTC')));
-                        if ($this->isTransitionAllowed($salesFunnelItem, 'close_as_lost')) {
-                            $this->workflowManager->transit($salesFunnelItem, 'close_as_lost');
-                        }
-                    }
+                if ($this->getRandomBoolean()) {
+                    $this->workflowManager->transitIfAllowed($salesFunnelItem, 'close_as_won');
+                } else {
+                    $salesFunnelItem->getData()
+                        ->set('close_reason_name', 'cancelled')
+                        ->set('close_date', new \DateTime('now', new \DateTimeZone('UTC')));
+                    $this->workflowManager->transitIfAllowed($salesFunnelItem, 'close_as_lost');
                 }
             }
         }
-    }
-
-    /**
-     * @param WorkflowItem $workflowItem
-     * @param string       $transition
-     * @return bool
-     */
-    protected function isTransitionAllowed(WorkflowItem $workflowItem, $transition)
-    {
-        $workflow = $this->workflowManager->getWorkflow($workflowItem);
-
-        return $workflow->isTransitionAllowed($workflowItem, $transition);
     }
 
     /**

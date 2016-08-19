@@ -50,9 +50,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  EntityManager */
     protected $em;
 
-    /** @var  ConfigManager */
-    protected $configManager;
-
     /** @var Organization */
     protected $organization;
 
@@ -73,7 +70,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container             = $container;
         $this->workflowManager       = $container->get('oro_workflow.manager');
-        $this->configManager         = $container->get('oro_entity_config.config_manager');
         $this->channelBuilderFactory = $container->get('orocrm_channel.builder.factory');
     }
 
@@ -308,7 +304,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         }
 
         $workflow = $workflowManager->getWorkflow($workflowItem);
-        /** @var EntityManager $em */
+
         $workflow->transit($workflowItem, $transition);
         $workflowItem->setUpdated();
     }
