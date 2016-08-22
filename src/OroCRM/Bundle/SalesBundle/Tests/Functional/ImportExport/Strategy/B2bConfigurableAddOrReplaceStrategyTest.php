@@ -196,7 +196,6 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         self::assertNull($existedCustomer->getShippingAddress()->getRegionText());
         self::assertNull($existedCustomer->getBillingAddress()->getRegionText());
 
-
         $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository('OroAddressBundle:Region')
             ->findOneBy(
                 [
@@ -241,7 +240,6 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         $entity = $this->strategy->process($newB2bCustomer);
         self::assertNull($entity->getShippingAddress()->getRegionText());
         self::assertNull($entity->getBillingAddress()->getRegionText());
-
 
         $exceptedRegion = $this->getContainer()->get('doctrine')->getRepository('OroAddressBundle:Region')
             ->findOneBy(
