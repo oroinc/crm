@@ -33,7 +33,7 @@ class AccountController extends Controller
             ->findBy(['status' => Channel::STATUS_ACTIVE], ['channelType' => 'ASC', 'name' => 'ASC']);
 
         $customers = $this->getDoctrine()
-            ->getRepository('OroCRMMagentoBundle::Customer')
+            ->getRepository('OroCRMMagentoBundle:Customer')
             ->findBy(['account' => $account->getId()]);
 
         return [
