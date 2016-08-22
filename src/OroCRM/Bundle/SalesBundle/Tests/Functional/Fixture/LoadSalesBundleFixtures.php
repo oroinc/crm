@@ -225,9 +225,11 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function getBillingAddress()
     {
         $address = new Address();
-        $address->setStreet('Test street');
         $address->setCountry($this->getCounty());
-        $address->setCity('test_city');
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
 
         return $address;
     }
@@ -238,13 +240,18 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function getShippingAddress()
     {
         $address = new Address();
-        $address->setStreet('Test street');
         $address->setCountry($this->getCounty());
-        $address->setCity('test_city');
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
 
         return $address;
     }
 
+    /**
+     * @return Country
+     */
     protected function getCounty()
     {
         $country = $this->em->getRepository('OroAddressBundle:Country')->findOneBy([
