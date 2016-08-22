@@ -55,9 +55,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "form"={
  *              "grid_name"="magento-cart-grid",
  *          },
- *          "workflow"={
- *              "active_workflows"={"b2c_flow_abandoned_shopping_cart"}
- *          },
  *          "grid"={
  *              "default"="magento-cart-grid",
  *              "context"="magento-cart-for-context-grid"
