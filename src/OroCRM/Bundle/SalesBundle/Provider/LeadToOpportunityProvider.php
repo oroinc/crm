@@ -292,12 +292,11 @@ class LeadToOpportunityProvider
      */
     public function isDisqualifyAndConvertAllowed(Lead $lead)
     {
-        $isLeadWorkflowEnabled = $this->workflowRegistry
-            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $isLeadWorkflowEnabled = !$this->workflowRegistry
+            ->getActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead')->isEmpty();
 
-        $isSalesFunnelWorkflowEnabled = $this->workflowRegistry
-            ->hasActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\SalesFunnel');
-
+        $isSalesFunnelWorkflowEnabled = !$this->workflowRegistry
+            ->getActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\SalesFunnel')->isEmpty();
 
         return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
                !$isLeadWorkflowEnabled &&

@@ -4,21 +4,22 @@ namespace OroCRM\Bundle\AccountBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
+
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -80,7 +81,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_11';
+        return 'v1_12';
     }
 
     /**
@@ -126,7 +127,7 @@ class OroCRMAccountBundleInstaller implements
     /**
      * Create orocrm_account table
      *
-     * @param Schema $schema
+     * @param Schema   $schema
      * @param QueryBag $queries
      */
     protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
@@ -146,7 +147,7 @@ class OroCRMAccountBundleInstaller implements
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
-                    'merge'     => ['display' => true],
+                    'merge'     => ['display' => true, 'autoescape' => false],
                     'dataaudit' => ['auditable' => true],
                     'form'      => ['type' => 'oro_resizeable_rich_text'],
                     'view'      => ['type' => 'html'],
