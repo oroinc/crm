@@ -89,7 +89,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
                         $self->assertSame([$entityAlias], $query->getFrom());
                         if ($channelId) {
                             $this->assertEquals(
-                                ' from orocrm_channel_stub where (integer some_fieldDataChannel = 1 '
+                                'from orocrm_channel_stub where (integer some_fieldDataChannel = 1 '
                                 . 'and text all_text ~ "someQuery") limit 11',
                                 $query->getStringQuery()
                             );
