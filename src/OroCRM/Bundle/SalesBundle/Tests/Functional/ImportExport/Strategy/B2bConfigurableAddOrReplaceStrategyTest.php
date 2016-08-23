@@ -38,10 +38,9 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(
-            ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+            [],
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
-        $this->client->useHashNavigation(true);
 
         $this->loadFixtures(
             [
