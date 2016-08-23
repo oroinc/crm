@@ -15,9 +15,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\ImportExport\Strategy\B2bConfigurableAddOrReplaceStrategy;
 
-/**
- * @dbIsolationPerTest
- */
 class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
 {
     /**
@@ -39,13 +36,16 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
     {
         $this->initClient(
             [],
-            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
+            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]),
+            true
         );
 
+        $this->client->startTransaction();
         $this->loadFixtures(
             [
                 'OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
-            ]
+            ],
+            true
         );
 
         $container = $this->getContainer();
@@ -69,6 +69,8 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
     protected function tearDown()
     {
         unset($this->strategy, $this->context, $this->stepExecution);
+        $this->client->rollbackTransaction();
+        parent::tearDown();
     }
 
     public function testUpdateAddress()
