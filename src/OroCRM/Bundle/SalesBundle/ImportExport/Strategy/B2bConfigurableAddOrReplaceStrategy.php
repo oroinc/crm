@@ -91,14 +91,13 @@ class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrate
             && $address->getCountry() && $address->getRegionText()
             && !$address->getRegion()
         ) {
-            $region = $this->doctrineHelper
-                ->getEntityRepository('OroAddressBundle:Region')
-                ->findOneBy(
-                    [
-                        'country' => $address->getCountry(),
-                        'name'    => $address->getRegionText()
-                    ]
-                );
+            $region = $this->databaseHelper->findOneBy(
+                'Oro\Bundle\AddressBundle\Entity\Region',
+                [
+                    'country' => $address->getCountry(),
+                    'name' => $address->getRegionText()
+                ]
+            );
             if ($region) {
                 $address->setRegion($region);
                 $address->setRegionText(null);
