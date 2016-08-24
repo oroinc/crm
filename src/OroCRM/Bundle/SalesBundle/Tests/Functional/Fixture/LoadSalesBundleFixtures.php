@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
@@ -105,6 +107,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $customer->setName(self::CUSTOMER_NAME);
         $customer->setDataChannel($this->getReference('default_channel'));
         $customer->setOrganization($this->organization);
+        $customer->setBillingAddress($this->getBillingAddress());
+        $customer->setShippingAddress($this->getShippingAddress());
 
         $this->em->persist($customer);
         $this->em->flush();
@@ -243,5 +247,47 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         }
 
         return $this->user;
+    }
+
+    /**
+     * @return Address
+     */
+    protected function getBillingAddress()
+    {
+        $address = new Address();
+        $address->setCountry($this->getCounty());
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
+
+        return $address;
+    }
+
+    /**
+     * @return Address
+     */
+    protected function getShippingAddress()
+    {
+        $address = new Address();
+        $address->setCountry($this->getCounty());
+        $address->setStreet('1215 Caldwell Road');
+        $address->setCity('Rochester');
+        $address->setPostalCode('14608');
+        $address->setRegionText('Arizona1');
+
+        return $address;
+    }
+
+    /**
+     * @return Country
+     */
+    protected function getCounty()
+    {
+        $country = $this->em->getRepository('OroAddressBundle:Country')->findOneBy([
+            'iso2Code'=>'US'
+        ]);
+
+        return $country;
     }
 }
