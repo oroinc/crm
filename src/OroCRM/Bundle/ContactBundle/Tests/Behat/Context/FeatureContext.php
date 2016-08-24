@@ -193,6 +193,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
      */
     public function assertAddressCount($count)
     {
+        $this->getSession()->getDriver()->waitForAjax();
         $addresses = $this->getSession()->getPage()->findAll('css', 'div.map-address-list .map-item');
 
         self::assertCount(
@@ -211,6 +212,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
      */
     public function assertPrimaryAddress($address)
     {
+        $this->getSession()->getDriver()->waitForAjax();
         $addresses = $this->getSession()->getPage()->findAll('css', 'div.map-address-list .map-item');
 
         /** @var NodeElement $actualAddress */
