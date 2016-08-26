@@ -205,7 +205,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
                     'gridParameters'      => [
                         'gridName' => 'sales-lead-grid'
                     ],
-                    'gridFilters'         => [],
+                    'gridFilters'         => [
+                        'sales-lead-grid[_sort_by][name][value]' => 'ASC',
+                    ],
                     'assert'              => [
                         'name'        => 'Lead name',
                         'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
