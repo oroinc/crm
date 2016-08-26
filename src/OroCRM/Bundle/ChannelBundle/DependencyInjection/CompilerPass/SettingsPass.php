@@ -24,7 +24,7 @@ class SettingsPass implements CompilerPassInterface
         $configs          = [];
         $configLoader     = new CumulativeConfigLoader(
             'orocrm_channel_settings',
-            new YamlCumulativeFileLoader('Resources/config/channel_configuration.yml')
+            new YamlCumulativeFileLoader('Resources/config/oro/channel_configuration.yml')
         );
         $resources        = $configLoader->load($container);
         foreach ($resources as $resource) {
