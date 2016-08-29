@@ -161,6 +161,7 @@ datagrid:
                     options:
                         field_options:
                             class: OroCRMMagentoBundle:CustomerGroup
+                            multiple: true
                             property: name
                             translatable_options: false
                     enabled: false
