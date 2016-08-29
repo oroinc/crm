@@ -24,3 +24,23 @@ Feature: Account attachment
       | File size | 76.77 KB |
     When I follow "cat1.jpg"
     Then I should see large image
+    And I close large image preview
+
+  Scenario: Edit attachment
+    Given I click Edit cat1.jpg in grid
+    When I fill "Attachment" form with:
+      | File    | cat2.jpg |
+      | Comment | So cute  |
+    And press "Save"
+    Then I should see "Attachment updated successfully" flash message
+    Then I should see cat in grid with following data:
+      | File name | cat2.jpg |
+      | File size | 61.51 KB |
+    And I follow "cat2.jpg"
+    And I should see large image
+    And I close large image preview
+
+    Scenario: Delete attachment
+      Given I click Delete cat2.jpg in grid
+      When I click "Yes, Delete"
+      Then I should see "Item deleted" flash message
