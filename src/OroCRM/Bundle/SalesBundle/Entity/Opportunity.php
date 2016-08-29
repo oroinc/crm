@@ -766,4 +766,12 @@ class Opportunity extends ExtendOpportunity implements
     {
         $this->closedAt = $closedAt;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getClosedAt()
+    {
+        return $this->closedAt;
+    }
 }
