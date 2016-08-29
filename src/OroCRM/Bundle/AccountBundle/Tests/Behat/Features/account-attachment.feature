@@ -40,6 +40,18 @@ Feature: Account attachment
     And I should see large image
     And I close large image preview
 
+  Scenario: Email attachment
+    Given follow "More actions"
+    And press "Send email"
+    And fill form with:
+      | Subject    | Hello World |
+      | To         | [John Doe]  |
+    When select cat2 as email attachment from record
+    And press "Send"
+    Then I should see "The email was sent" flash message
+    And I collapse "Hello World" in activity list
+    And I should see cat2.jpg text in activity
+
     Scenario: Delete attachment
       Given I click Delete cat2.jpg in grid
       When I click "Yes, Delete"
