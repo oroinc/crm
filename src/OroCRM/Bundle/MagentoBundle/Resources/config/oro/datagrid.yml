@@ -156,13 +156,13 @@ datagrid:
                     data_name: c.updatedAt
                     enabled: false
                 customerGroup:
-                    type: entity
+                    type: choice
                     data_name: cg.id
+                    enabled: false
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CustomerGroup
+                            choices: '@orocrm_magento.datagrid_helper->getMagentoGroupsChoices'
                             multiple: true
-                            property: name
                             translatable_options: false
                     enabled: false
         actions:

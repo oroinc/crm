@@ -572,6 +572,8 @@ services:
 
     orocrm_magento.datagrid_helper:
         class: %orocrm_magento.datagrid_helper.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
 
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
