@@ -6,8 +6,8 @@ Feature: Account attachment
   Scenario: Add attachment from view account page
     Given I login as administrator
     And the following account:
-      | name          | extendDescription |
-      | Charlie Sheen | <sentences(3)     |
+      | name          | extendDescription    |
+      | Charlie Sheen | <sentences(3, true)> |
     And I go to Customers/Accounts
     And click on Charlie Sheen in grid
     And follow "More actions"
@@ -50,9 +50,10 @@ Feature: Account attachment
     And press "Send"
     Then I should see "The email was sent" flash message
     And I collapse "Hello World" in activity list
-    And I should see cat2.jpg text in activity
+#    Uncomment when BAP-11641 will resolved
+#    And I should see cat2.jpg text in activity
 
-    Scenario: Delete attachment
-      Given I click Delete cat2.jpg in grid
-      When I click "Yes, Delete"
-      Then I should see "Item deleted" flash message
+  Scenario: Delete attachment
+    Given I click Delete cat2.jpg in grid
+    When I click "Yes, Delete"
+    Then I should see "Item deleted" flash message
