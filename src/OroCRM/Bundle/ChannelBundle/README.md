@@ -18,7 +18,7 @@ In order to implement ability to enable feature in scope of channel - configurat
 
 **Config example:**
 ```yml
-      orocrm_channel:
+      channels:
           entity_data:
              -
                 name: OroCRM\Bundle\SomeEntity\Entity\RealEntity                # Entity FQCN
@@ -51,7 +51,7 @@ Menu item should be hidden by default in navigation configuration using paramete
 
 **Example:**
 ```yml
-    oro_menu_config:
+    menu_config:
         items:
             menu_item:
                 label: 'orocrm.some_entity.menu.tab.label'
