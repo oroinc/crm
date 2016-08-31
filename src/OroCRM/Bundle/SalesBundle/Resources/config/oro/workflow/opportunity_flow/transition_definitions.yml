@@ -2,7 +2,7 @@ workflows:
     opportunity_flow:
         transition_definitions:
             create_definition:
-                post_actions:
+                actions:
                     - '@assign_value':
                         - [$close_revenue, null]
                         - [$close_reason, null]
@@ -16,7 +16,7 @@ workflows:
                     '@not_empty':
                         message: 'Close date must be set'
                         parameters: $close_date
-                post_actions:
+                actions:
                     - '@request_enum_entity':
                         enum_code: opportunity_status
                         identifier: 'won'
@@ -41,7 +41,7 @@ workflows:
                         - '@not_empty':
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
-                post_actions:
+                actions:
                     - '@request_enum_entity':
                         enum_code: opportunity_status
                         identifier: 'lost'
@@ -62,7 +62,7 @@ workflows:
                     '@and':
                         - '@neq': [$status.id, 'lost']
                         - '@neq': [$status.id, 'won']
-                post_actions:
+                actions:
                     - '@assign_value':
                         - [$close_revenue, null]
                         - [$close_reason, null]

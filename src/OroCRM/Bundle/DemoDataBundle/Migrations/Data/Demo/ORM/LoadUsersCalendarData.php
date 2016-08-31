@@ -101,9 +101,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->setTime(18, 0, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
-
                 $events['workday'][] = $event;
-
                 //call
                 $event = new CalendarEvent();
                 $event->setTitle('Client Call');
@@ -112,9 +110,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->setTime(12, 0, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
-
                 $events['call'][] = $event;
-
                 //meeting
                 $event = new CalendarEvent();
                 $event->setTitle('Meeting');
@@ -123,9 +119,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->setTime(18, 0, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
-
                 $events['meeting'][] = $event;
-
                 //lunch
                 $event = new CalendarEvent();
                 $event->setTitle('Lunch');
@@ -134,9 +128,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->setTime(12, 30, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(false);
-
                 $events['lunch'][] = $event;
-
                 //business trip
                 $event = new CalendarEvent();
                 $event->setTitle('Business trip');
@@ -146,7 +138,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->add(\DateInterval::createFromDateString('+3 days'));
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
-
                 $events['b_trip'][] = $event;
             } else {
                 $event = new CalendarEvent();
@@ -156,12 +147,11 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $day->setTime(18, 0, 0);
                 $event->setEnd(clone $day);
                 $event->setAllDay(true);
-
                 $events['weekend'][] = $event;
             }
         }
 
-        foreach ($this->users as $user) {
+        foreach ($this->users as $index => $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
@@ -176,9 +166,18 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             }
 
             $this->em->persist($calendar);
+            if ($index > 0 && $index % 5 === 0) {
+                $this->em->flush();
+                $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
+                $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
+                $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
+                $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
+            }
         }
 
         $this->em->flush();
+        $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
+        $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
 
@@ -263,12 +262,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             ->getScalarResult();
 
         if (count($userIds) > $limit) {
-            $rawList = [];
-            foreach ($userIds as $key => $value) {
-                // due array_rand() will pick only keywords
-                $rawList[$value['id']] = null;
-            }
-
+            $rawList = array_column($userIds, 'id', 'id');
             $keyList = array_rand($rawList, $limit);
 
             $criteria = new Criteria();
@@ -332,17 +326,20 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     protected function getRecurringEvents()
     {
+        $baseEvent = new CalendarEvent();
+        $baseRecurrence = new Recurrence();
+
         $recurringEvents = [];
 
         $day = new \DateTime('+2 day', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('Gym Visiting');
         $day->setTime(19, 0, 0);
         $event->setEnd(clone $day);
         $day->setTime(18, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_DAILY);
         $recurrence->setInterval(3)
             ->setTimeZone('America/Los_Angeles')
@@ -352,14 +349,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurringEvents[] = $event;
 
         $day = new \DateTime('+1 day', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('Standup meeting');
         $day->setTime(10, 15, 0);
         $event->setEnd(clone $day);
         $day->setTime(10, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_WEEKLY);
         $recurrence->setInterval(1)
             ->setTimeZone('America/Los_Angeles')
@@ -375,14 +372,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurringEvents[] = $event;
 
         $day = new \DateTime('-3 day', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('Monthly Team Meeting');
         $day->setTime(18, 0, 0);
         $event->setEnd(clone $day);
         $day->setTime(16, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(false);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTHLY);
         $recurrence->setInterval(2)
             ->setTimeZone('America/Los_Angeles')
@@ -393,14 +390,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurringEvents[] = $event;
 
         $day = new \DateTime('+5 day', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('Update News');
         $day->setTime(14, 0, 0);
         $event->setEnd(clone $day);
         $day->setTime(10, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTH_N_TH);
         $recurrence->setInterval(2)
             ->setTimeZone('America/Los_Angeles')
@@ -412,14 +409,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurringEvents[] = $event;
 
         $day = new \DateTime('now', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('Yearly Conference');
         $day->setTime(19, 0, 0);
         $event->setEnd(clone $day);
         $day->setTime(10, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEARLY);
         $recurrence->setInterval(12)
             ->setTimeZone('America/Los_Angeles')
@@ -430,14 +427,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurringEvents[] = $event;
 
         $day = new \DateTime('-2 day', $this->getTimeZone());
-        $event = new CalendarEvent();
+        $event = clone $baseEvent;
         $event->setTitle('New Year Party');
         $day->setTime(23, 0, 0);
         $event->setEnd(clone $day);
         $day->setTime(18, 0, 0);
         $event->setStart(clone $day);
         $event->setAllDay(true);
-        $recurrence = new Recurrence();
+        $recurrence = clone $baseRecurrence;
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEAR_N_TH);
         $recurrence->setInterval(12)
             ->setTimeZone('America/Los_Angeles')
