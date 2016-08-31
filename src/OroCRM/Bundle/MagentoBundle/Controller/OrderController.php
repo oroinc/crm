@@ -127,9 +127,15 @@ class OrderController extends Controller
                 [
                     ProcessorRegistry::TYPE_IMPORT => [
                         'filters' => [
-                            'increment_id' => $order->getIncrementId()
+                            'increment_id' => $order->getIncrementId(),
+                        ],
+                        'skipFilter' => [
+                            [
+                                'type' => 'Complex',
+                                'key' => 'updated_at'
                             ]
                         ]
+                    ]
                 ]
             );
         } catch (\LogicException $e) {
