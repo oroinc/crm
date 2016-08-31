@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ChannelConfiguration implements ConfigurationInterface
 {
-    const ROOT_NODE_NAME            = 'orocrm_channel';
+    const ROOT_NODE_NAME            = 'channels';
     const DEFAULT_CUSTOMER_IDENTITY = 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity';
     const DEFAULT_PRIORITY          = 0;
 
