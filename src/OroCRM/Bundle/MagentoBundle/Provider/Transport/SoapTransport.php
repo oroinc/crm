@@ -256,6 +256,23 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
+    protected function makeNewAttempt($action, $params)
+    {
+        $this->logAttempt();
+        sleep($this->getSleepBetweenAttempt());
+        ++$this->attempted;
+
+        // in case if we have WsiMode enabled we should convert object parameters to array to avoid
+        // not correct parameters during the next attempt call
+        return $this->call(
+            $action,
+            $this->isWsiMode ? (array)array_shift($params) : $params
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isExtensionInstalled()
     {
         if (null === $this->isExtensionInstalled) {
