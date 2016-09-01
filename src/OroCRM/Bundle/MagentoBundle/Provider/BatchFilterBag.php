@@ -238,15 +238,15 @@ class BatchFilterBag
      */
     public function resetFilterWithEmptyValue()
     {
-        $types = [
+        $filterTypes = [
             self::FILTER_TYPE_SIMPLE,
             self::FILTER_TYPE_COMPLEX
         ];
 
-        foreach ($types as $type) {
-            foreach ($this->filters[$type] as $name => $filter) {
-                if (empty($filter['value'])) {
-                    $this->reset($type, $name);
+        foreach ($filterTypes as $filterType) {
+            foreach ($this->filters[$filterType] as $filterName => $filterData) {
+                if (empty($filterData['value'])) {
+                    $this->reset($filterType, $filterName);
                 }
             }
         }
