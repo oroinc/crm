@@ -232,4 +232,23 @@ class BatchFilterBag
             }
         }
     }
+
+    /**
+     * Clear filters which have empty values
+     */
+    public function resetFilterWithEmptyValue()
+    {
+        $types = [
+            self::FILTER_TYPE_SIMPLE,
+            self::FILTER_TYPE_COMPLEX
+        ];
+
+        foreach ($types as $type) {
+            foreach ($this->filters[$type] as $name => $filter) {
+                if (empty($filter['value'])) {
+                    $this->reset($type, $name);
+                }
+            }
+        }
+    }
 }

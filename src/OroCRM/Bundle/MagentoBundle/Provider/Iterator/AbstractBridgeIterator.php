@@ -62,6 +62,8 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
             $this->filter->merge($this->predefinedFilters);
         }
 
+        $this->filter->resetFilterWithEmptyValue();
+
         $this->logAppliedFilters($this->filter);
     }
 
