@@ -128,8 +128,12 @@ class OrderController extends Controller
                     ProcessorRegistry::TYPE_IMPORT => [
                         'filters' => [
                             'increment_id' => $order->getIncrementId()
-                            ]
+                        ],
+                        'complex_filters' => [
+                            'updated_at-gt' => null,
+                            'updated_at-lte' => null
                         ]
+                    ]
                 ]
             );
         } catch (\LogicException $e) {
