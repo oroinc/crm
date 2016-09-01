@@ -62,6 +62,7 @@ class B2bCustomerWithChannelCreateOrSelectType extends AbstractType
                     'placeholder'    => 'orocrm.sales.form.choose_b2bcustomer',
                     'properties'     => ['name'],
                     'allowCreateNew' => $this->isGrantedCreateBusinessAccount(),
+                    'async_dialogs'  => true
                 ],
                 'autocomplete_alias' => 'b2b_customers_with_channel',
                 'grid_name'          => 'orocrm-sales-b2bcustomers-select-grid',
