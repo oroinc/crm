@@ -64,74 +64,41 @@
 {% endblock %}
 
 {% block oro_entity_create_or_select_inline_js_channel_aware %}
-    <script type="text/javascript">
-        require(['jquery', 'oroform/js/select-create-inline-type-handler'],
-        function ($, handler) {
-            $(function() {
-                var presetChannelId = {{ channel_id|json_encode|raw }};
-                var $formEl = $('#{{ id }}');
-                var $formElContainer = $('#{{ id }}-el');
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% if form.vars.configs.async_dialogs|default(false) is sameas(true) %}
+        {% set asyncNameSegment = 'async-' %}
+    {% endif %}
+    {% set urlParts = {
+        grid: {
+            route: 'oro_datagrid_widget',
+            parameters: {
+                gridName     : form.vars.grid_name,
+                params       : form.vars.grid_parameters,
+                renderParams : form.vars.grid_render_parameters
+            }
+        }
+    } %}
 
-                {% set urlParts = {
-                    grid: {
-                        route: 'oro_datagrid_widget',
-                        parameters: {
-                            gridName     : form.vars.grid_name,
-                            params       : form.vars.grid_parameters,
-                            renderParams : form.vars.grid_render_parameters
-                        }
-                    }
-                } %}
-
-                {% if form.vars.create_enabled|default(false) is sameas(true) %}
-                {% set urlParts = urlParts|merge({
-                    create: {
-                        route:      form.vars.create_form_route,
-                        parameters: form.vars.create_form_route_parameters
-                    }
-                }) %}
-                {% endif %}
-
-                var configurator = handler(
-                    $formElContainer,
-                    $formEl,
-                    {{ label|trans|json_encode|raw }},
-                    {{ urlParts|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
-                    {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
-                    {{ form.vars.create_enabled|default(false)|json_encode|raw }}
-                ),
-                changeHandler = function($el) {
-                    var parts = configurator.getUrlParts(),
-                        channelIds = [],
-                        currentVal = $el.val();
-
-                    if (currentVal) {
-                        channelIds.push(currentVal);
-                    }
-                    if (presetChannelId) {
-                        channelIds.push(presetChannelId);
-                    }
-
-                    if ({{ form.vars.channel_required|json_encode|raw }}) {
-                        var disallowEdit = !channelIds.length;
-                        $formElContainer.find('button').prop('disabled', disallowEdit);
-                        $formEl.select2("readonly", disallowEdit);
-                    }
-
-                    parts.grid.parameters.params.channelIds = channelIds.join(',');
-                    var channelId = presetChannelId || $el.val();
-                    if (parts.hasOwnProperty('create') && channelId) {
-                        parts.create.parameters.channelId = channelId;
-                    }
-                },
-                $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]');
-
-                $channelSelector.change(function() {
-                    changeHandler($(this));
-                    configurator.setSelection(null);
-                });
-                changeHandler($channelSelector);
-            });
-        });
-    </script>
+    {% if form.vars.create_enabled|default(false) is sameas(true) %}
+        {% set urlParts = urlParts|merge({
+            create: {
+                route:      form.vars.create_form_route,
+                parameters: form.vars.create_form_route_parameters
+            }
+        }) %}
+    {% endif %}
+    <div {{ UI.renderPageComponentAttributes({
+                module: 'orocrmchannel/js/app/components/select-create-inline-type-' ~ asyncNameSegment|default('') ~ 'component',
+                options: {
+                    _sourceElement: '#'~id~'-el',
+                    inputSelector: '#'~id,
+                    entityLabel: label|trans,
+                    urlParts: urlParts,
+                    existingEntityGridId: form.vars.existing_entity_grid_id|default('id'),
+                    createEnabled: form.vars.create_enabled|default(false),
+                    channelFieldSelector: 'select[name="'~channel_field_name~'"]',
+                    channelRequired: form.vars.channel_required|default(false),
+                    presetChannelId: channel_id
+                }
+            }) }} style="display: none"></div>
 {% endblock %}
