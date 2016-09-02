@@ -108,7 +108,10 @@ class ContactRequest extends AbstractPageEntity
      */
     public function checkStep($step)
     {
-        $this->assertElementPresent("//ul[contains(@class, 'workflow-step-list')]//li[contains (.,'{$step}')]");
+        $this->assertElementPresent(
+            "//table[contains(@class, 'workflow-entity')]//" .
+            "ul[contains(@class, 'workflow-steps-list')]//li[contains (.,'{$step}')]"
+        );
         return $this;
     }
 
