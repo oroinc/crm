@@ -65,7 +65,7 @@ class ReportGridListener
         }
 
         // and setup separate sorting column, used as well in grouping, but not affecting grouping result
-        // period will be always the first column, unless changed in datagrids.yml
+        // period will be always the first column, unless changed in oro/datagrids.yml
         if ($period == 'yearPeriod') {
             $groupAlias = $period;
             $sortAlias = $period;
