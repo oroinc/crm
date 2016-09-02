@@ -1,0 +1,93 @@
+datagrid:
+    orocrm-channels-grid:
+        acl_resource: orocrm_channel_view
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.channelType
+                    - CASE WHEN c.status = true THEN 'enabled' ELSE 'disabled' END as status
+                from:
+                    - { table: %orocrm_channel.entity.class%, alias: c }
+                groupBy: c.id
+        columns:
+            name:
+                label: orocrm.channel.name.label
+            channelType:
+                label: orocrm.channel.channel_type.label
+                frontend_type:  select
+                choices: '@orocrm_channel.provider.settings_provider->getChannelTypeChoiceList'
+            status:
+                label: orocrm.channel.status.label
+                frontend_type: select
+                choices:
+                    enabled:  orocrm.channel.active.label
+                    disabled: orocrm.channel.inactive.label
+
+        sorters:
+            columns:
+                name:        { data_name: c.name }
+                channelType: { data_name: c.channelType }
+                status:      { data_name: c.status }
+            default:
+                name: ASC
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: c.name
+                channelType:
+                    type:      choice
+                    data_name: c.channelType
+                    options:
+                        field_options:
+                            choices: '@orocrm_channel.provider.settings_provider->getChannelTypeChoiceList'
+                status:
+                    data_name: c.status
+                    type:      choice
+                    options:
+                        field_options:
+                            choices:
+                                - orocrm.channel.inactive.label
+                                - orocrm.channel.active.label
+        properties:
+            id: ~
+            update_link:
+                type:    url
+                route:   orocrm_channel_update
+                params:  [ id ]
+            delete_link:
+                type:    url
+                route:   orocrm_api_delete_channel
+                params:  [ id ]
+            view_link:
+                type:    url
+                route:   orocrm_channel_view
+                params:  [ id ]
+        actions:
+            view:
+                type:         navigate
+                link:         view_link
+                acl_resource: orocrm_channel_view
+                icon:         eye-open
+                label:        oro.grid.action.view
+                rowAction:    true
+            update:
+                type:         navigate
+                link:         update_link
+                acl_resource: orocrm_channel_update
+                icon:         edit
+                label:        oro.grid.action.update
+            delete:
+                type:         delete
+                link:         delete_link
+                acl_resource: orocrm_channel_delete
+                icon:         trash
+                label:        oro.grid.action.delete
+        options:
+            entity_pagination: true
+            mass_actions:
+                delete:
+                    enabled: false

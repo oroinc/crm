@@ -1,4 +1,4 @@
-api:
+oro_api:
     entity_aliases:
         # move this to "entity.yml" after the OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus entity will be removed
         # so, the alias for "Extend\Entity\EV_Opportunity_Status" should be "opportunitystatus", not "salesopportunitystatus"

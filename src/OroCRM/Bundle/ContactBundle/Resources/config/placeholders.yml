@@ -1,0 +1,19 @@
+placeholders:
+    quick_launchpad_right_column:
+        items:
+            contacts_launchpad:
+                order: 10
+
+items:
+    orocrm_add_contact_button:
+        template:   OroCRMContactBundle:Contact:addContactButton.html.twig
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_account.account.entity.class%)"
+        acl:        orocrm_contact_create
+
+    orocrm_add_contact_link:
+        template:   OroCRMContactBundle:Contact:addContactLink.html.twig
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_account.account.entity.class%)"
+        acl:        orocrm_contact_create
+
+    contacts_launchpad:
+        template: OroCRMContactBundle:Dashboard:contactsLaunchpad.html.twig

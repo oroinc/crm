@@ -1,0 +1,16 @@
+placeholders:
+    quick_launchpad_left_column:
+        items:
+            accounts_launchpad:
+                order: 10
+    page_header_stats_after:
+        items:
+            account_lifetime_value:
+                order: 20
+
+items:
+    accounts_launchpad:
+        template: OroCRMAccountBundle:Dashboard:accountsLaunchpad.html.twig
+    account_lifetime_value:
+        template: OroCRMAccountBundle:Account:lifetimeValue.html.twig
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_account.account.entity.class%)"

@@ -1,0 +1,8 @@
+orocrm_channel:
+   entity_data:
+       -
+          name: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest
+          dependent:
+              - OroCRM\Bundle\ContactUsBundle\Entity\ContactReason
+          navigation_items:
+              - application_menu.activities_tab.orocrm_contactus_requests

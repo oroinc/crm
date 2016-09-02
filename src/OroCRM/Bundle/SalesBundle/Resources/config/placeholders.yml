@@ -1,0 +1,25 @@
+placeholders:
+    quick_launchpad_left_column:
+        items:
+            leads_launchpad:
+                order: 20
+    quick_launchpad_right_column:
+        items:
+            opportunities_launchpad:
+                order: 20
+
+    orocrm_account_channel_info_b2b:
+        items:
+            orocrm_sales_account_channel_info: ~
+
+items:
+    leads_launchpad:
+        template:   OroCRMSalesBundle:Dashboard:leadsLaunchpad.html.twig
+        applicable: "@orocrm_sales.provider.enitity_state->isEntityLeadEnabled()"
+
+    opportunities_launchpad:
+        template:   OroCRMSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
+        applicable: "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+
+    orocrm_sales_account_channel_info:
+        action: OroCRMSalesBundle:B2bCustomer:accountCustomersInfo

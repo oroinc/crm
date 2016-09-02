@@ -1,0 +1,415 @@
+definitions:
+    magento_customer_creation:
+        label:   'Create Account and Contact for Magento Customer'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   10
+        exclude_definitions: [magento_customer_export, magento_customer_address_export]
+        actions_configuration:
+            - '@tree': # set Contact
+                conditions: # if Contact not exists
+                    '@empty': $contact
+                actions:
+                    - '@assign_value': [$.firstName, $firstName]
+                    - '@assign_value': # check and generate N/A first name
+                        conditions:
+                            '@empty': $.firstName
+                        parameters: [$.firstName, 'N/A']
+                    - '@assign_value': [$.lastName, $lastName]
+                    - '@assign_value': # check and generate last name
+                        conditions:
+                            '@empty': $.lastName
+                        parameters: [$.lastName, 'N/A']
+                    - '@create_entity': # create Contact
+                        class:     OroCRM\Bundle\ContactBundle\Entity\Contact
+                        attribute: $contact
+                        data:
+                            birthday:     $birthday
+                            email:        $email
+                            firstName:    $.firstName
+                            gender:       $gender
+                            lastName:     $.lastName
+                            middleName:   $middleName
+                            namePrefix:   $namePrefix
+                            nameSuffix:   $nameSuffix
+                            owner:        $owner
+                            organization: $organization
+                    - '@tree': # add Contact Email
+                        conditions:
+                            '@not_empty': $email
+                        actions:
+                            - '@create_entity': # create Contact Email
+                                class:     OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                attribute: $.contactEmail
+                                data:
+                                    email:   $email
+                                    primary: true
+                            - '@call_method': # add Contact Email to Contact
+                                object: $contact
+                                method: addEmail
+                                method_parameters: [$.contactEmail]
+                            - '@unset_value': [$.contactEmail]
+                    - '@foreach': # for all Magento addresses
+                        array: $addresses
+                        value: $.magentoAddress
+                        actions:
+                            - '@create_entity': # create Contact Address
+                                class:     OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                attribute: $.magentoAddress.contactAddress
+                                data:
+                                    label:        $.magentoAddress.label
+                                    street:       $.magentoAddress.street
+                                    street2:      $.magentoAddress.street2
+                                    city:         $.magentoAddress.city
+                                    postalCode:   $.magentoAddress.postalCode
+                                    country:      $.magentoAddress.country
+                                    organization: $.magentoAddress.organization
+                                    region:       $.magentoAddress.region
+                                    regionText:   $.magentoAddress.regionText
+                                    namePrefix:   $.magentoAddress.namePrefix
+                                    firstName:    $.magentoAddress.firstName
+                                    middleName:   $.magentoAddress.middleName
+                                    lastName:     $.magentoAddress.lastName
+                                    nameSuffix:   $.magentoAddress.nameSuffix
+                                    types:        $.magentoAddress.types
+                                    primary:      $.magentoAddress.primary
+                            - '@call_method': # add Contact Address to Contact
+                                object: $contact
+                                method: addAddress
+                                method_parameters: [$.magentoAddress.contactAddress]
+                            - '@tree': # add Contact Phone
+                                  conditions:
+                                      '@not_empty': $.magentoAddress.phone
+                                  actions:
+                                      - '@create_entity': # create Contact phone
+                                          class:     OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                          attribute: $.magentoAddress.contactPhone
+                                          data:
+                                              phone:   $.magentoAddress.phone
+                                              primary: $.magentoAddress.primary
+                                      - '@call_method': # add Contact Phone to Contact
+                                          object: $contact
+                                          method: addPhone
+                                          method_parameters: [$.magentoAddress.contactPhone]
+
+            - '@automatic_discovery':
+                conditions: # if Account not exists
+                    '@empty': $account
+                parameters:
+                    entity: $.data
+                    attribute: $.matchedEntity
+            - '@assign_value': # check matched entity and its account
+                conditions:
+                    '@not_empty': $.matchedEntity
+                    '@not_empty': $.matchedEntity.account
+                parameters: [$account, $.matchedEntity.account]
+
+            - '@tree': # set Account
+                conditions: # if Account not exists
+                    '@empty': $account
+                actions:
+                    - '@format_string': # generate Account name
+                        attribute: $.accountName
+                        string:    '%firstName% %lastName%'
+                        arguments:
+                            firstName: $firstName
+                            lastName:  $lastName
+                    - '@assign_value': # check and generate N/A Account name
+                        conditions:
+                            '@and':
+                                - '@empty': $firstName
+                                - '@empty': $lastName
+                        parameters: [$.accountName, 'N/A']
+                    - '@create_entity': # create Account
+                        class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                        attribute: $account
+                        data:
+                            defaultContact: $contact
+                            name:           $.accountName
+                            owner:          $owner
+                            organization:   $organization
+                    - '@unset_value': [$.accountName]
+
+    magento_customer_export:
+        label:   'Export Magento Customer to Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   20
+        exclude_definitions: [magento_customer_export, magento_customer_creation]
+        preconditions:
+            '@and':
+                - '@not_empty': $channel
+                - '@equal': [$channel.enabled, true]
+        actions_configuration:
+            - '@call_method':
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - '@call_method':
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
+            - '@tree':
+                conditions:
+                    '@equal': [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - '@assign_constant_value':
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_TO_MAGENTO
+                    - '@assign_constant_value':
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::MAGENTO_REMOVED
+                    - '@create_object':
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - '@call_method':
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - '@call_method':
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - '@tree':
+                        conditions:
+                            '@and':
+                                - '@equal': [$.isRemoteRemoved, false]
+                                - '@equal': [$.isSyncRequested, true]
+                        actions:
+                            - '@execute_job':
+                                jobType: export
+                                jobName: magento_customer_export
+                                configuration:
+                                    channel: $channel.id
+                                    entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
+                                    writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
+                                attribute: $.jobResult
+                            - '@call_method':
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
+
+    magento_customer_address_export:
+        label:   'Export Magento Customer Address to Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
+        order:   20
+        exclude_definitions: [magento_customer_address_export, magento_customer_creation]
+        preconditions:
+            '@and':
+                - '@not_empty': $channel
+                - '@equal': [$channel.enabled, true]
+                - '@not_empty': $owner
+                - '@not_empty': $owner.originId
+        actions_configuration:
+            - '@call_method':
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - '@call_method':
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
+            - '@tree':
+                conditions:
+                    '@equal': [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - '@assign_constant_value':
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::SYNC_TO_MAGENTO
+                    - '@assign_constant_value':
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::MAGENTO_REMOVED
+                    - '@create_object':
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - '@call_method':
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - '@call_method':
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - '@tree':
+                        conditions:
+                            '@and':
+                                - '@equal': [$.isRemoteRemoved, false]
+                                - '@equal': [$.isSyncRequested, true]
+                        actions:
+                            - '@execute_job':
+                                jobType: export
+                                jobName: magento_customer_address_export
+                                configuration:
+                                    channel: $channel.id
+                                    entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
+                                    writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
+                                attribute: $.jobResult
+                            - '@call_method':
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
+
+    magento_analytics_customer_calculate:
+        label:   'Calculate RFM analytics for Magento Customer'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
+        order:   30
+        preconditions:
+            '@not_empty': $customer
+        actions_configuration:
+            - '@assign_constant_value':
+                attribute: $.dataChannelStatusActive
+                value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+            - '@assign_constant_value':
+                attribute: $.commandName
+                value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
+            - '@tree':
+                conditions:
+                    '@and':
+                        - '@equal': [$dataChannel.status, $.dataChannelStatusActive]
+                        - '@equal': ["$.dataChannel.data[rfm_enabled]", true]
+                actions:
+                    - '@format_string':
+                        attribute: $.channelArguments
+                        string: '--channel=%channel_id% --ids=%id%'
+                        arguments:
+                            id: $customer.id
+                            channel_id: $dataChannel.id
+                    - '@create_entity':
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        flush: true
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
+    magento_analytics_customer_calculate_imported:
+        label:   'Calculate RFM analytics for Magento Customer on Import'
+        enabled: true
+        entity:  Oro\Bundle\IntegrationBundle\Entity\Status
+        order:   30
+        preconditions:
+            '@and':
+                - '@equal': [$code, 1]
+                - '@not_empty': $channel
+                - '@equal': [$channel.type, 'magento']
+                - '@equal': [$connector, 'order']
+        actions_configuration:
+            - '@assign_constant_value':
+                attribute: $.dataChannelStatusActive
+                value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+            - '@assign_constant_value':
+                attribute: $.commandName
+                value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
+            - '@find_entity':
+                parameters:
+                    class: OroCRM\Bundle\ChannelBundle\Entity\Channel
+                    attribute: $.dataChannel
+                    where:
+                        dataSource: $channel.id
+            - '@tree':
+                conditions:
+                    '@and':
+                        - '@not_empty': $.dataChannel
+                        - '@equal': [$.dataChannel.status, $.dataChannelStatusActive]
+                        - '@equal': ["$.dataChannel.data[rfm_enabled]", true]
+                actions:
+                    - '@format_string':
+                        attribute: $.channelArguments
+                        string: '--channel=%channel_id%'
+                        arguments:
+                            channel_id: $.dataChannel.id
+                    - '@create_entity':
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        flush: true
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
+    magento_schedule_integration:
+        label:   'Shedule integration'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+        order:   10
+        actions_configuration:
+            - '@find_entity':
+                parameters:
+                    class: Oro\Bundle\IntegrationBundle\Entity\Channel
+                    attribute: $.integration
+                    where:
+                        transport: $id
+            - '@tree':
+                conditions:
+                    '@and':
+                        - '@not_empty': $.integration
+                        - '@equal': [$.integration.enabled, true]
+                actions:
+                    - '@assign_constant_value':
+                        attribute: $.commandName
+                        value: Oro\Bundle\IntegrationBundle\Command\SyncCommand::COMMAND_NAME
+                    - '@format_string':
+                        attribute: $.channelArguments
+                        string: '--integration-id=%integration_id%'
+                        arguments:
+                            integration_id: $.integration.id
+                    - '@create_entity':
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
+triggers:
+    magento_customer_creation:
+        -
+            event:    create
+            priority: 5
+            queued:   true
+
+    magento_customer_export:
+        -
+            event:    update
+            priority: 10
+            queued:   true
+
+    magento_customer_address_export:
+        -
+            event:    update
+            priority: 10
+            queued:   true
+
+    magento_analytics_customer_calculate_imported:
+        -
+            event:    create
+            priority: 10
+            queued:   true
+
+    magento_analytics_customer_calculate:
+        -
+            event:    update
+            priority: 10
+            queued:   true
+            field:    subtotalAmmount
+
+    magento_schedule_integration:
+        -
+            event:    update
+            priority: 50
+            queued:   true
+            field:    syncStartDate

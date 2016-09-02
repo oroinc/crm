@@ -1,0 +1,17 @@
+placeholders:
+    orocrm_channel_additional_block:
+        items:
+            orocrm_channel_additional_block_rfm: ~
+
+    view_content_data_additional_information:
+        items:
+            orocrm_channel_view_additional_block_rfm: ~
+
+items:
+    orocrm_channel_additional_block_rfm:
+        template: OroCRMAnalyticsBundle:Form:form.html.twig
+        applicable: "@orocrm_analytics.placeholder.rfm_filter->isApplicable($entity$)"
+
+    orocrm_channel_view_additional_block_rfm:
+        action: OroCRMAnalyticsBundle:RFMCategory:channelView
+        applicable: "@orocrm_analytics.placeholder.rfm_filter->isViewApplicable($entity$)"
