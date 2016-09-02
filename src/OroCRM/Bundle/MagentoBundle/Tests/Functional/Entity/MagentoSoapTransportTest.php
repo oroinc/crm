@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Entity;
 use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\IntegrationBundle\Async\Topics;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
@@ -15,11 +16,13 @@ use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
  */
 class MagentoSoapTransportTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     public function setUp()
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
-        $this->getMessageProduer()->clearTraces();
+        $this->getMessageProduer()->clear();
     }
 
     public function testShouldScheduleSyncIntegrationIfSyncStartDateIsChanged()
@@ -37,17 +40,17 @@ class MagentoSoapTransportTest extends WebTestCase
 
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProduer()->getTopicTraces(Topics::SYNC_INTEGRATION);
+        $traces = $this->getMessageProduer()->getTopicSentMessages(Topics::SYNC_INTEGRATION);
 
         self::assertCount(1, $traces);
 
         self::assertEquals([
-            'integrationId' => $integration->getId(),
+            'integration_id' => $integration->getId(),
             'connector_parameters' => [],
             'connector' => null,
             'transport_batch_size' => 100,
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**

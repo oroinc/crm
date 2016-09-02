@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use Oro\Component\Testing\ResponseExtension;
@@ -11,8 +13,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Symfony\Component\Form\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
 /**
  * @outputBuffering enabled
  * @dbIsolation
@@ -20,6 +20,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class ChannelControllerTest extends WebTestCase
 {
     use ResponseExtension;
+    use MessageQueueExtension;
 
     const CHANNEL_NAME = 'some name';
     const GRID_NAME    = 'orocrm-channels-grid';
@@ -35,7 +36,7 @@ class ChannelControllerTest extends WebTestCase
     {
         $this->client->disableReboot();
         $em = $this->getEntityManager();
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
 
         $channel = new Channel();
         $channel->setName('aName');
@@ -53,11 +54,11 @@ class ChannelControllerTest extends WebTestCase
 
         $this->assertLastResponseStatus(302);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CHANNEL_STATUS_CHANGED);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CHANNEL_STATUS_CHANGED);
 
         $this->assertCount(1, $traces);
-        $this->assertEquals(['channelId' => $channel->getId()], $traces[0]['message']);
-        $this->assertEquals(MessagePriority::HIGH, $traces[0]['priority']);
+        $this->assertEquals(['channelId' => $channel->getId()], $traces[0]['message']->getBody());
+        $this->assertEquals(MessagePriority::HIGH, $traces[0]['message']->getPriority());
     }
 
 

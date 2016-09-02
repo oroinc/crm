@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\AnalyticsBundle\Service;
 
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
@@ -26,14 +27,22 @@ class ScheduleCalculateAnalyticsService
      */
     public function scheduleForChannel($channelId, array $customerIds = [])
     {
-        $this->messageProducer->send(Topics::CALCULATE_CHANNEL_ANALYTICS, [
+        $message = new Message();
+        $message->setPriority(MessagePriority::VERY_LOW);
+        $message->setBody([
             'channel_id' => $channelId,
             'customer_ids' => $customerIds,
-        ], MessagePriority::VERY_LOW);
+        ]);
+
+        $this->messageProducer->send(Topics::CALCULATE_CHANNEL_ANALYTICS, $message);
     }
 
     public function scheduleForAllChannels()
     {
-        $this->messageProducer->send(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, [], MessagePriority::VERY_LOW);
+        $message = new Message();
+        $message->setPriority(MessagePriority::VERY_LOW);
+        $message->setBody([]);
+
+        $this->messageProducer->send(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, $message);
     }
 }

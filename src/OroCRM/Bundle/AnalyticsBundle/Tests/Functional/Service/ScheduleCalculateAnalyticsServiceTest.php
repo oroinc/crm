@@ -2,9 +2,10 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
@@ -16,13 +17,15 @@ use OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
  */
 class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->initClient();
         $this->loadFixtures([LoadChannel::class]);
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
     }
 
     public function testCouldBeGetFromContainerAsService()
@@ -46,18 +49,18 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
         $channel->setStatus(true);
         $channel->setData([RFMAwareInterface::RFM_STATE_KEY => true]);
 
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
 
         $this->getEntityManager()->persist($channel);
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
             'customer_ids' => [],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**
@@ -69,7 +72,7 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
     }
 
     /**
-     * @return TraceableMessageProducer
+     * @return MessageCollector
      */
     private function getMessageProducer()
     {

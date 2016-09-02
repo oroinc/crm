@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
@@ -24,7 +24,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
     protected $doctrineHelper;
 
     /**
-     * @var TraceableMessageProducer
+     * @var MessageCollector
      */
     private $messageProducer;
 
@@ -45,7 +45,8 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             $this->logger
         );
 
-        $this->messageProducer = new TraceableMessageProducer($this->getMock(MessageProducerInterface::class));
+        $this->messageProducer = new MessageCollector($this->getMock(MessageProducerInterface::class));
+        $this->messageProducer->enable();
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
         $this->processor->setDoctrineHelper($this->doctrineHelper);
@@ -71,14 +72,14 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'integration_id' => 'testChannel',
             'connector_parameters' => ['skip-dictionary' => true],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     public function testProcessExisting()
@@ -123,14 +124,14 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'integration_id' => 'testChannel',
             'connector_parameters' => ['skip-dictionary' => true],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     public function testProcessJobNotRunning()
@@ -175,14 +176,14 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'integration_id' => 'testChannel',
             'connector_parameters' => ['skip-dictionary' => true],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     public function testProcessInitialSynced()
@@ -228,7 +229,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(0, $traces);
     }
@@ -299,7 +300,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration, null, ['force' => true]);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(0, $traces);
     }
@@ -335,14 +336,14 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->processor->process($integration);
 
-        $traces = $this->messageProducer->getTopicTraces(Topics::SYNC_INITIAL_INTEGRATION);
+        $traces = $this->messageProducer->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'integration_id' => 'testChannel',
             'connector_parameters' => ['skip-dictionary' => true],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**

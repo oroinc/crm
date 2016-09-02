@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
 use OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -16,6 +16,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
  */
 class CalculateAnalyticsCommandTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp()
     {
         parent::setUp();
@@ -41,14 +43,14 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
             'customer_ids' => []
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
@@ -58,7 +60,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for all channels.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS);
 
         self::assertCount(1, $traces);
     }
@@ -91,26 +93,18 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
 
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
             'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**
-     * @return EntityManagerInterface
-     */
-    private function getEntityManager()
-    {
-        return self::getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return TraceableMessageProducer
+     * @return MessageCollector
      */
     private function getMessageProducer()
     {

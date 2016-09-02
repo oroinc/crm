@@ -1006,7 +1006,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@orocrm_magento.provider.initial_sync_processor'
             - '@oro_platform.optional_listeners.manager'
-            - '@orocrm_analytics.model.rfm_state_manager'
+            - '@orocrm_analytics.schedule_calculate_analytics'
             - '@oro_message_queue.job.runner'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }

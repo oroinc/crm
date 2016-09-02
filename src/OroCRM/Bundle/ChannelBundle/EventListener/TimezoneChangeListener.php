@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
-
-use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListener
 {
@@ -32,8 +32,12 @@ class TimezoneChangeListener
             return;
         }
 
-        $this->messageProducer->send(Topics::AGGREGATE_LIFETIME_AVERAGE, [
+        $message = new Message();
+        $message->setPriority(MessagePriority::VERY_LOW);
+        $message->setBody([
             'force' => true,
-        ], MessagePriority::VERY_LOW);
+        ]);
+
+        $this->messageProducer->send(Topics::AGGREGATE_LIFETIME_AVERAGE, $message);
     }
 }

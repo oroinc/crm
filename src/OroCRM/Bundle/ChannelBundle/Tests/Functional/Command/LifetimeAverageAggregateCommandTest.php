@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Command;
 
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
 use OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData;
 
@@ -14,6 +15,8 @@ use OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData
  */
 class LifetimeAverageAggregateCommandTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp()
     {
         $this->initClient();
@@ -33,11 +36,11 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
 
         $this->assertContains('Completed!', $result);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::AGGREGATE_LIFETIME_AVERAGE);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::AGGREGATE_LIFETIME_AVERAGE);
 
         $this->assertCount(1, $traces);
-        $this->assertEquals(['force' => false, 'clear_table_use_delete' => false], $traces[0]['message']);
-        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        $this->assertEquals(['force' => false, 'clear_table_use_delete' => false], $traces[0]['message']->getBody());
+        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**

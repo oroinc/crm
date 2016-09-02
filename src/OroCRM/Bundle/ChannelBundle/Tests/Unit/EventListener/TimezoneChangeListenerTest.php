@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
@@ -25,11 +26,15 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessChange()
     {
+        $message = new Message();
+        $message->setBody(['force' => true]);
+        $message->setPriority(MessagePriority::VERY_LOW);
+
         $messageProducerMock = $this->createMessageProducerMock();
         $messageProducerMock
             ->expects($this->once())
             ->method('send')
-            ->with(Topics::AGGREGATE_LIFETIME_AVERAGE, ['force' => true], MessagePriority::VERY_LOW)
+            ->with(Topics::AGGREGATE_LIFETIME_AVERAGE, $message)
         ;
 
         $listener = new TimezoneChangeListener($messageProducerMock);

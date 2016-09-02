@@ -2,8 +2,9 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use OroCRM\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
@@ -16,6 +17,8 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  */
 class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp()
     {
         parent::setUp();
@@ -39,7 +42,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
 
         self::assertCount(4, $traces);
     }
@@ -58,13 +61,13 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
 
         self::assertCount(3, $traces);
     }
 
     /**
-     * @return TraceableMessageProducer
+     * @return MessageCollector
      */
     private function getMessageProducer()
     {

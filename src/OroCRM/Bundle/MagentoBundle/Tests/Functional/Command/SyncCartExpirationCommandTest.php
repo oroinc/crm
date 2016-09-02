@@ -2,6 +2,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Command;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
@@ -13,11 +14,13 @@ use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
  */
 class SyncCartExpirationCommandTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     public function setUp()
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
     }
 
     public function testShouldOutputHelpForTheCommand()
@@ -37,14 +40,14 @@ class SyncCartExpirationCommandTest extends WebTestCase
         $this->assertContains('Run sync for "Demo Web store" channel', $result);
         $this->assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::SYNC_CART_EXPIRATION_INTEGRATION);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::SYNC_CART_EXPIRATION_INTEGRATION);
 
         $this->assertCount(1, $traces);
 
         $this->assertEquals([
             'integrationId' => $integration->getId(),
-        ], $traces[0]['message']);
-        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**

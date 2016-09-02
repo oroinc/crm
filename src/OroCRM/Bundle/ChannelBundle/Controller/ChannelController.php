@@ -2,17 +2,16 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducer;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class ChannelController extends Controller
 {
@@ -101,10 +100,10 @@ class ChannelController extends Controller
     public function changeStatusAction(Channel $channel)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $message = 'orocrm.channel.controller.message.status.deactivated';
+            $flashMessage = 'orocrm.channel.controller.message.status.deactivated';
             $channel->setStatus(Channel::STATUS_INACTIVE);
         } else {
-            $message = 'orocrm.channel.controller.message.status.activated';
+            $flashMessage = 'orocrm.channel.controller.message.status.activated';
             $channel->setStatus(Channel::STATUS_ACTIVE);
         }
 
@@ -112,13 +111,13 @@ class ChannelController extends Controller
             ->getManager()
             ->flush();
 
-        $this->getMessageProducer()->send(
-            Topics::CHANNEL_STATUS_CHANGED,
-            ['channelId' => $channel->getId()],
-            MessagePriority::HIGH
-        );
+        $message = new Message();
+        $message->setPriority(MessagePriority::HIGH);
+        $message->setBody(['channelId' => $channel->getId()]);
 
-        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
+        $this->getMessageProducer()->send(Topics::CHANNEL_STATUS_CHANGED, $message);
+
+        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($flashMessage));
 
         return $this->redirect(
             $this->generateUrl(

@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
@@ -29,11 +30,15 @@ class ScheduleNewsletterSubscribersResync implements FixtureInterface, Container
         $applicableChannels = $channelRepository->getConfiguredChannelsForSync(ChannelType::TYPE);
         if ($applicableChannels) {
             foreach ($applicableChannels as $channel) {
-                $this->getMessageProducer()->send(Topics::SYNC_INITIAL_INTEGRATION, [
+                $message = new Message();
+                $message->setPriority(MessagePriority::VERY_LOW);
+                $message->setBody([
                     'integration_id' => $channel->getId(),
                     'connector' => InitialNewsletterSubscriberConnector::TYPE,
                     'connector_parameters' => ['skip-dictionary' => true],
-                ], MessagePriority::VERY_LOW);
+                ]);
+
+                $this->getMessageProducer()->send(Topics::SYNC_INITIAL_INTEGRATION, $message);
             }
         }
     }

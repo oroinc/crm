@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Tests\Functional\DataFixtures\LoadChannelData as LoadIntegrationData;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
@@ -17,13 +18,15 @@ use OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
  */
 class StatusTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     public function setUp()
     {
         parent::setUp();
 
         $this->initClient();
         $this->loadFixtures([LoadChannel::class, LoadIntegrationData::class]);
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
     }
 
     public function testShouldScheduleAnalyticsCalculateWhenCompletedIntegrationStatusIsCreated()
@@ -37,7 +40,7 @@ class StatusTest extends WebTestCase
         $integration = $this->getReference('oro_integration:foo_integration');
         $channel->setDataSource($integration);
         $this->getEntityManager()->flush();
-        $this->getMessageProducer()->clearTraces();
+        $this->getMessageProducer()->clear();
 
         /** @var Status $status */
         $status = new Status();
@@ -51,13 +54,13 @@ class StatusTest extends WebTestCase
         $this->getEntityManager()->persist($status);
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
             'customer_ids' => [],
-        ], $traces[0]['message']);
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['priority']);
+        ], $traces[0]['message']->getBody());
+        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
     }
 
     /**

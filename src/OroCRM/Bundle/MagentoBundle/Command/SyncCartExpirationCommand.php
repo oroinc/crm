@@ -6,6 +6,7 @@ use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
@@ -72,9 +73,13 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
         foreach ($channels as $channel) {
             $logger->info(sprintf('Run sync for "%s" channel.', $channel->getName()));
 
-            $this->getMessageProducer()->send(Topics::SYNC_CART_EXPIRATION_INTEGRATION, [
+            $message = new Message();
+            $message->setPriority(MessagePriority::VERY_LOW);
+            $message->setBody([
                 'integrationId' => $channel->getId(),
-            ], MessagePriority::VERY_LOW);
+            ]);
+
+            $this->getMessageProducer()->send(Topics::SYNC_CART_EXPIRATION_INTEGRATION, $message);
         }
 
         $logger->info('Completed');

@@ -7,6 +7,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
@@ -151,10 +152,14 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         )) {
             $this->logger->info('Scheduling initial synchronization');
 
-            $this->messageProducer->send(Topics::SYNC_INITIAL_INTEGRATION, [
+            $message = new Message();
+            $message->setPriority(MessagePriority::VERY_LOW);
+            $message->setBody([
                 'integration_id' => $integration->getId(),
                 'connector_parameters' => ['skip-dictionary' => true]
-            ], MessagePriority::VERY_LOW);
+            ]);
+
+            $this->messageProducer->send(Topics::SYNC_INITIAL_INTEGRATION, $message);
         }
     }
 

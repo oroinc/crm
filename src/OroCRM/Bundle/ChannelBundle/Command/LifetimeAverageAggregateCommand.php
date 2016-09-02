@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Command;
 
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use OroCRM\Bundle\ChannelBundle\Async\Topics;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -51,10 +52,14 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getMessageProducer()->send(Topics::AGGREGATE_LIFETIME_AVERAGE, [
+        $message = new Message();
+        $message->setBody([
             'force' => (bool) $input->getOption('force'),
             'clear_table_use_delete' => (bool) $input->getOption('use-delete'),
-        ], MessagePriority::VERY_LOW);
+        ]);
+        $message->setPriority(MessagePriority::VERY_LOW);
+
+        $this->getMessageProducer()->send(Topics::AGGREGATE_LIFETIME_AVERAGE, $message);
 
         $output->writeln('<info>Completed!</info>');
     }
