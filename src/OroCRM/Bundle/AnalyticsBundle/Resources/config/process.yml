@@ -4,7 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\ChannelBundle\Entity\Channel
         order:   30
-        pre_conditions:
+        preconditions:
             '@and':
                 - '@equal': [$status, true]
                 - '@not_empty': $data

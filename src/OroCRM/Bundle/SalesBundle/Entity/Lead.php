@@ -38,7 +38,15 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="icon-phone",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -74,11 +82,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    EmailOwnerInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
-    
+
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -1070,19 +1077,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
-            $defaultStatus = $em->getReference($enumStatusClass, 'new');
-            $this->setStatus($defaultStatus);
-        }
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
@@ -1113,6 +1107,8 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+
+        return $this;
     }
 
     /**
@@ -1326,22 +1322,6 @@ class Lead extends ExtendLead implements
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
-    {
-        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailFields()
-    {
-        return null;
     }
 
     /**

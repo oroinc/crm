@@ -1,0 +1,63 @@
+workflows:
+    b2b_flow_sales_funnel:
+        entity_restrictions:
+            opportunity_status_open:
+                attribute: opportunity
+                field: status
+                step: new_opportunity
+                mode: disallow
+                values:
+                    - 'won'
+                    - 'lost'
+
+            opportunity_developed_status_open:
+                attribute: opportunity
+                field: status
+                step: developed_opportunity
+                mode: disallow
+                values:
+                    - 'won'
+                    - 'lost'
+            opportunity_status_won:
+                attribute: opportunity
+                step: won_opportunity
+                field: status
+
+            opportunity_status_lost:
+                attribute: opportunity
+                step: lost_opportunity
+                field: status
+
+            lead_status_new:
+                attribute: lead
+                field: status
+                step: new_lead
+                mode: disallow
+                values:
+                    - 'qualified'
+                    - 'canceled'
+
+            lead_status_disqualified:
+                attribute: lead
+                field: status
+                step: disqualified_lead
+
+            lead_status_new_opportunity:
+                attribute: lead
+                field: status
+                step: new_opportunity
+
+            lead_status_developed_opportunity:
+                attribute: lead
+                field: status
+                step: developed_opportunity
+
+            lead_status_won_opportunity:
+                attribute: lead
+                field: status
+                step: won_opportunity
+
+            lead_status_lost_opportunity:
+                attribute: lead
+                field: status
+                step: lost_opportunity

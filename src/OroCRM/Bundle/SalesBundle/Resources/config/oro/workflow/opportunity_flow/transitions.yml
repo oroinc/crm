@@ -8,10 +8,15 @@ workflows:
                 is_hidden: true
                 is_unavailable_hidden: true
                 transition_definition: create_definition
+                frontend_options:
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 form_options:
                     attribute_fields:
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -19,17 +24,21 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_values:
+                                excluded_values:
                                     - won
                                     - lost
                         probability: ~
-                    init_actions:
-                        - '@assign_value': [$probability, null]
+                    form_init:
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:
                                 priority: ASC
                             attribute: $opportunity.status
+                        - '@call_service_method':
+                            service: orocrm_sales.provider.probability
+                            method: get
+                            method_parameters: [$opportunity.status]
+                            attribute: $opportunity.probability
             develop:
                 label: 'Develop'
                 step_to: open
@@ -37,6 +46,10 @@ workflows:
                 frontend_options:
                     icon: icon-play
                     class: btn-primary
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 transition_definition: develop_definition
                 form_options:
                     attribute_fields:
@@ -52,7 +65,7 @@ workflows:
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -60,7 +73,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_values:
+                                excluded_values:
                                     - won
                                     - lost
                         probability: ~
@@ -84,7 +97,7 @@ workflows:
                             options:
                                 constraints:
                                     - NotBlank: ~
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity': # set status if blank (to satisfy the validator)
                             conditions:
                                 '@empty': [$status]
@@ -119,7 +132,7 @@ workflows:
                             options:
                                 constraints:
                                     - NotBlank: ~
-                    init_actions:
+                    form_init:
                         - '@request_enum_entity': # set status if blank (to satisfy the validator)
                             conditions:
                                 '@empty': [$status]
@@ -136,6 +149,10 @@ workflows:
                 frontend_options:
                     icon: 'icon-backward'
                     class: 'btn-primary'
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 transition_definition: reopen_definition
                 form_options:
                     attribute_fields:
@@ -151,7 +168,7 @@ workflows:
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -159,7 +176,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_values:
+                                excluded_values:
                                     - won
                                     - lost
                         probability: ~
@@ -170,10 +187,14 @@ workflows:
                             form_type: oro_resizeable_rich_text
                         notes:
                             form_type: oro_resizeable_rich_text
-                    init_actions:
-                        - '@assign_value': [$probability, null]
+                    form_init:
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:
                                 priority: ASC
                             attribute: $opportunity.status
+                        - '@call_service_method':
+                            service: orocrm_sales.provider.probability
+                            method: get
+                            method_parameters: [$opportunity.status]
+                            attribute: $opportunity.probability

@@ -36,6 +36,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
+    /**
+     * @return string
+     */
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->getUrl('orocrm_sales_lead_create'));
@@ -205,7 +208,9 @@ class LeadControllersTest extends AbstractDatagridTestCase
                     'gridParameters'      => [
                         'gridName' => 'sales-lead-grid'
                     ],
-                    'gridFilters'         => [],
+                    'gridFilters'         => [
+                        'sales-lead-grid[_sort_by][name][value]' => 'ASC',
+                    ],
                     'assert'              => [
                         'name'        => 'Lead name',
                         'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,

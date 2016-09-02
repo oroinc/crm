@@ -128,13 +128,18 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     'oro_integration_type_select'        => new IntegrationTypeSelectType($registry, $assetsHelper),
                     'oro_user_organization_acl_select'   => new OrganizationUserAclSelectType(),
                     'oro_user_acl_select'                => new UserAclSelectType(),
-                    'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType($security, $cm),
+                    'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType(
+                        $security,
+                        $cm,
+                        $em,
+                        $searchRegistry
+                    ),
                     'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp),
                     'genemu_jqueryselect2_choice'        => new Select2Type('choice'),
                     'genemu_jqueryselect2_hidden'        => new Select2Type('hidden')
                 ],
                 [
-                    'form' => [
+                    'form'                         => [
                         new FormTypeCsrfExtension(
                             $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
                         ),

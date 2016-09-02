@@ -1,3 +1,5 @@
 config:
     paths:
         orocrmsales/js/datagrid/inline-editing/save-api-accessor: 'bundles/orocrmsales/js/datagrid/inline-editing/save-api-accessor.js'
+        orocrmsales/js/app/views/board/opportunity-card-view: 'bundles/orocrmsales/js/app/views/board/opportunity-card-view.js'
+        orocrmsales/js/app/views/update-page-view: 'bundles/orocrmsales/js/app/views/update-page-view.js'

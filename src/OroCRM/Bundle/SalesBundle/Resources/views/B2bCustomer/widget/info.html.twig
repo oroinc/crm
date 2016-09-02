@@ -12,9 +12,9 @@
             {{ channel.renderChannelProperty(entity, 'orocrm.sales.b2bcustomer.data_channel.label') }}
 
             {%- if resource_granted('orocrm_account_view') and entity.account -%}
-                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account|escape ~ '</a>' %}
+                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ UI.renderEntityViewLabel(entity.account, 'name', 'orocrm.account.entity_label') ~ '</a>' %}
             {%- else -%}
-                {% set accountView = entity.account ? entity.account|escape : '' %}
+                {% set accountView = UI.renderEntityViewLabel(entity.account, 'name') %}
             {%- endif -%}
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.account.label'|trans, accountView) }}
 

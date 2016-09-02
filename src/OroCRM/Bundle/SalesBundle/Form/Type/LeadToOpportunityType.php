@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -11,10 +12,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class LeadToOpportunityType extends OpportunityType
+class LeadToOpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_lead_to_opportunity';
 
+    /** @var bool */
     protected $useFullContactForm = false;
 
     /**
@@ -30,8 +32,6 @@ class LeadToOpportunityType extends OpportunityType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
-
         $resolver->setDefaults(
             [
                 'cascade_validation' => true
@@ -44,10 +44,12 @@ class LeadToOpportunityType extends OpportunityType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
     }
 
+    /**
+     * @param FormEvent $event
+     */
     public function onPreSetData(FormEvent $event)
     {
         $form = $event->getForm();
@@ -65,6 +67,14 @@ class LeadToOpportunityType extends OpportunityType
     public function getBlockPrefix()
     {
         return self::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'orocrm_sales_opportunity';
     }
 
     /**

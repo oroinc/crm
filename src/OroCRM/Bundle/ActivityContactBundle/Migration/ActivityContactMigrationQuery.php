@@ -77,7 +77,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 
         $entities = $this->getConfigurableEntitiesData($logger);
         foreach ($entities as $entityClassName => $config) {
-            // Skipp excluded entity
+            // Skip excluded entity
             if (TargetExcludeList::isExcluded($entityClassName)) {
                 continue;
             }

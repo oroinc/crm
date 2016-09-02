@@ -208,6 +208,7 @@ services:
             - '@orocrm_magento.provider.tracking_visit_event'
             - '@oro_chart.config_provider'
             - '@service_container'
+            - '@translator'
 
     orocrm_magento.provider.website_events_chart:
         class: %orocrm_magento.provider.website_events_chart.class%
@@ -277,6 +278,8 @@ services:
 
     orocrm_magento.form.type.customer_group_selector:
         class: %orocrm_magento.form.type.customer_group_selector.class%
+        arguments:
+            - '@oro_security.security_facade'
         tags:
             - { name: form.type, alias: orocrm_magento_customer_group_select }
 
@@ -495,6 +498,22 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
 
+    orocrm_magento.event_listener.customer_group_grid_listener:
+        class: OroCRM\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener
+        arguments:
+            - '@oro_security.security_facade'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-group-by-channel-grid, method: onBuildAfter }
+
+    orocrm_magento.event_listener.store_grid_listener:
+        class: OroCRM\Bundle\MagentoBundle\EventListener\StoreGridListener
+        arguments:
+            - '@oro_security.security_facade'
+            - '%orocrm_channel.entity.class%'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-store-by-channel-grid, method: onBuildAfter }
+
     orocrm_magento.event_listener.update_integration_connectors:
         class: %orocrm_magento.event_listener.update_integration_connectors.class%
         arguments:
@@ -673,6 +692,7 @@ services:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%orocrm_channel.entity.class%]]
+            - [setSecurityFacade, ['@oro_security.security_facade']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_customer_group", acl_resource: "orocrm_magento_customer_view" }
 
@@ -685,6 +705,7 @@ services:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%orocrm_channel.entity.class%]]
+            - [setSecurityFacade, ['@oro_security.security_facade']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_store", acl_resource: "orocrm_magento_customer_view" }
 

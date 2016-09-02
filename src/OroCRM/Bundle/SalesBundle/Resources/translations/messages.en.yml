@@ -76,6 +76,8 @@ orocrm:
                 in_progress.label: In Progress
                 total_forecast.label: Total Forecast
                 weighted_forecast.label: Weighted Forecast
+                total_indeterminate_forecast.label: Total Indeterminate Forecast
+                weighted_indeterminate_forecast.label: Weighted Indeterminate Forecast
                 metrics: Metrics
                 no_changes: No Changes
                 no_available_metrics: No available metrics
@@ -170,6 +172,7 @@ orocrm:
             assigned.label:       Assigned
             created_at.label:     Created At
             updated_at.label:     Updated At
+            closed_at.label:      Closed At
             workflow:
                 close_date.label: Close date
             datagrid:
@@ -233,6 +236,8 @@ orocrm:
             customer.label:       Business Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
+            primary_phone.label:  Primary Phone
+            primary_email.label:  Primary Email
             source:
                 unclassified:     No source
                 others:           Others
@@ -420,6 +425,21 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        system_configuration:
+            groups:
+                crm.title: CRM
+                sales_pipeline.title: Sales Pipeline
+                opportunity.title: Opportunity
+                opportunity_status_probabilities:
+                    title:          Probabilities
+                    options.label:  Default probabilities for opportunity statuses
+                    options.tooltip: >
+                        Manage opportunity statuses and assign default probabilities to them,
+                        except for system statuses Closed Won and Closed Lost.
+            fields:
+                opportunity_status_probabilities:
+                    probability.tooltip:                       Enter default probability (%) for this status
 
         privilege:
             category.sales_data.label: Sales Data

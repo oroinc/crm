@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Oro\Bundle\AddressBundle\Entity\Region;
+
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -183,6 +185,75 @@ class OrderStrategy extends AbstractImportStrategy
             $entity->setName('');
         }
 
+        $existingEntity = $this->findRegionEntity($entity, $existingEntity);
+
         return $existingEntity;
+    }
+
+    /**
+     * @param $entity
+     * @param $existingEntity
+     *
+     * @return null|object
+     */
+    protected function findRegionEntity($entity, $existingEntity)
+    {
+        if (!$existingEntity && $entity instanceof Region) {
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            $magentoRegion = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                [
+                    'regionId' => $entity->getCode()
+                ]
+            );
+            if ($magentoRegion) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'Oro\Bundle\AddressBundle\Entity\Region',
+                    [
+                        'combinedCode' => $magentoRegion->getCombinedCode()
+                    ]
+                );
+            }
+        }
+
+        return $existingEntity;
+    }
+
+    /**
+     * Add special identifier for entities not existing in Magento
+     * Add customer Email to search context for processing related entity Guest Customer for Order
+     *
+     * @param string $entityName
+     * @param array $identityValues
+     * @return null|object
+     */
+    protected function findEntityByIdentityValues($entityName, array $identityValues)
+    {
+        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', true)
+            && empty($identityValues['originId'])
+            && $this->existingEntity
+        ) {
+            $identityValues['email'] = $this->existingEntity->getCustomerEmail();
+        }
+
+        return parent::findEntityByIdentityValues($entityName, $identityValues);
+    }
+
+    /**
+     * Add special search context for entities not existing in Magento
+     * Add customer Email to search context for Order related entity Guest Customer
+     *
+     * @param object $entity
+     * @param string $entityClass
+     * @param array $searchContext
+     * @return array|null
+     */
+    protected function combineIdentityValues($entity, $entityClass, array $searchContext)
+    {
+        if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
+            $searchContext['email'] = $this->existingEntity->getCustomerEmail();
+        }
+
+        return parent::combineIdentityValues($entity, $entityClass, $searchContext);
     }
 }

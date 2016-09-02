@@ -268,7 +268,8 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *              "order"=80
      *          },
      *          "merge"={
-     *              "display"=true
+     *              "display"=true,
+     *              "autoescape"=false
      *          }
      *      }
      * )

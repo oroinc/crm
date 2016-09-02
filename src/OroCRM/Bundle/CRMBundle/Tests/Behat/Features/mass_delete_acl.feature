@@ -3,11 +3,9 @@ Feature: Mass Delete records with acl
 	As a Administrator
 	I want give CRUD permissions to different user roles
 
-Background:
-	Given I login as "admin" user with "admin" password
-
 Scenario: User can but now can't delete records
-	Given I have 5 Cases
+	Given I login as "admin" user with "admin" password
+	And I have 5 Cases
 	And I go to Activities/Cases
 	And I keep in mind number of records in list
 	And select few records
@@ -19,14 +17,14 @@ Scenario: User can but now can't delete records
 	Then no records were deleted
 
 Scenario: User can't delete records
-	Given I go to Activities/Cases
+	Given I reload the page
 	Then I shouldn't see Delete action
 
 Scenario: User can delete only his records but view all
-	Given my permissions on View Cases as System and on Delete as User
+	Given my permissions on View Cases as Global and on Delete as User
 	And there are two users with their own 7 Cases
-	When I go to Activities/Cases
 	And keep in mind number of records in list
+	And I reload the page
 	And check all records in grid
 	And click Delete mass action
 	And confirm deletion
@@ -44,7 +42,7 @@ Scenario: User can delete only his records but view all
 #	Then I should see message that I am able to delete only 50 records at once
 
 Scenario: User can delete more records than can view
-	Given my permissions on View Accounts as User and on Delete as System
+	Given my permissions on View Accounts as User and on Delete as Global
 	And I have 3 Accounts
 	And there are two users with their own 7 Accounts
 	When I go to Customers/Accounts

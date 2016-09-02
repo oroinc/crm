@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Provider;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
@@ -27,11 +28,18 @@ class ChannelsByEntitiesProvider
     protected $channelsCache = [];
 
     /**
-     * @param DoctrineHelper $doctrineHelper
+     * @var AclHelper
      */
-    public function __construct(DoctrineHelper $doctrineHelper)
+    protected $aclHelper;
+
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     * @param AclHelper      $aclHelper
+     */
+    public function __construct(DoctrineHelper $doctrineHelper, AclHelper $aclHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
+        $this->aclHelper = $aclHelper;
     }
 
     /**
@@ -45,7 +53,8 @@ class ChannelsByEntitiesProvider
         sort($entities);
         $hash = md5(serialize([$entities, $status]));
         if (!isset($this->channelsCache[$hash])) {
-            $this->channelsCache[$hash] = $this->getChannelRepository()->getChannelsByEntities($entities, $status);
+            $this->channelsCache[$hash] = $this->getChannelRepository()
+                ->getChannelsByEntities($entities, $status, $this->aclHelper);
         }
 
         return $this->channelsCache[$hash];
