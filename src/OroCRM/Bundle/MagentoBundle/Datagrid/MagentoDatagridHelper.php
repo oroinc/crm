@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Datagrid;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
@@ -13,9 +15,13 @@ class MagentoDatagridHelper
     /** @var EntityManager */
     protected $em;
 
-    public function __construct(EntityManager $em)
+    /** @var AclHelper */
+    private $aclHelper;
+
+    public function __construct(EntityManager $em, AclHelper $aclHelper)
     {
         $this->em = $em;
+        $this->aclHelper = $aclHelper;
     }
 
     /**
@@ -34,20 +40,36 @@ class MagentoDatagridHelper
 
     /**
      * Returns choices for Magento Customer Group filter
-     * Labels include integration channel name if any
+     * Labels include magento channel name if multiple magento channels are available
      *
      * @return array
      */
     public function getMagentoGroupsChoices()
     {
-        $er = $this->em->getRepository(CustomerGroup::class);
+        $channelRepo = $this->em->getRepository(Channel::class);
+        $groupRepo = $this->em->getRepository(CustomerGroup::class);
+        $qb = $channelRepo->createQueryBuilder('mc')
+            ->select('IDENTITY(mc.dataSource) as channelId, mc.name as name')
+            ->where('mc.channelType = :type')
+            ->setParameter('type', 'magento');
+        $results = $this->aclHelper->apply($qb)->getArrayResult();
+        $magentoChannels = array_combine(array_column($results, 'channelId'), array_column($results, 'name'));
 
-        $qb = $er->createQueryBuilder('g')
-            ->select('g.id as id')
-            ->addSelect('CONCAT(g.name, COALESCE(CONCAT(\' (\', gc.name, \')\'), \'\')) as name')
-            ->leftJoin('g.channel', 'gc');
-        $groups = $qb->getQuery()->getArrayResult();
-        $choices = array_combine(array_column($groups, 'id'), array_column($groups, 'name'));
+        $addChannelName = count($magentoChannels) > 1;
+
+        $qb = $groupRepo->createQueryBuilder('g')
+            ->select('g.id as id, g.name as name, IDENTITY(g.channel) as channelId');
+        $groups = $this->aclHelper->apply($qb)->getArrayResult();
+
+        $choices = [];
+        foreach ($groups as $group) {
+            $groupName = $group['name'];
+            if ($addChannelName && !empty($group['channelId']) && isset($magentoChannels[$group['channelId']])) {
+                // append channel name
+                $groupName .= sprintf(' (%s)', $magentoChannels[$group['channelId']]);
+            }
+            $choices[$group['id']] = $groupName;
+        }
 
         return $choices;
     }

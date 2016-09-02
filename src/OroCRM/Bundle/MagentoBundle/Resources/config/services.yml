@@ -574,6 +574,7 @@ services:
         class: %orocrm_magento.datagrid_helper.class%
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@oro_security.acl_helper'
 
     orocrm_magento.country.datagrid_helper:
         class: %orocrm_magento.country.datagrid_helper.class%
