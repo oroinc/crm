@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -16,8 +17,12 @@ class MagentoDatagridHelper
     protected $em;
 
     /** @var AclHelper */
-    private $aclHelper;
+    protected $aclHelper;
 
+    /**
+     * @param EntityManager $em
+     * @param AclHelper     $aclHelper
+     */
     public function __construct(EntityManager $em, AclHelper $aclHelper)
     {
         $this->em = $em;
