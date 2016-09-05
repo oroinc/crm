@@ -42,7 +42,7 @@ class OroCRMCaseBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
