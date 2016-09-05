@@ -17,8 +17,6 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
@@ -42,7 +40,15 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="icon-phone",
+ *              "contact_information"={
+ *                  "email"={
+ *                      {"fieldName"="primaryEmail"}
+ *                  },
+ *                  "phone"={
+ *                      {"fieldName"="primaryPhone"}
+ *                  }
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -78,11 +84,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    EmailOwnerInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
-    
+
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -453,22 +458,6 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $notes;
-
-    /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
 
     /**
      * @var Organization
@@ -1090,46 +1079,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @param WorkflowItem $workflowItem
-     *
-     * @return Lead
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowItem $workflowStep
-     *
-     * @return Lead
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
-
-    /**
      * @param B2bCustomer $customer
      * @TODO remove null after BAP-5248
      */
@@ -1144,19 +1093,6 @@ class Lead extends ExtendLead implements
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
-            $defaultStatus = $em->getReference($enumStatusClass, 'new');
-            $this->setStatus($defaultStatus);
-        }
     }
 
     /**
@@ -1190,6 +1126,8 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+
+        return $this;
     }
 
     /**
@@ -1403,22 +1341,6 @@ class Lead extends ExtendLead implements
         }
 
         return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClass()
-    {
-        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailFields()
-    {
-        return null;
     }
 
     /**

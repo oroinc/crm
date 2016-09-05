@@ -1,4 +1,39 @@
 oro_entity:
+    virtual_fields:
+        OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+            primaryEmail:
+                query:
+                    select:
+                        expr:         emails.email
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+            primaryPhone:
+                query:
+                    select:
+                        expr:         phones.phone
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+        OroCRM\Bundle\SalesBundle\Entity\Lead:
+            primaryEmail:
+                query:
+                    select:
+                        expr:         emails.email
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
+            primaryPhone:
+                query:
+                    select:
+                        expr:         phones.phone
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
     entity_aliases:
         Extend\Entity\EV_Opportunity_Status:
             alias:        salesopportunitystatus

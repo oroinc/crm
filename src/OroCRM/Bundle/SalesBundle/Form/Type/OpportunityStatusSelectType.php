@@ -3,47 +3,55 @@
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityStatusSelectType extends AbstractType
 {
-    const NAME = 'orocrm_type_widget_opportunity_status_select';
+    /** @var ConfigManager $configManager */
+    private $configManager;
 
-    /** @var EnumValueProvider */
-    protected $enumValueProvider;
-
-    /**
-     * @param EnumValueProvider $enumValueProvider
-     */
-    public function __construct(EnumValueProvider $enumValueProvider)
+    public function __construct(ConfigManager $configManager)
     {
-        $this->enumValueProvider = $enumValueProvider;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        parent::setDefaultOptions($resolver);
-
-        $resolver->setDefaults(
-            [
-                'choices'  => $this->enumValueProvider->getEnumChoicesByCode('opportunity_status'),
-                'multiple' => true,
-                'configs'  => [
-                    'width'      => '400px',
-                    'allowClear' => true,
-                ]
-            ]
-        );
+        $this->configManager = $configManager;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        return self::NAME;
+        if (isset($options['probabilities'])) {
+            $view->vars['attr']['data-probabilities'] = json_encode($options['probabilities']);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $probabilities = $this->configManager->get(Opportunity::PROBABILITIES_CONFIG_KEY);
+
+        // filter out statuses without probability
+        $probabilities = array_filter($probabilities, function ($probability) {
+            return null !== $probability;
+        });
+
+        // expose as percents
+        $probabilities = array_map(
+            function ($probability) {
+                return round($probability * 100);
+            },
+            $probabilities
+        );
+
+        $resolver->setDefaults(['probabilities' => $probabilities]);
     }
 
     /**
@@ -51,6 +59,14 @@ class OpportunityStatusSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'genemu_jqueryselect2_choice';
+        return 'oro_enum_select';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'orocrm_sales_opportunity_status_select';
     }
 }

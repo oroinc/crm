@@ -109,16 +109,15 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     }
 
     /**
-     * Assert avatar image src, e.g. charlie-sheen.jpg
-     * Example: And avatar should be "charlie-sheen.jpg"
+     * Assert that entity view page has default avatar (info-user.png)
      *
-     * @Then avatar should be :arg1
+     * @Then avatar should not be default avatar
      */
-    public function avatarShouldBe($imgName)
+    public function avatarShouldNotBeDefaultAvatar()
     {
         $img = $this->getSession()->getPage()->find('css', 'div.customer-info div.visual img');
 
-        self::assertNotFalse(stripos($img->getAttribute('src'), $imgName), sprintf('Avatar is "%s" image', $imgName));
+        self::assertFalse(stripos($img->getAttribute('src'), 'info-user.png'), 'Avatar is not default avatar');
     }
 
     /**
@@ -194,6 +193,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
      */
     public function assertAddressCount($count)
     {
+        $this->getSession()->getDriver()->waitForAjax();
         $addresses = $this->getSession()->getPage()->findAll('css', 'div.map-address-list .map-item');
 
         self::assertCount(
@@ -212,6 +212,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
      */
     public function assertPrimaryAddress($address)
     {
+        $this->getSession()->getDriver()->waitForAjax();
         $addresses = $this->getSession()->getPage()->findAll('css', 'div.map-address-list .map-item');
 
         /** @var NodeElement $actualAddress */
@@ -239,6 +240,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     public function iDeleteAllAddresses($field)
     {
         $collection = $this->elementFactory->createElement('OroForm')->findField(ucfirst(Inflector::pluralize($field)));
+        self::assertNotNull($collection, sprintf('Can\'t find collection field with "%s" locator', $field));
 
         /** @var NodeElement $removeButton */
         while ($removeButton = $collection->find('css', '.removeRow')) {

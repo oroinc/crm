@@ -52,9 +52,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "group_name"="",
  *              "category"="sales_data"
  *          },
- *          "workflow"={
- *              "active_workflow"="b2c_flow_order_follow_up"
- *          },
  *          "grid"={
  *              "default"="magento-order-grid",
  *              "context"="magento-order-for-context-grid"
@@ -228,22 +225,6 @@ class Order extends ExtendOrder implements
     protected $feedback;
 
     /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
@@ -285,46 +266,6 @@ class Order extends ExtendOrder implements
      * @ORM\Column(type="datetime", name="synced_at", nullable=true)
      */
     protected $syncedAt;
-
-    /**
-     * @param WorkflowItem $workflowItem
-     *
-     * @return Order
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowItem $workflowStep
-     *
-     * @return Order
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
 
     public function __construct()
     {

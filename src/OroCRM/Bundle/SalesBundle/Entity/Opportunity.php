@@ -2,18 +2,14 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -45,14 +41,16 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"="",
- *              "category"="sales_data"
+ *              "category"="sales_data",
+ *              "field_acl_supported" = "true"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
  *              "grid_name"="sales-opportunity-grid",
  *          },
  *          "dataaudit"={
- *              "auditable"=true
+ *              "auditable"=true,
+ *              "immutable"=true
  *          },
  *          "grid"={
  *              "default"="sales-opportunity-grid",
@@ -74,6 +72,14 @@ class Opportunity extends ExtendOpportunity implements
     use ChannelEntityTrait;
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
+
+    const STATUS_LOST = 'lost';
+    const STATUS_WON  = 'won';
+
+    /**
+     * The key in system config for probability - status map
+     */
+    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
 
     /**
      * @var int
@@ -155,7 +161,7 @@ class Opportunity extends ExtendOpportunity implements
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=140,
      *          "short"=true
@@ -189,7 +195,7 @@ class Opportunity extends ExtendOpportunity implements
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=20
      *      }
@@ -211,9 +217,7 @@ class Opportunity extends ExtendOpportunity implements
      *              "constraints"={{"Range":{"min":0, "max":100}}},
      *          }
      *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=30
      *      }
@@ -235,9 +239,7 @@ class Opportunity extends ExtendOpportunity implements
      *              "constraints"={{"Range":{"min":0}}},
      *          }
      *      },
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=40
      *      }
@@ -355,22 +357,6 @@ class Opportunity extends ExtendOpportunity implements
     protected $notes;
 
     /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
-
-    /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
@@ -404,42 +390,17 @@ class Opportunity extends ExtendOpportunity implements
     protected $customer;
 
     /**
-     * @param  WorkflowItem $workflowItem
-     * @return Opportunity
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="closed_at", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
+     *      "importexport"={"excluded"=true, "immutable"=true}
+     *  }
+     * )
      */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param  WorkflowItem $workflowStep
-     * @return Opportunity
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
-    }
+    protected $closedAt;
 
     /**
      * @return int
@@ -796,5 +757,21 @@ class Opportunity extends ExtendOpportunity implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * @param \DateTime $closedAt
+     */
+    public function setClosedAt(\DateTime $closedAt = null)
+    {
+        $this->closedAt = $closedAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getClosedAt()
+    {
+        return $this->closedAt;
     }
 }

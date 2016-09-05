@@ -152,6 +152,120 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $filters
+     * @param array $complexFilters
+     * @param array $expectedBeforeReset
+     * @param array $expectedAfterReset
+     *
+     * @dataProvider providerResetFilterWithEmptyValue
+     */
+    public function testResetFilterWithEmptyValue($filters, $complexFilters, $expectedBeforeReset, $expectedAfterReset)
+    {
+        $bag = new BatchFilterBag($filters, $complexFilters);
+        $filters = $bag->getAppliedFilters();
+        self::assertEquals($expectedBeforeReset, $filters);
+
+        $bag->resetFilterWithEmptyValue();
+        $filters = $bag->getAppliedFilters();
+        self::assertEquals($expectedAfterReset, $filters);
+    }
+
+    /**
+     * Data provider for testResetFilterWithEmptyValue
+     *
+     * @return array
+     */
+    public function providerResetFilterWithEmptyValue()
+    {
+        return [
+            'all filters have empty value' => [
+                'filters' => [
+                    'testField1' => null
+                ],
+                'complexFilters' => [
+                    'testFieldComplex' => null
+                ],
+                'expectedBeforeReset' => [
+                    'filters' => [
+                        'filter' => [
+                            ['key' => 'testField1', 'value' => null]
+                        ],
+                        'complex_filter' => [
+                            ['key' => 'testFieldComplex', 'value' => null]
+                        ],
+                    ]
+                ],
+                'expectedAfterReset' => [
+                    'filters' => []
+                ]
+            ],
+            'one filter with empty value' => [
+                'filters' => [
+                    'testField1' => 'testValue1',
+                    'testField2' => null,
+                ],
+                'complexFilters' => [
+                    'testFieldComplex' => 'testValue1'
+                ],
+                'expectedBeforeReset' => [
+                    'filters' => [
+                        'filter' => [
+                            ['key' => 'testField1', 'value' => 'testValue1'],
+                            ['key' => 'testField2', 'value' => null]
+                        ],
+                        'complex_filter' => [
+                            ['key' => 'testFieldComplex', 'value' => 'testValue1']
+                        ],
+                    ]
+                ],
+                'expectedAfterReset' => [
+                    'filters' => [
+                        'filter' => [
+                            ['key' => 'testField1', 'value' => 'testValue1']
+                        ],
+                        'complex_filter' => [
+                            ['key' => 'testFieldComplex', 'value' => 'testValue1']
+                        ],
+                    ]
+                ]
+            ],
+            'one complex_filter with empty value' => [
+                'filters' => [
+                    'testField1' => 'testValue1',
+                    'testField2' => 'testValue2'
+                ],
+                'complexFilters' => [
+                    'testFieldComplex' => 'testValue1',
+                    'testFieldComplex2' => null
+                ],
+                'expectedBeforeReset' => [
+                    'filters' => [
+                        'filter' => [
+                            ['key' => 'testField1', 'value' => 'testValue1'],
+                            ['key' => 'testField2', 'value' => 'testValue2']
+                        ],
+                        'complex_filter' => [
+                            ['key' => 'testFieldComplex', 'value' => 'testValue1'],
+                            ['key' => 'testFieldComplex2', 'value' => null]
+                        ]
+                    ],
+                ],
+                'expectedAfterReset' => [
+                    'filters' => [
+                        'filter' => [
+                            ['key' => 'testField1', 'value' => 'testValue1'],
+                            ['key' => 'testField2', 'value' => 'testValue2']
+                        ],
+                        'complex_filter' => [
+                            ['key' => 'testFieldComplex', 'value' => 'testValue1']
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
      * @param BatchFilterBag $bag
      *
      * @return array

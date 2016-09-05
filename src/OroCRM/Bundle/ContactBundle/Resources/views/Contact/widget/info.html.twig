@@ -102,9 +102,9 @@
                     {% set accountViewGranted = resource_granted('orocrm_account_view') %}
                     {%- for account in entity.accounts -%}
                         {%- if accountViewGranted -%}
-                            <a href="{{ path('orocrm_account_view', {'id': account.id}) }}">{{ account }}</a>
+                            <a href="{{ path('orocrm_account_view', {'id': account.id}) }}">{{ ui.renderEntityViewLabel(account, 'name', 'orocrm.account.entity_label') }}</a>
                         {%- else -%}
-                            {{ account }}
+                            {{ ui.renderEntityViewLabel(account, 'name') }}
                         {%- endif -%}
                         {% if not loop.last %}, {% endif %}
                     {%- endfor -%}

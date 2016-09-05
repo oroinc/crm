@@ -110,7 +110,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_41';
+        return 'v1_42';
     }
 
     /**
@@ -253,8 +253,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -329,8 +327,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
-        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_4D09F3051023C4EE');
-        $table->addIndex(['workflow_step_id'], 'IDX_4D09F30571FE882C', []);
         $table->addIndex(['user_owner_id'], 'IDX_4D09F3059EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_4D09F30572F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
@@ -464,7 +460,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('product_image_url', 'text', ['notnull' => false]);
         $table->addColumn('product_url', 'text', ['notnull' => false]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
@@ -592,24 +588,23 @@ class OroCRMMagentoBundleInstaller implements
     protected function createOrocrmMagentoProductTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_magento_product');
-        $table->addColumn('id', 'integer', ['precision' => 0, 'autoincrement' => true]);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
-        $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('type', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('type', 'string', ['length' => 255]);
         $table->addColumn(
             'special_price',
             'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            ['notnull' => false]
         );
-        $table->addColumn('price', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
-        $table->addColumn('created_at', 'datetime', ['precision' => 0]);
-        $table->addColumn('updated_at', 'datetime', ['precision' => 0]);
-        $table->addColumn('origin_id', 'integer', ['precision' => 0, 'unsigned' => true]);
-        $table->addColumn('cost', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
+        $table->addColumn('price', 'money', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime');
+        $table->addColumn('origin_id', 'integer', ['unsigned' => true]);
+        $table->addColumn('cost', 'money', ['notnull' => false]);
         $table->addIndex(['channel_id'], 'IDX_5A17298272F5A1AA', []);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['sku', 'channel_id'], 'unq_sku_channel_id');
     }
 
     /**
@@ -664,8 +659,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('billing_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -707,8 +700,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['billing_address_id'], 'IDX_96661A8079D0C0E4', []);
         $table->addIndex(['status_name'], 'IDX_96661A806625D392', []);
         $table->addIndex(['opportunity_id'], 'IDX_96661A809A34590F', []);
-        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_96661A801023C4EE');
-        $table->addIndex(['workflow_step_id'], 'IDX_96661A8071FE882C', []);
         $table->addIndex(['user_owner_id'], 'IDX_96661A809EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_96661A8072F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_96661A80BDC09B73', []);
@@ -794,7 +785,7 @@ class OroCRMMagentoBundleInstaller implements
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:percent)']
         );
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
-        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
         $table->addColumn('price', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('weight', 'float', ['notnull' => false, 'precision' => 0]);
@@ -913,18 +904,6 @@ class OroCRMMagentoBundleInstaller implements
             []
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_item'),
-            ['workflow_item_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_step'),
-            ['workflow_step_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
             ['id'],
@@ -951,8 +930,6 @@ class OroCRMMagentoBundleInstaller implements
             'FK_4D09F30532C8A3DE'
         );
     }
-
-   
 
     /**
      * Add orocrm_magento_order_emails foreign keys.
@@ -1307,18 +1284,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_opportunity'),
             ['opportunity_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_item'),
-            ['workflow_item_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_step'),
-            ['workflow_step_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );

@@ -9,12 +9,47 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
+
+    /** @var ProbabilityProvider */
+    protected $probabilityProvider;
+
+    /** @var EnumValueProvider */
+    protected $enumValueProvider;
+
+    /** @var EnumTypeHelper */
+    protected $typeHelper;
+
+    /** @var OpportunityRelationsBuilder */
+    protected $relationsBuilder;
+
+    /**
+     * @param ProbabilityProvider         $probabilityProvider
+     * @param EnumValueProvider           $enumValueProvider
+     * @param EnumTypeHelper              $typeHelper
+     * @param OpportunityRelationsBuilder $relationsBuilder
+     */
+    public function __construct(
+        ProbabilityProvider $probabilityProvider,
+        EnumValueProvider $enumValueProvider,
+        EnumTypeHelper $typeHelper,
+        OpportunityRelationsBuilder $relationsBuilder
+    ) {
+        $this->probabilityProvider = $probabilityProvider;
+        $this->enumValueProvider   = $enumValueProvider;
+        $this->typeHelper          = $typeHelper;
+        $this->relationsBuilder    = $relationsBuilder;
+    }
 
     /**
      * {@inheritdoc}
@@ -47,17 +82,16 @@ class OpportunityType extends AbstractType
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                         'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
-                    ],
+                    ]
                 ]
             )
             ->add(
                 'customer',
-                'orocrm_sales_b2bcustomer_with_channel_select',
+                'orocrm_sales_b2bcustomer_with_channel_create_or_select',
                 [
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',
-                    'new_item_property_name' => 'name',
-                    'configs'                => ['allowCreateNew' => true],
+                    'new_item_property_name' => 'name'
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
@@ -107,7 +141,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'status',
-                'oro_enum_select',
+                'orocrm_sales_opportunity_status_select',
                 [
                     'required'    => true,
                     'label'       => 'orocrm.sales.opportunity.status.label',
@@ -115,8 +149,42 @@ class OpportunityType extends AbstractType
                     'constraints' => [new NotNull()]
                 ]
             );
-        
+
         $this->addListeners($builder);
+    }
+
+    /**
+     * Set new opportunities default probability based on default enum status value
+     *
+     * @param FormEvent $event
+     */
+    public function onFormPreSetData(FormEvent $event)
+    {
+        $opportunity = $event->getData();
+        if (null === $opportunity) {
+            return;
+        }
+
+        if ($opportunity->getId()) {
+            return;
+        }
+
+        if (null !== $opportunity->getProbability()) {
+            return;
+        }
+
+        $status = $opportunity->getStatus();
+
+        if (!$status) {
+            $status = $this->getDefaultStatus();
+        }
+
+        if (!$status) {
+            return;
+        }
+
+        $opportunity->setProbability($this->probabilityProvider->get($status));
+        $event->setData($opportunity);
     }
 
     /**
@@ -126,7 +194,7 @@ class OpportunityType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'data_class' => Opportunity::class,
                 'intention'  => 'opportunity'
             ]
         );
@@ -137,6 +205,14 @@ class OpportunityType extends AbstractType
      */
     public function getName()
     {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
         return self::NAME;
     }
 
@@ -145,26 +221,26 @@ class OpportunityType extends AbstractType
      */
     protected function addListeners(FormBuilderInterface $builder)
     {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onFormPreSetData']);
+
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
-                $opportunity = $event->getData();
-
-                if ($opportunity instanceof Opportunity) {
-                    $b2bCustomer = $opportunity->getCustomer();
-                    if ($b2bCustomer && !$b2bCustomer->getDataChannel()) {
-                        // new customer needs a channel
-                        $b2bCustomer->setDataChannel($opportunity->getDataChannel());
-                    }
-
-                    if ($b2bCustomer && !$b2bCustomer->getAccount()) {
-                        // new Account for new B2bCustomer
-                        $account = new Account();
-                        $account->setName($b2bCustomer->getName());
-                        $b2bCustomer->setAccount($account);
-                    }
-                }
+                $this->relationsBuilder->buildAll($event->getData());
             }
         );
+    }
+
+    /**
+     * Return default enum value for Opportunity Status
+     *
+     * @return AbstractEnumValue|null Return null if there is no default status
+     */
+    private function getDefaultStatus()
+    {
+        $enumCode        = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
+        $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
+
+        return reset($defaultStatuses);
     }
 }

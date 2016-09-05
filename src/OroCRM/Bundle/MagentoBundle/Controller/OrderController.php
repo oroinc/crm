@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -123,7 +124,17 @@ class OrderController extends Controller
         try {
             $result = $this->loadOrderInformation(
                 $order->getChannel(),
-                ['filters' => ['increment_id' => $order->getIncrementId()]]
+                [
+                    ProcessorRegistry::TYPE_IMPORT => [
+                        'filters' => [
+                            'increment_id' => $order->getIncrementId()
+                        ],
+                        'complex_filters' => [
+                            'updated_at-gt' => null,
+                            'updated_at-lte' => null
+                        ]
+                    ]
+                ]
             );
         } catch (\LogicException $e) {
             $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);

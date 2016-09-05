@@ -1,0 +1,5 @@
+css:
+  'orodatagrid':
+      - 'bundles/orocrmsales/css/less/main.less'
+  'orocrmsales':
+      - 'bundles/orocrmsales/css/less/orocrm.sales.less'

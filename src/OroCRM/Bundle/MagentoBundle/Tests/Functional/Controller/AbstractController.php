@@ -81,7 +81,11 @@ abstract class AbstractController extends WebTestCase
         foreach ($result['data'] as $row) {
             if ($shouldAssertData) {
                 foreach ($requestData['assert'] as $fieldName => $value) {
-                    $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                    if (is_string($row[$fieldName])) {
+                        $this->assertContains($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                    } else {
+                        $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                    }
                 }
                 break;
             }

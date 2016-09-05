@@ -2,6 +2,12 @@
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%lead.name%": name} }) %}
 
+{% set pageComponent = {
+    'module': 'oroui/js/app/components/view-component',
+    'options': {'view': 'orocrmsales/js/app/views/opportunity-status-select-view'},
+    'layout': 'separate'
+} %}
+
 {% set formAction = path('orocrm_sales_lead_convert_to_opportunity', {
     'id': entity.lead.id
 }) %}

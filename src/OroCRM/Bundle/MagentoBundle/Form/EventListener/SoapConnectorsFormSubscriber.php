@@ -68,6 +68,13 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 $config = $connectors->getConfig()->getOptions();
                 unset($config['choice_list']);
                 unset($config['choices']);
+                /**
+                 * @todo: should be removed in scope of BAP-11222
+                 */
+                /* Check if right now we're using Symfony 2.8+ */
+                if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+                    unset($config['choice_label']);
+                }
             } else {
                 $config = [];
             }

@@ -3,11 +3,9 @@ Feature: Contact call activity
   As OroCRM sales rep
   I need to log calls, edit, create and delete it
 
-Background:
-  Given I login as "admin" user with "admin" password
-
 Scenario: Log Call from contact view page
-  Given the following contact:
+  Given I login as "admin" user with "admin" password
+  And the following contact:
     | firstName | lastName | email             |
     | Charlie   | Sheen    | charlie@sheen.com |
   And the following users:
@@ -28,21 +26,17 @@ Scenario: Log Call from contact view page
   And should see "Proposed Charlie to star in new film" call in activity list
 
 Scenario: View Call in activity list
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
   When I collapse "Proposed Charlie to star in new film" in activity list
   Then I should see call with:
     | Subject             | Proposed Charlie to star in new film |
     | Additional comments | Charlie was in a good mood           |
-    | Call date & time    | Aug 24, 2017, 11:00 AM               |
+    | Call date & time    | Aug 24, 2017,? 11:00 AM              |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
     | Duration            | 5:30                                 |
   And I should see Charlie in Contexts
 
 Scenario: View Call in view call page
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
   When I click "View call log" on "Proposed Charlie to star in new film" in activity list
   Then the url should match "/call/view/\d+"
   And I should see call with:
@@ -54,8 +48,7 @@ Scenario: View Call in view call page
     | Duration            | 5:30                                 |
 
 Scenario: Edit Call from entity view page
-  Given I go to Customers/Contacts
-  And click view Charlie in grid
+  Given I move backward one page
   And I click "Update call log" on "Proposed Charlie to star in new film" in activity list
   And fill form with:
     | Owner               | Theresa                              |

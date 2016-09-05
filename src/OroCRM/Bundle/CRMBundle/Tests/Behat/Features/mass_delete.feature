@@ -8,7 +8,8 @@ Background:
 	Given I login as "admin" user with "admin" password
 
 Scenario: Update Sales Channel
-	Given I go to System/Channels
+	Given I login as "admin" user with "admin" password
+	And I go to System/Channels
 	And click edit Sales Channel in grid
 	When I press "Save and Close"
 	Then I should see "Channel saved" flash message
