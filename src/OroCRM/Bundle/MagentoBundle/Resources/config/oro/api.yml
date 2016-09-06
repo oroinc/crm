@@ -1,4 +1,4 @@
-api:
+oro_api:
     entities:
         OroCRM\Bundle\MagentoBundle\Entity\Address: ~
         OroCRM\Bundle\MagentoBundle\Entity\Cart: ~
