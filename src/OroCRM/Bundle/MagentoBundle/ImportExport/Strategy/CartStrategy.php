@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Region;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
@@ -70,7 +71,7 @@ class CartStrategy extends AbstractImportStrategy
         $isProcessingAllowed = true;
 
         if ($cart->getCustomer()) {
-            $customer = $this->findExistingEntity($cart->getCustomer());
+            $customer = $this->findExistingCustomer($cart);
 
             $customerOriginId = $cart->getCustomer()->getOriginId();
             if (!$customer && $customerOriginId) {
@@ -263,6 +264,70 @@ class CartStrategy extends AbstractImportStrategy
 
         return $this;
     }
+
+    /**
+     * Get existing registered customer or existing guest customer
+     *
+     * @param Cart $cart
+     * @return null|Customer
+     */
+    protected function findExistingCustomer(Cart $cart)
+    {
+        $customer = $cart->getCustomer();
+
+        if ($customer instanceof Customer) {
+            // Find from existing registered customers
+            /** @var Customer|null $existingEntity */
+            $existingEntity = null;
+            if ($customer->getId() || $customer->getOriginId()) {
+                $existingEntity = $this->findExistingEntity($customer);
+            }
+
+            if (!$existingEntity) {
+                $searchContext = $this->getSearchContext($cart);
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    $searchContext
+                );
+            }
+
+            return $existingEntity;
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Get search context for Guest customer by email, channel and website if exists
+     *
+     * @param Cart $cart
+     * @return array
+     */
+    protected function getSearchContext(Cart $cart)
+    {
+        $customer = $cart->getCustomer();
+        $searchContext = [
+            'email' => $cart->getEmail(),
+            'channel' => $customer->getChannel()
+        ];
+
+        if ($customer->getWebsite()) {
+            $website = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                [
+                    'originId' => $customer->getWebsite()->getOriginId(),
+                    'channel' => $customer->getChannel()
+                ]
+            );
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
+        }
+
+        return $searchContext;
+    }
+
 
     /**
      * {@inheritdoc}
