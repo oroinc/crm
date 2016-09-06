@@ -61,9 +61,9 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         /**
          * If Order created with registered customer but registered customer was deleted in Magento
          * before it was synced order will not have connection to the customer
-         * Customer for such orders should be processed as guest if Guest Customer synchronization ia allowed
+         * Customer for such orders should be processed as guest if Guest Customer synchronization is allowed
          */
-        if (!$customer && $transport->getGuestCustomerSync()) {
+        if (!$customer && !$customerOriginId && $transport->getGuestCustomerSync()) {
             $this->appendDataToContext(
                 'postProcessGuestCustomers',
                 GuestCustomerDataConverter::extractCustomersValues((array)$this->context->getValue('itemData'))

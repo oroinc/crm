@@ -97,6 +97,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
             ->createChannel()
             ->createWebSite()
             ->createCustomerGroup()
+            ->createGuestCustomerGroup()
             ->createStore();
 
         $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
@@ -124,6 +125,17 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $baseOrderItem = $this->createBaseOrderItem($order);
         $order->setItems([$baseOrderItem]);
         $this->em->persist($order);
+
+        $guestCart = $this->createGuestCart($cartAddress1, $cartAddress2, $customer, $items, $status);
+        $this->updateCartItem($cartItem, $guestCart);
+        $guestOrder = $this->createGuestOrder($guestCart);
+
+        $this->setReference('guestCart', $guestCart);
+        $this->setReference('guestOrder', $guestOrder);
+
+        $baseOrderItem = $this->createBaseOrderItem($guestOrder);
+        $order->setItems([$baseOrderItem]);
+        $this->em->persist($guestOrder);
 
         $this->em->flush();
     }
@@ -160,6 +172,47 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cart->setStoreToQuoteRate(12);
         $cart->setGrandTotal(2.54);
         $cart->setIsGuest(0);
+        $cart->setStore($this->store);
+        $cart->setOwner($this->getUser());
+        $cart->setOrganization($this->organization);
+
+        $this->em->persist($cart);
+
+        return $cart;
+    }
+
+    /**
+     * @param                 $billing
+     * @param                 $shipping
+     * @param Customer        $customer
+     * @param ArrayCollection $item
+     * @param CartStatus      $status
+     *
+     * @return Cart
+     */
+    protected function createGuestCart($billing, $shipping, Customer $customer, ArrayCollection $item, $status)
+    {
+        $cart = new Cart();
+        $cart->setOriginId(101);
+        $cart->setChannel($this->integration);
+        $cart->setDataChannel($this->channel);
+        $cart->setBillingAddress($billing);
+        $cart->setShippingAddress($shipping);
+        $cart->setCustomer(null);
+        $cart->setEmail('guest@email.com');
+        $cart->setCreatedAt(new \DateTime('now'));
+        $cart->setUpdatedAt(new \DateTime('now'));
+        $cart->setCartItems($item);
+        $cart->setStatus($status);
+        $cart->setItemsQty(0);
+        $cart->setItemsCount(1);
+        $cart->setBaseCurrencyCode('code');
+        $cart->setStoreCurrencyCode('code');
+        $cart->setQuoteCurrencyCode('usd');
+        $cart->setStoreToBaseRate(12);
+        $cart->setStoreToQuoteRate(12);
+        $cart->setGrandTotal(2.54);
+        $cart->setIsGuest(1);
         $cart->setStore($this->store);
         $cart->setOwner($this->getUser());
         $cart->setOrganization($this->organization);
@@ -412,6 +465,20 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     }
 
     /**
+     * @return $this
+     */
+    protected function createGuestCustomerGroup()
+    {
+        $customerGroup = new CustomerGroup;
+        $customerGroup->setName('NOT LOGGED IN');
+        $customerGroup->setChannel($this->integration);
+        $customerGroup->setOriginId(0);
+
+        $this->em->persist($customerGroup);
+        return $this;
+    }
+
+    /**
      * @return CartItem
      */
     protected function createCartItem()
@@ -482,6 +549,43 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setStore($this->store);
         $order->setCustomer($customer);
         $order->setCustomerEmail('customer@email.com');
+        $order->setDiscountAmount(4.40);
+        $order->setTaxAmount(12.47);
+        $order->setShippingAmount(5);
+        $order->setTotalPaidAmount(17.85);
+        $order->setTotalInvoicedAmount(11);
+        $order->setTotalRefundedAmount(4);
+        $order->setTotalCanceledAmount(0);
+        $order->setShippingMethod('some unique shipping method');
+        $order->setRemoteIp('127.0.0.1');
+        $order->setGiftMessage('some very unique gift message');
+        $order->setOwner($this->getUser());
+        $order->setOrganization($this->organization);
+
+        $this->em->persist($order);
+
+        return $order;
+    }
+
+    /**
+     * @param Cart $cart
+     *
+     * @return Order
+     */
+    protected function createGuestOrder(Cart $cart)
+    {
+        $order = new Order();
+        $order->setChannel($this->integration);
+        $order->setDataChannel($this->channel);
+        $order->setStatus('open');
+        $order->setIncrementId('100000308');
+        $order->setCreatedAt(new \DateTime('now'));
+        $order->setUpdatedAt(new \DateTime('now'));
+        $order->setCart($cart);
+        $order->setStore($this->store);
+        $order->setCustomer(null);
+        $order->setIsGuest(1);
+        $order->setCustomerEmail('guest@email.com');
         $order->setDiscountAmount(4.40);
         $order->setTaxAmount(12.47);
         $order->setShippingAmount(5);
