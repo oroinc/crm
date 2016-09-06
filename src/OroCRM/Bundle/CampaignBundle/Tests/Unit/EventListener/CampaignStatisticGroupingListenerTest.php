@@ -121,7 +121,7 @@ class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnPreBuildNotApplicable()
     {
         $gridName = ConfigurationProvider::GRID_PREFIX;
-        $config = DatagridConfiguration::create([]);
+        $config = DatagridConfiguration::createNamed('test_grid', []);
 
         $event = new PreBuild($config, new ParameterBag([]));
 
