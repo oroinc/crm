@@ -1,0 +1,16 @@
+oro_entity_config:
+    entity:
+        field:
+            items:
+                contact_information:
+                    form:
+                        type: choice
+                        options:
+                            choices:
+                                # each contact_information type requires own template
+                                # e.g. phone => "OroCRMMarketingListBundle:MarketingList/ExtendField:phone.html.twig"
+                                email: orocrm.marketinglist.entity_config.choices.email
+                                phone: orocrm.marketinglist.entity_config.choices.phone
+                            block: other
+                            label: orocrm.marketinglist.entity_config.contact_information.label
+                            required: false

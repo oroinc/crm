@@ -1,0 +1,299 @@
+datagrid:
+    base-case-grid:
+        acl_resource: orocrm_case_view
+        source:
+            type: orm
+            query:
+                select:
+                    - caseEntity.id
+                    - caseEntity.id as caseNumber
+                    - caseEntity.subject
+                    - caseEntity.reportedAt
+                    - caseEntity.closedAt
+                    - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
+                    - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
+                    - relatedAccount.name as relatedAccountName
+                    - assignedTo.id as assignedToId
+                    - status.label as statusLabel
+                    - pr.label as priorityLabel
+                    - pr.name as priority
+                from:
+                    - { table: %orocrm_case.entity.class%, alias: caseEntity }
+                join:
+                    left:
+                        - { join: caseEntity.relatedContact, alias: relatedContact }
+                        - { join: caseEntity.relatedAccount, alias: relatedAccount }
+                        - { join: caseEntity.assignedTo, alias: assignedTo }
+                        - { join: caseEntity.owner, alias: owner }
+                        - { join: caseEntity.source, alias: source }
+                        - { join: caseEntity.status, alias: status }
+                        - { join: caseEntity.priority, alias: pr }
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_case.entity.class%
+        columns:
+            caseNumber:
+                label: orocrm.case.datagrid.case_number.label
+            subject:
+                inline_editing:
+                    enable: false
+                type: twig
+                label: orocrm.case.datagrid.subject.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/subject.html.twig
+            assignedToName:
+                type: twig
+                label: orocrm.case.datagrid.assigned_to.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
+            reportedAt:
+                label: orocrm.case.datagrid.reported_on.label
+                frontend_type: datetime
+            closedAt:
+                label: orocrm.case.datagrid.closed_on.label
+                frontend_type: datetime
+            statusLabel:
+                label: orocrm.case.datagrid.status.label
+            priority:
+                label: orocrm.case.datagrid.priority.label
+        sorters:
+            columns:
+                subject:
+                    data_name: caseEntity.subject
+                caseNumber:
+                    data_name: caseEntity.id
+                assignedToName:
+                    data_name: assignedToName
+                reportedAt:
+                    data_name: caseEntity.reportedAt
+                closedAt:
+                    data_name: caseEntity.closedAt
+                statusLabel:
+                    data_name: status.order
+                priority:
+                    data_name: pr.order
+            default:
+                reportedAt: DESC
+        filters:
+            columns:
+                caseNumber:
+                    type: number-range
+                    data_name: caseEntity.id
+                subject:
+                    type: string
+                    data_name: caseEntity.subject
+                assignedToName:
+                    type: string
+                    data_name: assignedToName
+                reportedAt:
+                    type: datetime
+                    data_name: caseEntity.reportedAt
+                closedAt:
+                    type: datetime
+                    data_name: caseEntity.closedAt
+                statusLabel:
+                    label: orocrm.case.datagrid.status.label
+                    type: entity
+                    data_name: status.name
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CaseStatus
+                            property: label
+                priorityLabel:
+                    label: orocrm.case.datagrid.priority.label
+                    type: entity
+                    data_name: pr.name
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CasePriority
+                            property: label
+                source:
+                    label: orocrm.case.datagrid.source.label
+                    type: entity
+                    enabled: false
+                    data_name: source.name
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CaseSource
+                            property: label
+        properties:
+            id: ~
+            view_link:
+                type:         url
+                route:        orocrm_case_view
+                params:       [ id ]
+            update_link:
+                type:         url
+                route:        orocrm_case_update
+                params:       [ id ]
+            delete_link:
+                type:         url
+                route:        orocrm_case_api_delete_case
+                params:       [ id ]
+        actions:
+            view:
+                type:         navigate
+                acl_resource: orocrm_case_view
+                label:        oro.grid.action.view
+                icon:         eye-open
+                link:         view_link
+                rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: orocrm_case_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+            delete:
+                type:         delete
+                acl_resource: orocrm_case_delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link
+    cases-grid:
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedContact:
+                    label: orocrm.case.datagrid.related_contact.label
+                    type: string
+                    data_name: relatedContactName
+                    enabled: false
+                relatedAccount:
+                    label: orocrm.case.datagrid.related_account.label
+                    type: string
+                    data_name: relatedAccountName
+                    enabled: false
+        options:
+            entity_pagination: true
+    account-cases-grid:
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedContact:
+                    label: orocrm.case.datagrid.related_contact.label
+                    type: string
+                    data_name: relatedContactName
+                    enabled: false
+        source:
+            query:
+                where:
+                    and:
+                        - relatedAccount.id = :id
+            bind_parameters:
+                - id
+
+    contact-cases-grid:
+        extends: base-case-grid
+        filters:
+            columns:
+                relatedAccount:
+                    label: orocrm.case.datagrid.related_account.label
+                    type: string
+                    data_name: relatedAccountName
+                    enabled: false
+        source:
+            query:
+                where:
+                    and:
+                        - relatedContact.id = :id
+            bind_parameters:
+                - id
+
+    user-cases-grid:
+        extends: cases-grid
+        source:
+            query:
+                where:
+                    and:
+                        - (assignedTo.id = :id OR owner.id = :id)
+            bind_parameters:
+                - id
+        options:
+            entity_pagination: false
+
+    cases-for-context-grid:
+        options:
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+            routerEnabled: false
+
+        source:
+            type: orm
+            acl_resource: orocrm_case_view
+            query:
+                select:
+                    - caseEntity.id
+                    - caseEntity.id as caseNumber
+                    - caseEntity.subject
+                    - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
+                    - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
+                    - relatedAccount.name as relatedAccountName
+                    - assignedTo.id as assignedToId
+                    - status.label as statusLabel
+                    - priority.label as priorityLabel
+                from:
+                    - { table: %orocrm_case.entity.class%, alias: caseEntity }
+                join:
+                    left:
+                        - { join: caseEntity.relatedContact, alias: relatedContact }
+                        - { join: caseEntity.relatedAccount, alias: relatedAccount }
+                        - { join: caseEntity.assignedTo, alias: assignedTo }
+                        - { join: caseEntity.owner, alias: owner }
+                        - { join: caseEntity.source, alias: source }
+                        - { join: caseEntity.status, alias: status }
+                        - { join: caseEntity.priority, alias: priority }
+        columns:
+            id:
+                label: orocrm.case.datagrid.id.label
+            subject:
+                type: twig
+                label: orocrm.case.datagrid.subject.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/subject.html.twig
+            assignedToName:
+                type: twig
+                label: orocrm.case.datagrid.assigned_to.label
+                frontend_type: html
+                template: OroCRMCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
+            statusLabel:
+                label: orocrm.case.datagrid.status.label
+            priorityLabel:
+                label: orocrm.case.datagrid.priority.label
+        sorters:
+            columns:
+                subject:
+                    data_name: caseEntity.subject
+                assignedToName:
+                    data_name: assignedToName
+                statusLabel:
+                    data_name: status.order
+                priorityLabel:
+                    data_name: priority.order
+            default:
+                reportedAt: DESC
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: caseEntity.subject
+                assignedToName:
+                    type: string
+                    data_name: assignedToName
+                statusLabel:
+                    label: orocrm.case.datagrid.status.label
+                    type: entity
+                    data_name: status.name
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CaseStatus
+                            property: label
+                priorityLabel:
+                    label: orocrm.case.datagrid.priority.label
+                    type: entity
+                    data_name: priority.name
+                    options:
+                        field_options:
+                            class: OroCRMCaseBundle:CasePriority
+                            property: label

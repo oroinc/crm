@@ -1,0 +1,19 @@
+oro_menu_config:
+    items:
+        orocrm_case_index:
+            label: 'orocrm.case.menu.index.label'
+            route: 'orocrm_case_index'
+            extras:
+                position: 30
+                routes: ['orocrm_case_update', 'orocrm_case_create', 'orocrm_case_view']
+    tree:
+        application_menu:
+            children:
+                activities_tab:
+                    children:
+                        orocrm_case_index: ~
+oro_titles:
+    orocrm_case_index: ~
+    orocrm_case_view: '%%entity.subject%%'
+    orocrm_case_create: oro.ui.create_entity
+    orocrm_case_update: '%%entity.subject%% - Edit'

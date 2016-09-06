@@ -1,4 +1,4 @@
-api:
+oro_api:
     entities:
 #        OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest: ~
 
