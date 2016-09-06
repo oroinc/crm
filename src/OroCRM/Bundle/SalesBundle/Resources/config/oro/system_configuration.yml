@@ -1,0 +1,49 @@
+system_configuration:
+    groups:
+        crm:
+            icon:  fa-users
+            title: orocrm.sales.system_configuration.groups.crm.title
+
+        sales_pipeline:
+            title: orocrm.sales.system_configuration.groups.sales_pipeline.title
+
+        opportunity:
+            icon:  icon-usd
+            title: orocrm.sales.system_configuration.groups.opportunity.title
+
+        opportunity_status_probabilities:
+            title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
+            priority: 10
+
+    fields:
+        oro_crm_sales.opportunity_statuses:
+            ui_only: true
+            type: orocrm_sales_opportunity_status_config
+            options:
+                label: false
+                required: false
+                resettable: false
+                attr:
+                    class: oro-clearfix
+
+        oro_crm_sales.default_opportunity_probabilities:
+            data_type: array
+            type: orocrm_sales_opportunity_probability
+            options:
+                required: false
+                resettable: true
+                label: false
+                allow_extra_fields: true
+                attr:
+                    class: oro-clearfix
+    tree:
+        system_configuration:
+            crm:
+                children:
+                    sales_pipeline:
+                        children:
+                            opportunity:
+                                children:
+                                    opportunity_status_probabilities:
+                                        children:
+                                            - oro_crm_sales.opportunity_statuses
