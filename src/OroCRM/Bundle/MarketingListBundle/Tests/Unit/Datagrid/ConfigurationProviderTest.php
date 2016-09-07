@@ -246,8 +246,8 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $configuration->expects($this->once())
-            ->method('offsetSetByPath')
-            ->with(ConfigurationProvider::GRID_NAME_OFFSET, $gridName);
+            ->method('setName')
+            ->with($gridName);
         $this->chainConfigurationProvider->expects($this->once())
             ->method('getConfiguration')
             ->with($actualGridName)
