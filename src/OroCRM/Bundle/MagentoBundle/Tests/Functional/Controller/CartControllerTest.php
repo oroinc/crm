@@ -93,7 +93,23 @@ class CartControllerTest extends AbstractController
                         'email' => 'email@email.com',
                         'regionName' => 'Arizona'
                     ],
-                    'expectedResultCount' => 1
+                    'asserts' => [
+                        [
+                            'channelName' => 'Magento channel',
+                            'firstName' => 'John',
+                            'lastName' => 'Doe',
+                            'email' => 'email@email.com',
+                            'regionName' => 'Arizona'
+                        ],
+                        [
+                            'channelName' => 'Magento channel',
+                            'firstName' => 'Guest Jack',
+                            'lastName' => 'Guest White',
+                            'email' => 'guest@email.com',
+                            'regionName' => 'Arizona'
+                        ]
+                    ],
+                    'expectedResultCount' => 2
                 ],
             ],
             'Magento cart grid with filters' => [
