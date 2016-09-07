@@ -126,7 +126,14 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setItems([$baseOrderItem]);
         $this->em->persist($order);
 
-        $guestCart = $this->createGuestCart($cartAddress1, $cartAddress2, $customer, $items, $status);
+        $cartAddress3 = $this->createGuestCartAddress($this->regions['US-AZ'], $this->countries['US'], null);
+        $cartAddress4 = $this->createGuestCartAddress($this->regions['US-AZ'], $this->countries['US'], null);
+
+        $cartItem = $this->createCartItem();
+        $status   = $this->getStatus();
+        $items    = new ArrayCollection();
+        $items->add($cartItem);
+        $guestCart = $this->createGuestCart($cartAddress3, $cartAddress4, $items, $status);
         $this->updateCartItem($cartItem, $guestCart);
         $guestOrder = $this->createGuestOrder($guestCart);
 
@@ -184,13 +191,12 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     /**
      * @param                 $billing
      * @param                 $shipping
-     * @param Customer        $customer
      * @param ArrayCollection $item
      * @param CartStatus      $status
      *
      * @return Cart
      */
-    protected function createGuestCart($billing, $shipping, Customer $customer, ArrayCollection $item, $status)
+    protected function createGuestCart($billing, $shipping, ArrayCollection $item, $status)
     {
         $cart = new Cart();
         $cart->setOriginId(101);
@@ -300,6 +306,31 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cartAddress->setPostalCode(123456);
         $cartAddress->setFirstName('John');
         $cartAddress->setLastName('Doe');
+        $cartAddress->setOriginId($originId);
+        $cartAddress->setOrganization($this->organization);
+
+        $this->em->persist($cartAddress);
+
+        return $cartAddress;
+    }
+
+    /**
+     * @param $region
+     * @param $country
+     * @param $originId
+     *
+     * @return CartAddress
+     */
+    protected function createGuestCartAddress($region, $country, $originId)
+    {
+        $cartAddress = new CartAddress;
+        $cartAddress->setRegion($region);
+        $cartAddress->setCountry($country);
+        $cartAddress->setCity('City');
+        $cartAddress->setStreet('street');
+        $cartAddress->setPostalCode(123456);
+        $cartAddress->setFirstName('Guest Jack');
+        $cartAddress->setLastName('Guest White');
         $cartAddress->setOriginId($originId);
         $cartAddress->setOrganization($this->organization);
 

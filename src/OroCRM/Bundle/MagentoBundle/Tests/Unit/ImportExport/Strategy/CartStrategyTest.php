@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
@@ -17,9 +19,49 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class CartStrategyTest extends AbstractStrategyTest
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context
+     */
+    protected $context;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransport $transport
+     */
+    protected $transport;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel
+     */
+    protected $channel;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext $execution
+     */
+    protected $execution;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
+            ->getMock();
+
+        $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->execution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ExecutionContext')
+            ->getMock();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,27 +88,69 @@ class CartStrategyTest extends AbstractStrategyTest
 
     /**
      * @param mixed $expected
-     * @param mixed $entity
+     * @param Cart  $entity
      * @param mixed $databaseEntity
      *
      * @dataProvider contactInfoDataProvider
      */
-    public function testContactInfo($expected, $entity, $databaseEntity = null)
+    public function testContactInfo($expected, Cart $entity, $databaseEntity = null)
     {
         $strategy = $this->getStrategy();
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
-        $strategy->setImportExportContext($context);
+        $this->jobExecution->expects($this->any())->method('getExecutionContext')
+            ->will($this->returnValue($this->execution));
+        $strategy->setStepExecution($this->stepExecution);
+        $strategy->setImportExportContext($this->context);
         $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
 
-        $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
-        $this->jobExecution->expects($this->any())->method('getExecutionContext')
-            ->will($this->returnValue($execution));
-        $strategy->setStepExecution($this->stepExecution);
+        $this->transport->expects($this->any())
+            ->method('getGuestCustomerSync')
+            ->will($this->returnValue(true));
 
-        $this->databaseHelper->expects($this->once())->method('getEntityReference')->will($this->returnArgument(0));
-        $this->databaseHelper->expects($this->once())->method('findOneByIdentity')->willReturn($databaseEntity);
+        $this->channel->expects($this->any())
+            ->method('getTransport')
+            ->will($this->returnValue($this->transport));
+
+        $this->databaseHelper->expects($this->once())
+            ->method('getEntityReference')
+            ->will($this->returnArgument(0));
+
+        $this->databaseHelper->expects($this->any())
+            ->method('findOneByIdentity')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            $entity->getChannel(),
+                            $this->channel
+                        ],
+                        [
+                            $entity,
+                            $databaseEntity
+                        ]
+                    ]
+                )
+            );
+
+        $customer = null;
+        if (is_object($databaseEntity)) {
+            $customer = $databaseEntity->getCustomer();
+        }
+        $this->databaseHelper->expects($this->any())
+            ->method('findOneBy')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            [
+                                'email' => $entity->getEmail(),
+                                'channel' => $entity->getChannel()
+                            ],
+                            $customer
+                        ]
+                    ]
+                )
+            );
 
         $actualEntity = $strategy->process($entity);
         if ($actualEntity) {
@@ -119,21 +203,50 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'customer' => $this->getCustomer('user@example.com')
+                        'customer' => $this->getCustomer('user@example.com'),
+                        'isGuest'  => false
                     ]
                 ),
                 'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'customer' => $this->getCustomer()
+                        'customer' => $this->getCustomer(),
+                        'isGuest'  => false
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'database@example.com',
-                        'customer' => $this->getCustomer('database@example.com')
+                        'customer' => $this->getCustomer('database@example.com'),
+                        'isGuest'  => false
+                    ]
+                )
+            ],
+            'update customer email for guest cart' => [
+                'expected' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'customer' => $this->getCustomer('user@example.com'),
+                        'isGuest'  => true
+                    ]
+                ),
+                'entity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'customer' => $this->getCustomer(),
+                        'isGuest'  => true
+                    ]
+                ),
+                'databaseEntity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'database@example.com',
+                        'customer' => $this->getCustomer('database@example.com'),
+                        'isGuest'  => true
                     ]
                 )
             ],
@@ -283,13 +396,10 @@ class CartStrategyTest extends AbstractStrategyTest
             ->will($this->returnValue($newCart));
 
         $strategy = $this->getStrategy();
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
-        $strategy->setImportExportContext($context);
+        $strategy->setImportExportContext($this->context);
         $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
-        $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
-            ->will($this->returnValue($execution));
+            ->will($this->returnValue($this->execution));
         $strategy->setStepExecution($this->stepExecution);
 
         $strategy->process($existingCart);
@@ -328,7 +438,7 @@ class CartStrategyTest extends AbstractStrategyTest
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @return Customer
      */
     protected function getCustomer($email = null)
@@ -371,6 +481,10 @@ class CartStrategyTest extends AbstractStrategyTest
             }
 
             $propertyAccessor->setValue($cart, $property, $value);
+        }
+
+        if ($cart->getCustomer()) {
+            $cart->getCustomer()->setChannel($channel);
         }
 
         return $cart;

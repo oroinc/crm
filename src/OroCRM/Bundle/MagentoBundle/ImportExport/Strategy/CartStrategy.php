@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
@@ -80,9 +81,16 @@ class CartStrategy extends AbstractImportStrategy
                 $isProcessingAllowed = false;
             }
 
-            if (!$customer && $cart->getIsGuest()) {
-                /** @var MagentoSoapTransport $transport */
+            /**
+             * If registered customer add items to cart in Magento
+             * but after customer was deleted in Magento before castomer and cart were synced
+             * Cart will not have connection to the customer
+             * Customer for such Carts should be processed as guest if Guest Customer synchronization is allowed
+             */
+            if (!$customer && !$customerOriginId) {
+                /** @var Channel $channel */
                 $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
+                /** @var MagentoSoapTransport $transport */
                 $transport = $channel->getTransport();
                 if ($transport->getGuestCustomerSync()) {
                     $this->appendDataToContext(
