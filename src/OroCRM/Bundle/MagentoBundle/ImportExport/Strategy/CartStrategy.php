@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
@@ -83,7 +82,7 @@ class CartStrategy extends AbstractImportStrategy
 
             /**
              * If registered customer add items to cart in Magento
-             * but after customer was deleted in Magento before castomer and cart were synced
+             * but after customer was deleted in Magento before customer and cart were synced
              * Cart will not have connection to the customer
              * Customer for such Carts should be processed as guest if Guest Customer synchronization is allowed
              */
@@ -274,39 +273,6 @@ class CartStrategy extends AbstractImportStrategy
     }
 
     /**
-     * Get existing registered customer or existing guest customer
-     *
-     * @param Cart $cart
-     * @return null|Customer
-     */
-    protected function findExistingCustomer(Cart $cart)
-    {
-        $customer = $cart->getCustomer();
-
-        if ($customer instanceof Customer) {
-            // Find from existing registered customers
-            /** @var Customer|null $existingEntity */
-            $existingEntity = null;
-            if ($customer->getId() || $customer->getOriginId()) {
-                $existingEntity = $this->findExistingEntity($customer);
-            }
-
-            if (!$existingEntity) {
-                $searchContext = $this->getSearchContext($cart);
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                    $searchContext
-                );
-            }
-
-            return $existingEntity;
-        }
-
-        return null;
-    }
-
-
-    /**
      * Get search context for Guest customer by email, channel and website if exists
      *
      * @param Cart $cart
@@ -314,28 +280,11 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function getSearchContext(Cart $cart)
     {
-        $customer = $cart->getCustomer();
-        $searchContext = [
-            'email' => $cart->getEmail(),
-            'channel' => $customer->getChannel()
-        ];
-
-        if ($customer->getWebsite()) {
-            $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
-                [
-                    'originId' => $customer->getWebsite()->getOriginId(),
-                    'channel' => $customer->getChannel()
-                ]
-            );
-            if ($website) {
-                $searchContext['website'] = $website;
-            }
-        }
+        $searchContext = parent::getSearchContext($cart);
+        $searchContext['email'] = $cart->getEmail();
 
         return $searchContext;
     }
-
 
     /**
      * {@inheritdoc}
