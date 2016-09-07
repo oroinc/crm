@@ -18,6 +18,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
  */
 class MarketingListExtension extends AbstractExtension
 {
+    /** @deprecated since 1.10. Use config->getName() instead */
     const NAME_PATH = '[name]';
 
     /**
@@ -43,7 +44,7 @@ class MarketingListExtension extends AbstractExtension
      */
     public function isApplicable(DatagridConfiguration $config)
     {
-        $gridName = $config->offsetGetByPath(self::NAME_PATH);
+        $gridName = $config->getName();
 
         if (!empty($this->appliedFor[$gridName])) {
             return false;
@@ -105,7 +106,7 @@ class MarketingListExtension extends AbstractExtension
             $qb->andWhere($part);
         }
 
-        $gridName = $config->offsetGetByPath(self::NAME_PATH);
+        $gridName = $config->getName();
 
         if ($addParameter) {
             $qb->setParameter(

@@ -24,6 +24,7 @@ datagrid:
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
                     - c AS customerData
+                    - cg.name as customerGroup
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -34,6 +35,7 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
+                        - { join: c.group, alias: cg }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -61,6 +63,9 @@ datagrid:
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
+            customerGroup:
+                label:            orocrm.magento.datagrid.columns.customerGroup
+                renderable:       false
         properties:
             id: ~
             view_link:
@@ -91,6 +96,7 @@ datagrid:
                 countryName: { data_name: country.name }
                 lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
+                customerGroup:  { data_name: cg.name }
             default:
                 lastName:  ASC
                 firstName: ASC
@@ -148,6 +154,16 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: c.updatedAt
+                    enabled: false
+                customerGroup:
+                    type: choice
+                    data_name: cg.id
+                    enabled: false
+                    options:
+                        field_options:
+                            choices: '@orocrm_magento.datagrid_helper->getMagentoGroupsChoices'
+                            multiple: true
+                            translatable_options: false
                     enabled: false
         actions:
             view:
