@@ -76,38 +76,6 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     }
 
     /**
-     * Get existing registered customer or existing guest customer
-     *
-     * @param Order $order
-     * @return null|Customer
-     */
-    protected function findExistingCustomer(Order $order)
-    {
-        $customer = $order->getCustomer();
-
-        if ($customer instanceof Customer) {
-            // Find from existing registered customers
-            /** @var Customer|null $existingEntity */
-            $existingEntity = null;
-            if ($customer->getId() || $customer->getOriginId()) {
-                $existingEntity = parent::findExistingEntity($customer);
-            }
-
-            if (!$existingEntity) {
-                $searchContext = $this->getSearchContext($order);
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                    $searchContext
-                );
-            }
-
-            return $existingEntity;
-        }
-
-        return null;
-    }
-
-    /**
      * Get search context for Guest customer by email, channel and website if exists
      *
      * @param Order $order
@@ -115,24 +83,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected function getSearchContext(Order $order)
     {
-        $customer = $order->getCustomer();
-        $searchContext = [
-            'email' => $order->getCustomerEmail(),
-            'channel' => $customer->getChannel()
-        ];
-
-        if ($customer->getWebsite()) {
-            $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
-                [
-                    'originId' => $customer->getWebsite()->getOriginId(),
-                    'channel' => $customer->getChannel()
-                ]
-            );
-            if ($website) {
-                $searchContext['website'] = $website;
-            }
-        }
+        $searchContext = parent::getSearchContext($order);
+        $searchContext['email'] = $order->getCustomerEmail();
 
         return $searchContext;
     }

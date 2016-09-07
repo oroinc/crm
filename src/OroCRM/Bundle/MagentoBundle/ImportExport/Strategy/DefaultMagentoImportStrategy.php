@@ -7,6 +7,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
     /** @var PropertyAccessor */
@@ -85,5 +87,66 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
             $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         }
         return $this->propertyAccessor;
+    }
+
+    /**
+     * Get existing registered customer or existing guest customer
+     *
+     * @param object $entity
+     * @return null|Customer
+     */
+    protected function findExistingCustomer($entity)
+    {
+        $customer = $entity->getCustomer();
+
+        if ($customer instanceof Customer) {
+            // Find from existing registered customers
+            /** @var Customer|null $existingEntity */
+            $existingEntity = null;
+            if ($customer->getId() || $customer->getOriginId()) {
+                $existingEntity = $this->findExistingEntity($customer);
+            }
+
+            if (!$existingEntity) {
+                $searchContext = $this->getSearchContext($entity);
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    $searchContext
+                );
+            }
+
+            return $existingEntity;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get search context for entity customer by channel and website if exists
+     *
+     * @param object $entity
+     * @return array
+     */
+    protected function getSearchContext($entity)
+    {
+        $customer = $entity->getCustomer();
+        $searchContext = [
+            'channel' => $customer->getChannel()
+        ];
+
+        if ($customer->getWebsite()) {
+            $website = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                [
+                    'originId' => $customer->getWebsite()->getOriginId(),
+                    'channel' => $customer->getChannel()
+                ]
+            );
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
+        }
+
+        return $searchContext;
     }
 }
