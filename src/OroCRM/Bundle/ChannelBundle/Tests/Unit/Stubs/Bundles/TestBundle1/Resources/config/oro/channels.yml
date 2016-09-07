@@ -1,4 +1,4 @@
-orocrm_channel:
+channels:
    entity_data:
        -
            name: OroCRM\Bundle\TestBundle1\Entity\Entity1
