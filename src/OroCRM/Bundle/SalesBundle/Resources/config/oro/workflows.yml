@@ -1,0 +1,4 @@
+imports:
+    - { resource: 'workflows/b2b_flow_lead.yml' }          # Unqualified Sales Lead Workflow
+    - { resource: 'workflows/b2b_flow_sales_funnel.yml' }  # B2B Sales Activity flow
+    - { resource: 'workflows/opportunity_flow.yml' }       # Opportunity Management Flow

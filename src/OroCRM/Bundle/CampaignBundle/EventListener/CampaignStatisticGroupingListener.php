@@ -10,6 +10,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 class CampaignStatisticGroupingListener
 {
     const PATH_GROUPBY = '[source][query][groupBy]';
+    /** @deprecated since 1.10. Use config->getName() instead */
     const PATH_NAME = '[name]';
     const PATH_SELECT = '[source][query][select]';
 
@@ -45,9 +46,8 @@ class CampaignStatisticGroupingListener
     {
         $config = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName = $config->offsetGetByPath(self::PATH_NAME);
 
-        if (!$this->isApplicable($gridName, $parameters)) {
+        if (!$this->isApplicable($config->getName(), $parameters)) {
             return;
         }
 
