@@ -69,6 +69,7 @@ orocrm:
                 channel:          Integration
                 website:          Website
                 name:             Name
+                customerGroup:    Customer Group
                 sku:              Sku
                 type:             Type
                 specialPrice:     Special Price

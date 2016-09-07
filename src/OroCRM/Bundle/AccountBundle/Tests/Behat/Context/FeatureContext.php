@@ -4,9 +4,27 @@ namespace OroCRM\Bundle\AccountBundle\Tests\Behat\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
+use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
+use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 
-class FeatureContext extends OroFeatureContext
+class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
 {
+    use ElementFactoryDictionary;
+
+    /**
+     * @When /^(?:|I )select (?P<title>([\w\s]+)) as email attachment from record$/
+     */
+    public function selectEmailAttachment($title)
+    {
+        $page = $this->getPage();
+        $page->find('css', '.attach-file')->click();
+        $attachment = $page->findElementContains('AttachmentListRow', $title);
+        self::assertTrue($attachment->isValid(), sprintf('"%s" attachment not found', $title));
+
+        $attachment->find('css', 'input')->check();
+        $page->find('css', 'a.attach')->click();
+    }
+
     /**
      * @Then /^(?P<contactsCount>(?:|one|two|\d+)) contacts added to form$/
      */
