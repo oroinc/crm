@@ -86,13 +86,6 @@ class CartControllerTest extends AbstractController
                         'gridName' => 'magento-cart-grid'
                     ],
                     'gridFilters' => [],
-                    'assert' => [
-                        'channelName' => 'Magento channel',
-                        'firstName' => 'John',
-                        'lastName' => 'Doe',
-                        'email' => 'email@email.com',
-                        'regionName' => 'Arizona'
-                    ],
                     'asserts' => [
                         [
                             'channelName' => 'Magento channel',
