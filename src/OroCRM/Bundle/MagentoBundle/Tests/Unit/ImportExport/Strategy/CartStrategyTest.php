@@ -143,8 +143,8 @@ class CartStrategyTest extends AbstractStrategyTest
                         [
                             'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                             [
-                                'email' => $entity->getEmail(),
-                                'channel' => $entity->getChannel()
+                                'channel' => $entity->getChannel(),
+                                'email' => $entity->getEmail()
                             ],
                             $customer
                         ]
@@ -176,7 +176,7 @@ class CartStrategyTest extends AbstractStrategyTest
                 $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com']),
 
             ],
-            'dont change status' => [
+            'do not change status' => [
                 $this->getEntity(
                     ['itemsCount' => 1, 'email' => 'user@example.com', 'status' => new CartStatus('custom')]
                 ),

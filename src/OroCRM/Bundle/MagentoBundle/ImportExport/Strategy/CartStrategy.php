@@ -273,14 +273,14 @@ class CartStrategy extends AbstractImportStrategy
     }
 
     /**
-     * Get search context for Guest customer by email, channel and website if exists
+     * Add cart customer email to customer search context
      *
-     * @param Cart $cart
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getSearchContext(Cart $cart)
+    protected function getEntityCustomerSearchContext($cart)
     {
-        $searchContext = parent::getSearchContext($cart);
+        /** @var Cart $cart */
+        $searchContext = parent::getEntityCustomerSearchContext($cart);
         $searchContext['email'] = $cart->getEmail();
 
         return $searchContext;
