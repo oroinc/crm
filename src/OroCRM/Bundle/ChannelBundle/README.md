@@ -14,11 +14,11 @@ requirements B2B channel could be created that will enable _leads_ and _opportun
 After this, the Sales menu appears on the UI and has Leads and Opportunities menus.
 
 By default all specific to business direction features should be disabled, and will not be visible in reports, segments, menu etc.(except entity configuration)
-In order to implement ability to enable feature in scope of channel - configuration file should be created.
+In order to implement ability to enable feature in scope of channel `YourBundle/Resources/config/oro/channels.yml` configuration file should be created.
 
 **Config example:**
 ```yml
-      orocrm_channel:
+      channels:
           entity_data:
              -
                 name: OroCRM\Bundle\SomeEntity\Entity\RealEntity                # Entity FQCN
@@ -39,6 +39,7 @@ In order to implement ability to enable feature in scope of channel - configurat
                     connector:   another                                 # connector name
 ```
 
+
 | Option                   | Description                                                                                       |
 |--------------------------|---------------------------------------------------------------------------------------------------|
 | `name`                   | Entity name                                                                                       |
@@ -51,7 +52,7 @@ Menu item should be hidden by default in navigation configuration using paramete
 
 **Example:**
 ```yml
-    oro_menu_config:
+    menu_config:
         items:
             menu_item:
                 label: 'orocrm.some_entity.menu.tab.label'

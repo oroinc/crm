@@ -11,6 +11,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
 {
+    /** @deprecated since 1.10. Use config->getName() instead */
     const PATH_NAME = '[name]';
     const PATH_DATAGRID_WHERE = '[source][query][where]';
 
@@ -44,9 +45,8 @@ class CampaignStatisticDatagridListener
     {
         $config = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName = $config->offsetGetByPath(self::PATH_NAME);
 
-        if (!$this->isApplicable($gridName, $parameters)) {
+        if (!$this->isApplicable($config->getName(), $parameters)) {
             return;
         }
 
