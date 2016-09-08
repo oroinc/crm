@@ -13,7 +13,7 @@ use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
 /**
  * @ORM\Entity
  */
-class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings  implements Taggable
+class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
 {
     /**
      * @var User
