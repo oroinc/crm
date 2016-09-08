@@ -76,14 +76,14 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     }
 
     /**
-     * Get search context for Guest customer by email, channel and website if exists
+     * Add order customer email to customer search context
      *
-     * @param Order $order
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getSearchContext(Order $order)
+    protected function getEntityCustomerSearchContext($order)
     {
-        $searchContext = parent::getSearchContext($order);
+        /** @var Order $order */
+        $searchContext = parent::getEntityCustomerSearchContext($order);
         $searchContext['email'] = $order->getCustomerEmail();
 
         return $searchContext;

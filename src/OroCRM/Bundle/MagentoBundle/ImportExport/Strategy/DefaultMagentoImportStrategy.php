@@ -91,8 +91,10 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 
     /**
      * Get existing registered customer or existing guest customer
+     * Find existing customer using entity data for entities containing customer like Order and Cart
      *
      * @param object $entity
+     *
      * @return null|Customer
      */
     protected function findExistingCustomer($entity)
@@ -108,7 +110,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
             }
 
             if (!$existingEntity) {
-                $searchContext = $this->getSearchContext($entity);
+                $searchContext = $this->getEntityCustomerSearchContext($entity);
                 $existingEntity = $this->databaseHelper->findOneBy(
                     'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                     $searchContext
@@ -122,14 +124,33 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * Get search context for entity customer by channel and website if exists
+     * Get search context for entity customer
      *
      * @param object $entity
+     *
      * @return array
      */
-    protected function getSearchContext($entity)
+    protected function getEntityCustomerSearchContext($entity)
     {
+        $searchContext = [];
+
         $customer = $entity->getCustomer();
+        if ($customer instanceof Customer) {
+            $searchContext = $this->getCustomerSearchContext($customer);
+        }
+
+        return  $searchContext;
+    }
+
+    /**
+     * Get customer search context by channel and website if exists
+     *
+     * @param Customer $customer
+     *
+     * @return array
+     */
+    protected function getCustomerSearchContext(Customer $customer)
+    {
         $searchContext = [
             'channel' => $customer->getChannel()
         ];
