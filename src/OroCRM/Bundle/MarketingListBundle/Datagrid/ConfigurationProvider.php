@@ -11,6 +11,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     const GRID_PREFIX = 'orocrm_marketing_list_items_grid_';
+    /** @deprecated since 1.10. Use config->getName() instead */
     const GRID_NAME_OFFSET = '[name]';
 
     /**
@@ -86,7 +87,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
             $concreteGridConfiguration =  $this->chainConfigurationProvider->getConfiguration($concreteGridName);
             // Reset configured name to current gridName for further usage in Listener and Extension
-            $concreteGridConfiguration->offsetSetByPath(self::GRID_NAME_OFFSET, $gridName);
+            $concreteGridConfiguration->setName($gridName);
             $this->configuration[$gridName] = $concreteGridConfiguration;
         }
 
