@@ -51,6 +51,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
      */
     protected function updateWorkflowName(LoggerInterface $logger, $dryRun)
     {
+        $workflowFields = implode(',', $this->getWorkflowFieldsByWorkflow($logger, 'b2b_flow_sales', ['name']));
+
         $params = [
             'old_workflow_name' => 'b2b_flow_sales',
             'new_workflow_name' => 'opportunity_flow'
@@ -63,16 +65,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
 
         $queries = [
             // Copy workflow definition for new opportunity flow
-            'INSERT INTO oro_workflow_definition ' .
+            'INSERT INTO oro_workflow_definition (name,' . $workflowFields . ')' .
             ' SELECT ' .
-                ':new_workflow_name as name,' .
-                'start_step_id,' .
-                'label,' .
-                'related_entity,' .
-                'entity_attribute_name,' .
-                'steps_display_ordered,' .
-                'system, configuration,' .
-                'created_at, updated_at' .
+                ':new_workflow_name as name,' . $workflowFields .
             ' FROM oro_workflow_definition WHERE name = :old_workflow_name',
 
             'UPDATE oro_workflow_step SET workflow_name = :new_workflow_name WHERE workflow_name = :old_workflow_name',
@@ -108,16 +103,22 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             [
                 'old_name'      => 'qualify',
                 'new_name'      => 'open',
+                'new_label'     => 'Open',
+                'final'         => false,
                 'workflow_name' => 'opportunity_flow',
             ],
             [
                 'old_name'      => 'develop',
                 'new_name'      => 'won',
+                'new_label'     => 'Won',
+                'final'         => true,
                 'workflow_name' => 'opportunity_flow',
             ],
             [
                 'old_name'      => 'close',
                 'new_name'      => 'lost',
+                'new_label'     => 'Lost',
+                'final'         => true,
                 'workflow_name' => 'opportunity_flow',
             ],
         ];
@@ -125,10 +126,12 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $types = [
             'old_name'      => Type::STRING,
             'new_name'      => Type::STRING,
+            'new_label'     => Type::STRING,
+            'final'         => Type::BOOLEAN,
             'workflow_name' => Type::STRING,
         ];
 
-        $sql = 'UPDATE oro_workflow_step SET name = :new_name' .
+        $sql = 'UPDATE oro_workflow_step SET name = :new_name, label = :new_label, is_final = :final' .
                ' WHERE workflow_name = :workflow_name AND name = :old_name';
         foreach ($params as $param) {
             $this->logQuery($logger, $sql, $param, $types);
@@ -139,6 +142,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
     /**
      * @param LoggerInterface $logger
      * @param bool            $dryRun
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function updateWorkflowTransitionLogs(LoggerInterface $logger, $dryRun)
     {
@@ -331,5 +336,28 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $this->logQuery($logger, $sql, $params, $types);
 
         return $this->connection->fetchAll($sql, $params, $types);
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @param string $name
+     * @param array $exclude
+     * @return array
+     */
+    protected function getWorkflowFieldsByWorkflow(LoggerInterface $logger, $name, array $exclude)
+    {
+        $params = ['workflow_name' => $name];
+        $types  = ['workflow_name' => Type::STRING];
+
+        $sql = 'SELECT * FROM oro_workflow_definition WHERE name = :workflow_name LIMIT 1';
+        $this->logQuery($logger, $sql, $params, $types);
+
+        $fields = $this->connection->executeQuery($sql, $params, $types)->fetch();
+
+        foreach ($exclude as $field) {
+            unset($fields[$field]);
+        }
+
+        return array_keys($fields);
     }
 }
