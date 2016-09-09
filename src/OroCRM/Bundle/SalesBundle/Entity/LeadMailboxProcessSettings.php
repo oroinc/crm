@@ -4,15 +4,15 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
 
 /**
  * @ORM\Entity
  */
-class LeadMailboxProcessSettings extends MailboxProcessSettings
+class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
 {
     /**
      * @var User
