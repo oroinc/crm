@@ -57,8 +57,8 @@ class SoapController extends Controller
                 'adminUrl' => $transport->getAdminUrl(),
             ];
         } catch (\Exception $e) {
-            //$message = ValidationUtils::sanitizeSecureInfo($e->getMessage());
-            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
+            $message = ValidationUtils::sanitizeSecureInfo($e->getMessage());
+            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $message));
         }
 
         return new JsonResponse($response);
