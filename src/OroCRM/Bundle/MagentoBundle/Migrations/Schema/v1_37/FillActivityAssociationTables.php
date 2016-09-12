@@ -134,7 +134,7 @@ class FillActivityAssociationTables implements
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillCartCallActivityListQuery(),
-                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
+                ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
                 ['class' => Type::STRING]
             )
         );
@@ -149,7 +149,7 @@ class FillActivityAssociationTables implements
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillOrderCallActivityListQuery(),
-                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
+                ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
                 ['class' => Type::STRING]
             )
         );
@@ -176,7 +176,7 @@ class FillActivityAssociationTables implements
                ' SELECT call_id, cart_id' .
                ' FROM orocrm_magento_cart_calls';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_cart'));
     }
 
     /**
@@ -200,7 +200,7 @@ class FillActivityAssociationTables implements
                ' SELECT call_id, order_id' .
                ' FROM orocrm_magento_order_calls';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_order'));
     }
 
     /**
@@ -235,7 +235,7 @@ class FillActivityAssociationTables implements
         return sprintf(
             $sql,
             $this->activityListExtension->getAssociationTableName('orocrm_magento_cart'),
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart')
+            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_cart')
         );
     }
 
@@ -271,7 +271,7 @@ class FillActivityAssociationTables implements
         return sprintf(
             $sql,
             $this->activityListExtension->getAssociationTableName('orocrm_magento_order'),
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order')
+            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_order')
         );
     }
 }

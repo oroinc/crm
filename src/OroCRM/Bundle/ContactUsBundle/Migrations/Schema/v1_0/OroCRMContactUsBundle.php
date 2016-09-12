@@ -169,7 +169,7 @@ class OroCRMContactUsBundle implements Migration
         /** Generate foreign keys for table orocrm_contactus_request_calls **/
         $table = $schema->getTable('orocrm_contactus_request_calls');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
+            $schema->getTable('oro_call'),
             ['call_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]

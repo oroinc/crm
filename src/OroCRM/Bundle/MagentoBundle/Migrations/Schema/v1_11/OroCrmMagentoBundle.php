@@ -16,7 +16,7 @@ class OroCrmMagentoBundle implements Migration
         $cartCall = $schema->getTable('orocrm_magento_cart_calls');
         $cartCall->removeForeignKey('FK_83A8477550A89B2C');
         $cartCall->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
+            $schema->getTable('oro_call'),
             ['call_id'],
             ['id'],
             ['onDelete' => 'CASCADE']
@@ -31,7 +31,7 @@ class OroCrmMagentoBundle implements Migration
         $orderCall = $schema->getTable('orocrm_magento_order_calls');
         $orderCall->removeForeignKey('FK_A885A3450A89B2C');
         $orderCall->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
+            $schema->getTable('oro_call'),
             ['call_id'],
             ['id'],
             ['onDelete' => 'CASCADE']

@@ -13,7 +13,7 @@ class TargetExcludeList
         'Oro\Bundle\UserBundle\Entity\User',
         'OroCRM\Bundle\TaskBundle\Entity\Task',
         'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
-        'OroCRM\Bundle\CallBundle\Entity\Call',
+        'Oro\Bundle\CallBundle\Entity\Call',
         'Oro\Bundle\EmailBundle\Entity\Email',
     ];
 

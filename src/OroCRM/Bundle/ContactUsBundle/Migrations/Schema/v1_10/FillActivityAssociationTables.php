@@ -130,7 +130,7 @@ class FillActivityAssociationTables implements
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 $this->getFillContactRequestCallActivityListQuery(),
-                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
+                ['class' => 'Oro\Bundle\CallBundle\Entity\Call'],
                 ['class' => Type::STRING]
             )
         );
@@ -162,7 +162,7 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
+            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_contactus_request')
         );
     }
 
@@ -198,7 +198,7 @@ class FillActivityAssociationTables implements
         return sprintf(
             $sql,
             $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
+            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_contactus_request')
         );
     }
 }

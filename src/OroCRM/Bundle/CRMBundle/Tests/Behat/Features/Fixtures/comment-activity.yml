@@ -54,7 +54,7 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
     end: '<dateTimeBetween($createdAt, $createdAt)>'
     allDay: false
 
-OroCRM\Bundle\CallBundle\Entity\Call:
+Oro\Bundle\CallBundle\Entity\Call:
   call:
     subject: 'Proposed Charlie to star in new film'
     addActivityTarget: [@contactCharlie]
