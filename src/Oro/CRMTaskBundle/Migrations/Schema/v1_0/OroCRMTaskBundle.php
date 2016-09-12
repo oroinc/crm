@@ -52,6 +52,10 @@ class OroCRMTaskBundle implements
             'orocrm_magento_order'
         ];
         foreach ($targetTables as $targetTable) {
+            if (!$schema->hasTable($targetTable)) {
+                continue;
+            }
+
             $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', $targetTable);
             if (!$schema->hasTable($associationTableName)) {
                 $activityExtension->addActivityAssociation($schema, 'orocrm_task', $targetTable);
