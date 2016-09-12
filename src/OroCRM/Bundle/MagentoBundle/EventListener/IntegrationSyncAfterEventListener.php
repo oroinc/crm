@@ -20,10 +20,7 @@ class IntegrationSyncAfterEventListener
         $jobResult  = $event->getJobResult();
         $exceptions = array_map(
             function ($exception) {
-                if (is_string($exception)) {
-                    return preg_replace('#(<apiKey.*?>)(.*)(</apiKey>)#i', '$1***$3', $exception);
-                }
-
+                $exception = ValidationUtils::sanitizeSecureInfo($exception);
                 return $exception;
             },
             $jobResult->getFailureExceptions()
