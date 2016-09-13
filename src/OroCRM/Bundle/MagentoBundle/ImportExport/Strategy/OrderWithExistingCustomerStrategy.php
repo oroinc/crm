@@ -36,7 +36,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function isProcessingAllowed(Order $order)
     {
         $isProcessingAllowed = true;
-        $customer = $this->findExistingCustomer($order);
+        $customer = $this->findExistingEntity($order->getCustomer());
         $customerOriginId = $order->getCustomer()->getOriginId();
         if (!$customer && $customerOriginId) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
@@ -76,20 +76,6 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     }
 
     /**
-     * Add order customer email to customer search context
-     *
-     * {@inheritdoc}
-     */
-    protected function getEntityCustomerSearchContext($order)
-    {
-        /** @var Order $order */
-        $searchContext = parent::getEntityCustomerSearchContext($order);
-        $searchContext['email'] = $order->getCustomerEmail();
-
-        return $searchContext;
-    }
-
-    /**
      * Get existing entity
      * As guest customer entity not exist in Magento as separate entity and saved in order
      * find guest by customer email
@@ -100,8 +86,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {
-        if ($entity instanceof Customer && (!$entity->getOriginId() && $this->existingEntity)) {
-            return $this->findExistingCustomer($this->existingEntity);
+        if ($entity instanceof Customer && !$entity->getOriginId() && !$entity->getId() && $this->existingEntity) {
+            return $this->findExistingCustomerByContext($this->existingEntity);
         }
 
         return parent::findExistingEntity($entity, $searchContext);

@@ -97,25 +97,17 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
      *
      * @return null|Customer
      */
-    protected function findExistingCustomer($entity)
+    protected function findExistingCustomerByContext($entity)
     {
         $customer = $entity->getCustomer();
 
         if ($customer instanceof Customer) {
-            // Find from existing registered customers
             /** @var Customer|null $existingEntity */
-            $existingEntity = null;
-            if ($customer->getId() || $customer->getOriginId()) {
-                $existingEntity = $this->findExistingEntity($customer);
-            }
-
-            if (!$existingEntity) {
-                $searchContext = $this->getEntityCustomerSearchContext($entity);
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                    $searchContext
-                );
-            }
+            $searchContext = $this->getEntityCustomerSearchContext($entity);
+            $existingEntity = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                $searchContext
+            );
 
             return $existingEntity;
         }
