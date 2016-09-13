@@ -109,7 +109,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
 
         $em = $this->getEntityManager($this->getTrackingEventSummaryEntityClass());
         foreach ($events as $event) {
-            $website = !$event['websiteId'] ? null : $this->getDoctrineHelper()
+            $website = $this->getDoctrineHelper()
                 ->getEntityReference(
                     $this->getTrackingWebsiteEntityClass(),
                     $event['websiteId']
