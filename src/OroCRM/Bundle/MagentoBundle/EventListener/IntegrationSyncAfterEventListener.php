@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class IntegrationSyncAfterEventListener
 {
