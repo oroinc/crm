@@ -10,6 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
@@ -71,8 +72,7 @@ class CartStrategy extends AbstractImportStrategy
         $isProcessingAllowed = true;
 
         if ($cart->getCustomer()) {
-            $customer = $this->findExistingCustomer($cart);
-
+            $customer = $this->findExistingEntity($cart->getCustomer());
             $customerOriginId = $cart->getCustomer()->getOriginId();
             if (!$customer && $customerOriginId) {
                 $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
@@ -148,7 +148,7 @@ class CartStrategy extends AbstractImportStrategy
         if ((int)$entity->getItemsQty() === 0) {
             foreach ($entity->getCartItems() as $cartItem) {
                 if (!$cartItem->isRemoved()) {
-                    $cartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                    $cartItem->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
                     $cartItem->setRemoved(true);
                 }
             }
@@ -159,7 +159,7 @@ class CartStrategy extends AbstractImportStrategy
             foreach ($existingCartItems as $existingCartItem) {
                 if (!$newCartItems->contains($existingCartItem)) {
                     if (!$existingCartItem->isRemoved()) {
-                        $existingCartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                        $existingCartItem->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
                         $existingCartItem->setRemoved(true);
                     }
                 }
@@ -273,20 +273,6 @@ class CartStrategy extends AbstractImportStrategy
     }
 
     /**
-     * Add cart customer email to customer search context
-     *
-     * {@inheritdoc}
-     */
-    protected function getEntityCustomerSearchContext($cart)
-    {
-        /** @var Cart $cart */
-        $searchContext = parent::getEntityCustomerSearchContext($cart);
-        $searchContext['email'] = $cart->getEmail();
-
-        return $searchContext;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function findExistingEntity($entity, array $searchContext = [])
@@ -309,10 +295,35 @@ class CartStrategy extends AbstractImportStrategy
                     ]
                 );
             }
+        } elseif ($entity instanceof Customer
+            && !$entity->getOriginId()
+            && !$entity->getId()
+            && $this->existingEntity
+        ) {
+            /**
+             * Get existing customer entity
+             * As guest customer entity not exist in Magento as separate entity and saved in order
+             * find guest by customer email
+             */
+            return $this->findExistingCustomerByContext($this->existingEntity);
         } else {
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
         }
 
         return $existingEntity;
+    }
+
+    /**
+     * Add cart customer email to customer search context
+     *
+     * {@inheritdoc}
+     */
+    protected function getEntityCustomerSearchContext($cart)
+    {
+        /** @var Cart $cart */
+        $searchContext = parent::getEntityCustomerSearchContext($cart);
+        $searchContext['email'] = $cart->getEmail();
+
+        return $searchContext;
     }
 }

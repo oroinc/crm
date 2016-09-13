@@ -102,6 +102,10 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setImportExportContext($this->context);
         $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
 
+        $reflection = new \ReflectionProperty(get_class($strategy), 'existingEntity');
+        $reflection->setAccessible(true);
+        $reflection->setValue($strategy, $entity);
+
         $this->transport->expects($this->any())
             ->method('getGuestCustomerSync')
             ->will($this->returnValue(true));
