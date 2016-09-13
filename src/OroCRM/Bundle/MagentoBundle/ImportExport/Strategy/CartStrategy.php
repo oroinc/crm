@@ -72,8 +72,21 @@ class CartStrategy extends AbstractImportStrategy
         $isProcessingAllowed = true;
 
         if ($cart->getCustomer()) {
-            $customer = $this->findExistingEntity($cart->getCustomer());
-            $customerOriginId = $cart->getCustomer()->getOriginId();
+            $entityCustomer = $cart->getCustomer();
+            $customerOriginId = $entityCustomer->getOriginId();
+
+            /**
+             * Get existing registered customer or existing guest customer using Cart data
+             * for customer without Identifier
+             */
+            $customer = null;
+            if ($entityCustomer->getId() || $customerOriginId) {
+                $customer = parent::findExistingEntity($entityCustomer);
+            }
+            if (!$customer) {
+                $customer = $this->findExistingCustomerByContext($cart);
+            }
+
             if (!$customer && $customerOriginId) {
                 $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
@@ -295,17 +308,13 @@ class CartStrategy extends AbstractImportStrategy
                     ]
                 );
             }
-        } elseif ($entity instanceof Customer
-            && !$entity->getOriginId()
-            && !$entity->getId()
-            && $this->existingEntity
-        ) {
+        } elseif ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
             /**
              * Get existing customer entity
              * As guest customer entity not exist in Magento as separate entity and saved in order
              * find guest by customer email
              */
-            return $this->findExistingCustomerByContext($this->existingEntity);
+            $existingEntity = $this->findExistingCustomerByContext($this->existingEntity);
         } else {
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
         }
