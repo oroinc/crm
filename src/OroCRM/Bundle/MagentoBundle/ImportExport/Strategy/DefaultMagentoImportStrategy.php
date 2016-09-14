@@ -171,7 +171,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
      *
      * @return null|Region
      */
-    protected function findRegionEntity($entity)
+    protected function findRegionEntity(Region $entity)
     {
         $existingEntity = null;
 
