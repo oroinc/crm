@@ -304,7 +304,7 @@ class CartStrategy extends AbstractImportStrategy
         $existingEntity = null;
 
         if ($entity instanceof Region) {
-            /** @var Region $existingEntity */
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $existingEntity */
             $existingEntity = $this->findRegionEntity($entity);
         } elseif ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
             /**
