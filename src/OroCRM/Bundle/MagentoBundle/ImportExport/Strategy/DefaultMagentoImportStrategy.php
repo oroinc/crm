@@ -6,9 +6,10 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
+use Oro\Bundle\AddressBundle\Entity\Region;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use OroCRM\Bundle\MagentoBundle\Entity\Region as MagentoRegion;
 
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -169,7 +170,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
      *
      * @param Region $entity
      *
-     * @return null|Region
+     * @return null|MagentoRegion
      */
     protected function findRegionEntity(Region $entity)
     {

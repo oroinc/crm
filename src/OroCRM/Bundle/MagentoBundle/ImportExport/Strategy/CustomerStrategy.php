@@ -136,7 +136,7 @@ class CustomerStrategy extends AbstractImportStrategy
                 }
             }
         } elseif ($entity instanceof Region) {
-            /** @var Region $existingEntity */
+            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $existingEntity */
             $existingEntity = $this->findRegionEntity($entity);
         } else {
             /** @var Customer $existingEntity */
