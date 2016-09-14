@@ -46,8 +46,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
         $config
             ->expects($this->once())
-            ->method('offsetGetByPath')
-            ->with('[name]', null)
+            ->method('getName')
             ->will($this->returnValue('grid'));
 
         $this->assertFalse($this->extension->isApplicable($config));
@@ -68,8 +67,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
         $config
             ->expects($this->atLeastOnce())
-            ->method('offsetGetByPath')
-            ->with('[name]', null)
+            ->method('getName')
             ->will($this->returnValue(ConfigurationProvider::GRID_PREFIX . '1'));
 
         $this->marketingListHelper->expects($this->any())
@@ -244,8 +242,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
         $config
             ->expects($this->atLeastOnce())
-            ->method('offsetGetByPath')
-            ->with('[name]', null)
+            ->method('getName')
             ->will($this->returnValue($gridName));
 
         $this->marketingListHelper->expects($this->any())
