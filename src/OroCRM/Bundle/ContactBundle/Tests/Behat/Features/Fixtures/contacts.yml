@@ -1,6 +1,6 @@
 OroCRM\Bundle\ContactBundle\Entity\ContactEmail:
   contact-email-{1..30}:
-    email: <email()>
+    email (unique): <email()>
     primary: true
 
 OroCRM\Bundle\ContactBundle\Entity\Contact:
