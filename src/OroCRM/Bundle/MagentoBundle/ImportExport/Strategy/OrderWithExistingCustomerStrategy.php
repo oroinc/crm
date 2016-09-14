@@ -36,21 +36,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function isProcessingAllowed(Order $order)
     {
         $isProcessingAllowed = true;
-
-        $entityCustomer = $order->getCustomer();
-        $customerOriginId = $entityCustomer->getOriginId();
-        /**
-         * Get existing registered customer or existing guest customer using Order data
-         * for customer without Identifier
-         */
-        $customer = null;
-        if ($entityCustomer->getId() || $customerOriginId) {
-            $customer = parent::findExistingEntity($entityCustomer);
-        }
-        if (!$customer) {
-            $customer = $this->findExistingCustomerByContext($order);
-        }
-
+        $customer = $this->findExistingCustomer($order);
+        $customerOriginId = $order->getCustomer()->getOriginId();
         if (!$customer && $customerOriginId) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
@@ -86,6 +73,30 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         }
 
         return $isProcessingAllowed;
+    }
+
+    /**
+     * Get existing registered customer or existing guest customer
+     * If customer not found by Identifier
+     * find existing customer using entity data for entities containing customer like Order and Cart
+     *
+     * @param Order $entity
+     *
+     * @return null|Customer
+     */
+    protected function findExistingCustomer(Order $entity)
+    {
+        $existingEntity = null;
+        $customer = $entity->getCustomer();
+
+        if ($customer->getId() || $customer->getOriginId()) {
+            $existingEntity = parent::findExistingEntity($customer);
+        }
+        if (!$existingEntity) {
+            $existingEntity = $this->findExistingCustomerByContext($entity);
+        }
+
+        return $existingEntity;
     }
 
     /**

@@ -72,21 +72,8 @@ class CartStrategy extends AbstractImportStrategy
         $isProcessingAllowed = true;
 
         if ($cart->getCustomer()) {
-            $entityCustomer = $cart->getCustomer();
-            $customerOriginId = $entityCustomer->getOriginId();
-
-            /**
-             * Get existing registered customer or existing guest customer using Cart data
-             * for customer without Identifier
-             */
-            $customer = null;
-            if ($entityCustomer->getId() || $customerOriginId) {
-                $customer = parent::findExistingEntity($entityCustomer);
-            }
-            if (!$customer) {
-                $customer = $this->findExistingCustomerByContext($cart);
-            }
-
+            $customer = $this->findExistingCustomer($cart);
+            $customerOriginId = $cart->getCustomer()->getOriginId();
             if (!$customer && $customerOriginId) {
                 $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
@@ -116,6 +103,30 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         return $isProcessingAllowed;
+    }
+
+    /**
+     * Get existing registered customer or existing guest customer
+     * If customer not found by Identifier
+     * find existing customer using entity data for entities containing customer like Order and Cart
+     *
+     * @param Cart $entity
+     *
+     * @return null|Customer
+     */
+    protected function findExistingCustomer($entity)
+    {
+        $existingEntity = null;
+        $customer = $entity->getCustomer();
+
+        if ($customer->getId() || $customer->getOriginId()) {
+            $existingEntity = parent::findExistingEntity($customer);
+        }
+        if (!$existingEntity) {
+            $existingEntity = $this->findExistingCustomerByContext($entity);
+        }
+
+        return $existingEntity;
     }
 
     /**
@@ -293,21 +304,8 @@ class CartStrategy extends AbstractImportStrategy
         $existingEntity = null;
 
         if ($entity instanceof Region) {
-            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
-            $magentoRegion = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region',
-                [
-                    'regionId' => $entity->getCode()
-                ]
-            );
-            if ($magentoRegion) {
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\AddressBundle\Entity\Region',
-                    [
-                        'combinedCode' => $magentoRegion->getCombinedCode()
-                    ]
-                );
-            }
+            /** @var Region $existingEntity */
+            $existingEntity = $this->findRegionEntity($entity);
         } elseif ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
             /**
              * Get existing customer entity

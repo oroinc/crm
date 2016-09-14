@@ -8,6 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Region;
 
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -161,5 +162,35 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
         }
 
         return $searchContext;
+    }
+
+    /**
+     * Find existing Magento Region entity
+     *
+     * @param Region $entity
+     *
+     * @return null|Region
+     */
+    protected function findRegionEntity($entity)
+    {
+        $existingEntity = null;
+
+        /** @var Region $magentoRegion */
+        $magentoRegion = $this->databaseHelper->findOneBy(
+            'OroCRM\Bundle\MagentoBundle\Entity\Region',
+            [
+                'regionId' => $entity->getCombinedCode()
+            ]
+        );
+        if ($magentoRegion) {
+            $existingEntity = $this->databaseHelper->findOneBy(
+                'Oro\Bundle\AddressBundle\Entity\Region',
+                [
+                    'combinedCode' => $magentoRegion->getCombinedCode()
+                ]
+            );
+        }
+
+        return $existingEntity;
     }
 }

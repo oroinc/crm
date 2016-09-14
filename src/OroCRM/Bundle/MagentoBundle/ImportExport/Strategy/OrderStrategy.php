@@ -207,21 +207,7 @@ class OrderStrategy extends AbstractImportStrategy
     protected function findRegionEntity($entity, $existingEntity)
     {
         if (!$existingEntity && $entity instanceof Region) {
-            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
-            $magentoRegion = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region',
-                [
-                    'regionId' => $entity->getCode()
-                ]
-            );
-            if ($magentoRegion) {
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\AddressBundle\Entity\Region',
-                    [
-                        'combinedCode' => $magentoRegion->getCombinedCode()
-                    ]
-                );
-            }
+            return parent::findRegionEntity($entity);
         }
 
         return $existingEntity;
