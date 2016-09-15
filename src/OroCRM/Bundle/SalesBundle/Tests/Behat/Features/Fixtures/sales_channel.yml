@@ -1,0 +1,17 @@
+OroCRM\Bundle\ChannelBundle\Entity\Channel:
+  salesChannel:
+    name: Sales Channel
+    status: 1
+    channelType: b2b
+    customerIdentity: OroCRM\\Bundle\\SalesBundle\\Entity\\B2bCustomer
+
+OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+  b2b:
+    __construct: [OroCRM\\Bundle\\SalesBundle\\Entity\\B2bCustomer]
+    channel: '@salesChannel'
+  lead:
+    __construct: [OroCRM\\Bundle\\SalesBundle\\Entity\\Lead]
+    channel: '@salesChannel'
+  opportunity:
+    __construct: [OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity]
+    channel: '@salesChannel'
