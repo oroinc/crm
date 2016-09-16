@@ -145,7 +145,7 @@ class CategoriesValidator extends ConstraintValidator
             $criteria = Criteria::DESC;
         }
 
-        usort(
+        uasort(
             $orderedByValueArray,
             function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
                 $minValue1 = $item1->getMinValue();
@@ -156,7 +156,7 @@ class CategoriesValidator extends ConstraintValidator
                     $isValid = false;
                 }
 
-                return (($minValue1 < $minValue2) ? 1 : -1) * $inversion;
+                return (($minValue1 < $minValue2) ? -1 : 1) * $inversion;
             }
         );
 
