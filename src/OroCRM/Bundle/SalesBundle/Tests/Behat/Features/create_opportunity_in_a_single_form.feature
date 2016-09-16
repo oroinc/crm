@@ -4,8 +4,8 @@ Feature: Create opportunity in a single form
   I want to create Opportunity in a single form with minimum requirements
 
   Scenario: Reaquired fields
-    Given "sales channel" is a channel with enabled Opportunity, Lead, Business Customer entities
-    And I login as administrator
+    Given I login as administrator
+    And "sales channel" is a channel with enabled Opportunity, Lead, Business Customer entities
     And go to Sales/ Opportunities
     When I press "Create Opportunity"
     Then Opportunity Name is a required field
