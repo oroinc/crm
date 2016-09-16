@@ -135,8 +135,6 @@ class CategoriesValidator extends ConstraintValidator
         $isIncreasing = $this->isIncreasing($orderedByIndex);
         $orderedByValueArray = $value->toArray();
 
-        $isValid = true;
-
         if ($isIncreasing) {
             $inversion = 1;
             $criteria = Criteria::ASC;
@@ -145,21 +143,7 @@ class CategoriesValidator extends ConstraintValidator
             $criteria = Criteria::DESC;
         }
 
-        uasort(
-            $orderedByValueArray,
-            function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
-                $minValue1 = $item1->getMinValue();
-                $minValue2 = $item2->getMinValue();
-
-                if ($minValue1 === $minValue2 ||
-                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
-                    $isValid = false;
-                }
-
-                return (($minValue1 < $minValue2) ? -1 : 1) * $inversion;
-            }
-        );
-
+        $isValid = $this->orderByValue($orderedByValueArray, $inversion);
         if (!$isValid || $orderedByValueArray !== $orderedByIndex->toArray()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
         }
@@ -181,5 +165,32 @@ class CategoriesValidator extends ConstraintValidator
     {
         return is_null($orderedByIndex->first()->getMinValue())
         && is_null($orderedByIndex->last()->getMaxValue());
+    }
+
+    /**
+     * @param array $value
+     * @param int $inversion
+     *
+     * @return boolean
+     */
+    protected function orderByValue(array &$value, $inversion)
+    {
+        $isValid = true;
+        uasort(
+            $value,
+            function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
+                $minValue1 = $item1->getMinValue();
+                $minValue2 = $item2->getMinValue();
+
+                if ($minValue1 === $minValue2 ||
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
+                    $isValid = false;
+                }
+
+                return (($minValue1 < $minValue2) ? -1 : 1) * $inversion;
+            }
+        );
+
+        return $isValid;
     }
 }
