@@ -4,10 +4,8 @@ Feature: Mass Delete records with acl organization
   As a Administrator
   I want give CRUD permissions to different user roles
 
-Background:
-  Given I login as "admin" user with "admin" password
-
 Scenario: Delete from System organization
+  Given I login as administrator
   And I am logged in under System organization
   When I go to Activities/Contact Requests
   And check all records in grid

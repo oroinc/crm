@@ -4,7 +4,7 @@ Feature: Contact call activity
   I need to log calls, edit, create and delete it
 
 Scenario: Log Call from contact view page
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And the following contact:
     | firstName | lastName | email             |
     | Charlie   | Sheen    | charlie@sheen.com |

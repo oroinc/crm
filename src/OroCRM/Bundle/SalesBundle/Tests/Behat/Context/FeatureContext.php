@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
@@ -10,10 +12,15 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-class FeatureContext extends OroFeatureContext implements FixtureLoaderAwareInterface, OroElementFactoryAware
+class FeatureContext extends OroFeatureContext implements
+    FixtureLoaderAwareInterface,
+    OroElementFactoryAware,
+    KernelAwareContext
 {
-    use FixtureLoaderDictionary, ElementFactoryDictionary;
+    use FixtureLoaderDictionary, ElementFactoryDictionary, KernelDictionary;
 
     /**
      * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
@@ -62,5 +69,43 @@ class FeatureContext extends OroFeatureContext implements FixtureLoaderAwareInte
         }
 
         $form->saveAndClose();
+    }
+
+    /**
+     * @Given they has their own Accounts and Business Customers
+     */
+    public function accountHasBusinessCustomers()
+    {
+        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
+    }
+
+    /**
+     * @Given /^two users (?P<user1>(\w+)) and (?P<user2>(\w+)) exists in the system$/
+     */
+    public function twoUsersExistsInTheSystem()
+    {
+        $this->fixtureLoader->loadFixtureFile('users.yml');
+    }
+
+    /**
+     * @Then Accounts in the control are filtered by :channel
+     */
+    public function accountsInTheControlAreFilteredBy($channel)
+    {
+
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        var_dump(get_class($accountField));
+    }
+
+    /**
+     * @Then /^Accounts in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
+     */
+    public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)
+    {
+        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
+        $owner = $doctrine->getEntityRepositoryForClass(User::class)->findOneBy(['username' => $username]);
+        $ownAccounts = $doctrine->getEntityRepositoryForClass(Account::class)->findBy(['owner' => $owner]);
+
+        var_dump(count($ownAccounts));
     }
 }

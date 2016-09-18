@@ -4,11 +4,8 @@ Feature: Mass Delete records
 	As a crm administrator
 	I want to use mass delete functionality
 
-Background:
-	Given I login as "admin" user with "admin" password
-
 Scenario: Update Sales Channel
-	Given I login as "admin" user with "admin" password
+	Given I login as administrator
 	And I go to System/Channels
 	And click edit Sales Channel in grid
 	When I press "Save and Close"

@@ -5,7 +5,7 @@ Feature: Contacts grid
   I need to have grid with filters, sorters, pagination features
 
 Scenario: Select records per page
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And I go to Customers/Contacts
   And number of records should be 30
   And number of pages should be 2

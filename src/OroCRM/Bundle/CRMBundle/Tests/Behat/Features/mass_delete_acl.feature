@@ -4,7 +4,7 @@ Feature: Mass Delete records with acl
 	I want give CRUD permissions to different user roles
 
 Scenario: User can but now can't delete records
-	Given I login as "admin" user with "admin" password
+	Given I login as administrator
 	And I have 5 Cases
 	And I go to Activities/Cases
 	And I keep in mind number of records in list

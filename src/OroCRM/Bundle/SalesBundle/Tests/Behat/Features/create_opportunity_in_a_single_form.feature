@@ -6,24 +6,34 @@ Feature: Create opportunity in a single form
   Scenario: Reaquired fields
     Given I login as administrator
     And "sales channel" is a channel with enabled Opportunity, Lead, Business Customer entities
+    And two users Charlie and Samantha exists in the system
+    And user have "User" permissions for "View" "Account" entity
+    And they has their own Accounts and Business Customers
     And go to Sales/ Opportunities
     When I press "Create Opportunity"
     Then Opportunity Name is a required field
     And Account is a required field
+    And press "Cancel"
 
 #  Scenario: Renamed fields
 #    Given I am on Opportunity index page
 #    When I open Opportunity creation page
 #    Then Close Date is renamed to Expected Close Date
 #    And Customer Need and Proposed Solution have WYSIWYG editor
-#
-#  Scenario: Create Opportunity with 1 'sales channel'
-#    Given CRM has one 'sales channel'
-#    And Account has Business Customers
-#    When I open Opportunity creation page
-#    Then Accounts in the control are filtered by 'sales channel'
-#    And Accounts in the control are filtered according to my ACL permissions
-#
+
+  Scenario Outline: Create Opportunity with 1 'sales channel'
+    Given I login as "<user>" user
+    And go to Sales/ Opportunities
+    When I press "Create Opportunity"
+    Then Accounts in the control are filtered by 'sales channel'
+    And Accounts in the control are filtered according to <user> ACL permissions
+    And press "Cancel"
+
+    Examples:
+      | user     |
+      | charlie  |
+      | samantha |
+
 #  Scenario: Create Opportunity with more than 1 'sales channel'
 #    Given CRM has 'sales channels'
 #    And Account has Business Customers
