@@ -42,21 +42,24 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
         $context = $this->getMockForAbstractClass('Symfony\Component\Validator\ExecutionContextInterface');
 
-        $this->validator->initialize($context);
+        if (!$expectedViolationsMessages) {
+            $context->expects($this->never())
+                ->method('addViolationAt');
+        } else {
+            foreach ($expectedViolationsMessages as $key => $expectedViolationsMessage) {
+                $context->expects($this->at($key))
+                    ->method('addViolationAt')
+                    ->with($this->equalTo($type), $this->equalTo($expectedViolationsMessage), $this->isType('array'));
+            }
+        }
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|CategoriesConstraint $constraint */
         $constraint = $this->getMock('OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
-
-        foreach ($expectedViolationsMessages as $key => $expectedViolationsMessage) {
-            $context->expects($this->at($key))
-                ->method('addViolationAt')
-                ->with($this->equalTo($type), $this->equalTo($expectedViolationsMessage), $this->isType('array'));
-        }
-
         $constraint->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));
 
+        $this->validator->initialize($context);
         $this->validator->validate($collection, $constraint);
     }
 
