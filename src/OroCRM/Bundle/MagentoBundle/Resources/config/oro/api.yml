@@ -4,7 +4,24 @@ oro_api:
         OroCRM\Bundle\MagentoBundle\Entity\Cart: ~
         OroCRM\Bundle\MagentoBundle\Entity\CartAddress: ~
         OroCRM\Bundle\MagentoBundle\Entity\CartItem: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Customer: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Customer:
+            fields:
+                orders:
+                    exclude: true
+                carts:
+                    exclude: true
+            subresources:
+                orders:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
+                carts:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
+
 #        OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup: ~
 #        OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
 #        OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~

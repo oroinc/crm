@@ -382,6 +382,35 @@ class Cart extends ExtendCart implements
     }
 
     /**
+     * @param CartItem $cartItem
+     *
+     * @return $this
+     */
+    public function addCartItem(CartItem $cartItem)
+    {
+        if (!$this->cartItems->contains($cartItem)) {
+            $this->cartItems->add($cartItem);
+            $cartItem->setCart($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CartItem $cartItem
+     *
+     * @return $this
+     */
+    public function removeCartItem(CartItem $cartItem)
+    {
+        if ($this->cartItems->contains($cartItem)) {
+            $this->cartItems->removeElement($cartItem);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param Store $store
      */
     public function setStore($store)
@@ -824,10 +853,10 @@ class Cart extends ExtendCart implements
     }
 
     /**
-     * @param \DateTime $syncedAt
-     * @return Customer
+     * @param \DateTime|null $syncedAt
+     * @return Cart
      */
-    public function setSyncedAt(\DateTime $syncedAt)
+    public function setSyncedAt(\DateTime $syncedAt = null)
     {
         $this->syncedAt = $syncedAt;
 
@@ -843,10 +872,10 @@ class Cart extends ExtendCart implements
     }
 
     /**
-     * @param \DateTime $importedAt
-     * @return Customer
+     * @param \DateTime|null $importedAt
+     * @return Cart
      */
-    public function setImportedAt(\DateTime $importedAt)
+    public function setImportedAt(\DateTime $importedAt = null)
     {
         $this->importedAt = $importedAt;
 
