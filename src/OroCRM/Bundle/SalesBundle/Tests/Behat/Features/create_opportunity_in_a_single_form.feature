@@ -7,7 +7,7 @@ Feature: Create opportunity in a single form
     Given I login as administrator
     And "sales channel" is a channel with enabled Opportunity, Lead, Business Customer entities
     And two users Charlie and Samantha exists in the system
-    And user have "User" permissions for "View" "Account" entity
+    And user have "User" permissions for "View" "Business Customer" entity
     And they has their own Accounts and Business Customers
     And go to Sales/ Opportunities
     When I press "Create Opportunity"
@@ -25,7 +25,6 @@ Feature: Create opportunity in a single form
     Given I login as "<user>" user
     And go to Sales/ Opportunities
     When I press "Create Opportunity"
-    Then Accounts in the control are filtered by 'sales channel'
     And Accounts in the control are filtered according to <user> ACL permissions
     And press "Cancel"
 

@@ -2,10 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
+use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
@@ -13,7 +15,7 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
@@ -88,24 +90,29 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Then Accounts in the control are filtered by :channel
-     */
-    public function accountsInTheControlAreFilteredBy($channel)
-    {
-
-        $accountField = $this->createElement('OroForm')->findField('Account');
-        var_dump(get_class($accountField));
-    }
-
-    /**
      * @Then /^Accounts in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
      */
     public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)
     {
         $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
         $owner = $doctrine->getEntityRepositoryForClass(User::class)->findOneBy(['username' => $username]);
-        $ownAccounts = $doctrine->getEntityRepositoryForClass(Account::class)->findBy(['owner' => $owner]);
+        $ownAccounts = $doctrine->getEntityRepositoryForClass(B2bCustomer::class)->findBy(['owner' => $owner]);
 
-        var_dump(count($ownAccounts));
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $visibleAccounts = array_map(
+            function (NodeElement $element) {
+                return $element->getText();
+            },
+            $accountField->getSuggestedValues()
+        );
+
+        self::assertCount(count($ownAccounts), $visibleAccounts);
+
+        /** @var B2bCustomer $account */
+        foreach ($ownAccounts as $account) {
+            $value = sprintf('%s (%s)', $account->getName(), $account->getAccount()->getName());
+            self::assertContains($value, $visibleAccounts);
+        }
     }
 }
