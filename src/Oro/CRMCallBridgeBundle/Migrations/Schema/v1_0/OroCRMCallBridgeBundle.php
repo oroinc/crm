@@ -46,6 +46,10 @@ class OroCRMCallBridgeBundle implements Migration, ActivityExtensionAwareInterfa
         ];
 
         foreach ($associationTables as $tableName) {
+            if (!$schema->hasTable($tableName)) {
+                continue;
+            }
+
             $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tableName);
             if (!$schema->hasTable($associationTableName)) {
                 $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tableName);
