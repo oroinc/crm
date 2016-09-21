@@ -39,7 +39,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLeadPhone;
 class LeadPhone extends ExtendLeadPhone
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Lead", inversedBy="phones")
+     * @ORM\ManyToOne(targetEntity="Lead", inversedBy="phones", cascade={"persist"})
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
