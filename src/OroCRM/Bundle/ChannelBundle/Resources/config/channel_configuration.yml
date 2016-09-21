@@ -1,7 +1,0 @@
-orocrm_channel:
-    entity_data:
-       -
-          name: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
-    channel_types:
-        custom:
-            label: orocrm.channel.channel_type.custom.label

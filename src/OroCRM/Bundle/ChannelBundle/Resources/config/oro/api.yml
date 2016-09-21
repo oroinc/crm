@@ -1,4 +1,4 @@
-oro_api:
+api:
     entities:
         OroCRM\Bundle\ChannelBundle\Entity\Channel:
             actions:

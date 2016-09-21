@@ -1,0 +1,3 @@
+imports:
+    - { resource: 'workflows/b2c_flow_abandoned_shopping_cart.yml' }   # Abandoned Shopping Cart Flow
+    - { resource: 'workflows/b2c_flow_order_follow_up.yml' }           # Order Follow Up Flow
