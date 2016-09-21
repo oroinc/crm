@@ -36,10 +36,13 @@ api:
                 primaryEmail:
                     data_type: string
                     depends_on: [emails.email, emails.primary]
+                    form_options:
+                        constraints:
+                            - Email: ~
                     property_path: _
             filters:
                 fields:
-                    phone:
+                    phones:
                         data_type: string
                         allow_array: true
                         property_path: phones.phone
@@ -49,7 +52,7 @@ api:
                         property_path: phones
                         options:
                             data_field: phone
-                    email:
+                    emails:
                         data_type: string
                         allow_array: true
                         property_path: emails.email
@@ -89,10 +92,13 @@ api:
                 primaryEmail:
                     data_type: string
                     depends_on: [emails.email, emails.primary]
+                    form_options:
+                        constraints:
+                            - Email: ~
                     property_path: _
             filters:
                 fields:
-                    phone:
+                    phones:
                         data_type: string
                         allow_array: true
                         property_path: phones.phone
@@ -102,7 +108,7 @@ api:
                         property_path: phones
                         options:
                             data_field: phone
-                    email:
+                    emails:
                         data_type: string
                         allow_array: true
                         property_path: emails.email
