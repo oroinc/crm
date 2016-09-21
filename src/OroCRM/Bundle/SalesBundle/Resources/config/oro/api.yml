@@ -18,6 +18,7 @@ api:
         OroCRM\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
         OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+            documentation_resource: @OroCRMSalesBundle/Resources/doc/api/api.md
             fields:
                 phones:
                     data_type: array
