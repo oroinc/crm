@@ -13,7 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use OroCRM\Bundle\DotmailerBundle\Entity\Contact;
+use Oro\Bundle\DotmailerBundle\Entity\Contact;
 
 /**
  * @outputBuffering enabled
