@@ -57,22 +57,25 @@ Feature: Create opportunity in a single form
     Then I should see "Opportunity saved" flash message
 
   Scenario: Account name is equal to Business Customer name
-    Given I login as "samantha" user
     Given Account Name is equal to Business Customer name
     And go to Sales/ Opportunities
     When I press "Create Opportunity"
     And select "First Sales Channel" from "Channel"
     Then I see only Account name in Account/Customer field choice
+    And press "Cancel"
 
-#  Scenario: Account has no Business Customers
-#    Given CRM has 'sales channels'
-#    And Account has no customers
-#    When I open Opportunity creation page
-#    And I select Account
-#    Then after the form is saved new Customer is created
-#    And Customer name is equal to Account name
-#    And new Opportunity is created
-#
+  Scenario: Account has no Business Customers
+    Given Account "Pure Account" has no customers
+    And go to Sales/ Opportunities
+    When I press "Create Opportunity"
+    When fill form with:
+      | Opportunity Name | Pure Opportunity       |
+      | Channel          | First Sales Channel    |
+    And I select "Pure Account"
+    And save and close form
+    Then I should see "Opportunity saved" flash message
+    And "Pure Account" Customer was created
+
 #  Scenario: New Account
 #    Given CRM has 'sales channels'
 #    When I open Opportunity creation page

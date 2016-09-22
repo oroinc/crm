@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Doctrine\ORM\EntityRepository;
@@ -15,6 +16,7 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
@@ -173,6 +175,69 @@ class FeatureContext extends OroFeatureContext implements
         self::assertContains('Samantha Customer', $actualCustomers);
         self::assertNotContains('Samantha Customer (Samantha Customer)', $actualCustomers);
     }
+
+    /**
+     * @Given Account :name has no customers
+     */
+    public function accountHasNoCustomers($name)
+    {
+        $this->fixtureLoader->load([
+            Account::class => [
+                uniqid('account_', true) => [
+                    'name' => $name,
+                    'owner' => '@samantha',
+                    'organization' => '@organization'
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * @When I select :name
+     */
+    public function selectAccount($name)
+    {
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $accountField->open();
+        /** @var NodeElement[] $inputs */
+        $inputs = array_filter(
+            $this->getPage()->findAll('css', '.select2-search input'),
+            function (NodeElement $element) {
+                return $element->isVisible();
+            }
+        );
+
+        self::assertCount(1, $inputs);
+        array_shift($inputs)->setValue($name);
+        $results = $accountField->getSuggestions();
+        foreach ($results as $result) {
+            if (false !== stripos($result->getText(), $name)) {
+                $result->click();
+
+                return;
+            }
+        }
+        self::fail('Not found account in suggested variants');
+    }
+
+    /**
+     * @Then :content Customer was created
+     */
+    public function customerWasCreated($content)
+    {
+        /** @var MainMenu $menu */
+        $menu = $this->createElement('MainMenu');
+        $menu->openAndClick('Customers/ Business Customers');
+        $this->waitForAjax();
+
+        $row = $this->elementFactory
+            ->findElementContains('Grid', $content)
+            ->findElementContains('GridRow', $content);
+
+        self::assertTrue($row->isValid(), "Can't find '$content' in grid");
+    }
+
 
     /**
      * @param Channel $channel
