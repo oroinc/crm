@@ -130,5 +130,6 @@ api:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\SalesBundle\Entity\Opportunity: ~
+        OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+            documentation_resource: @OroCRMSalesBundle/Resources/doc/api/api.md
         OroCRM\Bundle\SalesBundle\Entity\SalesFunnel: ~

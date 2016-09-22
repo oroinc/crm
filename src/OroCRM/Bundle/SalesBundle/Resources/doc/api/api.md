@@ -116,3 +116,97 @@ Primary email address
 ### primaryPhone
 
 Primary phone
+
+# OroCRM\Bundle\SalesBundle\Entity\Opportunity
+
+## Actions
+
+### Get
+
+Get one Opportunity record.
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+### Get_list
+
+Get the list of Opportunity records.
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+### Create
+
+Create new Opportunity record.
+
+Returns new created record
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+### Update
+
+Update existing Opportunity record.
+
+Returns updated record.
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+### Delete
+
+Delete existing Opportunity record.
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+### Delete_list
+
+Delete list of Opportunity records. The list of records should be deleted limits by filters.
+
+Opporunity represent highly probable potential or actual sales to a new or established customer.
+
+## Fields
+
+### name
+
+The name used to refer to the opportunity in the system.
+
+#### Create
+
+The name used to refer to the opportunity in the system.
+
+**The required field**
+
+#### Update
+
+The name used to refer to the opportunity in the system.
+
+**Field cannot be null**
+
+### customer
+
+A B2B customer the opportunity is created for.
+
+#### Create
+
+A B2B customer the opportunity is created for.
+
+**The required field**
+
+#### Update
+
+A B2B customer the opportunity is created for.
+
+**Field cannot be null**
+
+### dataChannel
+
+One of active channels, from which OroCRM will get information on this opportunity.
+ 
+#### Create
+
+One of active channels, from which OroCRM will get information on this opportunity.
+
+**The required field**
+
+#### Update
+
+One of active channels, from which OroCRM will get information on this opportunity.
+
+**Field cannot be null**
