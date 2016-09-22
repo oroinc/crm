@@ -231,6 +231,27 @@ class FeatureContext extends OroFeatureContext implements
         $menu->openAndClick('Customers/ Business Customers');
         $this->waitForAjax();
 
+        $this->assertRowInGrid($content);
+    }
+
+    /**
+     * @Then :content Account was created
+     */
+    public function accountWasCreated($content)
+    {
+        /** @var MainMenu $menu */
+        $menu = $this->createElement('MainMenu');
+        $menu->openAndClick('Customers/ Accounts');
+        $this->waitForAjax();
+
+        $this->assertRowInGrid($content);
+    }
+
+    /**
+     * @param string $content
+     */
+    private function assertRowInGrid($content)
+    {
         $row = $this->elementFactory
             ->findElementContains('Grid', $content)
             ->findElementContains('GridRow', $content);

@@ -76,14 +76,19 @@ Feature: Create opportunity in a single form
     Then I should see "Opportunity saved" flash message
     And "Pure Account" Customer was created
 
-#  Scenario: New Account
-#    Given CRM has 'sales channels'
-#    When I open Opportunity creation page
-#    And no Account with such name exists
-#    Then after the form is saved new Account and Customer are created
-#    And Customer name is equal to Account name
-#    And new Opportunity is created
-#
+  Scenario: New Account
+    Given go to Sales/ Opportunities
+    And I press "Create Opportunity"
+    When fill form with:
+      | Opportunity Name | Another New Opportunity |
+      | Channel          | First Sales Channel     |
+    And I select "Supper Brand New Customer Account"
+    And save and close form
+    Then I should see "Opportunity saved" flash message
+    And "Supper Brand New Customer Account" Customer was created
+    And "Supper Brand New Customer Account" Account was created
+
+
 #  Scenario: No permissions to create Account
 #    Given CRM has 'sales channels'
 #    And my permission on Create Account is set to None
