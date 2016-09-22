@@ -267,13 +267,6 @@ class Order extends ExtendOrder implements
      */
     protected $syncedAt;
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->items = new ArrayCollection();
-    }
-
     /**
      * @param string $incrementId
      *
@@ -691,10 +684,10 @@ class Order extends ExtendOrder implements
     }
 
     /**
-     * @param \DateTime $syncedAt
-     * @return Customer
+     * @param \DateTime|null $syncedAt
+     * @return Order
      */
-    public function setSyncedAt(\DateTime $syncedAt)
+    public function setSyncedAt(\DateTime $syncedAt = null)
     {
         $this->syncedAt = $syncedAt;
 
@@ -710,10 +703,10 @@ class Order extends ExtendOrder implements
     }
 
     /**
-     * @param \DateTime $importedAt
-     * @return Customer
+     * @param \DateTime|null $importedAt
+     * @return Order
      */
-    public function setImportedAt(\DateTime $importedAt)
+    public function setImportedAt(\DateTime $importedAt = null)
     {
         $this->importedAt = $importedAt;
 

@@ -5,6 +5,10 @@ UPGRADE FROM 1.10 to 2.0
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Lead`
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Opportunity`
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\SalesFunnel`
+- `OroCRM/Bundle/SalesBundle/Entity/LeadMailboxProcessSettings` extends `OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings`
+
+####OroCRMCaseBundle:
+- `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
 
 ####OroCRMContactUsBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest`

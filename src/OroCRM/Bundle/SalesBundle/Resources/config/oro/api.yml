@@ -17,13 +17,117 @@ api:
         # deprecated since 1.10. Enum type is used instead
         OroCRM\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
-        OroCRM\Bundle\SalesBundle\Entity\B2bCustomer: ~
+        OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+            fields:
+                phones:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        phone: ~
+                primaryPhone:
+                    data_type: string
+                    depends_on: [phones.phone, phones.primary]
+                    property_path: _
+                emails:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        email: ~
+                primaryEmail:
+                    data_type: string
+                    depends_on: [emails.email, emails.primary]
+                    form_options:
+                        constraints:
+                            - Email: ~
+                    property_path: _
+            filters:
+                fields:
+                    phones:
+                        data_type: string
+                        allow_array: true
+                        property_path: phones.phone
+                    primaryPhone:
+                        data_type: string
+                        type: primaryField
+                        property_path: phones
+                        options:
+                            data_field: phone
+                    emails:
+                        data_type: string
+                        allow_array: true
+                        property_path: emails.email
+                    primaryEmail:
+                        data_type: string
+                        property_path: emails
+                        type: primaryField
+                        options:
+                            data_field: email
+
+        OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone:
+            # this entity does not have own Data API resource
+            actions: false
+
+        OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail:
+            # this entity does not have own Data API resource
+            actions: false
+
         OroCRM\Bundle\SalesBundle\Entity\Lead:
             fields:
                 address:
                     exclude: true
+                phones:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        phone: ~
+                primaryPhone:
+                    data_type: string
+                    depends_on: [phones.phone, phones.primary]
+                    property_path: _
+                emails:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        email: ~
+                primaryEmail:
+                    data_type: string
+                    depends_on: [emails.email, emails.primary]
+                    form_options:
+                        constraints:
+                            - Email: ~
+                    property_path: _
+            filters:
+                fields:
+                    phones:
+                        data_type: string
+                        allow_array: true
+                        property_path: phones.phone
+                    primaryPhone:
+                        data_type: string
+                        type: primaryField
+                        property_path: phones
+                        options:
+                            data_field: phone
+                    emails:
+                        data_type: string
+                        allow_array: true
+                        property_path: emails.email
+                    primaryEmail:
+                        data_type: string
+                        property_path: emails
+                        type: primaryField
+                        options:
+                            data_field: email
+
         OroCRM\Bundle\SalesBundle\Entity\LeadAddress: ~
-        OroCRM\Bundle\SalesBundle\Entity\LeadPhone: ~
-        OroCRM\Bundle\SalesBundle\Entity\LeadEmail: ~
+
+        OroCRM\Bundle\SalesBundle\Entity\LeadPhone:
+            # this entity does not have own Data API resource
+            actions: false
+
+        OroCRM\Bundle\SalesBundle\Entity\LeadEmail:
+            # this entity does not have own Data API resource
+            actions: false
+
         OroCRM\Bundle\SalesBundle\Entity\Opportunity: ~
         OroCRM\Bundle\SalesBundle\Entity\SalesFunnel: ~
