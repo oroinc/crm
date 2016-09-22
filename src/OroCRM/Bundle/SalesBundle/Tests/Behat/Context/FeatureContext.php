@@ -154,6 +154,26 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
+     * @Given Account Name is equal to Business Customer name
+     */
+    public function accountNameEqualToBusinessCustomer()
+    {
+        $this->fixtureLoader->loadFixtureFile('account_name_equal_to_business_customer_name.yml');
+    }
+
+    /**
+     * @Then /^I see only Account name in Account\/Customer field choice$/
+     */
+    public function iSeeAccountNameOnly()
+    {
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $actualCustomers = $accountField->getSuggestedValues();
+
+        self::assertContains('Samantha Customer', $actualCustomers);
+        self::assertNotContains('Samantha Customer (Samantha Customer)', $actualCustomers);
+    }
+
      * @param Channel $channel
      * @param EntityRepository $customerRepository
      * @return array

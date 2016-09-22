@@ -53,18 +53,17 @@ Feature: Create opportunity in a single form
       | Opportunity Name | Supper Opportunity                |
       | Channel          | First Sales Channel               |
       | Account          | Diana Bailey (Samantha Account 2) |
-    And submit form
+    And save and close form
     Then I should see "Opportunity saved" flash message
-#
-#  Scenario: Account name is equal to Business Customer name
-#    Given CRM has 'sales channels'
-#    And Account has one Business Customer
-#    And Account Name is equal to Business Customer name
-#    When I open Opportunity creation page
-#    And select 'sales channel'
-#    And I make a search by Account/Customer
-#    Then in the result I see only Account name
-#
+
+  Scenario: Account name is equal to Business Customer name
+    Given I login as "samantha" user
+    Given Account Name is equal to Business Customer name
+    And go to Sales/ Opportunities
+    When I press "Create Opportunity"
+    And select "First Sales Channel" from "Channel"
+    Then I see only Account name in Account/Customer field choice
+
 #  Scenario: Account name is not equal to Business Customer name
 #    Given CRM has 'sales channels'
 #    And Account has one Business Customer
