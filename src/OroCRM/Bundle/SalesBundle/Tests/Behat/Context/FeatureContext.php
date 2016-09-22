@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
-use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
@@ -15,6 +15,7 @@ use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class FeatureContext extends OroFeatureContext implements
@@ -90,7 +91,7 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Then /^Accounts in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
+     * @Then /^Accounts and Customers in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
      */
     public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)
     {
@@ -100,12 +101,7 @@ class FeatureContext extends OroFeatureContext implements
 
         /** @var Select2Entity $accountField */
         $accountField = $this->createElement('OroForm')->findField('Account');
-        $visibleAccounts = array_map(
-            function (NodeElement $element) {
-                return $element->getText();
-            },
-            $accountField->getSuggestedValues()
-        );
+        $visibleAccounts = $accountField->getSuggestedValues();
 
         self::assertCount(count($ownAccounts), $visibleAccounts);
 
@@ -114,5 +110,63 @@ class FeatureContext extends OroFeatureContext implements
             $value = sprintf('%s (%s)', $account->getName(), $account->getAccount()->getName());
             self::assertContains($value, $visibleAccounts);
         }
+    }
+
+    /**
+     * @Given CRM has second sales channel with Accounts and Business Customers
+     */
+    public function crmHasSecondSalesChannel()
+    {
+        $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
+    }
+
+    /**
+     * @Then Accounts and Customers in the control are filtered by selected sales channel and :username ACL permissions
+     */
+    public function accountsInTheControlAreFilteredBySelected($username)
+    {
+        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
+        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
+            ->findOneBy(['username' => $username]);
+        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
+        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
+            ->getRepository(B2bCustomer::class);
+
+        /** @var Select2Entity $channelField */
+        $channelField = $this->createElement('OroForm')->findField('Channel');
+        $channels = $channelField->getSuggestedValues();
+
+        foreach ($channels as $channelName) {
+            $channelField->setValue($channelName);
+            $channel = $channelRepository->findOneBy(['name' => $channelName]);
+
+            $expectedCustomers = $this->getCustomers($channel, $customerRepository, $user);
+
+            /** @var Select2Entity $accountField */
+            $accountField = $this->createElement('OroForm')->findField('Account');
+            $actualCustomers = $accountField->getSuggestedValues();
+
+            self::assertEquals(
+                sort($expectedCustomers),
+                sort($actualCustomers)
+            );
+        }
+    }
+
+    /**
+     * @param Channel $channel
+     * @param EntityRepository $customerRepository
+     * @return array
+     */
+    private function getCustomers(Channel $channel, EntityRepository $customerRepository, User $user)
+    {
+        $customers = [];
+
+        /** @var B2bCustomer $customer */
+        foreach ($customerRepository->findBy(['owner' => $user, 'dataChannel' => $channel]) as $customer) {
+            $customers[] = sprintf('%s (%s)', $customer->getName(), $customer->getAccount()->getName());
+        }
+
+        return $customers;
     }
 }
