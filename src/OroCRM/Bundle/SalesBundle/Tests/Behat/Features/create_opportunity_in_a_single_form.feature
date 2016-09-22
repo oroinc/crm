@@ -5,7 +5,7 @@ Feature: Create opportunity in a single form
 
   Scenario: Reaquired fields
     Given I login as administrator
-    And "sales channel" is a channel with enabled Opportunity, Lead, Business Customer entities
+    And "First Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
     And two users charlie and samantha exists in the system
     And user have "User" permissions for "View" "Business Customer" entity
     And they has their own Accounts and Business Customers
@@ -47,13 +47,14 @@ Feature: Create opportunity in a single form
     | charlie  |
     | samantha |
 
-#  Scenario: New Opportunity
-#    Given CRM has 'sales channels'
-#    And Account has Business Customers
-#    When I open Opportunity creation page
-#    And select 'sales channel'
-#    And I select Account/Customer
-#    Then after the form is saved a new Opportunity is created
+  Scenario: New Opportunity
+    Given I press "Create Opportunity"
+    When fill form with:
+      | Opportunity Name | Supper Opportunity                |
+      | Channel          | First Sales Channel               |
+      | Account          | Diana Bailey (Samantha Account 2) |
+    And submit form
+    Then I should see "Opportunity saved" flash message
 #
 #  Scenario: Account name is equal to Business Customer name
 #    Given CRM has 'sales channels'

@@ -41,8 +41,16 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     dataChannel: 1
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
-  customer{7..8}:
+  customer7:
     name: <firstName()> <lastName()>
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount2'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer8:
+    name: Diana Bailey
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount2'
