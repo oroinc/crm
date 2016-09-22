@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\TaskBridgeBundle\Migrations\Schema\v1_0\OroTaskBundle as TaskBundle_v1_0;
 
-class OroTaskBridgeBundleBundleInstaller implements
+class OroTaskBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface
 {
