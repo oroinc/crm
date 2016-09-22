@@ -1,7 +1,7 @@
 include:
     - contacts.yml
 
-OroCRM\Bundle\TaskBundle\Entity\Task:
+Oro\Bundle\TaskBundle\Entity\Task:
   task-{1..30}:
     subject: '<sentence()>'
     owner: '@admin'

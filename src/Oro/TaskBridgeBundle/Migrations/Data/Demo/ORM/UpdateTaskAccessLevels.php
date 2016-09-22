@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMTaskBundle\Migrations\Data\Demo\ORM;
+namespace Oro\TaskBridgeBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -78,7 +78,7 @@ class UpdateTaskAccessLevels extends AbstractFixture implements ContainerAwareIn
             $role = $this->getRole($roleName);
             if ($role) {
                 $sid = $manager->getSid($role);
-                $oid = $manager->getOid('entity:OroCRM\Bundle\TaskBundle\Entity\Task');
+                $oid = $manager->getOid('entity:Oro\Bundle\TaskBundle\Entity\Task');
                 $extension = $manager->getExtensionSelector()->select($oid);
                 $maskBuilders = $extension->getAllMaskBuilders();
 

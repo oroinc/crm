@@ -63,7 +63,7 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
     end: '<dateTimeBetween($createdAt, $createdAt)>'
     allDay: false
 
-OroCRM\Bundle\CallBundle\Entity\Call:
+Oro\Bundle\CallBundle\Entity\Call:
   call{1..2}:
     subject: '<sentence(2, true)>'
     addActivityTarget: ['@contactCharlie']
@@ -74,7 +74,7 @@ OroCRM\Bundle\CallBundle\Entity\Call:
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
     organization: '@organization'
 
-OroCRM\Bundle\TaskBundle\Entity\Task:
+Oro\Bundle\TaskBundle\Entity\Task:
   task{1..2}:
     subject: '<sentence(2, true)>'
     addActivityTarget: ['@contactCharlie']

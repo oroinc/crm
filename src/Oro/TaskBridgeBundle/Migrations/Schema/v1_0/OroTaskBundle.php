@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMTaskBundle\Migrations\Schema\v1_0;
+namespace Oro\TaskBridgeBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -9,7 +9,7 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterfac
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMTaskBundle implements
+class OroTaskBundle implements
     Migration,
     ActivityExtensionAwareInterface
 {

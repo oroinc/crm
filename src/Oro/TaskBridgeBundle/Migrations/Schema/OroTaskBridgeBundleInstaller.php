@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMTaskBundle\Migrations\Schema;
+namespace Oro\TaskBridgeBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -8,9 +8,9 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\CRMTaskBundle\Migrations\Schema\v1_0\OroCRMTaskBundle as CRMTaskBundle_v1_0;
+use Oro\TaskBridgeBundle\Migrations\Schema\v1_0\OroTaskBundle as TaskBundle_v1_0;
 
-class OroCRMTaskBundleInstaller implements
+class OroTaskBridgeBundleBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface
 {
@@ -38,6 +38,6 @@ class OroCRMTaskBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        CRMTaskBundle_v1_0::addTaskActivityRelations($schema, $this->activityExtension);
+        TaskBundle_v1_0::addTaskActivityRelations($schema, $this->activityExtension);
     }
 }
