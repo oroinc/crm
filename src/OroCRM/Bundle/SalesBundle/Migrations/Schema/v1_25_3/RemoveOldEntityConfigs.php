@@ -18,7 +18,7 @@ class RemoveOldEntityConfigs implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $class = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
-        $fields = ['email', 'phone_number'];
+        $fields = ['email', 'phoneNumber'];
 
         $queries->addPostQuery(
             new ParametrizedSqlMigrationQuery(
