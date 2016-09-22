@@ -64,15 +64,6 @@ Feature: Create opportunity in a single form
     And select "First Sales Channel" from "Channel"
     Then I see only Account name in Account/Customer field choice
 
-#  Scenario: Account name is not equal to Business Customer name
-#    Given CRM has 'sales channels'
-#    And Account has one Business Customer
-#    And Account Name is not equal to Business Customer name
-#    When I open Opportunity creation page page
-#    And select 'sales channel'
-#    And I make a search by Account/Customer
-#    Then in the result I see Account name and Customer name
-#
 #  Scenario: Account has more than one Business Customer
 #    Given CRM has 'sales channels'
 #    And Account has Business Customers
