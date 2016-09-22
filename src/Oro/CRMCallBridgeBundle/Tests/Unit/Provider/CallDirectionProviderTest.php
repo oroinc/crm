@@ -3,8 +3,8 @@
 namespace Oro\CRMCallBridgeBundle\Tests\Unit\Provider;
 
 use Oro\CRMCallBridgeBundle\Provider\CallDirectionProvider;
-use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\CallBundle\Entity\CallDirection;
+use Oro\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\CallBundle\Entity\CallDirection;
 
 class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSupportedClass()
     {
-        $this->assertEquals('OroCRM\Bundle\CallBundle\Entity\Call', $this->provider->getSupportedClass());
+        $this->assertEquals('Oro\Bundle\CallBundle\Entity\Call', $this->provider->getSupportedClass());
     }
 
     public function testGetDirection()

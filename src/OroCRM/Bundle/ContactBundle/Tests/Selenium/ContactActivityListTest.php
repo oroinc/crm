@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Call;
+use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Call;
 use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactActivityListTest extends Selenium2TestCase
@@ -46,7 +46,7 @@ class ContactActivityListTest extends Selenium2TestCase
             ->open([$contactName])
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
             ->runActionInGroup('Log call')
-            ->openCall('OroCRM\Bundle\CallBundle');
+            ->openCall('Oro\Bundle\CallBundle');
 
         /** @var Call $call */
         $call

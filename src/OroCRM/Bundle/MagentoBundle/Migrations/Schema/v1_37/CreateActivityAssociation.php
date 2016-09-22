@@ -91,8 +91,8 @@ class CreateActivityAssociation implements
      */
     public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_cart');
+        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_magento_order');
+        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_magento_cart');
     }
 
     /**

@@ -89,7 +89,7 @@ class CreateActivityAssociation implements
      */
     public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contactus_request');
+        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_contactus_request');
     }
 
     /**

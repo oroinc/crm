@@ -733,7 +733,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate foreign keys for table orocrm_magento_cart_calls **/
         $table = $schema->getTable('orocrm_magento_cart_calls');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
+            $schema->getTable('oro_call'),
             ['call_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -1027,7 +1027,7 @@ class OroCRMMagentoBundle implements Migration
         /** Generate foreign keys for table orocrm_magento_order_calls **/
         $table = $schema->getTable('orocrm_magento_order_calls');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
+            $schema->getTable('oro_call'),
             ['call_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]

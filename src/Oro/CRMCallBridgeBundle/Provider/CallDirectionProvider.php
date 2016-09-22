@@ -10,7 +10,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\CallBundle\Entity\Call;
+use Oro\Bundle\CallBundle\Entity\Call;
 
 class CallDirectionProvider implements DirectionProviderInterface
 {
@@ -30,7 +30,7 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function getSupportedClass()
     {
-        return 'OroCRM\Bundle\CallBundle\Entity\Call';
+        return 'Oro\Bundle\CallBundle\Entity\Call';
     }
 
     /**
@@ -104,7 +104,7 @@ class CallDirectionProvider implements DirectionProviderInterface
             return null;
         }
 
-        $qb = $em->getRepository('OroCRM\Bundle\CallBundle\Entity\Call')
+        $qb = $em->getRepository('Oro\Bundle\CallBundle\Entity\Call')
             ->createQueryBuilder('call')
             ->select('call')
             ->innerJoin(
