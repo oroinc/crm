@@ -174,6 +174,7 @@ class FeatureContext extends OroFeatureContext implements
         self::assertNotContains('Samantha Customer (Samantha Customer)', $actualCustomers);
     }
 
+    /**
      * @param Channel $channel
      * @param EntityRepository $customerRepository
      * @return array
