@@ -11,7 +11,7 @@ class AddClosedAtField implements Migration
 {
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
         $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $queries->addPostQuery(new FillClosedAtField());
     }

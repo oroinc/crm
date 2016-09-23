@@ -10,7 +10,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\Entity(
  *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository"
  * )
- * @ORM\Table(name="oro_channel_ltime_avg_aggr")
+ * @ORM\Table(name="orocrm_channel_ltime_avg_aggr")
  * @ORM\HasLifecycleCallbacks
  */
 class LifetimeValueAverageAggregation implements ChannelAwareInterface

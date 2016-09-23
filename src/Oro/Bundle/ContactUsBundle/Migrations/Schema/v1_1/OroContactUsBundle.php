@@ -31,14 +31,14 @@ class OroContactUsBundle implements Migration, RenameExtensionAwareInterface
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'oro_contactus_contact_reason',
-            'oro_contactus_contact_rsn'
+            'orocrm_contactus_contact_reason',
+            'orocrm_contactus_contact_rsn'
         );
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'oro_contactus_request_emails',
-            'oro_contactus_req_emails'
+            'orocrm_contactus_request_emails',
+            'orocrm_contactus_req_emails'
         );
     }
 }

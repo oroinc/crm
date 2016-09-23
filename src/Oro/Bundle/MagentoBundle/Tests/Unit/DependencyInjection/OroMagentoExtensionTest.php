@@ -23,7 +23,7 @@ class OroMagentoExtensionTest extends \PHPUnit_Framework_TestCase
         $container = new ContainerBuilder();
         $extension = new OroMagentoExtension();
 
-        $extension->load(['oro_crm_magento' => $config], $container);
+        $extension->load(['oro_magento' => $config], $container);
 
         $tagged = $container->findTaggedServiceIds('oro_magento.bundle_config.aware');
 

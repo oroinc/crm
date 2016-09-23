@@ -35,7 +35,7 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_lead');
+        $table = $schema->getTable('orocrm_sales_lead');
         $table->removeForeignKey('FK_73DB46339B6B5FBA');
         $table->dropIndex('IDX_73DB46339B6B5FBA');
         $table->dropColumn('account_id');
@@ -61,7 +61,7 @@ DQL
      */
     protected function modifyOrocrmOpportunityTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
         $table->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
         $table->dropIndex('IDX_C0FE4AAC9B6B5FBA');
         $table->dropColumn('account_id');
@@ -87,7 +87,7 @@ DQL
      */
     protected function modifyOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_account');
+        $table = $schema->getTable('orocrm_account');
 
         $table->dropColumn('extend_website');
         $table->dropColumn('extend_employees');

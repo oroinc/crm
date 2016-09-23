@@ -38,7 +38,7 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_sales_lead');
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_sales_opportunity');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_opportunity');
     }
 }

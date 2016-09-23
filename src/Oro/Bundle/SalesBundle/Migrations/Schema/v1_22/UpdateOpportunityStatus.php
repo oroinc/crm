@@ -48,7 +48,7 @@ class UpdateOpportunityStatus implements
             'lost'
         ];
         $connection = $this->container->get('doctrine')->getConnection();
-        $oldStatuses = $connection->fetchAll('SELECT name, label FROM oro_sales_opport_status');
+        $oldStatuses = $connection->fetchAll('SELECT name, label FROM orocrm_sales_opport_status');
         $newStatuses = $connection->fetchAll('SELECT id, priority FROM oro_enum_opportunity_status');
         $oldStatuses = $this->buildOneDimensionArray($oldStatuses, 'name', 'label');
         $newStatuses = $this->buildOneDimensionArray($newStatuses, 'id', 'priority');
@@ -98,7 +98,7 @@ class UpdateOpportunityStatus implements
      */
     protected function updateOpportunityTable($queries, $statuses)
     {
-        $query = 'UPDATE oro_sales_opportunity SET status_id = :status_id WHERE status_name = :status_name';
+        $query = 'UPDATE orocrm_sales_opportunity SET status_id = :status_id WHERE status_name = :status_name';
         foreach ($statuses as $status) {
             $migrationQuery = new ParametrizedSqlMigrationQuery();
             $migrationQuery->addSql(

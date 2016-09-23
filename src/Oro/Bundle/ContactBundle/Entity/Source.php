@@ -10,7 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_contact_source")
+ * @ORM\Table(name="orocrm_contact_source")
  * @Config(
  *      defaultValues={
  *          "grouping"={

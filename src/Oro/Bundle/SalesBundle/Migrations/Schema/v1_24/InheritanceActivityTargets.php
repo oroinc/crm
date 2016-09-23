@@ -38,8 +38,8 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
     {
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'oro_sales_opportunity',
-            'oro_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_lead',
             ['opportunities']
         );
     }

@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\TaskBundle\Entity\Task;
-use Oro\Bundle\TaskBundle\Entity\TaskPriority;
+use OroCRM\Bundle\TaskBundle\Entity\Task;
+use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -114,7 +114,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     {
         $organization = $this->getReference('default_organization');
 
-        $priorities = $om->getRepository('OroTaskBundle:TaskPriority')->findAll();
+        $priorities = $om->getRepository('OroCRMTaskBundle:TaskPriority')->findAll();
         if (empty($priorities)) {
             return;
         }
@@ -131,7 +131,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             /** @var TaskPriority $taskPriority */
             $taskPriority = $this->getRandomEntity($priorities);
 
-            if ($om->getRepository('OroTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($om->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }

@@ -11,7 +11,7 @@ class TargetExcludeList
      */
     protected static $excludeTargets = [
         'Oro\Bundle\UserBundle\Entity\User',
-        'Oro\Bundle\TaskBundle\Entity\Task',
+        'OroCRM\Bundle\TaskBundle\Entity\Task',
         'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
         'Oro\Bundle\CallBundle\Entity\Call',
         'Oro\Bundle\EmailBundle\Entity\Email',

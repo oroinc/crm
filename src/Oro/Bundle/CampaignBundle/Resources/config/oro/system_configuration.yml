@@ -4,12 +4,12 @@ system_configuration:
             title: oro.campaign.emailcampaign.system_configuration.title
 
     fields:
-        oro_crm_campaign.campaign_sender_email:
+        oro_campaign.campaign_sender_email:
             data_type: string
             type: text
             options:
                 label: oro.campaign.emailcampaign.system_configuration.campaign_sender_email
-        oro_crm_campaign.campaign_sender_name:
+        oro_campaign.campaign_sender_name:
             data_type: string
             type: text
             options:
@@ -26,9 +26,9 @@ system_configuration:
                                 children:
                                     email_campaign_settings:
                                         children:
-                                            - oro_crm_campaign.campaign_sender_email
-                                            - oro_crm_campaign.campaign_sender_name
+                                            - oro_campaign.campaign_sender_email
+                                            - oro_campaign.campaign_sender_name
     api_tree:
         email_configuration:
-            oro_crm_campaign.campaign_sender_email: ~
-            oro_crm_campaign.campaign_sender_name: ~
+            oro_campaign.campaign_sender_email: ~
+            oro_campaign.campaign_sender_name: ~

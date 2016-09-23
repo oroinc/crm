@@ -31,20 +31,20 @@ class OroMagentoBundle implements Migration, RenameExtensionAwareInterface
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'oro_magento_customer_address',
-            'oro_magento_customer_addr'
+            'orocrm_magento_customer_address',
+            'orocrm_magento_customer_addr'
         );
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'oro_magento_customer_address_to_address_type',
-            'oro_magento_cust_addr_type'
+            'orocrm_magento_customer_address_to_address_type',
+            'orocrm_magento_cust_addr_type'
         );
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'oro_magento_product_to_website',
-            'oro_magento_prod_to_website'
+            'orocrm_magento_product_to_website',
+            'orocrm_magento_prod_to_website'
         );
     }
 }

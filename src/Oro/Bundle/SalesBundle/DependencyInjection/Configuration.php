@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('oro_crm_sales');
+        $rootNode = $treeBuilder->root('oro_sales');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

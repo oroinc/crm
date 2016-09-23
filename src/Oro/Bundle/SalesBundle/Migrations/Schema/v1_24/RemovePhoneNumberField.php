@@ -24,7 +24,7 @@ class RemovePhoneNumberField implements Migration, OrderedMigrationInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-        $table = $schema->getTable('oro_sales_lead');
+        $table = $schema->getTable('orocrm_sales_lead');
         if ($table->hasColumn('phone_number')) {
             $table->dropColumn('phone_number');
         }

@@ -63,7 +63,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     protected function createOrocrmContactusContactRsnTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_contactus_contact_rsn');
+        $table = $schema->createTable('orocrm_contactus_contact_rsn');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
@@ -76,7 +76,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     protected function createOrocrmContactusReqEmailsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_contactus_req_emails');
+        $table = $schema->createTable('orocrm_contactus_req_emails');
         $table->addColumn('request_id', 'integer', []);
         $table->addColumn('email_id', 'integer', []);
         $table->setPrimaryKey(['request_id', 'email_id']);
@@ -91,7 +91,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     protected function createOrocrmContactusRequestTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_contactus_request');
+        $table = $schema->createTable('orocrm_contactus_request');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
@@ -124,7 +124,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     protected function addOrocrmContactusReqEmailsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_contactus_req_emails');
+        $table = $schema->getTable('orocrm_contactus_req_emails');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
@@ -132,7 +132,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_contactus_request'),
+            $schema->getTable('orocrm_contactus_request'),
             ['request_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -146,27 +146,27 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     protected function addOrocrmContactusRequestForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_contactus_request');
+        $table = $schema->getTable('orocrm_contactus_request');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_contactus_contact_rsn'),
+            $schema->getTable('orocrm_contactus_contact_rsn'),
             ['contact_reason_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_sales_lead'),
+            $schema->getTable('orocrm_sales_lead'),
             ['lead_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_sales_opportunity'),
+            $schema->getTable('orocrm_sales_opportunity'),
             ['opportunity_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],

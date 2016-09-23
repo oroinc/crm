@@ -4,7 +4,7 @@ Automatic accounts discovery
 ### Configuration Reference
 
 ```
-oro_crm_magento:
+oro_magento:
     account_discovery:
         fields:
             firstName: ~

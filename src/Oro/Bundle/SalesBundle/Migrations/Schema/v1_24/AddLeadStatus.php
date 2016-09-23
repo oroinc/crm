@@ -63,7 +63,7 @@ class AddLeadStatus implements
     {
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-        $extendOptionsManager->removeColumnOptions('oro_sales_lead', 'status');
+        $extendOptionsManager->removeColumnOptions('orocrm_sales_lead', 'status');
         self::addStatusField($schema, $this->extendExtension, $queries);
     }
 
@@ -76,7 +76,7 @@ class AddLeadStatus implements
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
-            'oro_sales_lead',
+            'orocrm_sales_lead',
             'status',
             Lead::INTERNAL_STATUS_CODE,
             false,

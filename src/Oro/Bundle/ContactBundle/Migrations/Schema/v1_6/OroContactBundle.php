@@ -67,7 +67,7 @@ class OroContactBundle implements
     {
         self::addActivityAssociations($schema, $this->activityExtension);
 
-        $this->assignActivities('oro_email', 'oro_contact', 'owner_contact_id', $queries);
+        $this->assignActivities('oro_email', 'orocrm_contact', 'owner_contact_id', $queries);
     }
 
     /**
@@ -78,7 +78,7 @@ class OroContactBundle implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_contact');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
     }
 
     /**

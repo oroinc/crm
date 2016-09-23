@@ -24,12 +24,12 @@ class OroMagentoBundle implements Migration
      */
     protected function modifyOrocrmMagentoOrderTable(Schema $schema)
     {
-        $table = $schema->getTable('oro_magento_order');
+        $table = $schema->getTable('orocrm_magento_order');
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
@@ -42,12 +42,12 @@ class OroMagentoBundle implements Migration
      */
     protected function modifyOrocrmMagentoCustomerTable(Schema $schema)
     {
-        $table = $schema->getTable('oro_magento_customer');
+        $table = $schema->getTable('orocrm_magento_customer');
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['data_channel_id'], 'IDX_2A61EE7DBDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
@@ -60,12 +60,12 @@ class OroMagentoBundle implements Migration
      */
     protected function modifyOrocrmMagentoCartTable(Schema $schema)
     {
-        $table = $schema->getTable('oro_magento_cart');
+        $table = $schema->getTable('orocrm_magento_cart');
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['data_channel_id'], 'IDX_96661A80BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],

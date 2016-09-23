@@ -51,7 +51,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
         $this->addOrocrmCampaignTeSummaryForeignKeys($schema);
         $this->addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport($schema);
 
-        $this->extension->addVisitEventAssociation($schema, 'oro_campaign');
+        $this->extension->addVisitEventAssociation($schema, 'orocrm_campaign');
     }
 
     /**
@@ -61,7 +61,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function createOrocrmCampaignTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign');
+        $table = $schema->createTable('orocrm_campaign');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -93,7 +93,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function createOrocrmCampaignEmailTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign_email');
+        $table = $schema->createTable('orocrm_campaign_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
         $table->addColumn('transport_settings_id', 'integer', ['notnull' => false]);
@@ -126,7 +126,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function createOrocrmEmailCampaignStatisticsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign_email_stats');
+        $table = $schema->createTable('orocrm_campaign_email_stats');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('email_campaign_id', 'integer', []);
         $table->addColumn('marketing_list_item_id', 'integer', []);
@@ -143,7 +143,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
         $table->addIndex(['owner_id'], 'idx_3ce99ef07e3c61f9', []);
         $table->addIndex(['organization_id'], 'idx_3ce99ef032c8a3de', []);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'oro_ec_litem_unq');
+        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'orocrm_ec_litem_unq');
     }
 
     /**
@@ -153,7 +153,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function createOrocrmCampaignTeSummaryTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign_te_summary');
+        $table = $schema->createTable('orocrm_campaign_te_summary');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('website_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -175,7 +175,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function createOrocrmCmpgnTransportStngsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_cmpgn_transport_stngs');
+        $table = $schema->createTable('orocrm_cmpgn_transport_stngs');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('type', 'string', ['length' => 50]);
         $table->setPrimaryKey(['id']);
@@ -188,7 +188,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function updateOrocrmCmpgnTransportStngsTableAddInternalEmailTransport(Schema $schema)
     {
-        $table = $schema->getTable('oro_cmpgn_transport_stngs');
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
         $table->addColumn('email_template_id', 'integer', ['notnull' => false]);
         $table->addIndex(['email_template_id'], 'idx_16e86bf2131a730f', []);
     }
@@ -200,7 +200,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function addOrocrmCampaignForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign');
+        $table = $schema->getTable('orocrm_campaign');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -222,21 +222,21 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function addOrocrmCampaignEmailForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign_email');
+        $table = $schema->getTable('orocrm_campaign_email');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_campaign'),
+            $schema->getTable('orocrm_campaign'),
             ['campaign_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_cmpgn_transport_stngs'),
+            $schema->getTable('orocrm_cmpgn_transport_stngs'),
             ['transport_settings_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list'),
+            $schema->getTable('orocrm_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
@@ -262,15 +262,15 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function addOrocrmEmailCampaignStatisticsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign_email_stats');
+        $table = $schema->getTable('orocrm_campaign_email_stats');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_campaign_email'),
+            $schema->getTable('orocrm_campaign_email'),
             ['email_campaign_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list_item'),
+            $schema->getTable('orocrm_marketing_list_item'),
             ['marketing_list_item_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -296,7 +296,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function addOrocrmCampaignTeSummaryForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign_te_summary');
+        $table = $schema->getTable('orocrm_campaign_te_summary');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_tracking_website'),
             ['website_id'],
@@ -312,7 +312,7 @@ class OroCampaignBundleInstaller implements Installation, VisitEventAssociationE
      */
     protected function addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport(Schema $schema)
     {
-        $table = $schema->getTable('oro_cmpgn_transport_stngs');
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email_template'),
             ['email_template_id'],

@@ -15,10 +15,10 @@ use Oro\Bundle\MagentoBundle\Model\ExtendWebsite;
  * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
- *  name="oro_magento_website",
+ *  name="orocrm_magento_website",
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})},
  *  indexes={
- *       @ORM\Index(name="oro_magento_website_name_idx",columns={"website_name"})
+ *       @ORM\Index(name="orocrm_magento_website_name_idx",columns={"website_name"})
  *  }
  * )
  * @Config(

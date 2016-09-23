@@ -13,7 +13,7 @@ class OroCrmMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $orderTable = $schema->getTable('oro_magento_order');
+        $orderTable = $schema->getTable('orocrm_magento_order');
         $orderTable->dropIndex('UNIQ_4D09F3051AD5CDBF');
         $orderTable->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF');
     }

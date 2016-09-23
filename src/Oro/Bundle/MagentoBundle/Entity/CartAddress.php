@@ -12,7 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
 
 /**
- * @ORM\Table("oro_magento_cart_address")
+ * @ORM\Table("orocrm_magento_cart_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={

@@ -23,7 +23,7 @@ class AddFields implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_magento_customer');
+        $table = $schema->getTable('orocrm_magento_customer');
         $table->addColumn('vat_temp', 'string', ['notnull' => false, 'length' => 255]);
     }
 }

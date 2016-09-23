@@ -38,7 +38,7 @@ class OroContactBundle implements Migration, AttachmentExtensionAwareInterface
     {
         $attachmentExtension->addImageRelation(
             $schema,
-            'oro_contact',
+            'orocrm_contact',
             'picture',
             [],
             2,

@@ -24,7 +24,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="oro_magento_cart",
+ * @ORM\Table(name="orocrm_magento_cart",
  *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"}),
  *      @ORM\Index(name="magecart_updated_idx",columns={"updatedAt"})

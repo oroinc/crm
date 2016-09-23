@@ -9,7 +9,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_magento_cart_status")
+ * @ORM\Table(name="orocrm_magento_cart_status")
  * @Config(
  *      defaultValues={
  *          "grouping"={

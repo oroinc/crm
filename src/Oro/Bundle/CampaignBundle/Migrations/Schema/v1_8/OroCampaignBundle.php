@@ -14,7 +14,7 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_campaign_email_stats');
+        $table = $schema->getTable('orocrm_campaign_email_stats');
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'idx_3ce99ef07e3c61f9', []);
         $table->addForeignKeyConstraint(

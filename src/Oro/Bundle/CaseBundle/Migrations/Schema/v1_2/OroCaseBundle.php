@@ -45,7 +45,7 @@ class OroCaseBundle implements Migration
      */
     public static function addOrganization(Schema $schema)
     {
-        $table = $schema->getTable('oro_case');
+        $table = $schema->getTable('orocrm_case');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_AB3BAC1E32C8A3DE', []);
         $table->addForeignKeyConstraint(
@@ -55,7 +55,7 @@ class OroCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('oro_case_comment');
+        $table = $schema->getTable('orocrm_case_comment');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_604C70FB32C8A3DE', []);
         $table->addForeignKeyConstraint(

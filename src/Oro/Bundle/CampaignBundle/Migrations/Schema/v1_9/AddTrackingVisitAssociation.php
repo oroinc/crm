@@ -27,6 +27,6 @@ class AddTrackingVisitAssociation implements Migration, VisitEventAssociationExt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addVisitEventAssociation($schema, 'oro_campaign');
+        $this->extension->addVisitEventAssociation($schema, 'orocrm_campaign');
     }
 }

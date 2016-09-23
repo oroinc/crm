@@ -13,7 +13,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('oro_crm_case');
+        $treeBuilder->root('oro_case');
 
         return $treeBuilder;
     }

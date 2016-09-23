@@ -13,7 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
 
 /**
- * @ORM\Table("oro_magento_order_address")
+ * @ORM\Table("orocrm_magento_order_address")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity
  * @Config(
@@ -42,7 +42,7 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
-     *     name="oro_magento_order_addr_type",
+     *     name="orocrm_magento_order_addr_type",
      *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

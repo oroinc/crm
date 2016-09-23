@@ -34,7 +34,7 @@ class OroMarketingListBundle implements Migration
      */
     protected function createOrocrmMarketingListTypeTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_marketing_list_type');
+        $table = $schema->createTable('orocrm_marketing_list_type');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->addUniqueIndex(['label'], 'uniq_143b81a8ea750e8');
@@ -48,14 +48,14 @@ class OroMarketingListBundle implements Migration
      */
     protected function createOrocrmMarketingListItemTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_marketing_list_item');
+        $table = $schema->createTable('orocrm_marketing_list_item');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
         $table->addColumn('contacted_times', 'integer', []);
         $table->addColumn('last_contacted_at', 'datetime', []);
         $table->addColumn('created_at', 'datetime', []);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_unq');
         $table->addIndex(['marketing_list_id'], 'idx_87fef39f96434d04', []);
         $table->setPrimaryKey(['id']);
     }
@@ -67,14 +67,14 @@ class OroMarketingListBundle implements Migration
      */
     protected function createOrocrmMlItemUnsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_ml_item_uns');
+        $table = $schema->createTable('orocrm_ml_item_uns');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', []);
         $table->addIndex(['marketing_list_id'], 'idx_ceb0306896434d04', []);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_uns_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_uns_unq');
     }
 
     /**
@@ -84,7 +84,7 @@ class OroMarketingListBundle implements Migration
      */
     protected function createOrocrmMarketingListTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_marketing_list');
+        $table = $schema->createTable('orocrm_marketing_list');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('segment_id', 'integer', ['notnull' => false]);
@@ -109,12 +109,12 @@ class OroMarketingListBundle implements Migration
      */
     protected function createOrocrmMlItemRmTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_ml_item_rm');
+        $table = $schema->createTable('orocrm_ml_item_rm');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', []);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_rm_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_rm_unq');
         $table->addIndex(['marketing_list_id'], 'idx_8f6405f96434d04', []);
         $table->setPrimaryKey(['id']);
     }
@@ -126,9 +126,9 @@ class OroMarketingListBundle implements Migration
      */
     protected function addOrocrmMarketingListItemForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_marketing_list_item');
+        $table = $schema->getTable('orocrm_marketing_list_item');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list'),
+            $schema->getTable('orocrm_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -142,9 +142,9 @@ class OroMarketingListBundle implements Migration
      */
     protected function addOrocrmMlItemUnsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_ml_item_uns');
+        $table = $schema->getTable('orocrm_ml_item_uns');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list'),
+            $schema->getTable('orocrm_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -158,7 +158,7 @@ class OroMarketingListBundle implements Migration
      */
     protected function addOrocrmMarketingListForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_marketing_list');
+        $table = $schema->getTable('orocrm_marketing_list');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['owner_id'],
@@ -172,7 +172,7 @@ class OroMarketingListBundle implements Migration
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list_type'),
+            $schema->getTable('orocrm_marketing_list_type'),
             ['type'],
             ['name'],
             ['onUpdate' => null, 'onDelete' => null]
@@ -186,9 +186,9 @@ class OroMarketingListBundle implements Migration
      */
     protected function addOrocrmMlItemRmForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_ml_item_rm');
+        $table = $schema->getTable('orocrm_ml_item_rm');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list'),
+            $schema->getTable('orocrm_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']

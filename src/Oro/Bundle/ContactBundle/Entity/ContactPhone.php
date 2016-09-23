@@ -11,7 +11,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
 
 /**
  * @ORM\Entity
- * @ORM\Table("oro_contact_phone", indexes={
+ * @ORM\Table("orocrm_contact_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
  *      @ORM\Index(name="phone_idx", columns={"phone"})
  * })

@@ -19,7 +19,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="oro_case"
+ *      name="orocrm_case"
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable

@@ -14,7 +14,7 @@ class OroSalesBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_lead');
+        $table = $schema->getTable('orocrm_sales_lead');
 
         $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);

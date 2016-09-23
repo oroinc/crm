@@ -33,7 +33,7 @@ class OroCampaignBundle implements Migration
      */
     protected function createOrocrmCampaignEmailTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign_email');
+        $table = $schema->createTable('orocrm_campaign_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
         $table->addColumn('transport_settings_id', 'integer', ['notnull' => false]);
@@ -64,7 +64,7 @@ class OroCampaignBundle implements Migration
      */
     protected function createOrocrmEmailCampaignStatisticsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_campaign_email_stats');
+        $table = $schema->createTable('orocrm_campaign_email_stats');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('email_campaign_id', 'integer', []);
         $table->addColumn('marketing_list_item_id', 'integer', []);
@@ -81,7 +81,7 @@ class OroCampaignBundle implements Migration
      */
     protected function createOrocrmCmpgnTransportStngsTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_cmpgn_transport_stngs');
+        $table = $schema->createTable('orocrm_cmpgn_transport_stngs');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('type', 'string', ['length' => 50]);
         $table->setPrimaryKey(['id']);
@@ -94,7 +94,7 @@ class OroCampaignBundle implements Migration
      */
     protected function updateOrocrmCmpgnTransportStngsTableAddInternalEmailTransport(Schema $schema)
     {
-        $table = $schema->getTable('oro_cmpgn_transport_stngs');
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
         $table->addColumn('email_template_id', 'integer', ['notnull' => false]);
         $table->addIndex(['email_template_id'], 'idx_16e86bf2131a730f', []);
     }
@@ -106,21 +106,21 @@ class OroCampaignBundle implements Migration
      */
     protected function addOrocrmCampaignEmailForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign_email');
+        $table = $schema->getTable('orocrm_campaign_email');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_campaign'),
+            $schema->getTable('orocrm_campaign'),
             ['campaign_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_cmpgn_transport_stngs'),
+            $schema->getTable('orocrm_cmpgn_transport_stngs'),
             ['transport_settings_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list'),
+            $schema->getTable('orocrm_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
@@ -140,15 +140,15 @@ class OroCampaignBundle implements Migration
      */
     protected function addOrocrmEmailCampaignStatisticsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_campaign_email_stats');
+        $table = $schema->getTable('orocrm_campaign_email_stats');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_campaign_email'),
+            $schema->getTable('orocrm_campaign_email'),
             ['email_campaign_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_marketing_list_item'),
+            $schema->getTable('orocrm_marketing_list_item'),
             ['marketing_list_item_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -162,7 +162,7 @@ class OroCampaignBundle implements Migration
      */
     protected function addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport(Schema $schema)
     {
-        $table = $schema->getTable('oro_cmpgn_transport_stngs');
+        $table = $schema->getTable('orocrm_cmpgn_transport_stngs');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email_template'),
             ['email_template_id'],

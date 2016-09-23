@@ -14,7 +14,7 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_campaign');
+        $table = $schema->getTable('orocrm_campaign');
         $table->dropIndex('IDX_55153CAD7E3C61F9');
         $table->addIndex(['owner_id'], 'cmpgn_owner_idx', []);
     }

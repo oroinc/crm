@@ -38,20 +38,20 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
     {
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'oro_account',
-            'oro_magento_customer',
+            'orocrm_account',
+            'orocrm_magento_customer',
             ['account']
         );
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'oro_account',
-            'oro_magento_order',
+            'orocrm_account',
+            'orocrm_magento_order',
             ['customer', 'account']
         );
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'oro_account',
-            'oro_magento_cart',
+            'orocrm_account',
+            'orocrm_magento_cart',
             ['customer', 'account']
         );
     }

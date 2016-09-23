@@ -206,7 +206,7 @@ class EmailCampaignSender
             return $senderEmail;
         }
 
-        return $this->configManager->get('oro_crm_campaign.campaign_sender_email');
+        return $this->configManager->get('oro_campaign.campaign_sender_email');
     }
 
     /**
@@ -218,7 +218,7 @@ class EmailCampaignSender
             return $senderName;
         }
 
-        return $this->configManager->get('oro_crm_campaign.campaign_sender_name');
+        return $this->configManager->get('oro_campaign.campaign_sender_name');
     }
 
     /**

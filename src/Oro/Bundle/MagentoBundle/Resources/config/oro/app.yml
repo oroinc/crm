@@ -1,4 +1,4 @@
-oro_crm_magento:
+oro_magento:
     account_discovery:
         fields:
             firstName: ~

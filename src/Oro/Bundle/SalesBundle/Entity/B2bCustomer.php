@@ -21,7 +21,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="oro_sales_b2bcustomer")
+ * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_sales_b2bcustomer_index",

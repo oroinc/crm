@@ -14,7 +14,7 @@ class UpdateLeadFirstLastName implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $leadTable = $schema->getTable('oro_sales_lead');
+        $leadTable = $schema->getTable('orocrm_sales_lead');
 
         $leadTable->getColumn('last_name')->setNotnull(false);
         $leadTable->getColumn('first_name')->setNotnull(false);

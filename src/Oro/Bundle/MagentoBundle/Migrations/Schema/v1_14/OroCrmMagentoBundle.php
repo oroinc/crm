@@ -40,7 +40,7 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_magento_customer');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
     }
 
     /**
@@ -55,7 +55,7 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
         $options = new OroOptions();
         $options->set('activity', 'immutable', true);
 
-        $schema->getTable('oro_magento_cart')->addOption(OroOptions::KEY, $options);
-        $schema->getTable('oro_magento_order')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_magento_cart')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_magento_order')->addOption(OroOptions::KEY, $options);
     }
 }

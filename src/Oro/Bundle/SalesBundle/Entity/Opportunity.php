@@ -18,7 +18,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
- *      name="oro_sales_opportunity",
+ *      name="orocrm_sales_opportunity",
  *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
  * )
  * @ORM\HasLifecycleCallbacks()
@@ -78,7 +78,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * The key in system config for probability - status map
      */
-    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
+    const PROBABILITIES_CONFIG_KEY = 'oro_sales.default_opportunity_probabilities';
 
     /**
      * @var int

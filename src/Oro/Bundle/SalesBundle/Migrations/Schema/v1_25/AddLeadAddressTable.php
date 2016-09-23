@@ -34,7 +34,7 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
      */
     public static function createLeadAddressTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_sales_lead_address');
+        $table = $schema->createTable('orocrm_sales_lead_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
@@ -60,7 +60,7 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
         $table->addIndex(['region_code'], 'IDX_LEAD_ADDRESS_REGION', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_sales_lead'),
+            $schema->getTable('orocrm_sales_lead'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -86,14 +86,14 @@ class AddLeadAddressTable implements Migration, OrderedMigrationInterface
      */
     protected function addMigrationQueries(QueryBag $queries)
     {
-        $sql = 'INSERT INTO oro_sales_lead_address(owner_id, region_code, country_code, is_primary, label, street,' .
+        $sql = 'INSERT INTO orocrm_sales_lead_address(owner_id, region_code, country_code, is_primary, label, street,' .
                ' street2, city, postal_code, organization, region_text, name_prefix, first_name, middle_name,' .
                ' last_name, name_suffix, created, updated)' .
                'SELECT lead.id, addr.region_code, addr.country_code,' .
                ' \'1\', addr.label, addr.street, addr.street2, addr.city, addr.postal_code, addr.organization,' .
                ' addr.region_text, addr.name_prefix, addr.first_name, addr.middle_name, addr.last_name,' .
                ' addr.name_suffix, addr.created, addr.updated FROM oro_address as addr' .
-               ' INNER JOIN oro_sales_lead as lead on lead.address_id = addr.id';
+               ' INNER JOIN orocrm_sales_lead as lead on lead.address_id = addr.id';
 
         $queries->addPostQuery(new SqlMigrationQuery($sql));
     }

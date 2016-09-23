@@ -15,7 +15,7 @@ class OroSalesBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
         $table->getColumn('probability')->setType(Type::getType('percent'));
         $table->getColumn('budget_amount')->setType(Type::getType('money'));
         $table->getColumn('close_revenue')->setType(Type::getType('money'));

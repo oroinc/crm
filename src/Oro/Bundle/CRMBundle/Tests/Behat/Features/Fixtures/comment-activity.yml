@@ -65,7 +65,7 @@ Oro\Bundle\CallBundle\Entity\Call:
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
     organization: @organization
 
-Oro\Bundle\TaskBundle\Entity\Task:
+OroCRM\Bundle\TaskBundle\Entity\Task:
   task:
     subject: 'Contact with Charlie'
     addActivityTarget: [@contactCharlie]

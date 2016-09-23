@@ -63,7 +63,7 @@ class AddOpportunityStatus implements
     {
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-        $extendOptionsManager->removeColumnOptions('oro_sales_opportunity', 'status');
+        $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
 
         $immutableCodes = ['in_progress', 'won', 'lost'];
 
@@ -91,7 +91,7 @@ class AddOpportunityStatus implements
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
-            'oro_sales_opportunity',
+            'orocrm_sales_opportunity',
             'status',
             Opportunity::INTERNAL_STATUS_CODE,
             false,
