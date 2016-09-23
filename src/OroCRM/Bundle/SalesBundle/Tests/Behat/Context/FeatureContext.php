@@ -28,6 +28,18 @@ class FeatureContext extends OroFeatureContext implements
     use FixtureLoaderDictionary, ElementFactoryDictionary, KernelDictionary;
 
     /**
+     * @Given /^(?:|I )open (Opportunity) creation page$/
+     */
+    public function openOpportunityCreationPage()
+    {
+        /** @var MainMenu $menu */
+        $menu = $this->createElement('MainMenu');
+        $menu->openAndClick('Sales/ Opportunities');
+        $this->waitForAjax();
+        $this->getPage()->clickLink('Create Opportunity');
+    }
+
+    /**
      * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
@@ -127,22 +139,14 @@ class FeatureContext extends OroFeatureContext implements
      */
     public function accountsInTheControlAreFilteredBySelected($username)
     {
-        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
-        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
-            ->findOneBy(['username' => $username]);
-        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
-        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
-            ->getRepository(B2bCustomer::class);
-
         /** @var Select2Entity $channelField */
         $channelField = $this->createElement('OroForm')->findField('Channel');
         $channels = $channelField->getSuggestedValues();
 
         foreach ($channels as $channelName) {
             $channelField->setValue($channelName);
-            $channel = $channelRepository->findOneBy(['name' => $channelName]);
 
-            $expectedCustomers = $this->getCustomers($channel, $customerRepository, $user);
+            $expectedCustomers = $this->getCustomers($channelName, $username);
 
             /** @var Select2Entity $accountField */
             $accountField = $this->createElement('OroForm')->findField('Account');
@@ -199,17 +203,7 @@ class FeatureContext extends OroFeatureContext implements
     {
         /** @var Select2Entity $accountField */
         $accountField = $this->createElement('OroForm')->findField('Account');
-        $accountField->open();
-        /** @var NodeElement[] $inputs */
-        $inputs = array_filter(
-            $this->getPage()->findAll('css', '.select2-search input'),
-            function (NodeElement $element) {
-                return $element->isVisible();
-            }
-        );
-
-        self::assertCount(1, $inputs);
-        array_shift($inputs)->setValue($name);
+        $accountField->fillSearchField($name);
         $results = $accountField->getSuggestions();
         foreach ($results as $result) {
             if (false !== stripos($result->getText(), $name)) {
@@ -259,14 +253,61 @@ class FeatureContext extends OroFeatureContext implements
         self::assertTrue($row->isValid(), "Can't find '$content' in grid");
     }
 
+    /**
+     * @When type :text into Account field
+     */
+    public function iTypeIntoAccountField($text)
+    {
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $accountField->fillSearchField($text);
+    }
 
     /**
-     * @param Channel $channel
-     * @param EntityRepository $customerRepository
+     * @Then I should see only existing accounts
+     */
+    public function iShouldSeeOnlyExistingAccounts()
+    {
+        $existingCustomers = $this->getCustomers('First Sales Channel', 'samantha');
+
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $actualCustomers = $accountField->getSuggestedValues();
+
+        self::assertEquals(
+            sort($existingCustomers),
+            sort($actualCustomers)
+        );
+    }
+
+    /**
+     * @Then should not see :text account
+     */
+    public function shouldNotSeeAccount($text)
+    {
+        /** @var Select2Entity $accountField */
+        $accountField = $this->createElement('OroForm')->findField('Account');
+        $actualCustomers = $accountField->getSuggestedValues();
+
+        self::assertNotContains($text, $actualCustomers);
+    }
+
+    /**
+     * @param string $channelName
+     * @param string $username
      * @return array
      */
-    private function getCustomers(Channel $channel, EntityRepository $customerRepository, User $user)
+    private function getCustomers($channelName, $username)
     {
+        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
+        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
+            ->getRepository(B2bCustomer::class);
+        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
+
+        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
+            ->findOneBy(['username' => $username]);
+        $channel = $channelRepository->findOneBy(['name' => $channelName]);
+
         $customers = [];
 
         /** @var B2bCustomer $customer */
