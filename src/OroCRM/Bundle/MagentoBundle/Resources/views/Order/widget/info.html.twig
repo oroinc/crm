@@ -66,9 +66,11 @@
 
             {% if entity.addresses is not empty %}
                 {% for orderAddress in entity.addresses %}
-                    {% set title = orderAddress.types.first and orderAddress.types.first.name == 'billing'
-                        ? 'orocrm.magento.cart.billing_address.label'|trans
-                        : 'orocrm.magento.cart.shipping_address.label'|trans %}
+                    {% if orderAddress.types is not empty and orderAddress.types.first is not empty and orderAddress.types.first.name == 'billing' %}
+                        {% set title = 'orocrm.magento.cart.billing_address.label'|trans %}
+                    {% else %}
+                        {% set title = 'orocrm.magento.cart.shipping_address.label'|trans %}
+                    {% endif %}
                     {{ ui.renderHtmlProperty(title, address.renderAddress(orderAddress)) }}
                 {% endfor %}
             {% endif %}
