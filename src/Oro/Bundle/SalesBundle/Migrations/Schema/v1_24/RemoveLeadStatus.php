@@ -28,8 +28,8 @@ class RemoveLeadStatus implements Migration, OrderedMigrationInterface
 
         $leadForeignKeyList = $table->getForeignKeys();
         foreach ($leadForeignKeyList as $foreignKey) {
-            $foreingKeyColumns = $foreignKey->getUnquotedLocalColumns();
-            if (in_array($statusColumnName, $foreingKeyColumns, true)) {
+            $foreignKeyColumns = $foreignKey->getUnquotedLocalColumns();
+            if (in_array($statusColumnName, $foreignKeyColumns, true)) {
                 $table->removeForeignKey($foreignKey->getName());
             }
         }

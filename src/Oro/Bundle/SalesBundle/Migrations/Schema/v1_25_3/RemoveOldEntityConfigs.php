@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25_3;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_3;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -17,7 +17,7 @@ class RemoveOldEntityConfigs implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $class = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+        $class = 'Oro\Bundle\SalesBundle\Entity\Lead';
         $fields = ['email', 'phoneNumber'];
 
         $queries->addPostQuery(

@@ -1,3 +1,4 @@
-css:
-    oroanalytics:
-        - bundles/oroanalytics/css/styles.css
+assets:
+    css:
+        oroanalytics:
+            - bundles/oroanalytics/css/styles.css

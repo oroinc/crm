@@ -1,3 +1,4 @@
-css:
-    'orochannel':
-      - 'bundles/orochannel/css/style.css'
+assets:
+    css:
+        'orochannel':
+          - 'bundles/orochannel/css/style.css'

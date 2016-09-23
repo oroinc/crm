@@ -1,3 +1,4 @@
-css:
-    'orocase':
-      - 'bundles/orocase/css/less/comment.less'
+assets:
+    css:
+        'orocase':
+          - 'bundles/orocase/css/less/comment.less'
