@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Form\Type;
+namespace Oro\Bundle\AnalyticsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RFMCategorySettingsType extends AbstractType
 {
-    const NAME = 'orocrm_analytics_rfm_category_settings';
+    const NAME = 'oro_analytics_rfm_category_settings';
     const TYPE_OPTION = 'rfm_type';
 
     /**

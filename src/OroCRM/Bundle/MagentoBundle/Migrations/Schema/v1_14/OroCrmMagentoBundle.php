@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_14;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
@@ -41,7 +40,7 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_magento_customer');
     }
 
     /**
@@ -56,7 +55,7 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
         $options = new OroOptions();
         $options->set('activity', 'immutable', true);
 
-        $schema->getTable('orocrm_magento_cart')->addOption(OroOptions::KEY, $options);
-        $schema->getTable('orocrm_magento_order')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('oro_magento_cart')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('oro_magento_order')->addOption(OroOptions::KEY, $options);
     }
 }

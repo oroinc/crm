@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Store;
 
 /**
  * @dbIsolation
@@ -16,10 +16,10 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
     {
         parent::setUp();
 
-        $this->getContainer()->get('orocrm_magento.importexport.writer.newsletter_subscriber')
+        $this->getContainer()->get('oro_magento.importexport.writer.newsletter_subscriber')
             ->setTransport($this->transport);
 
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
     }
 
     public function testUpdateExisting()
@@ -52,7 +52,7 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
                 'entity' => $newsletterSubscriber,
                 'writer_skip_clear' => true,
                 'statusIdentifier' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -60,7 +60,7 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
         $this->assertTrue($jobResult->isSuccessful());
 
         $newsletterSubscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
+            ->getRepository('OroMagentoBundle:NewsletterSubscriber')
             ->findOneBy(['originId' => $newsletterSubscriber->getOriginId()]);
         $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
 
@@ -106,7 +106,7 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
                 'entity' => $newsletterSubscriber,
                 'writer_skip_clear' => true,
                 'statusIdentifier' => NewsletterSubscriber::STATUS_SUBSCRIBED,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -114,7 +114,7 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
         $this->assertTrue($jobResult->isSuccessful());
 
         $newsletterSubscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
+            ->getRepository('OroMagentoBundle:NewsletterSubscriber')
             ->findOneBy(['originId' => $originId]);
         $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -13,8 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class LoadCustomerData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -38,7 +37,7 @@ class LoadCustomerData extends AbstractFixture implements ContainerAwareInterfac
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+            'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
         ];
     }
 

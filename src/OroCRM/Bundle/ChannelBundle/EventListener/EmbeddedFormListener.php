@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
-
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 class EmbeddedFormListener
 {
@@ -39,7 +38,7 @@ class EmbeddedFormListener
             $env              = $event->getTwigEnvironment();
             $data             = $event->getFormData();
             $form             = $event->getForm();
-            $dataChannelField = $env->render('OroCRMChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
+            $dataChannelField = $env->render('OroChannelBundle:Form:dataChannelField.html.twig', ['form' => $form]);
 
             /**
              * Setting dataChannel field as first field in first data block

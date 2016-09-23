@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Component\ConfigExpression\ContextAccessor;
-
-use OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
+use Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +14,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stateProvider   = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+        $stateProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();
         $this->condition = new ChannelEntityAvailability($stateProvider);
         $this->condition->setContextAccessor(new ContextAccessor());
@@ -29,14 +28,14 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluate(array $options, $expectedResult)
     {
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $channel
             ->expects($this->once())
             ->method('getEntities')
             ->willReturn(
                 [
-                    'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                    'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'Oro\Bundle\SalesBundle\Entity\Opportunity'
                 ]
             );
 
@@ -54,8 +53,8 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                 'options'        => [
                     new PropertyPath('[channel]'),
                     [
-                        'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                        'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                        'Oro\Bundle\SalesBundle\Entity\Lead',
+                        'Oro\Bundle\SalesBundle\Entity\Opportunity'
                     ]
                 ],
                 'expectedResult' => true
@@ -64,8 +63,8 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                 'options'        => [
                     new PropertyPath('[channel]'),
                     [
-                        'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                        'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel'
+                        'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                        'Oro\Bundle\SalesBundle\Entity\SalesFunnel'
                     ]
                 ],
                 'expectedResult' => false

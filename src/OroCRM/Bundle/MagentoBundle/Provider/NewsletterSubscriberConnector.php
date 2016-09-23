@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 class NewsletterSubscriberConnector extends AbstractMagentoConnector implements ExtensionVersionAwareInterface
 {
@@ -23,7 +23,7 @@ class NewsletterSubscriberConnector extends AbstractMagentoConnector implements 
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.newsletter_subscriber.label';
+        return 'oro.magento.connector.newsletter_subscriber.label';
     }
 
     /**

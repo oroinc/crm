@@ -16,15 +16,15 @@ workflows:
             proposed_solution:
                 property_path: opportunity.proposedSolution
             close_reason_name:
-                label: orocrm.sales.opportunity.close_reason.label
+                label: oro.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 property_path: opportunity.closeReason
             close_revenue:
                 property_path: opportunity.closeRevenue
             close_date:
-                label: orocrm.sales.opportunity.close_date.label
+                label: oro.sales.opportunity.close_date.label
                 property_path: opportunity.closeDate
             status:
-                label: orocrm.sales.opportunity.status.label
+                label: oro.sales.opportunity.status.label
                 property_path: opportunity.status

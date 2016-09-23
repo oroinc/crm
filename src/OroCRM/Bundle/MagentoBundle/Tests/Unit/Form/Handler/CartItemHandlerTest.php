@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\CartItemHandler;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Form\Handler\CartItemHandler;
 
 class CartItemHandlerTest extends AbstractHandlerTest
 {

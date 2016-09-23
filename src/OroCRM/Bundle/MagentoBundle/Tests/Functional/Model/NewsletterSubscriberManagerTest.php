@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Model;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Model;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
  * @dbIsolation
@@ -16,7 +15,7 @@ class NewsletterSubscriberManagerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
     }
 
     public function testCreateFromCustomer()
@@ -29,7 +28,7 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         $customer->setChannel($integration);
         $this->assertEmpty($customer->getNewsletterSubscribers());
 
-        $newsletterSubscribers = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->getContainer()->get('oro_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
         $this->assertNotEmpty($newsletterSubscribers);
@@ -51,7 +50,7 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         $customer = $this->getReference('customer');
         $this->assertNotEmpty($customer->getNewsletterSubscribers());
 
-        $newsletterSubscribers = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->getContainer()->get('oro_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
         $this->assertCount(2, $newsletterSubscribers);

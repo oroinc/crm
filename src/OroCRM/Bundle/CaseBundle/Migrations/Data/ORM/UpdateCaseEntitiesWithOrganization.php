@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,7 +22,7 @@ class UpdateCaseEntitiesWithOrganization extends UpdateWithOrganization implemen
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMCaseBundle:CaseEntity');
-        $this->update($manager, 'OroCRMCaseBundle:CaseComment');
+        $this->update($manager, 'OroCaseBundle:CaseEntity');
+        $this->update($manager, 'OroCaseBundle:CaseComment');
     }
 }

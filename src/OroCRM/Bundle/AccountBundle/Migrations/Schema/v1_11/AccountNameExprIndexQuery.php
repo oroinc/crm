@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
 
@@ -37,7 +37,7 @@ class AccountNameExprIndexQuery extends ParametrizedMigrationQuery
     {
         $platform = $this->connection->getDatabasePlatform();
         if ($platform instanceof PostgreSQL92Platform) {
-            $createIndex = 'CREATE INDEX account_name_expr_idx ON orocrm_account (lower(name))';
+            $createIndex = 'CREATE INDEX account_name_expr_idx ON oro_account (lower(name))';
 
             $this->logQuery($logger, $createIndex);
             if (!$dryRun) {

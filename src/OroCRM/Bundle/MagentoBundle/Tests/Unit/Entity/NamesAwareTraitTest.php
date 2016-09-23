@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\NamesAwareEntity;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\NamesAwareEntity;
 
 class NamesAwareTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class NamesAwareTraitTest extends \PHPUnit_Framework_TestCase
         $address->expects($this->any())->method('getFirstName')->will($this->returnValue($testAddressFirstName));
         $address->expects($this->any())->method('getLastName')->will($this->returnValue($testAddressLastName));
 
-        $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $customer = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
         $customer->expects($this->any())->method('getFirstName')->will($this->returnValue($testCustomerFirstName));
         $customer->expects($this->any())->method('getLastName')->will($this->returnValue($testCustomerLastName));
 

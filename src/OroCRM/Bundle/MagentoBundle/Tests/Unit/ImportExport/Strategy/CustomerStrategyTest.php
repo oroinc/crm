@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy;
 
 class CustomerStrategyTest extends AbstractStrategyTest
 {
@@ -43,7 +42,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
             ->disableOriginalConstructor()
             ->getMock()
         );
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         $execution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ExecutionContext')->getMock();
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
@@ -76,7 +75,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
                 $this->returnValueMap(
                     [
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'Oro\Bundle\MagentoBundle\Entity\Customer',
                             [
                                 'email' => $customerEmail,
                                 'channel' => $channel,
@@ -201,7 +200,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
                 $this->returnValueMap(
                     [
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                            'Oro\Bundle\MagentoBundle\Entity\Website',
                             [
                                 'originId' => 1,
                                 'channel' => $channel
@@ -209,7 +208,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
                             $website
                         ],
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'Oro\Bundle\MagentoBundle\Entity\Customer',
                             [
                                 'email' => $email,
                                 'channel' => $channel,

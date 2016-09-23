@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
 
 class CustomerHandler extends UpdateHandler
 {

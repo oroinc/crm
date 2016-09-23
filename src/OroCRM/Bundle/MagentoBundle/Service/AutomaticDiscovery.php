@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Service;
+namespace Oro\Bundle\MagentoBundle\Service;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Util\ClassUtils;
@@ -11,8 +11,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
+use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 
 class AutomaticDiscovery
 {

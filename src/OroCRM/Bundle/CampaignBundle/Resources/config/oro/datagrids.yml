@@ -1,7 +1,7 @@
 datagrids:
     orocrm-campaign-grid:
-        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
-        acl_resource: orocrm_campaign_view
+        extended_entity_name: Oro\Bundle\CampaignBundle\Entity\Campaign
+        acl_resource: oro_campaign_view
         source:
             type: orm
             query:
@@ -13,20 +13,20 @@ datagrids:
                     - c.endDate
                     - c.budget
                 from:
-                    - { table: OroCRM\Bundle\CampaignBundle\Entity\Campaign, alias: c }
+                    - { table: Oro\Bundle\CampaignBundle\Entity\Campaign, alias: c }
         columns:
             name:
-                label: orocrm.campaign.name.label
+                label: oro.campaign.name.label
             code:
-                label: orocrm.campaign.code.label
+                label: oro.campaign.code.label
             startDate:
-                label: orocrm.campaign.start_date.label
+                label: oro.campaign.start_date.label
                 frontend_type: date
             endDate:
-                label: orocrm.campaign.end_date.label
+                label: oro.campaign.end_date.label
                 frontend_type: date
             budget:
-                label: orocrm.campaign.budget.label
+                label: oro.campaign.budget.label
                 frontend_type:   currency
         filters:
             columns:
@@ -58,11 +58,11 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_campaign_view
+                route: oro_campaign_view
                 params: [ id ]
             update_link:
                 type: url
-                route: orocrm_campaign_update
+                route: oro_campaign_update
                 params:
                     - id
             delete_link:
@@ -76,17 +76,17 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_campaign_view
+                acl_resource: oro_campaign_view
                 rowAction:    true
             update:
                 type:          navigate
-                acl_resource:  orocrm_campaign_update
+                acl_resource:  oro_campaign_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_campaign_delete
+                acl_resource:  oro_campaign_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -94,7 +94,7 @@ datagrids:
             entity_pagination: true
 
     campaign-tracking-total-report-grid-basic:
-        acl_resource: orocrm_campaign_view
+        acl_resource: oro_campaign_view
         source:
             type: orm
             query:
@@ -108,7 +108,7 @@ datagrids:
             name:
                 label: oro.tracking.trackingevent.name.label
             visitsCount:
-                label: orocrm.campaign.trackingevent.report.visits_count.label
+                label: oro.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
         sorters:
             columns:
@@ -150,10 +150,10 @@ datagrids:
                     - e.name
                     - SUM(e.visitCount) as visitsCount
                 from:
-                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
+                    - { table: %oro_campaign.tracking_event_summary.class%, alias: e }
 
     campaign-tracking-detailed-report-hour-grid:
-        acl_resource: orocrm_campaign_view
+        acl_resource: oro_campaign_view
         source:
             type: orm
             query:
@@ -173,14 +173,14 @@ datagrids:
             name:
                 label: oro.tracking.trackingevent.name.label
             visitsCount:
-                label: orocrm.campaign.trackingevent.report.visits_count.label
+                label: oro.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: orocrm.campaign.trackingevent.report.date.label
+                label: oro.campaign.trackingevent.report.date.label
                 frontend_type: datetime
 
     campaign-tracking-detailed-report-day-grid-basic:
-        acl_resource: orocrm_campaign_view
+        acl_resource: oro_campaign_view
         source:
             type: orm
             query:
@@ -194,10 +194,10 @@ datagrids:
             name:
                 label: oro.tracking.trackingevent.name.label
             visitsCount:
-                label: orocrm.campaign.trackingevent.report.visits_count.label
+                label: oro.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: orocrm.campaign.trackingevent.report.date.label
+                label: oro.campaign.trackingevent.report.date.label
                 frontend_type: date
 
     campaign-tracking-detailed-report-day-grid:
@@ -220,10 +220,10 @@ datagrids:
                     - SUM(e.visitCount) as visitsCount
                     - DATE(e.loggedAt) as logTime
                 from:
-                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
+                    - { table: %oro_campaign.tracking_event_summary.class%, alias: e }
 
     campaign-tracking-detailed-report-month-grid-basic:
-        acl_resource: orocrm_campaign_view
+        acl_resource: oro_campaign_view
         source:
             type: orm
             query:
@@ -237,10 +237,10 @@ datagrids:
             name:
                 label: oro.tracking.trackingevent.name.label
             visitsCount:
-                label: orocrm.campaign.trackingevent.report.visits_count.label
+                label: oro.campaign.trackingevent.report.visits_count.label
                 frontend_type: integer
             logTime:
-                label: orocrm.campaign.trackingevent.report.date.label
+                label: oro.campaign.trackingevent.report.date.label
                 frontend_type: date
 
     campaign-tracking-detailed-report-month-grid:
@@ -267,11 +267,11 @@ datagrids:
                     - MONTH(e.loggedAt) as monthLoggedAt
                     - DATE(CONCAT(YEAR(e.loggedAt), '-', MONTH(e.loggedAt), '-01')) as logTime
                 from:
-                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
+                    - { table: %oro_campaign.tracking_event_summary.class%, alias: e }
 
     orocrm-email-campaign-grid:
-        extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
-        acl_resource: orocrm_email_campaign_view
+        extended_entity_name: Oro\Bundle\CampaignBundle\Entity\EmailCampaign
+        acl_resource: oro_email_campaign_view
         source:
             type: orm
             query:
@@ -289,41 +289,41 @@ datagrids:
                     - c.name as campaignName
                     - ml.name as marktingListName
                 from:
-                    - { table: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign, alias: ec }
+                    - { table: Oro\Bundle\CampaignBundle\Entity\EmailCampaign, alias: ec }
                 join:
                     left:
                         - { join: ec.campaign, alias: c }
                         - { join: ec.marketingList, alias: ml }
         columns:
             name:
-                label: orocrm.campaign.emailcampaign.name.label
+                label: oro.campaign.emailcampaign.name.label
             senderEmail:
-                label: orocrm.campaign.emailcampaign.sender_email.label
+                label: oro.campaign.emailcampaign.sender_email.label
             senderName:
-                label: orocrm.campaign.emailcampaign.sender_name.label
+                label: oro.campaign.emailcampaign.sender_name.label
             campaignName:
-                label: orocrm.campaign.emailcampaign.campaign.label
+                label: oro.campaign.emailcampaign.campaign.label
             marktingListName:
-                label: orocrm.campaign.emailcampaign.marketing_list.label
+                label: oro.campaign.emailcampaign.marketing_list.label
             schedule:
-                label: orocrm.campaign.emailcampaign.schedule.label
+                label: oro.campaign.emailcampaign.schedule.label
                 type:          twig
                 frontend_type: html
-                template:      OroCRMCampaignBundle:EmailCampaign:Property/schedule.html.twig
+                template:      OroCampaignBundle:EmailCampaign:Property/schedule.html.twig
             scheduledFor:
-                label: orocrm.campaign.emailcampaign.scheduled_for.label
+                label: oro.campaign.emailcampaign.scheduled_for.label
                 frontend_type: datetime
             sent:
-                label:         orocrm.campaign.emailcampaign.sent.label
+                label:         oro.campaign.emailcampaign.sent.label
                 frontend_type: boolean
             sentAt:
-                label:         orocrm.campaign.emailcampaign.sent_at.label
+                label:         oro.campaign.emailcampaign.sent_at.label
                 frontend_type: datetime
             createdAt:
-                label: orocrm.campaign.emailcampaign.created_at.label
+                label: oro.campaign.emailcampaign.created_at.label
                 frontend_type: datetime
             updatedAt:
-                label: orocrm.campaign.emailcampaign.updated_at.label
+                label: oro.campaign.emailcampaign.updated_at.label
                 frontend_type: datetime
         filters:
             columns:
@@ -384,11 +384,11 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_email_campaign_view
+                route: oro_email_campaign_view
                 params: [ id ]
             update_link:
                 type: url
-                route: orocrm_email_campaign_update
+                route: oro_email_campaign_update
                 params: [ id ]
             delete_link:
                 type: url
@@ -400,17 +400,17 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_email_campaign_view
+                acl_resource: oro_email_campaign_view
                 rowAction:    true
             update:
                 type:          navigate
-                acl_resource:  orocrm_email_campaign_update
+                acl_resource:  oro_email_campaign_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_email_campaign_delete
+                acl_resource:  oro_email_campaign_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -423,12 +423,12 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
                             condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
                             condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
@@ -449,12 +449,12 @@ datagrids:
                 join:
                     inner:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
                         -
-                            join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
+                            join: 'Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
                             alias: 'cs'
                             conditionType: 'WITH'
                             condition: 'cs.marketingListItem = mli.id AND cs.emailCampaign = :emailCampaign'
@@ -462,30 +462,30 @@ datagrids:
                 - emailCampaign
         columns:
             openCount:
-                label: orocrm.campaign.emailcampaign.stats.open.label
+                label: oro.campaign.emailcampaign.stats.open.label
                 type: twig
                 frontend_type: html
-                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+                template: OroCampaignBundle:EmailCampaign:Property/stats.html.twig
             clickCount:
-                label: orocrm.campaign.emailcampaign.stats.click.label
+                label: oro.campaign.emailcampaign.stats.click.label
                 type: twig
                 frontend_type: html
-                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+                template: OroCampaignBundle:EmailCampaign:Property/stats.html.twig
             bounceCount:
-                label: orocrm.campaign.emailcampaign.stats.bounce.label
+                label: oro.campaign.emailcampaign.stats.bounce.label
                 type: twig
                 frontend_type: html
-                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+                template: OroCampaignBundle:EmailCampaign:Property/stats.html.twig
             abuseCount:
-                label: orocrm.campaign.emailcampaign.stats.abuse.label
+                label: oro.campaign.emailcampaign.stats.abuse.label
                 type: twig
                 frontend_type: html
-                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+                template: OroCampaignBundle:EmailCampaign:Property/stats.html.twig
             unsubscribeCount:
-                label: orocrm.campaign.emailcampaign.stats.unsubscribe.label
+                label: oro.campaign.emailcampaign.stats.unsubscribe.label
                 type: twig
                 frontend_type: html
-                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+                template: OroCampaignBundle:EmailCampaign:Property/stats.html.twig
         filters:
             columns:
                 openCount:

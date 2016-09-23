@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Command;
+namespace Oro\Bundle\SalesBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
+use Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
@@ -39,7 +39,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
     protected function calculateCustomerLifetime(EntityManager $em, $customer)
     {
         /** @var B2bCustomerRepository $customerRepo */
-        $customerRepo  = $em->getRepository('OroCRMSalesBundle:B2bCustomer');
+        $customerRepo  = $em->getRepository('OroSalesBundle:B2bCustomer');
         $lifetimeValue = $customerRepo->calculateLifetimeValue($customer);
 
         return $lifetimeValue;

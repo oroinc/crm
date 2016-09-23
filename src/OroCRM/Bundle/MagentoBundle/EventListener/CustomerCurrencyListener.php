@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerCurrencyListener implements ContainerAwareInterface
 {

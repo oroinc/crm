@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class ContactRequest
- * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages
  * {@inheritdoc}
  */
 class ContactRequest extends AbstractPageEntity
@@ -17,7 +17,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setFirstName($name)
     {
-        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_firstName']");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_magento_contactus_contact_request_firstName']");
         $field->clear();
         $field->value($name);
 
@@ -30,7 +30,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setLastName($name)
     {
-        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_lastName']");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_magento_contactus_contact_request_lastName']");
         $field->clear();
         $field->value($name);
 
@@ -43,7 +43,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setEmail($email)
     {
-        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_emailAddress']");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_magento_contactus_contact_request_emailAddress']");
         $field->clear();
         $field->value($email);
 
@@ -56,7 +56,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setComment($comment)
     {
-        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_comment']");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_magento_contactus_contact_request_comment']");
         $field->clear();
         $field->value($comment);
 
@@ -69,7 +69,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setPhone($phone)
     {
-        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_phone']");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_magento_contactus_contact_request_phone']");
         $field->clear();
         $field->value($phone);
 

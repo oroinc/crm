@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Validator;
+namespace Oro\Bundle\ChannelBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
 {
@@ -27,7 +27,7 @@ class ChannelCustomerIdentityConstraintValidator extends ConstraintValidator
      */
     protected function validateCustomerIdentity(Channel $channel)
     {
-        $errorLabel = 'orocrm.channel.form.customer_identity_selected_not_correctly.label';
+        $errorLabel = 'oro.channel.form.customer_identity_selected_not_correctly.label';
         $fieldName  = 'customerIdentity';
         $entities   = $channel->getEntities();
 

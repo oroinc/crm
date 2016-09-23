@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Type;
+namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -20,14 +20,14 @@ class CaseEntityType extends AbstractType
                 'subject',
                 'text',
                 [
-                    'label'        => 'orocrm.case.caseentity.subject.label'
+                    'label'        => 'oro.case.caseentity.subject.label'
                 ]
             )
             ->add(
                 'description',
                 'oro_resizeable_rich_text',
                 [
-                    'label'        => 'orocrm.case.caseentity.description.label',
+                    'label'        => 'oro.case.caseentity.description.label',
                     'required'     => false
                 ]
             )
@@ -35,7 +35,7 @@ class CaseEntityType extends AbstractType
                 'resolution',
                 'oro_resizeable_rich_text',
                 [
-                    'label'        => 'orocrm.case.caseentity.resolution.label',
+                    'label'        => 'oro.case.caseentity.resolution.label',
                     'required'     => false
                 ]
             )
@@ -43,16 +43,16 @@ class CaseEntityType extends AbstractType
                 'source',
                 'entity',
                 [
-                    'label'        => 'orocrm.case.caseentity.source.label',
-                    'class'        => 'OroCRMCaseBundle:CaseSource',
+                    'label'        => 'oro.case.caseentity.source.label',
+                    'class'        => 'OroCaseBundle:CaseSource',
                 ]
             )
             ->add(
                 'status',
                 'entity',
                 [
-                    'label'         => 'orocrm.case.caseentity.status.label',
-                    'class'         => 'OroCRMCaseBundle:CaseStatus',
+                    'label'         => 'oro.case.caseentity.status.label',
+                    'class'         => 'OroCaseBundle:CaseStatus',
                     'query_builder' => function (EntityRepository $entityRepository) {
                         return $entityRepository->createQueryBuilder('status')
                             ->orderBy('status.order', 'ASC');
@@ -63,8 +63,8 @@ class CaseEntityType extends AbstractType
                 'priority',
                 'entity',
                 [
-                    'label'         => 'orocrm.case.caseentity.priority.label',
-                    'class'         => 'OroCRMCaseBundle:CasePriority',
+                    'label'         => 'oro.case.caseentity.priority.label',
+                    'class'         => 'OroCaseBundle:CasePriority',
                     'query_builder' => function (EntityRepository $entityRepository) {
                         return $entityRepository->createQueryBuilder('priority')
                             ->orderBy('priority.order', 'ASC');
@@ -73,18 +73,18 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'relatedContact',
-                'orocrm_contact_select',
+                'oro_contact_select',
                 [
                     'required'      => false,
-                    'label'         => 'orocrm.case.caseentity.related_contact.label',
+                    'label'         => 'oro.case.caseentity.related_contact.label',
                 ]
             )
             ->add(
                 'relatedAccount',
-                'orocrm_account_select',
+                'oro_account_select',
                 [
                     'required'      => false,
-                    'label'         => 'orocrm.case.caseentity.related_account.label',
+                    'label'         => 'oro.case.caseentity.related_account.label',
                 ]
             )
             ->add(
@@ -92,7 +92,7 @@ class CaseEntityType extends AbstractType
                 'oro_user_organization_acl_select',
                 [
                     'required'      => false,
-                    'label'         => 'orocrm.case.caseentity.assigned_to.label',
+                    'label'         => 'oro.case.caseentity.assigned_to.label',
                 ]
             );
     }
@@ -104,8 +104,8 @@ class CaseEntityType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseEntity',
-                'intention'          => 'orocrm_case_entity',
+                'data_class'         => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseEntity',
+                'intention'          => 'oro_case_entity',
                 'cascade_validation' => true
             ]
         );
@@ -124,6 +124,6 @@ class CaseEntityType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_case_entity';
+        return 'oro_case_entity';
     }
 }

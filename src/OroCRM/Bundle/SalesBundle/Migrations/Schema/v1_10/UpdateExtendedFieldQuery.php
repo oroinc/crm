@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +34,7 @@ class UpdateExtendedFieldQuery extends ParametrizedMigrationQuery
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $className = 'OroCRM\Bundle\AccountBundle\Entity\Account';
+        $className = 'Oro\Bundle\AccountBundle\Entity\Account';
         $classConfig = $this->loadEntityConfigData($logger, $className);
         if ($classConfig) {
             $data = $this->connection->convertToPHPValue($classConfig['data'], 'array');

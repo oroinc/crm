@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\DependencyInjection;
+namespace Oro\Bundle\AnalyticsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

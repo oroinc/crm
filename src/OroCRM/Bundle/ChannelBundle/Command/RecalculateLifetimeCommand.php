@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Command;
+namespace Oro\Bundle\ChannelBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -77,7 +77,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
      */
     protected function getChannelSettings($channelType)
     {
-        $settingsProvider = $this->getContainer()->get('orocrm_channel.provider.settings_provider');
+        $settingsProvider = $this->getContainer()->get('oro_channel.provider.settings_provider');
         $settings         = $settingsProvider->getLifetimeValueSettings();
 
         return isset($settings[$channelType])

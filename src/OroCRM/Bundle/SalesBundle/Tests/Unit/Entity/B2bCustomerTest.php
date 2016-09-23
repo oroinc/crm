@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class B2bCustomerTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,9 +45,9 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     {
         $name         = uniqid('name');
         $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contact      = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $contact      = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         $date         = new \DateTime();
@@ -95,7 +95,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
         $this->assertCount(0, $result);
 
-        $lead = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $lead = $this->getMock('Oro\Bundle\SalesBundle\Entity\Lead');
         $this->entity->addLead($lead);
         $this->assertCount(1, $this->entity->getLeads());
         $this->assertTrue($this->entity->getLeads()->contains($lead));
@@ -116,7 +116,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
         $this->assertCount(0, $result);
 
-        $opportunity = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
+        $opportunity = $this->getMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
         $this->entity->addOpportunity($opportunity);
         $this->assertCount(1, $this->entity->getOpportunities());
         $this->assertTrue($this->entity->getOpportunities()->contains($opportunity));

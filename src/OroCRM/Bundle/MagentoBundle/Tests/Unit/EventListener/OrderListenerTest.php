@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\EventListener\OrderListener;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\EventListener\OrderListener;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class OrderListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->listener = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener')
+        $this->listener = $this->getMockBuilder('Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -42,7 +42,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         if ($expectedLifetime) {
             $this->customerRepository->expects($this->once())
                 ->method('updateCustomerLifetimeValue')
-                ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
+                ->with($this->isInstanceOf('Oro\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
         } else {
             $this->customerRepository->expects($this->never())->method('updateCustomerLifetimeValue');
         }
@@ -142,7 +142,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         if ($newLifetime) {
             $this->customerRepository->expects($this->once())
                 ->method('updateCustomerLifetimeValue')
-                ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $newLifetime);
+                ->with($this->isInstanceOf('Oro\Bundle\MagentoBundle\Entity\Customer'), $newLifetime);
         } else {
             $this->customerRepository->expects($this->never())->method('updateCustomerLifetimeValue');
         }
@@ -177,7 +177,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     protected function createEntityManagerMock($order = null)
     {
         $this->customerRepository = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,7 +197,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $unitOfWork
             ->expects($this->any())
             ->method('getScheduledEntityInsertions')
-            ->will($this->returnValue(['OroCRM\Bundle\MagentoBundle\Entity\Order' => $order]));
+            ->will($this->returnValue(['Oro\Bundle\MagentoBundle\Entity\Order' => $order]));
         $unitOfWork
             ->expects($this->any())
             ->method('getScheduledEntityDeletions')
@@ -222,7 +222,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Customer')
+            ->with('OroMagentoBundle:Customer')
             ->will($this->returnValue($this->customerRepository));
         $entityManager
             ->expects($this->any())
@@ -272,8 +272,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $expectedLifetime = 200;
         $order = new Order();
 
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $customer = new Customer();
         $customer
@@ -287,7 +287,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $entityManager = $this->createEntityManagerMock();
         $this->customerRepository->expects($this->once())
             ->method('updateCustomerLifetimeValue')
-            ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
+            ->with($this->isInstanceOf('Oro\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
 
         $this->listener->expects($this->once())
             ->method('scheduleEntityUpdate')
@@ -309,7 +309,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $entityManager = $this->createEntityManagerMock();
         $this->customerRepository->expects($this->once())
             ->method('updateCustomerLifetimeValue')
-            ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
+            ->with($this->isInstanceOf('Oro\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
 
         $this->listener->expects($this->never())->method('scheduleEntityUpdate');
 

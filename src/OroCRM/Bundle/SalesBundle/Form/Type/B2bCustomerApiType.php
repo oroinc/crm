@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -25,7 +25,7 @@ class B2bCustomerApiType extends B2bCustomerType
     {
         $resolver->setDefaults(
             [
-                'data_class'           => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
+                'data_class'           => 'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
                 'intention'            => 'b2bcustomer',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false
@@ -46,6 +46,6 @@ class B2bCustomerApiType extends B2bCustomerType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_b2bcustomer_api';
+        return 'oro_sales_b2bcustomer_api';
     }
 }

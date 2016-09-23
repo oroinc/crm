@@ -9,9 +9,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
-                        reader:    orocrm_magento.mage.customer_connector
+                        reader:    oro_magento.mage.customer_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -26,9 +26,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.customer_info
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.customer_info
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -40,18 +40,18 @@ connector:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.importexport.reader.entity
-                        processor: orocrm_magento.importexport.processor.customer_export
-                        writer:    orocrm_magento.importexport.writer.customer
+                        reader:    oro_magento.importexport.reader.entity
+                        processor: oro_magento.importexport.processor.customer_export
+                        writer:    oro_magento.importexport.writer.customer
                     parameters:
                         batch_size: 1
                 import_merged_data:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_customer_export
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_customer_export
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 1
 
@@ -63,18 +63,18 @@ connector:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.importexport.reader.entity
-                        processor: orocrm_magento.importexport.processor.newsletter_subscriber_export
-                        writer:    orocrm_magento.importexport.writer.newsletter_subscriber
+                        reader:    oro_magento.importexport.reader.entity
+                        processor: oro_magento.importexport.processor.newsletter_subscriber_export
+                        writer:    oro_magento.importexport.writer.newsletter_subscriber
                     parameters:
                         batch_size: 1
                 import:
                     title: import
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_newsletter_subscriber_export
-                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_newsletter_subscriber_export
+                        processor: oro_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
 
         magento_customer_address_export:
             title: 'Export Magento Customer Address to Magento'
@@ -84,18 +84,18 @@ connector:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.importexport.reader.entity
-                        processor: orocrm_magento.importexport.processor.customer_address_export
-                        writer:    orocrm_magento.importexport.writer.customer_address
+                        reader:    oro_magento.importexport.reader.entity
+                        processor: oro_magento.importexport.processor.customer_address_export
+                        writer:    oro_magento.importexport.writer.customer_address
                     parameters:
                         batch_size: 1
                 import_merged_data:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_customer_address_export
-                        processor: orocrm_magento.importexport.processor.import_customer_address
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_customer_address_export
+                        processor: oro_magento.importexport.processor.import_customer_address
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 1
 
@@ -107,9 +107,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.mage.region_connector
+                        reader:    oro_magento.mage.region_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 100
 
@@ -121,9 +121,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
-                        reader:    orocrm_magento.mage.order_connector
-                        processor: orocrm_magento.importexport.processor.import_order_with_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.order_connector
+                        processor: oro_magento.importexport.processor.import_order_with_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -138,54 +138,54 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_customer.order
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_customer.order
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 import_guest_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_guest_customer
-                        processor: orocrm_magento.importexport.processor.import_guest_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_guest_customer
+                        processor: oro_magento.importexport.processor.import_guest_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 import_carts:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_cart.order
-                        processor: orocrm_magento.importexport.processor.import_cart
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_cart.order
+                        processor: oro_magento.importexport.processor.import_cart
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 import_with_new_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_order
-                        processor: orocrm_magento.importexport.processor.context_order
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_order
+                        processor: oro_magento.importexport.processor.context_order
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 load_customer_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.customer_info
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.customer_info
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 load_order_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.order_info
-                        processor: orocrm_magento.importexport.processor.import_order
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.order_info
+                        processor: oro_magento.importexport.processor.import_order
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -197,9 +197,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
-                        reader:    orocrm_magento.mage.cart_connector
-                        processor: orocrm_magento.importexport.processor.import_cart_with_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.cart_connector
+                        processor: oro_magento.importexport.processor.import_cart_with_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -214,27 +214,27 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_customer.cart
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_customer.cart
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 import_with_new_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_cart
-                        processor: orocrm_magento.importexport.processor.context_cart
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_cart
+                        processor: oro_magento.importexport.processor.context_cart
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 load_customer_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.customer_info
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.customer_info
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -246,9 +246,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
-                        reader:    orocrm_magento.mage.newsletter_subscriber_connector
-                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.newsletter_subscriber_connector
+                        processor: oro_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -263,9 +263,9 @@ connector:
                     title:     import
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
-                        reader:    orocrm_magento.mage.newsletter_subscriber_connector_initial
-                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
-                        writer:    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber
+                        reader:    oro_magento.mage.newsletter_subscriber_connector_initial
+                        processor: oro_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    oro_magento.importexport.writer.initial_sync.newsletter_subscriber
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -280,27 +280,27 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_customer.newsletter_subscriber
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.context_customer.newsletter_subscriber
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
                 import_posponded_subscribers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.context_newsletter_subscriber
-                        processor: orocrm_magento.importexport.processor.context_newsletter_subscriber
-                        writer:    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber
+                        reader:    oro_magento.reader.context_newsletter_subscriber
+                        processor: oro_magento.importexport.processor.context_newsletter_subscriber
+                        writer:    oro_magento.importexport.writer.initial_sync.newsletter_subscriber
                     parameters:
                         batch_size: 25
                 load_customer_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.reader.customer_info
-                        processor: orocrm_magento.importexport.processor.import_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.reader.customer_info
+                        processor: oro_magento.importexport.processor.import_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -312,9 +312,9 @@ connector:
                     title: import
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.mage.store
-                        processor: orocrm_magento.importexport.processor.store
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.store
+                        processor: oro_magento.importexport.processor.store
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -326,9 +326,9 @@ connector:
                     title: import
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.mage.website
-                        processor: orocrm_magento.importexport.processor.website
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.website
+                        processor: oro_magento.importexport.processor.website
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
@@ -340,8 +340,8 @@ connector:
                     title: import
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.mage.customer_group
-                        processor: orocrm_magento.importexport.processor.customer_group
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        reader:    oro_magento.mage.customer_group
+                        processor: oro_magento.importexport.processor.customer_group
+                        writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

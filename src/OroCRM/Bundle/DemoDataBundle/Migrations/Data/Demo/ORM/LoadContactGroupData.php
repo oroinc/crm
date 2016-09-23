@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -8,7 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadContactGroupData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
@@ -21,7 +21,7 @@ class LoadContactGroupData extends AbstractFixture implements ContainerAwareInte
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData'];
+        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData'];
     }
 
     public function setContainer(ContainerInterface $container = null)

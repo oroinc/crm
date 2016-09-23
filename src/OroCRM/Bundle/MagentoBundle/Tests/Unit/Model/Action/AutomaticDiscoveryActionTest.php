@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Model\Action;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Model\Action;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Component\Action\Model\ContextAccessor;
-
-use OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +29,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextAccessor = new ContextAccessor();
-        $this->automaticDiscovery = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery')
+        $this->automaticDiscovery = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery')
             ->disableOriginalConstructor()
             ->getMock();
 

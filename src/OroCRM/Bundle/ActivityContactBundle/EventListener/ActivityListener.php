@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\EventListener;
+namespace Oro\Bundle\ActivityContactBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
@@ -13,11 +13,10 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
-use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityListener
 {

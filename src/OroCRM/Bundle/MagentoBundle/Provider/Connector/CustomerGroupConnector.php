@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 
 class CustomerGroupConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
@@ -21,7 +21,7 @@ class CustomerGroupConnector extends AbstractMagentoConnector implements Diction
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.customer_group.label';
+        return 'oro.magento.connector.customer_group.label';
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -14,10 +14,9 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -58,8 +57,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOpportunitiesData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOpportunitiesData'
         ];
     }
 
@@ -96,8 +95,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         }
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->leads = $this->getRandomEntityRecords('OroCRMSalesBundle:Lead');
-        $this->opportunities = $this->getRandomEntityRecords('OroCRMSalesBundle:Opportunity');
+        $this->leads = $this->getRandomEntityRecords('OroSalesBundle:Lead');
+        $this->opportunities = $this->getRandomEntityRecords('OroSalesBundle:Opportunity');
     }
 
     /**

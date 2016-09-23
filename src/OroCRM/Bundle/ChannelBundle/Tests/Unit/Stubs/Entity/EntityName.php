@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

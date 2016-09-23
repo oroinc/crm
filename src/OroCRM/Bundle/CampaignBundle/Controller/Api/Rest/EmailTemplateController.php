@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Controller\Api\Rest;
+namespace Oro\Bundle\CampaignBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -14,11 +14,11 @@ use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
  * @RouteResource("emailcampaign_email_template")
- * @NamePrefix("orocrm_api_")
+ * @NamePrefix("oro_api_")
  */
 class EmailTemplateController extends RestController
 {
@@ -45,7 +45,7 @@ class EmailTemplateController extends RestController
 
         $marketingList = $this
             ->getDoctrine()
-            ->getRepository('OroCRMMarketingListBundle:MarketingList')
+            ->getRepository('OroMarketingListBundle:MarketingList')
             ->find((int)$id);
 
         if (!$marketingList) {

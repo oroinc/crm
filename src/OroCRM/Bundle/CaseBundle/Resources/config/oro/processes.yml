@@ -24,7 +24,7 @@ processes:
                             html: $bodyContent
                         - '@find_entity':
                             attribute: $.caseSource
-                            class: OroCRMCaseBundle:CaseSource
+                            class: OroCaseBundle:CaseSource
                             identifier: 'email'
                         - '@assign_value':
                             attribute: $.caseSubject
@@ -48,7 +48,7 @@ processes:
                                     conditions:
                                         '@and':
                                             - '@equal':      [$.email.fromEmailAddress.hasOwner, true]
-                                            - '@instanceof': [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
+                                            - '@instanceof': [$.email.fromEmailAddress.owner, Oro\Bundle\ContactBundle\Entity\Contact]
                                             - '@equal':      [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
                                     actions:
                                         - '@assign_value':
@@ -68,7 +68,7 @@ processes:
                                             attribute: $.caseRelatedAccount
                                             value: $.caseRelatedContact.accounts[0]
                                 - '@create_entity':
-                                    class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+                                    class: Oro\Bundle\CaseBundle\Entity\CaseEntity
                                     attribute: $.caseEntity
                                     flush: true
                                     data:

@@ -15,7 +15,7 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "target-dir": "OroCRM/Bundle/SalesBundle",
+    "target-dir": "Oro/Bundle/SalesBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

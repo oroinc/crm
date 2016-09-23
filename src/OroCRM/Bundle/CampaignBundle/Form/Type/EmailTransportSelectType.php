@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 
 class EmailTransportSelectType extends AbstractType
 {
@@ -55,6 +55,6 @@ class EmailTransportSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_campaign_email_transport_select';
+        return 'oro_campaign_email_transport_select';
     }
 }

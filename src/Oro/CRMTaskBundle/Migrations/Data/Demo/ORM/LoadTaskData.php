@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\TaskBundle\Entity\Task;
-use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
+use Oro\Bundle\TaskBundle\Entity\Task;
+use Oro\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -81,9 +81,9 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
         ];
     }
 
@@ -114,7 +114,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     {
         $organization = $this->getReference('default_organization');
 
-        $priorities = $om->getRepository('OroCRMTaskBundle:TaskPriority')->findAll();
+        $priorities = $om->getRepository('OroTaskBundle:TaskPriority')->findAll();
         if (empty($priorities)) {
             return;
         }
@@ -122,8 +122,8 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         if (empty($users)) {
             return;
         }
-        $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $accounts = $om->getRepository('OroAccountBundle:Account')->findAll();
+        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
 
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
             /** @var User $assignedTo */
@@ -131,7 +131,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             /** @var TaskPriority $taskPriority */
             $taskPriority = $this->getRandomEntity($priorities);
 
-            if ($om->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($om->getRepository('OroTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }

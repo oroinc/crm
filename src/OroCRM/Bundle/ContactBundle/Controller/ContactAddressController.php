@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller;
+namespace Oro\Bundle\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -10,32 +10,32 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactAddressController extends Controller
 {
     /**
-     * @Route("/address-book/{id}", name="orocrm_contact_address_book", requirements={"id"="\d+"})
+     * @Route("/address-book/{id}", name="oro_contact_address_book", requirements={"id"="\d+"})
      * @Template
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      */
     public function addressBookAction(Contact $contact)
     {
         return array(
             'entity' => $contact,
-            'address_edit_acl_resource' => 'orocrm_contact_update'
+            'address_edit_acl_resource' => 'oro_contact_update'
         );
     }
 
     /**
      * @Route(
      *      "/{contactId}/address-create",
-     *      name="orocrm_contact_address_create",
+     *      name="oro_contact_address_create",
      *      requirements={"contactId"="\d+"}
      * )
-     * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
-     * @AclAncestor("orocrm_contact_create")
+     * @Template("OroContactBundle:ContactAddress:update.html.twig")
+     * @AclAncestor("oro_contact_create")
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
     public function createAction(Contact $contact)
@@ -46,11 +46,11 @@ class ContactAddressController extends Controller
     /**
      * @Route(
      *      "/{contactId}/address-update/{id}",
-     *      name="orocrm_contact_address_update",
+     *      name="oro_contact_address_update",
      *      requirements={"contactId"="\d+","id"="\d+"},defaults={"id"=0}
      * )
      * @Template
-     * @AclAncestor("orocrm_contact_update")
+     * @AclAncestor("oro_contact_update")
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
     public function updateAction(Contact $contact, ContactAddress $address)
@@ -88,13 +88,13 @@ class ContactAddressController extends Controller
         // Update contact's modification date when an address is changed
         $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
-        if ($this->get('orocrm_contact.form.handler.contact_address')->process($address)) {
+        if ($this->get('oro_contact.form.handler.contact_address')->process($address)) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
         }
 
-        $responseData['form'] = $this->get('orocrm_contact.contact_address.form')->createView();
+        $responseData['form'] = $this->get('oro_contact.contact_address.form')->createView();
         return $responseData;
     }
 }

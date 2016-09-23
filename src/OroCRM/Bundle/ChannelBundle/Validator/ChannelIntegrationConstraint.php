@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Validator;
+namespace Oro\Bundle\ChannelBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
@@ -19,6 +19,6 @@ class ChannelIntegrationConstraint extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_channel.validator.channel_integration';
+        return 'oro_channel.validator.channel_integration';
     }
 }

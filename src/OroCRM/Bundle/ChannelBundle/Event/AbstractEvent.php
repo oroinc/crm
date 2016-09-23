@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Event;
+namespace Oro\Bundle\ChannelBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class AbstractEvent extends Event
 {

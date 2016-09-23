@@ -11,27 +11,27 @@ datagrids:
                     - __root_entity__.ac_last_contact_date_out as lastContactedDateOut
         columns:
             timesContacted:
-                label: orocrm.activity_contact.ac_contact_count.label
+                label: oro.activity_contact.ac_contact_count.label
                 frontend_type: integer
                 renderable: false
             timesContactedIn:
-                label: orocrm.activity_contact.ac_contact_count_in.label
+                label: oro.activity_contact.ac_contact_count_in.label
                 frontend_type: integer
                 renderable: false
             timesContactedOut:
-                label: orocrm.activity_contact.ac_contact_count_out.label
+                label: oro.activity_contact.ac_contact_count_out.label
                 frontend_type: integer
                 renderable: false
             lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
+                label: oro.activity_contact.ac_last_contact_date.label
                 frontend_type: datetime
                 renderable: false
             lastContactedDateIn:
-                label: orocrm.activity_contact.ac_last_contact_date_in.label
+                label: oro.activity_contact.ac_last_contact_date_in.label
                 frontend_type: datetime
                 renderable: false
             lastContactedDateOut:
-                label: orocrm.activity_contact.ac_last_contact_date_out.label
+                label: oro.activity_contact.ac_last_contact_date_out.label
                 frontend_type: datetime
                 renderable: false
         sorters:
@@ -82,7 +82,7 @@ datagrids:
                     - DATE_DIFF(CURRENT_DATE(), __root_entity__.ac_last_contact_date) as daysSinceLastContact
         columns:
             daysSinceLastContact:
-                label: orocrm.activity_contact.days_since_last_contact.label
+                label: oro.activity_contact.days_since_last_contact.label
                 frontend_type: integer
                 renderable: false
         sorters:
@@ -103,5 +103,5 @@ datagrids:
                     - __root_entity__.ac_last_contact_date as lastContactedDate
         columns:
             lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
+                label: oro.activity_contact.ac_last_contact_date.label
                 frontend_type: datetime

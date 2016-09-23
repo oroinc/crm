@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -21,13 +21,12 @@ use Oro\Bundle\SoapBundle\Request\Parameters\Filter\ChainParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\BooleanParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\EntityClassParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
-
-use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
+use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
+use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 
 /**
  * @RouteResource("channel")
- * @NamePrefix("orocrm_api_")
+ * @NamePrefix("oro_api_")
  */
 class ChannelController extends RestController
 {
@@ -64,7 +63,7 @@ class ChannelController extends RestController
      *      description="Get all channels",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_channel_view")
+     * @AclAncestor("oro_channel_view")
      * @return Response
      */
     public function cgetAction()
@@ -107,10 +106,10 @@ class ChannelController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_channel_delete",
+     *      id="oro_channel_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMChannelBundle:Channel"
+     *      class="OroChannelBundle:Channel"
      * )
      * @return Response
      */
@@ -150,7 +149,7 @@ class ChannelController extends RestController
      */
     public function getManager()
     {
-        return $this->get('orocrm_channel.manager.channel.api');
+        return $this->get('oro_channel.manager.channel.api');
     }
 
     /**

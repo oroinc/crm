@@ -12,11 +12,11 @@ workflows:
                     pageComponent:
                         module: 'oroui/js/app/components/view-component'
                         options:
-                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
+                            view: 'orosales/js/app/views/opportunity-status-select-view'
                 form_options:
                     attribute_fields:
                         status:
-                            form_type: orocrm_sales_opportunity_status_select
+                            form_type: oro_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -35,7 +35,7 @@ workflows:
                                 priority: ASC
                             attribute: $opportunity.status
                         - '@call_service_method':
-                            service: orocrm_sales.provider.probability
+                            service: oro_sales.provider.probability
                             method: get
                             method_parameters: [$opportunity.status]
                             attribute: $opportunity.probability
@@ -49,23 +49,23 @@ workflows:
                     pageComponent:
                         module: 'oroui/js/app/components/view-component'
                         options:
-                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
+                            view: 'orosales/js/app/views/opportunity-status-select-view'
                 transition_definition: develop_definition
                 form_options:
                     attribute_fields:
                         contact:
-                            form_type: orocrm_contact_select
+                            form_type: oro_contact_select
                             options:
                                 new_item_property_name: firstName
                                 configs:
                                     allowCreateNew: true
                                     renderedPropertyName: fullName
-                                    placeholder: orocrm.contact.form.choose_contact
+                                    placeholder: oro.contact.form.choose_contact
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: orocrm_sales_opportunity_status_select
+                            form_type: oro_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -152,23 +152,23 @@ workflows:
                     pageComponent:
                         module: 'oroui/js/app/components/view-component'
                         options:
-                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
+                            view: 'orosales/js/app/views/opportunity-status-select-view'
                 transition_definition: reopen_definition
                 form_options:
                     attribute_fields:
                         contact:
-                            form_type: orocrm_contact_select
+                            form_type: oro_contact_select
                             options:
                                 new_item_property_name: firstName
                                 configs:
                                     allowCreateNew: true
                                     renderedPropertyName: fullName
-                                    placeholder: orocrm.contact.form.choose_contact
+                                    placeholder: oro.contact.form.choose_contact
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: orocrm_sales_opportunity_status_select
+                            form_type: oro_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -194,7 +194,7 @@ workflows:
                                 priority: ASC
                             attribute: $opportunity.status
                         - '@call_service_method':
-                            service: orocrm_sales.provider.probability
+                            service: oro_sales.provider.probability
                             method: get
                             method_parameters: [$opportunity.status]
                             attribute: $opportunity.probability

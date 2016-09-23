@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\ChannelBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadChannels extends AbstractFixture
 {
@@ -45,7 +44,7 @@ class LoadChannels extends AbstractFixture
             ->setCreatedAt($date)
             ->setUpdatedAt($date)
             ->setCustomerIdentity('test1')
-            ->setEntities(['OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity']);
+            ->setEntities(['Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']);
 
         $manager->persist($channel2);
 

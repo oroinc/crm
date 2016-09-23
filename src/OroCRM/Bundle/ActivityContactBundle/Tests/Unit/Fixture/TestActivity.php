@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
 
 class TestActivity
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Handler;
+namespace Oro\Bundle\SalesBundle\Handler;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -8,7 +8,7 @@ use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApi
 
 class OpportunityApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
+    const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
 
     /** @var PropertyAccess **/
     protected $accessor;

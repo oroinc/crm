@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -18,8 +18,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class AddLeadStatus implements
     Migration,
@@ -64,7 +63,7 @@ class AddLeadStatus implements
     {
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-        $extendOptionsManager->removeColumnOptions('orocrm_sales_lead', 'status');
+        $extendOptionsManager->removeColumnOptions('oro_sales_lead', 'status');
         self::addStatusField($schema, $this->extendExtension, $queries);
     }
 
@@ -77,7 +76,7 @@ class AddLeadStatus implements
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
-            'orocrm_sales_lead',
+            'oro_sales_lead',
             'status',
             Lead::INTERNAL_STATUS_CODE,
             false,

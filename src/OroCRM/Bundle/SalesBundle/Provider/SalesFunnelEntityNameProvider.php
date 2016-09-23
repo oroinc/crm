@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
 class SalesFunnelEntityNameProvider implements EntityNameProviderInterface
 {
-    const CLASS_NAME = 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel';
+    const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\SalesFunnel';
 
     /**
      * {@inheritdoc}

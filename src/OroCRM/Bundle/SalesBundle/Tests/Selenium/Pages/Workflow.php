@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Workflow
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method Workflow openWorkflow openWorkflow(string $bundlePath)
  * {@inheritdoc}
  */

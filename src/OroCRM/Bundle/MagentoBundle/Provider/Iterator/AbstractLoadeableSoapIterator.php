@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractLoadeableSoapIterator implements \Iterator, \Countable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Controller;
+namespace Oro\Bundle\CampaignBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
 
 /**
  * @Route("/campaign/email")
@@ -19,27 +19,27 @@ use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
 class EmailCampaignController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_email_campaign_index")
-     * @AclAncestor("orocrm_email_campaign_view")
+     * @Route("/", name="oro_email_campaign_index")
+     * @AclAncestor("oro_email_campaign_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_campaign.email_campaign.entity.class')
+            'entity_class' => $this->container->getParameter('oro_campaign.email_campaign.entity.class')
         ];
     }
 
     /**
      * Create email campaign
      *
-     * @Route("/create", name="orocrm_email_campaign_create")
-     * @Template("OroCRMCampaignBundle:EmailCampaign:update.html.twig")
+     * @Route("/create", name="oro_email_campaign_create")
+     * @Template("OroCampaignBundle:EmailCampaign:update.html.twig")
      * @Acl(
-     *      id="orocrm_email_campaign_create",
+     *      id="oro_email_campaign_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMCampaignBundle:EmailCampaign"
+     *      class="OroCampaignBundle:EmailCampaign"
      * )
      */
     public function createAction()
@@ -50,13 +50,13 @@ class EmailCampaignController extends Controller
     /**
      * Edit email campaign
      *
-     * @Route("/update/{id}", name="orocrm_email_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_email_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_email_campaign_update",
+     *      id="oro_email_campaign_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMCampaignBundle:EmailCampaign"
+     *      class="OroCampaignBundle:EmailCampaign"
      * )
      * @param EmailCampaign $entity
      * @return array
@@ -69,12 +69,12 @@ class EmailCampaignController extends Controller
     /**
      * View email campaign
      *
-     * @Route("/view/{id}", name="orocrm_email_campaign_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_email_campaign_view", requirements={"id"="\d+"})
      * @Acl(
-     *      id="orocrm_email_campaign_view",
+     *      id="oro_email_campaign_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMCampaignBundle:EmailCampaign"
+     *      class="OroCampaignBundle:EmailCampaign"
      * )
      * @Template
      * @param EmailCampaign $entity
@@ -83,7 +83,7 @@ class EmailCampaignController extends Controller
     public function viewAction(EmailCampaign $entity)
     {
         $stats = $this->getDoctrine()
-            ->getRepository("OroCRMCampaignBundle:EmailCampaignStatistics")
+            ->getRepository("OroCampaignBundle:EmailCampaignStatistics")
             ->getEmailCampaignStats($entity);
 
         return [
@@ -102,10 +102,10 @@ class EmailCampaignController extends Controller
      */
     protected function update(EmailCampaign $entity)
     {
-        if ($this->get('orocrm_campaign.form.handler.email_campaign')->process($entity)) {
+        if ($this->get('oro_campaign.form.handler.email_campaign')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
+                $this->get('translator')->trans('oro.campaign.emailcampaign.controller.saved.message')
             );
 
             return $this->get('oro_ui.router')->redirect($entity);
@@ -127,24 +127,24 @@ class EmailCampaignController extends Controller
     {
         $isUpdateOnly = $this->get('request')->get(EmailCampaignHandler::UPDATE_MARKER, false);
 
-        $form = $this->get('orocrm_campaign.email_campaign.form');
+        $form = $this->get('oro_campaign.email_campaign.form');
         if ($isUpdateOnly) {
             // substitute submitted form with new not submitted instance to ignore validation errors
             // on form after transport field was changed
             $form = $this->get('form.factory')
-                ->createNamed('orocrm_email_campaign', 'orocrm_email_campaign', $form->getData());
+                ->createNamed('oro_email_campaign', 'oro_email_campaign', $form->getData());
         }
 
         return $form;
     }
 
     /**
-     * @Route("/send/{id}", name="orocrm_email_campaign_send", requirements={"id"="\d+"})
+     * @Route("/send/{id}", name="oro_email_campaign_send", requirements={"id"="\d+"})
      * @Acl(
-     *      id="orocrm_email_campaign_send",
+     *      id="oro_email_campaign_send",
      *      type="action",
-     *      label="orocrm.campaign.acl.send_emails.label",
-     *      description="orocrm.campaign.acl.send_emails.description",
+     *      label="oro.campaign.acl.send_emails.label",
+     *      description="oro.campaign.acl.send_emails.description",
      *      group_name="",
      *      category="marketing"
      * )
@@ -155,24 +155,24 @@ class EmailCampaignController extends Controller
     public function sendAction(EmailCampaign $entity)
     {
         if ($this->isManualSendAllowed($entity)) {
-            $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.builder');
+            $senderFactory = $this->get('oro_campaign.email_campaign.sender.builder');
             $sender = $senderFactory->getSender($entity);
             $sender->send($entity);
 
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.sent')
+                $this->get('translator')->trans('oro.campaign.emailcampaign.controller.sent')
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.send_disallowed')
+                $this->get('translator')->trans('oro.campaign.emailcampaign.controller.send_disallowed')
             );
         }
 
         return $this->redirect(
             $this->generateUrl(
-                'orocrm_email_campaign_view',
+                'oro_email_campaign_view',
                 ['id' => $entity->getId()]
             )
         );
@@ -186,7 +186,7 @@ class EmailCampaignController extends Controller
     {
         $sendAllowed = $entity->getSchedule() === EmailCampaign::SCHEDULE_MANUAL
             && !$entity->isSent()
-            && $this->get('oro_security.security_facade')->isGranted('orocrm_email_campaign_send');
+            && $this->get('oro_security.security_facade')->isGranted('oro_email_campaign_send');
 
         if ($sendAllowed) {
             $transportSettings = $entity->getTransportSettings();

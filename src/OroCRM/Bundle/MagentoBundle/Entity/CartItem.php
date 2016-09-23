@@ -1,19 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendCartItem;
+use Oro\Bundle\MagentoBundle\Model\ExtendCartItem;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Class CartItem
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_cart_item", indexes={
+ * @ORM\Table(name="oro_magento_cart_item", indexes={
  *      @ORM\Index(name="magecartitem_origin_idx", columns={"origin_id"}),
  *      @ORM\Index(name="magecartitem_sku_idx", columns={"sku"}),*
  * })

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

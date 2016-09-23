@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
 
 class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testName()
     {
-        $this->assertEquals('orocrm_account_select', $this->type->getName());
+        $this->assertEquals('oro_account_select', $this->type->getName());
     }
 
     public function testParent()

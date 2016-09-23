@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 
 class WebsiteConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
@@ -21,7 +21,7 @@ class WebsiteConnector extends AbstractMagentoConnector implements DictionaryCon
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.website.label';
+        return 'oro.magento.connector.website.label';
     }
 
     /**

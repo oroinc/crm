@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Controller;
+namespace Oro\Bundle\CampaignBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,8 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 
 /**
  * @Route("/campaign")
@@ -18,27 +17,27 @@ use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 class CampaignController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_campaign_index")
-     * @AclAncestor("orocrm_campaign_view")
+     * @Route("/", name="oro_campaign_index")
+     * @AclAncestor("oro_campaign_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_campaign.entity.class')
+            'entity_class' => $this->container->getParameter('oro_campaign.entity.class')
         ];
     }
 
     /**
      * Create campaign
      *
-     * @Route("/create", name="orocrm_campaign_create")
-     * @Template("OroCRMCampaignBundle:Campaign:update.html.twig")
+     * @Route("/create", name="oro_campaign_create")
+     * @Template("OroCampaignBundle:Campaign:update.html.twig")
      * @Acl(
-     *      id="orocrm_campaign_create",
+     *      id="oro_campaign_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMCampaignBundle:Campaign"
+     *      class="OroCampaignBundle:Campaign"
      * )
      */
     public function createAction()
@@ -49,13 +48,13 @@ class CampaignController extends Controller
     /**
      * Edit campaign
      *
-     * @Route("/update/{id}", name="orocrm_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_campaign_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_campaign_update",
+     *      id="oro_campaign_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMCampaignBundle:Campaign"
+     *      class="OroCampaignBundle:Campaign"
      * )
      */
     public function updateAction(Campaign $entity)
@@ -66,12 +65,12 @@ class CampaignController extends Controller
     /**
      * View campaign
      *
-     * @Route("/view/{id}", name="orocrm_campaign_view")
+     * @Route("/view/{id}", name="oro_campaign_view")
      * @Acl(
-     *      id="orocrm_campaign_view",
+     *      id="oro_campaign_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMCampaignBundle:Campaign"
+     *      class="OroCampaignBundle:Campaign"
      * )
      * @Template
      */
@@ -90,8 +89,8 @@ class CampaignController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_campaign.campaign.form'),
-            $this->get('translator')->trans('orocrm.campaign.controller.campaign.saved.message')
+            $this->get('oro_campaign.campaign.form'),
+            $this->get('translator')->trans('oro.campaign.controller.campaign.saved.message')
         );
     }
 }

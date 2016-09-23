@@ -1,20 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
+use Oro\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
 
 /**
  * Class CustomerGroup
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_customer_group")
+ * @ORM\Table(name="oro_magento_customer_group")
  * @Config(
  *      defaultValues={
  *          "entity"={

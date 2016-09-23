@@ -1,21 +1,20 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * Listener for grid "magento-store-by-channel-grid".
  *
- * @see \OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
+ * @see \Oro\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
  */
 class StoreGridListener
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Command;
+namespace Oro\Bundle\ActivityContactBundle\Command;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -14,7 +14,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Component\PropertyAccess\PropertyAccessor;
 use Oro\Component\Log\OutputLogger;
-
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Entity\Repository\ActivityListRepository;
@@ -25,10 +24,10 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {
@@ -76,7 +75,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
         $activityConfigProvider = $this->getContainer()->get('oro_entity_config.provider.activity');
 
         /** @var ActivityContactProvider $activityContactProvider */
-        $activityContactProvider   = $this->getContainer()->get('orocrm_activity_contact.provider');
+        $activityContactProvider   = $this->getContainer()->get('oro_activity_contact.provider');
         $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
 
         $entityConfigsWithApplicableActivities = $activityConfigProvider->filter(
@@ -98,7 +97,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
             $this->activityListRepository = $this->em->getRepository(ActivityList::ENTITY_NAME);
 
             /** @var ActivityListener $activityListener */
-            $activityListener = $this->getContainer()->get('orocrm_activity_contact.listener.activity_listener');
+            $activityListener = $this->getContainer()->get('oro_activity_contact.listener.activity_listener');
             /** @var ActivityListFilterHelper $activityListHelper */
             $activityListHelper = $this->getContainer()->get('oro_activity_list.filter.helper');
 
@@ -240,7 +239,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
     protected function getTargetIds($className)
     {
         /** @var ActivityContactProvider $activityContactProvider */
-        $activityContactProvider   = $this->getContainer()->get('orocrm_activity_contact.provider');
+        $activityContactProvider   = $this->getContainer()->get('oro_activity_contact.provider');
         $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
 
         // we need try/catch here to avoid crash on non existing entity relation

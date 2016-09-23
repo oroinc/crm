@@ -1,6 +1,6 @@
 datagrids:
     dashboard-my-contacts-activity-grid:
-        acl_resource: orocrm_contact_view
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -11,7 +11,7 @@ datagrids:
                     - phone.phone as primaryPhone
                     - max(history.visitedAt) as visitDate
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -21,7 +21,7 @@ datagrids:
                             join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
                             alias: history
                             conditionType: WITH
-                            condition: "c.id=history.entityId AND history.route='orocrm_contact_view'"
+                            condition: "c.id=history.entityId AND history.route='oro_contact_view'"
                 where:
                     and:
                       - history.user = @oro_security.security_facade->getLoggedUserId
@@ -32,13 +32,13 @@ datagrids:
         columns:
             contactName:
                 type: twig
-                label: orocrm.contact.datagrid.contact_name
+                label: oro.contact.datagrid.contact_name
                 frontend_type: html
-                template: OroCRMContactBundle:Contact:Datagrid/Property/contactName.html.twig
+                template: OroContactBundle:Contact:Datagrid/Property/contactName.html.twig
             primaryEmail:
-                label: orocrm.contact.email.label
+                label: oro.contact.email.label
             primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
+                label: oro.contact.contactphone.phone.label
                 frontend_type: phone
         options:
             entityHint: contact
@@ -48,9 +48,9 @@ datagrids:
                     items: [10]
                     default_per_page: 10
 
-    # contact groups grid, shown on orocrm_contact_group_index
+    # contact groups grid, shown on oro_contact_group_index
     contact-groups-grid:
-        acl_resource: orocrm_contact_group_view
+        acl_resource: oro_contact_group_view
         source:
             type: orm
             query:
@@ -58,15 +58,15 @@ datagrids:
                     - g.id
                     - g.label
                 from:
-                  - { table: %orocrm_contact.group.entity.class%, alias: g }
+                  - { table: %oro_contact.group.entity.class%, alias: g }
         columns:
             label:
-                label: orocrm.contact.group.label.label
+                label: oro.contact.group.label.label
         properties:
             id: ~
             update_link:
                 type:       url
-                route:      orocrm_contact_group_update
+                route:      oro_contact_group_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -84,14 +84,14 @@ datagrids:
         actions:
             update:
                 type:          navigate
-                acl_resource:  orocrm_contact_group_update
+                acl_resource:  oro_contact_group_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
                 rowAction:     true
             delete:
                 type:          delete
-                acl_resource:  orocrm_contact_group_delete
+                acl_resource:  oro_contact_group_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -99,9 +99,9 @@ datagrids:
             entityHint: group
             entity_pagination: true
 
-    # contacts assigned to group, shown on orocrm_contact_group_update route
+    # contacts assigned to group, shown on oro_contact_group_update route
     contact-group-contacts-grid:
-        acl_resource: orocrm_contact_view
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -118,20 +118,20 @@ datagrids:
                         THEN true ELSE false END
                       END) as hasGroup
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
             bind_parameters:
                 -
                     name: group
                     default: null
         columns:
             hasGroup:
-                label: orocrm.contact.group.has_group.label
+                label: oro.contact.group.has_group.label
                 editable: true
                 frontend_type: boolean
             firstName:
-                label: orocrm.contact.first_name.label
+                label: oro.contact.first_name.label
             lastName:
-                label: orocrm.contact.last_name.label
+                label: oro.contact.last_name.label
         properties:
             id: ~
         filters:
@@ -163,13 +163,13 @@ datagrids:
                     included: '#groupAppendContacts'
                     excluded: '#groupRemoveContacts'
 
-    # contacts main grid show on orocrm_contact_index route
+    # contacts main grid show on oro_contact_index route
     contacts-grid:
-        extended_entity_name: %orocrm_contact.entity.class%
+        extended_entity_name: %oro_contact.entity.class%
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
-        acl_resource: orocrm_contact_view
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -202,7 +202,7 @@ datagrids:
                     - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedName
                     - CONCAT_WS(' ', reportsTo.firstName, reportsTo.lastName) as reportsName
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -221,26 +221,26 @@ datagrids:
             enable: true
         columns:
             firstName:
-                label:         orocrm.contact.first_name.label
+                label:         oro.contact.first_name.label
             lastName:
-                label:         orocrm.contact.last_name.label
+                label:         oro.contact.last_name.label
             birthday:
-                label:         orocrm.contact.birthday.label
+                label:         oro.contact.birthday.label
                 frontend_type: date
                 renderable: false
             gender:
-                label:         orocrm.contact.gender.label
+                label:         oro.contact.gender.label
                 frontend_type: select
                 choices: "@oro_user.gender_provider->getChoices"
                 renderable: false
             email:
-                label:         orocrm.contact.email.label
+                label:         oro.contact.email.label
                 inline_editing:
                     enable: true
                     validation_rules:
                         Email: true
                     save_api_accessor:
-                        class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
+                        class: orocontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
                             name: oro_api_post_contact_email
                             http_method: POST
@@ -251,18 +251,18 @@ datagrids:
                             association: emails
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_ContactBundle_Entity_ContactEmail
+                            className: Oro_Bundle_ContactBundle_Entity_ContactEmail
                         route_parameters_rename_map:
                             emailId: id
             phone:
-                label:         orocrm.contact.contactphone.phone.label
+                label:         oro.contact.contactphone.phone.label
                 frontend_type: phone
                 inline_editing:
                     enable: true
                     editor:
                         view: oroform/js/app/views/editor/text-editor-view
                     save_api_accessor:
-                        class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
+                        class: orocontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
                             name: oro_api_post_contact_phone
                             http_method: POST
@@ -273,46 +273,46 @@ datagrids:
                             association: phones
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_ContactBundle_Entity_ContactPhone
+                            className: Oro_Bundle_ContactBundle_Entity_ContactPhone
                         route_parameters_rename_map:
                             phoneId: id
             fax:
-                label:         orocrm.contact.fax.label
+                label:         oro.contact.fax.label
                 frontend_type: phone
                 renderable:    false
             skype:
-                label:         orocrm.contact.skype.label
+                label:         oro.contact.skype.label
                 frontend_type: string
                 renderable:    false
             twitter:
-                label:         orocrm.contact.twitter.label
+                label:         oro.contact.twitter.label
                 frontend_type: string
                 renderable:    false
             facebook:
-                label:         orocrm.contact.facebook.label
+                label:         oro.contact.facebook.label
                 frontend_type: string
                 renderable:    false
             linkedIn:
-                label:         orocrm.contact.linked_in.label
+                label:         oro.contact.linked_in.label
                 frontend_type: string
                 renderable:    false
             googlePlus:
-                label:         orocrm.contact.google_plus.label
+                label:         oro.contact.google_plus.label
                 frontend_type: string
                 renderable:    false
             source:
-                label:         orocrm.contact.source.label
+                label:         oro.contact.source.label
             countryName:
-                label:         orocrm.contact.contactaddress.country.label
+                label:         oro.contact.contactaddress.country.label
             regionLabel:
-                label:         orocrm.contact.contactaddress.region.label
+                label:         oro.contact.contactaddress.region.label
             addressPostalCode:
-                label:         orocrm.contact.contactaddress.postal_code.label
+                label:         oro.contact.contactaddress.postal_code.label
             addressCity:
-                label:         orocrm.contact.contactaddress.city.label
+                label:         oro.contact.contactaddress.city.label
                 renderable:    false
             addressStreet:
-                label:         orocrm.contact.contactaddress.street.label
+                label:         oro.contact.contactaddress.street.label
                 renderable:    false
             createdAt:
                 label:         oro.ui.created_at
@@ -321,16 +321,16 @@ datagrids:
                 label:         oro.ui.updated_at
                 frontend_type: datetime
             pictureFilename:
-                label:         orocrm.contact.picture.label
+                label:         oro.contact.picture.label
                 renderable:    false
             ownerName:
-                label:         orocrm.contact.owner.label
+                label:         oro.contact.owner.label
                 renderable: false
             assignedName:
-                label:         orocrm.contact.assigned_to.label
+                label:         oro.contact.assigned_to.label
                 renderable: false
             reportsName:
-                label:         orocrm.contact.reports_to.label
+                label:         oro.contact.reports_to.label
                 renderable: false
         properties:
             id: ~
@@ -338,11 +338,11 @@ datagrids:
             phoneId: ~
             view_link:
                 type:       url
-                route:      orocrm_contact_view
+                route:      oro_contact_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_contact_update
+                route:      oro_contact_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -456,7 +456,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroCRMContactBundle:Source
+                            class: OroContactBundle:Source
                             property: label
                             translatable_options: false
                 countryName:
@@ -467,7 +467,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -522,27 +522,27 @@ datagrids:
         actions:
             view:
                 type: navigate
-                acl_resource: orocrm_contact_view
+                acl_resource: oro_contact_view
                 label: oro.grid.action.view
                 icon: eye-open
                 link: view_link
                 rowAction: true
             update:
                 type: navigate
-                acl_resource: orocrm_contact_update
+                acl_resource: oro_contact_update
                 label: oro.grid.action.update
                 icon: edit
                 link: update_link
             delete:
                 type: delete
-                acl_resource: orocrm_contact_delete
+                acl_resource: oro_contact_delete
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
         mass_actions:
             merge:
                 type: merge
-                entity_name: %orocrm_contact.entity.class%
+                entity_name: %oro_contact.entity.class%
                 data_identifier: c.id
         options:
             entityHint: contact
@@ -551,7 +551,7 @@ datagrids:
 
     # assigned accounts grid
     contact-accounts-grid:
-        acl_resource: orocrm_contact_view
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -574,7 +574,7 @@ datagrids:
                         THEN true ELSE false END
                       END) as hasContact
                 from:
-                    - { table: OroCRMAccountBundle:Account, alias: a }
+                    - { table: OroAccountBundle:Account, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -588,22 +588,22 @@ datagrids:
                     type: integer
         columns:
             hasContact:
-                label:         orocrm.contact.assigned_to.label
+                label:         oro.contact.assigned_to.label
                 editable:      true
                 frontend_type: boolean
             name:
-                label:         orocrm.account.name.label
+                label:         oro.account.name.label
             contactFirstName:
-                label:         orocrm.account.contact.first_name
+                label:         oro.account.contact.first_name
             contactLastName:
-                label:         orocrm.account.contact.last_name
+                label:         oro.account.contact.last_name
             contactEmail:
-                label:         orocrm.account.contact.email
+                label:         oro.account.contact.email
             contactPhone:
-                label:         orocrm.account.contact.phone
+                label:         oro.account.contact.phone
                 frontend_type: phone
             ownerName:
-                label:         orocrm.contact.owner.label
+                label:         oro.contact.owner.label
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -673,8 +673,8 @@ datagrids:
 
     # contacts select grid used for contact selection in dialog
     contacts-select-grid:
-        extended_entity_name: %orocrm_contact.entity.class%
-        acl_resource: orocrm_contact_view
+        extended_entity_name: %oro_contact.entity.class%
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -689,7 +689,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -702,22 +702,22 @@ datagrids:
                 - HINT_TRANSLATABLE
         columns:
             firstName:
-                label: orocrm.contact.first_name.label
+                label: oro.contact.first_name.label
             lastName:
-                label: orocrm.contact.last_name.label
+                label: oro.contact.last_name.label
             primaryEmail:
-                label: orocrm.contact.email.label
+                label: oro.contact.email.label
             primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
+                label: oro.contact.contactphone.phone.label
                 frontend_type: phone
             contactSourceLabel:
-                label: orocrm.contact.source.label
+                label: oro.contact.source.label
             countryName:
-                label: orocrm.contact.contactaddress.country.label
+                label: oro.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.contactaddress.region.label
+                label: oro.contact.contactaddress.region.label
             addressPostalCode:
-                label: orocrm.contact.contactaddress.postal_code.label
+                label: oro.contact.contactaddress.postal_code.label
         sorters:
             columns:
                 firstName:
@@ -759,7 +759,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroCRMContactBundle:Source
+                            class: OroContactBundle:Source
                             property: label
                             translatable_options: false
                 countryName:
@@ -770,7 +770,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -787,8 +787,8 @@ datagrids:
 
     # contacts grid for context
     contacts-for-context-grid:
-        extended_entity_name: %orocrm_contact.entity.class%
-        acl_resource: orocrm_contact_view
+        extended_entity_name: %oro_contact.entity.class%
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -803,7 +803,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -816,22 +816,22 @@ datagrids:
                 - HINT_TRANSLATABLE
         columns:
             id:
-                label:        orocrm.contact.id.label
+                label:        oro.contact.id.label
             firstName:
-                label:         orocrm.contact.first_name.label
+                label:         oro.contact.first_name.label
             lastName:
-                label:         orocrm.contact.last_name.label
+                label:         oro.contact.last_name.label
             primaryEmail:
-                label:         orocrm.contact.email.label
+                label:         oro.contact.email.label
             primaryPhone:
-                label:         orocrm.contact.contactphone.phone.label
+                label:         oro.contact.contactphone.phone.label
                 frontend_type: phone
             contactSourceLabel:
-                label:         orocrm.contact.source.label
+                label:         oro.contact.source.label
             countryName:
-                label:         orocrm.contact.contactaddress.country.label
+                label:         oro.contact.contactaddress.country.label
             regionLabel:
-                label:         orocrm.contact.contactaddress.region.label
+                label:         oro.contact.contactaddress.region.label
         sorters:
             columns:
                 firstName:
@@ -871,7 +871,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroCRMContactBundle:Source
+                            class: OroContactBundle:Source
                             property: label
                             translatable_options: false
                 countryName:
@@ -882,7 +882,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string

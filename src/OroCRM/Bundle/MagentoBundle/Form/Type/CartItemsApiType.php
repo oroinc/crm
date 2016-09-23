@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
 
 class CartItemsApiType extends AbstractType
 {
@@ -38,7 +37,7 @@ class CartItemsApiType extends AbstractType
         $builder->add('priceInclTax', 'oro_money', ['required' => false]);
         $builder->add('rowTotal', 'oro_money', ['required' => true]);
         $builder->add('productType', 'text', ['required' => true]);
-        $builder->add('cart', 'orocrm_cart_select', ['required' => false]);
+        $builder->add('cart', 'oro_cart_select', ['required' => false]);
 
         $builder->addEventSubscriber(new PatchSubscriber());
         $builder->addEventSubscriber(new CartItemApiFormSubscriber());
@@ -51,7 +50,7 @@ class CartItemsApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'           => 'OroCRM\Bundle\MagentoBundle\Entity\CartItem',
+                'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
                 'intention'            => 'items',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'single_form'          => true,

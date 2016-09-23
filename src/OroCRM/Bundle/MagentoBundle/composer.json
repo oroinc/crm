@@ -21,7 +21,7 @@
             "": "src/"
         }
     },
-    "target-dir": "OroCRM/Bundle/MagentoBundle",
+    "target-dir": "Oro/Bundle/MagentoBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

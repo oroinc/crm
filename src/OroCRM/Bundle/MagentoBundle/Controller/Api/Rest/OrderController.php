@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +25,7 @@ class OrderController extends RestController
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.order.manager.api');
+        return $this->get('oro_magento.order.manager.api');
     }
 
     /**
@@ -33,7 +33,7 @@ class OrderController extends RestController
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.order.api');
+        return $this->get('oro_magento.form.order.api');
     }
 
     /**
@@ -41,7 +41,7 @@ class OrderController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.order.api');
+        return $this->get('oro_magento.form.handler.order.api');
     }
 
     /**
@@ -57,7 +57,7 @@ class OrderController extends RestController
      *      description="Get all orders",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      *
      * @return Response
      */
@@ -77,10 +77,10 @@ class OrderController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_create",
+     *      id="oro_magento_order_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:Order"
+     *      class="OroMagentoBundle:Order"
      * )
      */
     public function postAction()
@@ -97,7 +97,7 @@ class OrderController extends RestController
      *      description="Get order",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      *
      * @return Response
      */
@@ -116,10 +116,10 @@ class OrderController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_update",
+     *      id="oro_magento_order_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:Order"
+     *      class="OroMagentoBundle:Order"
      * )
      * @return Response
      */
@@ -138,10 +138,10 @@ class OrderController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_delete",
+     *      id="oro_magento_order_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:Order"
+     *      class="OroMagentoBundle:Order"
      * )
      * @return Response
      */

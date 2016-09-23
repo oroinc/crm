@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\EventListener;
+namespace Oro\Bundle\CampaignBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector;
+use Oro\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector;
 
 class EmailCampaignStatisticConnectorCacheClearListener implements EventSubscriber
 {

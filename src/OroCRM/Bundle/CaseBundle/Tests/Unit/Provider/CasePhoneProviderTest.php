@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
-use OroCRM\Bundle\CaseBundle\Provider\CasePhoneProvider;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Provider\CasePhoneProvider;
 
 class CasePhoneProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +35,7 @@ class CasePhoneProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetPhoneNumber()
     {
         $entity  = new CaseEntity();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -67,7 +67,7 @@ class CasePhoneProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetPhoneNumbers()
     {
         $entity  = new CaseEntity();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 

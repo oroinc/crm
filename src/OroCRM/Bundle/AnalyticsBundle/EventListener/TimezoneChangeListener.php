@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
+namespace Oro\Bundle\AnalyticsBundle\EventListener;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 
 class TimezoneChangeListener
 {

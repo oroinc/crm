@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -13,7 +13,7 @@ class OroCrmMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_order');
+        $table = $schema->getTable('oro_magento_order');
         $table->addColumn('customer_email', 'string', ['notnull' => false, 'length' => 255]);
     }
 }

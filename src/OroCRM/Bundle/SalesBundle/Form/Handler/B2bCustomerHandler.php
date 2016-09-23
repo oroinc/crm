@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

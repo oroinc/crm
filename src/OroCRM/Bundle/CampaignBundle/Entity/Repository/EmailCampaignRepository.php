@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
+namespace Oro\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignRepository extends EntityRepository
 {
@@ -15,7 +15,7 @@ class EmailCampaignRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('email_campaign')
-            ->from('OroCRMCampaignBundle:EmailCampaign', 'email_campaign')
+            ->from('OroCampaignBundle:EmailCampaign', 'email_campaign')
             ->where($qb->expr()->eq('email_campaign.sent', ':sent'))
             ->andWhere($qb->expr()->eq('email_campaign.schedule', ':scheduleType'))
             ->andWhere($qb->expr()->isNotNull('email_campaign.scheduledFor'))

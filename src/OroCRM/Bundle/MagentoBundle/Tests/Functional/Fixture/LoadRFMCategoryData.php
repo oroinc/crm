@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -10,9 +10,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -153,7 +153,7 @@ class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInt
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+            'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
         ];
     }
 }

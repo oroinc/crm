@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Builder;
+namespace Oro\Bundle\AnalyticsBundle\Builder;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 interface AnalyticsBuilderInterface
 {

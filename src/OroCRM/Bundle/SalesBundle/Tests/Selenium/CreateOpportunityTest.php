@@ -1,18 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 
 /**
  * Class CreateOpportunityTest
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Sales
  */
 class CreateOpportunityTest extends Selenium2TestCase
 {
@@ -28,7 +28,7 @@ class CreateOpportunityTest extends Selenium2TestCase
         $channelName = $this->createChannel($login);
         $customer = $this->createB2BCustomer($login, $accountName, $channelName);
         /** @var Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Opportunities - Sales')
             ->add()
             ->assertTitle('Create Opportunity - Opportunities - Sales')
@@ -58,7 +58,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $accountName = 'Account_'.mt_rand();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->add()
             ->setName($accountName)
             ->setOwner('admin')
@@ -75,7 +75,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $channelName = 'Channel_'.mt_rand();
         /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+        $login->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
@@ -98,7 +98,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $name = 'B2BCustomer_'.mt_rand();
         /** @var B2BCustomers $login */
-        $login->openB2BCustomers('OroCRM\Bundle\SalesBundle')
+        $login->openB2BCustomers('Oro\Bundle\SalesBundle')
             ->add()
             ->setName($name)
             ->setOwner('admin')
@@ -120,7 +120,7 @@ class CreateOpportunityTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->assertTitle("{$name} - Opportunities - Sales")
@@ -144,7 +144,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->delete()

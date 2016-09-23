@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider\Lifetime;
+namespace Oro\Bundle\ChannelBundle\Provider\Lifetime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -70,9 +70,9 @@ class AverageLifetimeWidgetProvider
             ];
         }
 
-        $channelNames = $this->registry->getRepository('OroCRMChannelBundle:Channel')
+        $channelNames = $this->registry->getRepository('OroChannelBundle:Channel')
             ->getAvailableChannelNames($this->aclHelper);
-        $data         = $this->registry->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')
+        $data         = $this->registry->getRepository('OroChannelBundle:LifetimeValueAverageAggregation')
             ->findForPeriod($start, $end, array_keys($channelNames));
 
         foreach ($data as $row) {

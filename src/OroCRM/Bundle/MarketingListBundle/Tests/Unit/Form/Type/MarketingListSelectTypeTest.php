@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListSelectType;
+use Oro\Bundle\MarketingListBundle\Form\Type\MarketingListSelectType;
 
 class MarketingListSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,9 +24,9 @@ class MarketingListSelectTypeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'autocomplete_alias' => 'marketing_lists',
-                    'create_form_route'  => 'orocrm_marketing_list_create',
+                    'create_form_route'  => 'oro_marketing_list_create',
                     'configs'            => [
-                        'placeholder' => 'orocrm.marketinglist.form.choose_marketing_list'
+                        'placeholder' => 'oro.marketinglist.form.choose_marketing_list'
                     ],
                 ]
             );
@@ -36,7 +36,7 @@ class MarketingListSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_marketing_list_select', $this->type->getName());
+        $this->assertEquals('oro_marketing_list_select', $this->type->getName());
     }
 
     public function testGetParent()

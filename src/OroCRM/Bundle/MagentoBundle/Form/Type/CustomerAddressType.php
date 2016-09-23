@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,14 +13,14 @@ use Symfony\Component\Validator\Constraint;
 
 class CustomerAddressType extends AbstractType
 {
-    const NAME = 'orocrm_magento_customer_addresses';
+    const NAME = 'oro_magento_customer_addresses';
 
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('phone', 'text', ['required' => true, 'label' => 'orocrm.magento.address.phone.label']);
+        $builder->add('phone', 'text', ['required' => true, 'label' => 'oro.magento.address.phone.label']);
     }
 
     /**

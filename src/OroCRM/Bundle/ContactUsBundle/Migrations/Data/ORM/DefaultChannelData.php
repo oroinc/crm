@@ -1,27 +1,26 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
     const PREFERABLE_CHANNEL_TYPE = 'custom';
 
-    const FORM_TYPE = 'orocrm_contact_us.embedded_form';
+    const FORM_TYPE = 'oro_contact_us.embedded_form';
 
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        $entity = 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest';
+        $entity = 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest';
 
         $forms = $this->em->getRepository('OroEmbeddedFormBundle:EmbeddedForm')
             ->findBy(['formType' => self::FORM_TYPE]);
@@ -30,13 +29,13 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
         $shouldBeCreated =  $existingRecords || !empty($forms);
         if ($shouldBeCreated) {
             /** @var Channel|null $channel */
-            $channel = $this->em->getRepository('OroCRMChannelBundle:Channel')
+            $channel = $this->em->getRepository('OroChannelBundle:Channel')
                 ->findOneBy(['channelType' => self::PREFERABLE_CHANNEL_TYPE]);
 
             if (!$channel) {
-                $builder = $this->container->get('orocrm_channel.builder.factory')->createBuilder();
+                $builder = $this->container->get('oro_channel.builder.factory')->createBuilder();
             } else {
-                $builder = $this->container->get('orocrm_channel.builder.factory')->createBuilderForChannel($channel);
+                $builder = $this->container->get('oro_channel.builder.factory')->createBuilderForChannel($channel);
             }
 
             $builder->setStatus(Channel::STATUS_ACTIVE);

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -21,7 +21,7 @@ class LeadDataChannelAwareSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_data_channel_aware_select';
+        return 'oro_sales_lead_data_channel_aware_select';
     }
 
     /**
@@ -48,10 +48,10 @@ class LeadDataChannelAwareSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias'           => 'leads',
-                'create_form_route'            => 'orocrm_sales_lead_data_channel_aware_create',
-                'grid_view_widget_route'       => 'orocrm_sales_datagrid_lead_datachannel_aware',
+                'create_form_route'            => 'oro_sales_lead_data_channel_aware_create',
+                'grid_view_widget_route'       => 'oro_sales_datagrid_lead_datachannel_aware',
                 'configs'                      => [
-                    'placeholder' => 'orocrm.sales.form.choose_lead'
+                    'placeholder' => 'oro.sales.form.choose_lead'
                 ],
                 'channel_field'                => 'dataChannel',
                 'channel_required'             => true,

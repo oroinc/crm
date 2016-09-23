@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_27;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_27;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,7 +14,7 @@ class AddCustomerPassword implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $customerTable = $schema->getTable('orocrm_magento_customer');
+        $customerTable = $schema->getTable('oro_magento_customer');
         $customerTable->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
     }
 }

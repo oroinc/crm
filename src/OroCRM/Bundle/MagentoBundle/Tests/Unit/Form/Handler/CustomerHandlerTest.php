@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\Form;
 
-use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
+use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
+use Oro\Bundle\MagentoBundle\Service\StateManager;
 use Oro\Bundle\FormBundle\Tests\Unit\Model\UpdateHandlerTest;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerHandler;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Form\Handler\CustomerHandler;
 
 class CustomerHandlerTest extends UpdateHandlerTest
 {

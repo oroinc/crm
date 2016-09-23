@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Type;
+namespace Oro\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +40,7 @@ class ContactApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_contact';
+        return 'oro_contact';
     }
 
     /**

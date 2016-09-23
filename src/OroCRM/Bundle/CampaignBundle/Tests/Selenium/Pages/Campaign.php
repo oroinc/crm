@@ -1,17 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\CampaignBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Campaign
- * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\CampaignBundle\Tests\Selenium\Pages
  * {@inheritdoc}
  */
 class Campaign extends AbstractPageEntity
 {
-    protected $owner = "//div[starts-with(@id,'s2id_orocrm_campaign_form_owner')]/a";
+    protected $owner = "//div[starts-with(@id,'s2id_oro_campaign_form_owner')]/a";
 
     /**
      * @param string $name
@@ -19,7 +19,7 @@ class Campaign extends AbstractPageEntity
      */
     public function setName($name)
     {
-        $object = $this->test->byXpath("//*[@data-ftid='orocrm_campaign_form_name']");
+        $object = $this->test->byXpath("//*[@data-ftid='oro_campaign_form_name']");
         $object->clear();
         $object->value($name);
 
@@ -32,7 +32,7 @@ class Campaign extends AbstractPageEntity
      */
     public function setCode($code)
     {
-        $object = $this->test->byXpath("//*[@data-ftid='orocrm_campaign_form_code']");
+        $object = $this->test->byXpath("//*[@data-ftid='oro_campaign_form_code']");
         $object->clear();
         $object->value($code);
 

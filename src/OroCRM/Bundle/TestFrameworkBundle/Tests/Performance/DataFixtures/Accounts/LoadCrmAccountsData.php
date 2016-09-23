@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
+namespace Oro\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -13,17 +13,16 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Source;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
@@ -106,8 +105,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     protected function initSupportingEntities()
     {
-        $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
+        $this->contactGroups = $this->contactManager->getRepository('OroContactBundle:Group')->findAll();
+        $this->contactSources = $this->contactManager->getRepository('OroContactBundle:Source')->findAll();
 
         $userStorageManager = $this->userManager->getStorageManager();
         $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();

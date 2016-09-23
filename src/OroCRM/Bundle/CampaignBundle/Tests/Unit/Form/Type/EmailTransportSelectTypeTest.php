@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\CampaignBundle\Form\Type\EmailTransportSelectType;
+use Oro\Bundle\CampaignBundle\Form\Type\EmailTransportSelectType;
 
 class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->emailTransportProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider')
+            ->getMockBuilder('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider')
             ->disableOriginalConstructor()
             ->getMock();
         $this->type = new EmailTransportSelectType($this->emailTransportProvider);
@@ -32,7 +32,7 @@ class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $choices = ['internal' => 'orocrm.campaign.emailcampaign.transport.internal'];
+        $choices = ['internal' => 'oro.campaign.emailcampaign.transport.internal'];
         $this->emailTransportProvider
             ->expects($this->once())
             ->method('getVisibleTransportChoices')
@@ -52,6 +52,6 @@ class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_campaign_email_transport_select', $this->type->getName());
+        $this->assertEquals('oro_campaign_email_transport_select', $this->type->getName());
     }
 }

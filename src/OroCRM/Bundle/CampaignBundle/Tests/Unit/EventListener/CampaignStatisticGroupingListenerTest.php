@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupByHelper = $this

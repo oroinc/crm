@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;

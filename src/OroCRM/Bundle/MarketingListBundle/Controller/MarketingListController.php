@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Controller;
+namespace Oro\Bundle\MarketingListBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,8 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 /**
  * @Route("/marketing-list")
@@ -18,24 +18,24 @@ use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 class MarketingListController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_marketing_list_index")
-     * @AclAncestor("orocrm_marketing_list_view")
+     * @Route("/", name="oro_marketing_list_index")
+     * @AclAncestor("oro_marketing_list_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_marketing_list.entity.class')
+            'entity_class' => $this->container->getParameter('oro_marketing_list.entity.class')
         ];
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_marketing_list_view", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/view/{id}", name="oro_marketing_list_view", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Acl(
-     *      id="orocrm_marketing_list_view",
+     *      id="oro_marketing_list_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMarketingListBundle:MarketingList"
+     *      class="OroMarketingListBundle:MarketingList"
      * )
      * @Template
      *
@@ -45,7 +45,7 @@ class MarketingListController extends Controller
      */
     public function viewAction(MarketingList $entity)
     {
-        $entityConfig = $this->get('orocrm_marketing_list.entity_provider')->getEntity($entity->getEntity());
+        $entityConfig = $this->get('oro_marketing_list.entity_provider')->getEntity($entity->getEntity());
 
         return [
             'entity'   => $entity,
@@ -55,13 +55,13 @@ class MarketingListController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_marketing_list_create")
-     * @Template("OroCRMMarketingListBundle:MarketingList:update.html.twig")
+     * @Route("/create", name="oro_marketing_list_create")
+     * @Template("OroMarketingListBundle:MarketingList:update.html.twig")
      * @Acl(
-     *      id="orocrm_marketing_list_create",
+     *      id="oro_marketing_list_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMarketingListBundle:MarketingList"
+     *      class="OroMarketingListBundle:MarketingList"
      * )
      */
     public function createAction()
@@ -70,14 +70,14 @@ class MarketingListController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_marketing_list_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_marketing_list_update", requirements={"id"="\d+"}, defaults={"id"=0})
      *
      * @Template
      * @Acl(
-     *      id="orocrm_marketing_list_update",
+     *      id="oro_marketing_list_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMarketingListBundle:MarketingList"
+     *      class="OroMarketingListBundle:MarketingList"
      * )
      *
      * @param MarketingList $entity
@@ -98,9 +98,9 @@ class MarketingListController extends Controller
     {
         $response = $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_marketing_list.form.marketing_list'),
-            $this->get('translator')->trans('orocrm.marketinglist.entity.saved'),
-            $this->get('orocrm_marketing_list.form.handler.marketing_list')
+            $this->get('oro_marketing_list.form.marketing_list'),
+            $this->get('translator')->trans('oro.marketinglist.entity.saved'),
+            $this->get('oro_marketing_list.form.handler.marketing_list')
         );
 
         if (is_array($response)) {

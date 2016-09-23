@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MarketingListBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,7 +13,7 @@ class UpdateMarketingListSegmentOrganization extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $marketingLists = $manager->getRepository('OroCRMMarketingListBundle:MarketingList')->findAll();
+        $marketingLists = $manager->getRepository('OroMarketingListBundle:MarketingList')->findAll();
         $entitiesToFlush = [];
 
         foreach ($marketingLists as $marketingList) {

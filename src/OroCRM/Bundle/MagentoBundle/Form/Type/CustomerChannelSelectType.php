@@ -1,18 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class CustomerChannelSelectType extends AbstractType
 {
-    const NAME = 'orocrm_magento_customer_channel_select';
+    const NAME = 'oro_magento_customer_channel_select';
 
     /**
      * @var string
@@ -64,7 +64,7 @@ class CustomerChannelSelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_channel_select_type';
+        return 'oro_channel_select_type';
     }
 
     /**

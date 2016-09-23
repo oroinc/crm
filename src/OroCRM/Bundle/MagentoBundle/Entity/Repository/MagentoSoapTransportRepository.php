@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
+namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 
 class MagentoSoapTransportRepository extends EntityRepository
 {

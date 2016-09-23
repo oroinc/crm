@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Utils;
+namespace Oro\Bundle\MagentoBundle\Utils;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class ValidationUtils
 {

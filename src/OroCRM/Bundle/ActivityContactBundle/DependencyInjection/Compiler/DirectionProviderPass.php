@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\DependencyInjection\Compiler;
+namespace Oro\Bundle\ActivityContactBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,8 +8,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class DirectionProviderPass implements CompilerPassInterface
 {
-    const TAG                 = 'orocrm_activity_direction.provider';
-    const PROVIDER_SERVICE_ID = 'orocrm_activity_contact.provider';
+    const TAG                 = 'oro_activity_direction.provider';
+    const PROVIDER_SERVICE_ID = 'oro_activity_contact.provider';
 
     /**
      * {@inheritdoc}

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_13;
+namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_13;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
@@ -17,28 +17,28 @@ class UpdateCreatedUpdatedLabels implements Migration
     {
         $fields = [
             [
-                'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                'entityName' => 'Oro\Bundle\ContactBundle\Entity\Contact',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.contact.created_at.label'
+                'replace' => 'oro.contact.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                'entityName' => 'Oro\Bundle\ContactBundle\Entity\Contact',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.contact.updated_at.label'
+                'replace' => 'oro.contact.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
+                'entityName' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress',
                 'field' => 'created',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.contact.contactaddress.created.label'
+                'replace' => 'oro.contact.contactaddress.created.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
+                'entityName' => 'Oro\Bundle\ContactBundle\Entity\ContactAddress',
                 'field' => 'updated',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.contact.contactaddress.updated.label'
+                'replace' => 'oro.contact.contactaddress.updated.label'
             ]
         ];
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Performance;
+namespace Oro\Bundle\TestFrameworkBundle\Tests\Performance;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 

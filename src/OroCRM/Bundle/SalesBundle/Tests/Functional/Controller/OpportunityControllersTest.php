@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @outputBuffering enabled
@@ -33,7 +32,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     protected function postFixtureLoad()
@@ -44,26 +43,26 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_sales_opportunity_index'));
+        $this->client->request('GET', $this->getUrl('oro_sales_opportunity_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_sales_opportunity_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_sales_opportunity_create'));
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
-        $form['orocrm_sales_opportunity_form[name]']         = $name;
-        $form['orocrm_sales_opportunity_form[customer]']     = self::$customer->getId();
-        $form['orocrm_sales_opportunity_form[probability]']  = 50;
-        $form['orocrm_sales_opportunity_form[budgetAmount]'] = 10000;
-        $form['orocrm_sales_opportunity_form[customerNeed]'] = 10001;
-        $form['orocrm_sales_opportunity_form[closeReason]']  = 'cancelled';
-        $form['orocrm_sales_opportunity_form[owner]']        = 1;
-        $form['orocrm_sales_opportunity_form[dataChannel]']  = $this->getReference('default_channel')->getId();
+        $form['oro_sales_opportunity_form[name]']         = $name;
+        $form['oro_sales_opportunity_form[customer]']     = self::$customer->getId();
+        $form['oro_sales_opportunity_form[probability]']  = 50;
+        $form['oro_sales_opportunity_form[budgetAmount]'] = 10000;
+        $form['oro_sales_opportunity_form[customerNeed]'] = 10001;
+        $form['oro_sales_opportunity_form[closeReason]']  = 'cancelled';
+        $form['oro_sales_opportunity_form[owner]']        = 1;
+        $form['oro_sales_opportunity_form[dataChannel]']  = $this->getReference('default_channel')->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -96,13 +95,13 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_update', ['id' => $result['id']])
+            $this->getUrl('oro_sales_opportunity_update', ['id' => $result['id']])
         );
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
-        $form['orocrm_sales_opportunity_form[name]'] = $name;
+        $form['oro_sales_opportunity_form[name]'] = $name;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -126,7 +125,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
+            $this->getUrl('oro_sales_opportunity_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -145,7 +144,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_sales_opportunity_info',
+                'oro_sales_opportunity_info',
                 ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
@@ -170,7 +169,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_opportunity_view', ['id' => $returnValue['id']])
+            $this->getUrl('oro_sales_opportunity_view', ['id' => $returnValue['id']])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);

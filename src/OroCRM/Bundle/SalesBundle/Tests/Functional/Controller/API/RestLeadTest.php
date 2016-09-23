@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @outputBuffering enabled
@@ -21,7 +20,7 @@ class RestLeadTest extends WebTestCase
             [],
             $this->generateWsseAuthHeader()
         );
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     protected function postFixtureLoad()

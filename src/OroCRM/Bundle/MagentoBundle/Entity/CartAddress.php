@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -9,10 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
+use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
 
 /**
- * @ORM\Table("orocrm_magento_cart_address")
+ * @ORM\Table("oro_magento_cart_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={

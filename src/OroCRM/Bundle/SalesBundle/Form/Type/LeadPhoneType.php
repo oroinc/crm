@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -26,7 +26,7 @@ class LeadPhoneType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\LeadPhone',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadPhone',
                 'intention' => 'lead',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation' => true,
@@ -48,6 +48,6 @@ class LeadPhoneType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_phone';
+        return 'oro_sales_lead_phone';
     }
 }

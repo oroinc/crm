@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,10 +10,9 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
-
-use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+use Oro\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 /**
  * Schedule initial synchronization if it is required.

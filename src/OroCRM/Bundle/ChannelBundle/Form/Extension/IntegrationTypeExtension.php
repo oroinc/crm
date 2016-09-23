@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Extension;
+namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;

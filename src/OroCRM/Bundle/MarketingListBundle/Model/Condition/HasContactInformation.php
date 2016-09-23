@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Model\Condition;
+namespace Oro\Bundle\MarketingListBundle\Model\Condition;
 
 use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
@@ -8,9 +8,8 @@ use Oro\Component\Action\Condition\AbstractCondition;
 use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
-
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 /**
  * Check MarketingList for presence of contact information fields of given type
@@ -74,7 +73,7 @@ class HasContactInformation extends AbstractCondition implements ContextAccessor
 
         if (!$marketingList instanceof MarketingList) {
             throw new InvalidArgumentException(
-                'Option "marketing_list" must be instance of "OroCRM\Bundle\MarketingListBundle\Entity\MarketingList"'
+                'Option "marketing_list" must be instance of "Oro\Bundle\MarketingListBundle\Entity\MarketingList"'
             );
         }
 

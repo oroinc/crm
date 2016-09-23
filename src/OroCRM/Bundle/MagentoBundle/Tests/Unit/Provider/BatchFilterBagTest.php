@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
 class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
 {

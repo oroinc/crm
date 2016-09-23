@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

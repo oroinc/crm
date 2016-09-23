@@ -1,5 +1,5 @@
 css:
   'orodatagrid':
-      - 'bundles/orocrmsales/css/less/main.less'
-  'orocrmsales':
-      - 'bundles/orocrmsales/css/less/orocrm.sales.less'
+      - 'bundles/orosales/css/less/main.less'
+  'orosales':
+      - 'bundles/orosales/css/less/oro.sales.less'

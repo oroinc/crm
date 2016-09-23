@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Builder;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild(array $builders)
     {
         /** @var Channel|\PHPUnit_Framework_MockObject_MockObject $entity */
-        $entity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $entity = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         foreach ($builders as $builder) {
             $this->builder->addBuilder($builder);
@@ -91,6 +91,6 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getBuilderMock()
     {
-        return $this->getMock('OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface');
+        return $this->getMock('Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface');
     }
 }

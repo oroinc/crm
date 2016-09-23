@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+namespace Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\ORM\QueryBuilder;
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 
 abstract class AbstractDiscoveryStrategy implements DiscoveryStrategyInterface
 {

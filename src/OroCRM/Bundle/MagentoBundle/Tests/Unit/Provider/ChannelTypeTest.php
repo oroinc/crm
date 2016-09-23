@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,6 +21,6 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testPublicInterface()
     {
-        $this->assertEquals('orocrm.magento.channel_type.label', $this->channel->getLabel());
+        $this->assertEquals('oro.magento.channel_type.label', $this->channel->getLabel());
     }
 }

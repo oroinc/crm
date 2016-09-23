@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +35,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helper = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
+        $this->helper = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +84,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
         $gridName = ConfigurationProvider::GRID_PREFIX . '1_postfix';
         $entityName = '\stdClass';
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -121,7 +121,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
         $gridName = ConfigurationProvider::GRID_PREFIX . '1_postfix';
         $entityName = '\stdClass';
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -163,7 +163,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
         $actualGridName = 'test_grid';
         $entityName = '\stdClass';
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -213,7 +213,7 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue(2));
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())

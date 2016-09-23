@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Migrations\Schema\v1_5;
+namespace Oro\Bundle\CampaignBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Connection;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
@@ -51,8 +51,8 @@ class AggregateStatisticsQuery implements MigrationQuery, ConnectionAwareInterfa
         $duplicateEntitiesQuery = 'SELECT
                 DISTINCT t2.id
             FROM
-                orocrm_campaign_email_stats AS t1
-            LEFT JOIN orocrm_campaign_email_stats AS t2
+                oro_campaign_email_stats AS t1
+            LEFT JOIN oro_campaign_email_stats AS t2
                 ON t1.email_campaign_id = t2.email_campaign_id
                 AND t1.marketing_list_item_id = t2.marketing_list_item_id
                 AND t2.id > t1.id
@@ -71,7 +71,7 @@ class AggregateStatisticsQuery implements MigrationQuery, ConnectionAwareInterfa
         );
 
         if ($idsToRemove) {
-            $query = 'DELETE FROM orocrm_campaign_email_stats WHERE id IN (?)';
+            $query = 'DELETE FROM oro_campaign_email_stats WHERE id IN (?)';
             $logger->info($query);
             if (!$dryRun) {
                 $this->connection->executeQuery($query, [$idsToRemove], [Connection::PARAM_INT_ARRAY]);

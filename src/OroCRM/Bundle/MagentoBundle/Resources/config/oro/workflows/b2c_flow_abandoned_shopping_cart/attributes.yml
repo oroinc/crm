@@ -24,9 +24,9 @@ workflows:
                label: 'Account'
                type: entity
                options:
-                   class: OroCRM\Bundle\AccountBundle\Entity\Account
+                   class: Oro\Bundle\AccountBundle\Entity\Account
            contact:
                label: 'Contact'
                type: entity
                options:
-                   class: OroCRM\Bundle\ContactBundle\Entity\Contact
+                   class: Oro\Bundle\ContactBundle\Entity\Contact

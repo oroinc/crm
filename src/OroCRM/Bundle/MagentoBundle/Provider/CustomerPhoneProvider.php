@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MarketingListUnsubscribedItemTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +49,7 @@ class MarketingListUnsubscribedItemTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('entityId', 2),
-            array('marketingList', $this->getMock('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')),
+            array('marketingList', $this->getMock('Oro\Bundle\MarketingListBundle\Entity\MarketingList')),
             array('createdAt', new \DateTime()),
         );
     }

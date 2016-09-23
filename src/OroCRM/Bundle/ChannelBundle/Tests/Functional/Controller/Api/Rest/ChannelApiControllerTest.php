@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @outputBuffering enabled
@@ -14,12 +14,12 @@ class ChannelApiControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannels']);
+        $this->loadFixtures(['Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannels']);
     }
 
     public function testCget()
     {
-        $url = $this->getUrl('orocrm_api_get_channels');
+        $url = $this->getUrl('oro_api_get_channels');
         $this->client->request('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -37,7 +37,7 @@ class ChannelApiControllerTest extends WebTestCase
         $inactiveChannel = $this->getReference('channel_2');
 
         //fetch active channels
-        $url = $this->getUrl('orocrm_api_get_channels', ['active' => 'false']);
+        $url = $this->getUrl('oro_api_get_channels', ['active' => 'false']);
         $this->client->request('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -47,7 +47,7 @@ class ChannelApiControllerTest extends WebTestCase
         $this->assertEquals($channels[0]['name'], $inactiveChannel->getName());
 
         //fetch inactive channels
-        $url = $this->getUrl('orocrm_api_get_channels', ['active' => 'true']);
+        $url = $this->getUrl('oro_api_get_channels', ['active' => 'true']);
         $this->client->request('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -60,8 +60,8 @@ class ChannelApiControllerTest extends WebTestCase
     public function testCgetWithEntityFilter()
     {
         $url = $this->getUrl(
-            'orocrm_api_get_channels',
-            ['entity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity']
+            'oro_api_get_channels',
+            ['entity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']
         );
         $this->client->request('GET', $url);
 

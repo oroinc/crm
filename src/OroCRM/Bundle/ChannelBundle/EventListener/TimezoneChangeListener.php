@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use JMS\JobQueueBundle\Entity\Job;
 
-use OroCRM\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
-
+use Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListener

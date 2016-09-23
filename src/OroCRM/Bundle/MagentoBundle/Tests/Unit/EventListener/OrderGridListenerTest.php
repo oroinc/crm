@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\Datagrid;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use OroCRM\Bundle\MagentoBundle\EventListener\OrderGridListener;
+use Oro\Bundle\MagentoBundle\EventListener\OrderGridListener;
 
 class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -136,7 +136,7 @@ class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
                                         'alias'         => 'address',
                                         'conditionType' => 'WITH',
                                         'condition'     => 'address.id IN (SELECT oa.id '.
-                                            'FROM OroCRMMagentoBundle:OrderAddress oa LEFT JOIN '.
+                                            'FROM OroMagentoBundle:OrderAddress oa LEFT JOIN '.
                                             'oa.types type WHERE type.name = \'billing\' OR type.name IS NULL)'
                                     ],
                                     [

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -68,7 +68,7 @@ class LeadMailboxProcessSourceType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_mailbox_process_source';
+        return 'oro_sales_lead_mailbox_process_source';
     }
 
     /**

@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider;
+namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 
 class ChannelsByEntitiesProvider
 {
@@ -78,7 +77,7 @@ class ChannelsByEntitiesProvider
     {
         if (null === $this->channelRepository) {
             $this->channelRepository = $this->doctrineHelper
-                ->getEntityRepositoryForClass('OroCRMChannelBundle:Channel');
+                ->getEntityRepositoryForClass('OroChannelBundle:Channel');
         }
 
         return $this->channelRepository;

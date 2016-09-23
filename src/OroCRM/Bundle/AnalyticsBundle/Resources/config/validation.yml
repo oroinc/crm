@@ -1,4 +1,4 @@
-OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory:
+Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: [ categoryIndex, channel, categoryType ]

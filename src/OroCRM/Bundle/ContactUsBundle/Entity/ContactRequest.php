@@ -1,29 +1,28 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Entity;
+namespace Oro\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
 
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="orocrm_contactus_request",
+ *      name="oro_contactus_request",
  *      indexes={@ORM\Index(name="request_create_idx",columns={"created_at"})}
  * )
  *
  * @Config(
- *      routeName="orocrm_contactus_request_index",
- *      routeView="orocrm_contactus_request_view",
+ *      routeName="oro_contactus_request_index",
+ *      routeView="oro_contactus_request_view",
  *      defaultValues={
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",
@@ -49,9 +48,9 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
 {
     use ChannelEntityTrait;
 
-    const CONTACT_METHOD_BOTH  = 'orocrm.contactus.contactrequest.method.both';
-    const CONTACT_METHOD_PHONE = 'orocrm.contactus.contactrequest.method.phone';
-    const CONTACT_METHOD_EMAIL = 'orocrm.contactus.contactrequest.method.email';
+    const CONTACT_METHOD_BOTH  = 'oro.contactus.contactrequest.method.both';
+    const CONTACT_METHOD_PHONE = 'oro.contactus.contactrequest.method.phone';
+    const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
 
     /**
      * @var string
@@ -70,7 +69,7 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
     /**
      * @var ContactReason
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactUsBundle\Entity\ContactReason")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactUsBundle\Entity\ContactReason")
      * @ORM\JoinColumn(name="contact_reason_id", referencedColumnName="id", nullable=true)
      **/
     protected $contactReason;
@@ -85,7 +84,7 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
     /**
      * @var Opportunity
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity")
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $opportunity;
@@ -93,7 +92,7 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $lead;

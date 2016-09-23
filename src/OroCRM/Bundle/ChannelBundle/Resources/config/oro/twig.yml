@@ -1,2 +1,2 @@
 bundles:
-    - OroCRMChannelBundle:Form:fields.html.twig
+    - OroChannelBundle:Form:fields.html.twig

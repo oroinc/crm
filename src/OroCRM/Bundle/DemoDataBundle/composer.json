@@ -10,9 +10,9 @@
         "doctrine/data-fixtures": "@dev"
     },
     "autoload": {
-        "psr-0": { "OroCRM\\Bundle\\DemoDataBundle": "" }
+        "psr-0": { "Oro\\Bundle\\DemoDataBundle": "" }
     },
-    "target-dir": "OroCRM/Bundle/DemoDataBundle",
+    "target-dir": "Oro/Bundle/DemoDataBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

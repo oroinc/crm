@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 /**
  * @outputBuffering enabled
@@ -8,7 +8,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
  */
 class OrderControllerTest extends AbstractController
 {
-    /** @var \OroCRM\Bundle\MagentoBundle\Entity\Order */
+    /** @var \Oro\Bundle\MagentoBundle\Entity\Order */
     public static $order;
 
     protected function postFixtureLoad()
@@ -25,7 +25,7 @@ class OrderControllerTest extends AbstractController
 
     public function testView()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_order_view', ['id' => $this->getMainEntityId()]));
+        $this->client->request('GET', $this->getUrl('oro_magento_order_view', ['id' => $this->getMainEntityId()]));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Orders', $result->getContent());

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
 
 class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
 {
@@ -44,7 +44,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
             ->with($object)
             ->will($this->returnValue($className));
 
-        $this->voter->setClassName('OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
+        $this->voter->setClassName('Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
 
         $this->doctrineHelper->expects($this->any())
             ->method('getSingleEntityIdentifier')
@@ -74,7 +74,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
      */
     public function attributesDataProvider()
     {
-        $className = 'OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber';
+        $className = 'Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber';
         $objectIdentityClass = 'Symfony\Component\Security\Acl\Model\ObjectIdentityInterface';
 
 
@@ -212,7 +212,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
      */
     protected function getSubscriber($hasCustomer = false, $customerOriginId = null)
     {
-        $newsletterSubscriber = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
+        $newsletterSubscriber = $this->getMock('Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
 
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $newsletterSubscriber->expects($this->any())
@@ -220,7 +220,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
             ->will($this->returnValue($channel));
 
         if ($hasCustomer) {
-            $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+            $customer = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
 
             $newsletterSubscriber->expects($this->any())
                 ->method('getCustomer')

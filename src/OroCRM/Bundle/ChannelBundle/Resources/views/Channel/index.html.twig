@@ -2,14 +2,14 @@
 
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-{% set pageTitle = 'orocrm.channel.entity_plural_label'|trans %}
+{% set pageTitle = 'oro.channel.entity_plural_label'|trans %}
 {% set gridName  = 'orocrm-channels-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_channel_create') %}
+    {% if resource_granted('oro_channel_create') %}
         {{ UI.addButton({
-            'path': path('orocrm_channel_create'),
-            'entity_label': 'orocrm.channel.entity_label'|trans
+            'path': path('oro_channel_create'),
+            'entity_label': 'oro.channel.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

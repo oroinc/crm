@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
+namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -99,7 +99,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
         // contact last name and first name must be in this order to support compound index
-        if ($entityName == 'OroCRM\Bundle\ContactBundle\Entity\Contact') {
+        if ($entityName == 'Oro\Bundle\ContactBundle\Entity\Contact') {
             if (array_key_exists('firstName', $identityValues) && array_key_exists('lastName', $identityValues)) {
                 $firstName = $identityValues['firstName'];
                 $lastName = $identityValues['lastName'];

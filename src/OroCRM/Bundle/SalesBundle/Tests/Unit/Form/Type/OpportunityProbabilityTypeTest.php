@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 
@@ -11,8 +11,7 @@ use Symfony\Component\Validator\Constraints\Range;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
-
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType;
 
 class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +30,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = $this->getFormType([]);
 
-        $this->assertEquals('orocrm_sales_opportunity_probability', $type->getName());
+        $this->assertEquals('oro_sales_opportunity_probability', $type->getName());
     }
 
     /**

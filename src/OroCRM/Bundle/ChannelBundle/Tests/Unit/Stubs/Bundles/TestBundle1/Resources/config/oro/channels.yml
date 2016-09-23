@@ -1,13 +1,13 @@
 channels:
    entity_data:
        -
-           name: OroCRM\Bundle\TestBundle1\Entity\Entity1
+           name: Oro\Bundle\TestBundle1\Entity\Entity1
            dependent:
-               - OroCRM\Bundle\TestBundle1\Entity\Entity1Status
-               - OroCRM\Bundle\TestBundle1\Entity\Entity1Reason
+               - Oro\Bundle\TestBundle1\Entity\Entity1Status
+               - Oro\Bundle\TestBundle1\Entity\Entity1Reason
            dependencies:
-               - OroCRM\Bundle\TestBundle1\Entity\Entity2
-               - OroCRM\Bundle\TestBundle1\Entity\Entity3
+               - Oro\Bundle\TestBundle1\Entity\Entity2
+               - Oro\Bundle\TestBundle1\Entity\Entity3
            dependencies_condition: OR
            navigation_items:
                - application_menu.menu1.list
@@ -18,9 +18,9 @@ channels:
         test1:
             label: test1 type
             entities:
-                - OroCRM\Bundle\TestBundle1\Entity\Entity1
-                - OroCRM\Bundle\TestBundle1\Entity\Entity2
-                - OroCRM\Bundle\TestBundle1\Entity\Entity3
+                - Oro\Bundle\TestBundle1\Entity\Entity1
+                - Oro\Bundle\TestBundle1\Entity\Entity2
+                - Oro\Bundle\TestBundle1\Entity\Entity3
             integration_type: test
-            customer_identity: OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer
+            customer_identity: Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer
             lifetime_value: some_field

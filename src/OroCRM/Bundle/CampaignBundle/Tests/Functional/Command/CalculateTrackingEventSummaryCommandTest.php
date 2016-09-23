@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Functional\Command;
+namespace Oro\Bundle\CampaignBundle\Tests\Functional\Command;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\CampaignBundle\Command\CalculateTrackingEventSummaryCommand;
+use Oro\Bundle\CampaignBundle\Command\CalculateTrackingEventSummaryCommand;
 
 /**
  * @outputBuffering enabled
@@ -16,8 +16,8 @@ class CalculateTrackingEventSummaryCommandTest extends WebTestCase
         $this->initClient();
         $this->loadFixtures(
             [
-                'OroCRM\Bundle\CampaignBundle\Tests\Functional\DataFixtures\LoadCampaignData',
-                'OroCRM\Bundle\CampaignBundle\Tests\Functional\DataFixtures\LoadTrackingEventData',
+                'Oro\Bundle\CampaignBundle\Tests\Functional\DataFixtures\LoadCampaignData',
+                'Oro\Bundle\CampaignBundle\Tests\Functional\DataFixtures\LoadTrackingEventData',
             ]
         );
     }
@@ -86,7 +86,7 @@ class CalculateTrackingEventSummaryCommandTest extends WebTestCase
     protected function getSummaryData()
     {
         return $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMCampaignBundle:TrackingEventSummary')
+            ->getRepository('OroCampaignBundle:TrackingEventSummary')
             ->createQueryBuilder('q')
             ->select(['q.code', 'q.name', 'q.visitCount', 'DATE(q.loggedAt) as loggedAtDate'])
             ->addOrderBy('q.code, q.name, q.loggedAt')

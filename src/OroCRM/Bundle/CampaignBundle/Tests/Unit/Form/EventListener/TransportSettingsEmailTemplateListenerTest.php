@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\EventListener;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class TransportSettingsEmailTemplateListenerTest extends \PHPUnit_Framework_TestCase
 {

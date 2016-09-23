@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Command;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Command;
 
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\MemoryOutput;
-use OroCRM\Bundle\MagentoBundle\Command\CartExpirationSyncCommand;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\MemoryOutput;
+use Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand;
 
 class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +52,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
         $testChannelId = 11;
 
         /** @var CartExpirationSyncCommand|\PHPUnit_Framework_MockObject_MockObject $command */
-        $command = $this->getMock('OroCRM\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
+        $command = $this->getMock('Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
         $command->setContainer($this->container);
 
         $input  = new ArrayInput(['-c' => $testChannelId], $command->getDefinition());
@@ -85,12 +84,12 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var CartExpirationSyncCommand|\PHPUnit_Framework_MockObject_MockObject $command */
-        $command = $this->getMock('OroCRM\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
+        $command = $this->getMock('Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
         $command->setContainer($this->container);
 
         $input     = new ArrayInput($params, $command->getDefinition());
         $output    = new MemoryOutput();
-        $processor = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor')
+        $processor = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor')
             ->disableOriginalConstructor()->getMock();
         $em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
@@ -101,7 +100,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $this->container->expects($this->at(0))->method('get')
-            ->with('orocrm_magento.provider.cart_expiration_processor')
+            ->with('oro_magento.provider.cart_expiration_processor')
             ->will($this->returnValue($processor));
         $this->container->expects($this->at(1))->method('get')
             ->with('doctrine.orm.entity_manager')
@@ -147,12 +146,12 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
         $channel = new Channel();
         $channel->setConnectors(['customer', 'cart']);
         /** @var CartExpirationSyncCommand|\PHPUnit_Framework_MockObject_MockObject $command */
-        $command = $this->getMock('OroCRM\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
+        $command = $this->getMock('Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand', ['isJobRunning']);
         $command->setContainer($this->container);
 
         $input     = new ArrayInput([], $command->getDefinition());
         $output    = new MemoryOutput();
-        $processor = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor')
+        $processor = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor')
             ->disableOriginalConstructor()->getMock();
         $em        = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
@@ -160,7 +159,7 @@ class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->container->expects($this->at(0))->method('get')
-            ->with('orocrm_magento.provider.cart_expiration_processor')
+            ->with('oro_magento.provider.cart_expiration_processor')
             ->will($this->returnValue($processor));
         $this->container->expects($this->at(1))->method('get')
             ->with('doctrine.orm.entity_manager')

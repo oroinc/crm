@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\Test\TypeTestCase;
 
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
-
-use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
+use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
 class ContactRequestTypeTest extends TypeTestCase
 {
@@ -25,7 +24,7 @@ class ContactRequestTypeTest extends TypeTestCase
 
     public function testHasName()
     {
-        $this->assertEquals('orocrm_contactus_contact_request', $this->formType->getName());
+        $this->assertEquals('oro_contactus_contact_request', $this->formType->getName());
     }
 
     public function testImplementEmbeddedFormInterface()
@@ -61,7 +60,7 @@ class ContactRequestTypeTest extends TypeTestCase
 
         $this->assertSame(
             [
-                'dataChannel'  => 'orocrm_channel_select_type',
+                'dataChannel'  => 'oro_channel_select_type',
                 'firstName'    => 'text',
                 'lastName'     => 'text',
                 'emailAddress' => 'text',

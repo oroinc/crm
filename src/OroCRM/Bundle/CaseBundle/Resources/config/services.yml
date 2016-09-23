@@ -1,39 +1,39 @@
 parameters:
-    orocrm_case.entity.class:              OroCRM\Bundle\CaseBundle\Entity\CaseEntity
-    orocrm_case.comment.class:             OroCRM\Bundle\CaseBundle\Entity\CaseComment
-    orocrm_case.manager.class:             OroCRM\Bundle\CaseBundle\Model\CaseEntityManager
-    orocrm_case.manager.api.class:         OroCRM\Bundle\CaseBundle\Model\CaseApiEntityManager
-    orocrm_case.manager.comment.api.class: OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager
-    orocrm_case.view_factory.class:        OroCRM\Bundle\CaseBundle\Model\ViewFactory
-    orocrm_case.provider.phone.case.class: OroCRM\Bundle\CaseBundle\Provider\CasePhoneProvider
-    orocrm_case.provider.mailbox_process.case.class: OroCRM\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
-    orocrm_case.event_listener.mailbox_saved_listener.class: OroCRM\Bundle\CaseBundle\EventListener\MailboxSavedListener
+    oro_case.entity.class:              Oro\Bundle\CaseBundle\Entity\CaseEntity
+    oro_case.comment.class:             Oro\Bundle\CaseBundle\Entity\CaseComment
+    oro_case.manager.class:             Oro\Bundle\CaseBundle\Model\CaseEntityManager
+    oro_case.manager.api.class:         Oro\Bundle\CaseBundle\Model\CaseApiEntityManager
+    oro_case.manager.comment.api.class: Oro\Bundle\CaseBundle\Model\CommentApiEntityManager
+    oro_case.view_factory.class:        Oro\Bundle\CaseBundle\Model\ViewFactory
+    oro_case.provider.phone.case.class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
+    oro_case.provider.mailbox_process.case.class: Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
+    oro_case.event_listener.mailbox_saved_listener.class: Oro\Bundle\CaseBundle\EventListener\MailboxSavedListener
 
 services:
-    orocrm_case.manager:
-        class: %orocrm_case.manager.class%
+    oro_case.manager:
+        class: %oro_case.manager.class%
         arguments:
             - "@doctrine"
             - "@oro_security.acl_helper"
 
-    orocrm_case.manager.api:
-        class: %orocrm_case.manager.api.class%
+    oro_case.manager.api:
+        class: %oro_case.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %orocrm_case.entity.class%
+            - %oro_case.entity.class%
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_case.manager"
+            - "@oro_case.manager"
 
-    orocrm_case.manager.comment.api:
-        class: %orocrm_case.manager.comment.api.class%
+    oro_case.manager.comment.api:
+        class: %oro_case.manager.comment.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %orocrm_case.comment.class%
+            - %oro_case.comment.class%
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_case.manager"
+            - "@oro_case.manager"
 
-    orocrm_case.view_factory:
-        class: %orocrm_case.view_factory.class%
+    oro_case.view_factory:
+        class: %oro_case.view_factory.class%
         arguments:
             - "@oro_security.security_facade"
             - "@router"
@@ -41,18 +41,18 @@ services:
             - "@oro_locale.formatter.date_time"
             - "@oro_attachment.manager"
 
-    orocrm_case.provider.phone.case:
-        class: %orocrm_case.provider.phone.case.class%
+    oro_case.provider.phone.case:
+        class: %oro_case.provider.phone.case.class%
         tags:
-            - { name: oro_address.phone_provider, class: %orocrm_case.entity.class% }
+            - { name: oro_address.phone_provider, class: %oro_case.entity.class% }
 
-    orocrm_case.provider.mailbox_process.case:
-        class: %orocrm_case.provider.mailbox_process.case.class%
+    oro_case.provider.mailbox_process.case:
+        class: %oro_case.provider.mailbox_process.case.class%
         tags:
             - { name: oro_email.mailbox_process, type: case }
 
-    orocrm_case.event_listener.mailbox_saved_listener.class:
-        class: %orocrm_case.event_listener.mailbox_saved_listener.class%
+    oro_case.event_listener.mailbox_saved_listener.class:
+        class: %oro_case.event_listener.mailbox_saved_listener.class%
         arguments:
             - "@oro_tag.tag.manager"
         tags:

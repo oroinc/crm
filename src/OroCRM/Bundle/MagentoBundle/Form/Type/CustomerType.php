@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,14 +10,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Length;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerType extends AbstractType
 {
-    const NAME = 'orocrm_magento_customer';
+    const NAME = 'oro_magento_customer';
 
     /**
      * @var string
@@ -47,20 +47,20 @@ class CustomerType extends AbstractType
         $isExisting = $builder->getData() && $builder->getData()->getId();
 
         $builder
-            ->add('namePrefix', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.name_prefix.label'])
-            ->add('firstName', 'text', ['label' => 'orocrm.magento.customer.first_name.label'])
-            ->add('middleName', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.middle_name.label'])
-            ->add('lastName', 'text', ['label' => 'orocrm.magento.customer.last_name.label'])
-            ->add('nameSuffix', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.name_suffix.label'])
-            ->add('gender', 'oro_gender', ['required' => false, 'label' => 'orocrm.magento.customer.gender.label'])
-            ->add('birthday', 'oro_date', ['required' => false, 'label' => 'orocrm.magento.customer.birthday.label'])
-            ->add('email', 'email', ['label' => 'orocrm.magento.customer.email.label'])
-            ->add('vat', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.vat.label'])
+            ->add('namePrefix', 'text', ['required' => false, 'label' => 'oro.magento.customer.name_prefix.label'])
+            ->add('firstName', 'text', ['label' => 'oro.magento.customer.first_name.label'])
+            ->add('middleName', 'text', ['required' => false, 'label' => 'oro.magento.customer.middle_name.label'])
+            ->add('lastName', 'text', ['label' => 'oro.magento.customer.last_name.label'])
+            ->add('nameSuffix', 'text', ['required' => false, 'label' => 'oro.magento.customer.name_suffix.label'])
+            ->add('gender', 'oro_gender', ['required' => false, 'label' => 'oro.magento.customer.gender.label'])
+            ->add('birthday', 'oro_date', ['required' => false, 'label' => 'oro.magento.customer.birthday.label'])
+            ->add('email', 'email', ['label' => 'oro.magento.customer.email.label'])
+            ->add('vat', 'text', ['required' => false, 'label' => 'oro.magento.customer.vat.label'])
             ->add(
                 'dataChannel',
-                'orocrm_magento_customer_channel_select',
+                'oro_magento_customer_channel_select',
                 [
-                    'label' => 'orocrm.magento.customer.data_channel.label',
+                    'label' => 'oro.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
                     'required' => true,
                     'disabled' => $isExisting,
@@ -69,9 +69,9 @@ class CustomerType extends AbstractType
             )
             ->add(
                 'store',
-                'orocrm_magento_store_select',
+                'oro_magento_store_select',
                 [
-                    'label' => 'orocrm.magento.customer.store.label',
+                    'label' => 'oro.magento.customer.store.label',
                     'channel_field' => 'dataChannel',
                     'required' => true,
                     'disabled' => $isExisting
@@ -79,9 +79,9 @@ class CustomerType extends AbstractType
             )
             ->add(
                 'group',
-                'orocrm_magento_customer_group_select',
+                'oro_magento_customer_group_select',
                 [
-                    'label' => 'orocrm.magento.customer.group.label',
+                    'label' => 'oro.magento.customer.group.label',
                     'channel_field' => 'dataChannel',
                     'required' => true
                 ]
@@ -90,22 +90,22 @@ class CustomerType extends AbstractType
                 'addresses',
                 'oro_address_collection',
                 [
-                    'label' => 'orocrm.magento.customer.addresses.label',
-                    'type' => 'orocrm_magento_customer_addresses',
+                    'label' => 'oro.magento.customer.addresses.label',
+                    'type' => 'oro_magento_customer_addresses',
                     'required' => true,
                     'options' => ['data_class' => $this->customerAddressClassName]
                 ]
             )
-            ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
-            ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
+            ->add('contact', 'oro_contact_select', ['label' => 'oro.magento.customer.contact.label'])
+            ->add('account', 'oro_account_select', ['label' => 'oro.magento.customer.account.label']);
 
         if ($this->isPasswordSetAllowed($builder->getData())) {
             $builder->add(
                 'generatedPassword',
                 'text',
                 [
-                    'label' => 'orocrm.magento.customer.password.label',
-                    'tooltip' => 'orocrm.magento.customer.password.tooltip',
+                    'label' => 'oro.magento.customer.password.label',
+                    'tooltip' => 'oro.magento.customer.password.tooltip',
                     'required' => false,
                     'constraints' => [new Length(['min' => 6])]
                 ]

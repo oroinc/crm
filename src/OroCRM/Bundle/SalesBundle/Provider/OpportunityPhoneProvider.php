@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {

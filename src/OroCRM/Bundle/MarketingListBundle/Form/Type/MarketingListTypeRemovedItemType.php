@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +19,7 @@ class MarketingListTypeRemovedItemType extends AbstractType
                 'marketingList',
                 'entity',
                 [
-                    'class'    => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
+                    'class'    => 'Oro\Bundle\MarketingListBundle\Entity\MarketingList',
                     'required' => true
                 ]
             );
@@ -32,7 +32,7 @@ class MarketingListTypeRemovedItemType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem',
+                'data_class'         => 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem',
                 'intention'          => 'marketing_list_removed_item',
                 'cascade_validation' => true
             ]
@@ -52,6 +52,6 @@ class MarketingListTypeRemovedItemType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_marketing_list_removed_item';
+        return 'oro_marketing_list_removed_item';
     }
 }

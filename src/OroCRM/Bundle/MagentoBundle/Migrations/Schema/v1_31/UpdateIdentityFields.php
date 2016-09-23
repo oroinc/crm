@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_31;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_31;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -15,14 +15,14 @@ class UpdateIdentityFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress', 'street');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress', 'city');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress', 'postalCode');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress', 'country');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress', 'region');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CartAddress', 'street');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CartAddress', 'city');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CartAddress', 'postalCode');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CartAddress', 'country');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CartAddress', 'region');
 
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress', 'country');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress', 'region');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\OrderAddress', 'country');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\OrderAddress', 'region');
     }
 
     /**

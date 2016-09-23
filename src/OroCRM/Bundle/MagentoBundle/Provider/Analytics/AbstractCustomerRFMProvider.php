@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Analytics;
+namespace Oro\Bundle\MagentoBundle\Provider\Analytics;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
 {
@@ -35,8 +35,8 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     public function supports(Channel $channel)
     {
         $entityFQCN = $channel->getCustomerIdentity();
-        return is_a($entityFQCN, 'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true)
-            && is_a($entityFQCN, 'OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface', true)
+        return is_a($entityFQCN, 'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true)
+            && is_a($entityFQCN, 'Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface', true)
             && is_a($entityFQCN, $this->className, true);
     }
 

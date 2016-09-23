@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
 
 class CaseCommentTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +51,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->comment->getContact());
 
-        $value = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+        $value = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,7 +63,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->comment->getCase());
 
-        $value = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseEntity')
+        $value = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseEntity')
             ->disableOriginalConstructor()
             ->getMock();
 

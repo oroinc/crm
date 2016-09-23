@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Model;
+namespace Oro\Bundle\AnalyticsBundle\Model;
 
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 
 class StateManager
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class NewsletterSubscriberInitialWriter extends ProxyEntityWriter
 {

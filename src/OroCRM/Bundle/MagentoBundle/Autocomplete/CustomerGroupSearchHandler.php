@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Autocomplete;
+namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
 class CustomerGroupSearchHandler extends IntegrationAwareSearchHandler
 {

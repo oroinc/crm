@@ -1,7 +1,7 @@
 <?php
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListTypeRemovedItemType;
+use Oro\Bundle\MarketingListBundle\Form\Type\MarketingListTypeRemovedItemType;
 
 class MarketingListTypeRemovedItemTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class MarketingListTypeRemovedItemTypeTest extends \PHPUnit_Framework_TestCase
                 'marketingList',
                 'entity',
                 [
-                    'class'    => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
+                    'class'    => 'Oro\Bundle\MarketingListBundle\Entity\MarketingList',
                     'required' => true
                 ]
             );
@@ -58,6 +58,6 @@ class MarketingListTypeRemovedItemTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_marketing_list_removed_item', $this->type->getName());
+        $this->assertEquals('oro_marketing_list_removed_item', $this->type->getName());
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 /**
  * Class ChannelSelectType
@@ -15,7 +15,7 @@ use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
  */
 class ChannelSelectType extends AbstractType
 {
-    const NAME = 'orocrm_channel_select_type';
+    const NAME = 'oro_channel_select_type';
 
     /**
      * @var ChannelsByEntitiesProvider
@@ -61,14 +61,14 @@ class ChannelSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'label'                => 'orocrm.channel.entity_label',
-                'class'                => 'OroCRMChannelBundle:Channel',
+                'label'                => 'oro.channel.entity_label',
+                'class'                => 'OroChannelBundle:Channel',
                 'property'             => 'name',
                 'random_id'            => true,
                 'choices'              => [],
                 'configs'              => [
                     'allowClear'  => true,
-                    'placeholder' => 'orocrm.channel.form.select_channel_type.label'
+                    'placeholder' => 'oro.channel.form.select_channel_type.label'
                 ],
                 'entities'             => [],
                 'translatable_options' => false

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
@@ -9,9 +9,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {

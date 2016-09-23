@@ -1,2 +1,2 @@
 bundles:
-    - { name: OroCRM\Bundle\ActivityContactBundle\OroCRMActivityContactBundle }
+    - { name: Oro\Bundle\ActivityContactBundle\OroActivityContactBundle }

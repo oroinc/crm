@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 class RegionConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
@@ -11,7 +11,7 @@ class RegionConnector extends AbstractMagentoConnector implements DictionaryConn
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.region.label';
+        return 'oro.magento.connector.region.label';
     }
 
     /**

@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Entity;
+namespace Oro\Bundle\AnalyticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")
- * @ORM\Table(name="orocrm_analytics_rfm_category")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")
+ * @ORM\Table(name="oro_analytics_rfm_category")
  * @Config(
  *  defaultValues={
  *      "ownership"={
@@ -89,7 +89,7 @@ class RFMMetricCategory
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $channel;

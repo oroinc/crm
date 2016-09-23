@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem;
 
 /**
  * @Rest\RouteResource("marketinglist_unsubscribeditem")
- * @Rest\NamePrefix("orocrm_api_")
+ * @Rest\NamePrefix("oro_api_")
  */
 class MarketingListUnsubscribedItemController extends RestController implements ClassResourceInterface
 {
@@ -31,7 +31,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      *     description="Create new MarketingListUnsubscribedItem",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_create")
+     * @AclAncestor("oro_marketinglist_unsubscribed_item_create")
      */
     public function postAction()
     {
@@ -47,7 +47,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      *     description="Delete MarketingListRemovedItem",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_delete")
+     * @AclAncestor("oro_marketinglist_unsubscribed_item_delete")
      *
      * @return Response
      */
@@ -66,7 +66,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      *      "/marketinglist/{marketingList}/unsubscribe/{id}"
      * )
      * @ApiDoc(description="Unsubscribe marketing list entity item", resource=true)
-     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_create")
+     * @AclAncestor("oro_marketinglist_unsubscribed_item_create")
      *
      * @param MarketingList $marketingList
      * @param int           $id
@@ -99,7 +99,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
                 array(
                     'successful' => true,
                     'message'    => $this->get('translator')->trans(
-                        'orocrm.marketinglist.controller.unsubscribed',
+                        'oro.marketinglist.controller.unsubscribed',
                         ['%entityName%' => $this->get('translator')->trans($entityName)]
                     )
                 ),
@@ -119,7 +119,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      *     description="Delete MarketingListUnsubscribedItem by marketing list entity",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketinglist_unsubscribed_item_delete")
+     * @AclAncestor("oro_marketinglist_unsubscribed_item_delete")
      *
      * @return Response
      */
@@ -156,7 +156,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
                 array(
                     'successful' => true,
                     'message'    => $this->get('translator')->trans(
-                        'orocrm.marketinglist.controller.subscribed',
+                        'oro.marketinglist.controller.subscribed',
                         ['%entityName%' => $this->get('translator')->trans($entityName)]
                     )
                 ),
@@ -170,7 +170,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      */
     public function getManager()
     {
-        return $this->get('orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api');
+        return $this->get('oro_marketing_list.marketing_list_unsubscribed_item.manager.api');
     }
 
     /**
@@ -178,7 +178,7 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      */
     public function getForm()
     {
-        return $this->get('orocrm_marketing_list.form.marketing_list_unsubscribed_item');
+        return $this->get('oro_marketing_list.form.marketing_list_unsubscribed_item');
     }
 
     /**
@@ -186,6 +186,6 @@ class MarketingListUnsubscribedItemController extends RestController implements 
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_marketing_list.form.handler.marketing_list_unsubscribed_item');
+        return $this->get('oro_marketing_list.form.handler.marketing_list_unsubscribed_item');
     }
 }

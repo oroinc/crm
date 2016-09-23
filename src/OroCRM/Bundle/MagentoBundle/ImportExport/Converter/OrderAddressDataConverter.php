@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Converter;
 
 class OrderAddressDataConverter extends AbstractAddressDataConverter
 {

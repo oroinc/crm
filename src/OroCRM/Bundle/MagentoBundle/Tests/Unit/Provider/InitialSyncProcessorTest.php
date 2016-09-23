@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
+use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
+use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
 class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 {
@@ -57,7 +57,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
-        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+        $dictionaryConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
             ->disableOriginalConstructor()
             ->getMock();
         $dictionaryConnector->expects($this->any())
@@ -130,7 +130,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
-        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+        $dictionaryConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
             ->disableOriginalConstructor()
             ->getMock();
         $dictionaryConnector->expects($this->any())
@@ -202,7 +202,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
-        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+        $dictionaryConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
             ->disableOriginalConstructor()
             ->getMock();
         $dictionaryConnector->expects($this->any())

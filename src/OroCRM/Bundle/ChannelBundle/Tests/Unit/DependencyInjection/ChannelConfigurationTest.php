@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Component\Config\CumulativeResourceManager;
-
-use OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
+use Oro\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
 
 class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,14 +14,14 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected = [
             'entity_data'   => [
                 [
-                    'name'                   => 'OroCRM\Bundle\TestBundle1\Entity\Entity1',
+                    'name'                   => 'Oro\Bundle\TestBundle1\Entity\Entity1',
                     'dependent'              => [
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity1Status',
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity1Reason'
+                        'Oro\Bundle\TestBundle1\Entity\Entity1Status',
+                        'Oro\Bundle\TestBundle1\Entity\Entity1Reason'
                     ],
                     'dependencies'           => [
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity2',
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity3'
+                        'Oro\Bundle\TestBundle1\Entity\Entity2',
+                        'Oro\Bundle\TestBundle1\Entity\Entity3'
                     ],
                     'dependencies_condition' => 'OR',
                     'navigation_items'       => [
@@ -33,9 +32,9 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [
-                    'name'                   => 'OroCRM\Bundle\TestBundle2\Entity\Entity',
+                    'name'                   => 'Oro\Bundle\TestBundle2\Entity\Entity',
                     'dependent'              => [
-                        'OroCRM\Bundle\TestBundle2\Entity\EntityContact'
+                        'Oro\Bundle\TestBundle2\Entity\EntityContact'
                     ],
                     'navigation_items'       => [
                         'application_menu.activities_tab.contact',
@@ -48,19 +47,19 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                 'test1' => [
                     'label'             => 'test1 type',
                     'entities'          => [
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity1',
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity2',
-                        'OroCRM\Bundle\TestBundle1\Entity\Entity3',
+                        'Oro\Bundle\TestBundle1\Entity\Entity1',
+                        'Oro\Bundle\TestBundle1\Entity\Entity2',
+                        'Oro\Bundle\TestBundle1\Entity\Entity3',
                     ],
                     'integration_type'  => 'test',
-                    'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
+                    'customer_identity' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
                     'lifetime_value'    => 'some_field',
                     'priority'          => 0
                 ],
                 'test2' => [
                     'label'             => 'test2 type',
                     'entities'          => [],
-                    'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
+                    'customer_identity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity',
                     'priority'          => 0
                 ]
             ],

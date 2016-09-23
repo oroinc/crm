@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
-
-use OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener;
+use Oro\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener;
 
 class IntegrationSyncAfterEventListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Transport;
+namespace Oro\Bundle\CampaignBundle\Transport;
 
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EmailBundle\Form\Model\Email;
@@ -8,9 +8,8 @@ use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Provider\EmailRenderer;
 use Oro\Bundle\EmailBundle\Tools\EmailAddressHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType;
 
 class EmailTransport implements TransportInterface
 {
@@ -109,7 +108,7 @@ class EmailTransport implements TransportInterface
      */
     public function getLabel()
     {
-        return 'orocrm.campaign.emailcampaign.transport.' . self::NAME;
+        return 'oro.campaign.emailcampaign.transport.' . self::NAME;
     }
 
     /**
@@ -125,6 +124,6 @@ class EmailTransport implements TransportInterface
      */
     public function getSettingsEntityFQCN()
     {
-        return 'OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings';
+        return 'Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings';
     }
 }

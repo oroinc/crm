@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Functional\Grid;
+namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Grid;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
-use OroCRM\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures;
+use Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures;
 
 /**
  * @outputBuffering enabled
@@ -16,7 +15,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
     {
         parent::setUp();
 
-        $this->loadFixtures(['OroCRM\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures']);
     }
 
     /**

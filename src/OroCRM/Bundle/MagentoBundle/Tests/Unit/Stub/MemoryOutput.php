@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Stub;
 
 use Symfony\Component\Console\Output\Output;
 

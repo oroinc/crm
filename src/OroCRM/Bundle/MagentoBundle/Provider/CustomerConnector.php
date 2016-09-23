@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
@@ -13,7 +13,7 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.customer.label';
+        return 'oro.magento.connector.customer.label';
     }
 
     /**

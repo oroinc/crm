@@ -1,21 +1,21 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity;
+namespace Oro\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
+use Oro\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
 /**
  * Email Campaign Statistics.
  *
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignStatisticsRepository")
- * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\CampaignBundle\Entity\Repository\EmailCampaignStatisticsRepository")
+ * @ORM\Table(name="oro_campaign_email_stats", uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="oro_ec_litem_unq")
  * })
  * @Config(
  *      defaultValues={
@@ -52,7 +52,7 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     /**
      * @var MarketingListItem
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MarketingListBundle\Entity\MarketingListItem")
      * @ORM\JoinColumn(name="marketing_list_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingListItem;
@@ -60,7 +60,7 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     /**
      * @var EmailCampaign
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\CampaignBundle\Entity\EmailCampaign")
      * @ORM\JoinColumn(name="email_campaign_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $emailCampaign;

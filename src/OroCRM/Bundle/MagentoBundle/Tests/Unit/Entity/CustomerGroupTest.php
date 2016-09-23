@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 class CustomerGroupTest extends AbstractEntityTestCase
 {
@@ -11,7 +11,7 @@ class CustomerGroupTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
+        return 'Oro\Bundle\MagentoBundle\Entity\CustomerGroup';
     }
 
     /**

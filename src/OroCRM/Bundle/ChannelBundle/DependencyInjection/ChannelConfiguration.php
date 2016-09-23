@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\DependencyInjection;
+namespace Oro\Bundle\ChannelBundle\DependencyInjection;
 
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class ChannelConfiguration implements ConfigurationInterface
 {
     const ROOT_NODE_NAME            = 'channels';
-    const DEFAULT_CUSTOMER_IDENTITY = 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity';
+    const DEFAULT_CUSTOMER_IDENTITY = 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity';
     const DEFAULT_PRIORITY          = 0;
 
     /**
@@ -72,7 +72,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                         function ($v) {
                                             if (class_exists($v)) {
                                                 return !in_array(
-                                                    'OroCRM\\Bundle\\ChannelBundle\\Model\\CustomerIdentityInterface',
+                                                    'Oro\\Bundle\\ChannelBundle\\Model\\CustomerIdentityInterface',
                                                     class_implements($v)
                                                 );
                                             }

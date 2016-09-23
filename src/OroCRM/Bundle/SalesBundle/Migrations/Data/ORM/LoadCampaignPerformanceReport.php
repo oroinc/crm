@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -51,7 +51,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
 
         $report = new Report();
         $report->setName('Campaign Performance');
-        $report->setEntity('OroCRM\Bundle\CampaignBundle\Entity\Campaign');
+        $report->setEntity('Oro\Bundle\CampaignBundle\Entity\Campaign');
         $type = $em->getReference('OroReportBundle:ReportType', ReportType::TYPE_TABLE);
         $report->setType($type);
         // @codingStandardsIgnoreStart
@@ -61,7 +61,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                 ['name' => 'name', 'label' => 'Name', 'func' => '', 'sorting' => ''],
                 ['name' => 'code', 'label' => 'Code', 'func' => '', 'sorting' => ''],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::id',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::id',
                     'label'   => 'Leads',
                     'func'    => [
                         'name'       => 'Count',
@@ -71,7 +71,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::id',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::id',
                     'label'   => 'Opportunities',
                     'func'    => [
                         'name'       => 'Count',
@@ -81,7 +81,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
                     'label'   => 'Number Won',
                     'func'    => [
                         'name'       => 'WonCount',
@@ -91,7 +91,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
                     'label'   => 'Number Lost',
                     'func'    => [
                         'name'       => 'LostCount',
@@ -101,7 +101,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenue',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenue',
                     'label'   => 'Close revenue',
                     'func'    => [
                         'name'       => 'WonRevenueSumFunction',

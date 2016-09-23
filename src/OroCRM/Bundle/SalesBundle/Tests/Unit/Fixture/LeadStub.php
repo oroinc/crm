@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Fixture;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Fixture;
 
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadStub extends Lead
 {

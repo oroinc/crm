@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityRepository;

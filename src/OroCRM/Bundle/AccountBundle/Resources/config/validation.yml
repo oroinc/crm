@@ -1,4 +1,4 @@
-OroCRM\Bundle\AccountBundle\Entity\Account:
+Oro\Bundle\AccountBundle\Entity\Account:
     properties:
         name:
             - NotBlank:     ~

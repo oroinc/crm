@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
-use OroCRM\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -76,7 +76,7 @@ class B2bCustomerEmailHandler
             $b2bCustomerId = $this->request->request->get('entityId');
             if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
-                    'OroCRMSalesBundle:B2bCustomer',
+                    'OroSalesBundle:B2bCustomer',
                     $b2bCustomerId
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $customer)) {
@@ -114,7 +114,7 @@ class B2bCustomerEmailHandler
             $em->remove($customerEmail);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.sales.email.error.delete.more_one", 500);
+            throw new \Exception("oro.sales.email.error.delete.more_one", 500);
         }
     }
 

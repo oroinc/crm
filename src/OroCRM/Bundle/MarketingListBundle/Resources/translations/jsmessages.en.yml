@@ -1,4 +1,4 @@
-orocrm:
+oro:
     marketing:
         list:
             change_entity_confirmation: The template data can contain variables related to the previous selected entity. Do you want to clear all template data?

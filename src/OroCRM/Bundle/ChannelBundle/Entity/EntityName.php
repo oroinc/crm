@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity;
+namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_channel_entity_name")
+ * @ORM\Table(name="oro_channel_entity_name")
  */
 class EntityName
 {
@@ -29,7 +29,7 @@ class EntityName
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel", inversedBy="entities")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel", inversedBy="entities")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $channel;

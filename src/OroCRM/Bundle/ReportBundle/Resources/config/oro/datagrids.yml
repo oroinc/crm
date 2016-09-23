@@ -1,6 +1,6 @@
 datagrids:
-    orocrm_report-accounts-life_time_value:
-        pageTitle: orocrm.report.accounts_life_time_value
+    oro_report-accounts-life_time_value:
+        pageTitle: oro.report.accounts_life_time_value
         acl_resource: oro_report_view
         source:
             type: orm
@@ -10,25 +10,25 @@ datagrids:
                     - a.name
                     - SUM( CASE WHEN ch.status = true THEN lifetimeHistory.amount ELSE 0 END ) as value
                 from:
-                    - { table: OroCRMAccountBundle:Account, alias: a }
+                    - { table: OroAccountBundle:Account, alias: a }
                 join:
                     left:
-                        - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = true" }
+                        - { join: OroChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = true" }
                         - { join: lifetimeHistory.dataChannel, alias: ch  }
                 groupBy:  a.id
         columns:
-            name:   { label: orocrm.report.datagrid.columns.account_name }
-            value:  { label: orocrm.account.lifetime_value.label,  frontend_type: currency }
+            name:   { label: oro.report.datagrid.columns.account_name }
+            value:  { label: oro.account.lifetime_value.label,  frontend_type: currency }
         properties:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_account_view
+                route:      oro_account_view
                 params:     [ id ]
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_account_view
+                acl_resource:  oro_account_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
@@ -40,12 +40,12 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
 
             grand_total:
                 columns:
                     name:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
                     value:
                         expr: SUM( CASE WHEN ch.status = true THEN lifetimeHistory.amount ELSE 0 END )
                         formatter: currency
@@ -69,14 +69,14 @@ datagrids:
             export: true
             entity_pagination: true
 
-    orocrm_report-accounts-by_opportunities:
-        pageTitle: orocrm.report.accounts_by_opportunities
+    oro_report-accounts-by_opportunities:
+        pageTitle: oro.report.accounts_by_opportunities
         acl_resource: oro_report_view
         source:
             type: orm
             query:
                 from:
-                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                    - { table: OroSalesBundle:Opportunity, alias: o }
                 select:
                     - a.id
                     - a.name
@@ -90,12 +90,12 @@ datagrids:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_account_view
+                route:      oro_account_view
                 params:     [ id ]
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_account_view
+                acl_resource:  oro_account_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
@@ -107,13 +107,13 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     name:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
         columns:
-            name:             { label: orocrm.report.datagrid.columns.account_name }
+            name:             { label: oro.report.datagrid.columns.account_name }
         sorters:
             columns:
                 name:              { data_name: a.name }
@@ -124,19 +124,19 @@ datagrids:
                     data_name:   a.name
                 closeDate:
                     type:        date
-                    label:       orocrm.report.datagrid.columns.close_date
+                    label:       oro.report.datagrid.columns.close_date
                     data_name:   o.closeDate
                 createdAt:
                     type:        date
-                    label:       orocrm.report.datagrid.columns.created_date
+                    label:       oro.report.datagrid.columns.created_date
                     data_name:   o.createdAt
         options:
             entityHint: report data
             export: true
             entity_pagination: true
 
-    orocrm_report-leads-by_date:
-        pageTitle: orocrm.report.leads_by_date
+    oro_report-leads-by_date:
+        pageTitle: oro.report.leads_by_date
         acl_resource: oro_report_view
         source:
             type: orm
@@ -145,7 +145,7 @@ datagrids:
                     - COUNT(l.id) as leadsCount
                     - DATE(l.createdAt) as createdDate
                 from:
-                    - { table: OroCRMSalesBundle:Lead, alias: l }
+                    - { table: OroSalesBundle:Lead, alias: l }
                 groupBy: createdDate
         totals:
             total:
@@ -154,16 +154,16 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     createdDate:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     createdDate:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
                     leadsCount:
                         expr: COUNT(l.id)
         columns:
-            createdDate:    { label: orocrm.report.datagrid.columns.created_date, frontend_type: date }
-            leadsCount:     { label: orocrm.report.datagrid.columns.leads_count,  frontend_type: integer }
+            createdDate:    { label: oro.report.datagrid.columns.created_date, frontend_type: date }
+            leadsCount:     { label: oro.report.datagrid.columns.leads_count,  frontend_type: integer }
         sorters:
             columns:
                 createdDate:   { data_name: createdDate }
@@ -177,8 +177,8 @@ datagrids:
             export: true
             entity_pagination: true
 
-    orocrm_report-opportunities-by_status:
-        pageTitle: orocrm.report.opportunities_by_status
+    oro_report-opportunities-by_status:
+        pageTitle: oro.report.opportunities_by_status
         acl_resource: oro_report_view
         source:
             type: orm
@@ -187,7 +187,7 @@ datagrids:
                 join:
                     # if any date filter is used, this will be replaced by OpportunitiesByStatusReportListener
                     left:
-                        - { join: OroCRMSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
+                        - { join: OroSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
                 select:
                     - status.name as statusLabel
                     - status.priority as statusPriority
@@ -205,11 +205,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     statusLabel:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     statusLabel:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
@@ -220,10 +220,10 @@ datagrids:
                         formatter: currency
         columns:
             statusPriority:        { label: statusPriority, renderable: false, manageable: false }
-            statusLabel:           { label: orocrm.report.datagrid.columns.status }
-            numberOfOpportunities: { label: orocrm.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
-            closeRevenue:          { label: orocrm.report.datagrid.columns.close_revenue, frontend_type: currency }
-            budgetAmount:          { label: orocrm.report.datagrid.columns.budget_amount, frontend_type: currency }
+            statusLabel:           { label: oro.report.datagrid.columns.status }
+            numberOfOpportunities: { label: oro.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
+            closeRevenue:          { label: oro.report.datagrid.columns.close_revenue, frontend_type: currency }
+            budgetAmount:          { label: oro.report.datagrid.columns.budget_amount, frontend_type: currency }
         sorters:
             columns:
                 statusLabel:           { data_name: statusLabel }
@@ -257,15 +257,15 @@ datagrids:
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 closeDate:
-                    label:     orocrm.sales.opportunity.close_date.label
+                    label:     oro.sales.opportunity.close_date.label
                     type:      date
                     data_name: opportunity.closeDate
                 createdAt:
-                    label:     orocrm.sales.opportunity.created_at.label
+                    label:     oro.sales.opportunity.created_at.label
                     type:      datetime
                     data_name: opportunity.createdAt
                 updatedAt:
-                    label:     orocrm.sales.opportunity.updated_at.label
+                    label:     oro.sales.opportunity.updated_at.label
                     type:      datetime
                     data_name: opportunity.updatedAt
 
@@ -274,8 +274,8 @@ datagrids:
             export: true
             entity_pagination: true
 
-    orocrm_report-opportunities-won_by_period:
-        pageTitle: orocrm.report.opportunities_won_by_period
+    oro_report-opportunities-won_by_period:
+        pageTitle: oro.report.opportunities_won_by_period
         acl_resource: oro_report_view
         source:
             type: orm
@@ -291,7 +291,7 @@ datagrids:
                     - SUM(o.closeRevenue) as value
                     - COUNT(o.id) as cnt
                 from:
-                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                    - { table: OroSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
                         - { join: o.status, alias: s }
@@ -311,11 +311,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     period:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     period:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
                     cnt:
                         expr: COUNT( o.id )
                     value:
@@ -323,9 +323,9 @@ datagrids:
                         formatter: currency
 
         columns:
-            period:    { label: orocrm.report.datagrid.columns.period }
-            cnt:       { label: orocrm.report.datagrid.columns.number_won, frontend_type: integer }
-            value:     { label: orocrm.report.datagrid.columns.total_value, frontend_type: currency }
+            period:    { label: oro.report.datagrid.columns.period }
+            cnt:       { label: oro.report.datagrid.columns.number_won, frontend_type: integer }
+            value:     { label: oro.report.datagrid.columns.total_value, frontend_type: currency }
         sorters:
             columns:
                 period:     { data_name: o.closeDate }
@@ -334,7 +334,7 @@ datagrids:
         filters:
             columns:
                 period:
-                    type: orocrm_period_filter
+                    type: oro_period_filter
                     data_name: period
                     options:
                         populate_default: false
@@ -355,11 +355,11 @@ datagrids:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 closeDate:
                     type:        date
-                    label:       orocrm.report.datagrid.columns.close_date
+                    label:       oro.report.datagrid.columns.close_date
                     data_name:   o.closeDate
                 createdAt:
                     type:        date
-                    label:       orocrm.report.datagrid.columns.created_date
+                    label:       oro.report.datagrid.columns.created_date
                     data_name:   o.createdAt
             default:
                 period: { value: monthPeriod }
@@ -368,8 +368,8 @@ datagrids:
             export: true
             entity_pagination: true
 
-    orocrm_report-opportunities-total_forecast:
-        pageTitle: orocrm.report.opportunities.total_forecast
+    oro_report-opportunities-total_forecast:
+        pageTitle: oro.report.opportunities.total_forecast
         acl_resource: oro_report_view
         source:
             type: orm
@@ -380,7 +380,7 @@ datagrids:
                     - SUM( o.budgetAmount ) as budgetAmount
                     - SUM( o.budgetAmount * o.probability ) as weightedForecast
                 from:
-                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                    - { table: OroSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
                         - { join: o.status, alias: s }
@@ -399,11 +399,11 @@ datagrids:
                 hide_if_one_page: true
                 columns:
                     ownerName:
-                        label: orocrm.magento.datagrid.columns.page_total
+                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     ownerName:
-                        label: orocrm.magento.datagrid.columns.grand_total
+                        label: oro.magento.datagrid.columns.grand_total
                     inProgressCount:
                         expr: SUM( (CASE WHEN (s.id NOT IN ('lost', 'won')) THEN 1 ELSE 0 END) )
                     budgetAmount:
@@ -413,10 +413,10 @@ datagrids:
                         expr: SUM( o.budgetAmount * o.probability )
                         formatter: currency
         columns:
-            ownerName:        { label: orocrm.report.datagrid.columns.ownerName,        frontend_type: string }
-            inProgressCount:  { label: orocrm.report.datagrid.columns.inProgressCount,  frontend_type: integer }
-            budgetAmount:     { label: orocrm.report.datagrid.columns.budgetAmount,     frontend_type: currency }
-            weightedForecast: { label: orocrm.report.datagrid.columns.weightedForecast, frontend_type: currency }
+            ownerName:        { label: oro.report.datagrid.columns.ownerName,        frontend_type: string }
+            inProgressCount:  { label: oro.report.datagrid.columns.inProgressCount,  frontend_type: integer }
+            budgetAmount:     { label: oro.report.datagrid.columns.budgetAmount,     frontend_type: currency }
+            weightedForecast: { label: oro.report.datagrid.columns.weightedForecast, frontend_type: currency }
         sorters:
             columns:
                 ownerName:        { data_name: ownerName }

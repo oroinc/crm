@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Selenium;
+namespace Oro\Bundle\CaseBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
+use Oro\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
 
 /**
  * Class CasesTest
  *
- * @package OroCRM\Bundle\CaseBundle\Tests\Selenium
+ * @package Oro\Bundle\CaseBundle\Tests\Selenium
  */
 class CasesTest extends Selenium2TestCase
 {
@@ -21,7 +21,7 @@ class CasesTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        $login->openCases('Oro\Bundle\CaseBundle')
             ->assertTitle('All - Cases - Activities')
             ->add()
             ->assertTitle('Create Case - Cases - Activities')
@@ -46,7 +46,7 @@ class CasesTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        $login->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->assertTitle("{$subject} - Cases - Activities")
@@ -71,7 +71,7 @@ class CasesTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        $login->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->edit()
@@ -82,7 +82,7 @@ class CasesTest extends Selenium2TestCase
             ->toGrid()
             ->assertTitle('All - Cases - Activities');
 
-        $data = $login->openCases('OroCRM\Bundle\CaseBundle')
+        $data = $login->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->getAllData();
         static::assertEquals($data[0]['STATUS'], $status['status']);
@@ -110,14 +110,14 @@ class CasesTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        $login->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->delete()
             ->assertMessage('Case deleted')
             ->assertTitle('All - Cases - Activities');
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle');
+        $login->openCases('Oro\Bundle\CaseBundle');
         if ($login->getRowsCount() > 0) {
             $login->filterBy('Subject', $subject)
                 ->assertNoDataMessage('No entity was found to match your search');

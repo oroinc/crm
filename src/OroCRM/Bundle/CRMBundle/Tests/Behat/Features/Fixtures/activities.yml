@@ -1,4 +1,4 @@
-OroCRM\Bundle\ContactBundle\Entity\Contact:
+Oro\Bundle\ContactBundle\Entity\Contact:
   contactCharlie:
     firstName: Charlie
     lastName: Sheen
@@ -74,7 +74,7 @@ Oro\Bundle\CallBundle\Entity\Call:
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
     organization: '@organization'
 
-OroCRM\Bundle\TaskBundle\Entity\Task:
+Oro\Bundle\TaskBundle\Entity\Task:
   task{1..2}:
     subject: '<sentence(2, true)>'
     addActivityTarget: ['@contactCharlie']

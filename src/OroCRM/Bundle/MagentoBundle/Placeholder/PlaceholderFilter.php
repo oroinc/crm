@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Placeholder;
+namespace Oro\Bundle\MagentoBundle\Placeholder;
 
 use Doctrine\Common\Util\ClassUtils;
 
@@ -14,7 +14,7 @@ class PlaceholderFilter
      */
     public function isApplicable($entity = null)
     {
-        return ClassUtils::getClass($entity) === 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        return ClassUtils::getClass($entity) === 'Oro\Bundle\MagentoBundle\Entity\Customer';
     }
 
     /**

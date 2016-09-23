@@ -1,18 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
 {
@@ -28,9 +27,9 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData',
         ];
     }
 
@@ -41,7 +40,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     {
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle  = fopen($dictionaryDir . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         $headers = fgetcsv($handle, 1000, ",");
@@ -119,7 +118,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
      */
     protected function getAccountReference($identifier)
     {
-        return $this->em->getReference('OroCRMAccountBundle:Account', $identifier);
+        return $this->em->getReference('OroAccountBundle:Account', $identifier);
     }
 
     /**
@@ -130,7 +129,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         if ($this->hasReference('default_channel')) {
             return $this->getReference('default_channel');
         } else {
-            return $this->em->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c')
+            return $this->em->getRepository('OroChannelBundle:Channel')->createQueryBuilder('c')
                 ->setMaxResults(1)
                 ->getQuery()
                 ->getResult();
@@ -159,7 +158,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     private function loadAccountsIds()
     {
         $items = $this->em->createQueryBuilder()
-            ->from('OroCRMAccountBundle:Account', 'a')
+            ->from('OroAccountBundle:Account', 'a')
             ->select('a.id')
             ->getQuery()
             ->getArrayResult();

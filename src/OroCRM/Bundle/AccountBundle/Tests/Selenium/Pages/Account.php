@@ -1,17 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\AccountBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 class Account extends AbstractPageEntity
 {
     protected $filtersPath = '';
-    protected $owner = "//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a";
+    protected $owner = "//div[starts-with(@id,'s2id_oro_account_form_owner')]/a";
 
     public function setName($name)
     {
-        $element = $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']");
+        $element = $this->test->byXPath("//*[@data-ftid='oro_account_form_name']");
         $element->clear();
         $element->value($name);
 
@@ -20,8 +20,8 @@ class Account extends AbstractPageEntity
 
     public function verifyTag($tag)
     {
-        if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
-            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
+        if ($this->isElementPresent("//div[starts-with(@id,'s2id_oro_account_form_tags_autocomplete')]")) {
+            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_oro_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value(substr($tag, 0, (strlen($tag)-1)));
             $this->waitForAjax();
@@ -50,8 +50,8 @@ class Account extends AbstractPageEntity
      */
     public function setTag($tag)
     {
-        if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
-            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
+        if ($this->isElementPresent("//div[starts-with(@id,'s2id_oro_account_form_tags_autocomplete')]")) {
+            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_oro_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value($tag);
             $this->waitForAjax();
@@ -69,7 +69,7 @@ class Account extends AbstractPageEntity
 
     public function getName()
     {
-        return $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']")->value();
+        return $this->test->byXPath("//*[@data-ftid='oro_account_form_name']")->value();
     }
 
     /**

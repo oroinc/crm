@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
 class OrderAddressApiHandler extends ApiFormHandler

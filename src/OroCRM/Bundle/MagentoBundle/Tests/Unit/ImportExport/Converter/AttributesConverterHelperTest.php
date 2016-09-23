@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 
 use Oro\Bundle\ImportExportBundle\Context\Context;
-
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AttributesConverterHelper;
+use Oro\Bundle\MagentoBundle\ImportExport\Converter\AttributesConverterHelper;
 
 class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
 {

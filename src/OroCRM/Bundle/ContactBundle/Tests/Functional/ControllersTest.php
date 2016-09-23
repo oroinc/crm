@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\UserBundle\DataFixtures\UserUtilityTrait;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @outputBuffering enabled
@@ -28,19 +27,19 @@ class ControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_contact_index'));
+        $this->client->request('GET', $this->getUrl('oro_contact_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_contact_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
-        $form['orocrm_contact_form[owner]'] = '1';
+        $form['oro_contact_form[firstName]'] = 'Contact_fname';
+        $form['oro_contact_form[lastName]'] = 'Contact_lname';
+        $form['oro_contact_form[owner]'] = '1';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -69,12 +68,12 @@ class ControllersTest extends WebTestCase
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_contact_update', array('id' => $id))
+            $this->getUrl('oro_contact_update', array('id' => $id))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname_updated';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname_updated';
+        $form['oro_contact_form[firstName]'] = 'Contact_fname_updated';
+        $form['oro_contact_form[lastName]'] = 'Contact_lname_updated';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -94,7 +93,7 @@ class ControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_contact_view', array('id' => $id))
+            $this->getUrl('oro_contact_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -118,7 +117,7 @@ class ControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_contact_view', array('id' => $id))
+            $this->getUrl('oro_contact_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -130,7 +129,7 @@ class ControllersTest extends WebTestCase
      */
     public function testMassAction()
     {
-        $entityManager = $this->getContainer()->get('doctrine')->getManagerForClass('OroCRMContactBundle:Contact');
+        $entityManager = $this->getContainer()->get('doctrine')->getManagerForClass('OroContactBundle:Contact');
         $owner = $this->getFirstUser($entityManager);
 
         for ($i = 1; $i <= 5; $i++) {

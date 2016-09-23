@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -10,11 +10,11 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
 
 /**
  * @Rest\RouteResource("marketinglist")
- * @Rest\NamePrefix("orocrm_api_")
+ * @Rest\NamePrefix("oro_api_")
  */
 class MarketingListController extends RestController implements ClassResourceInterface
 {
@@ -27,7 +27,7 @@ class MarketingListController extends RestController implements ClassResourceInt
      *      description="Delete Marketing List",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_delete")
+     * @AclAncestor("oro_marketing_list_delete")
      *
      * @return Response
      */
@@ -51,7 +51,7 @@ class MarketingListController extends RestController implements ClassResourceInt
         $entity = $this->getRequest()->get('entity');
         $field = $this->getRequest()->get('field');
         /** @var ContactInformationFieldHelper $helper */
-        $helper = $this->get('orocrm_marketing_list.contact_information_field_helper');
+        $helper = $this->get('oro_marketing_list.contact_information_field_helper');
         return $this->handleView(
             $this->view(
                 $helper->getContactInformationFieldType($entity, $field),
@@ -74,7 +74,7 @@ class MarketingListController extends RestController implements ClassResourceInt
     {
         $entity = $this->getRequest()->get('entity');
         /** @var ContactInformationFieldHelper $helper */
-        $helper = $this->get('orocrm_marketing_list.contact_information_field_helper');
+        $helper = $this->get('oro_marketing_list.contact_information_field_helper');
 
         return $this->handleView($this->view($helper->getEntityContactInformationColumnsInfo($entity), Codes::HTTP_OK));
     }
@@ -84,7 +84,7 @@ class MarketingListController extends RestController implements ClassResourceInt
      */
     public function getManager()
     {
-        return $this->get('orocrm_marketing_list.marketing_list.manager.api');
+        return $this->get('oro_marketing_list.marketing_list.manager.api');
     }
 
     /**

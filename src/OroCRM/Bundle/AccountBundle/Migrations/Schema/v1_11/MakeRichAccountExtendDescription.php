@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -15,7 +15,7 @@ class MakeRichAccountExtendDescription implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_account');
+        $table = $schema->getTable('oro_account');
         $column = $table->getColumn('extend_description');
         $column->setOptions(
             [

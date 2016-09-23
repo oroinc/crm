@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
  * Class Opportunities
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method Opportunities openOpportunities(string $bundlePath)
  * @method Opportunity add()
  * @method Opportunity open(array $filter)

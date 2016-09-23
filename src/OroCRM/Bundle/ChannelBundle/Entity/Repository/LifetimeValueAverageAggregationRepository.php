@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
+namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Carbon\Carbon;
 
@@ -10,8 +10,8 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Security\Core\Util\ClassUtils;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {
@@ -31,7 +31,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
     {
         $em       = $this->getEntityManager();
         $now      = new \DateTime('now', new \DateTimeZone($timeZone));
-        $channels = $em->getRepository('OroCRMChannelBundle:Channel')->findAll();
+        $channels = $em->getRepository('OroChannelBundle:Channel')->findAll();
 
         /** @var Channel $channel */
         foreach ($channels as $channel) {
@@ -199,7 +199,7 @@ SQL;
     private function getSQLColumnNamesArray()
     {
         $em       = $this->getEntityManager();
-        $metadata = $em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory');
+        $metadata = $em->getClassMetadata('OroChannelBundle:LifetimeValueHistory');
 
         $sqlNames = ['tableName' => $metadata->getTableName()];
         foreach ($metadata->getFieldNames() as $fieldName) {

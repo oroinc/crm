@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Model;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Model\EmailCampaignSender;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,7 +66,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Provider\MarketingListProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,12 +76,12 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->statisticsConnector = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector')
+            ->getMockBuilder('Oro\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->contactInformationFieldsProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
             ->disableOriginalConstructor()
             ->getMock();
         $this->registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
@@ -89,9 +89,9 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
-        $this->transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $this->transport = $this->getMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
 
-        $this->transportProvider = $this->getMock('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider');
+        $this->transportProvider = $this->getMock('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider');
 
         $this->sender = new EmailCampaignSender(
             $this->marketingListProvider,
@@ -131,7 +131,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getTransportByName')
             ->will($this->returnValue($this->transport));
 
-        $transportSettings = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings')
+        $transportSettings = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\TransportSettings')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -200,7 +200,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $marketingList->setType($type);
         $marketingList->setEntity($entity);
 
-        $transportSettings = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings')
+        $transportSettings = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\TransportSettings')
             ->disableOriginalConstructor()
             ->getMock();
         $campaign = new EmailCampaign();
@@ -252,13 +252,13 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
                 )
                 ->will($this->returnValue($to));
 
-            $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
+            $marketingListItem = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListItem')
                 ->disableOriginalConstructor()
                 ->getMock();
             $marketingListItem->expects($this->exactly($itCount))
                 ->method('contact');
 
-            $statisticsRecord = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics')
+            $statisticsRecord = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics')
                 ->disableOriginalConstructor()
                 ->getMock();
             $statisticsRecord->expects($this->exactly($itCount))

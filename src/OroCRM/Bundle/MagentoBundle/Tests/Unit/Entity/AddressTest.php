@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 class AddressTest extends AbstractEntityTestCase
 {
@@ -9,7 +9,7 @@ class AddressTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\Address';
+        return 'Oro\Bundle\MagentoBundle\Entity\Address';
     }
 
     /**
@@ -17,7 +17,7 @@ class AddressTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $owner      = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $owner      = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
         $originId = 123;
 
         return [

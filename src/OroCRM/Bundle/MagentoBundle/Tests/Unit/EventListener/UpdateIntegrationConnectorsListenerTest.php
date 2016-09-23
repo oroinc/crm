@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {
@@ -48,16 +48,16 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
 
-        $orderConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\OrderConnector')
+        $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\OrderConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cartConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\CartConnector')
+        $cartConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\CartConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
         $dictionaryConnector = $this
-            ->getMock('OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface');
+            ->getMock('Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface');
 
         $this->typesRegistry->expects($this->any())
             ->method('getConnectorType')
@@ -104,12 +104,12 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
         $this->integration->setTransport($transport);
 
         $extensionAwareConnector = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
         $versionAwareConnector = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

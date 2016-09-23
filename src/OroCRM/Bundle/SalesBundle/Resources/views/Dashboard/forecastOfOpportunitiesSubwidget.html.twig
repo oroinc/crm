@@ -1,4 +1,4 @@
-{% include 'OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig' %}
+{% include 'OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig' %}
 {% if item.value.deviation is defined %}
 <div class="deviation">
     <span class="deviation {% if item.value.isPositive is defined %}{% if item.value.isPositive %}positive{% else %}negative{% endif %}{% endif %}">
@@ -7,7 +7,7 @@
 </div>
 <div class="deviation">
     <span class="deviation">
-        {{ 'orocrm.magento.dashboard.e_commerce_statistic.compare_to.label'|trans }}:
+        {{ 'oro.magento.dashboard.e_commerce_statistic.compare_to.label'|trans }}:
     </span>
     <span class="date-range">{{ item.value.previousRange }}</span>
 </div>

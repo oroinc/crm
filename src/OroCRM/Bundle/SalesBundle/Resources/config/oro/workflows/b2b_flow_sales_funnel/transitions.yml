@@ -6,15 +6,15 @@ workflows:
                 step_to: new_lead
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: orocrm_sales_salesfunnel_create
+                acl_resource: oro_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
                     icon: 'icon-phone'
                     class: 'btn-success'
                     page:
-                        parent_route: 'orocrm_sales_salesfunnel_index'
-                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
-                        title: orocrm.sales.salesfunnel.new_entity
+                        parent_route: 'oro_sales_salesfunnel_index'
+                        parent_label: oro.sales.salesfunnel.entity_plural_label
+                        title: oro.sales.salesfunnel.new_entity
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
@@ -29,17 +29,17 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         dataChannel:
-                            form_type: orocrm_channel_select_type
+                            form_type: oro_channel_select_type
                             options:
                                 required: true
-                                label: orocrm.sales.lead.data_channel.label
+                                label: oro.sales.lead.data_channel.label
                                 entities:
-                                    - OroCRM\Bundle\SalesBundle\Entity\Lead
-                                    - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+                                    - Oro\Bundle\SalesBundle\Entity\Lead
+                                    - Oro\Bundle\SalesBundle\Entity\SalesFunnel
                                 constraints:
                                     - NotBlank: ~
                         lead:
-                            form_type: orocrm_sales_lead_data_channel_aware_select
+                            form_type: oro_sales_lead_data_channel_aware_select
                             options:
                                 grid_name: 'sales-funnel-lead-with-data-channel-grid'
                                 configs:
@@ -61,15 +61,15 @@ workflows:
                 step_to: new_opportunity
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: orocrm_sales_salesfunnel_create
+                acl_resource: oro_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
                     icon: 'icon-dollar'
                     class: 'btn-success'
                     page:
-                        parent_route: 'orocrm_sales_salesfunnel_index'
-                        parent_label: orocrm.sales.salesfunnel.entity_plural_label
-                        title: orocrm.sales.salesfunnel.new_entity
+                        parent_route: 'oro_sales_salesfunnel_index'
+                        parent_label: oro.sales.salesfunnel.entity_plural_label
+                        title: oro.sales.salesfunnel.new_entity
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
@@ -84,17 +84,17 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         dataChannel:
-                            form_type: orocrm_channel_select_type
+                            form_type: oro_channel_select_type
                             options:
                                 required: true
-                                label: orocrm.sales.lead.data_channel.label
+                                label: oro.sales.lead.data_channel.label
                                 entities:
-                                    - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-                                    - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+                                    - Oro\Bundle\SalesBundle\Entity\Opportunity
+                                    - Oro\Bundle\SalesBundle\Entity\SalesFunnel
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
-                            form_type: orocrm_sales_opportunity_data_channel_aware_select
+                            form_type: oro_sales_opportunity_data_channel_aware_select
                             options:
                                 grid_name: 'sales-funnel-opportunity-with-data-channel-grid'
                                 configs:
@@ -139,7 +139,7 @@ workflows:
                 label: 'Qualify'
                 step_to: new_opportunity
                 is_unavailable_hidden: true
-                acl_resource: orocrm_sales_opportunity_create
+                acl_resource: oro_sales_opportunity_create
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'
@@ -168,7 +168,7 @@ workflows:
                                     - '@empty':     $new_b2bcustomer
                                     - '@not_empty': $new_company_name
                             parameters:
-                                class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
                                 attribute: $new_b2bcustomer
                                 where:
                                     name:  $new_company_name

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\CartHandler;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Form\Handler\CartHandler;
 
 class CartHandlerTest extends AbstractHandlerTest
 {
@@ -75,7 +75,7 @@ class CartHandlerTest extends AbstractHandlerTest
         $this->manager->expects($this->once())
             ->method('flush');
 
-        $cartItem = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\CartItem')
+        $cartItem = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\CartItem')
             ->disableOriginalConstructor()
             ->getMock();
 

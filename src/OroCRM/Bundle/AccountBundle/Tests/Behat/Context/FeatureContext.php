@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Behat\Context;
+namespace Oro\Bundle\AccountBundle\Tests\Behat\Context;
 
 use Behat\Mink\Element\NodeElement;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
@@ -102,7 +102,7 @@ class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
     {
         $page = $this->getSession()->getPage();
 
-        return $page->findAll('css', 'div[id^="orocrm_account_form_contacts"] .list-group-item');
+        return $page->findAll('css', 'div[id^="oro_account_form_contacts"] .list-group-item');
     }
 
     /**

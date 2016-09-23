@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CartAddressApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartAddressApiType;
 
 class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,7 +55,7 @@ class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'           => 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress',
+                    'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartAddress',
                     'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                     'single_form'          => true,
                     'csrf_protection'      => false

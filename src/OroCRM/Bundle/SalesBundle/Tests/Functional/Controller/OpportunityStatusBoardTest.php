@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
-use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures;
 
 /**
  * @outputBuffering enabled
@@ -22,12 +21,12 @@ class OpportunityStatusBoardTest extends AbstractDatagridTestCase
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures']);
     }
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_sales_opportunity_index'));
+        $this->client->request('GET', $this->getUrl('oro_sales_opportunity_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }

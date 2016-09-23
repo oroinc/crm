@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Builder;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Builder;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 /**
  * @dbIsolation
@@ -21,12 +21,12 @@ class RFMBuilderTest extends WebTestCase
     {
         $this->initClient();
         $this->loadFixtures([
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData',
-            'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData',
+            'Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
+            'Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData',
+            'Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData',
         ]);
 
-        $this->builder = $this->getContainer()->get('orocrm_analytics.builder.rfm');
+        $this->builder = $this->getContainer()->get('oro_analytics.builder.rfm');
     }
 
     /**
@@ -79,8 +79,8 @@ class RFMBuilderTest extends WebTestCase
         }, array_keys($expectedData)), array_values($expectedData));
 
         $repository = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('OroCRM\Bundle\MagentoBundle\Entity\Customer')
-            ->getRepository('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+            ->getManagerForClass('Oro\Bundle\MagentoBundle\Entity\Customer')
+            ->getRepository('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         $actualData = $repository->findBy(['dataChannel' => $channel]);
         /** @var Customer[] $actualData */

@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\ChannelBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -14,7 +13,7 @@ class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtu
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\Channel';
+        return 'Oro\Bundle\ChannelBundle\Entity\Channel';
     }
 
     /**

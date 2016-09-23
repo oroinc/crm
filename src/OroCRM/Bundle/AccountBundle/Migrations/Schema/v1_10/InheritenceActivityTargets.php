@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -36,6 +36,6 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
      */
     public static function addInheritanceTargets(Schema $schema, ActivityListExtension $activityListExtension)
     {
-        $activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_contact', ['accounts']);
+        $activityListExtension->addInheritanceTargets($schema, 'oro_account', 'oro_contact', ['accounts']);
     }
 }

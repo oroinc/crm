@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 class RegionTest extends AbstractEntityTestCase
 {
@@ -9,7 +9,7 @@ class RegionTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\Region';
+        return 'Oro\Bundle\MagentoBundle\Entity\Region';
     }
 
     /**

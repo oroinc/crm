@@ -1,8 +1,8 @@
 datagrids:
     # Newsletter subscribers filtering is added by CustomerDataGridListener
     magento-customers-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
-        acl_resource: orocrm_magento_customer_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: oro_magento_customer_view
         source:
             type: orm
             query:
@@ -16,17 +16,17 @@ datagrids:
                     - c.createdAt
                     - c.updatedAt
                     - dataChannel.name as channelName
-                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
+                    - channel.id as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-                    - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
-                    - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
+                    - c.originId as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - c.id as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
                     - c AS customerData
                     - cg.name as customerGroup
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: dataChannel }
@@ -38,25 +38,25 @@ datagrids:
                         - { join: c.group, alias: cg }
         columns:
             channelName:
-                label:            orocrm.magento.customer.data_channel.label
+                label:            oro.magento.customer.data_channel.label
             websiteName:
-                label:            orocrm.magento.customer.website.label
+                label:            oro.magento.customer.website.label
             firstName:
-                label:            orocrm.magento.customer.first_name.label
+                label:            oro.magento.customer.first_name.label
             lastName:
-                label:            orocrm.magento.customer.last_name.label
+                label:            oro.magento.customer.last_name.label
             email:
-                label:            orocrm.magento.customer.email.label
+                label:            oro.magento.customer.email.label
             lifetime:
-                label:            orocrm.magento.customer.lifetime.label
+                label:            oro.magento.customer.lifetime.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             countryName:
-                label:            orocrm.magento.datagrid.columns.billing_country
+                label:            oro.magento.datagrid.columns.billing_country
             regionName:
-                label:            orocrm.magento.datagrid.columns.billing_region
+                label:            oro.magento.datagrid.columns.billing_region
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -64,25 +64,25 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             customerGroup:
-                label:            orocrm.magento.datagrid.columns.customerGroup
+                label:            oro.magento.datagrid.columns.customerGroup
                 renderable:       false
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_customer_view
+                route: oro_magento_customer_view
                 params: [ id ]
             update_link:
                 type: url
-                route: orocrm_magento_customer_update
+                route: oro_magento_customer_update
                 params: [ id ]
             subscribe_link:
                 type: url
-                route: orocrm_magento_newsletter_subscriber_subscribe_customer
+                route: oro_magento_newsletter_subscriber_subscribe_customer
                 params: [ id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_magento_newsletter_subscriber_unsubscribe_customer
+                route: oro_magento_newsletter_subscriber_unsubscribe_customer
                 params: [ id ]
         sorters:
             columns:
@@ -107,7 +107,7 @@ datagrids:
                     data_name: dataChannel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -115,7 +115,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                             translatable_options: false
                     enabled: false
@@ -135,7 +135,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type: string
@@ -144,7 +144,7 @@ datagrids:
                     type: number-range
                     data_name: c.lifetime
                 guest:
-                    label: orocrm.magento.datagrid.columns.customer_is_guest.label
+                    label: oro.magento.datagrid.columns.customer_is_guest.label
                     type: boolean
                     data_name: c.guest
                 createdAt:
@@ -161,7 +161,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            choices: '@orocrm_magento.datagrid_helper->getMagentoGroupsChoices'
+                            choices: '@oro_magento.datagrid_helper->getMagentoGroupsChoices'
                             multiple: true
                             translatable_options: false
                     enabled: false
@@ -171,50 +171,50 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_customer_view
+                acl_resource: oro_magento_customer_view
                 rowAction:    true
             update:
                 type:         navigate
-                acl_resource: orocrm_magento_customer_update
+                acl_resource: oro_magento_customer_update
                 label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
             subscribe:
                 type: ajaxdelete
-                label: orocrm.magento.newslettersubscriber.action.subscribe
+                label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: oro_magento_newsletter_subscriber_subscribe
                 defaultMessages:
-                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
-                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
-                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
-                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
-                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
-                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
+                    confirm_title:   oro.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      oro.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  oro.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: oro.magento.newslettersubscriber.action.content.subscribe
+                    success:         oro.magento.newslettersubscriber.action.success.subscribe
+                    error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
-                label: orocrm.magento.newslettersubscriber.action.unsubscribe
+                label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: oro_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
-                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
-                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
-                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
-                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
-                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
-                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
+                    confirm_title:   oro.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      oro.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  oro.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: oro.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         oro.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           oro.magento.newslettersubscriber.action.error.unsubscribe
 
-        action_configuration: [ "@orocrm_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
+        action_configuration: [ "@oro_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
         options:
             entityHint: customer
             export: true
             entity_pagination: true
 
     magento-cart-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
-        acl_resource: orocrm_magento_cart_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: oro_magento_cart_view
         source:
             type: orm
             query:
@@ -235,7 +235,7 @@ datagrids:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Cart , alias: c }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Cart , alias: c }
                 join:
                     left:
                         - { join: c.store, alias: cs }
@@ -247,25 +247,25 @@ datagrids:
                         - { join: cs.website, alias: cw }
         columns:
             channelName:
-                label:            orocrm.magento.cart.data_channel.label
+                label:            oro.magento.cart.data_channel.label
             websiteName:
-                label:            orocrm.magento.cart.website.label
+                label:            oro.magento.cart.website.label
             originId:
-                label:            orocrm.magento.cart.id.label
+                label:            oro.magento.cart.id.label
             firstName:
-                label:            orocrm.magento.datagrid.columns.first_name
+                label:            oro.magento.datagrid.columns.first_name
             lastName:
-                label:            orocrm.magento.datagrid.columns.last_name
+                label:            oro.magento.datagrid.columns.last_name
             email:
-                label:            orocrm.magento.cart.email.label
+                label:            oro.magento.cart.email.label
             itemsQty:
-                label:            orocrm.magento.datagrid.columns.qty
+                label:            oro.magento.datagrid.columns.qty
                 frontend_type:    integer
             grandTotal:
-                label:            orocrm.magento.cart.grand_total.label
+                label:            oro.magento.cart.grand_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             createdAt:
                 label:            oro.ui.created_at
@@ -274,16 +274,16 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             countryName:
-                label:            orocrm.magento.datagrid.columns.billing_country
+                label:            oro.magento.datagrid.columns.billing_country
             regionName:
-                label:            orocrm.magento.datagrid.columns.billing_region
+                label:            oro.magento.datagrid.columns.billing_region
             statusLabel:
-                label:            orocrm.magento.datagrid.columns.status
+                label:            oro.magento.datagrid.columns.status
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_cart_view
+                route: oro_magento_cart_view
                 params: [ id ]
         sorters:
             columns:
@@ -309,7 +309,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -317,7 +317,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                     enabled:   false
                 originId:
@@ -343,7 +343,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
@@ -354,7 +354,7 @@ datagrids:
                     data_name: c.status
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CartStatus
+                            class: OroMagentoBundle:CartStatus
                             property: label
                             translatable_options: false
                 createdAt:
@@ -371,7 +371,7 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_cart_view
+                acl_resource: oro_magento_cart_view
                 rowAction:    true
         options:
             entityHint: cart
@@ -379,8 +379,8 @@ datagrids:
             entity_pagination: true
 
     magento-cartitem-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
-        acl_resource: orocrm_magento_cart_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CartItem
+        acl_resource: oro_magento_cart_view
         source:
             type: orm
             query:
@@ -401,7 +401,7 @@ datagrids:
                     - c.updatedAt
                     - co.quoteCurrencyCode as currency
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\CartItem , alias: c }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CartItem , alias: c }
                 join:
                     left:
                         - { join: c.cart, alias: co }
@@ -443,49 +443,49 @@ datagrids:
                         - c.removed = false
         columns:
             sku:
-                label:            orocrm.magento.datagrid.columns.sku
+                label:            oro.magento.datagrid.columns.sku
             name:
-                label:            orocrm.magento.datagrid.columns.name
+                label:            oro.magento.datagrid.columns.name
             qty:
-                label:            orocrm.magento.datagrid.columns.qty
+                label:            oro.magento.datagrid.columns.qty
                 frontend_type:    integer
             giftMessage:
-                label:            orocrm.magento.datagrid.columns.gift_message
+                label:            oro.magento.datagrid.columns.gift_message
             price:
-                label:            orocrm.magento.datagrid.columns.price
+                label:            oro.magento.datagrid.columns.price
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             priceInclTax:
-                label:            orocrm.magento.datagrid.columns.price_incl_tax
+                label:            oro.magento.datagrid.columns.price_incl_tax
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             rowTotal:
-                label:            orocrm.magento.datagrid.columns.row_total
+                label:            oro.magento.datagrid.columns.row_total
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             taxAmount:
-                label:            orocrm.magento.datagrid.columns.tax_amount
+                label:            oro.magento.datagrid.columns.tax_amount
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             discountAmount:
-                label:            orocrm.magento.datagrid.columns.discount_amount
+                label:            oro.magento.datagrid.columns.discount_amount
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             weight:
-                label:            orocrm.magento.datagrid.columns.weight
+                label:            oro.magento.datagrid.columns.weight
                 frontend_type:    decimal
             createdAt:
-                label:            orocrm.magento.datagrid.columns.added_on
+                label:            oro.magento.datagrid.columns.added_on
                 frontend_type:    datetime
             updatedAt:
                 label:            oro.ui.updated_at
@@ -503,82 +503,82 @@ datagrids:
                         - c.removed = true
         columns:
             sku:
-                label:            orocrm.magento.datagrid.columns.sku
+                label:            oro.magento.datagrid.columns.sku
             name:
-                label:            orocrm.magento.datagrid.columns.name
+                label:            oro.magento.datagrid.columns.name
             giftMessage:
-                label:            orocrm.magento.datagrid.columns.gift_message
+                label:            oro.magento.datagrid.columns.gift_message
             price:
-                label:            orocrm.magento.datagrid.columns.price
+                label:            oro.magento.datagrid.columns.price
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             priceInclTax:
-                label:            orocrm.magento.datagrid.columns.price_incl_tax
+                label:            oro.magento.datagrid.columns.price_incl_tax
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             rowTotal:
-                label:            orocrm.magento.datagrid.columns.row_total
+                label:            oro.magento.datagrid.columns.row_total
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             taxAmount:
-                label:            orocrm.magento.datagrid.columns.tax_amount
+                label:            oro.magento.datagrid.columns.tax_amount
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             discountAmount:
-                label:            orocrm.magento.datagrid.columns.discount_amount
+                label:            oro.magento.datagrid.columns.discount_amount
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             weight:
-                label:            orocrm.magento.datagrid.columns.weight
+                label:            oro.magento.datagrid.columns.weight
                 frontend_type:    decimal
             createdAt:
-                label:            orocrm.magento.datagrid.columns.added_on
+                label:            oro.magento.datagrid.columns.added_on
                 frontend_type:    datetime
             updatedAt:
-                label:            orocrm.magento.datagrid.columns.removed_at
+                label:            oro.magento.datagrid.columns.removed_at
                 frontend_type:    datetime
 
     magento-products-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
-        acl_resource: orocrm_magento_product_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Product
+        acl_resource: oro_magento_product_view
         source:
             type: orm
             query:
                 select:
                     - p
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Product , alias: p }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Product , alias: p }
                 join:
                     left:
                         - { join: p.channel, alias: pch }
                         - { join: p.websites, alias: pw }
         columns:
             name:
-                label:         orocrm.magento.datagrid.columns.name
+                label:         oro.magento.datagrid.columns.name
             sku:
-                label:         orocrm.magento.datagrid.columns.sku
+                label:         oro.magento.datagrid.columns.sku
             type:
-                label:         orocrm.magento.datagrid.columns.type
+                label:         oro.magento.datagrid.columns.type
             price:
-                label:         orocrm.magento.datagrid.columns.price
+                label:         oro.magento.datagrid.columns.price
                 frontend_type: decimal
             specialPrice:
-                label:         orocrm.magento.datagrid.columns.specialPrice
+                label:         oro.magento.datagrid.columns.specialPrice
                 frontend_type: decimal
             websites:
-                label:         orocrm.magento.datagrid.columns.websites
+                label:         oro.magento.datagrid.columns.websites
                 type:          callback
-                callable:      OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString::getConverterCallback
+                callable:      Oro\Bundle\MagentoBundle\Converter\WebsiteCollectionToString::getConverterCallback
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -589,7 +589,7 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_product_view
+                route: oro_magento_product_view
                 params: [ id ]
         sorters:
             columns:
@@ -626,7 +626,7 @@ datagrids:
                     data_name: pw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             multiple: true
                             property: name
                             translatable_options: false
@@ -644,14 +644,14 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_product_view
+                acl_resource: oro_magento_product_view
                 rowAction:    true
         options:
             entityHint: magento product
 
     magento-order-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
-        acl_resource: orocrm_magento_order_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Order
+        acl_resource: oro_magento_order_view
         source:
             type: orm
             query:
@@ -674,18 +674,18 @@ datagrids:
                     - o.discountPercent
                     - o.couponCode
                     - >
-                        (SELECT country.name FROM OroCRMMagentoBundle:OrderAddress address_c
+                        (SELECT country.name FROM OroMagentoBundle:OrderAddress address_c
                         LEFT JOIN address_c.country country
                         LEFT JOIN address_c.types types_c
                         WHERE address_c.owner = o AND (types_c.name = 'billing' OR types_c.name IS NULL)) as countryName
                     - >
                         (SELECT CONCAT(CASE WHEN address_r.regionText IS NOT NULL THEN address_r.regionText ELSE region.name END, '')
-                        FROM OroCRMMagentoBundle:OrderAddress address_r
+                        FROM OroMagentoBundle:OrderAddress address_r
                         LEFT JOIN address_r.region region
                         LEFT JOIN address_r.types types_r
                         WHERE address_r.owner = o AND (types_r.name = 'billing' OR types_r.name IS NULL)) as regionName
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.customer, alias: customer }
@@ -694,17 +694,17 @@ datagrids:
                         - { join: cs.website, alias: cw }
         columns:
             channelName:
-                label:            orocrm.magento.order.data_channel.label
+                label:            oro.magento.order.data_channel.label
             websiteName:
-                label:            orocrm.magento.order.website.label
+                label:            oro.magento.order.website.label
             incrementId:
-                label:            orocrm.magento.order.increment_id.label
+                label:            oro.magento.order.increment_id.label
             firstName:
-                label:            orocrm.magento.datagrid.columns.first_name
+                label:            oro.magento.datagrid.columns.first_name
             lastName:
-                label:            orocrm.magento.datagrid.columns.last_name
+                label:            oro.magento.datagrid.columns.last_name
             email:
-                label:            orocrm.magento.datagrid.columns.email
+                label:            oro.magento.datagrid.columns.email
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -712,34 +712,34 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             totalPaidAmount:
-                label:            orocrm.magento.order.total_paid_amount.label
+                label:            oro.magento.order.total_paid_amount.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             grandTotal:
-                label:            orocrm.magento.cart.grand_total.label
+                label:            oro.magento.cart.grand_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             subTotal:
-                label:            orocrm.magento.cart.sub_total.label
+                label:            oro.magento.cart.sub_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             countryName:
-                label:            orocrm.magento.datagrid.columns.billing_country
+                label:            oro.magento.datagrid.columns.billing_country
             regionName:
-                label:            orocrm.magento.datagrid.columns.billing_region
+                label:            oro.magento.datagrid.columns.billing_region
             status:
-                label:            orocrm.magento.order.status.label
+                label:            oro.magento.order.status.label
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_order_view
+                route: oro_magento_order_view
                 params: [ id ]
         sorters:
             columns:
@@ -766,7 +766,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -774,7 +774,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                             translatable_options: false
                     enabled:   false
@@ -817,21 +817,21 @@ datagrids:
                     type:             string
                     data_name:        o.status
                 guest:
-                    label: orocrm.magento.datagrid.columns.order_is_guest.label
+                    label: oro.magento.datagrid.columns.order_is_guest.label
                     type: boolean
                     data_name: o.isGuest
                 discountAmount:
-                    label:            orocrm.magento.datagrid.columns.discount_amount
+                    label:            oro.magento.datagrid.columns.discount_amount
                     type:             currency
                     data_name:        o.discountAmount
                     enabled:          false
                 discountPercent:
-                    label:            orocrm.magento.datagrid.columns.discount_percent
+                    label:            oro.magento.datagrid.columns.discount_percent
                     type:             percent
                     data_name:        o.discountPercent
                     enabled:          false
                 couponCode:
-                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    label:     oro.magento.datagrid.columns.coupon_code
                     type:      string
                     data_name: o.couponCode
                     enabled:   false
@@ -841,7 +841,7 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_order_view
+                acl_resource: oro_magento_order_view
                 rowAction:    true
         options:
             entityHint: order
@@ -849,8 +849,8 @@ datagrids:
             entity_pagination: true
 
     magento-orderitem-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem
-        acl_resource: orocrm_magento_order_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\OrderItem
+        acl_resource: oro_magento_order_view
         source:
             type: orm
             query:
@@ -870,7 +870,7 @@ datagrids:
                     - oi.rowTotal
                     - o.currency
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\OrderItem , alias: oi }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\OrderItem , alias: oi }
                 join:
                     left:
                         - { join: oi.order, alias: o }
@@ -881,52 +881,52 @@ datagrids:
                 - id
         columns:
             sku:
-                label: orocrm.magento.datagrid.columns.sku
+                label: oro.magento.datagrid.columns.sku
             name:
-                label: orocrm.magento.datagrid.columns.name
+                label: oro.magento.datagrid.columns.name
             qty:
-                label: orocrm.magento.datagrid.columns.qty
+                label: oro.magento.datagrid.columns.qty
                 frontend_type: number
             productType:
-                label: orocrm.magento.datagrid.columns.productType
+                label: oro.magento.datagrid.columns.productType
             weight:
-                label: orocrm.magento.datagrid.columns.weight
+                label: oro.magento.datagrid.columns.weight
                 frontend_type: decimal
             price:
-                label: orocrm.magento.datagrid.columns.price
+                label: oro.magento.datagrid.columns.price
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             originalPrice:
-                label: orocrm.magento.datagrid.columns.originalPrice
+                label: oro.magento.datagrid.columns.originalPrice
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             discountPercent:
-                label: orocrm.magento.datagrid.columns.discountPercent
+                label: oro.magento.datagrid.columns.discountPercent
                 frontend_type: percent
             discountAmount:
-                label: orocrm.magento.datagrid.columns.discountAmount
+                label: oro.magento.datagrid.columns.discountAmount
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             taxPercent:
-                label: orocrm.magento.datagrid.columns.taxPercent
+                label: oro.magento.datagrid.columns.taxPercent
                 frontend_type: percent
             taxAmount:
-                label: orocrm.magento.datagrid.columns.taxAmount
+                label: oro.magento.datagrid.columns.taxAmount
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             rowTotal:
-                label: orocrm.magento.datagrid.columns.rowTotal
+                label: oro.magento.datagrid.columns.rowTotal
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
         sorters:
             columns:
@@ -950,7 +950,7 @@ datagrids:
                     hide: true
 
     magento-customer-order-grid:
-        acl_resource: orocrm_magento_order_view
+        acl_resource: oro_magento_order_view
         source:
             type: orm
             query:
@@ -963,7 +963,7 @@ datagrids:
                     - o.currency
                     - COUNT(items.id) as itemsCount
                 from:
-                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                    - { table: %oro_magento.order.entity.class%, alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -973,24 +973,24 @@ datagrids:
                 groupBy: o.id
         columns:
             incrementId:
-                label: orocrm.magento.order.id.label
+                label: oro.magento.order.id.label
             itemsCount:
-                label: orocrm.magento.order.items_qty.label
+                label: oro.magento.order.items_qty.label
                 frontend_type: integer
             totalAmount:
-                label: orocrm.magento.order.total_amount.label
+                label: oro.magento.order.total_amount.label
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             totalPaidAmount:
-                label:  orocrm.magento.order.total_paid_amount.label
+                label:  oro.magento.order.total_paid_amount.label
                 type:   localized_number
                 method: formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
             status:
-                label: orocrm.magento.order.status.label
+                label: oro.magento.order.status.label
         sorters:
             columns:
                 incrementId:     { data_name: o.incrementId }
@@ -1002,7 +1002,7 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_order_view
+                route: oro_magento_order_view
                 params: [ id ]
         actions:
             view:
@@ -1010,11 +1010,11 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_order_view
+                acl_resource: oro_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-grid:
-        acl_resource: orocrm_magento_cart_view
+        acl_resource: oro_magento_cart_view
         source:
             type: orm
             query:
@@ -1028,7 +1028,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount
                 from:
-                    - { table: %orocrm_magento.cart.entity.class% , alias: c }
+                    - { table: %oro_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
@@ -1038,21 +1038,21 @@ datagrids:
                 groupBy: c.id
         columns:
             originId:
-                label:            orocrm.magento.cart.id.label
+                label:            oro.magento.cart.id.label
             itemsCount:
-                label:            orocrm.magento.cart.items_count.label
+                label:            oro.magento.cart.items_count.label
                 frontend_type:    integer
             grandTotal:
-                label:            orocrm.magento.cart.grand_total.label
+                label:            oro.magento.cart.grand_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             subTotal:
-                label:            orocrm.magento.cart.sub_total.label
+                label:            oro.magento.cart.sub_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             createdAt:
                 label:            oro.ui.created_at
@@ -1061,12 +1061,12 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             statusLabel:
-                label:            orocrm.magento.datagrid.columns.status
+                label:            oro.magento.datagrid.columns.status
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_cart_view
+                route: oro_magento_cart_view
                 params: [ id ]
         sorters:
             columns:
@@ -1085,11 +1085,11 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_cart_view
+                acl_resource: oro_magento_cart_view
                 rowAction:    true
 
     magento-customer-orders-widget-grid:
-        acl_resource: orocrm_magento_order_view
+        acl_resource: oro_magento_order_view
         source:
             type: orm
             query:
@@ -1108,7 +1108,7 @@ datagrids:
                     - o.discountPercent
                     - o.couponCode
                 from:
-                    - { table: %orocrm_magento.order.entity.class%, alias: o }
+                    - { table: %oro_magento.order.entity.class%, alias: o }
                 join:
                     left:
                         - { join: o.items, alias: items }
@@ -1118,9 +1118,9 @@ datagrids:
                 groupBy: o.id
         columns:
             incrementId:
-                label:            orocrm.magento.order.increment_id.label
+                label:            oro.magento.order.increment_id.label
             itemsCount:
-                label:            orocrm.magento.order.items_qty.label
+                label:            oro.magento.order.items_qty.label
                 frontend_type:    integer
             createdAt:
                 label:            oro.ui.created_at
@@ -1129,25 +1129,25 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             subtotalAmount:
-                label:            orocrm.magento.cart.sub_total_amount.label
+                label:            oro.magento.cart.sub_total_amount.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             totalAmount:
-                label:            orocrm.magento.order.total_amount.label
+                label:            oro.magento.order.total_amount.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             totalPaidAmount:
-                label:            orocrm.magento.order.total_paid_amount.label
+                label:            oro.magento.order.total_paid_amount.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             status:
-                label:            orocrm.magento.order.status.label
+                label:            oro.magento.order.status.label
         filters:
             columns:
                 incrementId:
@@ -1178,17 +1178,17 @@ datagrids:
                     type:         string
                     data_name:    o.status
                 discountAmount:
-                    label:            orocrm.magento.datagrid.columns.discount_amount
+                    label:            oro.magento.datagrid.columns.discount_amount
                     type:             currency
                     data_name:        o.discountAmount
                     enabled:          false
                 discountPercent:
-                    label:            orocrm.magento.datagrid.columns.discount_percent
+                    label:            oro.magento.datagrid.columns.discount_percent
                     type:             percent
                     data_name:        o.discountPercent
                     enabled:          false
                 couponCode:
-                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    label:     oro.magento.datagrid.columns.coupon_code
                     type:      string
                     data_name: o.couponCode
                     enabled:   false
@@ -1208,7 +1208,7 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_order_view
+                route: oro_magento_order_view
                 params: [ id ]
         actions:
             view:
@@ -1216,11 +1216,11 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_order_view
+                acl_resource: oro_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-widget-grid:
-        acl_resource: orocrm_magento_cart_view
+        acl_resource: oro_magento_cart_view
         source:
             type: orm
             query:
@@ -1234,7 +1234,7 @@ datagrids:
                     - MAX(cstatus.label) as statusLabel
                     - c.itemsCount as itemsCount
                 from:
-                    - { table: %orocrm_magento.cart.entity.class% , alias: c }
+                    - { table: %oro_magento.cart.entity.class% , alias: c }
                 join:
                     left:
                         - { join: c.status, alias: cstatus }
@@ -1244,9 +1244,9 @@ datagrids:
                 groupBy: c.id
         columns:
             originId:
-                label:            orocrm.magento.cart.id.label
+                label:            oro.magento.cart.id.label
             itemsCount:
-                label:            orocrm.magento.cart.items_qty.label
+                label:            oro.magento.cart.items_qty.label
                 frontend_type:    integer
             createdAt:
                 label:            oro.ui.created_at
@@ -1255,18 +1255,18 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             grandTotal:
-                label:            orocrm.magento.cart.grand_total.label
+                label:            oro.magento.cart.grand_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             statusLabel:
-                label:            orocrm.magento.datagrid.columns.status
+                label:            oro.magento.datagrid.columns.status
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_cart_view
+                route: oro_magento_cart_view
                 params: [ id ]
         sorters:
             columns:
@@ -1301,7 +1301,7 @@ datagrids:
                     data_name:        c.status
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CartStatus
+                            class: OroMagentoBundle:CartStatus
                             property: label
         actions:
             view:
@@ -1309,14 +1309,14 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_magento_cart_view
+                acl_resource: oro_magento_cart_view
                 rowAction:    true
 
     magento-customers-group-by-channel-grid:
-        extended_entity_name: %orocrm_magento.entity.customer_group.class%
+        extended_entity_name: %oro_magento.entity.customer_group.class%
         channel_limitation:
             channel_relation_path: dataChannel
-        acl_resource: orocrm_magento_customer_view
+        acl_resource: oro_magento_customer_view
         source:
             type: orm
             skip_acl_apply: true
@@ -1325,14 +1325,14 @@ datagrids:
                     - g.id
                     - g.name
                 from:
-                    - { table: %orocrm_magento.entity.customer_group.class%, alias: g }
+                    - { table: %oro_magento.entity.customer_group.class%, alias: g }
                 join:
                     left:
                         - { join: g.channel, alias: integrationChannel }
-                        - { join: %orocrm_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+                        - { join: %oro_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
         columns:
             name:
-                label: orocrm.magento.customergroup.name.label
+                label: oro.magento.customergroup.name.label
         properties:
             id: ~
         sorters:
@@ -1347,10 +1347,10 @@ datagrids:
                     data_name: g.name
 
     magento-store-by-channel-grid:
-        extended_entity_name: %orocrm_magento.entity.store.class%
+        extended_entity_name: %oro_magento.entity.store.class%
         channel_limitation:
             channel_relation_path: dataChannel
-        acl_resource: orocrm_magento_customer_view
+        acl_resource: oro_magento_customer_view
         source:
             type: orm
             skip_acl_apply: true
@@ -1361,19 +1361,19 @@ datagrids:
                     - s.code
                     - w.name as websiteName
                 from:
-                    - { table: %orocrm_magento.entity.store.class%, alias: s }
+                    - { table: %oro_magento.entity.store.class%, alias: s }
                 join:
                     left:
                         - { join: s.website, alias: w }
                         - { join: s.channel, alias: integrationChannel }
-                        - { join: %orocrm_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+                        - { join: %oro_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
         columns:
             name:
-                label: orocrm.magento.store.name.label
+                label: oro.magento.store.name.label
             code:
-                label: orocrm.magento.store.code.label
+                label: oro.magento.store.code.label
             websiteName:
-                label: orocrm.magento.store.website.label
+                label: oro.magento.store.website.label
         properties:
             id: ~
         sorters:
@@ -1397,17 +1397,17 @@ datagrids:
                     data_name: w.name
 
     magento-newsletter-subscriber-grid:
-        extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
-        acl_resource: orocrm_magento_newsletter_subscriber_view
+        extended_entity_name: %oro_magento.entity.newsletter_subscriber.class%
+        acl_resource: oro_magento_newsletter_subscriber_view
         source:
             type: orm
             query:
                 select:
                     - newsletterSubscriber.id
-                    - customer.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
-                    - customer.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
+                    - customer.originId as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - customer.id as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - dataChannel.name as channelName
-                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
+                    - channel.id as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
                     - newsletterSubscriber.email
                     - CONCAT_WS(' ', customer.firstName, customer.lastName) as customerName
@@ -1417,7 +1417,7 @@ datagrids:
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - newsletterSubscriber AS customerData
                 from:
-                    - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
+                    - { table: %oro_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
                 join:
                     left:
                         - { join: newsletterSubscriber.customer, alias: customer }
@@ -1428,15 +1428,15 @@ datagrids:
                         - { join: store.website, alias: website }
         columns:
             channelName:
-                label: orocrm.magento.newslettersubscriber.data_channel.label
+                label: oro.magento.newslettersubscriber.data_channel.label
             websiteName:
-                label: orocrm.magento.newslettersubscriber.website.label
+                label: oro.magento.newslettersubscriber.website.label
             email:
-                label: orocrm.magento.newslettersubscriber.email.label
+                label: oro.magento.newslettersubscriber.email.label
             customerName:
-                label: orocrm.magento.newslettersubscriber.customer.label
+                label: oro.magento.newslettersubscriber.customer.label
             customerEmail:
-                label: orocrm.magento.newslettersubscriber.email.customer
+                label: oro.magento.newslettersubscriber.email.customer
             createdAt:
                 label: oro.ui.created_at
                 frontend_type: datetime
@@ -1461,7 +1461,7 @@ datagrids:
                     data_name: dataChannel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -1486,59 +1486,59 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_newsletter_subscriber_view
+                route: oro_magento_newsletter_subscriber_view
                 params: [ id ]
             subscribe_link:
                 type: url
-                route: orocrm_magento_newsletter_subscriber_subscribe
+                route: oro_magento_newsletter_subscriber_subscribe
                 params: [ id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_magento_newsletter_subscriber_unsubscribe
+                route: oro_magento_newsletter_subscriber_unsubscribe
                 params: [ id ]
         actions:
             view:
                 type: navigate
-                acl_resource: orocrm_magento_newsletter_subscriber_view
+                acl_resource: oro_magento_newsletter_subscriber_view
                 label: oro.grid.action.view
                 icon: eye-open
                 link: view_link
                 rowAction: true
             subscribe:
                 type: ajaxdelete
-                label: orocrm.magento.newslettersubscriber.action.subscribe
+                label: oro.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: oro_magento_newsletter_subscriber_subscribe
                 defaultMessages:
-                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
-                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
-                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
-                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
-                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
-                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
+                    confirm_title:   oro.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      oro.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  oro.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: oro.magento.newslettersubscriber.action.content.subscribe
+                    success:         oro.magento.newslettersubscriber.action.success.subscribe
+                    error:           oro.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
                 type: ajaxdelete
-                label: orocrm.magento.newslettersubscriber.action.unsubscribe
+                label: oro.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: oro_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
-                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
-                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
-                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
-                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
-                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
-                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
-        action_configuration: [ "@orocrm_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
+                    confirm_title:   oro.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      oro.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  oro.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: oro.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         oro.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           oro.magento.newslettersubscriber.action.error.unsubscribe
+        action_configuration: [ "@oro_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
         options:
             entityHint: newsletter subscriber
             export: true
             entity_pagination: true
 
     magento-customers-for-context-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
-        acl_resource: orocrm_magento_customer_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: oro_magento_customer_view
         source:
             type: orm
             query:
@@ -1548,13 +1548,13 @@ datagrids:
                     - c.lastName
                     - c.email
                     - dataChannel.name as channelName
-                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
+                    - channel.id as Oro\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
                     - c.originId as customerOriginId
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: dataChannel }
@@ -1565,17 +1565,17 @@ datagrids:
                         - { join: c.website, alias: cw }
         columns:
             id:
-                label:            orocrm.magento.customer.id.label
+                label:            oro.magento.customer.id.label
             channelName:
-                label:            orocrm.magento.customer.data_channel.label
+                label:            oro.magento.customer.data_channel.label
             websiteName:
-                label:            orocrm.magento.customer.website.label
+                label:            oro.magento.customer.website.label
             firstName:
-                label:            orocrm.magento.customer.first_name.label
+                label:            oro.magento.customer.first_name.label
             lastName:
-                label:            orocrm.magento.customer.last_name.label
+                label:            oro.magento.customer.last_name.label
             email:
-                label:            orocrm.magento.customer.email.label
+                label:            oro.magento.customer.email.label
         sorters:
             columns:
                 firstName:   { data_name: c.firstName }
@@ -1593,7 +1593,7 @@ datagrids:
                     data_name: dataChannel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -1601,7 +1601,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                             translatable_options: false
                     enabled: false
@@ -1623,8 +1623,8 @@ datagrids:
             routerEnabled: false
 
     magento-order-for-context-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
-        acl_resource: orocrm_magento_order_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Order
+        acl_resource: oro_magento_order_view
         source:
             type: orm
             query:
@@ -1646,7 +1646,7 @@ datagrids:
                     - channel.name as channelName
                     - cw.name as websiteName
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.customer, alias: customer }
@@ -1654,7 +1654,7 @@ datagrids:
                             join: o.addresses
                             alias: address
                             conditionType: WITH
-                            condition: "address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa LEFT JOIN oa.types type WHERE type.name = 'billing')"
+                            condition: "address.id IN (SELECT oa.id FROM OroMagentoBundle:OrderAddress oa LEFT JOIN oa.types type WHERE type.name = 'billing')"
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: o.dataChannel, alias: channel }
@@ -1662,19 +1662,19 @@ datagrids:
                         - { join: cs.website, alias: cw }
         columns:
             id:
-                label:            orocrm.magento.order.id.label
+                label:            oro.magento.order.id.label
             channelName:
-                label:            orocrm.magento.order.data_channel.label
+                label:            oro.magento.order.data_channel.label
             websiteName:
-                label:            orocrm.magento.order.website.label
+                label:            oro.magento.order.website.label
             incrementId:
-                label:            orocrm.magento.order.increment_id.label
+                label:            oro.magento.order.increment_id.label
             firstName:
-                label:            orocrm.magento.datagrid.columns.first_name
+                label:            oro.magento.datagrid.columns.first_name
             lastName:
-                label:            orocrm.magento.datagrid.columns.last_name
+                label:            oro.magento.datagrid.columns.last_name
             email:
-                label:            orocrm.magento.datagrid.columns.email
+                label:            oro.magento.datagrid.columns.email
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -1682,16 +1682,16 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             countryName:
-                label:            orocrm.magento.datagrid.columns.billing_country
+                label:            oro.magento.datagrid.columns.billing_country
             regionName:
-                label:            orocrm.magento.datagrid.columns.billing_region
+                label:            oro.magento.datagrid.columns.billing_region
             status:
-                label:            orocrm.magento.order.status.label
+                label:            oro.magento.order.status.label
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_order_view
+                route: oro_magento_order_view
                 params: [ id ]
         sorters:
             columns:
@@ -1715,7 +1715,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -1723,7 +1723,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                             translatable_options: false
                     enabled:   false
@@ -1747,7 +1747,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder:  "@oro_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
@@ -1773,8 +1773,8 @@ datagrids:
             routerEnabled: false
 
     magento-cart-for-context-grid:
-        extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
-        acl_resource: orocrm_magento_cart_view
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: oro_magento_cart_view
         source:
             type: orm
             query:
@@ -1792,7 +1792,7 @@ datagrids:
                     - channel.name as channelName
                     - cw.name as websiteName
                 from:
-                    - { table: OroCRM\Bundle\MagentoBundle\Entity\Cart , alias: c }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\Cart , alias: c }
                 join:
                     left:
                         - { join: c.store, alias: cs }
@@ -1804,22 +1804,22 @@ datagrids:
                         - { join: cs.website, alias: cw }
         columns:
             id:
-                label:            orocrm.magento.cart.id.label
+                label:            oro.magento.cart.id.label
             channelName:
-                label:            orocrm.magento.cart.data_channel.label
+                label:            oro.magento.cart.data_channel.label
             websiteName:
-                label:            orocrm.magento.cart.website.label
+                label:            oro.magento.cart.website.label
             firstName:
-                label:            orocrm.magento.datagrid.columns.first_name
+                label:            oro.magento.datagrid.columns.first_name
             lastName:
-                label:            orocrm.magento.datagrid.columns.last_name
+                label:            oro.magento.datagrid.columns.last_name
             email:
-                label:            orocrm.magento.cart.email.label
+                label:            oro.magento.cart.email.label
             grandTotal:
-                label:            orocrm.magento.cart.grand_total.label
+                label:            oro.magento.cart.grand_total.label
                 type:             localized_number
                 method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
             createdAt:
                 label:            oro.ui.created_at
@@ -1828,12 +1828,12 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
             statusLabel:
-                label:            orocrm.magento.datagrid.columns.status
+                label:            oro.magento.datagrid.columns.status
         properties:
             id: ~
             view_link:
                 type: url
-                route: orocrm_magento_cart_view
+                route: oro_magento_cart_view
                 params: [ id ]
         sorters:
             columns:
@@ -1855,7 +1855,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 websiteName:
@@ -1863,7 +1863,7 @@ datagrids:
                     data_name: cw.id
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:Website
+                            class: OroMagentoBundle:Website
                             property: name
                     enabled:   false
                 firstName:
@@ -1883,7 +1883,7 @@ datagrids:
                     data_name: c.status
                     options:
                         field_options:
-                            class: OroCRMMagentoBundle:CartStatus
+                            class: OroMagentoBundle:CartStatus
                             property: label
                             translatable_options: false
                 createdAt:

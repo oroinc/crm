@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Carbon\Carbon;
 
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
 {
@@ -16,7 +16,7 @@ class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation';
+        return 'Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation';
     }
 
     /**
@@ -24,7 +24,7 @@ class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $channel         = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel         = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $someDateTime    = new \DateTime();
         $someInteger     = 3;
         $someFloat       = 121.12;

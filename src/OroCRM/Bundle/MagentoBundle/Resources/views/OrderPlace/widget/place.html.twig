@@ -32,7 +32,7 @@
                                             {
                                                 message: data.message,
                                                 url: data.url,
-                                                urlLabel: __('orocrm.magento.view_order')
+                                                urlLabel: __('oro.magento.view_order')
                                             }
                                     );
                                 }
@@ -46,14 +46,14 @@
                                 }
                             };
 
-                        var performMessage = messenger.notificationFlashMessage('warning', __('orocrm.magento.performing_synchronization'));
+                        var performMessage = messenger.notificationFlashMessage('warning', __('oro.magento.performing_synchronization'));
 
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
 
                             widget.trigger('formSave');
                             {% if cartId is defined %}
                             $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
-                                {% set syncURL = path('orocrm_magento_orderplace_new_cart_order_sync', {id: cartId}) %}
+                                {% set syncURL = path('oro_magento_orderplace_new_cart_order_sync', {id: cartId}) %}
                                 $.ajax({
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
@@ -70,7 +70,7 @@
                                 });
                             });
                             {% elseif customerId is defined %}
-                                {% set syncURL = path('orocrm_magento_orderplace_new_customer_order_sync', {id: customerId}) %}
+                                {% set syncURL = path('oro_magento_orderplace_new_customer_order_sync', {id: customerId}) %}
                                 $.ajax({
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw }},
@@ -84,7 +84,7 @@
                                     error: function() {
                                         messenger.notificationFlashMessage(
                                                 'error',
-                                                __('orocrm.magento.external_error')
+                                                __('oro.magento.external_error')
                                         );
                                     }
                                 }).always(function () {
@@ -94,7 +94,7 @@
                         });
                     };
                     ORO_ORDER_EMBED_API.error = function () {
-                        messenger.notificationFlashMessage('error', __('orocrm.magento.external_error'));
+                        messenger.notificationFlashMessage('error', __('oro.magento.external_error'));
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
                             widget.remove();
                         });

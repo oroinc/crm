@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Utils;
+namespace Oro\Bundle\MagentoBundle\Utils;
 
 class WSIUtils
 {

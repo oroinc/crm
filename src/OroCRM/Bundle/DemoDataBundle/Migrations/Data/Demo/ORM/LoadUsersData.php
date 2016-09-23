@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,8 +47,8 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUserData',
         ];
     }
 
@@ -207,7 +207,7 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
 
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         if (!isset($dictionaries[$name])) {
             $dictionary = array();

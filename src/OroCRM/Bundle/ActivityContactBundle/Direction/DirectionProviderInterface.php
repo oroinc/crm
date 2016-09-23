@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Direction;
+namespace Oro\Bundle\ActivityContactBundle\Direction;
 
 use Doctrine\ORM\EntityManager;
 

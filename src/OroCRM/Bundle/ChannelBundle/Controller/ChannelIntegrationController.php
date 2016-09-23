@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Controller;
+namespace Oro\Bundle\ChannelBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -16,14 +16,14 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 class ChannelIntegrationController extends Controller
 {
     /**
-     * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="orocrm_channel_integration_create")
+     * @Route("/create/{type}/{channelName}", requirements={"type"="\w+"}, name="oro_channel_integration_create")
      * @AclAncestor("oro_integration_create")
-     * @Template("OroCRMChannelBundle:ChannelIntegration:update.html.twig")
+     * @Template("OroChannelBundle:ChannelIntegration:update.html.twig")
      */
     public function createAction($type, $channelName = null)
     {
         $translator      = $this->get('translator');
-        $integrationName = urldecode($channelName) . ' ' . $translator->trans('orocrm.channel.data_source.label');
+        $integrationName = urldecode($channelName) . ' ' . $translator->trans('oro.channel.data_source.label');
         $integration     = new Integration();
         $integration->setType(urldecode($type));
         $integration->setName(trim($integrationName));
@@ -32,7 +32,7 @@ class ChannelIntegrationController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", requirements={"id"="\d+"}, name="orocrm_channel_integration_update")
+     * @Route("/update/{id}", requirements={"id"="\d+"}, name="oro_channel_integration_update")
      * @AclAncestor("oro_integration_update")
      * @Template()
      */
@@ -48,7 +48,7 @@ class ChannelIntegrationController extends Controller
      */
     protected function update(Integration $integration)
     {
-        $handler = $this->get('orocrm_channel.channel_integration_form.handler');
+        $handler = $this->get('oro_channel.channel_integration_form.handler');
 
         $data = null;
         if ($handler->process($integration)) {

@@ -2,40 +2,40 @@ navigation:
     menu_config:
         items:
             magento_cart:
-                label:   'orocrm.magento.cart.entity_plural_label'
-                route:   'orocrm_magento_cart_index'
+                label:   'oro.magento.cart.entity_plural_label'
+                route:   'oro_magento_cart_index'
                 display: false
                 extras:
-                    routes:      ['/^orocrm_magento_cart_(index|view)|orocrm_magento_orderplace_cart$/']
+                    routes:      ['/^oro_magento_cart_(index|view)|oro_magento_orderplace_cart$/']
                     position:    40
-                    description: 'orocrm.magento.cart.entity_plural_label'
+                    description: 'oro.magento.cart.entity_plural_label'
 
             magento_order:
-                label:   'orocrm.magento.order.entity_plural_label'
-                route:   'orocrm_magento_order_index'
+                label:   'oro.magento.order.entity_plural_label'
+                route:   'oro_magento_order_index'
                 display: false
                 extras:
-                    routes:      ['/^orocrm_magento_order_(index|view)$/']
+                    routes:      ['/^oro_magento_order_(index|view)$/']
                     position:    50
-                    description: 'orocrm.magento.order.entity_plural_label'
+                    description: 'oro.magento.order.entity_plural_label'
 
             magento_customer:
-                label:   'orocrm.magento.customer.entity_plural_label'
-                route:   'orocrm_magento_customer_index'
+                label:   'oro.magento.customer.entity_plural_label'
+                route:   'oro_magento_customer_index'
                 display: false
                 extras:
-                    routes:      ['/^orocrm_magento_customer_(index|view|create|update)$/']
+                    routes:      ['/^oro_magento_customer_(index|view|create|update)$/']
                     position:    60
-                    description: 'orocrm.magento.customer.entity_plural_label'
+                    description: 'oro.magento.customer.entity_plural_label'
 
             magento_newsletter_subscriber:
-                label:   'orocrm.magento.newslettersubscriber.entity_plural_label'
-                route:   'orocrm_magento_newsletter_subscriber_index'
+                label:   'oro.magento.newslettersubscriber.entity_plural_label'
+                route:   'oro_magento_newsletter_subscriber_index'
                 display: false
                 extras:
-                    routes:      ['/^orocrm_magento_newsletter_subscriber_(index|view)$/']
+                    routes:      ['/^oro_magento_newsletter_subscriber_(index|view)$/']
                     position:    70
-                    description: 'orocrm.magento.newslettersubscriber.entity_plural_label'
+                    description: 'oro.magento.newslettersubscriber.entity_plural_label'
 
         tree:
             application_menu:
@@ -52,19 +52,19 @@ navigation:
                             magento_newsletter_subscriber: ~
 
     titles:
-        orocrm_magento_customer_index: ~
-        orocrm_magento_customer_view:  %%customer.name%%
-        orocrm_magento_customer_update: %%customer.name%% - oro.ui.edit
-        orocrm_magento_customer_create: oro.ui.create_entity
+        oro_magento_customer_index: ~
+        oro_magento_customer_view:  %%customer.name%%
+        oro_magento_customer_update: %%customer.name%% - oro.ui.edit
+        oro_magento_customer_create: oro.ui.create_entity
 
-        orocrm_magento_cart_index:     ~
-        orocrm_magento_cart_view:      'Cart #%%cart.id%%'
+        oro_magento_cart_index:     ~
+        oro_magento_cart_view:      'Cart #%%cart.id%%'
 
-        orocrm_magento_order_index:    ~
-        orocrm_magento_order_view:     'Order #%%order.incrementId%%'
+        oro_magento_order_index:    ~
+        oro_magento_order_view:     'Order #%%order.incrementId%%'
 
-        orocrm_magento_product_index:  'orocrm.magento.product.entity_plural_label'
-        orocrm_magento_product_view:   %%product.name%%
+        oro_magento_product_index:  'oro.magento.product.entity_plural_label'
+        oro_magento_product_view:   %%product.name%%
 
-        orocrm_magento_newsletter_subscriber_index:  'orocrm.magento.newslettersubscriber.entity_plural_label'
-        orocrm_magento_newsletter_subscriber_view:   %%newsletter_subscriber.email%%
+        oro_magento_newsletter_subscriber_index:  'oro.magento.newslettersubscriber.entity_plural_label'
+        oro_magento_newsletter_subscriber_view:   %%newsletter_subscriber.email%%

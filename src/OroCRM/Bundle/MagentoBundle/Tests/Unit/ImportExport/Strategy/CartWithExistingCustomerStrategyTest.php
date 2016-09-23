@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy;
 
 class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
 {

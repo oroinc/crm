@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Twig;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Twig;
 
-use OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Twig\MetadataExtension;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider')
+        $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\MetadataProvider')
             ->disableOriginalConstructor()->getMock();
 
         $this->extension = new MetadataExtension($this->provider);
@@ -50,14 +50,14 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals($this->extension->getName(), 'orocrm_channel_metadata');
+        $this->assertEquals($this->extension->getName(), 'oro_channel_metadata');
     }
 
     public function testGetFunctions()
     {
         $result = $this->extension->getFunctions();
 
-        $this->assertArrayHasKey('orocrm_channel_entities_metadata', $result);
-        $this->assertArrayHasKey('orocrm_channel_type_metadata', $result);
+        $this->assertArrayHasKey('oro_channel_entities_metadata', $result);
+        $this->assertArrayHasKey('oro_channel_type_metadata', $result);
     }
 }

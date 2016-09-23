@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
+use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 
 class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
 {

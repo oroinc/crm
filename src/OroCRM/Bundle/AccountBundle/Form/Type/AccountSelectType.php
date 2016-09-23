@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\AccountBundle\Form\Type;
+namespace Oro\Bundle\AccountBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,9 +14,9 @@ class AccountSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'accounts',
-                'create_form_route'  => 'orocrm_account_create',
+                'create_form_route'  => 'oro_account_create',
                 'configs'            => [
-                    'placeholder' => 'orocrm.account.form.choose_account'
+                    'placeholder' => 'oro.account.form.choose_account'
                 ],
             ]
         );
@@ -43,6 +43,6 @@ class AccountSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_account_select';
+        return 'oro_account_select';
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\Method;
+use Oro\Bundle\ContactBundle\Entity\Method;
 
 class LoadMethodData extends AbstractFixture
 {

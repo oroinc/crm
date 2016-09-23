@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,17 +16,16 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\MagentoBundle\Model\ExtendOrder;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * Class Order
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository")
+ * @package Oro\Bundle\OroMagentoBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="orocrm_magento_order",
+ * @ORM\Table(name="oro_magento_order",
  *     indexes={
  *          @ORM\Index(name="mageorder_created_idx",columns={"created_at"})
  *     },
@@ -35,7 +34,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *     }
  * )
  * @Config(
- *      routeView="orocrm_magento_order_view",
+ *      routeView="oro_magento_order_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt"
@@ -116,7 +115,7 @@ class Order extends ExtendOrder implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

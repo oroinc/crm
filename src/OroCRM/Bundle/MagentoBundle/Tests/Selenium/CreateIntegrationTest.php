@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Selenium;
+namespace Oro\Bundle\MagentoBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integrations;
-
-use OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
+use Oro\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
 
 /**
  * Class CreateIntegrationTest
  *
- * @package OroCRM\Bundle\MagentoBundle\Tests\Selenium
+ * @package Oro\Bundle\MagentoBundle\Tests\Selenium
  */
 class CreateIntegrationTest extends Selenium2TestCase
 {

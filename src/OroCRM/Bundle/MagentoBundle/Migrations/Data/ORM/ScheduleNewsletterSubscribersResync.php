@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -9,9 +9,9 @@ use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 class ScheduleNewsletterSubscribersResync implements FixtureInterface
 {

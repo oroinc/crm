@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Model;
+namespace Oro\Bundle\CaseBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 
 class CaseEntityManager
 {
@@ -55,7 +54,7 @@ class CaseEntityManager
      */
     protected function getDefaultCaseStatus()
     {
-        return $this->registry->getManager()->find('OroCRMCaseBundle:CaseStatus', CaseStatus::STATUS_OPEN);
+        return $this->registry->getManager()->find('OroCaseBundle:CaseStatus', CaseStatus::STATUS_OPEN);
     }
 
     /**
@@ -63,7 +62,7 @@ class CaseEntityManager
      */
     protected function getDefaultCasePriority()
     {
-        return $this->registry->getManager()->find('OroCRMCaseBundle:CasePriority', CasePriority::PRIORITY_NORMAL);
+        return $this->registry->getManager()->find('OroCaseBundle:CasePriority', CasePriority::PRIORITY_NORMAL);
     }
 
     /**
@@ -71,7 +70,7 @@ class CaseEntityManager
      */
     protected function getDefaultCaseSource()
     {
-        return $this->registry->getManager()->find('OroCRMCaseBundle:CaseSource', CaseSource::SOURCE_OTHER);
+        return $this->registry->getManager()->find('OroCaseBundle:CaseSource', CaseSource::SOURCE_OTHER);
     }
 
     /**
@@ -110,7 +109,7 @@ class CaseEntityManager
     {
         $order = (strtoupper($order) == 'ASC') ? $order : 'DESC';
         /** @var EntityRepository $repository */
-        $repository   = $this->registry->getRepository('OroCRMCaseBundle:CaseComment');
+        $repository   = $this->registry->getRepository('OroCaseBundle:CaseComment');
         $queryBuilder = $repository->createQueryBuilder('comment')
             ->where('comment.case = :case')
             ->orderBy('comment.createdAt', $order)

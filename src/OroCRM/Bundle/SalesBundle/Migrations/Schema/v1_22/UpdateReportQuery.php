@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Psr\Log\LoggerInterface;
 
@@ -73,7 +73,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     {
         $sql = 'SELECT r.id, r.definition, r.entity FROM oro_report r';
 
-        $className = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
+        $className = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
         $oldField = 'status_label';
         $newField = 'status';
         $this->logQuery($logger, $sql);
@@ -93,7 +93,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     {
         $sql = 'SELECT s.id, s.definition, s.entity FROM oro_segment s';
 
-        $className = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
+        $className = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
         $oldField = 'status_label';
         $newField = 'status';
         $this->logQuery($logger, $sql);
@@ -218,7 +218,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
      */
     protected function fixFilterCriterion($def, $field, $key)
     {
-        $paramOldClassName = 'OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus';
+        $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\OpportunityStatus';
         $paramNewClassName = ExtendHelper::buildEnumValueClassName('opportunity_status');
         if (isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName

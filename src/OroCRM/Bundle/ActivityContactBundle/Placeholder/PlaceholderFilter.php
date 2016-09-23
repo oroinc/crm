@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Placeholder;
+namespace Oro\Bundle\ActivityContactBundle\Placeholder;
 
 use Oro\Bundle\ActivityListBundle\Placeholder\PlaceholderFilter as BasePlaceholder;
-use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 
 class PlaceholderFilter extends BasePlaceholder
 {

@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
@@ -42,7 +41,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException
+     * @expectedException \Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException
      */
     public function testProcessConfigurationExceptionScenario()
     {
@@ -53,7 +52,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')->will($this->returnValue(false));
 
         $this->helper->expects($this->once())->method('getTransport')
@@ -79,7 +78,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')
@@ -110,9 +109,9 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
             (object)['entity_id' => 22]
         ];
 
-        $repo = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository')
+        $repo = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository')
             ->disableOriginalConstructor()->getMock();
-        $this->em->expects($this->any())->method('getRepository')->with('OroCRMMagentoBundle:Cart')
+        $this->em->expects($this->any())->method('getRepository')->with('OroMagentoBundle:Cart')
             ->will($this->returnValue($repo));
 
         $transport = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Transport')
@@ -120,7 +119,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')

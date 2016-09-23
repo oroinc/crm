@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 class CartWithExistingCustomerStrategy extends CartStrategy
 {

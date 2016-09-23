@@ -1,4 +1,4 @@
-orocrm:
+oro:
     magento:
         success: Connection successful, please select a website from the list below
         success_bridge: Connection was successful. You are running OroBridge version {{ extension_version }}. Please select a website from the list below

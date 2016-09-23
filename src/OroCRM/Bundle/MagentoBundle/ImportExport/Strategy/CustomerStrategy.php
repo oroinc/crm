@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
@@ -103,7 +102,7 @@ class CustomerStrategy extends AbstractImportStrategy
 
         if ($entity instanceof Customer) {
             $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                'Oro\Bundle\MagentoBundle\Entity\Website',
                 [
                     'originId' => $entity->getWebsite()->getOriginId(),
                     'channel' => $entity->getChannel()
@@ -118,7 +117,7 @@ class CustomerStrategy extends AbstractImportStrategy
 
             if (!$existingEntity) {
                 $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    'Oro\Bundle\MagentoBundle\Entity\Customer',
                     [
                         'email' => $entity->getEmail(),
                         'channel' => $entity->getChannel(),
@@ -155,9 +154,9 @@ class CustomerStrategy extends AbstractImportStrategy
     {
         $existingEntity = null;
 
-        /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+        /** @var \Oro\Bundle\MagentoBundle\Entity\Region $magentoRegion */
         $magentoRegion = $this->databaseHelper->findOneBy(
-            'OroCRM\Bundle\MagentoBundle\Entity\Region',
+            'Oro\Bundle\MagentoBundle\Entity\Region',
             [
                 'regionId' => $entity->getCombinedCode()
             ]

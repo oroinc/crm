@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType;
+use Oro\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType;
 
 class InternalTransportSettingsTypeTest extends \PHPUnit_Framework_TestCase
 {

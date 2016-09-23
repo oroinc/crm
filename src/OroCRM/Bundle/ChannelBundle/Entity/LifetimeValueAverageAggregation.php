@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity;
+namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(
- *     repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository"
+ *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository"
  * )
- * @ORM\Table(name="orocrm_channel_ltime_avg_aggr")
+ * @ORM\Table(name="oro_channel_ltime_avg_aggr")
  * @ORM\HasLifecycleCallbacks
  */
 class LifetimeValueAverageAggregation implements ChannelAwareInterface
@@ -34,7 +34,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $dataChannel;

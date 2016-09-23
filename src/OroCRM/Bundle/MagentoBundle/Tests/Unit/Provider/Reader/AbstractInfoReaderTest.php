@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Item\ItemReaderInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Psr\Log\NullLogger;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -69,7 +69,7 @@ abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
             ->method('getTransport')
             ->will($this->returnValue($transportSettings));
 
-        $this->transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $this->transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->contextMediator->expects($this->any())
             ->method('getInitializedTransport')
             ->will($this->returnValue($this->transport));

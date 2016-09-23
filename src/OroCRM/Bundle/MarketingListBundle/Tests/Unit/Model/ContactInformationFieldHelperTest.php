@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Model;
 
-use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
 
 class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
 {

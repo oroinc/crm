@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Twig;
+namespace Oro\Bundle\MarketingListBundle\Twig;
 
-use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
 
 class ContactInformationFieldsExtension extends \Twig_Extension
 {
-    const NAME = 'orocrm_marketing_list_contact_information_fields';
+    const NAME = 'oro_marketing_list_contact_information_fields';
 
     /**
      * @var ContactInformationFieldHelper

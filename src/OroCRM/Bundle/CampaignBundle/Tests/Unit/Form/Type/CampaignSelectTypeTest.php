@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\CampaignBundle\Form\Type\CampaignSelectType;
+use Oro\Bundle\CampaignBundle\Form\Type\CampaignSelectType;
 
 class CampaignSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +38,6 @@ class CampaignSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_campaign_select', $this->type->getName());
+        $this->assertEquals('oro_campaign_select', $this->type->getName());
     }
 }

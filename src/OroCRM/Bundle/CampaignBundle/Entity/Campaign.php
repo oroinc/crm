@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity;
+namespace Oro\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,14 +8,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
+use Oro\Bundle\CampaignBundle\Model\ExtendCampaign;
 
 /**
- * @package OroCRM\Bundle\OroCRMCampaignBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
+ * @package Oro\Bundle\OroCampaignBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
  * @ORM\Table(
- *      name="orocrm_campaign",
+ *      name="oro_campaign",
  *      indexes={@ORM\Index(name="cmpgn_owner_idx", columns={"owner_id"})}
  * )
  * @ORM\HasLifecycleCallbacks()
@@ -37,7 +36,7 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  *              "category"="marketing"
  *          },
  *          "form"={
- *              "form_type"="orocrm_campaign_select",
+ *              "form_type"="oro_campaign_select",
  *              "grid_name"="orocrm-campaign-grid",
  *          },
  *          "grid"={

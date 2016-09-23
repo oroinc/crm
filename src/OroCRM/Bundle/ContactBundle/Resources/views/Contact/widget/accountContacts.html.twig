@@ -8,7 +8,7 @@
                 {{ _self.render_contact_box(entity, contact, false) }}
             {% endfor %}
         {% else %}
-            <p>{{ "orocrm.contact.account.no_contacts_exist"|trans }}</p>
+            <p>{{ "oro.contact.account.no_contacts_exist"|trans }}</p>
         {% endif %}
     </div>
 </div>
@@ -18,16 +18,16 @@
     {% import 'OroEmailBundle::macros.html.twig' as Email %}
     <div class="contact-box">
         <div class="contact-box-row">
-            <a class="contact-box-name-link contact-box-link" href="{{ path('orocrm_contact_view',{'id': contact.id }) }}">
+            <a class="contact-box-name-link contact-box-link" href="{{ path('oro_contact_view',{'id': contact.id }) }}">
                 {{ contact|oro_format_name|escape }}
                 {% if isDefault %}
-                    <span class="label label-info">{{ "orocrm.account.default_contact.label"|trans }}</span>
+                    <span class="label label-info">{{ "oro.account.default_contact.label"|trans }}</span>
                 {% endif %}
             </a>
         </div>
         <div class="contact-box-row"></div>
         <div class="contact-box-row">
-            <span class="contact-element-label">{{ "orocrm.account.phone.label"|trans }}:</span>
+            <span class="contact-element-label">{{ "oro.account.phone.label"|trans }}:</span>
             {% if contact.primaryPhone %}
                 {{ UI.renderPhoneWithActions(contact.primaryPhone, contact) }}
             {% else %}
@@ -35,7 +35,7 @@
             {% endif %}
         </div>
         <div class="contact-box-row">
-            <span class="contact-element-label">{{ "orocrm.account.email.label"|trans }}:</span>
+            <span class="contact-element-label">{{ "oro.account.email.label"|trans }}:</span>
             {% if contact.primaryEmail %}
                 {{ Email.renderEmailWithActions(contact.primaryEmail.email, contact) }}
             {% else %}

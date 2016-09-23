@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Validator\Constraints;
+namespace Oro\Bundle\MarketingListBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
@@ -9,12 +9,12 @@ class ContactInformationColumnConstraint extends Constraint
     /**
      * @var string
      */
-    public $message = 'orocrm.marketinglist.contact_information_required';
+    public $message = 'oro.marketinglist.contact_information_required';
 
     /**
      * @var string
      */
-    public $typeMessage = 'orocrm.marketinglist.contact_information_type';
+    public $typeMessage = 'oro.marketinglist.contact_information_type';
 
     /**
      * @var string
@@ -47,6 +47,6 @@ class ContactInformationColumnConstraint extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_marketing_list.contact_information_column_validator';
+        return 'oro_marketing_list.contact_information_column_validator';
     }
 }

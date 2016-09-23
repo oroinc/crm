@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_31;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_31;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -16,13 +16,13 @@ class DropFieldConfig implements Migration
      */
     protected $fields = [
         'channel_id' => [
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\CustomerGroup',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Product',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Website'
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Cart',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Customer',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\CustomerGroup',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Order',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Product',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Store',
+            'Oro\\Bundle\\MagentoBundle\\Entity\\Website'
         ]
     ];
 

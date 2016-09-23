@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 
 class CampaignTest extends AbstractEntityTestCase
 {
@@ -13,7 +12,7 @@ class CampaignTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\CampaignBundle\Entity\Campaign';
+        return 'Oro\Bundle\CampaignBundle\Entity\Campaign';
     }
 
     /**

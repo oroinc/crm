@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Stub;
 
-use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 
 class StubIterator extends \ArrayIterator implements PredefinedFiltersAwareInterface
 {

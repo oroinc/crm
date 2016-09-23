@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadPhoneProvider implements PhoneProviderInterface
 {

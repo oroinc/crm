@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerTest extends AbstractEntityTestCase
 {
@@ -18,7 +18,7 @@ class CustomerTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        return 'Oro\Bundle\MagentoBundle\Entity\Customer';
     }
 
     /**
@@ -27,11 +27,11 @@ class CustomerTest extends AbstractEntityTestCase
     public function getSetDataProvider()
     {
         $date         = new \DateTime('now');
-        $group        = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup');
-        $website      = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
-        $store        = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Store');
-        $contact      = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $group        = $this->getMock('Oro\Bundle\MagentoBundle\Entity\CustomerGroup');
+        $website      = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $store        = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Store');
+        $contact      = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
         $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
@@ -64,7 +64,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->entity->setLastName(self::TEST_STRING . 'last');
         $this->assertNull($this->entity->getOrganization());
 
-        $this->entity->addAddress($this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address'));
+        $this->entity->addAddress($this->getMock('Oro\Bundle\MagentoBundle\Entity\Address'));
         $this->entity->setOrganization($this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'));
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
@@ -77,7 +77,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getWebsiteName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));
@@ -90,7 +90,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getStoreName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Store');
+        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Store');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));

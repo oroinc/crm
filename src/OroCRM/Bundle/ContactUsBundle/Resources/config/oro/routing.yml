@@ -1,10 +1,10 @@
-orocrm_contactus:
-    resource: "@OroCRMContactUsBundle/Controller"
+oro_contactus:
+    resource: "@OroContactUsBundle/Controller"
     type:     annotation
     prefix:   /contact-us
 
-orocrm_contactus_api:
-    resource:     "@OroCRMContactUsBundle/Resources/config/oro/routing_api.yml"
+oro_contactus_api:
+    resource:     "@OroContactUsBundle/Resources/config/oro/routing_api.yml"
     type:         rest
     prefix:       api/rest/{version}
     requirements:

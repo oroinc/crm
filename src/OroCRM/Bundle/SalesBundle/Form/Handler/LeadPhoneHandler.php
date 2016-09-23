@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -10,9 +10,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LeadPhoneHandler
 {
@@ -57,7 +56,7 @@ class LeadPhoneHandler
      */
     public function process(LeadPhone $entity)
     {
-        $form = $this->form->create('orocrm_sales_lead_phone', $entity);
+        $form = $this->form->create('oro_sales_lead_phone', $entity);
 
         $submitData = [
             'phone' => $this->request->request->get('phone'),
@@ -70,7 +69,7 @@ class LeadPhoneHandler
             $leadId = $this->request->request->get('entityId');
             if ($form->isValid() && $leadId) {
                 $lead = $this->manager->find(
-                    'OroCRMSalesBundle:Lead',
+                    'OroSalesBundle:Lead',
                     $leadId
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $lead)) {
@@ -109,7 +108,7 @@ class LeadPhoneHandler
             $em->remove($leadPhone);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.sales.phone.error.delete.more_one", 500);
+            throw new \Exception("oro.sales.phone.error.delete.more_one", 500);
         }
     }
 

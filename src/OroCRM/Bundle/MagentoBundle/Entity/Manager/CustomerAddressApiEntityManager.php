@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
+namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Address;
 
 class CustomerAddressApiEntityManager extends ApiEntityManager
 {

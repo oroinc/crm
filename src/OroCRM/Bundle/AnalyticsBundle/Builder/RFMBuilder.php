@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Builder;
+namespace Oro\Bundle\AnalyticsBundle\Builder;
 
 use Doctrine\Common\Collections\Criteria;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class RFMBuilder implements AnalyticsBuilderInterface
 {
@@ -58,7 +58,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function supports(Channel $channel)
     {
-        return is_a($channel->getCustomerIdentity(), 'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true);
+        return is_a($channel->getCustomerIdentity(), 'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true);
     }
 
     /**
@@ -247,7 +247,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
         }
 
         $categories = $this->doctrineHelper
-            ->getEntityRepository('OroCRMAnalyticsBundle:RFMMetricCategory')
+            ->getEntityRepository('OroAnalyticsBundle:RFMMetricCategory')
             ->findBy(['channel' => $channelId, 'categoryType' => $type], ['categoryIndex' => Criteria::ASC]);
 
         $this->categories[$channelId][$type] = $categories;

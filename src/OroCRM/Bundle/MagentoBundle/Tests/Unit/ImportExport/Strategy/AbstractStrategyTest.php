@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
@@ -19,10 +19,9 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
-
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
 
 abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,12 +126,12 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->channelHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->addressHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
             ->disableOriginalConstructor()
             ->getMock();
 

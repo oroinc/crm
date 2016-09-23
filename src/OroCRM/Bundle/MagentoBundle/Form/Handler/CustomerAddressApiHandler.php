@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Address;
 
 class CustomerAddressApiHandler
 {

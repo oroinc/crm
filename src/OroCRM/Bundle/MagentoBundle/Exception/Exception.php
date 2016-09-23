@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Exception;
+namespace Oro\Bundle\MagentoBundle\Exception;
 
 interface Exception
 {

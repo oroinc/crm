@@ -1,18 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 {
@@ -120,10 +119,10 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     public function getEventTargets()
     {
         return [
-            'OroCRM\Bundle\MagentoBundle\Entity\Order',
-            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-            'OroCRM\Bundle\MagentoBundle\Entity\Product',
-            'OroCRM\Bundle\MagentoBundle\Entity\Cart'
+            'Oro\Bundle\MagentoBundle\Entity\Order',
+            'Oro\Bundle\MagentoBundle\Entity\Customer',
+            'Oro\Bundle\MagentoBundle\Entity\Product',
+            'Oro\Bundle\MagentoBundle\Entity\Cart'
         ];
     }
 
@@ -169,14 +168,14 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 
         switch ($eventName) {
             case self::EVENT_CART_ITEM_ADDED:
-                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(
+                $targets[] = $this->em->getRepository('OroMagentoBundle:Product')->findOneBy(
                     [
                         'originId' => (int)$eventValue
                     ]
                 );
                 break;
             case self::EVENT_ORDER_PLACE_SUCCESS:
-                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
+                $targets[] = $this->em->getRepository('OroMagentoBundle:Order')->findOneBy(
                     [
                         'subtotalAmount' => $eventValue,
                         'dataChannel'    => $channel
@@ -184,7 +183,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 );
                 break;
             case self::EVENT_ORDER_PLACED:
-                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
+                $targets[] = $this->em->getRepository('OroMagentoBundle:Order')->findOneBy(
                     [
                         'incrementId' => $eventValue,
                         'dataChannel' => $channel
@@ -192,7 +191,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 );
                 break;
             case self::EVENT_CHECKOUT_STARTED:
-                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Cart')->findOneBy(
+                $targets[] = $this->em->getRepository('OroMagentoBundle:Cart')->findOneBy(
                     [
                         'subTotal'    => $eventValue,
                         'dataChannel' => $channel
@@ -200,7 +199,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 );
                 break;
             case self::EVENT_CUSTOMER_LOGOUT:
-                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Customer')->findOneBy(
+                $targets[] = $this->em->getRepository('OroMagentoBundle:Customer')->findOneBy(
                     [
                         'originId'    => (int)$eventValue,
                         'dataChannel' => $channel

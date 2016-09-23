@@ -1,6 +1,6 @@
 datagrids:
     dashboard-my-accounts-activity-grid:
-        acl_resource: orocrm_account_view
+        acl_resource: oro_account_view
         source:
             type: orm
             query:
@@ -11,7 +11,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - max(history.visitedAt) as visitDate
                 from:
-                    - { table: %orocrm_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -22,7 +22,7 @@ datagrids:
                             join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
                             alias: history
                             conditionType: WITH
-                            condition: "a.id=history.entityId AND history.route='orocrm_account_view'"
+                            condition: "a.id=history.entityId AND history.route='oro_account_view'"
                 where:
                     and:
                       - history.user = @oro_security.security_facade->getLoggedUserId
@@ -35,13 +35,13 @@ datagrids:
         columns:
             name:
                 type: twig
-                label: orocrm.account.name.label
+                label: oro.account.name.label
                 frontend_type: html
-                template: OroCRMAccountBundle:Account:Datagrid/Property/accountName.html.twig
+                template: OroAccountBundle:Account:Datagrid/Property/accountName.html.twig
             contactEmail:
-                label: orocrm.contact.contactemail.email.label
+                label: oro.contact.contactemail.email.label
             contactPhone:
-                label: orocrm.contact.contactphone.phone.label
+                label: oro.contact.contactphone.phone.label
                 frontend_type: phone
         fields_acl:
             columns:
@@ -60,10 +60,10 @@ datagrids:
                     default_per_page: 10
 
     accounts-grid:
-        extended_entity_name: %orocrm_account.account.entity.class%
+        extended_entity_name: %oro_account.account.entity.class%
         inline_editing:
             enable: true
-        acl_resource: orocrm_account_view
+        acl_resource: oro_account_view
         source:
             type: orm
             query:
@@ -78,7 +78,7 @@ datagrids:
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                     - accountOwner.id as owner
                 from:
-                    - { table: %orocrm_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -90,11 +90,11 @@ datagrids:
             owner: ~
             view_link:
                 type:       url
-                route:      orocrm_account_view
+                route:      oro_account_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_account_update
+                route:      oro_account_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -102,16 +102,16 @@ datagrids:
                 params:     [ id ]
         columns:
             name:
-                label:         orocrm.account.name.label
+                label:         oro.account.name.label
             contactName:
-                label:         orocrm.account.contact.name
+                label:         oro.account.contact.name
             contactEmail:
-                label:         orocrm.account.contact.email
+                label:         oro.account.contact.email
             contactPhone:
-                label:         orocrm.account.contact.phone
+                label:         oro.account.contact.phone
                 frontend_type: phone
             ownerName:
-                label:         orocrm.account.owner.label
+                label:         oro.account.owner.label
                 frontend_type: relation
                 inline_editing:
                     enable: true
@@ -120,7 +120,7 @@ datagrids:
                             value_field_name: owner
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account
+                        permission_check_entity_name: Oro_Bundle_AccountBundle_Entity_Account
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -194,27 +194,27 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_account_view
+                acl_resource:  oro_account_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_account_update
+                acl_resource:  oro_account_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_account_delete
+                acl_resource:  oro_account_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         mass_actions:
             merge:
                 type: merge
-                entity_name: %orocrm_account.account.entity.class%
+                entity_name: %oro_account.account.entity.class%
                 data_identifier: a.id
         options:
             entityHint: account
@@ -222,8 +222,8 @@ datagrids:
             entity_pagination: true
 
     base-account-contacts-grid:
-        extended_entity_name: %orocrm_contact.entity.class%
-        acl_resource: orocrm_contact_view
+        extended_entity_name: %oro_contact.entity.class%
+        acl_resource: oro_contact_view
         source:
             type: orm
             query:
@@ -238,7 +238,7 @@ datagrids:
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                 from:
-                    - { table: %orocrm_contact.entity.class%, alias: c }
+                    - { table: %oro_contact.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -288,26 +288,26 @@ datagrids:
                     default: null
         columns:
             hasContact:
-                label:   orocrm.account.assigned.label
+                label:   oro.account.assigned.label
                 editable: true
                 frontend_type: boolean
             first_name:
-                label: orocrm.contact.first_name.label
+                label: oro.contact.first_name.label
                 data_name: firstName
             last_name:
-                label: orocrm.contact.last_name.label
+                label: oro.contact.last_name.label
                 data_name: lastName
             primaryEmail:
-                label: orocrm.contact.email.label
+                label: oro.contact.email.label
             primaryPhone:
-                label: orocrm.contact.contactphone.phone.label
+                label: oro.contact.contactphone.phone.label
                 frontend_type: phone
             countryName:
-                label: orocrm.contact.contactaddress.country.label
+                label: oro.contact.contactaddress.country.label
             regionLabel:
-                label: orocrm.contact.contactaddress.region.label
+                label: oro.contact.contactaddress.region.label
             addressPostalCode:
-                label: orocrm.contact.contactaddress.postal_code.label
+                label: oro.contact.contactaddress.postal_code.label
         properties:
             id: ~
         sorters:
@@ -340,7 +340,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -360,8 +360,8 @@ datagrids:
                     excluded: '#removeContacts'
 
     accounts-select-grid:
-        extended_entity_name: %orocrm_account.account.entity.class%
-        acl_resource: orocrm_account_view
+        extended_entity_name: %oro_account.account.entity.class%
+        acl_resource: oro_account_view
         source:
             type: orm
             query:
@@ -373,7 +373,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
-                    - { table: %orocrm_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -384,16 +384,16 @@ datagrids:
             id: ~
         columns:
             name:
-                label:   orocrm.account.name.label
+                label:   oro.account.name.label
             contactName:
-                label:   orocrm.account.contact.name
+                label:   oro.account.contact.name
             contactEmail:
-                label:   orocrm.account.contact.email
+                label:   oro.account.contact.email
             contactPhone:
-                label:   orocrm.account.contact.phone
+                label:   oro.account.contact.phone
                 frontend_type: phone
             ownerName:
-                label:   orocrm.account.owner.label
+                label:   oro.account.owner.label
         fields_acl:
             columns:
                 name:
@@ -448,8 +448,8 @@ datagrids:
             entityHint: account
 
     accounts-for-context-grid:
-        extended_entity_name: %orocrm_account.account.entity.class%
-        acl_resource: orocrm_account_view
+        extended_entity_name: %oro_account.account.entity.class%
+        acl_resource: oro_account_view
         source:
             type: orm
             query:
@@ -461,7 +461,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
-                    - { table: %orocrm_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -470,18 +470,18 @@ datagrids:
                         - { join: a.owner, alias: accountOwner }
         columns:
             id:
-                label:         orocrm.account.id.label
+                label:         oro.account.id.label
             name:
-                label:         orocrm.account.name.label
+                label:         oro.account.name.label
             contactName:
-                label:         orocrm.account.contact.name
+                label:         oro.account.contact.name
             contactEmail:
-                label:         orocrm.account.contact.email
+                label:         oro.account.contact.email
             contactPhone:
-                label:         orocrm.account.contact.phone
+                label:         oro.account.contact.phone
                 frontend_type: phone
             ownerName:
-                label:         orocrm.account.owner.label
+                label:         oro.account.owner.label
         fields_acl:
             columns:
                 name:

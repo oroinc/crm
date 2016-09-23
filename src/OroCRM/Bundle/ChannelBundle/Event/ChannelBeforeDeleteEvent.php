@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Event;
+namespace Oro\Bundle\ChannelBundle\Event;
 
 class ChannelBeforeDeleteEvent extends AbstractEvent
 {
-    const EVENT_NAME = 'orocrm_channel.channel.before_delete';
+    const EVENT_NAME = 'oro_channel.channel.before_delete';
 }

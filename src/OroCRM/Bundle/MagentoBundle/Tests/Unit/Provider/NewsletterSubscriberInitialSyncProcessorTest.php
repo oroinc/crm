@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\Query\Expr;
 
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+use Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
 class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessorTest
 {

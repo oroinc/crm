@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,15 +8,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
+use Oro\Bundle\MagentoBundle\Model\ExtendProduct;
 
 /**
  * Class Product
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_product")
+ * @ORM\Table(name="oro_magento_product")
  * @Config(
  *      defaultValues={
  *          "security"={
@@ -117,8 +116,8 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
     /**
      * @var Website[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
-     * @ORM\JoinTable(name="orocrm_magento_prod_to_website",
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\Website")
+     * @ORM\JoinTable(name="oro_magento_prod_to_website",
      *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

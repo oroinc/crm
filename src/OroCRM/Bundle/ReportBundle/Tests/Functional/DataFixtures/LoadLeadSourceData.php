@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

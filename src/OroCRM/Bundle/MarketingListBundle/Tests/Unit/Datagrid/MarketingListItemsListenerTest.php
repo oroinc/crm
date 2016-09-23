@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -42,7 +42,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnBuildAfter($gridName, $useDataSource, $hasParameter)
     {
         $marketingList = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 

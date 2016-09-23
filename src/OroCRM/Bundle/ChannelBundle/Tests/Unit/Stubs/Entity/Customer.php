@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity
@@ -26,7 +26,7 @@ class Customer implements ChannelAwareInterface, CustomerIdentityInterface
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $dataChannel;
@@ -34,7 +34,7 @@ class Customer implements ChannelAwareInterface, CustomerIdentityInterface
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;

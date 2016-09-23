@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Validator;
+namespace Oro\Bundle\ChannelBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelIntegrationConstraintValidator extends ConstraintValidator
 {
@@ -39,7 +39,7 @@ class ChannelIntegrationConstraintValidator extends ConstraintValidator
      */
     protected function validateIntegration(Channel $channel)
     {
-        $errorLabel      = 'orocrm.channel.form.integration_invalid.label';
+        $errorLabel      = 'oro.channel.form.integration_invalid.label';
         $field           = 'dataSource';
         $integrationType = $this->provider->getIntegrationType($channel->getChannelType());
 

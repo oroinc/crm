@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
@@ -24,8 +24,8 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
             'description' => 'Geographical distribution of Leads',
             'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
-            'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
-            'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
+            'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+            'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
         ],
     ];
     // @codingStandardsIgnoreEnd
@@ -41,7 +41,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'
         ];
     }
 

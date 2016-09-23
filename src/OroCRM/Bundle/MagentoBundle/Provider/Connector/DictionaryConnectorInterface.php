@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 interface DictionaryConnectorInterface
 {

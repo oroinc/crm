@@ -12,9 +12,9 @@
         "oro/activity-list-bundle": "dev-master"
     },
     "autoload": {
-        "psr-0": { "OroCRM\\Bundle\\ActivityContactBundle": "" }
+        "psr-0": { "Oro\\Bundle\\ActivityContactBundle": "" }
     },
-    "target-dir": "OroCRM/Bundle/ActivityContactBundle",
+    "target-dir": "Oro/Bundle/ActivityContactBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

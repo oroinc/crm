@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Provider;
+namespace Oro\Bundle\CaseBundle\Provider;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
@@ -11,7 +11,7 @@ use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
  * Registers convert to case mailbox email process.
  * Actual implementation of this process can be found in processes.yml of this bundle.
  *
- * @package OroCRM\Bundle\CaseBundle\Provider
+ * @package Oro\Bundle\CaseBundle\Provider
  */
 class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
 {
@@ -22,7 +22,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsEntityFQCN()
     {
-        return 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings';
+        return 'Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings';
     }
 
     /**
@@ -30,7 +30,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsFormType()
     {
-        return 'orocrm_case_mailbox_process_settings';
+        return 'oro_case_mailbox_process_settings';
     }
 
     /**
@@ -38,7 +38,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getLabel()
     {
-        return 'orocrm.case.mailbox.process.case.label';
+        return 'oro.case.mailbox.process.case.label';
     }
 
     /**

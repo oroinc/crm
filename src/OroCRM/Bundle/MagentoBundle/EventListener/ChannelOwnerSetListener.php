@@ -1,20 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
-
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 /**
  * This event listener is subscribed on 'oro_integration.default_owner.set' in order to set default owner
  * to magento related entities.
  *
- * @package OroCRM\Bundle\MagentoBundle\EventListener
+ * @package Oro\Bundle\MagentoBundle\EventListener
  */
 class ChannelOwnerSetListener
 {
@@ -44,14 +43,14 @@ class ChannelOwnerSetListener
         // update contacts related to current channel
         // skip if owner is already set manually
         $qb = $this->em->createQueryBuilder();
-        $qb->update('OroCRMContactBundle:Contact', 'c')
+        $qb->update('OroContactBundle:Contact', 'c')
             ->set('c.owner', $event->getDefaultUserOwner()->getId())
             ->where($qb->expr()->isNull('c.owner'))
             ->andWhere(
                 $qb->expr()->exists(
                     $this->em->createQueryBuilder()
                         ->select('mc.id')
-                        ->from('OroCRMMagentoBundle:Customer', 'mc')
+                        ->from('OroMagentoBundle:Customer', 'mc')
                         ->where('mc.channel = :channel')
                         ->setParameter('channel', $channel)
                         ->andWhere('mc.contact = c.id')
@@ -64,14 +63,14 @@ class ChannelOwnerSetListener
         // update accounts related to current channel
         // skip if owner is already set manually
         $qb = $this->em->createQueryBuilder();
-        $qb->update('OroCRMAccountBundle:Account', 'a')
+        $qb->update('OroAccountBundle:Account', 'a')
             ->set('a.owner', $event->getDefaultUserOwner()->getId())
             ->where($qb->expr()->isNull('a.owner'))
             ->andWhere(
                 $qb->expr()->exists(
                     $this->em->createQueryBuilder()
                         ->select('mc.id')
-                        ->from('OroCRMMagentoBundle:Customer', 'mc')
+                        ->from('OroMagentoBundle:Customer', 'mc')
                         ->where('mc.channel = :channel')
                         ->setParameter('channel', $channel)
                         ->andWhere('mc.account = a.id')
@@ -81,7 +80,7 @@ class ChannelOwnerSetListener
 
         $qb->getQuery()->execute();
 
-        $magentoEntities = ['OroCRMMagentoBundle:Customer', 'OroCRMMagentoBundle:Cart', 'OroCRMMagentoBundle:Order'];
+        $magentoEntities = ['OroMagentoBundle:Customer', 'OroMagentoBundle:Cart', 'OroMagentoBundle:Order'];
         foreach ($magentoEntities as $entity) {
             $this->updateMagentoEntity($entity, $channel, $event->getDefaultUserOwner()->getId());
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -10,11 +10,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
+use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
 
 /**
- * @ORM\Table("orocrm_magento_order_address")
+ * @ORM\Table("oro_magento_order_address")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity
  * @Config(
@@ -43,7 +42,7 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
-     *     name="orocrm_magento_order_addr_type",
+     *     name="oro_magento_order_addr_type",
      *     joinColumns={@ORM\JoinColumn(name="order_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

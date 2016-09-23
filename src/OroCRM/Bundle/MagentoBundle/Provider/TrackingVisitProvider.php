@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
@@ -8,9 +8,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class TrackingVisitProvider
 {

@@ -1,6 +1,6 @@
 {#
     Available variables:
-    * entity       - user entity OroCRM\Bundle\SalesBundle\Entity\Opportunity or null
+    * entity       - user entity Oro\Bundle\SalesBundle\Entity\Opportunity or null
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
@@ -9,7 +9,7 @@
 
 {% set recordUrl = indexer_item.recordUrl %}
 
-{% set entityType = 'orocrm.sales.opportunity.entity_label'|trans %}
+{% set entityType = 'oro.sales.opportunity.entity_label'|trans %}
 
 {% if  resource_granted('VIEW', entity, 'name') %}
     {% set title = entity ? entity.__toString : indexer_item.recordTitle %}

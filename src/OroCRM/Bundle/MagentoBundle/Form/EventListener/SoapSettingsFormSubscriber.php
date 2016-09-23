@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\EventListener;
+namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -56,7 +56,7 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             FormUtils::replaceField(
                 $form,
                 'apiKey',
-                ['label' => 'orocrm.magento.magentosoaptransport.new_api_key.label', 'required' => false],
+                ['label' => 'oro.magento.magentosoaptransport.new_api_key.label', 'required' => false],
                 ['constraints']
             );
         }

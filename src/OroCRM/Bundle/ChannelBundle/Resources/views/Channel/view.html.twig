@@ -1,13 +1,13 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroCRMChannelBundle::macros.html.twig' as channelMacro %}
+{% import 'OroChannelBundle::macros.html.twig' as channelMacro %}
 
 {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
-        'indexPath':   path('orocrm_channel_index'),
-        'indexLabel':  'orocrm.channel.entity_plural_label'|trans,
+        'indexPath':   path('oro_channel_index'),
+        'indexLabel':  'oro.channel.entity_plural_label'|trans,
         'entityTitle': entity.name|default('N/A')
     } %}
 
@@ -20,35 +20,35 @@
             {{ UI.button({
                 'aCss':  'btn-danger',
                 'iCss':  'icon-remove',
-                'label': 'orocrm.channel.button.deactivate.label'|trans,
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
-                'title': 'orocrm.channel.button.deactivate.label'|trans,
+                'label': 'oro.channel.button.deactivate.label'|trans,
+                'path':  path('oro_channel_change_status', {'id' : entity.id}),
+                'title': 'oro.channel.button.deactivate.label'|trans,
             }) }}
         {% else %}
             {{ UI.button({
                 'aCss':  'btn-success',
                 'iCss':  'icon-ok',
-                'label': 'orocrm.channel.button.activate.label'|trans,
-                'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
-                'title': 'orocrm.channel.button.activate.label'|trans,
+                'label': 'oro.channel.button.activate.label'|trans,
+                'path':  path('oro_channel_change_status', {'id' : entity.id}),
+                'title': 'oro.channel.button.activate.label'|trans,
             }) }}
         {% endif %}
 
         {{ UI.buttonSeparator() }}
         {{ UI.editButton({
-            'path': path('orocrm_channel_update', {'id': entity.id}),
-            'entity_label': 'orocrm.channel.entity_label'|trans
+            'path': path('oro_channel_update', {'id': entity.id}),
+            'entity_label': 'oro.channel.entity_label'|trans
         }) }}
     {% endif %}
 
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_api_delete_channel', {'id': entity.id}),
-            'dataRedirect': path('orocrm_channel_index'),
+            'dataUrl': path('oro_api_delete_channel', {'id': entity.id}),
+            'dataRedirect': path('oro_channel_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-channel',
             'dataId': entity.id,
-            'entity_label': 'orocrm.channel.entity_label'|trans,
+            'entity_label': 'oro.channel.entity_label'|trans,
         }) }}
     {% endif %}
 {% endblock %}
@@ -58,10 +58,10 @@
     <div class="pull-left">
         {% if entity.status %}
             <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.channel.active.label'|trans }}</div>
+                <i class="icon-status-enabled icon-circle"></i>{{ 'oro.channel.active.label'|trans }}</div>
         {% else %}
             <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.channel.inactive.label'|trans }}</div>
+                <i class="icon-status-disabled icon-circle"></i>{{ 'oro.channel.inactive.label'|trans }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
@@ -71,7 +71,7 @@
     {% set channelInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_channel_widget_info', {id: entity.id})
+            'url': path('oro_channel_widget_info', {id: entity.id})
         }) }}
     {% endset %}
 

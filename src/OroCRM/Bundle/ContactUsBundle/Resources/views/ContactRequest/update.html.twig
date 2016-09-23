@@ -1,34 +1,34 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_contactus_request_update', { 'id': form.vars.value.id }) : path('orocrm_contactus_request_create') %}
+{% set formAction = form.vars.value.id ? path('oro_contactus_request_update', { 'id': form.vars.value.id }) : path('oro_contactus_request_create') %}
 {% set fullname = form.vars.value|oro_format_name|default('N/A') %}
 {% oro_title_set({ params : {"%request.clientName%": fullname} }) %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('orocrm_contactus_request_delete') %}
+    {% if form.vars.value.id and resource_granted('oro_contactus_request_delete') %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_contactus_request_delete', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_contactus_request_index'),
+            'dataUrl': path('oro_contactus_request_delete', {'id': form.vars.value.id}),
+            'dataRedirect': path('oro_contactus_request_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-contact-request-form',
             'dataId': form.vars.value.id,
-            'entity_label': 'orocrm.contactus.contactrequest.entity_label'|trans,
+            'entity_label': 'oro.contactus.contactrequest.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.button({'path' : path('oro_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_contactus_request_view',
+        'route': 'oro_contactus_request_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('orocrm_contactus_request_create') %}
+    {% if resource_granted('oro_contactus_request_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_contactus_request_create'
+            'route': 'oro_contactus_request_create'
         }) %}
     {% endif %}
-    {% if resource_granted('orocrm_contactus_request_edit') %}
+    {% if resource_granted('oro_contactus_request_edit') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'orocrm_contactus_request_update',
+            'route': 'oro_contactus_request_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -39,13 +39,13 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_contactus_request_index'),
-            'indexLabel': 'orocrm.contactus.contactrequest.entity_plural_label'|trans,
+            'indexPath':   path('oro_contactus_request_index'),
+            'indexLabel': 'oro.contactus.contactrequest.entity_plural_label'|trans,
             'entityTitle': fullname
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.contactus.contactrequest.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.contactus.contactrequest.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -54,11 +54,11 @@
     {% set id = 'contact-request-form' %}
 
     {% set dataBlocks = [{
-        'title': 'orocrm.contactus.block.general'|trans,
+        'title': 'oro.contactus.block.general'|trans,
         'class': 'active',
         'subblocks': [
             {
-                'title': 'orocrm.contactus.block.request_information'|trans,
+                'title': 'oro.contactus.block.request_information'|trans,
                 'data': [
                     form_row(form.firstName),
                     form_row(form.lastName),
@@ -77,7 +77,7 @@
     {% endfor %}
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
-        'title':     'orocrm.contactus.block.additional'|trans,
+        'title':     'oro.contactus.block.additional'|trans,
         'subblocks': [{ 'title': '', 'useSpan': false, 'data' : additionalData }]
         }] ) %}
     {% endif %}

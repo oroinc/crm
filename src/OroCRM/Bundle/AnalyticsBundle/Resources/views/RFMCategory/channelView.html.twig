@@ -1,41 +1,41 @@
 <div class="responsive-cell clearfix">
     <div class="span6">
-        <h4>{{ 'orocrm.analytics.form.rfm_setting.title'|trans }}</h4>
+        <h4>{{ 'oro.analytics.form.rfm_setting.title'|trans }}</h4>
         <div class="rfm-settings rfm-enabled">
             <div class="rfm-settings-data">
                 {% if rfmCategoriesCount > 1 %}
                 <table class="grid table-hover table table-bordered table-condensed">
                     <thead>
                     <tr>
-                        <th><label>{{ 'orocrm.analytics.form.score.title'|trans }}</label></th>
+                        <th><label>{{ 'oro.analytics.form.score.title'|trans }}</label></th>
                         <th>
-                            <label>{{ 'orocrm.analytics.form.recency.label'|trans }}</label>
-                            {{ 'orocrm.analytics.form.hint.recency'|trans }}
+                            <label>{{ 'oro.analytics.form.recency.label'|trans }}</label>
+                            {{ 'oro.analytics.form.hint.recency'|trans }}
                         </th>
                         <th>
-                            <label>{{ 'orocrm.analytics.form.frequency.label'|trans }}</label>
-                            {{ 'orocrm.analytics.form.hint.frequency'|trans }}
+                            <label>{{ 'oro.analytics.form.frequency.label'|trans }}</label>
+                            {{ 'oro.analytics.form.hint.frequency'|trans }}
                         </th>
                         <th>
-                            <label>{{ 'orocrm.analytics.form.monetary.label'|trans }}</label>
-                            {{ 'orocrm.analytics.form.hint.monetary'|trans }}
+                            <label>{{ 'oro.analytics.form.monetary.label'|trans }}</label>
+                            {{ 'oro.analytics.form.hint.monetary'|trans }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td class="rfm-cell-index">1
-                                <br><small>{{ 'orocrm.analytics.best'|trans }}</small>
+                                <br><small>{{ 'oro.analytics.best'|trans }}</small>
                             </td>
                             <td class="rfm-cell-recency">
-                                <span>{{ 'orocrm.analytics.less'|trans }} </span>
+                                <span>{{ 'oro.analytics.less'|trans }} </span>
                                 <strong>{{ rfmCategories.recency[0].maxValue }}</strong>
                             </td>
                             <td class="rfm-cell-frequency">
-                                <span>{{ 'orocrm.analytics.more'|trans }} </span>
+                                <span>{{ 'oro.analytics.more'|trans }} </span>
                                 <strong>{{ rfmCategories.frequency[0].minValue }}</strong>
                             <td class="rfm-cell-monetary">
-                                <span>{{ 'orocrm.analytics.more'|trans }} </span>
+                                <span>{{ 'oro.analytics.more'|trans }} </span>
                                 <strong>{{ rfmCategories.monetary[0].minValue }}</strong>
                             </td>
                         </tr>
@@ -45,20 +45,20 @@
                                 <tr>
                                     <td class="rfm-cell-index">{{ loop.index + 1 }}</td>
                                     <td class="rfm-cell-recency">
-                                        <span>{{ 'orocrm.analytics.from'|trans }}</span>
+                                        <span>{{ 'oro.analytics.from'|trans }}</span>
                                         <strong>{{ rfmCategories.recency[loop.index].minValue }}</strong>
-                                        <br><span>{{ 'orocrm.analytics.to'|trans }}</span>
+                                        <br><span>{{ 'oro.analytics.to'|trans }}</span>
                                         <strong>{{ rfmCategories.recency[loop.index].maxValue }}</strong>
                                     </td>
                                     <td class="rfm-cell-frequency">
-                                        <span>{{ 'orocrm.analytics.from'|trans }}</span>
+                                        <span>{{ 'oro.analytics.from'|trans }}</span>
                                         <strong>{{ rfmCategories.frequency[loop.index].minValue }}</strong>
-                                        <br><span>{{ 'orocrm.analytics.to'|trans }}</span>
+                                        <br><span>{{ 'oro.analytics.to'|trans }}</span>
                                         <strong>{{ rfmCategories.frequency[loop.index].maxValue }}</strong>
                                     <td class="rfm-cell-monetary">
-                                        <span>{{ 'orocrm.analytics.from'|trans }}</span>
+                                        <span>{{ 'oro.analytics.from'|trans }}</span>
                                         <strong>{{ rfmCategories.monetary[loop.index].minValue }}</strong>
-                                        <br><span>{{ 'orocrm.analytics.to'|trans }}</span>
+                                        <br><span>{{ 'oro.analytics.to'|trans }}</span>
                                         <strong>{{ rfmCategories.monetary[loop.index].maxValue }}</strong>
                                     </td>
                                 </tr>
@@ -67,17 +67,17 @@
 
                         <tr>
                             <td class="rfm-cell-index">{{ rfmCategoriesCount }}
-                                <br><small>{{ 'orocrm.analytics.worst'|trans }}</small>
+                                <br><small>{{ 'oro.analytics.worst'|trans }}</small>
                             </td>
                             <td class="rfm-cell-recency">
-                                <span>{{ 'orocrm.analytics.more'|trans }} </span>
+                                <span>{{ 'oro.analytics.more'|trans }} </span>
                                 <strong>{{ rfmCategories.recency[rfmCategoriesCount - 1].minValue }}</strong>
                             </td>
                             <td class="rfm-cell-frequency">
-                                <span>{{ 'orocrm.analytics.less'|trans }} </span>
+                                <span>{{ 'oro.analytics.less'|trans }} </span>
                                 <strong>{{ rfmCategories.frequency[rfmCategoriesCount - 1].maxValue }}</strong>
                             <td class="rfm-cell-monetary">
-                                <span>{{ 'orocrm.analytics.less'|trans }} </span>
+                                <span>{{ 'oro.analytics.less'|trans }} </span>
                                 <strong>{{ rfmCategories.monetary[rfmCategoriesCount - 1].maxValue }}</strong>
                             </td>
                         </tr>

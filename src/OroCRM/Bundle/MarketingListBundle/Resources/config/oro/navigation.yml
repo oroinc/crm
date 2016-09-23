@@ -2,10 +2,10 @@ navigation:
     menu_config:
         items:
             marketing_lists_list:
-                label: 'orocrm.marketinglist.entity_plural_label'
-                route: 'orocrm_marketing_list_index'
+                label: 'oro.marketinglist.entity_plural_label'
+                route: 'oro_marketing_list_index'
                 extras:
-                    routes: ['orocrm_marketing_list_*']
+                    routes: ['oro_marketing_list_*']
                     position: 10
         tree:
             application_menu:
@@ -15,13 +15,13 @@ navigation:
                             marketing_lists_list: ~
 
     titles:
-        orocrm_marketing_list_index:  ~
-        orocrm_marketing_list_update: '%%entityName%% - Edit'
-        orocrm_marketing_list_view: '%%entityName%%'
-        orocrm_marketing_list_create: oro.ui.create_entity
+        oro_marketing_list_index:  ~
+        oro_marketing_list_update: '%%entityName%% - Edit'
+        oro_marketing_list_view: '%%entityName%%'
+        oro_marketing_list_create: oro.ui.create_entity
 
     navigation_elements:
         pinButton:
             routes:
-                orocrm_marketing_list_create: false
-                orocrm_marketing_list_update: false
+                oro_marketing_list_create: false
+                oro_marketing_list_update: false

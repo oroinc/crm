@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -8,9 +8,8 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
-
-use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
-use OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
+use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
+use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 
 class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\EventListener;
+namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerTypeSubscriber implements EventSubscriberInterface
 {

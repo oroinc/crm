@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderItemDenormalizer extends ConfigurableEntityNormalizer implements DenormalizerInterface
 {

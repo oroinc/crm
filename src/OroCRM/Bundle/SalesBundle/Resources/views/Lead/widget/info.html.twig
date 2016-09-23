@@ -1,8 +1,8 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
-{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
-{% import 'OroCRMSalesBundle::macros.html.twig' as sales %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+{% import 'OroSalesBundle::macros.html.twig' as sales %}
 
 {%- macro getSocialUrl(type, value) -%}
     {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
@@ -15,32 +15,32 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.sales.lead.first_name.label'|trans, entity.firstName) }}
-            {{ ui.renderProperty('orocrm.sales.lead.last_name.label'|trans, entity.lastName) }}
+            {{ ui.renderProperty('oro.sales.lead.first_name.label'|trans, entity.firstName) }}
+            {{ ui.renderProperty('oro.sales.lead.last_name.label'|trans, entity.lastName) }}
 
-            {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
+            {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
 
-            {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
+            {%- if resource_granted('oro_contact_view') and entity.contact -%}
+                {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
             {%- else -%}
                 {% set contactView = entity.contact ? entity.contact : '' %}
             {%- endif -%}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
-            {{ ui.renderProperty('orocrm.sales.lead.job_title.label'|trans, entity.jobTitle) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
+            {{ ui.renderProperty('oro.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
-            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
-                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
+            {%- if resource_granted('oro_sales_b2bcustomer_view') and entity.customer -%}
+                {% set customerView = '<a href="' ~ path('oro_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
             {%- else -%}
                 {% set customerView = entity.customer ? entity.customer|escape : '' %}
             {%- endif -%}
 
             {%- set opportunitiesData -%}
                 {%- if entity.opportunities.count -%}
-                    {% set opportunityViewGranted = resource_granted('orocrm_sales_opportunity_view') %}
+                    {% set opportunityViewGranted = resource_granted('oro_sales_opportunity_view') %}
                     {%- for opportunity in entity.opportunities -%}
                         {%- if opportunityViewGranted -%}
-                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': opportunity.id}) }}">{{ ui.renderEntityViewLabel(opportunity, 'name', 'orocrm.sales.oportunity.entity_label') }}</a>
+                            <a href="{{ path('oro_sales_opportunity_view', {'id': opportunity.id}) }}">{{ ui.renderEntityViewLabel(opportunity, 'name', 'oro.sales.oportunity.entity_label') }}</a>
                         {%- else -%}
                             {{ ui.renderEntityViewLabel(opportunity, 'name') }}
                         {%- endif -%}
@@ -49,11 +49,11 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.customer.label'|trans, customerView) }}
-            {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
-            {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
-            {{ ui.renderProperty('orocrm.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
-            {{ ui.renderProperty('orocrm.sales.lead.source.label'|trans, entity.source) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.customer.label'|trans, customerView) }}
+            {{ ui.renderProperty('oro.sales.lead.company_name.label'|trans, entity.companyName) }}
+            {{ ui.renderProperty('oro.sales.lead.industry.label'|trans, entity.industry) }}
+            {{ ui.renderProperty('oro.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
+            {{ ui.renderProperty('oro.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
@@ -80,12 +80,12 @@
         {%- endset -%}
 
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
-            {{ ui.renderHtmlProperty('orocrm.contact.social.label'|trans, socialData) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.entity_label'|trans, opportunitiesData) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
+            {{ ui.renderHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
+            {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>
     </div>
 </div>

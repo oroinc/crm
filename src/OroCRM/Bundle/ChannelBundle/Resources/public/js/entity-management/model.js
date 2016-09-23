@@ -2,7 +2,7 @@ define(['backbone'], function(Backbone) {
     'use strict';
 
     /**
-     * @class   orocrmchannel.entityManagement.Model
+     * @class   orochannel.entityManagement.Model
      * @extends Backbone.Model
      */
     return Backbone.Model.extend({

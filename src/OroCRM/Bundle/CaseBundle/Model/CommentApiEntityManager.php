@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Model;
+namespace Oro\Bundle\CaseBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CommentApiEntityManager extends ApiEntityManager
 {

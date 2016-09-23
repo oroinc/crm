@@ -1,9 +1,9 @@
 <?php
 
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CustomerApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerApiType;
 
 class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,7 +70,7 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                     'csrf_protection' => false
                 ]
             );

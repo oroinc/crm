@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -29,7 +29,7 @@ class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareI
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'];
+        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'];
     }
 
     /**

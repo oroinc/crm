@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Model;
+namespace Oro\Bundle\MarketingListBundle\Model;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListHelper
 {
-    const MARKETING_LIST = 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList';
+    const MARKETING_LIST = 'Oro\Bundle\MarketingListBundle\Entity\MarketingList';
 
     /**
      * @var ManagerRegistry

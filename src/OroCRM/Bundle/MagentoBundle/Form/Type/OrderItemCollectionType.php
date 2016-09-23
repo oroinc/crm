@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -48,6 +48,6 @@ class OrderItemCollectionType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_order_item_collection';
+        return 'oro_order_item_collection';
     }
 }

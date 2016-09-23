@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\ChannelBundle\Tests\Functional\Fixture;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,10 +10,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -37,7 +36,7 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
+        $this->factory = $container->get('oro_channel.builder.factory');
     }
 
     /**

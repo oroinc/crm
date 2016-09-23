@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -9,9 +9,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-
-use OroCRM\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
-use OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener;
+use Oro\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
+use Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {

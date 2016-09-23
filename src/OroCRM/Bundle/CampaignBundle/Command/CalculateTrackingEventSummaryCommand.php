@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Command;
+namespace Oro\Bundle\CampaignBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,10 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
-use OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository;
-use OroCRM\Bundle\CampaignBundle\Entity\Repository\TrackingEventSummaryRepository;
-use OroCRM\Bundle\CampaignBundle\Entity\TrackingEventSummary;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\Repository\CampaignRepository;
+use Oro\Bundle\CampaignBundle\Entity\Repository\TrackingEventSummaryRepository;
+use Oro\Bundle\CampaignBundle\Entity\TrackingEventSummary;
 
 /**
  * Calculate Tracking Event Summary
@@ -176,7 +176,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
      */
     protected function getCampaignEntityClass()
     {
-        return $this->getContainer()->getParameter('orocrm_campaign.entity.class');
+        return $this->getContainer()->getParameter('oro_campaign.entity.class');
     }
 
     /**
@@ -184,7 +184,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
      */
     protected function getTrackingEventSummaryEntityClass()
     {
-        return $this->getContainer()->getParameter('orocrm_campaign.tracking_event_summary.class');
+        return $this->getContainer()->getParameter('oro_campaign.tracking_event_summary.class');
     }
 
     /**

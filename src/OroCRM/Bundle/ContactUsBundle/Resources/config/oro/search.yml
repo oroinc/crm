@@ -1,12 +1,12 @@
 search:
-    OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
-        alias:                          orocrm_contactus_request
+    Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
+        alias:                          oro_contactus_request
         title_fields:                   [firstName, lastName]
         route:
-            name:                       orocrm_contactus_request_view
+            name:                       oro_contactus_request_view
             parameters:
                 id:                     id
-        search_template:                OroCRMContactUsBundle:Search:result.html.twig
+        search_template:                OroContactUsBundle:Search:result.html.twig
         fields:
             -
                 name:                   contactReason

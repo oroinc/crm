@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Placeholder;
+namespace Oro\Bundle\AnalyticsBundle\Placeholder;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 
 class RFMAwareFilter
 {

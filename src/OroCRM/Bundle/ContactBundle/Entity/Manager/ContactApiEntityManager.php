@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity\Manager;
+namespace Oro\Bundle\ContactBundle\Entity\Manager;
 
 use Doctrine\Common\Persistence\ObjectManager;
 

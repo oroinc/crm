@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Knp\Menu\MenuItem;
 use Knp\Menu\MenuFactory;
 
 use Oro\Component\Config\Resolver\ResolverInterface;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\EventListener\NavigationListener;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +23,7 @@ class NavigationListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->resolver = $this->getMockBuilder('Oro\Component\Config\Resolver\ResolverInterface')
             ->disableOriginalConstructor()->getMock();
-        $this->state    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+        $this->state    = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\EntityConfig;
+namespace Oro\Bundle\ActivityContactBundle\EntityConfig;
 
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
@@ -37,8 +37,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_last_contact_date.label',
-                    'description' => 'orocrm.activity_contact.ac_last_contact_date.description',
+                    'label'       => 'oro.activity_contact.ac_last_contact_date.label',
+                    'description' => 'oro.activity_contact.ac_last_contact_date.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,
@@ -58,8 +58,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_last_contact_date_in.label',
-                    'description' => 'orocrm.activity_contact.ac_last_contact_date_in.description',
+                    'label'       => 'oro.activity_contact.ac_last_contact_date_in.label',
+                    'description' => 'oro.activity_contact.ac_last_contact_date_in.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,
@@ -79,8 +79,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_last_contact_date_out.label',
-                    'description' => 'orocrm.activity_contact.ac_last_contact_date_out.description',
+                    'label'       => 'oro.activity_contact.ac_last_contact_date_out.label',
+                    'description' => 'oro.activity_contact.ac_last_contact_date_out.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,
@@ -100,8 +100,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_contact_count.label',
-                    'description' => 'orocrm.activity_contact.ac_contact_count.description',
+                    'label'       => 'oro.activity_contact.ac_contact_count.label',
+                    'description' => 'oro.activity_contact.ac_contact_count.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,
@@ -121,8 +121,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_contact_count_in.label',
-                    'description' => 'orocrm.activity_contact.ac_contact_count_in.description',
+                    'label'       => 'oro.activity_contact.ac_contact_count_in.label',
+                    'description' => 'oro.activity_contact.ac_contact_count_in.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,
@@ -142,8 +142,8 @@ class ActivityScope
             'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
-                    'label'       => 'orocrm.activity_contact.ac_contact_count_out.label',
-                    'description' => 'orocrm.activity_contact.ac_contact_count_out.description',
+                    'label'       => 'oro.activity_contact.ac_contact_count_out.label',
+                    'description' => 'oro.activity_contact.ac_contact_count_out.description',
                 ],
                 'extend'       => [
                     'owner'     => ExtendScope::OWNER_CUSTOM,

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Selenium;
+namespace Oro\Bundle\CaseBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
+use Oro\Bundle\CaseBundle\Tests\Selenium\Pages\Cases;
 
 class AclCasesTest extends Selenium2TestCase
 {
@@ -51,7 +51,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Label_' . $role))
             ->setBusinessUnit()
-            ->setOrganization('OroCRM')
+            ->setOrganization('Oro')
             ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')
@@ -71,7 +71,7 @@ class AclCasesTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        $login->openCases('Oro\Bundle\CaseBundle')
             ->add()
             ->assertTitle('Create Case - Cases - Activities')
             ->setSubject($subject)
@@ -128,7 +128,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openCases('OroCRM\Bundle\CaseBundle')
+            ->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $caseSubject)
             ->assertNoActionMenu('Delete')
             ->open(array($caseSubject))
@@ -147,7 +147,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openCases('OroCRM\Bundle\CaseBundle')
+            ->openCases('Oro\Bundle\CaseBundle')
             ->filterBy('Subject', $caseSubject)
             ->assertNoActionMenu('Update')
             ->open(array($caseSubject))
@@ -166,7 +166,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openCases('OroCRM\Bundle\CaseBundle')
+            ->openCases('Oro\Bundle\CaseBundle')
             ->assertElementNotPresent(
                 "//div[@class='pull-right title-buttons-container']//a[contains(., 'Create Case')]"
             );
@@ -184,7 +184,7 @@ class AclCasesTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openCases('OroCRM\Bundle\CaseBundle')
+            ->openCases('Oro\Bundle\CaseBundle')
             ->assertTitle('403 - Forbidden');
     }
 

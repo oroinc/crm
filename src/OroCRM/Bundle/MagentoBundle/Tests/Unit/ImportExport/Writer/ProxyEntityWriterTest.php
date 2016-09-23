@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter;
 
 class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,7 +117,7 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetStepExecutionSetToWrappedWriter()
     {
-        $wrapped       = $this->getMock('OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
+        $wrapped       = $this->getMock('Oro\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
         $writer        = new ProxyEntityWriter($wrapped, $this->databaseHelper);
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()->getMock();
@@ -163,12 +162,12 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     public function getCustomer($customerEmail, $channelId, $isGuest = true, $originId = null)
     {
         $channel = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $customer = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->setMethods(['getChannel', 'getOriginId'])
             ->disableOriginalConstructor()
             ->getMock();

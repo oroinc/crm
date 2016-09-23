@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Model;
+namespace Oro\Bundle\ChannelBundle\Model;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 interface CustomerIdentityInterface
 {

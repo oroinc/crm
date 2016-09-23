@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model\Condition;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Model\Condition;
 
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Component\ConfigExpression\ContextAccessor;
-
-use OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation;
+use Oro\Bundle\MarketingListBundle\Model\Condition\HasContactInformation;
 
 class HasContactInformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +28,7 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->contextAccessor = new ContextAccessor();
         $this->fieldsProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
             ->disableOriginalConstructor()
             ->getMock();
         $this->condition = new HasContactInformation($this->fieldsProvider);
@@ -108,7 +107,7 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
     public function testEvaluate()
     {
         $type = 'test';
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $context = new \stdClass();

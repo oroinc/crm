@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Validator;
+namespace Oro\Bundle\AnalyticsBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
@@ -11,17 +11,17 @@ class CategoriesConstraint extends Constraint
     /**
      * @var string
      */
-    public $message = 'orocrm.analytics.validator.categories.order';
+    public $message = 'oro.analytics.validator.categories.order';
 
     /**
      * @var string
      */
-    public $countMessage = 'orocrm.analytics.validator.categories.count';
+    public $countMessage = 'oro.analytics.validator.categories.count';
 
     /**
      * @var string
      */
-    public $blankMessage = 'orocrm.analytics.validator.categories.blank';
+    public $blankMessage = 'oro.analytics.validator.categories.blank';
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class CategoriesConstraint extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_analytics.categories_validator';
+        return 'oro_analytics.categories_validator';
     }
 
     /**

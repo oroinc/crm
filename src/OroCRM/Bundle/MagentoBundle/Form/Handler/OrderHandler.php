@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -8,10 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderHandler
 {

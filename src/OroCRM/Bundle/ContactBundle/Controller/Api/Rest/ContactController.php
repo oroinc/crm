@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -20,9 +20,8 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
 
 /**
  * @RouteResource("contact")
@@ -87,7 +86,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Get all contacts items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      *
      * @throws \Exception
      * @return Response
@@ -133,7 +132,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getAction($id)
@@ -150,7 +149,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Update contact",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_update")
+     * @AclAncestor("oro_contact_update")
      * @return Response
      */
     public function putAction($id)
@@ -165,7 +164,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Create new contact",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_create")
+     * @AclAncestor("oro_contact_create")
      */
     public function postAction()
     {
@@ -182,10 +181,10 @@ class ContactController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_contact_delete",
+     *      id="oro_contact_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMContactBundle:Contact"
+     *      class="OroContactBundle:Contact"
      * )
      * @return Response
      */
@@ -201,7 +200,7 @@ class ContactController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact.manager.api');
+        return $this->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -209,7 +208,7 @@ class ContactController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_contact.form.contact.api');
+        return $this->get('oro_contact.form.contact.api');
     }
 
     /**
@@ -217,7 +216,7 @@ class ContactController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_contact.form.handler.contact.api');
+        return $this->get('oro_contact.form.handler.contact.api');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity;
+namespace Oro\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -9,10 +9,10 @@ use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use OroCRM\Bundle\ContactBundle\Model\ExtendContactAddress;
+use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
 
 /**
- * @ORM\Table("orocrm_contact_address")
+ * @ORM\Table("oro_contact_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
@@ -52,7 +52,7 @@ class ContactAddress extends ExtendContactAddress
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType", cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="orocrm_contact_adr_to_adr_type",
+     *     name="oro_contact_adr_to_adr_type",
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

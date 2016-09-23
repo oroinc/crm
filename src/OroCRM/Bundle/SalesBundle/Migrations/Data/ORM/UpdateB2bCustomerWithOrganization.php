@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,6 +22,6 @@ class UpdateB2bCustomerWithOrganization extends UpdateWithOrganization implement
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMSalesBundle:B2bCustomer');
+        $this->update($manager, 'OroSalesBundle:B2bCustomer');
     }
 }

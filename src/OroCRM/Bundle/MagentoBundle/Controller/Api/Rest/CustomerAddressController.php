@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,10 +18,9 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Manager\CustomerApiEntityManager;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Manager\CustomerApiEntityManager;
 
 /**
  * @NamePrefix("oro_api_")
@@ -35,7 +34,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      * @param int $customerId
      *
      * @return JsonResponse
@@ -67,7 +66,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *      description="Add address to the customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_create")
+     * @AclAncestor("oro_magento_customer_create")
      * @param int $customerId
      *
      * @return JsonResponse
@@ -105,7 +104,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *      description="Get customer address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      *
      * @return Response
      */
@@ -129,7 +128,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *      description="Update customer address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_update")
+     * @AclAncestor("oro_magento_customer_update")
      * @return Response
      */
     public function putAction($customerId, $addressId)
@@ -160,10 +159,10 @@ class CustomerAddressController extends RestController implements ClassResourceI
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_customer_delete",
+     *      id="oro_magento_customer_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:Address"
+     *      class="OroMagentoBundle:Address"
      * )
      * @return Response
      */
@@ -195,7 +194,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.customer_address.manager.api');
+        return $this->get('oro_magento.customer_address.manager.api');
     }
 
     /**
@@ -203,7 +202,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.customer_address.api');
+        return $this->get('oro_magento.form.customer_address.api');
     }
 
     /**
@@ -211,7 +210,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.api.handler.customer_address');
+        return $this->get('oro_magento.form.api.handler.customer_address');
     }
 
     /**
@@ -219,7 +218,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     protected function getCustomerManager()
     {
-        return $this->get('orocrm_magento.customer.manager.api');
+        return $this->get('oro_magento.customer.manager.api');
     }
 
     /**

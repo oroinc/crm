@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
+namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 
 class CartItemApiEntityManager extends ApiEntityManager
 {

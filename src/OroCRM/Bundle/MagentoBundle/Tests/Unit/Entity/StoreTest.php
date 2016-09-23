@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 class StoreTest extends AbstractEntityTestCase
 {
@@ -12,7 +12,7 @@ class StoreTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+        return 'Oro\Bundle\MagentoBundle\Entity\Store';
     }
 
     /**
@@ -20,7 +20,7 @@ class StoreTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
 
         return [
             'id'      => ['id', self::TEST_ID, self::TEST_ID],
@@ -35,7 +35,7 @@ class StoreTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getWebsiteName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));

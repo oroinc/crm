@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
@@ -8,12 +8,11 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class CartExpirationProcessor
 {
@@ -60,7 +59,7 @@ class CartExpirationProcessor
     {
         $this->configure($channel);
 
-        $result = $this->em->getRepository('OroCRMMagentoBundle:Cart')->getCartsByChannelIdsIterator($channel);
+        $result = $this->em->getRepository('OroMagentoBundle:Cart')->getCartsByChannelIdsIterator($channel);
 
         $ids   = [];
         $count = 0;
@@ -111,7 +110,7 @@ class CartExpirationProcessor
         );
         $resultIds  = array_flip($resultIds);
         $removedIds = array_values(array_diff_key($ids, $resultIds));
-        $this->em->getRepository('OroCRMMagentoBundle:Cart')->markExpired($removedIds);
+        $this->em->getRepository('OroMagentoBundle:Cart')->markExpired($removedIds);
     }
 
     /**

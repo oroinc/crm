@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Validator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -9,9 +9,9 @@ use Doctrine\ORM\PersistentCollection;
 
 use Symfony\Component\Validator\ExecutionContextInterface;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesValidator;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator;
 
 class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|CategoriesConstraint $constraint */
-        $constraint = $this->getMock('OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
+        $constraint = $this->getMock('Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
         $constraint->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));

@@ -19,10 +19,10 @@ define(function(require) {
                 method: 'POST',
                 success: function(response) {
                     if (response.successful) {
-                        messenger.notificationMessage('success', __('orocrm.magento.customer_registration.success'));
+                        messenger.notificationMessage('success', __('oro.magento.customer_registration.success'));
                         mediator.execute('refreshPage');
                     } else {
-                        messenger.notificationMessage('error', __('orocrm.magento.customer_registration.error'));
+                        messenger.notificationMessage('error', __('oro.magento.customer_registration.error'));
                         console.warn(response.error);
                     }
                 },

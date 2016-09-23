@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Model;
+namespace Oro\Bundle\ContactUsBundle\Model;
 
-use OroCRM\Bundle\ContactUsBundle\Entity\AbstractContactRequest;
+use Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest;
 
 class ExtendContactRequest extends AbstractContactRequest
 {

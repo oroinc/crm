@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @outputBuffering enabled
@@ -41,17 +40,17 @@ class CommentControllerTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
     }
 
     protected function postFixtureLoad()
     {
         $case = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMCaseBundle:CaseEntity')
+            ->getRepository('OroCaseBundle:CaseEntity')
             ->findOneBySubject('Case #1');
 
         $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneByEmail('daniel.case@example.com');
 
         $this->assertNotNull($case);
@@ -65,7 +64,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'POST',
-            $this->getUrl('orocrm_case_api_post_comment', ['id' => self::$caseId]),
+            $this->getUrl('oro_case_api_post_comment', ['id' => self::$caseId]),
             ['comment' => $this->commentPostData],
             [],
             $this->generateWsseAuthHeader()
@@ -86,7 +85,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_comments', ['id' => self::$caseId]),
+            $this->getUrl('oro_case_api_get_comments', ['id' => self::$caseId]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -118,7 +117,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id]),
+            $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -156,7 +155,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('orocrm_case_api_put_comment', ['id' => $id]),
+            $this->getUrl('oro_case_api_put_comment', ['id' => $id]),
             ['comment' => $putData],
             [],
             $this->generateWsseAuthHeader()
@@ -167,7 +166,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id])
+            $this->getUrl('oro_case_api_get_comment', ['id' => $id])
         );
 
         $updatedComment = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -189,7 +188,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_case_api_delete_comment', ['id' => $id]),
+            $this->getUrl('oro_case_api_delete_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -200,7 +199,7 @@ class CommentControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_comment', ['id' => $id]),
+            $this->getUrl('oro_case_api_get_comment', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()

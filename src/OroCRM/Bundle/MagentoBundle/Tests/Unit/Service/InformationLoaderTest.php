@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\Service\InformationLoader;
+use Oro\Bundle\MagentoBundle\Service\InformationLoader;
 
 class InformationLoaderTest extends \PHPUnit_Framework_TestCase
 {

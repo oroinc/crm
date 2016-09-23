@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
+namespace Oro\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 
 class AclAccountTest extends Selenium2TestCase
 {
@@ -51,7 +51,7 @@ class AclAccountTest extends Selenium2TestCase
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Label_' . $role))
             ->setBusinessUnit()
-            ->setOrganization('OroCRM')
+            ->setOrganization('Oro')
             ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')
@@ -72,7 +72,7 @@ class AclAccountTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')
             ->setName($accountName)
@@ -131,7 +131,7 @@ class AclAccountTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         /* @var Accounts $login  */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->assertNoActionMenu('Delete')
             ->open(array($accountName))
@@ -152,7 +152,7 @@ class AclAccountTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         /* @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->assertNoActionMenu('Update')
             ->open(array($accountName))
@@ -172,7 +172,7 @@ class AclAccountTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         /* @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->assertElementNotPresent("//div[@class = 'container-fluid']//a[contains(., 'Create Account')]");
     }
 
@@ -189,7 +189,7 @@ class AclAccountTest extends Selenium2TestCase
             ->setPassword('123123q')
             ->submit();
         /* @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->assertTitle('403 - Forbidden');
     }
 

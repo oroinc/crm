@@ -1,6 +1,6 @@
 {#
     Available variables:
-    * entity       - user entity OroCRM\Bundle\AccountBundle\Entity\Account or null
+    * entity       - user entity Oro\Bundle\AccountBundle\Entity\Account or null
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
@@ -8,7 +8,7 @@
 {% set showImage = false %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% set entityType = 'orocrm.account.entity_label'|trans %}
+{% set entityType = 'oro.account.entity_label'|trans %}
 
 {% if  resource_granted('VIEW', entity, 'name') %}
     {% set title = indexer_item.recordTitle %}

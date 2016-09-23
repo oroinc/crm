@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Migration;
+namespace Oro\Bundle\ActivityContactBundle\Migration;
 
 use Psr\Log\LoggerInterface;
 
@@ -15,10 +15,9 @@ use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
-use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Provider;
+namespace Oro\Bundle\MarketingListBundle\Provider;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Util\ClassUtils;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
-use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class ContactInformationFieldsProvider
 {

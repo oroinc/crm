@@ -1,7 +1,7 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CartItemCollectionType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartItemCollectionType;
 use Symfony\Component\OptionsResolver\Options;
 
 class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
@@ -42,7 +42,7 @@ class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_cart_item_collection', $this->type->getName());
+        $this->assertEquals('oro_cart_item_collection', $this->type->getName());
     }
 
     public function testGetParent()

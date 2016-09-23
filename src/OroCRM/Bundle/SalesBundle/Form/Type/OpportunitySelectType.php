@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,9 +14,9 @@ class OpportunitySelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'opportunities',
-                'create_form_route'  => 'orocrm_sales_opportunity_create',
+                'create_form_route'  => 'oro_sales_opportunity_create',
                 'configs'            => [
-                    'placeholder' => 'orocrm.sales.form.choose_opportunity'
+                    'placeholder' => 'oro.sales.form.choose_opportunity'
                 ],
             ]
         );
@@ -43,6 +43,6 @@ class OpportunitySelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_opportunity_select';
+        return 'oro_sales_opportunity_select';
     }
 }

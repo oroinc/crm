@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
 
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EmailBundle\Form\Model\Email;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings;
-use OroCRM\Bundle\CampaignBundle\Transport\EmailTransport;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings;
+use Oro\Bundle\CampaignBundle\Transport\EmailTransport;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class EmailTransportTest extends \PHPUnit_Framework_TestCase
 {

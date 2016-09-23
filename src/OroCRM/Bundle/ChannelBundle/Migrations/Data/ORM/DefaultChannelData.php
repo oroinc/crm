@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
@@ -16,7 +15,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
      */
     public function load(ObjectManager $manager)
     {
-        $settingsProvider = $this->container->get('orocrm_channel.provider.settings_provider');
+        $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
 
         $this->createChannelsForIntegrations($settingsProvider);
     }
@@ -33,7 +32,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
 
         /** @var Integration $integration */
         foreach ($integrations as $integration) {
-            $builder = $this->container->get('orocrm_channel.builder.factory')
+            $builder = $this->container->get('oro_channel.builder.factory')
                 ->createBuilderForIntegration($integration);
             $builder->setOwner($integration->getOrganization());
             $builder->setDataSource($integration);

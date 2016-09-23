@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
+namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactImportHelper
 {

@@ -1,4 +1,4 @@
-OroCRMAccountBundle
+OroAccountBundle
 ===================
 
 Customer account entity management

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Twig;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Twig;
 
-use OroCRM\Bundle\ContactBundle\Twig\SocialUrlExtension;
-use OroCRM\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ContactBundle\Twig\SocialUrlExtension;
+use Oro\Bundle\ContactBundle\Model\Social;
 
 class SocialUrlExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class SocialUrlExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlFormatter = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
+        $this->urlFormatter = $this->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
             ->setMethods(array('getSocialUrl'))
             ->disableOriginalConstructor()
             ->getMock();

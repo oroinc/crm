@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -35,7 +35,7 @@ class AddFields implements Migration, OrderedMigrationInterface
      */
     protected function modifyOrocrmSalesLeadTable(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_lead');
+        $table = $schema->getTable('oro_sales_lead');
 
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
@@ -43,13 +43,13 @@ class AddFields implements Migration, OrderedMigrationInterface
         $table->addIndex(['data_channel_id'], 'IDX_73DB4633BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_b2bcustomer'),
+            $schema->getTable('oro_sales_b2bcustomer'),
             ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
@@ -62,7 +62,7 @@ class AddFields implements Migration, OrderedMigrationInterface
      */
     protected function modifyOrocrmSalesOpportunityTable(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table = $schema->getTable('oro_sales_opportunity');
 
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_C0FE4AAC9395C3F3', []);
@@ -70,13 +70,13 @@ class AddFields implements Migration, OrderedMigrationInterface
         $table->addIndex(['data_channel_id'], 'IDX_C0FE4AACBDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_b2bcustomer'),
+            $schema->getTable('oro_sales_b2bcustomer'),
             ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
@@ -89,12 +89,12 @@ class AddFields implements Migration, OrderedMigrationInterface
      */
     protected function modifyOrocrmSalesSalesFunnelTable(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_funnel');
+        $table = $schema->getTable('oro_sales_funnel');
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['data_channel_id'], 'IDX_E20C7344BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],

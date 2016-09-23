@@ -1,11 +1,11 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Reader;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Reader;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader;
 
 class ContextOptionReaderTest extends \PHPUnit_Framework_TestCase
 {

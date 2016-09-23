@@ -1,4 +1,4 @@
-OroCRM\Bundle\CampaignBundle\Entity\Campaign:
+Oro\Bundle\CampaignBundle\Entity\Campaign:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: code
     properties:
@@ -31,7 +31,7 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
+Oro\Bundle\CampaignBundle\Entity\EmailCampaign:
     properties:
         name:
             - NotBlank: ~
@@ -55,7 +55,7 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings:
+Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings:
     properties:
         template:
             - NotBlank: ~

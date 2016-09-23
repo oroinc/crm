@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-
-use OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider;
+use Oro\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider;
 
 class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
 {

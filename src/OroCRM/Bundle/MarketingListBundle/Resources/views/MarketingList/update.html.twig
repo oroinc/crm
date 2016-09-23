@@ -4,7 +4,7 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 {% oro_title_set({params : {"%entityName%": entity.name} }) %}
-{% set formAction = form.vars.value.id ? path('orocrm_marketing_list_update', { 'id': form.vars.value.id }) : path('orocrm_marketing_list_create')  %}
+{% set formAction = form.vars.value.id ? path('oro_marketing_list_update', { 'id': form.vars.value.id }) : path('oro_marketing_list_create')  %}
 
 {% block head_script %}
     {{ parent() }}
@@ -17,29 +17,29 @@
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_api_delete_marketinglist', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_marketing_list_index'),
+            'dataUrl': path('oro_api_delete_marketinglist', {'id': form.vars.value.id}),
+            'dataRedirect': path('oro_marketing_list_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-marketing-list',
             'dataId': form.vars.value.id,
-            'entity_label': 'orocrm.marketinglist.entity_label'|trans
+            'entity_label': 'oro.marketinglist.entity_label'|trans
         }) }}
 
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.cancelButton(path('orocrm_marketing_list_index')) }}
+    {{ UI.cancelButton(path('oro_marketing_list_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_marketing_list_view',
+        'route': 'oro_marketing_list_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('orocrm_contactus_request_create') %}
+    {% if resource_granted('oro_contactus_request_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_marketing_list_create'
+            'route': 'oro_marketing_list_create'
         }) %}
     {% endif %}
-    {% if form.vars.value.id or resource_granted('orocrm_marketing_list_update') %}
+    {% if form.vars.value.id or resource_granted('oro_marketing_list_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'orocrm_marketing_list_update',
+            'route': 'oro_marketing_list_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -51,13 +51,13 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_marketing_list_index'),
-            'indexLabel': 'orocrm.marketinglist.entity_plural_label'|trans,
+            'indexPath':   path('oro_marketing_list_index'),
+            'indexLabel': 'oro.marketinglist.entity_plural_label'|trans,
             'entityTitle': entity.name
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.marketinglist.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.marketinglist.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -80,9 +80,9 @@
                 {
                     'title': '',
                     'data': [
-                        form_row(form.name, {'label': 'orocrm.marketinglist.name.label'}),
+                        form_row(form.name, {'label': 'oro.marketinglist.name.label'}),
                         form_row(form.description, {
-                            'label': 'orocrm.marketinglist.description.label',
+                            'label': 'oro.marketinglist.description.label',
                             'attr': {
                                 'class': 'segment-descr'
                             }
@@ -92,8 +92,8 @@
                 {
                     'title': '',
                     'data': [
-                        form_row(form.entity, {'label': 'orocrm.marketinglist.entity.label'}),
-                        form_row(form.type, {'label': 'orocrm.marketinglist.type.label'})
+                        form_row(form.entity, {'label': 'oro.marketinglist.entity.label'}),
+                        form_row(form.type, {'label': 'oro.marketinglist.type.label'})
                     ] | merge(ownerDataBlock.dataBlocks[0].subblocks[0].data)
                 }
             ]
@@ -105,28 +105,28 @@
     {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
     {% set columnsComponentOptions = {
         'formSelector': '#' ~ form.vars.id,
-        'entityChoiceSelector': '[data-ftid=orocrm_marketing_list_form_entity]',
+        'entityChoiceSelector': '[data-ftid=oro_marketing_list_form_entity]',
         'fieldsChoiceSelector': '#contact-information-fields-list',
         'contactInformationFields': hasEntity ? get_contact_information_fields_info(form.vars.value.entity) : []
     } %}
 
-    {% set type = 'orocrm_marketing_list' %}
+    {% set type = 'oro_marketing_list' %}
     {% set columnsDesigner %}
-    <div data-page-component-module="orocrmmarketinglist/js/app/components/columns-component"
+    <div data-page-component-module="oromarketinglist/js/app/components/columns-component"
          data-page-component-options="{{ columnsComponentOptions|json_encode }}"
          class="marketing-list-qd-columns"
     >
         <div id="column-information-notice" class="alert alert-info">
-            <strong>{{ 'orocrm.marketinglist.form.importance'|trans }}</strong>:
-            {{ 'orocrm.marketinglist.form.columns_notice'|trans }}
-            <div class="column-information-fields-notice">{{ 'orocrm.marketinglist.form.available_fields_notice'|trans }}:</div>
+            <strong>{{ 'oro.marketinglist.form.importance'|trans }}</strong>:
+            {{ 'oro.marketinglist.form.columns_notice'|trans }}
+            <div class="column-information-fields-notice">{{ 'oro.marketinglist.form.available_fields_notice'|trans }}:</div>
             <div id="contact-information-fields-list"></div>
         </div>
 
         {{ QD.query_designer_column_form(
             form.column,
             {'id': type ~ '-column-form'},
-            {'entity_choice_id': 'orocrm_marketing_list_form_entity'},
+            {'entity_choice_id': 'oro_marketing_list_form_entity'},
             ['column', 'label', 'sorting', 'action']
         ) }}
 
@@ -155,7 +155,7 @@
                     segmentQD.query_designer_condition_builder({
                         'id': type ~ '-condition-builder',
                         'criteria_list_id': 'filter-criteria-list',
-                        'entity_choice_id': 'orocrm_marketing_list_form_entity',
+                        'entity_choice_id': 'oro_marketing_list_form_entity',
                         'currentSegmentId': entity.id|default(null),
                         'page_limit': constant('\\Oro\\Bundle\\SegmentBundle\\Entity\\Manager\\SegmentManager::PER_PAGE')
                     })

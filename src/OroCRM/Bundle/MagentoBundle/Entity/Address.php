@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -11,14 +11,13 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\MagentoBundle\Model\ExtendAddress;
 
 /**
- * @ORM\Table("orocrm_magento_customer_addr")
+ * @ORM\Table("oro_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
@@ -204,7 +203,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
-     *     name="orocrm_magento_cust_addr_type",
+     *     name="oro_magento_cust_addr_type",
      *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
@@ -212,7 +211,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     protected $types;
 
     /**
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\ContactAddress")
      * @ORM\JoinColumn(name="related_contact_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @var ContactAddress
      * @ConfigField(
@@ -228,7 +227,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     /**
      * @var ContactPhone
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\ContactPhone")
      * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

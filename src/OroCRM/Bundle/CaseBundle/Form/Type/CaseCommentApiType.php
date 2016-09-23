@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Type;
+namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,15 +20,15 @@ class CaseCommentApiType extends AbstractType
                 'updatedBy',
                 'oro_user_select',
                 [
-                    'label'     => 'orocrm.case.casecomment.updated_by.label',
+                    'label'     => 'oro.case.casecomment.updated_by.label',
                     'required'  => false,
                 ]
             )
             ->add(
                 'contact',
-                'orocrm_contact_select',
+                'oro_contact_select',
                 [
-                    'label'     => 'orocrm.case.casecomment.contact.label',
+                    'label'     => 'oro.case.casecomment.contact.label',
                     'required'  => false,
                 ]
             );
@@ -62,7 +62,7 @@ class CaseCommentApiType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_case_comment_api';
+        return 'oro_case_comment_api';
     }
 
     /**
@@ -70,6 +70,6 @@ class CaseCommentApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_case_comment';
+        return 'oro_case_comment';
     }
 }

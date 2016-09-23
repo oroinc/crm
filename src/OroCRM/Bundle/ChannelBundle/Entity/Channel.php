@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity;
+namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,16 +11,16 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
- * @ORM\Table(name="orocrm_channel", indexes={
+ * @ORM\Entity(repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
+ * @ORM\Table(name="oro_channel", indexes={
  *     @ORM\Index(name="crm_channel_name_idx", columns={"name"}),
  *     @ORM\Index(name="crm_channel_status_idx", columns={"status"}),
  *     @ORM\Index(name="crm_channel_channel_type_idx", columns={"channel_type"})
  * })
  * @ORM\HasLifecycleCallbacks()
  * @Config(
- *  routeName="orocrm_channel_index",
- *  routeView="orocrm_channel_view",
+ *  routeName="oro_channel_index",
+ *  routeView="oro_channel_view",
  *  defaultValues={
  *      "entity"={
  *          "icon"="icon-sitemap"
@@ -36,7 +36,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *          "category"="account_management"
  *      },
  *      "form"={
- *            "form_type"="orocrm_channel_select_type"
+ *            "form_type"="oro_channel_select_type"
  *      },
  *      "grid"={
  *          "default"="orocrm-channels-grid"
@@ -87,7 +87,7 @@ class Channel
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
-     *     targetEntity="OroCRM\Bundle\ChannelBundle\Entity\EntityName",
+     *     targetEntity="Oro\Bundle\ChannelBundle\Entity\EntityName",
      *     cascade={"all"}, mappedBy="channel", orphanRemoval=true
      * )
      */

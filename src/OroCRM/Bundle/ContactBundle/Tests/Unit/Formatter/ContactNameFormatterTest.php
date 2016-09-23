@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Formatter;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 
 class ContactNameFormatterTest extends \PHPUnit_Framework_TestCase
 {

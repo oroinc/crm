@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\EventListener;
+namespace Oro\Bundle\ContactBundle\EventListener;
 
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
-
-use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 
 class PrepareResultItemListener
 {
@@ -25,7 +24,7 @@ class PrepareResultItemListener
     public function prepareEmailItemDataEvent(PrepareResultItemEvent $event)
     {
         if (trim($event->getResultItem()->getRecordTitle()) ||
-            $event->getResultItem()->getEntityName() !== 'OroCRM\Bundle\ContactBundle\Entity\Contact'
+            $event->getResultItem()->getEntityName() !== 'Oro\Bundle\ContactBundle\Entity\Contact'
         ) {
             return;
         }

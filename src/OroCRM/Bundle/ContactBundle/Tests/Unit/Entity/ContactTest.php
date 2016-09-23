@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 /**
@@ -413,7 +413,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
+     * @param \Oro\Bundle\ContactBundle\Entity\Contact $contact
      */
     protected function getFirstNameTest($contact)
     {
@@ -421,7 +421,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
+     * @param \Oro\Bundle\ContactBundle\Entity\Contact $contact
      */
     protected function toStringTest($contact)
     {
@@ -460,9 +460,9 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     {
         $now = new \DateTime('now');
         $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User');
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
-        $source = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
-        $method = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Method');
+        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
+        $source = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
+        $method = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Method');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return array(

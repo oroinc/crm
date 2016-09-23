@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -49,15 +49,15 @@ class CustomerDataGridListener
         $filters = $config->offsetGetByPath('[filters][columns]', []);
         if (!array_key_exists('isSubscriber', $filters)) {
             $filters['isSubscriber'] = [
-                'label' => 'orocrm.magento.datagrid.columns.is_subscriber.label',
+                'label' => 'oro.magento.datagrid.columns.is_subscriber.label',
                 'type' => 'single_choice',
                 'data_name' => 'isSubscriber',
                 'options' => [
                     'field_options' => [
                         'choices' => [
-                            'unknown' => 'orocrm.magento.datagrid.columns.is_subscriber.unknown',
-                            'no' => 'orocrm.magento.datagrid.columns.is_subscriber.no',
-                            'yes' => 'orocrm.magento.datagrid.columns.is_subscriber.yes'
+                            'unknown' => 'oro.magento.datagrid.columns.is_subscriber.unknown',
+                            'no' => 'oro.magento.datagrid.columns.is_subscriber.no',
+                            'yes' => 'oro.magento.datagrid.columns.is_subscriber.yes'
                         ]
                     ]
                 ]
@@ -85,7 +85,7 @@ class CustomerDataGridListener
             END as isSubscriber";
 
         $query['join']['left'][] = [
-            'join' => 'OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+            'join' => 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
             'alias' => 'transport',
             'conditionType' => 'WITH',
             'condition' => 'channel.transport = transport'

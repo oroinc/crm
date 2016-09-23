@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LoadLeadPhoneData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -17,7 +17,7 @@ class LoadLeadPhoneData extends AbstractFixture implements DependentFixtureInter
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
+            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
+namespace Oro\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -16,8 +16,8 @@ class CommandsTest extends WebTestCase
         $this->initClient();
         $this->loadFixtures(
             array(
-                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
-                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
+                'Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
+                'Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
             )
         );
     }

@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
-
-use OroCRM\Bundle\MagentoBundle\Converter\WebsiteCollectionToString;
+use Oro\Bundle\MagentoBundle\Converter\WebsiteCollectionToString;
 
 class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,11 +28,11 @@ class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase
      */
     public function converterCallbackDataProvider()
     {
-        $websiteMock1 = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $websiteMock1 = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $websiteMock1->expects($this->any())->method('getName')
             ->will($this->returnValue('website 1'));
 
-        $websiteMock2 = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Website');
+        $websiteMock2 = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $websiteMock2->expects($this->any())->method('getName')
             ->will($this->returnValue('website 2'));
 

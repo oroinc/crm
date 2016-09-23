@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType;
+use Oro\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType;
 
 class ContactInformationEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,6 +27,6 @@ class ContactInformationEntityChoiceTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_marketing_list_contact_information_entity_choice', $this->type->getName());
+        $this->assertEquals('oro_marketing_list_contact_information_entity_choice', $this->type->getName());
     }
 }

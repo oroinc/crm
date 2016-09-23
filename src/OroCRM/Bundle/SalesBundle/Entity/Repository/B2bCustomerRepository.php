@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
+namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerRepository extends EntityRepository
 {
@@ -19,7 +19,7 @@ class B2bCustomerRepository extends EntityRepository
      */
     public function calculateLifetimeValue(B2bCustomer $customer)
     {
-        $qb = $this->getEntityManager()->getRepository('OroCRMSalesBundle:Opportunity')
+        $qb = $this->getEntityManager()->getRepository('OroSalesBundle:Opportunity')
             ->createQueryBuilder('o');
         $qb->select('SUM(o.closeRevenue)');
         $qb->innerJoin('o.customer', 'c');

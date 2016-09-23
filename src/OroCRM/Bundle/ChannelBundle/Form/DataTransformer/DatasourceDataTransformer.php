@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\DataTransformer;
+namespace Oro\Bundle\ChannelBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;

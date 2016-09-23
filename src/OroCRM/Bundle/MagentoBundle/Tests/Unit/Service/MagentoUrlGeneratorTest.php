@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
-use OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 
 class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
     }

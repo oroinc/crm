@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
-use OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
+use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
 
 class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->transport = $this
-            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface')
             ->getMock();
 
         $this->validator = new UniqueCustomerEmailValidator($this->transport);
@@ -124,14 +124,14 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getTransport')
             ->will($this->returnValue($transport));
 
-        $store = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Store')
+        $store = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Store')
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->once())
             ->method('getOriginId')
             ->will($this->returnValue(42));
 
-        $customer = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+        $customer = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         $customer->expects($this->once())

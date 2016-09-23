@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class SalesFunnelTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,16 +27,16 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
     {
         $now          = new \DateTime('now');
         $organization = new Organization();
-        $lead         = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+        $lead         = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
             ->disableOriginalConstructor()
             ->getMock();
-        $opportunity  = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Opportunity')
+        $opportunity  = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Opportunity')
             ->disableOriginalConstructor()
             ->getMock();
         $user         = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
             ->disableOriginalConstructor()
             ->getMock();
-        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return array(
             'startDate'    => array('startDate', $now, $now),

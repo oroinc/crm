@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Config;
+namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Config;
 
 use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
-use OroCRM\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
@@ -33,7 +33,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->activityContactProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider')
+            ->getMockBuilder('Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider')
             ->disableOriginalConstructor()
             ->getMock();
 

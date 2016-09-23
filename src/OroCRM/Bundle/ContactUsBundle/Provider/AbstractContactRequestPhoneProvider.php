@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Provider;
+namespace Oro\Bundle\ContactUsBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
-use OroCRM\Bundle\ContactUsBundle\Entity\AbstractContactRequest;
+use Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest;
 
 class AbstractContactRequestPhoneProvider implements PhoneProviderInterface
 {

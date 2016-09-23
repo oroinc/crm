@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class LoadContactData extends AbstractFixture
 {
@@ -17,7 +17,7 @@ class LoadContactData extends AbstractFixture
             'firstName' => 'Daniel',
             'lastName'  => 'Case',
             'email'     => 'daniel.case@example.com',
-            'reference' => 'orocrm_case_contact'
+            'reference' => 'oro_case_contact'
         )
     );
 

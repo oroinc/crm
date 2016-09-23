@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
+use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,9 +34,9 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->registry        = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
-        $this->settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
-        $this->event           = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent')
+        $this->event           = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')
             ->setMethods(['getDataSource', 'getChannel'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,8 +67,8 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
     {
         $this->entity->setEntities(
             [
-                'OroCRM\Bundle\AcmeBundle\Entity\TestEntity1',
-                'OroCRM\Bundle\AcmeBundle\Entity\TestEntity2',
+                'Oro\Bundle\AcmeBundle\Entity\TestEntity1',
+                'Oro\Bundle\AcmeBundle\Entity\TestEntity2',
             ]
         );
 
@@ -80,13 +79,13 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
         $this->settingProvider
             ->expects($this->at(0))
             ->method('getIntegrationConnectorName')
-            ->with('OroCRM\Bundle\AcmeBundle\Entity\TestEntity1')
+            ->with('Oro\Bundle\AcmeBundle\Entity\TestEntity1')
             ->will($this->returnValue('TestConnector1'));
 
         $this->settingProvider
             ->expects($this->at(1))
             ->method('getIntegrationConnectorName')
-            ->with('OroCRM\Bundle\AcmeBundle\Entity\TestEntity2')
+            ->with('Oro\Bundle\AcmeBundle\Entity\TestEntity2')
             ->will($this->returnValue('TestConnector2'));
 
         $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Transport;
+namespace Oro\Bundle\CampaignBundle\Transport;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 interface TransportInterface
 {

@@ -1,10 +1,10 @@
-orocrm_account_bundle:
-    resource:     "@OroCRMAccountBundle/Controller"
+oro_account_bundle:
+    resource:     "@OroAccountBundle/Controller"
     type:         annotation
     prefix:       /account
 
-orocrm_account_api_account:
-    resource:     "@OroCRMAccountBundle/Controller/Api/Rest/AccountController.php"
+oro_account_api_account:
+    resource:     "@OroAccountBundle/Controller/Api/Rest/AccountController.php"
     type:         rest
     prefix:       api/rest/{version}/
     requirements:
@@ -17,7 +17,7 @@ oro_api_post_account_deprecated:
     path:            /api/rest/{version}/account.{_format}
     methods:         [POST]
     defaults:
-        _controller: OroCRM\Bundle\AccountBundle\Controller\Api\Rest\AccountController::postAction
+        _controller: Oro\Bundle\AccountBundle\Controller\Api\Rest\AccountController::postAction
         _format:     json
         version:     latest
     requirements:

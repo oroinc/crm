@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use JMS\JobQueueBundle\Entity\Job;
 
@@ -18,7 +18,7 @@ class UpdateCustomerAddresses extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var EntityRepository $repository */
-        $repository = $manager->getRepository('OroCRMMagentoBundle:Address');
+        $repository = $manager->getRepository('OroMagentoBundle:Address');
 
         $qb = $repository->createQueryBuilder('a');
         $qb->leftJoin('a.owner', 'c');

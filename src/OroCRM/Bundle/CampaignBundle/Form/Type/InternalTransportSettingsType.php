@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class InternalTransportSettingsType extends AbstractTransportSettingsType
 {
-    const NAME = 'orocrm_campaign_internal_transport_settings';
+    const NAME = 'oro_campaign_internal_transport_settings';
 
     /**
      * @param FormBuilderInterface $builder
@@ -20,10 +20,10 @@ class InternalTransportSettingsType extends AbstractTransportSettingsType
                 'template',
                 'oro_email_template_list',
                 [
-                    'label' => 'orocrm.campaign.emailcampaign.template.label',
+                    'label' => 'oro.campaign.emailcampaign.template.label',
                     'required' => true,
                     'depends_on_parent_field' => 'marketingList',
-                    'data_route' => 'orocrm_api_get_emailcampaign_email_templates',
+                    'data_route' => 'oro_api_get_emailcampaign_email_templates',
                     'data_route_parameter' => 'id'
                 ]
             );
@@ -38,7 +38,7 @@ class InternalTransportSettingsType extends AbstractTransportSettingsType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings'
+                'data_class' => 'Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings'
             ]
         );
     }

@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-
-use OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
 
 /**
  * @outputBuffering enabled
@@ -39,13 +38,13 @@ class OrderPlaceControllerTest extends WebTestCase
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
 
-        $this->soapTransport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
+        $this->soapTransport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
             ->setMethods(['init', 'call', 'getCarts', 'getCustomers', 'getOrders'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->getContainer()->set('orocrm_magento.transport.soap_transport', $this->soapTransport);
+        $this->getContainer()->set('oro_magento.transport.soap_transport', $this->soapTransport);
     }
 
     protected function postFixtureLoad()
@@ -62,7 +61,7 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_orderplace_cart',
+                'oro_magento_orderplace_cart',
                 [
                     'id'               => $this->cart->getId(),
                     '_widgetContainer' => 'block',
@@ -102,7 +101,7 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_orderplace_new_cart_order_sync', ['id' => $this->cart->getId()]),
+            $this->getUrl('oro_magento_orderplace_new_cart_order_sync', ['id' => $this->cart->getId()]),
             [],
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
@@ -115,12 +114,12 @@ class OrderPlaceControllerTest extends WebTestCase
         $this->assertEquals('Data successfully synchronized.', $arrayJson['message']);
         $this->assertEquals(
             $arrayJson['url'],
-            $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
+            $this->getUrl('oro_magento_order_view', ['id' => $this->order->getId()])
         );
         $jobManager->rollback();
         $jobManager->getConnection()->close();
 
-        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->cart->getId()]));
+        $this->client->request('GET', $this->getUrl('oro_magento_cart_view', ['id' => $this->cart->getId()]));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
@@ -209,7 +208,7 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_orderplace_new_customer_order_sync', ['id' => $this->customer->getId()]),
+            $this->getUrl('oro_magento_orderplace_new_customer_order_sync', ['id' => $this->customer->getId()]),
             [],
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
@@ -225,12 +224,12 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $this->assertEquals(
             $arrayJson['url'],
-            $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
+            $this->getUrl('oro_magento_order_view', ['id' => $this->order->getId()])
         );
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_customer_view', ['id' => $this->customer->getId()])
+            $this->getUrl('oro_magento_customer_view', ['id' => $this->customer->getId()])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);

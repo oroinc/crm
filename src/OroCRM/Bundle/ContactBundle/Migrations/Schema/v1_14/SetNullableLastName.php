@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_14;
+namespace Oro\Bundle\ContactBundle\Migrations\Schema\v1_14;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,7 +14,7 @@ class AllowNullableFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_contact');
+        $table = $schema->getTable('oro_contact');
         
         $lastNameColumn = $table->getColumn('last_name');
         $lastNameColumn->setNotnull(false);

@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
+use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,14 +25,14 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->manager = $this->getMockBuilder('OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
+        $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->listener = new RFMCategoryListener(
             $this->manager,
-            'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
-            'OroCRM\Bundle\ChannelBundle\Entity\Channel'
+            'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
+            'Oro\Bundle\ChannelBundle\Entity\Channel'
         );
     }
 
@@ -139,7 +139,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     protected function getChannel($channelId = 1, array $data = [])
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $channel->expects($this->any())
             ->method('getId')

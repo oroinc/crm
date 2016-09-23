@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Controller\Api\Rest;
+namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,12 +12,11 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @Rest\RouteResource("case/comment")
- * @Rest\NamePrefix("orocrm_case_api_")
+ * @Rest\NamePrefix("oro_case_api_")
  */
 class CommentController extends RestController implements ClassResourceInterface
 {
@@ -38,11 +37,11 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Get list of case comments",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_comment_view")
+     * @AclAncestor("oro_case_comment_view")
      */
     public function cgetAction(CaseEntity $case)
     {
-        $comments = $this->get('orocrm_case.manager')
+        $comments = $this->get('oro_case.manager')
             ->getCaseComments(
                 $case,
                 $this->getRequest()->get('order', 'DESC')
@@ -62,7 +61,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Get CaseComment item",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_comment_view")
+     * @AclAncestor("oro_case_comment_view")
      * @return Response
      */
     public function getAction($id)
@@ -79,7 +78,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Update CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_comment_update")
+     * @AclAncestor("oro_case_comment_update")
      * @return Response
      */
     public function putAction($id)
@@ -98,7 +97,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Create new CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_comment_create")
+     * @AclAncestor("oro_case_comment_create")
      */
     public function postAction(CaseEntity $case)
     {
@@ -114,7 +113,7 @@ class CommentController extends RestController implements ClassResourceInterface
      *     description="Delete CaseComment",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_comment_delete")
+     * @AclAncestor("oro_case_comment_delete")
      * @return Response
      */
     public function deleteAction($id)
@@ -127,7 +126,7 @@ class CommentController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_case.manager.comment.api');
+        return $this->get('oro_case.manager.comment.api');
     }
 
     /**
@@ -135,7 +134,7 @@ class CommentController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.comment.api');
+        return $this->get('oro_case.form.comment.api');
     }
 
     /**
@@ -143,7 +142,7 @@ class CommentController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_case.form.handler.comment.api');
+        return $this->get('oro_case.form.handler.comment.api');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -69,7 +69,7 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.lead_phone.manager.api');
+        return $this->get('oro_sales.lead_phone.manager.api');
     }
 
     /**
@@ -77,7 +77,7 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.form.type.lead_phone.handler');
+        return $this->get('oro_sales.form.type.lead_phone.handler');
     }
 
     /**
@@ -85,7 +85,7 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.form.type.lead_phone.type');
+        return $this->get('oro_sales.form.type.lead_phone.type');
     }
 
     /**
@@ -93,6 +93,6 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
      */
     public function getDeleteHandler()
     {
-        return $this->get('orocrm_sales.form.type.lead_phone.handler');
+        return $this->get('oro_sales.form.type.lead_phone.handler');
     }
 }

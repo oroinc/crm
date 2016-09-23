@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
+use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator;
 
 class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +14,7 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
 
     public function setUp()
     {
-        $this->provider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
     }
 
@@ -42,7 +41,7 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
      */
     public function testValidateValid($isValid, $integration)
     {
-        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channel = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()->getMock();
         $context = $this->getMockBuilder('Symfony\Component\Validator\ExecutionContext')
             ->disableOriginalConstructor()->getMock();

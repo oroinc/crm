@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -48,7 +48,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
      */
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
-        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
+        if (is_a($entityName, 'Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
             $identityValues['channel'] = $this->context->getOption('channel');
         }
 
@@ -69,7 +69,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
      */
     protected function combineIdentityValues($entity, $entityClass, array $searchContext)
     {
-        if (is_a($entityClass, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
+        if (is_a($entityClass, 'Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
             $searchContext['channel'] = $this->context->getOption('channel');
         }
 

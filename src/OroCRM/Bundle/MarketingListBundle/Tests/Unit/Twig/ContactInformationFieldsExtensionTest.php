@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Twig;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Twig;
 
-use OroCRM\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension;
+use Oro\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension;
 
 class ContactInformationFieldsExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class ContactInformationFieldsExtensionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
+        $this->helper = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->extension = new ContactInformationFieldsExtension($this->helper);

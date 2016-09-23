@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Grid;
+namespace Oro\Bundle\MagentoBundle\Grid;
 
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;

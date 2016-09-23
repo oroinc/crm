@@ -12,7 +12,7 @@ Abandoned Shopping Cart Flow
 This workflow is used to process shopping cart from external sources (f.e. from Magento) and to try
 to convert it to opportunity.
 
-The workflow should be managed trough `orocrm_magento.manager.abandoned_shopping_cart_flow` service that is an instance of `Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager`
+The workflow should be managed trough `oro_magento.manager.abandoned_shopping_cart_flow` service that is an instance of `Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager`
 
 ### Definitions
 

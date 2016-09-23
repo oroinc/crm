@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
 
 use FOS\RestBundle\Util\Codes;
 
@@ -24,13 +24,13 @@ class MarketingListRemovedItemControllerTest extends WebTestCase
     {
         $marketingListId = $this->getContainer()
             ->get('doctrine')
-            ->getRepository('OroCRMMarketingListBundle:MarketingList')
+            ->getRepository('OroMarketingListBundle:MarketingList')
             ->findOneBy([])
             ->getId();
 
         $this->client->request(
             'POST',
-            $this->getUrl('orocrm_api_post_marketinglist_removeditem'),
+            $this->getUrl('oro_api_post_marketinglist_removeditem'),
             [
                 'entityId'      => 1,
                 'marketingList' => $marketingListId
@@ -54,7 +54,7 @@ class MarketingListRemovedItemControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_marketinglist_removeditem', ['id' => $id])
+            $this->getUrl('oro_api_delete_marketinglist_removeditem', ['id' => $id])
         );
 
         $this->assertEmptyResponseStatusCodeEquals(

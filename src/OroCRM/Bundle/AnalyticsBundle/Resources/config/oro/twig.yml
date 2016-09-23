@@ -1,2 +1,2 @@
 bundles:
-    - OroCRMAnalyticsBundle:Form:fields.html.twig
+    - OroAnalyticsBundle:Form:fields.html.twig

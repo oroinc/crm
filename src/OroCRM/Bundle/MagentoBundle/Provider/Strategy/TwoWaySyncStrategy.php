@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Strategy;
+namespace Oro\Bundle\MagentoBundle\Provider\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 

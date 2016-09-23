@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConverter;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 
 class CartDataConverter extends AbstractTreeDataConverter
 {

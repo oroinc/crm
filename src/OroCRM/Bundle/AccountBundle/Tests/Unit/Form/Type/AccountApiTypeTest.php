@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
+use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -32,7 +32,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $securityFacade->expects($this->any())
             ->method('isGranted')
-            ->with('orocrm_contact_view')
+            ->with('oro_contact_view')
             ->will($this->returnValue($havePrivilege));
 
         $this->type = new AccountApiType($router, $entityNameResolver, $securityFacade);

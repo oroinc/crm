@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Guesser;
+namespace Oro\Bundle\ChannelBundle\Form\Guesser;
 
 use Symfony\Component\Form\Guess\TypeGuess;
 use Symfony\Component\Form\Guess\ValueGuess;
@@ -16,7 +16,7 @@ class ChannelTypeGuesser implements FormTypeGuesserInterface
     {
         if ($className == 'Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm' && $property == 'dataChannel') {
             return new TypeGuess(
-                'orocrm_channel_select_type',
+                'oro_channel_select_type',
                 [
                     'constraints' => [new Assert\NotBlank()]
                 ],

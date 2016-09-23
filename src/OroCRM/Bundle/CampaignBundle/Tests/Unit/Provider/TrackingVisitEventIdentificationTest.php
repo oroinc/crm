@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\TrackingBundle\Entity\TrackingEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
-
-use OroCRM\Bundle\CampaignBundle\Provider\TrackingVisitEventIdentification;
+use Oro\Bundle\CampaignBundle\Provider\TrackingVisitEventIdentification;
 
 class TrackingVisitEventIdentificationTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +43,7 @@ class TrackingVisitEventIdentificationTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                'OroCRM\Bundle\CampaignBundle\Entity\Campaign'
+                'Oro\Bundle\CampaignBundle\Entity\Campaign'
             ],
             $this->provider->getEventTargets()
         );
@@ -78,7 +77,7 @@ class TrackingVisitEventIdentificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->em->expects($this->once())
             ->method('getRepository')
-            ->with('OroCRMCampaignBundle:Campaign')
+            ->with('OroCampaignBundle:Campaign')
             ->willReturn($repo);
         $repo->expects($this->once())->method('findOneBy')
             ->with(['code' => 'test'])

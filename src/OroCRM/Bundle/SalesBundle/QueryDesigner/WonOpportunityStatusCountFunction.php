@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
+namespace Oro\Bundle\SalesBundle\QueryDesigner;
 
 class WonOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
 {

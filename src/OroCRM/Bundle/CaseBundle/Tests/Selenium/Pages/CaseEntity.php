@@ -1,17 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\CaseBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Case
  *
- * @package OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\CaseBundle\Tests\Selenium\Pages
  */
 class CaseEntity extends AbstractPageEntity
 {
-    protected $owner = "//div[starts-with(@id,'s2id_orocrm_case_form_owner')]/a";
+    protected $owner = "//div[starts-with(@id,'s2id_oro_case_form_owner')]/a";
 
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $subject;
@@ -24,10 +24,10 @@ class CaseEntity extends AbstractPageEntity
 
     public function init()
     {
-        $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_subject']");
-        $this->resolution = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_resolution']");
+        $this->subject = $this->test->byXpath("//*[@data-ftid='oro_case_entity_form_subject']");
+        $this->resolution = $this->test->byXpath("//*[@data-ftid='oro_case_entity_form_resolution']");
         $this->status = $this->test
-            ->select($this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_status']"));
+            ->select($this->test->byXpath("//*[@data-ftid='oro_case_entity_form_status']"));
 
         return $this;
     }
@@ -46,7 +46,7 @@ class CaseEntity extends AbstractPageEntity
 
     public function setDescription($description)
     {
-        return $this->setContentToTinymceElement('orocrm_case_entity_form_description', $description);
+        return $this->setContentToTinymceElement('oro_case_entity_form_description', $description);
     }
 
     public function getDescription()

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Tests\Functional\Datagrid;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider;
+use Oro\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider;
 
 /**
  * @dbIsolation

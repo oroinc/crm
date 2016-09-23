@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
 class LoadSourceData extends AbstractTranslatableEntityFixture
@@ -29,7 +28,7 @@ class LoadSourceData extends AbstractTranslatableEntityFixture
      */
     protected function loadEntities(ObjectManager $manager)
     {
-        $sourceRepository = $manager->getRepository('OroCRMCaseBundle:CaseSource');
+        $sourceRepository = $manager->getRepository('OroCaseBundle:CaseSource');
 
         $translationLocales = $this->getTranslationLocales();
 

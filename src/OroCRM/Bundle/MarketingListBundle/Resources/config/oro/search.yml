@@ -1,13 +1,13 @@
 search:
-    OroCRM\Bundle\MarketingListBundle\Entity\MarketingList:
-        alias: orocrm_marketing_list
+    Oro\Bundle\MarketingListBundle\Entity\MarketingList:
+        alias: oro_marketing_list
         title_fields: [name]
-        label: orocrm.marketinglist.entity_plural_label
+        label: oro.marketinglist.entity_plural_label
         route:
-            name: orocrm_marketing_list_view
+            name: oro_marketing_list_view
             parameters:
                 id: id
-        search_template: OroCRMMarketingListBundle:MarketingList:searchResult.html.twig
+        search_template: OroMarketingListBundle:MarketingList:searchResult.html.twig
         fields:
             -
                 name:                   name

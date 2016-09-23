@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
+namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
@@ -9,10 +9,9 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 class OrderRepository extends ChannelAwareEntityRepository
 {
@@ -150,7 +149,7 @@ class OrderRepository extends ChannelAwareEntityRepository
     ) {
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
-        $channels      = $entityManager->getRepository('OroCRMChannelBundle:Channel')
+        $channels      = $entityManager->getRepository('OroChannelBundle:Channel')
             ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
 
         // execute data query

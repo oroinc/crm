@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class EmailCampaignTest extends AbstractEntityTestCase
 {
@@ -16,7 +15,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign';
+        return 'Oro\Bundle\CampaignBundle\Entity\EmailCampaign';
     }
 
     /**
@@ -28,7 +27,7 @@ class EmailCampaignTest extends AbstractEntityTestCase
         $marketingList = new MarketingList();
         $owner         = new User();
         $date          = new \DateTime('now', new \DateTimeZone('UTC'));
-        $transportSettings = $this->getMockForAbstractClass('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings');
+        $transportSettings = $this->getMockForAbstractClass('Oro\Bundle\CampaignBundle\Entity\TransportSettings');
 
         return [
             'name'          => ['name', 'test', 'test'],

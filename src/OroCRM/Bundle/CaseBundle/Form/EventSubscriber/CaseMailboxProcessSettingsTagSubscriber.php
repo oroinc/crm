@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\EventSubscriber;
+namespace Oro\Bundle\CaseBundle\Form\EventSubscriber;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -8,8 +8,7 @@ use Symfony\Component\Form\FormEvents;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\TagBundle\Form\EventSubscriber\TagSubscriber;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 
 class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
 {

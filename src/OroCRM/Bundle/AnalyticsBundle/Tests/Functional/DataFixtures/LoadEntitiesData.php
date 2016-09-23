@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -8,8 +8,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class LoadEntitiesData extends AbstractFixture implements DependentFixtureInterface
 {

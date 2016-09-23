@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-
-use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 
 /**
  * Remove WSDL cache for integration scheduled for removal.

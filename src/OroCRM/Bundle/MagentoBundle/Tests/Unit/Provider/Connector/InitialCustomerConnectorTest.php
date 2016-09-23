@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector;
 
 class InitialCustomerConnectorTest extends InitialConnectorTestCase
 {

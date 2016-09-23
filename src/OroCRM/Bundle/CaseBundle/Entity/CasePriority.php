@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Entity;
+namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,8 +12,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_case_priority")
- * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CasePriorityTranslation")
+ * @ORM\Table(name="oro_case_priority")
+ * @Gedmo\TranslationEntity(class="Oro\Bundle\CaseBundle\Entity\CasePriorityTranslation")
  * @Config(
  *      defaultValues={
  *          "grouping"={

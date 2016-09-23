@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 
 /**
  * @outputBuffering enabled
@@ -38,14 +37,14 @@ class CaseControllerTest extends WebTestCase
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
         $this->initSoapClient();
     }
 
     protected function postFixtureLoad()
     {
         $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneByEmail('daniel.case@example.com');
 
         $this->assertNotNull($contact);

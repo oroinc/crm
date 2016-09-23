@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Builder;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Builder;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 {

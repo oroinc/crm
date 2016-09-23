@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
+use Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint;
 
 class ChannelIntegrationConstraintTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,6 +15,6 @@ class ChannelIntegrationConstraintTest extends \PHPUnit_Framework_TestCase
     public function testValidatedBy()
     {
         $constraint = new ChannelIntegrationConstraint();
-        $this->assertSame('orocrm_channel.validator.channel_integration', $constraint->validatedBy());
+        $this->assertSame('oro_channel.validator.channel_integration', $constraint->validatedBy());
     }
 }

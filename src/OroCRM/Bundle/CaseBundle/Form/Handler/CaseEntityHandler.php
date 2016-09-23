@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Handler;
+namespace Oro\Bundle\CaseBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -9,9 +9,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-
-use OroCRM\Bundle\CaseBundle\Event\Events;
-use OroCRM\Bundle\CaseBundle\Event\FormHandlerEvent;
+use Oro\Bundle\CaseBundle\Event\Events;
+use Oro\Bundle\CaseBundle\Event\FormHandlerEvent;
 
 class CaseEntityHandler extends ApiFormHandler
 {

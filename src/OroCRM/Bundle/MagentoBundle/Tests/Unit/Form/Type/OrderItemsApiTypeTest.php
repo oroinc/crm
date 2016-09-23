@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\OrderItemsApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderItemsApiType;
 
 class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +41,7 @@ class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             'discountPercent' => 'oro_percent',
             'discountAmount'  => 'oro_money',
             'rowTotal'        => 'oro_money',
-            'order'           => 'orocrm_order_select',
+            'order'           => 'oro_order_select',
             'productType'     => 'text',
             'productOptions'  => 'text',
             'isVirtual'       => 'checkbox',
@@ -70,7 +70,7 @@ class OrderItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\OrderItem',
+                    'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\OrderItem',
                     'csrf_protection' => false,
                 ]
             );

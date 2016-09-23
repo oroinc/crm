@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,8 +9,8 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\QueryDesignerBundle\Form\Type\AbstractQueryDesignerType;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType as MarketingListTypeEntity;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType as MarketingListTypeEntity;
 
 class MarketingListType extends AbstractQueryDesignerType
 {
@@ -21,7 +21,7 @@ class MarketingListType extends AbstractQueryDesignerType
     {
         $builder
             ->add('name', 'text', ['required' => true])
-            ->add('entity', 'orocrm_marketing_list_contact_information_entity_choice', ['required' => true])
+            ->add('entity', 'oro_marketing_list_contact_information_entity_choice', ['required' => true])
             ->add('description', 'oro_resizeable_rich_text', ['required' => false]);
 
         // TODO: remove this listener after full support of manual marketing lists CRM-1878
@@ -50,10 +50,10 @@ class MarketingListType extends AbstractQueryDesignerType
                     'type',
                     'entity',
                     [
-                        'class' => 'OroCRMMarketingListBundle:MarketingListType',
+                        'class' => 'OroMarketingListBundle:MarketingListType',
                         'property' => 'label',
                         'required' => true,
-                        'empty_value' => 'orocrm.marketinglist.form.choose_marketing_list_type',
+                        'empty_value' => 'oro.marketinglist.form.choose_marketing_list_type',
                         'query_builder' => $qb
                     ]
                 );
@@ -84,7 +84,7 @@ class MarketingListType extends AbstractQueryDesignerType
         $options = array_merge(
             $this->getDefaultOptions(),
             [
-                'data_class' => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
+                'data_class' => 'Oro\Bundle\MarketingListBundle\Entity\MarketingList',
                 'intention' => 'marketing_list',
                 'cascade_validation' => true
             ]
@@ -106,6 +106,6 @@ class MarketingListType extends AbstractQueryDesignerType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_marketing_list';
+        return 'oro_marketing_list';
     }
 }

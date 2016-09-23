@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Stub;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Stub;
 
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity as BaseOpportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity as BaseOpportunity;
 
 class Opportunity extends BaseOpportunity
 {

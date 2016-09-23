@@ -18,26 +18,26 @@
         }
     } %}
 
-    <div data-page-component-module="orocrmchannel/js/app/components/channel"
+    <div data-page-component-module="orochannel/js/app/components/channel"
          data-page-component-options="{{ options|json_encode }}"></div>
 {% endmacro %}
 
 {#
     Renders and initialize entity list compoenent in view mode
     params:
-        channel - OroCRM\Bundle\ChannelBundle\Entity\Channel
+        channel - Oro\Bundle\ChannelBundle\Entity\Channel
 #}
 {% macro inializeEntitiesViewComponent(channel) %}
     {% set containerIdentifier = 'entities-list-view' %}
 
     <div id="{{ containerIdentifier }}"></div>
     <script type="text/javascript">
-        require(['jquery', 'orocrmchannel/js/entity-management/entity-component-view'],
+        require(['jquery', 'orochannel/js/entity-management/entity-component-view'],
         function ($, EntityComponentView) {
             var entityComponentView = new EntityComponentView({
                 data:     {{ channel.entities|json_encode|raw }},
                 mode:     EntityComponentView.prototype.MODES.VIEW_MODE,
-                metadata: {{ orocrm_channel_entities_metadata()|json_encode|raw }}
+                metadata: {{ oro_channel_entities_metadata()|json_encode|raw }}
             });
 
             entityComponentView.render();
@@ -50,7 +50,7 @@
     Renders channel property for entities that aware of it. Check wheter view of channel is allowed then renders
     link to channel view page.
     params:
-        entity - entity instanse of OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface
+        entity - entity instanse of Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface
         params - set of params required for render(e.g. label etc..)
 #}
 {% macro renderChannelProperty(entity, params = {}) %}
@@ -58,11 +58,11 @@
 
     {% set label = params.label is defined
         ? params.label
-        :  oro_entity_config_value('OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel', 'label')
+        :  oro_entity_config_value('Oro\\Bundle\\ChannelBundle\\Entity\\Channel', 'label')
     %}
 
     {%- if entity.dataChannel and resource_granted('VIEW', entity.dataChannel) -%}
-        {% set channelView = '<a href="' ~ path('orocrm_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
+        {% set channelView = '<a href="' ~ path('oro_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
     {%- else -%}
         {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}
     {%- endif -%}

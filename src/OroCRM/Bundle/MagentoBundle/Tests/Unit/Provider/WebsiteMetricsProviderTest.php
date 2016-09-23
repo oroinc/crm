@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
-use OroCRM\Bundle\MagentoBundle\Provider\WebsiteMetricsProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
+use Oro\Bundle\MagentoBundle\Provider\WebsiteMetricsProvider;
 
 class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase
 {

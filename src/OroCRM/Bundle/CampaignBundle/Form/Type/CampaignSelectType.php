@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,9 +15,9 @@ class CampaignSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'campaigns',
-                'create_form_route' => 'orocrm_campaign_create',
+                'create_form_route' => 'oro_campaign_create',
                 'configs' => [
-                    'placeholder' => 'orocrm.campaign.form.choose_campaign'
+                    'placeholder' => 'oro.campaign.form.choose_campaign'
                 ],
             ]
         );
@@ -44,6 +44,6 @@ class CampaignSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_campaign_select';
+        return 'oro_campaign_select';
     }
 }

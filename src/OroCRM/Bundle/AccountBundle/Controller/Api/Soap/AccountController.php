@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Controller\Api\Soap;
+namespace Oro\Bundle\AccountBundle\Controller\Api\Soap;
 
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
@@ -15,7 +15,7 @@ class AccountController extends SoapController
      * @Soap\Method("getAccounts")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\AccountBundle\Entity\Account[]")
+     * @Soap\Result(phpType = "Oro\Bundle\AccountBundle\Entity\Account[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +25,7 @@ class AccountController extends SoapController
     /**
      * @Soap\Method("getAccount")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @Soap\Result(phpType = "Oro\Bundle\AccountBundle\Entity\Account")
      */
     public function getAction($id)
     {
@@ -34,7 +34,7 @@ class AccountController extends SoapController
 
     /**
      * @Soap\Method("createAccount")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @Soap\Param("account", phpType = "Oro\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "int")
      */
     public function createAction($account)
@@ -45,7 +45,7 @@ class AccountController extends SoapController
     /**
      * @Soap\Method("updateAccount")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @Soap\Param("account", phpType = "Oro\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $account)
@@ -68,7 +68,7 @@ class AccountController extends SoapController
      */
     public function getManager()
     {
-        return $this->container->get('orocrm_account.account.manager.api');
+        return $this->container->get('oro_account.account.manager.api');
     }
 
     /**
@@ -76,7 +76,7 @@ class AccountController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_account.form.account.api');
+        return $this->container->get('oro_account.form.account.api');
     }
 
     /**
@@ -84,6 +84,6 @@ class AccountController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_account.form.handler.account.api');
+        return $this->container->get('oro_account.form.handler.account.api');
     }
 }

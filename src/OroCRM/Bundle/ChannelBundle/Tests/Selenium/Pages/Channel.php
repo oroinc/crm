@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\ChannelBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Channel
- * @package OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\ChannelBundle\Tests\Selenium\Pages
  * {@inheritdoc}
  */
 class Channel extends AbstractPageEntity
@@ -18,7 +18,7 @@ class Channel extends AbstractPageEntity
     public function setStatus($status)
     {
         $element = $this->test
-            ->select($this->test->byXpath("//*[@data-ftid='orocrm_channel_form_status']"));
+            ->select($this->test->byXpath("//*[@data-ftid='oro_channel_form_status']"));
         $element->selectOptionByLabel($status);
 
         return $this;
@@ -30,7 +30,7 @@ class Channel extends AbstractPageEntity
      */
     public function setName($name)
     {
-        $element = $this->test->byXpath("//*[@data-ftid='orocrm_channel_form_name']");
+        $element = $this->test->byXpath("//*[@data-ftid='oro_channel_form_name']");
         $element->clear();
         $element->value($name);
 
@@ -43,7 +43,7 @@ class Channel extends AbstractPageEntity
      */
     public function setType($type)
     {
-        $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_channel_form_channelType')]/a")->click();
+        $this->test->byXPath("//div[starts-with(@id,'s2id_oro_channel_form_channelType')]/a")->click();
         $this->test->byXpath("//li/div[@class='select2-result-label' and contains(text(), '{$type}')]")->click();
         $this->waitForAjax();
         return $this;

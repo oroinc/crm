@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Filter;
+namespace Oro\Bundle\ReportBundle\Filter;
 
 use Oro\Bundle\FilterBundle\Filter\ChoiceFilter;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;

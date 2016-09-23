@@ -4,23 +4,23 @@ namespace Oro\Bundle\CalendarBundle\Tests\Unit\EventListener\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 
-use OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
+use Oro\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\StoreGridListener;
+use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
 
 class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 {

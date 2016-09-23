@@ -1,21 +1,21 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity;
+namespace Oro\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use OroCRM\Bundle\ContactBundle\Model\ExtendContactPhone;
+use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_contact_phone", indexes={
+ * @ORM\Table("oro_contact_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
  *      @ORM\Index(name="phone_idx", columns={"phone"})
  * })
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
  * @Config(
  *      defaultValues={
  *          "entity"={

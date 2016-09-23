@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,14 +12,13 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
-use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class OpportunityType extends AbstractType
 {
-    const NAME = 'orocrm_sales_opportunity';
+    const NAME = 'oro_sales_opportunity';
 
     /** @var ProbabilityProvider */
     protected $probabilityProvider;
@@ -61,25 +60,25 @@ class OpportunityType extends AbstractType
                 'closeReason',
                 'translatable_entity',
                 [
-                    'label'       => 'orocrm.sales.opportunity.close_reason.label',
-                    'class'       => 'OroCRMSalesBundle:OpportunityCloseReason',
+                    'label'       => 'oro.sales.opportunity.close_reason.label',
+                    'class'       => 'OroSalesBundle:OpportunityCloseReason',
                     'property'    => 'label',
                     'required'    => false,
                     'disabled'    => false,
-                    'empty_value' => 'orocrm.sales.form.choose_close_rsn'
+                    'empty_value' => 'oro.sales.form.choose_close_rsn'
                 ]
             )
             ->add(
                 'contact',
-                'orocrm_contact_select',
+                'oro_contact_select',
                 [
                     'required'               => false,
-                    'label'                  => 'orocrm.sales.opportunity.contact.label',
+                    'label'                  => 'oro.sales.opportunity.contact.label',
                     'new_item_property_name' => 'firstName',
                     'configs'                => [
                         'allowCreateNew'          => true,
                         'renderedPropertyName'    => 'fullName',
-                        'placeholder'             => 'orocrm.contact.form.choose_contact',
+                        'placeholder'             => 'oro.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                         'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                     ]
@@ -87,64 +86,64 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customer',
-                'orocrm_sales_b2bcustomer_with_channel_create_or_select',
+                'oro_sales_b2bcustomer_with_channel_create_or_select',
                 [
                     'required'               => true,
-                    'label'                  => 'orocrm.sales.opportunity.customer.label',
+                    'label'                  => 'oro.sales.opportunity.customer.label',
                     'new_item_property_name' => 'name'
                 ]
             )
-            ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
+            ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
             ->add(
                 'dataChannel',
-                'orocrm_channel_select_type',
+                'oro_channel_select_type',
                 [
                     'required' => false,
-                    'label'    => 'orocrm.sales.opportunity.data_channel.label',
-                    'entities' => ['OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'],
+                    'label'    => 'oro.sales.opportunity.data_channel.label',
+                    'entities' => ['Oro\\Bundle\\SalesBundle\\Entity\\Opportunity'],
                 ]
             )
             ->add(
                 'closeDate',
                 'oro_date',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.close_date.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.close_date.label']
             )
             ->add(
                 'probability',
                 'oro_percent',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.probability.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.probability.label']
             )
             ->add(
                 'budgetAmount',
                 'oro_money',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.budget_amount.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.budget_amount.label']
             )
             ->add(
                 'closeRevenue',
                 'oro_money',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.close_revenue.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.close_revenue.label']
             )
             ->add(
                 'customerNeed',
                 'oro_resizeable_rich_text',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.customer_need.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.customer_need.label']
             )
             ->add(
                 'proposedSolution',
                 'oro_resizeable_rich_text',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.proposed_solution.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.proposed_solution.label']
             )
             ->add(
                 'notes',
                 'oro_resizeable_rich_text',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.notes.label']
+                ['required' => false, 'label' => 'oro.sales.opportunity.notes.label']
             )
             ->add(
                 'status',
-                'orocrm_sales_opportunity_status_select',
+                'oro_sales_opportunity_status_select',
                 [
                     'required'    => true,
-                    'label'       => 'orocrm.sales.opportunity.status.label',
+                    'label'       => 'oro.sales.opportunity.status.label',
                     'enum_code'   => Opportunity::INTERNAL_STATUS_CODE,
                     'constraints' => [new NotNull()]
                 ]

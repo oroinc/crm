@@ -1,13 +1,13 @@
 search:
-    OroCRM\Bundle\ContactBundle\Entity\Contact:
-        alias: orocrm_contact
-        label: orocrm.contact.entity_plural_label
+    Oro\Bundle\ContactBundle\Entity\Contact:
+        alias: oro_contact
+        label: oro.contact.entity_plural_label
         title_fields: [namePrefix, firstName, lastName]
         route:
-            name: orocrm_contact_view
+            name: oro_contact_view
             parameters:
                 id: id
-        search_template: OroCRMContactBundle:Contact:searchResult.html.twig
+        search_template: OroContactBundle:Contact:searchResult.html.twig
         fields:
             -
                 name:                   namePrefix

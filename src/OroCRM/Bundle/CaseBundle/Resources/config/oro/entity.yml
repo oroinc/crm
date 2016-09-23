@@ -1,5 +1,5 @@
 oro_entity:
     entity_aliases:
-        OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
+        Oro\Bundle\CaseBundle\Entity\CaseEntity:
             alias:        case
             plural_alias: cases

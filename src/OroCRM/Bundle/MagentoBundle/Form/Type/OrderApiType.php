@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
 
 class OrderApiType extends AbstractType
 {
@@ -45,7 +44,7 @@ class OrderApiType extends AbstractType
         $builder->add('totalAmount', 'oro_money', ['required' => false]);
         $builder->add('status', 'text', ['required' => true]);
 
-        $builder->add('customer', 'orocrm_customer_select', ['required' => false]);
+        $builder->add('customer', 'oro_customer_select', ['required' => false]);
 
         $builder->add(
             'addresses',
@@ -54,18 +53,18 @@ class OrderApiType extends AbstractType
                 'label'    => '',
                 'type'     => 'oro_typed_address',
                 'required' => true,
-                'options'  => ['data_class' => 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress']
+                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderAddress']
             ]
         );
 
         $builder->add(
             'items',
-            'orocrm_order_item_collection',
+            'oro_order_item_collection',
             [
                 'label'    => '',
-                'type'     => 'orocrm_order_item',
+                'type'     => 'oro_order_item',
                 'required' => true,
-                'options'  => ['data_class' => 'OroCRM\Bundle\MagentoBundle\Entity\OrderItem']
+                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\OrderItem']
             ]
         );
 
@@ -83,7 +82,7 @@ class OrderApiType extends AbstractType
             'dataChannel',
             'translatable_entity',
             [
-                'class'    => 'OroCRMChannelBundle:Channel',
+                'class'    => 'OroChannelBundle:Channel',
                 'property' => 'name',
                 'required' => false
             ]
@@ -93,7 +92,7 @@ class OrderApiType extends AbstractType
             'store',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:Store',
+                'class'    => 'OroMagentoBundle:Store',
                 'property' => 'name'
             ]
         );
@@ -111,7 +110,7 @@ class OrderApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Order',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Order',
                 'csrf_protection' => false
             ]
         );

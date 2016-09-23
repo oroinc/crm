@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,7 +71,7 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.b2bcustomer_email.manager.api');
+        return $this->get('oro_sales.b2bcustomer_email.manager.api');
     }
 
     /**
@@ -79,7 +79,7 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_email.handler');
+        return $this->get('oro_sales.form.type.b2bcustomer_email.handler');
     }
 
     /**
@@ -87,7 +87,7 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_email.type');
+        return $this->get('oro_sales.form.type.b2bcustomer_email.type');
     }
 
     /**
@@ -95,6 +95,6 @@ class B2bCustomerEmailController extends RestController implements ClassResource
      */
     public function getDeleteHandler()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_email.handler');
+        return $this->get('oro_sales.form.type.b2bcustomer_email.handler');
     }
 }

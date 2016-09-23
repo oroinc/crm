@@ -1,13 +1,13 @@
 search:
-    OroCRM\Bundle\CampaignBundle\Entity\Campaign:
-        alias: orocrm_campaign
+    Oro\Bundle\CampaignBundle\Entity\Campaign:
+        alias: oro_campaign
         title_fields: [name]
-        label: orocrm.campaign.entity_plural_label
+        label: oro.campaign.entity_plural_label
         route:
-            name: orocrm_campaign_view
+            name: oro_campaign_view
             parameters:
                 id: id
-        search_template: OroCRMCampaignBundle:Campaign:searchResult.html.twig
+        search_template: OroCampaignBundle:Campaign:searchResult.html.twig
         fields:
             -
                 name:                   name
@@ -22,15 +22,15 @@ search:
                 target_type:            text
                 target_fields:          [code]
 
-    OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
-        alias: orocrm_email_campaign
+    Oro\Bundle\CampaignBundle\Entity\EmailCampaign:
+        alias: oro_email_campaign
         title_fields: [name]
-        label: orocrm.email_campaign.entity_plural_label
+        label: oro.email_campaign.entity_plural_label
         route:
-            name: orocrm_email_campaign_view
+            name: oro_email_campaign_view
             parameters:
                 id: id
-        search_template: OroCRMCampaignBundle:EmailCampaign:searchResult.html.twig
+        search_template: OroCampaignBundle:EmailCampaign:searchResult.html.twig
         fields:
             -
                 name:                   name

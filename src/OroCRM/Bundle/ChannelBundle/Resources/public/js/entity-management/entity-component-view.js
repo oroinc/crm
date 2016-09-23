@@ -21,7 +21,7 @@ define(function(require) {
     };
 
     /**
-     * @class   orocrmchannel.entityManagement.EntityComponentView
+     * @class   orochannel.entityManagement.EntityComponentView
      * @extends Backbone.View
      */
     return Backbone.View.extend({
@@ -121,7 +121,7 @@ define(function(require) {
          */
         _initializeForm: function() {
             var configs = {
-                    placeholder:        __('orocrm.channel.form.entity'),
+                    placeholder:        __('oro.channel.form.entity'),
                     result_template:    entitySelectResultTemplate,
                     selection_template: entitySelectSelectionTemplate,
                     data: _.bind(function() {
@@ -141,7 +141,7 @@ define(function(require) {
 
                         _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
                             results.push({
-                                text: __('orocrm.channel.entity_owner.' + groupName),
+                                text: __('oro.channel.entity_owner.' + groupName),
                                 icon: null,
                                 children: optionGroups[groupName]
                             });
@@ -202,7 +202,7 @@ define(function(require) {
         /**
          * Appends single item to list
          *
-         * @param {Object.<orocrmchannel.entityManagement.Model>} model
+         * @param {Object.<orochannel.entityManagement.Model>} model
          * @private
          */
         _onItemAdded: function(model) {
@@ -212,7 +212,7 @@ define(function(require) {
         /**
          * Prepares model attributes
          *
-         * @param   {Object.<orocrmchannel.entityManagement.Model>} model
+         * @param   {Object.<orochannel.entityManagement.Model>} model
          * @returns {object}
          * @private
          */
@@ -248,7 +248,7 @@ define(function(require) {
          * Creates model form name
          *
          * @param   {string} entityName
-         * @returns {Object.<orocrmchannel.entityManagement.Model>}
+         * @returns {Object.<orochannel.entityManagement.Model>}
          * @private
          */
         _createModel: function(entityName) {

@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Formatter;
+namespace Oro\Bundle\ContactBundle\Formatter;
 
 use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactNameFormatter
 {

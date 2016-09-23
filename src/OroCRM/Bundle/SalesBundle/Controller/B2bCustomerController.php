@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller;
+namespace Oro\Bundle\SalesBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,9 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @Route("/b2bcustomer")
@@ -22,28 +22,28 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_sales_b2bcustomer_index",
+     *      name="oro_sales_b2bcustomer_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format"="html"}
      * )
      * @Template
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_sales.b2bcustomer.entity.class')
+            'entity_class' => $this->container->getParameter('oro_sales.b2bcustomer.entity.class')
         ];
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_sales_b2bcustomer_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_sales_b2bcustomer_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_b2bcustomer_view",
+     *      id="oro_sales_b2bcustomer_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMSalesBundle:B2bCustomer"
+     *      class="OroSalesBundle:B2bCustomer"
      * )
      */
     public function viewAction(B2bCustomer $customer)
@@ -54,8 +54,8 @@ class B2bCustomerController extends Controller
     }
 
     /**
-     * @Route("/widget/info/{id}", name="orocrm_sales_b2bcustomer_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @Route("/widget/info/{id}", name="oro_sales_b2bcustomer_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
     public function infoAction(B2bCustomer $customer)
@@ -66,8 +66,8 @@ class B2bCustomerController extends Controller
     }
 
     /**
-     * @Route("/widget/b2bcustomer-leads/{id}", name="orocrm_sales_b2bcustomer_widget_leads", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @Route("/widget/b2bcustomer-leads/{id}", name="oro_sales_b2bcustomer_widget_leads", requirements={"id"="\d+"})
+     * @AclAncestor("oro_sales_lead_view")
      * @Template
      */
     public function b2bCustomerLeadsAction(B2bCustomer $customer)
@@ -80,14 +80,14 @@ class B2bCustomerController extends Controller
     /**
      * Create b2bcustomer form
      *
-     * @Route("/create", name="orocrm_sales_b2bcustomer_create")
+     * @Route("/create", name="oro_sales_b2bcustomer_create")
      * @Acl(
-     *      id="orocrm_sales_b2bcustomer_create",
+     *      id="oro_sales_b2bcustomer_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMSalesBundle:B2bCustomer"
+     *      class="OroSalesBundle:B2bCustomer"
      * )
-     * @Template("OroCRMSalesBundle:B2bCustomer:update.html.twig")
+     * @Template("OroSalesBundle:B2bCustomer:update.html.twig")
      */
     public function createAction()
     {
@@ -103,22 +103,22 @@ class B2bCustomerController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_sales.b2bcustomer.form'),
-            $this->get('translator')->trans('orocrm.sales.controller.b2bcustomer.saved.message'),
-            $this->get('orocrm_sales.b2bcustomer.form.handler')
+            $this->get('oro_sales.b2bcustomer.form'),
+            $this->get('translator')->trans('oro.sales.controller.b2bcustomer.saved.message'),
+            $this->get('oro_sales.b2bcustomer.form.handler')
         );
     }
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="orocrm_sales_b2bcustomer_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_sales_b2bcustomer_update", requirements={"id"="\d+"}, defaults={"id"=0})
      *
      * @Template
      * @Acl(
-     *      id="orocrm_sales_b2bcustomer_update",
+     *      id="oro_sales_b2bcustomer_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMSalesBundle:B2bCustomer"
+     *      class="OroSalesBundle:B2bCustomer"
      * )
      */
     public function updateAction(B2bCustomer $entity)
@@ -129,10 +129,10 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/widget/b2bcustomer-opportunities/{id}",
-     *      name="orocrm_sales_b2bcustomer_widget_opportunities",
+     *      name="oro_sales_b2bcustomer_widget_opportunities",
      *      requirements={"id"="\d+"}
      * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @AclAncestor("oro_sales_opportunity_view")
      * @Template
      */
     public function b2bCustomerOpportunitiesAction(B2bCustomer $customer)
@@ -145,18 +145,18 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *      "/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}",
-     *      name="orocrm_sales_widget_account_b2bcustomers_info",
+     *      name="oro_sales_widget_account_b2bcustomers_info",
      *      requirements={"accountId"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("account", class="OroCRMAccountBundle:Account", options={"id" = "accountId"})
-     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @ParamConverter("account", class="OroAccountBundle:Account", options={"id" = "accountId"})
+     * @ParamConverter("channel", class="OroChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
     public function accountCustomersInfoAction(Account $account, Channel $channel)
     {
         $customers = $this->getDoctrine()
-            ->getRepository('OroCRMSalesBundle:B2bCustomer')
+            ->getRepository('OroSalesBundle:B2bCustomer')
             ->findBy(['account' => $account, 'dataChannel' => $channel]);
 
         return ['account' => $account, 'customers' => $customers, 'channel' => $channel];
@@ -165,11 +165,11 @@ class B2bCustomerController extends Controller
     /**
      * @Route(
      *        "/widget/b2bcustomer-info/{id}/channel/{channelId}",
-     *        name="orocrm_sales_widget_b2bcustomer_info",
+     *        name="oro_sales_widget_b2bcustomer_info",
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @ParamConverter("channel", class="OroChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @Template
      */
     public function customerInfoAction(B2bCustomer $customer, Channel $channel)
@@ -177,8 +177,8 @@ class B2bCustomerController extends Controller
         return [
             'customer'             => $customer,
             'channel'              => $channel,
-            'leadClassName'        => $this->container->getParameter('orocrm_sales.lead.entity.class'),
-            'opportunityClassName' => $this->container->getParameter('orocrm_sales.opportunity.class'),
+            'leadClassName'        => $this->container->getParameter('oro_sales.lead.entity.class'),
+            'opportunityClassName' => $this->container->getParameter('oro_sales.opportunity.class'),
         ];
     }
 }

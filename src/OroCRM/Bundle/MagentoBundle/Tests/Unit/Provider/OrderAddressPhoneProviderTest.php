@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider;
 
 class OrderAddressPhoneProviderTest extends \PHPUnit_Framework_TestCase
 {

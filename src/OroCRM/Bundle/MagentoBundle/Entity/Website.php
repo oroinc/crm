@@ -1,25 +1,24 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
+use Oro\Bundle\MagentoBundle\Model\ExtendWebsite;
 
 /**
  * Class Website
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @package Oro\Bundle\OroMagentoBundle\Entity
  * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
- *  name="orocrm_magento_website",
+ *  name="oro_magento_website",
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_site_idx", columns={"website_code", "origin_id", "channel_id"})},
  *  indexes={
- *       @ORM\Index(name="orocrm_magento_website_name_idx",columns={"website_name"})
+ *       @ORM\Index(name="oro_magento_website_name_idx",columns={"website_name"})
  *  }
  * )
  * @Config(

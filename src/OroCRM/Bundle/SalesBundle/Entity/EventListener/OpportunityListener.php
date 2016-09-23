@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity\EventListener;
+namespace Oro\Bundle\SalesBundle\Entity\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityListener
 {

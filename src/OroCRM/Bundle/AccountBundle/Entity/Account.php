@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Entity;
+namespace Oro\Bundle\AccountBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -15,18 +15,17 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AccountBundle\Model\ExtendAccount;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name"})})
+ * @ORM\Table(name="oro_account", indexes={@ORM\Index(name="account_name_idx", columns={"name"})})
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_account_index",
- *      routeView="orocrm_account_view",
+ *      routeName="oro_account_index",
+ *      routeView="oro_account_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-suitcase"
@@ -48,7 +47,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *              "enable"=true
  *          },
  *          "form"={
- *              "form_type"="orocrm_account_select",
+ *              "form_type"="oro_account_select",
  *              "grid_name"="accounts-select-grid",
  *          },
  *          "dataaudit"={
@@ -132,8 +131,8 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      *
      * @var ArrayCollection $contacts
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
-     * @ORM\JoinTable(name="orocrm_account_to_contact")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
+     * @ORM\JoinTable(name="oro_account_to_contact")
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
@@ -153,7 +152,7 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      *
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="defaultInAccounts")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", inversedBy="defaultInAccounts")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\ImportExport\Strategy;
+namespace Oro\Bundle\AccountBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {

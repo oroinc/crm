@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
-use OroCRM\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator;
 
 class ContactRequestCallbackValidatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity\Repository;
+namespace Oro\Bundle\ContactBundle\Entity\Repository;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 
 class ContactPhoneRepository extends EntityRepository
 {

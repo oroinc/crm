@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Autocomplete;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
-use OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
+use Oro\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_Tes
             self::TEST_ENTITY_NAME,
             [],
             $this->businessAclProvider,
-            'OroCRMSalesBundle:Opportunity'
+            'OroSalesBundle:Opportunity'
         );
     }
 

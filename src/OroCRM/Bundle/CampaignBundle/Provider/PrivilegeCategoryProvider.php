@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Provider;
+namespace Oro\Bundle\CampaignBundle\Provider;
 
 use Oro\Bundle\UserBundle\Model\PrivilegeCategory;
 use Oro\Bundle\UserBundle\Provider\PrivilegeCategoryProviderInterface;
@@ -21,6 +21,6 @@ class PrivilegeCategoryProvider implements PrivilegeCategoryProviderInterface
      */
     public function getRolePrivilegeCategory()
     {
-        return new PrivilegeCategory(self::NAME, 'orocrm.campaign.privilege.category.marketing.label', true, 5);
+        return new PrivilegeCategory(self::NAME, 'oro.campaign.privilege.category.marketing.label', true, 5);
     }
 }

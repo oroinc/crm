@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Handler;
+namespace Oro\Bundle\CampaignBundle\Form\Handler;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignHandler
 {
@@ -50,7 +50,7 @@ class EmailCampaignHandler
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
             if (!$this->request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
-                $em = $this->registry->getManagerForClass('OroCRMCampaignBundle:EmailCampaign');
+                $em = $this->registry->getManagerForClass('OroCampaignBundle:EmailCampaign');
                 $em->persist($entity);
                 $em->flush();
 

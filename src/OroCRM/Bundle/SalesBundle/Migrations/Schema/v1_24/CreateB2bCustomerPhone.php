@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -20,13 +20,13 @@ class CreateB2bCustomerPhone implements Migration
         $this->addOrocrmB2bCustomerPhoneForeignKeys($schema);
     }
     /**
-     * Create orocrm_lead_phone table
+     * Create oro_lead_phone table
      *
      * @param Schema $schema
      */
     protected function createOrocrmB2bCustomerPhoneTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_sales_b2bcustomer_phone');
+        $table = $schema->createTable('oro_sales_b2bcustomer_phone');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('phone', 'string', ['length' => 255]);
@@ -38,15 +38,15 @@ class CreateB2bCustomerPhone implements Migration
     }
     
     /**
-     * Add orocrm_b2bcustomer_phone foreign keys.
+     * Add oro_b2bcustomer_phone foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmB2bCustomerPhoneForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_b2bcustomer_phone');
+        $table = $schema->getTable('oro_sales_b2bcustomer_phone');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_b2bcustomer'),
+            $schema->getTable('oro_sales_b2bcustomer'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]

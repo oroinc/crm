@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\ImportExport\Strategy;
+namespace Oro\Bundle\SalesBundle\ImportExport\Strategy;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {

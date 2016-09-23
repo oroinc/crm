@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\DBAL\Query\QueryBuilder;
 
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
-use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Model\B2bGuesser;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bGuesserTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +81,7 @@ class B2bGuesserTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCustomerIfLeadHaveCustomer()
     {
-        $leadMock = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+        $leadMock = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
                             ->setMethods(['getCustomer'])
                             ->disableOriginalConstructor()
                             ->getMock();

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,9 +16,8 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @RouteResource("b2bcustomer_phone")
@@ -33,7 +32,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      *      description="Get all phones items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_b2bcustomer_view")
+     * @AclAncestor("oro_b2bcustomer_view")
      * @param int $customerId
      * @return Response
      */
@@ -65,7 +64,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      *      description="Get customer primary phone",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_b2bcustomer_view")
+     * @AclAncestor("oro_b2bcustomer_view")
      * @return Response
      */
     public function getPrimaryAction($customerId)
@@ -130,7 +129,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
 
     protected function getB2bCustomerManager()
     {
-        return $this->get('orocrm_sales.b2bcustomer.manager.api');
+        return $this->get('oro_sales.b2bcustomer.manager.api');
     }
 
     /**
@@ -138,7 +137,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.b2bcustomer_phone.manager.api');
+        return $this->get('oro_sales.b2bcustomer_phone.manager.api');
     }
 
     /**
@@ -159,7 +158,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_phone.handler');
+        return $this->get('oro_sales.form.type.b2bcustomer_phone.handler');
     }
 
     /**
@@ -167,7 +166,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_phone.type');
+        return $this->get('oro_sales.form.type.b2bcustomer_phone.type');
     }
 
     /**
@@ -175,6 +174,6 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
      */
     public function getDeleteHandler()
     {
-        return $this->get('orocrm_sales.form.type.b2bcustomer_phone.handler');
+        return $this->get('oro_sales.form.type.b2bcustomer_phone.handler');
     }
 }

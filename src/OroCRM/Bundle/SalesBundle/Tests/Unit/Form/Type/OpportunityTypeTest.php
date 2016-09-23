@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
@@ -13,11 +13,10 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType;
-use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
-use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityType;
+use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {

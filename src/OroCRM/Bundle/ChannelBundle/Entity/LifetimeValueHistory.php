@@ -1,19 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity;
+namespace Oro\Bundle\ChannelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(
- *     repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository"
+ *     repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository"
  * )
- * @ORM\Table(name="orocrm_channel_lifetime_hist", indexes={
- *      @ORM\Index(name="orocrm_chl_ltv_hist_idx", columns={"account_id", "data_channel_id", "status"}),
- *      @ORM\Index(name="orocrm_chl_ltv_hist_status_idx", columns={"status"})
+ * @ORM\Table(name="oro_channel_lifetime_hist", indexes={
+ *      @ORM\Index(name="oro_chl_ltv_hist_idx", columns={"account_id", "data_channel_id", "status"}),
+ *      @ORM\Index(name="oro_chl_ltv_hist_status_idx", columns={"status"})
  * })
  * @ORM\HasLifecycleCallbacks
  */
@@ -41,7 +41,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $dataChannel;
@@ -49,7 +49,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $account;

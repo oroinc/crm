@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Model;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Model;
 
 use Oro\Component\Config\Common\ConfigObject;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -223,7 +222,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
         if (null !== $isTwoWaySyncEnabled) {
             $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
         }
-        $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
+        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
         $transport->expects($this->any())->method('isSupportedExtensionVersion')
             ->willReturn($isSupportedExtensionVersion);
         $settings = ConfigObject::create($settings);

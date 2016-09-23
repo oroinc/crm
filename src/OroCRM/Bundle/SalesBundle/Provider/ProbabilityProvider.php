@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * Simple wrapper over ConfigManager to receive probabilities

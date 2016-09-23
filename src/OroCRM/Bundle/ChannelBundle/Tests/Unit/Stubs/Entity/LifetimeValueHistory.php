@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @ORM\Entity()
@@ -29,7 +29,7 @@ class LifetimeValueHistory
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel")
      * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $dataChannel;
@@ -37,7 +37,7 @@ class LifetimeValueHistory
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $account;

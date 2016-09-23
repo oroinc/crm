@@ -5,14 +5,14 @@
     {% if vertical is defined %}<div class="rfm-analytics-label-wrapper">{% endif %}
         <div class="pull-right label label-warning rfm-analytics-label{% if vertical is defined %} rfm-analytics-label-vertical{% endif %}">
             {% set el = vertical is defined ? 'p' : 'span' %}
-            <{{ el }} title="{{ 'orocrm.analytics.rfm.recency.title'|trans}}">
-                {{ 'orocrm.analytics.rfm.recency.label'|trans}} {{ entity.recency|default('-') }}
+            <{{ el }} title="{{ 'oro.analytics.rfm.recency.title'|trans}}">
+                {{ 'oro.analytics.rfm.recency.label'|trans}} {{ entity.recency|default('-') }}
             </{{ el }}>
-            <{{ el }} title="{{ 'orocrm.analytics.rfm.frequency.title'|trans}}">
-                {{ 'orocrm.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default('-') }}
+            <{{ el }} title="{{ 'oro.analytics.rfm.frequency.title'|trans}}">
+                {{ 'oro.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default('-') }}
             </{{ el }}>
-            <{{ el }} title="{{ 'orocrm.analytics.rfm.monetary.title'|trans}}">
-                {{ 'orocrm.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default('-') }}
+            <{{ el }} title="{{ 'oro.analytics.rfm.monetary.title'|trans}}">
+                {{ 'oro.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default('-') }}
             </{{ el }}>
         </div>
         <div class="clearfix"></div>

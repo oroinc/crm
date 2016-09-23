@@ -1,23 +1,22 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Model\B2bGuesser;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
 class LeadToOpportunityProvider
 {
@@ -114,7 +113,7 @@ class LeadToOpportunityProvider
     protected function prepareEntityFields()
     {
         $rawFields = $this->entityFieldProvider->getFields(
-            'OroCRMSalesBundle:Lead',
+            'OroSalesBundle:Lead',
             true,
             true,
             false,
@@ -293,10 +292,10 @@ class LeadToOpportunityProvider
     public function isDisqualifyAndConvertAllowed(Lead $lead)
     {
         $isLeadWorkflowEnabled = !$this->workflowRegistry
-            ->getActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead')->isEmpty();
+            ->getActiveWorkflowsByEntityClass('Oro\Bundle\SalesBundle\Entity\Lead')->isEmpty();
 
         $isSalesFunnelWorkflowEnabled = !$this->workflowRegistry
-            ->getActiveWorkflowsByEntityClass('OroCRM\Bundle\SalesBundle\Entity\SalesFunnel')->isEmpty();
+            ->getActiveWorkflowsByEntityClass('Oro\Bundle\SalesBundle\Entity\SalesFunnel')->isEmpty();
 
         return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
                !$isLeadWorkflowEnabled &&

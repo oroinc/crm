@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Selenium;
+namespace Oro\Bundle\ChannelBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 
 /**
  * Class ChannelTest
  *
- * @package OroCRM\Bundle\ChannelBundle\Tests\Selenium\Sales
+ * @package Oro\Bundle\ChannelBundle\Tests\Selenium\Sales
  */
 class ChannelTest extends Selenium2TestCase
 {
@@ -21,7 +21,7 @@ class ChannelTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+        $login->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')

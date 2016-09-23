@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
-use OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
+use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
 
 /**
  * Class ManageEmbeddedFormTest
  *
- * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium
+ * @package Oro\Bundle\ContactUsBundle\Tests\Selenium
  */
 class ManageEmbeddedFormTest extends Selenium2TestCase
 {
@@ -73,7 +73,7 @@ class ManageEmbeddedFormTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var ContactRequests $login */
-        $data = $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $data = $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->getAllData();
         $this->assertEquals($email, $data[0]['EMAIL']);

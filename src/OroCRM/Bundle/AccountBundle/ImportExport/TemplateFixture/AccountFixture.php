@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\AccountBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -13,7 +13,7 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\AccountBundle\Entity\Account';
+        return 'Oro\Bundle\AccountBundle\Entity\Account';
     }
 
     /**
@@ -41,7 +41,7 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
         $userRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $contactRepo = $this->templateManager
-            ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+            ->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConverter;
 use Oro\Bundle\UserBundle\Model\Gender;

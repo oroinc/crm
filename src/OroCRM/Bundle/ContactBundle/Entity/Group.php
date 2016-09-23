@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity;
+namespace Oro\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -11,11 +11,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
+use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contact_group")
+ * @ORM\Table(name="oro_contact_group")
  * @Oro\Loggable
  * @Config(
  *      defaultValues={

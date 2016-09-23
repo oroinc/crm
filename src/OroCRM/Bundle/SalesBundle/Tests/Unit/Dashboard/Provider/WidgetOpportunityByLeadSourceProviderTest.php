@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -9,9 +9,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
-use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestCase
 {

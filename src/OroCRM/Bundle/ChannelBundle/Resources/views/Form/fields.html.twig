@@ -1,8 +1,8 @@
-{% block orocrm_channel_datasource_form_row %}
+{% block oro_channel_datasource_form_row %}
     {{ block('form_row') }}
 {% endblock %}
 
-{% block orocrm_channel_datasource_form_widget %}
+{% block oro_channel_datasource_form_widget %}
     {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'orocrm-channel-datasource-field' }) %}
     {{ form_widget(form, { 'attr': attr }) }}
 
@@ -15,15 +15,15 @@
         channelNameEl:  '#' ~ form.parent.name.vars.id
     } %}
 
-    <div data-page-component-module="orocrmchannel/js/app/components/integration-widget"
+    <div data-page-component-module="orochannel/js/app/components/integration-widget"
          data-page-component-options="{{ options|json_encode }}"></div>
 {% endblock %}
 
-{% block orocrm_channel_entity_choice_form_row %}
+{% block oro_channel_entity_choice_form_row %}
     {{ form_row(form) }}
 {% endblock %}
 
-{% block _orocrm_channel_form_channelType_widget %}
+{% block _oro_channel_form_channelType_widget %}
     {% if form.vars.disabled %}
         {% for choice in choices %}
             {% if choice is selectedchoice(value) %}
@@ -88,7 +88,7 @@
         }) %}
     {% endif %}
     <div {{ UI.renderPageComponentAttributes({
-                module: 'orocrmchannel/js/app/components/select-create-inline-type-' ~ asyncNameSegment|default('') ~ 'component',
+                module: 'orochannel/js/app/components/select-create-inline-type-' ~ asyncNameSegment|default('') ~ 'component',
                 options: {
                     _sourceElement: '#'~id~'-el',
                     inputSelector: '#'~id,

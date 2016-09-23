@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -15,7 +15,7 @@ class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization imple
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData',
+            'Oro\Bundle\ContactBundle\Migrations\Data\ORM\LoadGroupData',
             'Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'
         ];
     }
@@ -25,7 +25,7 @@ class UpdateContactEntitiesWithOrganization extends UpdateWithOrganization imple
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMContactBundle:Group');
-        $this->update($manager, 'OroCRMContactBundle:Contact');
+        $this->update($manager, 'OroContactBundle:Group');
+        $this->update($manager, 'OroContactBundle:Contact');
     }
 }

@@ -1,11 +1,11 @@
-OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
+Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
     properties:
         email:
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
     constraints:
-        - OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
+        - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
               fields:     [ websiteId, wsdlUrl ]
     properties:
         wsdlUrl:
@@ -14,11 +14,11 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - NotBlank: ~
         syncStartDate:
           - NotBlank: ~
-          - OroCRM\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
+          - Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
         websiteId:
           - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\Website:
+Oro\Bundle\MagentoBundle\Entity\Website:
     properties:
         code:
             - NotBlank: ~
@@ -27,7 +27,7 @@ OroCRM\Bundle\MagentoBundle\Entity\Website:
             - NotBlank: ~
             - Length: { max: 255 }
 
-OroCRM\Bundle\MagentoBundle\Entity\Store:
+Oro\Bundle\MagentoBundle\Entity\Store:
     properties:
         code:
             - NotBlank: ~
@@ -39,7 +39,7 @@ OroCRM\Bundle\MagentoBundle\Entity\Store:
             - NotBlank: ~
             - Valid: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\Region:
+Oro\Bundle\MagentoBundle\Entity\Region:
     properties:
         combinedCode:
             - NotBlank: ~
@@ -55,9 +55,9 @@ OroCRM\Bundle\MagentoBundle\Entity\Region:
         name:
             - Length: { max: 255 }
 
-OroCRM\Bundle\MagentoBundle\Entity\Customer:
+Oro\Bundle\MagentoBundle\Entity\Customer:
     constraints:
-        - OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint: { groups: ['form'] }
+        - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint: { groups: ['form'] }
     properties:
         namePrefix:
             - Length: { max: 255 }
@@ -104,13 +104,13 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup:
+Oro\Bundle\MagentoBundle\Entity\CustomerGroup:
     properties:
         name:
             - NotBlank: ~
             - Length: { max: 255 }
 
-OroCRM\Bundle\MagentoBundle\Entity\Address:
+Oro\Bundle\MagentoBundle\Entity\Address:
     properties:
         types:
             - Valid: ~
@@ -132,7 +132,7 @@ OroCRM\Bundle\MagentoBundle\Entity\Address:
         phone:
             - NotBlank: { groups: ['form'] }
 
-OroCRM\Bundle\MagentoBundle\Entity\Cart:
+Oro\Bundle\MagentoBundle\Entity\Cart:
     properties:
         cartItems:
             - Valid: ~
@@ -174,14 +174,14 @@ OroCRM\Bundle\MagentoBundle\Entity\Cart:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\CartAddress:
+Oro\Bundle\MagentoBundle\Entity\CartAddress:
     properties:
         country:
             - Valid: ~
         region:
             - Valid: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\CartStatus:
+Oro\Bundle\MagentoBundle\Entity\CartStatus:
     properties:
         name:
             - NotBlank: ~
@@ -190,7 +190,7 @@ OroCRM\Bundle\MagentoBundle\Entity\CartStatus:
             - NotBlank: ~
             - Length: { max: 255 }
 
-OroCRM\Bundle\MagentoBundle\Entity\CartItem:
+Oro\Bundle\MagentoBundle\Entity\CartItem:
     properties:
         productId:
             - NotBlank: ~
@@ -232,7 +232,7 @@ OroCRM\Bundle\MagentoBundle\Entity\CartItem:
             - DateTime: ~
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\Order:
+Oro\Bundle\MagentoBundle\Entity\Order:
     properties:
         incrementId:
             - Length: { max: 500 }
@@ -273,7 +273,7 @@ OroCRM\Bundle\MagentoBundle\Entity\Order:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\OrderItem:
+Oro\Bundle\MagentoBundle\Entity\OrderItem:
     properties:
         productType:
             - Length: { max: 255 }
@@ -284,7 +284,7 @@ OroCRM\Bundle\MagentoBundle\Entity\OrderItem:
         qty:
             - NotBlank: ~
 
-OroCRM\Bundle\MagentoBundle\Entity\OrderAddress:
+Oro\Bundle\MagentoBundle\Entity\OrderAddress:
     properties:
         types:
             - Valid: ~

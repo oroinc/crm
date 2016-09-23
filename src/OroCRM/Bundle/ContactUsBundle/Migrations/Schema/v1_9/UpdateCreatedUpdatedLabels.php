@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_9;
+namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
@@ -17,16 +17,16 @@ class UpdateCreatedUpdatedLabels implements Migration
     {
         $fields = [
             [
-                'entityName' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
+                'entityName' => 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.contactus.contactrequest.created_at.label'
+                'replace' => 'oro.contactus.contactrequest.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
+                'entityName' => 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.contactus.contactrequest.updated_at.label'
+                'replace' => 'oro.contactus.contactrequest.updated_at.label'
             ],
         ];
 

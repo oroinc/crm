@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Region
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\RegionRepository")
+ * @package Oro\Bundle\OroMagentoBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\RegionRepository")
  * @ORM\Table(
- *  name="orocrm_magento_region",
+ *  name="oro_magento_region",
  *  indexes={
  *      @ORM\Index(name="idx_region", columns={"region_id"})
  *  },

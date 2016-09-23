@@ -56,7 +56,7 @@
                         if (isActive) {
                             addedModels[id] = new MultipleEntityModel({
                                 'id': model.get('id'),
-                                'link': routing.generate('orocrm_contact_info', {id: model.get('id')}),
+                                'link': routing.generate('oro_contact_info', {id: model.get('id')}),
                                 'label': nameFormatter.format(model.toJSON()),
                                 'extraData': [
                                     {

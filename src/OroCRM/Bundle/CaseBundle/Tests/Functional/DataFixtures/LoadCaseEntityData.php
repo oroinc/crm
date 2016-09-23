@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -28,7 +28,7 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
                     'message'      => 'Case #1 Comment #1',
                     'public'    => true,
                     'createdAt' => '2014-01-01 13:00:00',
-                    'contact'   => 'orocrm_case_contact'
+                    'contact'   => 'oro_case_contact'
                 ),
                 array(
                     'message'      => 'Case #1 Comment #2',
@@ -42,7 +42,7 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
                 )
             ),
             'reportedAt'     => '2014-01-01 13:00:00',
-            'relatedContact' => 'orocrm_case_contact'
+            'relatedContact' => 'oro_case_contact'
         ),
         array(
             'subject'       => 'Case #2',
@@ -63,7 +63,7 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
      */
     public function load(ObjectManager $manager)
     {
-        $caseManager = $this->container->get('orocrm_case.manager');
+        $caseManager = $this->container->get('oro_case.manager');
 
         $adminUser = $manager->getRepository('OroUserBundle:User')->findOneByUsername('admin');
         $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
@@ -112,6 +112,6 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
      */
     public function getDependencies()
     {
-        return array('OroCRM\\Bundle\\CaseBundle\\Tests\\Functional\\DataFixtures\\LoadContactData');
+        return array('Oro\\Bundle\\CaseBundle\\Tests\\Functional\\DataFixtures\\LoadContactData');
     }
 }

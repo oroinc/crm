@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Provider\RegionConnector;
+use Oro\Bundle\MagentoBundle\Provider\RegionConnector;
 
 class RegionConnectorTest extends MagentoConnectorTestCase
 {
@@ -50,8 +49,8 @@ class RegionConnectorTest extends MagentoConnectorTestCase
 
         $this->assertEquals('region_dictionary', $connector->getType());
         $this->assertEquals('mage_region_import', $connector->getImportJobName());
-        $this->assertEquals('OroCRM\Bundle\MagentoBundle\Entity\Region', $connector->getImportEntityFQCN());
-        $this->assertEquals('orocrm.magento.connector.region.label', $connector->getLabel());
+        $this->assertEquals('Oro\Bundle\MagentoBundle\Entity\Region', $connector->getImportEntityFQCN());
+        $this->assertEquals('oro.magento.connector.region.label', $connector->getLabel());
     }
 
     /**
@@ -69,7 +68,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
 
     public function testSkippedIfSyncedDuringConfiguredInterval()
     {
-        $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $channel = new Channel();
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, $channel);

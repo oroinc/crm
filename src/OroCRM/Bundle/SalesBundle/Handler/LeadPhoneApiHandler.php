@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Handler;
+namespace Oro\Bundle\SalesBundle\Handler;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
@@ -12,11 +12,11 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 /**
  * Class LeadPhoneApiHandler
- * @package OroCRM\Bundle\SalesBundle\Handler
+ * @package Oro\Bundle\SalesBundle\Handler
  */
 class LeadPhoneApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\LeadPhone';
+    const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\LeadPhone';
 
     /**
      * @var Registry

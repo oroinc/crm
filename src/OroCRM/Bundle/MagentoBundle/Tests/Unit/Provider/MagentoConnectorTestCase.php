@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
@@ -19,9 +19,8 @@ use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +50,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->transportMock     = $this
-            ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
+            ->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
 
         $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
             ->setMethods(['getExecutionContext', 'getJobExecution'])
@@ -113,7 +112,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
 
-        $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iterator = $this->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
@@ -150,7 +149,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     public function predefinedIteratorProvider()
     {
         $iterator1 = $this->getMock('\Iterator');
-        $iterator2 = $this->getMock('OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\PredefinedFiltersAwareFixture');
+        $iterator2 = $this->getMock('Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\PredefinedFiltersAwareFixture');
 
         return [
             'should throw exception' => [
@@ -198,7 +197,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testRead($dateInContext, $dateInItem, $expectedDate, $hasData = true, $dateInIterator = null)
     {
-        $iteratorMock = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iteratorMock = $this->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 

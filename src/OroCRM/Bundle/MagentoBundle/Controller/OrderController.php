@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -12,9 +12,8 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 /**
  * @Route("/order")
@@ -22,24 +21,24 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_order_index")
-     * @AclAncestor("orocrm_magento_order_view")
+     * @Route("/", name="oro_magento_order_index")
+     * @AclAncestor("oro_magento_order_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_magento.order.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.order.entity.class')
         ];
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_magento_order_view", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="oro_magento_order_view", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_order_view",
+     *      id="oro_magento_order_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Order"
+     *      class="OroMagentoBundle:Order"
      * )
      * @Template
      * @param Order $order
@@ -51,8 +50,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_magento_order_widget_info", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @Route("/info/{id}", name="oro_magento_order_widget_info", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_cart_view")
      * @Template
      * @param Order $order
      * @return array
@@ -63,8 +62,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", name="orocrm_magento_order_widget_items", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @Route("/widget/grid/{id}", name="oro_magento_order_widget_items", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_cart_view")
      * @Template
      * @param Order $order
      * @return array
@@ -77,11 +76,11 @@ class OrderController extends Controller
     /**
      * @Route(
      *        "/account-widget/customer-orders/{customerId}/{channelId}",
-     *        name="orocrm_magento_widget_customer_orders",
+     *        name="oro_magento_widget_customer_orders",
      *        requirements={"customerId"="\d+", "channelId"="\d+"}
      * )
-     * @AclAncestor("orocrm_magento_order_view")
-     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
+     * @AclAncestor("oro_magento_order_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
      * @Template
      * @param Customer $customer
@@ -96,10 +95,10 @@ class OrderController extends Controller
     /**
      * @Route(
      *        "/customer-widget/customer-orders/{customerId}/{channelId}",
-     *        name="orocrm_magento_customer_orders_widget",
+     *        name="oro_magento_customer_orders_widget",
      *        requirements={"customerId"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
      * @Template
      * @param Customer $customer
@@ -112,8 +111,8 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/actualize/{id}", name="orocrm_magento_order_actualize", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_order_view")
+     * @Route("/actualize/{id}", name="oro_magento_order_actualize", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_order_view")
      * @param Order $order
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -143,16 +142,16 @@ class OrderController extends Controller
         if ($result === true) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+                $this->get('translator')->trans('oro.magento.controller.synchronization_success')
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+                $this->get('translator')->trans('oro.magento.controller.synchronization_error')
             );
         }
 
-        return $this->redirect($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
+        return $this->redirect($this->generateUrl('oro_magento_order_view', ['id' => $order->getId()]));
     }
 
     /**
@@ -162,7 +161,7 @@ class OrderController extends Controller
      */
     protected function loadOrderInformation(Channel $channel, array $configuration = [])
     {
-        $orderInformationLoader = $this->get('orocrm_magento.service.order.information_loader');
+        $orderInformationLoader = $this->get('oro_magento.service.order.information_loader');
 
         return $orderInformationLoader->load($channel, $configuration);
     }

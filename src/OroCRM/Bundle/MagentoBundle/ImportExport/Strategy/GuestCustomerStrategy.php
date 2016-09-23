@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class GuestCustomerStrategy extends AbstractImportStrategy
 {
@@ -46,7 +46,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
 
         $searchContext = $this->getSearchContext($entity);
         $existingCustomer = $this->databaseHelper->findOneBy(
-            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'Oro\Bundle\MagentoBundle\Entity\Customer',
             $searchContext
         );
 
@@ -68,7 +68,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
 
         if ($entity->getWebsite()) {
             $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                'Oro\Bundle\MagentoBundle\Entity\Website',
                 [
                     'originId' => $entity->getWebsite()->getOriginId(),
                     'channel' => $entity->getChannel()
@@ -118,8 +118,8 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     protected function setDefaultGroup(Customer $entity)
     {
         if (!$entity->getGroup()) {
-            $em = $this->strategyHelper->getEntityManager('OroCRMMagentoBundle:CustomerGroup');
-            $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
+            $em = $this->strategyHelper->getEntityManager('OroMagentoBundle:CustomerGroup');
+            $group = $em->getRepository('OroMagentoBundle:CustomerGroup')
                 ->findOneBy(
                     [
                         'originId' => static::NOT_LOGGED_IN_ID,
@@ -142,7 +142,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
-        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', true)
+        if (is_a($entityName, 'Oro\Bundle\MagentoBundle\Entity\Customer', true)
             && empty($identityValues['originId'])
         ) {
             $data = $this->context->getValue('itemData');

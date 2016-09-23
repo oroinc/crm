@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
@@ -9,14 +9,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelType extends AbstractType
 {
-    const NAME = 'orocrm_channel_form';
+    const NAME = 'oro_channel_form';
 
     /** @var SettingsProvider */
     protected $settingsProvider;
@@ -46,18 +45,18 @@ class ChannelType extends AbstractType
             'text',
             [
                 'required' => true,
-                'label'    => 'orocrm.channel.name.label'
+                'label'    => 'oro.channel.name.label'
             ]
         );
-        $builder->add('entities', 'orocrm_channel_entities');
+        $builder->add('entities', 'oro_channel_entities');
         $builder->add(
             'channelType',
             'genemu_jqueryselect2_choice',
             [
                 'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,
-                'label'    => 'orocrm.channel.channel_type.label',
-                'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
+                'label'    => 'oro.channel.channel_type.label',
+                'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
                 'empty_value'     => '',
             ]
         );
@@ -66,11 +65,11 @@ class ChannelType extends AbstractType
             'choice',
             [
                 'choices'  => [
-                    Channel::STATUS_INACTIVE    => 'orocrm.channel.inactive.label',
-                    Channel::STATUS_ACTIVE      => 'orocrm.channel.active.label'
+                    Channel::STATUS_INACTIVE    => 'oro.channel.inactive.label',
+                    Channel::STATUS_ACTIVE      => 'oro.channel.active.label'
                 ],
                 'required' => true,
-                'label'    => 'orocrm.channel.status.label',
+                'label'    => 'oro.channel.status.label',
             ]
         );
     }
@@ -94,7 +93,7 @@ class ChannelType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
+                'data_class' => 'Oro\\Bundle\\ChannelBundle\\Entity\\Channel'
             ]
         );
     }

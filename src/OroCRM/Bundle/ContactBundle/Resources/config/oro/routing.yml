@@ -1,10 +1,10 @@
-orocrm_contact_bundle:
-    resource:     "@OroCRMContactBundle/Controller"
+oro_contact_bundle:
+    resource:     "@OroContactBundle/Controller"
     type:         annotation
     prefix:       /contact
 
-orocrm_contact_bundle_api:
-    resource: "@OroCRMContactBundle/Resources/config/oro/routing_api.yml"
+oro_contact_bundle_api:
+    resource: "@OroContactBundle/Resources/config/oro/routing_api.yml"
     type: rest
     prefix:       api/rest/{version}
     requirements:
@@ -17,7 +17,7 @@ oro_api_post_contact_deprecated:
     path:            /api/rest/{version}/contact.{_format}
     methods:         [POST]
     defaults:
-        _controller: OroCRM\Bundle\ContactBundle\Controller\Api\Rest\ContactController::postAction
+        _controller: Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactController::postAction
         _format:     json
         version:     latest
     requirements:
@@ -28,7 +28,7 @@ oro_api_post_contactgroup_deprecated:
     path:            /api/rest/{version}/contactgroup.{_format}
     methods:         [POST]
     defaults:
-        _controller: OroCRM\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::postAction
+        _controller: Oro\Bundle\ContactBundle\Controller\Api\Rest\ContactGroupController::postAction
         _format:     json
         version:     latest
     requirements:

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\EventListener;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\EventListener;
 
 use Symfony\Component\Form\FormEvents;
-use OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener;
+use Oro\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener;
 
 class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->emailTransportProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider')
+            ->getMockBuilder('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider')
             ->disableOriginalConstructor()
             ->getMock();
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
@@ -60,7 +60,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     public function testPreSetHasTransportHasForm()
     {
         $transportName = 'internal';
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -69,7 +69,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->once())
             ->method('setTransport')
             ->with($transportName);
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')
@@ -107,7 +107,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     public function testPreSetHasTransportNoFormHadBefore()
     {
         $transportName = 'internal';
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -116,7 +116,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->once())
             ->method('setTransport')
             ->with($transportName);
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')
@@ -158,7 +158,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     public function testPreSetHasTransportNoForm()
     {
         $transportName = 'internal';
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -167,7 +167,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->once())
             ->method('setTransport')
             ->with($transportName);
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')
@@ -208,7 +208,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     public function testPreSetNoTransportSetHasForm()
     {
         $transportName = 'internal';
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -217,7 +217,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->once())
             ->method('setTransport')
             ->with($transportName);
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')
@@ -266,7 +266,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     public function testPostSet()
     {
         $transportName = 'internal';
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -306,7 +306,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     {
         $transportName = 'internal';
 
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->any())
@@ -359,7 +359,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($expectedSetData);
 
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')
@@ -388,7 +388,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
     {
         $transportName = 'internal';
 
-        $entity = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $entity = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->any())
@@ -441,7 +441,7 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($expectedSetData);
 
-        $transport = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface')
+        $transport = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Transport\TransportInterface')
             ->getMock();
         $transport->expects($this->any())
             ->method('getName')

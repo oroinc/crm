@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,12 +10,11 @@ use Symfony\Component\Validator\Constraints\Range;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityProbabilityType extends AbstractType
 {
-    const NAME = 'orocrm_sales_opportunity_probability';
+    const NAME = 'oro_sales_opportunity_probability';
 
     /**
      * @var array List of statuses which have non-editable probability

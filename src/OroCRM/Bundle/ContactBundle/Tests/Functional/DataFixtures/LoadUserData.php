@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -27,7 +27,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
         'name'        => 'ROLE_TEST',
         'label'       => 'Role Test',
         'permissions' => [
-            'entity|OroCRM\Bundle\ContactBundle\Entity\Contact' => [
+            'entity|Oro\Bundle\ContactBundle\Entity\Contact' => [
                 'VIEW_BASIC', 'EDIT_SYSTEM'
             ]
         ]

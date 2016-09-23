@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -17,10 +17,9 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 
 /**
  * @NamePrefix("oro_api_")
@@ -32,7 +31,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.order_address.manager.api');
+        return $this->get('oro_magento.order_address.manager.api');
     }
 
     /**
@@ -40,7 +39,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.order_address.api');
+        return $this->get('oro_magento.form.order_address.api');
     }
 
     /**
@@ -48,7 +47,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.order_address.api');
+        return $this->get('oro_magento.form.handler.order_address.api');
     }
 
     /**
@@ -58,7 +57,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      * @param int $orderId
      *
      * @return JsonResponse
@@ -81,10 +80,10 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_address_create",
+     *      id="oro_magento_order_address_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:OrderAddress"
+     *      class="OroMagentoBundle:OrderAddress"
      * )
      * @param int $orderId
      *
@@ -123,7 +122,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *      description="Get order address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      *
      * @return Response
      */
@@ -148,10 +147,10 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_address_update",
+     *      id="oro_magento_order_address_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:OrderAddress"
+     *      class="OroMagentoBundle:OrderAddress"
      * )
      * @return Response
      */
@@ -184,10 +183,10 @@ class OrderAddressController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_delete",
+     *      id="oro_magento_order_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:OrderAddress"
+     *      class="OroMagentoBundle:OrderAddress"
      * )
      * @return Response
      */
@@ -220,6 +219,6 @@ class OrderAddressController extends RestController implements ClassResourceInte
      */
     protected function getOrderManager()
     {
-        return $this->get('orocrm_magento.order.manager.api');
+        return $this->get('oro_magento.order.manager.api');
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 /**
  * Class NamesAwareTrait
  *
- * @package OroCRM\Bundle\MagentoBundle\Entity
+ * @package Oro\Bundle\MagentoBundle\Entity
  *
  * Denormalized data to process billing address person names for guest carts/orders
  * Or customer first/last name for logged in customer's cart

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Type;
+namespace Oro\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -26,7 +26,7 @@ class ContactEmailType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail',
+                'data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail',
                 'intention' => 'contact',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation' => true,
@@ -48,6 +48,6 @@ class ContactEmailType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_contact_email';
+        return 'oro_contact_email';
     }
 }

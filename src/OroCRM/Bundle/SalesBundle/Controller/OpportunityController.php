@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller;
+namespace Oro\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,9 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @Route("/opportunity")
@@ -21,13 +20,13 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class OpportunityController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="orocrm_sales_opportunity_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_sales_opportunity_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_opportunity_view",
+     *      id="oro_sales_opportunity_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMSalesBundle:Opportunity"
+     *      class="OroSalesBundle:Opportunity"
      * )
      */
     public function viewAction(Opportunity $entity)
@@ -38,9 +37,9 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_sales_opportunity_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="oro_sales_opportunity_info", requirements={"id"="\d+"})
      * @Template
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @AclAncestor("oro_sales_opportunity_view")
      */
     public function infoAction(Opportunity $entity)
     {
@@ -50,13 +49,13 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_sales_opportunity_create")
-     * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
+     * @Route("/create", name="oro_sales_opportunity_create")
+     * @Template("OroSalesBundle:Opportunity:update.html.twig")
      * @Acl(
-     *      id="orocrm_sales_opportunity_create",
+     *      id="oro_sales_opportunity_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMSalesBundle:Opportunity"
+     *      class="OroSalesBundle:Opportunity"
      * )
      */
     public function createAction()
@@ -65,13 +64,13 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_sales_opportunity_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_sales_opportunity_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_opportunity_update",
+     *      id="oro_sales_opportunity_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMSalesBundle:Opportunity"
+     *      class="OroSalesBundle:Opportunity"
      * )
      */
     public function updateAction(Opportunity $entity)
@@ -82,30 +81,30 @@ class OpportunityController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_sales_opportunity_index",
+     *      name="oro_sales_opportunity_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @AclAncestor("oro_sales_opportunity_view")
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_sales.opportunity.class')
+            'entity_class' => $this->container->getParameter('oro_sales.opportunity.class')
         ];
     }
 
     /**
      * Create opportunity form with data channel
      *
-     * @Route("/create/{channelIds}", name="orocrm_sales_opportunity_data_channel_aware_create")
-     * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
-     * @AclAncestor("orocrm_sales_opportunity_create")
+     * @Route("/create/{channelIds}", name="oro_sales_opportunity_data_channel_aware_create")
+     * @Template("OroSalesBundle:Opportunity:update.html.twig")
+     * @AclAncestor("oro_sales_opportunity_create")
      *
      * @ParamConverter(
      *      "channel",
-     *      class="OroCRMChannelBundle:Channel",
+     *      class="OroChannelBundle:Channel",
      *      options={"id" = "channelIds"}
      * )
      */
@@ -120,10 +119,10 @@ class OpportunityController extends Controller
     /**
      * @Route(
      *     "/datagrid/opportunity-with-datachannel/{channelIds}",
-     *     name="orocrm_sales_datagrid_opportunity_datachannel_aware"
+     *     name="oro_sales_datagrid_opportunity_datachannel_aware"
      * )
-     * @Template("OroCRMSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @Template("OroSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
+     * @AclAncestor("oro_sales_opportunity_view")
      */
     public function opportunityWithDataChannelGridAction($channelIds, Request $request)
     {
@@ -150,9 +149,9 @@ class OpportunityController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_sales.opportunity.form'),
-            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
-            $this->get('orocrm_sales.opportunity.form.handler')
+            $this->get('oro_sales.opportunity.form'),
+            $this->get('translator')->trans('oro.sales.controller.opportunity.saved.message'),
+            $this->get('oro_sales.opportunity.form.handler')
         );
     }
 }

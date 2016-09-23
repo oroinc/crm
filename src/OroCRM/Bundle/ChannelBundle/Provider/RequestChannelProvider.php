@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider;
+namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 class RequestChannelProvider
 {
@@ -51,7 +51,7 @@ class RequestChannelProvider
             /** @var EntityManager $em */
             $em = $this->registry->getManager();
 
-            return $em->getReference('OroCRMChannelBundle:Channel', $channelId);
+            return $em->getReference('OroChannelBundle:Channel', $channelId);
         }
 
         return false;

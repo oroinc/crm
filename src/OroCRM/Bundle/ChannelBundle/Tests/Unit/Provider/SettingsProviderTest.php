@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class SettingsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -207,12 +207,12 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                         'magento' => [
                             'label' => 'Magento type',
                             'entities' => [
-                                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-                                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                                'OroCRM\Bundle\MagentoBundle\Entity\Order'
+                                'Oro\Bundle\MagentoBundle\Entity\Cart',
+                                'Oro\Bundle\MagentoBundle\Entity\Customer',
+                                'Oro\Bundle\MagentoBundle\Entity\Order'
                             ],
                             'integration_type' => 'magento',
-                            'customer_identity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'customer_identity' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                         ],
                         'custom' => [
                             'label' => 'Custom',
@@ -260,12 +260,12 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                         'magento' => [
                             'label' => 'Magento type',
                             'entities' => [
-                                'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-                                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                                'OroCRM\Bundle\MagentoBundle\Entity\Order'
+                                'Oro\Bundle\MagentoBundle\Entity\Cart',
+                                'Oro\Bundle\MagentoBundle\Entity\Customer',
+                                'Oro\Bundle\MagentoBundle\Entity\Order'
                             ],
                             'integration_type' => 'magento',
-                            'customer_identity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'customer_identity' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                             'priority' => 0
                         ],
                         'custom' => [

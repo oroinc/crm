@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,8 +17,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailThread;
 use Oro\Bundle\EmailBundle\Entity\EmailUser;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class LoadEmailData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -47,7 +46,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
+        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
     }
 
     /**
@@ -78,7 +77,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     {
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "emails.csv", "r");
         if ($handle) {
@@ -98,7 +97,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      */
     protected function loadEmailsDemo(ObjectManager $om)
     {
-        $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
         $contactCount = count($contacts);
 
         for ($i = 0; $i < 100; ++$i) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
+namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -9,9 +9,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 
 class CartAddressApiEntityManager extends ApiEntityManager
 {

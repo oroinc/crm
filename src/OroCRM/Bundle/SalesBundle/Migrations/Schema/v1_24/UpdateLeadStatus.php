@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -48,7 +48,7 @@ class UpdateLeadStatus implements
             'canceled'
         ];
         $connection = $this->container->get('doctrine')->getConnection();
-        $oldStatuses = $connection->fetchAll('SELECT name, label FROM orocrm_sales_lead_status');
+        $oldStatuses = $connection->fetchAll('SELECT name, label FROM oro_sales_lead_status');
         $newStatuses = $connection->fetchAll('SELECT id, priority FROM oro_enum_lead_status');
         $oldStatuses = $this->buildOneDimensionArray($oldStatuses, 'name', 'label');
         $newStatuses = $this->buildOneDimensionArray($newStatuses, 'id', 'priority');
@@ -98,7 +98,7 @@ class UpdateLeadStatus implements
      */
     protected function updateLeadTable($queries, $statuses)
     {
-        $query = 'UPDATE orocrm_sales_lead SET status_id = :status_id WHERE status_name = :status_name';
+        $query = 'UPDATE oro_sales_lead SET status_id = :status_id WHERE status_name = :status_name';
         foreach ($statuses as $status) {
             $migrationQuery = new ParametrizedSqlMigrationQuery();
             $migrationQuery->addSql(

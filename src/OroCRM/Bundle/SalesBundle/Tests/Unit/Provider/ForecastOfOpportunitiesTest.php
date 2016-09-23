@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -11,9 +11,8 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
-
-use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
-use OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
+use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 
 class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 {
@@ -76,7 +75,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->forecastProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_30;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_30;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -24,9 +24,9 @@ class AddTrackingVisitAssociation implements Migration, VisitEventAssociationExt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_order');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_product');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_cart');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_customer');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_order');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_product');
     }
 }

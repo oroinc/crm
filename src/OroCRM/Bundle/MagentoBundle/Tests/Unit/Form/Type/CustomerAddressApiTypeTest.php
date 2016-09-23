@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CustomerAddressApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressApiType;
 
 class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             'primary'      => 'checkbox',
             'country'      => 'translatable_entity',
             'region'       => 'translatable_entity',
-            'owner'        => 'orocrm_customer_select',
+            'owner'        => 'oro_customer_select',
             'types'        => 'translatable_entity'
         ];
 

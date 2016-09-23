@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider;
+namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;
@@ -9,11 +9,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class StateProvider
 {
-    const CACHE_ID = 'orocrm_channel_state_data';
+    const CACHE_ID = 'oro_channel_state_data';
 
     /** @var SettingsProvider */
     protected $settingsProvider;
@@ -78,7 +78,7 @@ class StateProvider
     public function isEntitiesEnabledInSomeChannel(array $entities)
     {
         $qb = $this->getManager()->createQueryBuilder('c');
-        $qb->from('OroCRMChannelBundle:Channel', 'c');
+        $qb->from('OroChannelBundle:Channel', 'c');
         $qb->select('c.id');
         $qb->andWhere('c.status = :status');
         $qb->setParameter('status', Channel::STATUS_ACTIVE);
@@ -97,8 +97,8 @@ class StateProvider
     }
 
     /**
-     * Event listener subscribed  on 'orocrm_channel.channel.save_succeed' and on
-     * 'orocrm_channel.channel.delete_succeed' event.
+     * Event listener subscribed  on 'oro_channel.channel.save_succeed' and on
+     * 'oro_channel.channel.delete_succeed' event.
      */
     public function processChannelChange()
     {
@@ -132,7 +132,7 @@ class StateProvider
             $qb = $this->getManager()->createQueryBuilder();
             $qb->distinct(true);
             $qb->select('e.name')
-                ->from('OroCRMChannelBundle:Channel', 'c')
+                ->from('OroChannelBundle:Channel', 'c')
                 ->andWhere('c.status = :status')
                 ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');

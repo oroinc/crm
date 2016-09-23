@@ -1,38 +1,38 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
-{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
-{% import 'OroCRMSalesBundle::macros.html.twig' as sales %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+{% import 'OroSalesBundle::macros.html.twig' as sales %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ UI.renderProperty('orocrm.sales.b2bcustomer.name.label'|trans, entity.name) }}
+            {{ UI.renderProperty('oro.sales.b2bcustomer.name.label'|trans, entity.name) }}
 
-            {{ channel.renderChannelProperty(entity, 'orocrm.sales.b2bcustomer.data_channel.label') }}
+            {{ channel.renderChannelProperty(entity, 'oro.sales.b2bcustomer.data_channel.label') }}
 
-            {%- if resource_granted('orocrm_account_view') and entity.account -%}
-                {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ UI.renderEntityViewLabel(entity.account, 'name', 'orocrm.account.entity_label') ~ '</a>' %}
+            {%- if resource_granted('oro_account_view') and entity.account -%}
+                {% set accountView = '<a href="' ~ path('oro_account_view', {'id': entity.account.id}) ~ '">' ~ UI.renderEntityViewLabel(entity.account, 'name', 'oro.account.entity_label') ~ '</a>' %}
             {%- else -%}
                 {% set accountView = UI.renderEntityViewLabel(entity.account, 'name') %}
             {%- endif -%}
-            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.account.label'|trans, accountView) }}
+            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.account.label'|trans, accountView) }}
 
-            {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
+            {%- if resource_granted('oro_contact_view') and entity.contact -%}
+                {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
             {%- else -%}
                 {% set contactView = entity.contact ? entity.contact : '' %}
             {%- endif -%}
-            {{ UI.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? sales.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
-            {{ UI.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? sales.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
-            {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
+            {{ UI.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? sales.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ UI.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? sales.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
+            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.contact.label'|trans, contactView) }}
 
             {% if entity.billingAddress is not empty %}
-                {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
+                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
             {% endif %}
 
             {% if entity.shippingAddress is not empty %}
-                {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+                {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
         </div>
         <div class="responsive-block">

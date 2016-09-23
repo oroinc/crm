@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
-use OroCRM\Bundle\MagentoBundle\Provider\WebsiteChannelChartProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\WebsiteChannelChartProvider;
 
 class WebsiteChannelChartProviderTest extends WebsiteChartProviderTest
 {

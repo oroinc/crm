@@ -3,18 +3,18 @@ dashboards:
         quick_launchpad:
             items:
                 accounts:
-                    label:      orocrm.account.entity_plural_label
+                    label:      oro.account.entity_plural_label
                     icon:       suitcase
-                    route:      orocrm_account_index
-                    acl:        orocrm_account_view
+                    route:      oro_account_index
+                    acl:        oro_account_view
                     position:   10
         my_accounts_activity:
-            label:       orocrm.dashboard.my_accounts_activity.title
+            label:       oro.dashboard.my_accounts_activity.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroCRMAccountBundle, name: myAccountsActivity }
-            acl:         orocrm_account_view
-            description: orocrm.dashboard.my_accounts_activity.description
-            icon:        bundles/orocrmaccount/img/recent_accessed_accounts.png
+            route_parameters: { bundle: OroAccountBundle, name: myAccountsActivity }
+            acl:         oro_account_view
+            description: oro.dashboard.my_accounts_activity.description
+            icon:        bundles/oroaccount/img/recent_accessed_accounts.png
             configuration:
                 owners:
                     type: oro_type_widget_owners

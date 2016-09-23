@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class UpdateCustomerLifetime extends AbstractFixture
 {
@@ -19,7 +19,7 @@ class UpdateCustomerLifetime extends AbstractFixture
     {
         /** @var EntityManager $manager */
         /** @var EntityRepository $repository */
-        $repository = $manager->getRepository('OroCRMMagentoBundle:Customer');
+        $repository = $manager->getRepository('OroMagentoBundle:Customer');
         $queryBuilder = $repository->createQueryBuilder('customer');
 
         $queryBuilder
@@ -35,7 +35,7 @@ class UpdateCustomerLifetime extends AbstractFixture
             ->setParameter('status', Order::STATUS_CANCELED);
 
         $updateQuery =
-            'UPDATE OroCRMMagentoBundle:Customer customer SET customer.lifetime = :lifetime WHERE customer.id = :id';
+            'UPDATE OroMagentoBundle:Customer customer SET customer.lifetime = :lifetime WHERE customer.id = :id';
 
         // update lifetime for all customers
         $iterator = new BufferedQueryResultIterator($queryBuilder);

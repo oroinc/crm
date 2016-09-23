@@ -18,7 +18,7 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "target-dir": "OroCRM/Bundle/AnalyticsBundle",
+    "target-dir": "Oro/Bundle/AnalyticsBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

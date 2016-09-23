@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Model;
+namespace Oro\Bundle\CampaignBundle\Model;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListItem;
+use Oro\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 
 class EmailCampaignStatisticsConnector
 {

@@ -1,6 +1,6 @@
 Addresses: Addresses
 Basic Information: Basic Information
-orocrm:
+oro:
     dashboard:
         my_accounts_activity:
             title:                  Recently accessed accounts
@@ -30,7 +30,7 @@ orocrm:
         controller:
             account.saved.message:  "Account saved"
         #
-        # OroCRM/Bundle/AccountBundle/Entity/Account
+        # Oro/Bundle/AccountBundle/Entity/Account
         #
         entity_label:               Account
         entity_plural_label:        Accounts

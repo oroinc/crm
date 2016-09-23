@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Entity\Repository;
+namespace Oro\Bundle\AnalyticsBundle\Entity\Repository;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class RFMMetricCategoryRepository extends EntityRepository
 {

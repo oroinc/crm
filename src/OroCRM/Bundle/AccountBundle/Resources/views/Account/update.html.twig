@@ -4,12 +4,12 @@
 {% if entity.name %}
     {% set name = resource_granted('VIEW', entity, 'name')
         ? entity.name|default('N/A')
-        : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans})
+        : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans})
     %}
 {% endif %}
 {% oro_title_set({params : {"%account.name%": name }}) %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
+{% set formAction = form.vars.value.id ? path('oro_account_update', { 'id': form.vars.value.id }) : path('oro_account_create')  %}
 
 {% block head_script %}
     {{ parent() }}
@@ -22,27 +22,27 @@
     {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_account', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_account_index'),
+            'dataRedirect': path('oro_account_index'),
             'aCss': 'no-hash remove-button',
             'dataId': form.vars.value.id,
             'id': 'btn-remove-account',
-            'entity_label': 'orocrm.account.entity_label'|trans,
+            'entity_label': 'oro.account.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.cancelButton(path('orocrm_account_index')) }}
+    {{ UI.cancelButton(path('oro_account_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_account_view',
+        'route': 'oro_account_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('orocrm_account_create') %}
+    {% if resource_granted('oro_account_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_account_create'
+            'route': 'oro_account_create'
         }) %}
     {% endif %}
-    {% if form.vars.value.id or resource_granted('orocrm_account_update') %}
+    {% if form.vars.value.id or resource_granted('oro_account_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'orocrm_account_update',
+            'route': 'oro_account_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -55,19 +55,19 @@
         {% if form.vars.value.name %}
             {% set name = resource_granted('VIEW', form.vars.value, 'name')
             ? form.vars.value.name|default('N/A')
-            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
+            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}))
             %}
         {% endif %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_account_index'),
-            'indexLabel': 'orocrm.account.entity_plural_label'|trans,
+            'indexPath':   path('oro_account_index'),
+            'indexLabel': 'oro.account.entity_plural_label'|trans,
             'entityTitle': name
         }
         %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.account.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.account.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -105,7 +105,7 @@
 
     {% if form.contacts is defined%}
         {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.account.contacts.label'|trans,
+            'title' : 'oro.account.contacts.label'|trans,
             'subblocks': [{
                 'title' : null,
                 'useSpan': false,

@@ -20,7 +20,7 @@
                 });
 
                 widget.on('contentLoad', function(event) {
-                    var dataField = $('[data-ftid=orocrm_channel_form_dataSource_data]');
+                    var dataField = $('[data-ftid=oro_channel_form_dataSource_data]');
                     var apiKeyField = $('[data-ftid=oro_integration_channel_form_transport_apiKey]');
                     if (dataField.val() && !apiKeyField.val()) {
                         data = JSON.parse(dataField.val());

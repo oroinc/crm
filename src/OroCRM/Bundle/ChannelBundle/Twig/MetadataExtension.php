@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Twig;
+namespace Oro\Bundle\ChannelBundle\Twig;
 
-use OroCRM\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
+use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 
 class MetadataExtension extends \Twig_Extension
 {
-    const EXTENSION_NAME = 'orocrm_channel_metadata';
+    const EXTENSION_NAME = 'oro_channel_metadata';
 
     /** @var MetadataProviderInterface */
     protected $metaDataProvider;
@@ -25,14 +25,14 @@ class MetadataExtension extends \Twig_Extension
     public function getFunctions()
     {
         $entitiesMetadataFunction    = new \Twig_SimpleFunction(
-            'orocrm_channel_entities_metadata',
+            'oro_channel_entities_metadata',
             [
                 $this,
                 'getEntitiesMetadata'
             ]
         );
         $channelTypeMetadataFunction = new \Twig_SimpleFunction(
-            'orocrm_channel_type_metadata',
+            'oro_channel_type_metadata',
             [
                 $this,
                 'getChannelTypeMetadata'

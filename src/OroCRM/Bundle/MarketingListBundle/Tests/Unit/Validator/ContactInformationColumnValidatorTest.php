@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
-use OroCRM\Bundle\MarketingListBundle\Validator\ContactInformationColumnValidator;
+use Oro\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
+use Oro\Bundle\MarketingListBundle\Validator\ContactInformationColumnValidator;
 
 class ContactInformationColumnValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class ContactInformationColumnValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contactInformationFieldHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
 

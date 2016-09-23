@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -9,9 +9,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -23,7 +23,7 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'];
+        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'];
     }
 
     /**
@@ -31,7 +31,7 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
+        $this->factory = $container->get('oro_channel.builder.factory');
     }
 
     /**

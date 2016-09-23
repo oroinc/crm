@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextReader;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextReader;
 
 class ContextReaderTest extends \PHPUnit_Framework_TestCase
 {

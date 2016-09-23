@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Type;
+namespace Oro\Bundle\ContactBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class GroupApiType extends GroupType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\Group',
+                'data_class' => 'Oro\Bundle\ContactBundle\Entity\Group',
                 'intention'  => 'group',
                 'csrf_protection' => false,
             )

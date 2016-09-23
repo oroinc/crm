@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -18,9 +18,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 
 /**
  * @NamePrefix("oro_api_")
@@ -32,7 +31,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.cart_address.manager.api');
+        return $this->get('oro_magento.cart_address.manager.api');
     }
 
     /**
@@ -40,7 +39,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.cart_address.api');
+        return $this->get('oro_magento.form.cart_address.api');
     }
 
     /**
@@ -48,7 +47,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.cart_address');
+        return $this->get('oro_magento.form.handler.cart_address');
     }
 
     /**
@@ -59,10 +58,10 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_address_create",
+     *      id="oro_magento_cart_address_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:CartAddress"
+     *      class="OroMagentoBundle:CartAddress"
      * )
      * @param int $cartId
      *
@@ -81,10 +80,10 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_address_create",
+     *      id="oro_magento_cart_address_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:CartAddress"
+     *      class="OroMagentoBundle:CartAddress"
      * )
      * @param int $cartId
      *
@@ -104,7 +103,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      description="Get address by type",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @return Response
      */
@@ -122,7 +121,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      description="Get address item by type",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @return Response
      */
@@ -141,10 +140,10 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_address_update",
+     *      id="oro_magento_cart_address_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:CartAddress"
+     *      class="OroMagentoBundle:CartAddress"
      * )
      * @return Response
      */
@@ -162,7 +161,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      description="Update cart billing address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_address_update")
+     * @AclAncestor("oro_magento_cart_address_update")
      *
      * @return Response
      */
@@ -181,10 +180,10 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_address_delete",
+     *      id="oro_magento_cart_address_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:CartAddress"
+     *      class="OroMagentoBundle:CartAddress"
      * )
      * @return Response
      */
@@ -202,7 +201,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      *      description="Delete cart billing address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_address_delete")
+     * @AclAncestor("oro_magento_cart_address_delete")
      * @return Response
      */
     public function deleteBillingAction($cartId)
@@ -297,7 +296,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      */
     protected function getCartManager()
     {
-        return $this->get('orocrm_magento.cart.manager.api');
+        return $this->get('oro_magento.cart.manager.api');
     }
 
     /**

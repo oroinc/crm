@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Handler;
+namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;

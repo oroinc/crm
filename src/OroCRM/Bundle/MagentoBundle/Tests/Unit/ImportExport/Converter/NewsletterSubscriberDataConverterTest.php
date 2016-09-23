@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter;
+use Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter;
 
 class NewsletterSubscriberDataConverterTest extends \PHPUnit_Framework_TestCase
 {

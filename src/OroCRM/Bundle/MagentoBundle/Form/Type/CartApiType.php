@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
 
 class CartApiType extends AbstractType
 {
@@ -24,20 +23,20 @@ class CartApiType extends AbstractType
         $builder->add('taxAmount', 'oro_money', ['required' => false]);
         $builder->add(
             'cartItems',
-            'orocrm_cart_item_collection',
+            'oro_cart_item_collection',
             [
                 'label'    => '',
                 'type'     => 'cart_item_api_type',
                 'required' => true,
-                'options'  => ['data_class' => 'OroCRM\Bundle\MagentoBundle\Entity\CartItem']
+                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\CartItem']
             ]
         );
-        $builder->add('customer', 'orocrm_customer_select', ['required' => false]);
+        $builder->add('customer', 'oro_customer_select', ['required' => false]);
         $builder->add(
             'store',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:Store',
+                'class'    => 'OroMagentoBundle:Store',
                 'property' => 'name'
             ]
         );
@@ -57,7 +56,7 @@ class CartApiType extends AbstractType
             'status',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:CartStatus',
+                'class'    => 'OroMagentoBundle:CartStatus',
                 'property' => 'name'
             ]
         );
@@ -76,7 +75,7 @@ class CartApiType extends AbstractType
             'dataChannel',
             'translatable_entity',
             [
-                'class'    => 'OroCRMChannelBundle:Channel',
+                'class'    => 'OroChannelBundle:Channel',
                 'property' => 'name',
                 'required' => false
             ]
@@ -95,7 +94,7 @@ class CartApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Cart',
                 'csrf_protection' => false
             ]
         );

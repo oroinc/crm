@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\EventListener;
+namespace Oro\Bundle\ActivityContactBundle\EventListener;
 
 use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 use Oro\Bundle\MigrationBundle\Event\PostMigrationEvent;
-
-use OroCRM\Bundle\ActivityContactBundle\Migration\ActivityContactMigration;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Migration\ActivityContactMigration;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactMigrationListener
 {

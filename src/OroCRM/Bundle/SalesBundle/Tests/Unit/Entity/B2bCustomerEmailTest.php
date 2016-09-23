@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 
 class B2bCustomerEmailTest extends \PHPUnit_Framework_TestCase
 {

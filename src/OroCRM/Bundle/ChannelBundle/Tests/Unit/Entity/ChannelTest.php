@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\Collection;
 
-use OroCRM\Bundle\ChannelBundle\Entity\EntityName;
+use Oro\Bundle\ChannelBundle\Entity\EntityName;
 
 class ChannelTest extends AbstractEntityTestCase
 {
@@ -13,7 +13,7 @@ class ChannelTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\Channel';
+        return 'Oro\Bundle\ChannelBundle\Entity\Channel';
     }
 
     /**
@@ -24,7 +24,7 @@ class ChannelTest extends AbstractEntityTestCase
         $name             = 'Some name';
         $owner            = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         $integration      = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $customerIdentity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
+        $customerIdentity = $this->getMock('Oro\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
         $status           = true;
         $channelType      = 'Custom';
         $someDateTime     = new \DateTime();

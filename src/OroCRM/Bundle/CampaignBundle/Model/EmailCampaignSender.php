@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Model;
+namespace Oro\Bundle\CampaignBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,11 +10,11 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Validator\ValidatorInterface;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
-use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use Oro\Bundle\CampaignBundle\Transport\TransportInterface;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\MarketingListBundle\Provider\MarketingListProvider;
 
 class EmailCampaignSender
 {

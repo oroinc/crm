@@ -2,10 +2,10 @@ placeholders:
     placeholders:
         page_header_stats_after:
             items:
-                orocrm_activity_contact:
+                oro_activity_contact:
                     order: 10
 
     items:
-        orocrm_activity_contact:
-            template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
-            applicable: "@orocrm_activity_contact.placeholder.filter->isApplicable($entity$, Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope::VIEW_PAGE)"
+        oro_activity_contact:
+            template: OroActivityContactBundle:ActivityContact:metrics.html.twig
+            applicable: "@oro_activity_contact.placeholder.filter->isApplicable($entity$, Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope::VIEW_PAGE)"

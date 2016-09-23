@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Twig;
+namespace Oro\Bundle\ContactBundle\Twig;
 
-use OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
+use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 
 class SocialUrlExtension extends \Twig_Extension
 {
@@ -24,7 +24,7 @@ class SocialUrlExtension extends \Twig_Extension
      */
     public function getName()
     {
-        return 'orocrm_contact_social_url';
+        return 'oro_contact_social_url';
     }
 
     /**

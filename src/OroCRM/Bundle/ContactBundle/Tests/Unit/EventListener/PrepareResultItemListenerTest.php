@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
-use OroCRM\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
 
 class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,7 +18,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->nameFormatter = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter')
+        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +50,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new Contact())
                                 ->setFirstName('first')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'Oro\Bundle\ContactBundle\Entity\Contact',
                         1
                     )
                 ),
@@ -61,7 +60,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new Contact())
                                 ->setFirstName('first')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'Oro\Bundle\ContactBundle\Entity\Contact',
                         1,
                         'first'
                     )
@@ -74,7 +73,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new Contact())
                                 ->setFirstName('first')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'Oro\Bundle\ContactBundle\Entity\Contact',
                         1,
                         'preset title'
                     )
@@ -85,7 +84,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new Contact())
                                 ->setFirstName('first')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'Oro\Bundle\ContactBundle\Entity\Contact',
                         1,
                         'preset title'
                     )
@@ -98,7 +97,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new ContactPhone())
                                 ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
                         1
                     )
                 ),
@@ -108,7 +107,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new ContactPhone())
                                 ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
                         1
                     )
                 ),
@@ -120,7 +119,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new ContactPhone())
                                 ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
                         1,
                         'preset title'
                     )
@@ -131,7 +130,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                             (new ContactPhone())
                                 ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
+                        'Oro\Bundle\ContactBundle\Entity\ContactPhone',
                         1,
                         'preset title'
                     )

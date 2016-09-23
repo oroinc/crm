@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -17,10 +17,9 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Manager\CartApiEntityManager;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Manager\CartApiEntityManager;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 
 /**
  * @NamePrefix("oro_api_")
@@ -32,7 +31,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.cart_item.manager.api');
+        return $this->get('oro_magento.cart_item.manager.api');
     }
 
     /**
@@ -40,7 +39,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.cart_item.api');
+        return $this->get('oro_magento.form.cart_item.api');
     }
 
     /**
@@ -48,7 +47,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.cart_item');
+        return $this->get('oro_magento.form.handler.cart_item');
     }
 
     /**
@@ -59,10 +58,10 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_item_create",
+     *      id="oro_magento_cart_item_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:CartItem"
+     *      class="OroMagentoBundle:CartItem"
      * )
      * @param int $cartId
      *
@@ -101,7 +100,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *      description="Get cart item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @return Response
      */
@@ -122,7 +121,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *      description="Get all cart items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @param int $cartId
      *
@@ -149,10 +148,10 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_item_update",
+     *      id="oro_magento_cart_item_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:CartItem"
+     *      class="OroMagentoBundle:CartItem"
      * )
      * @return Response
      */
@@ -184,10 +183,10 @@ class CartItemController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_item_delete",
+     *      id="oro_magento_cart_item_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:CartItem"
+     *      class="OroMagentoBundle:CartItem"
      * )
      * @return Response
      */
@@ -220,6 +219,6 @@ class CartItemController extends RestController implements ClassResourceInterfac
      */
     protected function getCartManager()
     {
-        return $this->get('orocrm_magento.cart.manager.api');
+        return $this->get('oro_magento.cart.manager.api');
     }
 }

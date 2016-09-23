@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Provider;
+namespace Oro\Bundle\CampaignBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -51,7 +51,7 @@ class TrackingVisitEventIdentification implements TrackingEventIdentifierInterfa
     public function getEventTargets()
     {
         return [
-            'OroCRM\Bundle\CampaignBundle\Entity\Campaign'
+            'Oro\Bundle\CampaignBundle\Entity\Campaign'
         ];
     }
 
@@ -70,7 +70,7 @@ class TrackingVisitEventIdentification implements TrackingEventIdentifierInterfa
     public function processEvent(TrackingVisitEvent $trackingVisitEvent)
     {
         $code = $trackingVisitEvent->getWebEvent()->getCode();
-        $campaign = $this->em->getRepository('OroCRMCampaignBundle:Campaign')->findOneBy(['code' => $code]);
+        $campaign = $this->em->getRepository('OroCampaignBundle:Campaign')->findOneBy(['code' => $code]);
         if ($campaign) {
             return [$campaign];
         }

@@ -1,4 +1,4 @@
-OroCRMChannelBundle
+OroChannelBundle
 ===================
 
 Entity data block
@@ -21,15 +21,15 @@ In order to implement ability to enable feature in scope of channel `YourBundle/
       channels:
           entity_data:
              -
-                name: OroCRM\Bundle\SomeEntity\Entity\RealEntity                # Entity FQCN
+                name: Oro\Bundle\SomeEntity\Entity\RealEntity                # Entity FQCN
                 dependent:                                                      # Service entities that dependent on availability of main entity
-                      - OroCRM\Bundle\SomeEntity\Entity\RealEntityStatus
-                      - OroCRM\Bundle\SomeEntity\Entity\RealEntityCloseReason
+                      - Oro\Bundle\SomeEntity\Entity\RealEntityStatus
+                      - Oro\Bundle\SomeEntity\Entity\RealEntityCloseReason
                 navigation_items:                                               # Navigation items that responsible for entity visibility
                       - menu.tab.real_entity_list
 
              -
-                name: OroCRM\Bundle\AcmeDemoBundle\Entity\AnotherEntity
+                name: Oro\Bundle\AcmeDemoBundle\Entity\AnotherEntity
                 dependent: ~
                 navigation_items:
                     - menu.tab.entity_funnel_list
@@ -55,7 +55,7 @@ Menu item should be hidden by default in navigation configuration using paramete
     menu_config:
         items:
             menu_item:
-                label: 'orocrm.some_entity.menu.tab.label'
+                label: 'oro.some_entity.menu.tab.label'
                 display: false
         tree:
             application_menu:
@@ -75,10 +75,10 @@ also bring the `integration` field to configure the integration. It should be de
         customer_channel_type:
             label: Channel type name
             entities:
-                - OroCRM\Bundle\AcmeBundle\Entity\Entity
-                - OroCRM\Bundle\AcmeBundle\Entity\Customer
+                - Oro\Bundle\AcmeBundle\Entity\Entity
+                - Oro\Bundle\AcmeBundle\Entity\Customer
             integration_type: some_type
-            customer_identity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
+            customer_identity: Oro\Bundle\ChannelBundle\Entity\CustomerIdentity
             lifetime_value: field
             priority: -10
 ```
@@ -93,7 +93,7 @@ also bring the `integration` field to configure the integration. It should be de
 | `priority`          | Uses to sort channel types by priority. Default value is 0                                                          | no       |
 
 
-By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
+By default, if `customer_identity` option is not set `Oro\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
 will be included automatically.
 
 Lifetime sales value
@@ -106,11 +106,11 @@ amount for single customer.
 OroChannel bundle provides mechanism for tracking changes of lifetime sales value per customer and stores history of those changes.
 Developer needs just to configure lifetime field for channel type to enable tracking.
 
-In order to use data from history **Amount provider** was implemented. It's registered as service for DIC with `orocrm_channel.provider.lifetime.amount_provider` identifier.
-Also if you need to display **Life time** on the page you can use `orocrm_channel_lifetime_value` twig extension that brings `orocrm_channel_account_lifetime` twig function.
+In order to use data from history **Amount provider** was implemented. It's registered as service for DIC with `oro_channel.provider.lifetime.amount_provider` identifier.
+Also if you need to display **Life time** on the page you can use `oro_channel_lifetime_value` twig extension that brings `oro_channel_account_lifetime` twig function.
 
 **Examples of usage:**
 ```twig
-    Lifetime for {{ channel.name }}: {{ orocrm_channel_account_lifetime(account, channel)|oro_format_currency }}
+    Lifetime for {{ channel.name }}: {{ oro_channel_account_lifetime(account, channel)|oro_format_currency }}
 ```
 

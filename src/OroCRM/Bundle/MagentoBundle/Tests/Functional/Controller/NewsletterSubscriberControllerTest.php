@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
  * @dbIsolation
@@ -41,7 +41,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
 
         $this->loadFixtures(
-            ['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData'],
+            ['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData'],
             true
         );
 
@@ -82,7 +82,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_newsletter_subscriber_view', ['id' => $this->getMainEntityId()])
+            $this->getUrl('oro_magento_newsletter_subscriber_view', ['id' => $this->getMainEntityId()])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
@@ -159,7 +159,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_newsletter_subscriber_unsubscribe', ['id' => $this->getMainEntityId()])
+            $this->getUrl('oro_magento_newsletter_subscriber_unsubscribe', ['id' => $this->getMainEntityId()])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -173,7 +173,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_newsletter_subscriber_subscribe', ['id' => $this->getMainEntityId()])
+            $this->getUrl('oro_magento_newsletter_subscriber_subscribe', ['id' => $this->getMainEntityId()])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -185,7 +185,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_newsletter_subscriber_unsubscribe_customer',
+                'oro_magento_newsletter_subscriber_unsubscribe_customer',
                 ['id' => $this->subscriber->getCustomer()->getId()]
             )
         );
@@ -200,7 +200,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_newsletter_subscriber_subscribe_customer',
+                'oro_magento_newsletter_subscriber_subscribe_customer',
                 ['id' => $subscriber->getCustomer()->getId()]
             )
         );

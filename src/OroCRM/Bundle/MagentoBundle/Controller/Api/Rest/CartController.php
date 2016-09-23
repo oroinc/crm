@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +25,7 @@ class CartController extends RestController
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.cart.manager.api');
+        return $this->get('oro_magento.cart.manager.api');
     }
 
     /**
@@ -33,7 +33,7 @@ class CartController extends RestController
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.cart.api');
+        return $this->get('oro_magento.form.cart.api');
     }
 
     /**
@@ -41,7 +41,7 @@ class CartController extends RestController
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.cart.api');
+        return $this->get('oro_magento.form.handler.cart.api');
     }
 
     /**
@@ -57,7 +57,7 @@ class CartController extends RestController
      *      description="Get all carts",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @return Response
      */
@@ -77,10 +77,10 @@ class CartController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_create",
+     *      id="oro_magento_cart_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:Cart"
+     *      class="OroMagentoBundle:Cart"
      * )
      */
     public function postAction()
@@ -97,7 +97,7 @@ class CartController extends RestController
      *      description="Get cart",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @AclAncestor("oro_magento_cart_view")
      *
      * @return Response
      */
@@ -116,10 +116,10 @@ class CartController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_update",
+     *      id="oro_magento_cart_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:Cart"
+     *      class="OroMagentoBundle:Cart"
      * )
      * @return Response
      */
@@ -138,10 +138,10 @@ class CartController extends RestController
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_cart_delete",
+     *      id="oro_magento_cart_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:Cart"
+     *      class="OroMagentoBundle:Cart"
      * )
      * @return Response
      */

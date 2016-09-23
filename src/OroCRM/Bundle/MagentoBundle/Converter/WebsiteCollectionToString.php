@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Converter;
+namespace Oro\Bundle\MagentoBundle\Converter;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 
 /**
  * Used in datagrid for conversion websites list to string

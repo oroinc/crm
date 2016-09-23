@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -8,7 +8,6 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
-
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_5;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -17,18 +17,18 @@ class UpdateEntityLabel implements Migration
     {
         $queries->addQuery(
             new UpdateEntityConfigEntityValueQuery(
-                'OroCRM\Bundle\AccountBundle\Entity\Account',
+                'Oro\Bundle\AccountBundle\Entity\Account',
                 'entity',
                 'label',
-                'orocrm.account.entity_label'
+                'oro.account.entity_label'
             )
         );
         $queries->addQuery(
             new UpdateEntityConfigEntityValueQuery(
-                'OroCRM\Bundle\AccountBundle\Entity\Account',
+                'Oro\Bundle\AccountBundle\Entity\Account',
                 'entity',
                 'plural_label',
-                'orocrm.account.entity_plural_label'
+                'oro.account.entity_plural_label'
             )
         );
     }

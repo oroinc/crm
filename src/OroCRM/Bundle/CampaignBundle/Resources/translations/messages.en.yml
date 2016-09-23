@@ -1,4 +1,4 @@
-orocrm:
+oro:
     campaign:
         entity_description:  Marketing campaigns
         entity_label:        Campaign
@@ -119,7 +119,7 @@ orocrm:
                 campaign_sender_name: Sender Name
                 title: Campaign
             transport:
-                internal: OroCRM
+                internal: Oro
             stats:
                 open.label: Open
                 click.label: Click

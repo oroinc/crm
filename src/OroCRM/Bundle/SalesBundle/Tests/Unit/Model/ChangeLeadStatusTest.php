@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMInvalidArgumentException;
 
-use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
-use OroCRM\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 
 class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
 {

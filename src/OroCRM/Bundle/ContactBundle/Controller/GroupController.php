@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller;
+namespace Oro\Bundle\ContactBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,8 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Group;
 
 /**
  * @Route("/group")
@@ -21,13 +20,13 @@ class GroupController extends Controller
     /**
      * Create group form
      *
-     * @Route("/create", name="orocrm_contact_group_create")
-     * @Template("OroCRMContactBundle:Group:update.html.twig")
+     * @Route("/create", name="oro_contact_group_create")
+     * @Template("OroContactBundle:Group:update.html.twig")
      * @Acl(
-     *      id="orocrm_contact_group_create",
+     *      id="oro_contact_group_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMContactBundle:Group"
+     *      class="OroContactBundle:Group"
      * )
      */
     public function createAction()
@@ -38,13 +37,13 @@ class GroupController extends Controller
     /**
      * Update group form
      *
-     * @Route("/update/{id}", name="orocrm_contact_group_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_contact_group_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_contact_group_update",
+     *      id="oro_contact_group_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMContactBundle:Group"
+     *      class="OroContactBundle:Group"
      * )
      */
     public function updateAction(Group $entity)
@@ -55,22 +54,22 @@ class GroupController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_contact_group_index",
+     *      name="oro_contact_group_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="orocrm_contact_group_view",
+     *      id="oro_contact_group_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMContactBundle:Group"
+     *      class="OroContactBundle:Group"
      * )
      * @Template()
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_contact.group.entity.class')
+            'entity_class' => $this->container->getParameter('oro_contact.group.entity.class')
         ];
     }
 
@@ -81,10 +80,10 @@ class GroupController extends Controller
      */
     protected function update(Group $entity)
     {
-        if ($this->get('orocrm_contact.form.handler.group')->process($entity)) {
+        if ($this->get('oro_contact.form.handler.group')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.contact.controller.contact_group.saved.message')
+                $this->get('translator')->trans('oro.contact.controller.contact_group.saved.message')
             );
 
             if (!$this->getRequest()->get('_widgetContainer')) {
@@ -94,8 +93,8 @@ class GroupController extends Controller
 
         return array(
             'entity'           => $entity,
-            'form'             => $this->get('orocrm_contact.form.group')->createView(),
-            'showContactsGrid' => count($this->get('orocrm_contact.contact.manager')->getList()) ? true : false
+            'form'             => $this->get('oro_contact.form.group')->createView(),
+            'showContactsGrid' => count($this->get('oro_contact.contact.manager')->getList()) ? true : false
         );
     }
 }

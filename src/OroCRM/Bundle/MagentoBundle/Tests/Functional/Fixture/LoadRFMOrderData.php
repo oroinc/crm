@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class LoadRFMOrderData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -167,7 +167,7 @@ class LoadRFMOrderData extends AbstractFixture implements DependentFixtureInterf
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+            'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,23 +10,22 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
- *      name="orocrm_sales_opportunity",
+ *      name="oro_sales_opportunity",
  *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_sales_opportunity_index",
- *      routeView="orocrm_sales_opportunity_view",
+ *      routeName="oro_sales_opportunity_index",
+ *      routeView="oro_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-usd"
@@ -45,7 +44,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "field_acl_supported" = "true"
  *          },
  *          "form"={
- *              "form_type"="orocrm_sales_opportunity_select",
+ *              "form_type"="oro_sales_opportunity_select",
  *              "grid_name"="sales-opportunity-grid",
  *          },
  *          "dataaudit"={
@@ -100,7 +99,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var OpportunityCloseReason
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason")
      * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
      * @Oro\Versioned
      * @ConfigField(
@@ -118,7 +117,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -129,7 +128,7 @@ class Opportunity extends ExtendOpportunity implements
      *          "short"=true
      *      },
      *      "form"={
-     *          "form_type"="orocrm_contact_select"
+     *          "form_type"="oro_contact_select"
      *      }
      *  }
      * )
@@ -139,7 +138,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -368,7 +367,7 @@ class Opportunity extends ExtendOpportunity implements
      * @var B2bCustomer
      *
      * @ORM\ManyToOne(
-     *     targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer",
+     *     targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomer",
      *     inversedBy="opportunities",
      *     cascade={"persist"}
      * )
@@ -382,7 +381,7 @@ class Opportunity extends ExtendOpportunity implements
      *          "short"=true
      *      },
      *      "form"={
-     *          "form_type"="orocrm_sales_b2bcustomer_select"
+     *          "form_type"="oro_sales_b2bcustomer_select"
      *      }
      *  }
      * )

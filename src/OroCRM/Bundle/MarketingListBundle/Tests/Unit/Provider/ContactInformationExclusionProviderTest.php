@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider;
 
 class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCase
 {

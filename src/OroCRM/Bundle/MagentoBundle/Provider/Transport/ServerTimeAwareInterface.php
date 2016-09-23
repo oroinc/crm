@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
+namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 interface ServerTimeAwareInterface
 {

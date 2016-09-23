@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\RegionRepository;
-use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Repository\RegionRepository;
+use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
 
 class CustomerAddressExportWriter extends AbstractExportWriter
 {

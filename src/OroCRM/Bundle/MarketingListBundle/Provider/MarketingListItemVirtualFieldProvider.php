@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Provider;
+namespace Oro\Bundle\MarketingListBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\VirtualFieldProviderInterface;
 
@@ -74,7 +74,7 @@ class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInter
         return [
             'select' => [
                 'expr' => $itemAlias . '.contactedTimes',
-                'label' => 'orocrm.marketinglist.marketinglistitem.contacted_times.label',
+                'label' => 'oro.marketinglist.marketinglistitem.contacted_times.label',
                 'return_type' => 'integer'
             ],
             'join' => $relationData['query']['join']
@@ -93,7 +93,7 @@ class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInter
         return [
             'select' => [
                 'expr' => $itemAlias . '.lastContactedAt',
-                'label' => 'orocrm.marketinglist.marketinglistitem.last_contacted_at.label',
+                'label' => 'oro.marketinglist.marketinglistitem.last_contacted_at.label',
                 'return_type' => 'datetime'
             ],
             'join' => $relationData['query']['join']

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,21 +12,20 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="orocrm_sales_b2bcustomer")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
+ * @ORM\Table(name="oro_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
- *      routeName="orocrm_sales_b2bcustomer_index",
- *      routeView="orocrm_sales_b2bcustomer_view",
+ *      routeName="oro_sales_b2bcustomer_index",
+ *      routeView="oro_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user-md",
@@ -55,7 +54,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *              "auditable"=true
  *          },
  *          "form"={
- *              "form_type"="orocrm_sales_b2bcustomer_select"
+ *              "form_type"="oro_sales_b2bcustomer_select"
  *          },
  *          "grid"={
  *              "default"="orocrm-sales-b2bcustomers-grid",
@@ -163,7 +162,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *  defaultValues={
@@ -180,7 +179,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *  defaultValues={
@@ -197,7 +196,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"remove"})
      */
     protected $leads;
 
@@ -205,7 +204,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * @var ArrayCollection
      *
      * @ORM\OneToMany(
-     *     targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity",
+     *     targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity",
      *     mappedBy="customer",
      *     cascade={"remove"}
      * )
@@ -274,7 +273,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone", mappedBy="owner",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone", mappedBy="owner",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -294,7 +293,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})

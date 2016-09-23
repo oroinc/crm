@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator;
 
 class AbstractPageableSoapIteratorTest extends BaseIteratorTestCase
 {
@@ -16,7 +16,7 @@ class AbstractPageableSoapIteratorTest extends BaseIteratorTestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|AbstractPageableSoapIterator $iterator */
         $iterator = $this->getMockForAbstractClass(
-            'OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator',
+            'Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator',
             [$this->transport, $settings]
         );
 

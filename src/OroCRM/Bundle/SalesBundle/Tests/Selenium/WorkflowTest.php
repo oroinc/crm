@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesHelperTrait;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesHelperTrait;
 
 /**
  * Class WorkflowTest
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Sales
  */
 class WorkflowTest extends Selenium2TestCase
 {
@@ -33,13 +33,13 @@ class WorkflowTest extends Selenium2TestCase
         $customer = $this->createB2BCustomer($accountName);
 
         /** @var SalesFunnels $login */
-        $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $id = $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromLead()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Lead', $leadName)
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
             ->setB2BCustomer($customer)
@@ -59,7 +59,7 @@ class WorkflowTest extends Selenium2TestCase
             ->getId();
 
         /** @var Opportunities $login*/
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $leadName)
             ->open(array($leadName))
             ->checkStatus('Won');
@@ -76,13 +76,13 @@ class WorkflowTest extends Selenium2TestCase
         $customer = $this->createB2BCustomer($accountName);
 
         /** @var SalesFunnels $login */
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromLead()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Lead', $leadName)
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
             ->setB2BCustomer($customer)
@@ -100,7 +100,7 @@ class WorkflowTest extends Selenium2TestCase
             ->submit()
             ->checkStep('Lost Opportunity');
         /** @var  Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $leadName)
             ->open(array($leadName))
             ->checkStatus('Lost');
@@ -115,7 +115,7 @@ class WorkflowTest extends Selenium2TestCase
     {
         /** @var SalesFunnels $login */
         $login = $this->login();
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->filterBy('Sales', $funnelId, 'equals')
             ->open(array($funnelId))
             ->assertTitle('Sales Process #' . $funnelId . ' - Sales Processes - Sales')
@@ -130,11 +130,11 @@ class WorkflowTest extends Selenium2TestCase
         $leadName = $this->createLead($this->address);
 
         /** @var SalesFunnels $login */
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->startFromLead()
             ->selectEntity('Lead', $leadName)
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->disqualify()
             ->checkStep('Disqualified Lead')
@@ -149,14 +149,14 @@ class WorkflowTest extends Selenium2TestCase
         $opportunity = $this->createOpportunity();
 
         /** @var SalesFunnels $login */
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
             ->setChannel($opportunity['channel'])
             ->selectEntity('Opportunity', $opportunity['opportunity'])
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
             ->develop()
             ->setBudget('100')
@@ -170,7 +170,7 @@ class WorkflowTest extends Selenium2TestCase
             ->submit()
             ->checkStep('Won Opportunity');
         /** @var  Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunity['opportunity'])
             ->open(array($opportunity['opportunity']))
             ->checkStatus('Won');
@@ -183,14 +183,14 @@ class WorkflowTest extends Selenium2TestCase
         $opportunity = $this->createOpportunity();
 
         /** @var SalesFunnels $login */
-        $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $id = $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
             ->setChannel($opportunity['channel'])
             ->selectEntity('Opportunity', $opportunity['opportunity'])
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
             ->develop()
             ->setBudget('100')
@@ -206,7 +206,7 @@ class WorkflowTest extends Selenium2TestCase
             ->getId();
 
         /** @var Opportunities $login*/
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $login->openOpportunities('Oro\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunity['opportunity'])
             ->open(array($opportunity['opportunity']))
             ->checkStatus('Lost');
@@ -223,7 +223,7 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var SalesFunnels $login */
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->filterBy('Sales', $funnelId, 'equals')
             ->open(array($funnelId))
             ->assertTitle('Sales Process #' . $funnelId . ' - Sales Processes - Sales')

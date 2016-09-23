@@ -1,19 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Dashboard;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Dashboard;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 /**
  * Class DashboardControllerTest
- * @package OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Dashboard
+ * @package Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Dashboard
  *
  * @dbIsolation
  */
@@ -28,7 +27,7 @@ class DashboardControllerTest extends WebTestCase
     public function setUp()
     {
         $this->initClient();
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadDashboardData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\DataFixtures\LoadDashboardData']);
 
         $this->doctrine = $this->getContainer()->get('doctrine');
 
@@ -61,7 +60,7 @@ class DashboardControllerTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_dashboard_average_order_amount',
+                'oro_magento_dashboard_average_order_amount',
                 ['_widgetId' => $this->data['average_order_amount_chart']]
             )
         );
@@ -70,7 +69,7 @@ class DashboardControllerTest extends WebTestCase
         $this->assertContains('Average order amount', $result->getContent());
 
         /** @var Channel[] $channels */
-        $channels = $this->doctrine->getRepository('OroCRMChannelBundle:Channel')->findAll();
+        $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')->findAll();
         foreach ($channels as $channel) {
             $this->assertContains($channel->getName(), $result->getContent());
         }
@@ -81,7 +80,7 @@ class DashboardControllerTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_dashboard_new_customers_chart',
+                'oro_magento_dashboard_new_customers_chart',
                 ['_widgetId' => $this->data['new_magento_customers_chart']]
             )
         );
@@ -92,7 +91,7 @@ class DashboardControllerTest extends WebTestCase
         $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
 
         /** @var array $channels */
-        $channels = $this->doctrine->getRepository('OroCRMChannelBundle:Channel')
+        $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')
             ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
         foreach ($channels as $channel) {
             $this->assertContains($channel['name'], $result->getContent());

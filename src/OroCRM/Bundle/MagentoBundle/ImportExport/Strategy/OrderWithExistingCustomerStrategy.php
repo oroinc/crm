@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class OrderWithExistingCustomerStrategy extends OrderStrategy
 {
@@ -91,7 +91,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             if (!$existingEntity) {
                 $searchContext = $this->getSearchContext($order);
                 $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    'Oro\Bundle\MagentoBundle\Entity\Customer',
                     $searchContext
                 );
             }
@@ -118,7 +118,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
         if ($customer->getWebsite()) {
             $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                'Oro\Bundle\MagentoBundle\Entity\Website',
                 [
                     'originId' => $customer->getWebsite()->getOriginId(),
                     'channel' => $customer->getChannel()

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Type;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactApiType;
 
 class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,6 +55,6 @@ class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('orocrm_contact', $this->type->getParent());
+        $this->assertEquals('oro_contact', $this->type->getParent());
     }
 }

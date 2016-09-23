@@ -1,25 +1,24 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Service;
+namespace Oro\Bundle\MagentoBundle\Service;
 
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Exception\AdminUrlRequiredException;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Exception\AdminUrlRequiredException;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
 
 class MagentoUrlGenerator
 {
     const GATEWAY_ROUTE = 'oro_gateway/do';
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
     const CHECKOUT_ROUTE = 'oro_sales/checkout';
-    const EXTENSION_REQUIRED_ERROR_MESSAGE = 'orocrm.magento.controller.extension_required';
-    const DEFAULT_ERROR_MESSAGE = 'orocrm.magento.controller.transport_not_configure';
+    const EXTENSION_REQUIRED_ERROR_MESSAGE = 'oro.magento.controller.extension_required';
+    const DEFAULT_ERROR_MESSAGE = 'oro.magento.controller.transport_not_configure';
 
     /**
      * @var Channel

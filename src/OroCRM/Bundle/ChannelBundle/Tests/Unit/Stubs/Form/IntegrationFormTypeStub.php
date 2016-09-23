@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Form;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form;
 
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Extension\IntegrationTypeExtensionTest;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension\IntegrationTypeExtensionTest;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

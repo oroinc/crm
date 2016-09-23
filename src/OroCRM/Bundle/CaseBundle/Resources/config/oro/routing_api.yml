@@ -1,7 +1,7 @@
-orocrm_case_case_api:
-    resource:     "@OroCRMCaseBundle/Controller/Api/Rest/CaseController.php"
+oro_case_case_api:
+    resource:     "@OroCaseBundle/Controller/Api/Rest/CaseController.php"
     type:         rest
 
-orocrm_case_comment_api:
-    resource:     "@OroCRMCaseBundle/Controller/Api/Rest/CommentController.php"
+oro_case_comment_api:
+    resource:     "@OroCaseBundle/Controller/Api/Rest/CommentController.php"
     type:         rest

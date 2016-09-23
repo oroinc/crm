@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter;
+use Oro\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter;
 
 class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
 {
@@ -39,8 +38,8 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
             'EDIT' => ['EDIT', false],
             'DELETE' => ['DELETE', false],
             'ASSIGN' => ['ASSIGN', false],
-            'orocrm_magento_customer_create' => ['orocrm_magento_customer_create', true],
-            'orocrm_magento_customer_update' => ['orocrm_magento_customer_update', false],
+            'oro_magento_customer_create' => ['oro_magento_customer_create', true],
+            'oro_magento_customer_update' => ['oro_magento_customer_update', false],
         ];
     }
 
@@ -96,14 +95,14 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
             [
                 new Organization(),
                 $className,
-                ['orocrm_magento_customer_create'],
+                ['oro_magento_customer_create'],
                 true,
                 OrganizationAnnotationVoter::ACCESS_GRANTED,
             ],
             [
                 new Organization(),
                 $className,
-                ['orocrm_magento_customer_update'],
+                ['oro_magento_customer_update'],
                 true,
                 OrganizationAnnotationVoter::ACCESS_ABSTAIN,
             ],
@@ -111,14 +110,14 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
             [
                 new Organization(),
                 $className,
-                ['orocrm_magento_customer_create'],
+                ['oro_magento_customer_create'],
                 false,
                 OrganizationAnnotationVoter::ACCESS_DENIED,
             ],
             [
                 new Organization(),
                 $className,
-                ['orocrm_magento_customer_update'],
+                ['oro_magento_customer_update'],
                 false,
                 OrganizationAnnotationVoter::ACCESS_ABSTAIN,
             ],

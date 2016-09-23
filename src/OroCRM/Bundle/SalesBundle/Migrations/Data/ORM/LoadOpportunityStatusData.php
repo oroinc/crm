@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
+use Oro\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 class LoadOpportunityStatusData extends AbstractFixture
 {

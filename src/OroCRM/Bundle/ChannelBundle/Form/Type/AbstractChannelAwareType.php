@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;

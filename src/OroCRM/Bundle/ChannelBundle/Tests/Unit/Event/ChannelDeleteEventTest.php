@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Event;
 
-use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelDeleteEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WebsiteSelectType extends AbstractType
 {
-    const NAME = 'orocrm_magento_website_select';
+    const NAME = 'oro_magento_website_select';
 
     /**
      * {@inheritdoc}
@@ -38,6 +38,6 @@ class WebsiteSelectType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['tooltip' => 'orocrm.magento.magentosoaptransport.website_id.tooltip']);
+        $resolver->setDefaults(['tooltip' => 'oro.magento.magentosoaptransport.website_id.tooltip']);
     }
 }

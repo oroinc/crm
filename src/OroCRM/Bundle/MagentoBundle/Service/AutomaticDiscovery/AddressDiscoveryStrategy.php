@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+namespace Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
-use OroCRM\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
-use OroCRM\Bundle\MagentoBundle\Exception\RuntimeException;
+use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
+use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 

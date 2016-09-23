@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\EventListener;
+namespace Oro\Bundle\CaseBundle\EventListener;
 
 use Oro\Bundle\EmailBundle\Event\MailboxSaved;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 
 class MailboxSavedListener
 {

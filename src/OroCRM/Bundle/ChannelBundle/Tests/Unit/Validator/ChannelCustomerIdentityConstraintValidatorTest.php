@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
-use OroCRM\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
+use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
+use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
 
 class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_
      */
     public function testValidateValid(array $entities, $customerIdentity, $isValid)
     {
-        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channel = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()->getMock();
         $channel->expects($this->once())
             ->method('getEntities')
@@ -54,20 +54,20 @@ class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_
     public function validItemsDataProvider()
     {
         $entities = [
-            'OroCRM\Bundle\AcmeBundle\Entity\Test1',
-            'OroCRM\Bundle\AcmeBundle\Entity\Test2',
-            'OroCRM\Bundle\AcmeBundle\Entity\Test3',
+            'Oro\Bundle\AcmeBundle\Entity\Test1',
+            'Oro\Bundle\AcmeBundle\Entity\Test2',
+            'Oro\Bundle\AcmeBundle\Entity\Test3',
         ];
 
         return [
             'valid'   => [
                 'entities'         => $entities,
-                'customerIdentity' => 'OroCRM\Bundle\AcmeBundle\Entity\Test2',
+                'customerIdentity' => 'Oro\Bundle\AcmeBundle\Entity\Test2',
                 'isValid'          => true
             ],
             'invalid' => [
                 'entities'         => $entities,
-                'customerIdentity' => 'OroCRM\Bundle\AcmeBundle\Entity\Test0',
+                'customerIdentity' => 'Oro\Bundle\AcmeBundle\Entity\Test0',
                 'isValid'          => false
             ],
         ];

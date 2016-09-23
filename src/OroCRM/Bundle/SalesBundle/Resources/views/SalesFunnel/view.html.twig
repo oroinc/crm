@@ -3,7 +3,7 @@
 
 {% set salesFunnelHint = '' %}
 {% if entity %}
-    {% set salesFunnelHint = 'orocrm.sales.salesfunnel.hint'|trans({'%id%' : entity.id}) %}
+    {% set salesFunnelHint = 'oro.sales.salesfunnel.hint'|trans({'%id%' : entity.id}) %}
 {% endif %}
 
 {% oro_title_set({params : {"%sales_funnel%": salesFunnelHint} }) %}
@@ -11,18 +11,18 @@
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
-            'path' : path('orocrm_sales_salesfunnel_update', { 'id': entity.id }),
-            'entity_label': 'orocrm.sales.salesfunnel.entity_label'|trans
+            'path' : path('oro_sales_salesfunnel_update', { 'id': entity.id }),
+            'entity_label': 'oro.sales.salesfunnel.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_salesfunnel', {'id': entity.id}),
-            'dataRedirect': path('orocrm_sales_salesfunnel_index'),
+            'dataRedirect': path('oro_sales_salesfunnel_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-sales-funnel',
             'dataId': entity.id,
-            'entity_label': 'orocrm.sales.salesfunnel.entity_label'|trans
+            'entity_label': 'oro.sales.salesfunnel.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -35,8 +35,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_sales_salesfunnel_index'),
-        'indexLabel': 'orocrm.sales.salesfunnel.entity_plural_label'|trans,
+        'indexPath': path('oro_sales_salesfunnel_index'),
+        'indexLabel': 'oro.sales.salesfunnel.entity_plural_label'|trans,
         'entityTitle': salesFunnelHint
     } %}
     {{ parent() }}
@@ -46,7 +46,7 @@
     {% set informationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_sales_salesfunnel_info', {id: entity.id}),
+            'url': path('oro_sales_salesfunnel_info', {id: entity.id}),
         }) }}
     {% endset %}
 
@@ -62,7 +62,7 @@
         {% set opportunityInfoWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_sales_opportunity_info', {id: entity.opportunity.id})
+                'url': path('oro_sales_opportunity_info', {id: entity.opportunity.id})
             }) }}
         {% endset %}
         {% set dataBlocks = dataBlocks|merge([{

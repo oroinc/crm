@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CartItemsApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartItemsApiType;
 
 class CartItemsApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ class CartItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             'priceInclTax'   => 'oro_money',
             'rowTotal'       => 'oro_money',
             'productType'    => 'text',
-            'cart'           => 'orocrm_cart_select'
+            'cart'           => 'oro_cart_select'
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))
@@ -74,7 +74,7 @@ class CartItemsApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'           => 'OroCRM\Bundle\MagentoBundle\Entity\CartItem',
+                    'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
                     'intention'            => 'items',
                     'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                     'single_form'          => true,

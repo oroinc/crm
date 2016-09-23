@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Provider;
+namespace Oro\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class ActivityContactProvider
 {

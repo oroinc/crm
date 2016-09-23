@@ -12,23 +12,23 @@ workflows:
             lead_notes:
                 property_path: sales_funnel.lead.notes
             new_notes:
-                label: orocrm.sales.lead.notes.label
+                label: oro.sales.lead.notes.label
                 type: string
             new_opportunity_name:
-                label: orocrm.sales.opportunity.name.label
+                label: oro.sales.opportunity.name.label
                 type: string
             new_b2bcustomer:
-                label: orocrm.sales.b2bcustomer.entity_label
+                label: oro.sales.b2bcustomer.entity_label
                 type:  entity
                 options:
-                    class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                    class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
             new_account:
-                label:  orocrm.account.entity_label
+                label:  oro.account.entity_label
                 type: entity
                 options:
-                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+                    class: Oro\Bundle\AccountBundle\Entity\Account
             new_company_name:
-                label: orocrm.sales.lead.company_name.label
+                label: oro.sales.lead.company_name.label
                 type: string
             opportunity:
                 property_path: sales_funnel.opportunity
@@ -49,12 +49,12 @@ workflows:
             proposed_solution:
                 property_path: sales_funnel.opportunity.proposedSolution
             close_reason_name: # temporary attribute to find close reason by its name
-                label: orocrm.sales.opportunity.close_reason.label
+                label: oro.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 property_path: sales_funnel.opportunity.closeReason
             close_revenue:
                 property_path: sales_funnel.opportunity.closeRevenue
             close_date:
-                label: orocrm.sales.opportunity.workflow.close_date.label
+                label: oro.sales.opportunity.workflow.close_date.label
                 property_path: sales_funnel.opportunity.closeDate

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider\Opportunity;
+namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -13,8 +13,7 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class ForecastProvider
 {
@@ -114,7 +113,7 @@ class ForecastProvider
         $qb          = $this->getOpportunityRepository()->getForecastQB($alias);
 
         $qb = $this->filterProcessor
-            ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
+            ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
         if (!empty($ownerIds)) {
             $qb->join('o.owner', 'owner');
@@ -180,7 +179,7 @@ AND EXISTS(
 HAVING
             )
             ->setParameters([
-                'objectClass'           => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'objectClass'           => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                 'closedAtField'         => 'closedAt',
                 'closeDateField'        => 'closeDate',
                 'probabilityField'      => 'probability',
@@ -209,10 +208,10 @@ HAVING
                 ->setParameter('ownerIds', $ownerIds);
         }
         // need to join opportunity to properly apply acl permissions
-        $qb->join('OroCRMSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
+        $qb->join('OroSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
         if ($filters) {
             $this->filterProcessor
-                ->process($qb, 'OroCRM\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
+                ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
         $result = $this->aclHelper->apply($qb)->getArrayResult();
@@ -302,7 +301,7 @@ HAVING
      */
     protected function getOpportunityRepository()
     {
-        return $this->doctrine->getRepository('OroCRMSalesBundle:Opportunity');
+        return $this->doctrine->getRepository('OroSalesBundle:Opportunity');
     }
 
     /**

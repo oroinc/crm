@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Handler;
+namespace Oro\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -10,10 +10,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactPhoneHandler
 {
@@ -76,7 +75,7 @@ class ContactPhoneHandler
 
             if ($this->form->isValid() && $this->request->request->get('contactId')) {
                 $contact = $this->manager->find(
-                    'OroCRMContactBundle:Contact',
+                    'OroContactBundle:Contact',
                     $this->request->request->get('contactId')
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $contact)) {

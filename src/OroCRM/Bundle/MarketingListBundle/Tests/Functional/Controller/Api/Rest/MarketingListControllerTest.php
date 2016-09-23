@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
 
 use FOS\RestBundle\Util\Codes;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 /**
  * @dbIsolation
@@ -24,7 +23,7 @@ class MarketingListControllerTest extends WebTestCase
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $type = $em
-            ->getRepository('OroCRMMarketingListBundle:MarketingListType')
+            ->getRepository('OroMarketingListBundle:MarketingListType')
             ->find(MarketingListType::TYPE_DYNAMIC);
 
         $entity = new MarketingList();
@@ -40,7 +39,7 @@ class MarketingListControllerTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_marketinglist', ['id' => $entity->getId()]),
+            $this->getUrl('oro_api_delete_marketinglist', ['id' => $entity->getId()]),
             [],
             [],
             $this->generateWsseAuthHeader()

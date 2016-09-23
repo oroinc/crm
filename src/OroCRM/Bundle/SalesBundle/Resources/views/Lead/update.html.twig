@@ -3,7 +3,7 @@
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 
-{% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
+{% set formAction = form.vars.value.id ? path('oro_sales_lead_update', { 'id': form.vars.value.id }) : path('oro_sales_lead_create')  %}
 
 {% block head_script %}
     {{ parent() }}
@@ -17,27 +17,27 @@
     {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_lead', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_sales_lead_index'),
+            'dataRedirect': path('oro_sales_lead_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-lead',
             'dataId': form.vars.value.id,
-            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+            'entity_label': 'oro.sales.lead.entity_label'|trans
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.cancelButton(path('orocrm_sales_lead_index')) }}
+    {{ UI.cancelButton(path('oro_sales_lead_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_sales_lead_view',
+        'route': 'oro_sales_lead_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('orocrm_sales_lead_create') %}
+    {% if resource_granted('oro_sales_lead_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_sales_lead_create'
+            'route': 'oro_sales_lead_create'
         }) %}
     {% endif %}
-    {% if form.vars.value.id or resource_granted('orocrm_sales_lead_update') %}
+    {% if form.vars.value.id or resource_granted('oro_sales_lead_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'orocrm_sales_lead_update',
+            'route': 'oro_sales_lead_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -48,13 +48,13 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_sales_lead_index'),
-            'indexLabel': 'orocrm.sales.lead.entity_plural_label'|trans,
+            'indexPath':   path('oro_sales_lead_index'),
+            'indexLabel': 'oro.sales.lead.entity_plural_label'|trans,
             'entityTitle': entity.name
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.sales.lead.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.sales.lead.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -88,7 +88,7 @@
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'orocrm.sales.lead.information'|trans,
+                    'title': 'oro.sales.lead.information'|trans,
                     'data': formFields|merge([
                                 form_row(form.name),
                                 form_row(form.status),
@@ -108,7 +108,7 @@
     %}
 
     {% set dataBlocks = dataBlocks|merge([{
-            'title': 'orocrm.sales.lead.contact_information'|trans,
+            'title': 'oro.sales.lead.contact_information'|trans,
             'class': 'active',
             'subblocks': [
                 {

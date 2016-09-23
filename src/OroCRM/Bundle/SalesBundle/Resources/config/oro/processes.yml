@@ -45,7 +45,7 @@ processes:
                                     conditions:
                                         '@and':
                                             - '@equal':      [$.email.fromEmailAddress.hasOwner, true]
-                                            - '@instanceof': [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
+                                            - '@instanceof': [$.email.fromEmailAddress.owner, Oro\Bundle\ContactBundle\Entity\Contact]
                                             - '@equal':      [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
                                     actions:
                                         - '@assign_value':
@@ -96,7 +96,7 @@ processes:
                                     identifier: 'new'
                                     attribute: $.leadStatus
                                 - '@create_entity':
-                                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                                    class: Oro\Bundle\SalesBundle\Entity\Lead
                                     attribute: $.leadEntity
                                     flush: true
                                     data:
@@ -111,7 +111,7 @@ processes:
                                         lastName:       $.leadLastName
                                         status:         $.leadStatus
                                 - '@create_entity':
-                                    class: OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+                                    class: Oro\Bundle\SalesBundle\Entity\LeadEmail
                                     attribute: $.leadEmail
                                     data:
                                         email: $.email.fromEmailAddress.email

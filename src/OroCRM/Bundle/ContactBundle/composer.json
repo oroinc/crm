@@ -21,7 +21,7 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "target-dir": "OroCRM/Bundle/ContactBundle",
+    "target-dir": "Oro/Bundle/ContactBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

@@ -1,6 +1,6 @@
 api:
     entities:
-        OroCRM\Bundle\ContactBundle\Entity\Contact:
+        Oro\Bundle\ContactBundle\Entity\Contact:
             fields:
                 email:
                     exclude: true
@@ -48,14 +48,14 @@ api:
                         options:
                             data_field: email
 
-        OroCRM\Bundle\ContactBundle\Entity\ContactAddress: ~
+        Oro\Bundle\ContactBundle\Entity\ContactAddress: ~
 
-        OroCRM\Bundle\ContactBundle\Entity\ContactEmail:
+        Oro\Bundle\ContactBundle\Entity\ContactEmail:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\ContactBundle\Entity\ContactPhone:
+        Oro\Bundle\ContactBundle\Entity\ContactPhone:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\ContactBundle\Entity\Group: ~
+        Oro\Bundle\ContactBundle\Entity\Group: ~

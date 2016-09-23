@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider;
+namespace Oro\Bundle\ChannelBundle\Provider;
 
 interface MetadataProviderInterface
 {

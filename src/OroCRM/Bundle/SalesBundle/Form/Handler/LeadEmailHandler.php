@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -10,9 +10,8 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadEmailHandler
 {
@@ -57,7 +56,7 @@ class LeadEmailHandler
      */
     public function process(LeadEmail $entity)
     {
-        $form = $this->form->create('orocrm_sales_lead_email', $entity);
+        $form = $this->form->create('oro_sales_lead_email', $entity);
 
         $submitData = [
             'email' => $this->request->request->get('email'),
@@ -70,7 +69,7 @@ class LeadEmailHandler
             if ($form->isValid() && $this->request->request->get('entityId')) {
                 /** @var Lead $lead */
                 $lead = $this->manager->find(
-                    'OroCRMSalesBundle:Lead',
+                    'OroSalesBundle:Lead',
                     $this->request->request->get('entityId')
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $lead)) {
@@ -108,7 +107,7 @@ class LeadEmailHandler
             $em->remove($leadEmail);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.sales.email.error.delete.more_one", 500);
+            throw new \Exception("oro.sales.email.error.delete.more_one", 500);
         }
     }
 

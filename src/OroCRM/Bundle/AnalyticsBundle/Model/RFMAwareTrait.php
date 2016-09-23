@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Model;
+namespace Oro\Bundle\AnalyticsBundle\Model;
 
 trait RFMAwareTrait
 {

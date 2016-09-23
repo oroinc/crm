@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +16,7 @@ use Oro\Bundle\SegmentBundle\Entity\Segment;
 
 /**
  * @Rest\RouteResource("marketinglist_segment")
- * @Rest\NamePrefix("orocrm_api_")
+ * @Rest\NamePrefix("oro_api_")
  */
 class SegmentController extends RestController implements ClassResourceInterface
 {
@@ -27,7 +27,7 @@ class SegmentController extends RestController implements ClassResourceInterface
      *      description="Run Static Marketing List Segment",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_update")
+     * @AclAncestor("oro_marketing_list_update")
      * @return Response
      */
     public function postRunAction($id)

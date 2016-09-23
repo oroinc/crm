@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Connection;
@@ -15,8 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
     ContainerAwareInterface,
@@ -70,7 +69,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
     protected function fillChannelToEntity(Channel $channel, $entity, $additionalParameters = [])
     {
         $interfaces = class_implements($entity) ?: [];
-        if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
+        if (!in_array('Oro\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
             return;
         }
 
@@ -101,7 +100,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
      */
     protected function getLifetimeFieldsMap()
     {
-        $settingsProvider = $this->container->get('orocrm_channel.provider.settings_provider');
+        $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
 
         $lifetimeFields = [];
         $settings       = $settingsProvider->getLifetimeValueSettings();
@@ -124,7 +123,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             return;
         }
         $lifetimeFieldName = $lifetimeFields[$customerIdentity];
-        $accountRepo       = $this->em->getRepository('OroCRMAccountBundle:Account');
+        $accountRepo       = $this->em->getRepository('OroAccountBundle:Account');
 
         $accountIterator = new BufferedQueryResultIterator(
             $accountRepo->createQueryBuilder('a')->select('a.id')
@@ -158,13 +157,13 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
 
         $this->em->getConnection()->executeUpdate(
-            'UPDATE orocrm_channel_lifetime_hist SET status = :status
+            'UPDATE oro_channel_lifetime_hist SET status = :status
              WHERE data_channel_id = :channel_id AND account_id IN (:account_ids)',
             ['status' => false, 'channel_id' => $channel->getId(), 'account_ids' => $accountIds],
             ['status' => Type::BOOLEAN, 'channel_id' => Type::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
         );
         $this->em->getConnection()->executeUpdate(
-            'INSERT INTO orocrm_channel_lifetime_hist'
+            'INSERT INTO oro_channel_lifetime_hist'
             . ' (account_id, data_channel_id, status, amount, created_at)'
             . sprintf(
                 ' SELECT e.account_id AS hist_account_id, e.data_channel_id AS hist_data_channel_id,'

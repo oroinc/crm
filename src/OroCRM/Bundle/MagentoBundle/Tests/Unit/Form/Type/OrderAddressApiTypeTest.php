@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\OrderAddressApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderAddressApiType;
 
 class OrderAddressApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class OrderAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             'region'       => 'translatable_entity',
             'types'        => 'translatable_entity',
             'fax'          => 'text',
-            'owner'        => 'orocrm_order_select',
+            'owner'        => 'oro_order_select',
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))
@@ -72,7 +72,7 @@ class OrderAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress',
+                    'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\OrderAddress',
                     'csrf_protection' => false,
                 ]
             );

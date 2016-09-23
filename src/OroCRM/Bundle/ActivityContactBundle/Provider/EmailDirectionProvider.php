@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Provider;
+namespace Oro\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
@@ -13,13 +13,12 @@ use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 /**
  * Class EmailDirectionProvider
- * @package OroCRM\Bundle\ActivityContactBundle\Provider
+ * @package Oro\Bundle\ActivityContactBundle\Provider
  */
 class EmailDirectionProvider implements DirectionProviderInterface
 {

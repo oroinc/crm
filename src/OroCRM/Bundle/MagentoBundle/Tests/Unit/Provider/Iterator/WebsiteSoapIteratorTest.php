@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 
 class WebsiteSoapIteratorTest extends BaseIteratorTestCase
 {

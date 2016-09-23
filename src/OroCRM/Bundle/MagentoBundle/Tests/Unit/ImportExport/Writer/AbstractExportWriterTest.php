@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
 use Oro\Bundle\IntegrationBundle\Tests\Unit\ImportExport\Writer\PersistentBatchWriterTest;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter;
+use Oro\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter;
 
 abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
 {
@@ -18,7 +18,7 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
      */
     public function testChannelIdMissing()
     {
-        $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
@@ -47,7 +47,7 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
      */
     public function testChannelMissing()
     {
-        $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')

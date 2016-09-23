@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
-use OroCRM\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use Oro\Bundle\ContactBundle\Model\Social;
 
 class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +29,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->socialUrlFormatter = $this
-            ->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
+            ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
             ->disableOriginalConstructor()
             ->getMock();
 

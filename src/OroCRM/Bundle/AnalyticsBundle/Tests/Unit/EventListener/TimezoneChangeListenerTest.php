@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-use OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
+use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->manager = $this->getMockBuilder('OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
+        $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()
             ->getMock();
 

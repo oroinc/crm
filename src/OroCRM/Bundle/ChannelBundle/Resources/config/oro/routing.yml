@@ -1,10 +1,10 @@
-orocrm_channel_bundle:
-    resource: "@OroCRMChannelBundle/Controller"
+oro_channel_bundle:
+    resource: "@OroChannelBundle/Controller"
     type:     annotation
     prefix:   /channel
 
-orocrm_channel_bundle_api:
-    resource: "@OroCRMChannelBundle/Resources/config/oro/routing_api.yml"
+oro_channel_bundle_api:
+    resource: "@OroChannelBundle/Resources/config/oro/routing_api.yml"
     type:     rest
     prefix:   api/rest/{version}/
     requirements:

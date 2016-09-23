@@ -1,6 +1,6 @@
 <div class="widget-content">
     {# JS template for address view #}
-    {% include "OroCRMMagentoBundle:Js:address.js.twig" %}
+    {% include "OroMagentoBundle:Js:address.js.twig" %}
     <div class="list-box map-box" id="address-book"></div>
 
     {% set listUrl = path('oro_api_get_customer_addresses', {'customerId': entity.id}) %}

@@ -9,7 +9,7 @@
 "Delete":                        "Delete"
 "There is no entities selected": "There is no entities selected"
 
-orocrm:
+oro:
     channel:
         form:
             entity: Please select entity

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -10,10 +10,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class LoadCustomerContact extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -59,7 +58,7 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
      */
     public function getDependencies()
     {
-        return ['OroCRM\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\LoadMagentoChannel'];
+        return ['Oro\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\LoadMagentoChannel'];
     }
 
     /**

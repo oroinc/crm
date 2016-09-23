@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
 use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
 
@@ -9,8 +9,7 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use Oro\Bundle\MagentoBundle\Entity\Region;
 
 class AddressImportHelper
 {
@@ -96,7 +95,7 @@ class AddressImportHelper
     {
         return $this->doctrineHelper->getEntityByCriteria(
             ['regionId' => $mageRegionId],
-            'OroCRM\Bundle\MagentoBundle\Entity\Region'
+            'Oro\Bundle\MagentoBundle\Entity\Region'
         );
     }
 

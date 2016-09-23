@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\TemplateFixture;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\TemplateFixture;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\AddressTypeFixture;
@@ -8,8 +8,8 @@ use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\CountryFixture;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\RegionFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateEntityRegistry;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture;
 
 class ContactAddressFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class ContactAddressFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testGetEntityClass()
     {
-        $this->assertEquals('OroCRM\Bundle\ContactBundle\Entity\ContactAddress', $this->fixture->getEntityClass());
+        $this->assertEquals('Oro\Bundle\ContactBundle\Entity\ContactAddress', $this->fixture->getEntityClass());
     }
 
     public function testCreateEntity()
@@ -83,7 +83,7 @@ class ContactAddressFixtureTest extends \PHPUnit_Framework_TestCase
 
         /** @var ContactAddress $address */
         $address = current($data);
-        $this->assertInstanceOf('OroCRM\Bundle\ContactBundle\Entity\ContactAddress', $address);
+        $this->assertInstanceOf('Oro\Bundle\ContactBundle\Entity\ContactAddress', $address);
         $this->assertEquals('Jerry', $address->getFirstName());
         $this->assertEquals('Coleman', $address->getLastName());
         $this->assertEquals(array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING), $address->getTypeNames());

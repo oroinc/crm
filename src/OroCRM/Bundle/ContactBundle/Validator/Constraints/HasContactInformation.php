@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Validator\Constraints;
+namespace Oro\Bundle\ContactBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
@@ -14,7 +14,7 @@ class HasContactInformation extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_contact.has_contact_information';
+        return 'oro_contact.has_contact_information';
     }
 
     /**

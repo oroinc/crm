@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,7 +197,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetMarketingListTypedFieldsManual($contactInfoFields, $type, $expected)
     {
         $entity = '\stdClass';
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -227,7 +227,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
         $queryDesigner->expects($this->any())
             ->method('getEntity')
             ->will($this->returnValue('\stdClass'));
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())

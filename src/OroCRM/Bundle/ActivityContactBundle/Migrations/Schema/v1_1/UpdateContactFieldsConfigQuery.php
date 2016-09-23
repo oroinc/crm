@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Migrations\Schema\v1_1;
+namespace Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Connection;
 
@@ -8,8 +8,7 @@ use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 /**
  * Sets available permissions to VIEW for ActivityContact fields (ac_last_contact_date, ac_last_contact_date_out, ...).

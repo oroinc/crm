@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Oro\Bundle\AddressBundle\Migrations\Data\ORM\LoadCountryData;
 
@@ -29,6 +29,6 @@ class LoadMagentoCountryData extends LoadCountryData implements ContainerAwareIn
     {
         return $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMMagentoBundle/Migrations/Data/ORM' . $this->structureFileName);
+            ->locateResource('@OroMagentoBundle/Migrations/Data/ORM' . $this->structureFileName);
     }
 }

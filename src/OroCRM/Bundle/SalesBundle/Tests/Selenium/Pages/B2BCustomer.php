@@ -1,19 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class B2BCustomer
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method B2BCustomer assertTitle($title, $message = '')
  */
 class B2BCustomer extends AbstractPageEntity
 {
     public function setName($name)
     {
-        $element = $this->test->byXpath("//*[@data-ftid='orocrm_sales_b2bcustomer_form_name']");
+        $element = $this->test->byXpath("//*[@data-ftid='oro_sales_b2bcustomer_form_name']");
         $element->clear();
         $element->value($name);
         return $this;
@@ -21,12 +21,12 @@ class B2BCustomer extends AbstractPageEntity
 
     public function getName()
     {
-        return $this->test->byXpath("//*[@data-ftid='orocrm_sales_b2bcustomer_form_name']")->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_sales_b2bcustomer_form_name']")->value();
     }
 
     public function setOwner($owner)
     {
-        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_b2bcustomer_form_owner')]/a");
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_sales_b2bcustomer_form_owner')]/a");
         $element->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
@@ -47,7 +47,7 @@ class B2BCustomer extends AbstractPageEntity
 
     public function setAccount($account)
     {
-        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_b2bcustomer_form_account')]/a");
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_sales_b2bcustomer_form_account')]/a");
         $element->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($account);
@@ -63,7 +63,7 @@ class B2BCustomer extends AbstractPageEntity
 
     public function setChannel($channel)
     {
-        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_b2bcustomer_form_dataChannel')]/a");
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_sales_b2bcustomer_form_dataChannel')]/a");
         $element->click();
         $this->waitForAjax();
         if ($this->isElementPresent("//div[@id='select2-drop']/div/input")) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener;
+use Oro\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener;
 
 class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->wsdlManager = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\WsdlManager')
+        $this->wsdlManager = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\WsdlManager')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEntity($url = null)
     {
-        $entity = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->atLeastOnce())

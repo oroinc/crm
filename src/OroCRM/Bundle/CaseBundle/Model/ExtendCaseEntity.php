@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Model;
+namespace Oro\Bundle\CaseBundle\Model;
 
 class ExtendCaseEntity
 {

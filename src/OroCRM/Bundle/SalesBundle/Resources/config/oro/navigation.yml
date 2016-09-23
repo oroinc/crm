@@ -2,7 +2,7 @@ navigation:
     menu_config:
         items:
             sales_tab:
-                label: 'orocrm.sales.menu.sales_tab.label'
+                label: 'oro.sales.menu.sales_tab.label'
                 uri:   '#'
                 display: false
                 extras:
@@ -10,76 +10,76 @@ navigation:
                     position: 20
 
             lead_list:
-                label: 'orocrm.sales.lead.entity_plural_label'
-                route: 'orocrm_sales_lead_index'
+                label: 'oro.sales.lead.entity_plural_label'
+                route: 'oro_sales_lead_index'
                 display: false
                 extras:
                     position:    20
-                    routes:      ['/^orocrm_sales_lead/']
-                    description: 'orocrm.sales.menu.lead_list.description'
+                    routes:      ['/^oro_sales_lead/']
+                    description: 'oro.sales.menu.lead_list.description'
 
             opportunity_list:
-                label: 'orocrm.sales.opportunity.entity_plural_label'
-                route: 'orocrm_sales_opportunity_index'
+                label: 'oro.sales.opportunity.entity_plural_label'
+                route: 'oro_sales_opportunity_index'
                 display: false
                 extras:
                     position:    30
-                    routes:      ['/^orocrm_sales_opportunity/']
-                    description: 'orocrm.sales.menu.opportunity_list.description'
+                    routes:      ['/^oro_sales_opportunity/']
+                    description: 'oro.sales.menu.opportunity_list.description'
 
             sales_salesfunnel_list:
-                label: 'orocrm.sales.salesfunnel.entity_plural_label'
-                route: 'orocrm_sales_salesfunnel_index'
+                label: 'oro.sales.salesfunnel.entity_plural_label'
+                route: 'oro_sales_salesfunnel_index'
                 display: false
                 extras:
                     position:    10
-                    routes:      ['/^orocrm_sales_salesfunnel/']
-                    description: 'orocrm.sales.menu.sales_salesfunnel_list.description'
+                    routes:      ['/^oro_sales_salesfunnel/']
+                    description: 'oro.sales.menu.sales_salesfunnel_list.description'
 
             b2bcustomer_list:
-                label: 'orocrm.sales.b2bcustomer.entity_plural_label'
-                route: 'orocrm_sales_b2bcustomer_index'
+                label: 'oro.sales.b2bcustomer.entity_plural_label'
+                route: 'oro_sales_b2bcustomer_index'
                 display: false
                 extras:
                     position:    70
-                    routes:      ['orocrm_sales_b2bcustomer_*']
-                    description: 'orocrm.sales.menu.b2bcustomer_list.description'
+                    routes:      ['oro_sales_b2bcustomer_*']
+                    description: 'oro.sales.menu.b2bcustomer_list.description'
 
             shortcut_list_b2bcustomers:
-                label: 'orocrm.sales.menu.shortcut_list_b2bcustomers.label'
-                route: 'orocrm_sales_lead_index'
+                label: 'oro.sales.menu.shortcut_list_b2bcustomers.label'
+                route: 'oro_sales_lead_index'
                 display: false
                 extras:
-                    description: 'orocrm.sales.menu.shortcut_list_b2bcustomers.description'
+                    description: 'oro.sales.menu.shortcut_list_b2bcustomers.description'
 
             shortcut_list_leads:
-                label: 'orocrm.sales.menu.shortcut_list_leads.label'
-                route: 'orocrm_sales_lead_index'
+                label: 'oro.sales.menu.shortcut_list_leads.label'
+                route: 'oro_sales_lead_index'
                 display: false
                 extras:
-                    description: 'orocrm.sales.menu.shortcut_list_leads.description'
+                    description: 'oro.sales.menu.shortcut_list_leads.description'
 
             shortcut_list_opportunities:
-                label: 'orocrm.sales.menu.shortcut_list_opportunities.label'
-                route: orocrm_sales_opportunity_index
+                label: 'oro.sales.menu.shortcut_list_opportunities.label'
+                route: oro_sales_opportunity_index
                 display: false
                 extras:
-                    description: 'orocrm.sales.menu.shortcut_list_opportunities.description'
+                    description: 'oro.sales.menu.shortcut_list_opportunities.description'
 
             shortcut_new_lead:
-                label: 'orocrm.sales.menu.shortcut_new_lead.label'
-                route: 'orocrm_sales_lead_create'
+                label: 'oro.sales.menu.shortcut_new_lead.label'
+                route: 'oro_sales_lead_create'
                 display: false
                 extras:
-                    description: 'orocrm.sales.menu.shortcut_new_lead.description'
+                    description: 'oro.sales.menu.shortcut_new_lead.description'
                     isCustomAction: true
 
             shortcut_new_opportunity:
-                label: 'orocrm.sales.menu.shortcut_new_opportunity.label'
-                route: 'orocrm_sales_opportunity_create'
+                label: 'oro.sales.menu.shortcut_new_opportunity.label'
+                route: 'oro_sales_opportunity_create'
                 display: false
                 extras:
-                    description: 'orocrm.sales.menu.shortcut_new_opportunity.description'
+                    description: 'oro.sales.menu.shortcut_new_opportunity.description'
                     isCustomAction: true
 
         tree:
@@ -101,31 +101,31 @@ navigation:
                     shortcut_new_opportunity: ~
 
     titles:
-        orocrm_sales_opportunity_index: ~
-        orocrm_sales_opportunity_view: '%%opportunity.name%%'
-        orocrm_sales_opportunity_create: 'Create Opportunity'
-        orocrm_sales_opportunity_update: '%%opportunity.name%% - Edit'
+        oro_sales_opportunity_index: ~
+        oro_sales_opportunity_view: '%%opportunity.name%%'
+        oro_sales_opportunity_create: 'Create Opportunity'
+        oro_sales_opportunity_update: '%%opportunity.name%% - Edit'
 
-        orocrm_sales_lead_index: ~
-        orocrm_sales_lead_view: '%%lead.name%%'
-        orocrm_sales_lead_create: 'Create Lead'
-        orocrm_sales_lead_update: '%%lead.name%% - Edit'
-        orocrm_sales_lead_convert_to_opportunity: '%%lead.name%% - Convert To Opportunity'
+        oro_sales_lead_index: ~
+        oro_sales_lead_view: '%%lead.name%%'
+        oro_sales_lead_create: 'Create Lead'
+        oro_sales_lead_update: '%%lead.name%% - Edit'
+        oro_sales_lead_convert_to_opportunity: '%%lead.name%% - Convert To Opportunity'
 
-        orocrm_sales_salesfunnel_index: ~
-        orocrm_sales_salesfunnel_view: '%%sales_funnel%%'
-        orocrm_sales_salesfunnel_create: 'Create Sales Activity'
-        orocrm_sales_salesfunnel_update: '%%sales_funnel%% - Edit'
+        oro_sales_salesfunnel_index: ~
+        oro_sales_salesfunnel_view: '%%sales_funnel%%'
+        oro_sales_salesfunnel_create: 'Create Sales Activity'
+        oro_sales_salesfunnel_update: '%%sales_funnel%% - Edit'
 
-        orocrm_sales_b2bcustomer_index: ~
-        orocrm_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
-        orocrm_sales_b2bcustomer_create: 'Create Business Customer'
-        orocrm_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
+        oro_sales_b2bcustomer_index: ~
+        oro_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
+        oro_sales_b2bcustomer_create: 'Create Business Customer'
+        oro_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
 
     navigation_elements:
         pinButton:
             routes:
-                orocrm_sales_lead_convert_to_opportunity: false
+                oro_sales_lead_convert_to_opportunity: false
         favoriteButton:
             routes:
-                orocrm_sales_lead_convert_to_opportunity: false
+                oro_sales_lead_convert_to_opportunity: false

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\API;
 
 use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 
 /**
  * @outputBuffering enabled
@@ -17,7 +17,7 @@ class RestContactEmailApiTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([
-            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData'
+            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData'
         ]);
     }
 

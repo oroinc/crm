@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class SalesFunnel
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Pages
  */
 class SalesFunnel extends AbstractPageEntity
 {

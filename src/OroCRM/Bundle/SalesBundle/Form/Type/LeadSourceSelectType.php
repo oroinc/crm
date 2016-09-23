@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -9,7 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 class LeadSourceSelectType extends AbstractType
 {
-    const NAME = 'orocrm_type_widget_lead_source_select';
+    const NAME = 'oro_type_widget_lead_source_select';
 
     /** @var EnumValueProvider */
     protected $enumValueProvider;
@@ -29,7 +29,7 @@ class LeadSourceSelectType extends AbstractType
     {
         $choices = array_merge(
             [
-                '' => 'orocrm.sales.lead.source.unclassified',
+                '' => 'oro.sales.lead.source.unclassified',
             ],
             $this->enumValueProvider->getEnumChoicesByCode('lead_source')
         );

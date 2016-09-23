@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass;
+namespace Oro\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,8 +8,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AnalyticsBuilderPass implements CompilerPassInterface
 {
-    const ANALYTICS_BUILDER_SERVICE = 'orocrm_analytics.builder';
-    const TAG = 'orocrm_analytics.builder';
+    const ANALYTICS_BUILDER_SERVICE = 'oro_analytics.builder';
+    const TAG = 'oro_analytics.builder';
 
     /**
      * {@inheritDoc}

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +13,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
-use OroCRM\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
+use Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
 
 /**
  * @RouteResource("search_customer")
@@ -101,6 +101,6 @@ class CustomerSearchController extends RestGetController
      */
     public function getManager()
     {
-        return $this->container->get('orocrm_channel.manager.customer_search.api');
+        return $this->container->get('oro_channel.manager.customer_search.api');
     }
 }

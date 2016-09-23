@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -8,9 +8,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class LoadMagentoNewsletterSubscriberData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -31,7 +30,7 @@ class LoadMagentoNewsletterSubscriberData extends AbstractFixture implements Dep
     {
         $newsletterSubscribers = [];
 
-        $customers = new ArrayCollection($manager->getRepository('OroCRMMagentoBundle:Customer')->findAll());
+        $customers = new ArrayCollection($manager->getRepository('OroMagentoBundle:Customer')->findAll());
 
         $className = ExtendHelper::buildEnumValueClassName('mage_subscr_status');
         $statuses = new ArrayCollection($manager->getRepository($className)->findAll());

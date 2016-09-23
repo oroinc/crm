@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Command;
+namespace Oro\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
@@ -17,16 +17,15 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
-
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncCommand extends ContainerAwareCommand
 {
     const COMMAND_NAME = 'oro:magento:initial:sync';
 
-    const SYNC_PROCESSOR = 'orocrm_magento.provider.initial_sync_processor';
+    const SYNC_PROCESSOR = 'oro_magento.provider.initial_sync_processor';
 
     const STATUS_SUCCESS = 0;
     const STATUS_FAILED  = 255;
@@ -43,9 +42,9 @@ class InitialSyncCommand extends ContainerAwareCommand
      * List of entities we need to reindex after sync
      */
     protected $indexedEntities = [
-        'OroCRM\Bundle\MagentoBundle\Entity\Order',
-        'OroCRM\Bundle\MagentoBundle\Entity\Cart',
-        'OroCRM\Bundle\MagentoBundle\Entity\Customer'
+        'Oro\Bundle\MagentoBundle\Entity\Order',
+        'Oro\Bundle\MagentoBundle\Entity\Cart',
+        'Oro\Bundle\MagentoBundle\Entity\Customer'
     ];
 
     /**
@@ -210,7 +209,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     {
         $dataChannel = $this->getDataChannelByChannel($integration);
         /** @var RFMMetricStateManager $rfmStateManager */
-        $rfmStateManager = $this->getService('orocrm_analytics.model.rfm_state_manager');
+        $rfmStateManager = $this->getService('oro_analytics.model.rfm_state_manager');
         $rfmStateManager->scheduleRecalculation($dataChannel);
     }
 
@@ -221,7 +220,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     protected function getDataChannelByChannel(Integration $integration)
     {
         return $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:Channel')
+            ->getRepository('OroChannelBundle:Channel')
             ->findOneBy(['dataSource' => $integration]);
     }
 

@@ -4,14 +4,14 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ UI.renderProperty('orocrm.magento.newslettersubscriber.email.label'|trans, entity.email) }}
+            {{ UI.renderProperty('oro.magento.newslettersubscriber.email.label'|trans, entity.email) }}
 
             {% if useCustomer is defined and useCustomer %}
                 {%- set customerData -%}
                     {% if entity.customer is not empty %}
-                        {% set viewGranted = resource_granted('orocrm_magento_customer_view') %}
+                        {% set viewGranted = resource_granted('oro_magento_customer_view') %}
                         {%- if viewGranted -%}
-                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">
+                            <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">
                                 {{ entity.customer|oro_format_name }}
                             </a>
                         {%- else -%}
@@ -20,7 +20,7 @@
                     {% endif %}
                 {%- endset -%}
 
-                {{ UI.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+                {{ UI.renderHtmlProperty('oro.magento.newslettersubscriber.customer.label'|trans, customerData) }}
             {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}

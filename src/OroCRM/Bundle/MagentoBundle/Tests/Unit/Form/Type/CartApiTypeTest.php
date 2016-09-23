@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CartApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartApiType;
 
 class CartApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,8 +33,8 @@ class CartApiTypeTest extends \PHPUnit_Framework_TestCase
             'subTotal'          => 'oro_money',
             'grandTotal'        => 'oro_money',
             'taxAmount'         => 'oro_money',
-            'cartItems'         => 'orocrm_cart_item_collection',
-            'customer'          => 'orocrm_customer_select',
+            'cartItems'         => 'oro_cart_item_collection',
+            'customer'          => 'oro_customer_select',
             'store'             => 'translatable_entity',
             'itemsQty'          => 'number',
             'baseCurrencyCode'  => 'text',
@@ -79,7 +79,7 @@ class CartApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                    'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Cart',
                     'csrf_protection' => false
                 ]
             );

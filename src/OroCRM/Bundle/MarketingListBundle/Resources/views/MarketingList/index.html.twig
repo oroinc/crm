@@ -2,13 +2,13 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% set gridName = 'orocrm-marketing-list-grid' %}
-{% set pageTitle = 'orocrm.marketinglist.entity_plural_label'|trans %}
+{% set pageTitle = 'oro.marketinglist.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if isDesktopVersion() and resource_granted('orocrm_marketing_list_create') %}
+    {% if isDesktopVersion() and resource_granted('oro_marketing_list_create') %}
         {{ UI.addButton({
-            'path':          path('orocrm_marketing_list_create'),
-            'entity_label': 'orocrm.marketinglist.entity_label'|trans
+            'path':          path('oro_marketing_list_create'),
+            'entity_label': 'oro.marketinglist.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

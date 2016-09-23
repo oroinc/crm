@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 
@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ChannelEntityType extends AbstractType
 {
-    const NAME = 'orocrm_channel_entities';
+    const NAME = 'oro_channel_entities';
 
     /**
      * {@inheritdoc}

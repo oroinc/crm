@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Model;
+namespace Oro\Bundle\MagentoBundle\Model;
 
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
  * @method AbstractEnumValue getStatus()

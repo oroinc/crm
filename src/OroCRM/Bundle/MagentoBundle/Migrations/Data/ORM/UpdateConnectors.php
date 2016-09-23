@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 class UpdateConnectors extends AbstractFixture
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -10,10 +10,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
-use OroCRM\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator;
 
 class B2bCustomerPhoneHandler
 {
@@ -77,7 +76,7 @@ class B2bCustomerPhoneHandler
             $b2bCustomerId = $this->request->request->get('entityId');
             if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
-                    'OroCRMSalesBundle:B2bCustomer',
+                    'OroSalesBundle:B2bCustomer',
                     $b2bCustomerId
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $customer)) {
@@ -116,7 +115,7 @@ class B2bCustomerPhoneHandler
             $em->remove($b2bCustomerPhone);
             $em->flush();
         } else {
-            throw new \Exception("orocrm.sales.phone.error.delete.more_one", 500);
+            throw new \Exception("oro.sales.phone.error.delete.more_one", 500);
         }
     }
 

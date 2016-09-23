@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\ImportExport\EventListener;
+namespace Oro\Bundle\SalesBundle\ImportExport\EventListener;
 
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 
 class OpportunityListener
 {

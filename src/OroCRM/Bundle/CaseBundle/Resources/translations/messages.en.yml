@@ -1,4 +1,4 @@
-orocrm:
+oro:
     case:
         widgets:
             account_cases: Cases
@@ -23,7 +23,7 @@ orocrm:
 
         caseentity:
             #
-            # OroCRM/Bundle/CaseBundle/Entity/CaseEntity
+            # Oro/Bundle/CaseBundle/Entity/CaseEntity
             #
             entity_label:                   Case
             entity_plural_label:            Cases
@@ -46,7 +46,7 @@ orocrm:
 
         casecomment:
             #
-            # OroCRM/Bundle/CaseBundle/Entity/CaseComment
+            # Oro/Bundle/CaseBundle/Entity/CaseComment
             #
             entity_label:                   Case Comment
             entity_plural_label:            Case Comments

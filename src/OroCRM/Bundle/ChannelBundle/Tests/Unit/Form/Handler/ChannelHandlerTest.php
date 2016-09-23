@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler;
 
 class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -107,7 +107,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->expects($this->once())->method('dispatch')
             ->with(
                 $this->equalTo(ChannelSaveEvent::EVENT_NAME),
-                $this->isInstanceOf('OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent')
+                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')
             );
 
         $this->assertTrue($this->handler->process($this->entity));
@@ -199,7 +199,7 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('submit');
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
-        $this->request->request->set('orocrm_channel_form', ['channelType' => $requestValue]);
+        $this->request->request->set('oro_channel_form', ['channelType' => $requestValue]);
 
         $this->handler->process($entity);
     }

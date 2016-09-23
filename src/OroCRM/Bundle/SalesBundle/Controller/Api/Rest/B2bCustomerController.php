@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -41,7 +41,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      description="Get business customers",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @return Response
      */
     public function cgetAction()
@@ -61,7 +61,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      description="Get business customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @AclAncestor("oro_sales_b2bcustomer_view")
      * @return Response
      */
     public function getAction($id)
@@ -78,7 +78,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      description="Update business customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_b2bcustomer_update")
+     * @AclAncestor("oro_sales_b2bcustomer_update")
      * @return Response
      */
     public function putAction($id)
@@ -93,7 +93,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      description="Create new business customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_b2bcustomer_create")
+     * @AclAncestor("oro_sales_b2bcustomer_create")
      */
     public function postAction()
     {
@@ -110,10 +110,10 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_sales_b2bcustomer_delete",
+     *      id="oro_sales_b2bcustomer_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMSalesBundle:B2bCustomer"
+     *      class="OroSalesBundle:B2bCustomer"
      * )
      * @return Response
      */
@@ -129,7 +129,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.b2bcustomer.manager.api');
+        return $this->get('oro_sales.b2bcustomer.manager.api');
     }
 
     /**
@@ -137,7 +137,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.b2bcustomer.form.api');
+        return $this->get('oro_sales.b2bcustomer.form.api');
     }
 
     /**
@@ -145,7 +145,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.b2bcustomer.form.handler.api');
+        return $this->get('oro_sales.b2bcustomer.form.handler.api');
     }
 
     /**

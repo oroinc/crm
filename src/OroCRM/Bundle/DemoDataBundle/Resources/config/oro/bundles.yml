@@ -1,2 +1,2 @@
 bundles:
-    - OroCRM\Bundle\DemoDataBundle\OroCRMDemoDataBundle
+    - Oro\Bundle\DemoDataBundle\OroDemoDataBundle

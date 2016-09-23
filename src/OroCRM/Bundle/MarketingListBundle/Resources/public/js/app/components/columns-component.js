@@ -32,7 +32,7 @@ define(function(require) {
     var loadEntityContactInformationFields = function(entity) {
         if (entity) {
             $.ajax({
-                url: routing.generate('orocrm_api_entity_marketinglist_contact_information_fields'),
+                url: routing.generate('oro_api_entity_marketinglist_contact_information_fields'),
                 data: {'entity': entity},
                 success: updateContactInformationFields
             });
@@ -64,7 +64,7 @@ define(function(require) {
             contactInformationRender(model, element, contactInformationFieldsCache[fieldName]);
         } else if (fieldName.indexOf(':') > -1) {
             $.ajax({
-                url: routing.generate('orocrm_api_contact_marketinglist_information_field_type'),
+                url: routing.generate('oro_api_contact_marketinglist_information_field_type'),
                 data: {
                     'entity': $entityEl.select2('val'),
                     'field': fieldName

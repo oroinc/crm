@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\ContactBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\AddressFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 
 class ContactAddressFixture extends AddressFixture implements TemplateFixtureInterface
 {
@@ -14,7 +14,7 @@ class ContactAddressFixture extends AddressFixture implements TemplateFixtureInt
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress';
+        return 'Oro\Bundle\ContactBundle\Entity\ContactAddress';
     }
 
     /**

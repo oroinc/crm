@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderBridgeIteratorTest extends BaseIteratorTestCase
 {

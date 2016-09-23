@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Handler;
+namespace Oro\Bundle\ContactBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Group;
 
 class GroupHandler
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Acl\Voter;
+namespace Oro\Bundle\MarketingListBundle\Acl\Voter;
 
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class MarketingListSegmentVoter extends AbstractEntityVoter
 {
@@ -38,7 +38,7 @@ class MarketingListSegmentVoter extends AbstractEntityVoter
         if (empty($this->marketingListBySegment[$segmentId])) {
             $segment = $this->doctrineHelper->getEntityReference($this->className, $segmentId);
             $marketingList = $this->doctrineHelper
-                ->getEntityRepository('OroCRMMarketingListBundle:MarketingList')
+                ->getEntityRepository('OroMarketingListBundle:MarketingList')
                 ->findOneBy(['segment' => $segment]);
             $this->marketingListBySegment[$segmentId] = $marketingList;
         }

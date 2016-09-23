@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Form\Type\LeadType;
+use Oro\Bundle\SalesBundle\Form\Type\LeadType;
 
 class LeadTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,17 +21,17 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
         $expectedFields = array(
             'name' => 'text',
             'status' => 'oro_enum_select',
-            'dataChannel' => 'orocrm_channel_select_type',
+            'dataChannel' => 'oro_channel_select_type',
             'namePrefix' => 'text',
             'firstName' => 'text',
             'middleName' => 'text',
             'lastName' => 'text',
             'nameSuffix' => 'text',
-            'contact' => 'orocrm_contact_select',
+            'contact' => 'oro_contact_select',
             'jobTitle' => 'text',
             'phones' => 'oro_phone_collection',
             'emails' => 'oro_email_collection',
-            'customer' => 'orocrm_sales_b2bcustomer_select',
+            'customer' => 'oro_sales_b2bcustomer_select',
             'companyName' => 'text',
             'website' => 'url',
             'numberOfEmployees' => 'number',
@@ -61,7 +61,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testName()
     {
-        $this->assertEquals('orocrm_sales_lead', $this->type->getName());
+        $this->assertEquals('oro_sales_lead', $this->type->getName());
     }
 
     public function testSetDefaultOptions()
@@ -71,7 +71,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                    'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
                     'cascade_validation' => true,
                 ]
             );

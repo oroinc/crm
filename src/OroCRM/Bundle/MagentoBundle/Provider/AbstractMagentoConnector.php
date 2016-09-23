@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -14,10 +14,9 @@ use Oro\Bundle\IntegrationBundle\Exception\RuntimeException;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractMagentoConnector extends AbstractConnector implements MagentoConnectorInterface
 {

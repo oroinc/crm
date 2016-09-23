@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 
 class CartItemHandler
 {

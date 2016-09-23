@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -21,7 +21,7 @@ class OrderAddressApiType extends AbstractApiAddressType
         parent::buildForm($builder, $options);
 
         $builder->add('fax', 'text', ['required' => false]);
-        $builder->add('owner', 'orocrm_order_select');
+        $builder->add('owner', 'oro_order_select');
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }
@@ -33,7 +33,7 @@ class OrderAddressApiType extends AbstractApiAddressType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\OrderAddress',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\OrderAddress',
                 'csrf_protection' => false
             ]
         );

@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Autocomplete;
+namespace Oro\Bundle\SalesBundle\Autocomplete;
 
 use Doctrine\ORM\QueryBuilder;
 
-use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
@@ -35,15 +35,15 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
     public function settersAndGettersDataProvider()
     {
-        $source = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseSource')
+        $source = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseSource')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $status = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseStatus')
+        $status = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CaseStatus')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $priority = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CasePriority')
+        $priority = $this->getMockBuilder('Oro\Bundle\CaseBundle\Entity\CasePriority')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -60,8 +60,8 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('updatedAt', new \DateTime()),
             array('reportedAt', new \DateTime()),
             array('closedAt', new \DateTime()),
-            array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
-            array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account')),
+            array('relatedContact', $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact')),
+            array('relatedAccount', $this->getMock('Oro\Bundle\AccountBundle\Entity\Account')),
             array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
         );
     }
@@ -75,7 +75,7 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testAddComment()
     {
-        $comment = $this->getMock('OroCRM\Bundle\CaseBundle\Entity\CaseComment');
+        $comment = $this->getMock('Oro\Bundle\CaseBundle\Entity\CaseComment');
         $comment->expects($this->once())
             ->method('setCase')
             ->with($this->case);

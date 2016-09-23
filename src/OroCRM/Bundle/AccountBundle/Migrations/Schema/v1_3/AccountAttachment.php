@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_3;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_3;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -26,7 +26,7 @@ class AccountAttachment implements Migration, AttachmentExtensionAwareInterface
     {
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
-            'orocrm_account',
+            'oro_account',
             [
                 'image/*',
                 'application/pdf',

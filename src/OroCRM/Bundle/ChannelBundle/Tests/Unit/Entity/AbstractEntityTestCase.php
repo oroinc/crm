@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
 {

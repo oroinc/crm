@@ -7,18 +7,18 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_order_index'),
-        'indexLabel': 'orocrm.magento.order.entity_plural_label'|trans,
-        'entityTitle': 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.order.entity_label'|trans, '%entityNumber%': entity.incrementId})
+        'indexPath': path('oro_magento_order_index'),
+        'indexLabel': 'oro.magento.order.entity_plural_label'|trans,
+        'entityTitle': 'oro.magento.entity_number'|trans({'%entityName%': 'oro.magento.order.entity_label'|trans, '%entityNumber%': entity.incrementId})
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block navButtons %}
     {{ UI.button({
-        'path':  path('orocrm_magento_order_actualize', {'id': entity.id}),
-        'label': 'orocrm.magento.order.refresh_label'|trans,
-        'title': 'orocrm.magento.order.refresh_label'|trans,
+        'path':  path('oro_magento_order_actualize', {'id': entity.id}),
+        'label': 'oro.magento.order.refresh_label'|trans,
+        'title': 'oro.magento.order.refresh_label'|trans,
         'iCss': 'icon-refresh'
     }) }}
 {% endblock navButtons %}
@@ -29,18 +29,18 @@
     {% set orderInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_magento_order_widget_info', {id: entity.id}),
-            'title': 'orocrm.magento.order_information'|trans
+            'url': path('oro_magento_order_widget_info', {id: entity.id}),
+            'title': 'oro.magento.order_information'|trans
         }) }}
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
 
-    {% if entity.customer and resource_granted('orocrm_magento_customer_view') %}
+    {% if entity.customer and resource_granted('oro_magento_customer_view') %}
         {% set customerInformationWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_magento_customer_info', {id: entity.customer.id}),
-                'title': 'orocrm.magento.customer_information'|trans
+                'url': path('oro_magento_customer_info', {id: entity.customer.id}),
+                'title': 'oro.magento.customer_information'|trans
             }) }}
         {% endset %}
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformationWidget] }]) %}
@@ -48,23 +48,23 @@
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.magento.general_information'|trans,
+            'title': 'oro.magento.general_information'|trans,
             'class': 'active',
             'subblocks': generalSubblocks
         }
     ] %}
 
-    {% if resource_granted('orocrm_magento_cart_view') %}
+    {% if resource_granted('oro_magento_cart_view') %}
         {% set orderItemsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_magento_order_widget_items', {id: entity.id})
+                'url': path('oro_magento_order_widget_items', {id: entity.id})
             }) }}
         {% endset %}
 
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'orocrm.magento.order.items.label'|trans,
+                'title': 'oro.magento.order.items.label'|trans,
                 'subblocks': [
                     {'data' : [orderItemsWidget] }
                 ]

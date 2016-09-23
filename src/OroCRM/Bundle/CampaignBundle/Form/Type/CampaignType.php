@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Form\Type;
 
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -20,25 +20,25 @@ class CampaignType extends AbstractType
                 'name',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.name.label',
+                    'label'    => 'oro.campaign.name.label',
                     'required' => true,
-                    'tooltip'  => 'orocrm.campaign.name.description',
+                    'tooltip'  => 'oro.campaign.name.description',
                 ]
             )
             ->add(
                 'code',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.code.label',
+                    'label'    => 'oro.campaign.code.label',
                     'required' => true,
-                    'tooltip'  => 'orocrm.campaign.code.description',
+                    'tooltip'  => 'oro.campaign.code.description',
                 ]
             )
             ->add(
                 'startDate',
                 'oro_date',
                 [
-                    'label'    => 'orocrm.campaign.start_date.label',
+                    'label'    => 'oro.campaign.start_date.label',
                     'required' => false,
                 ]
             )
@@ -46,14 +46,14 @@ class CampaignType extends AbstractType
                 'endDate',
                 'oro_date',
                 [
-                    'label'    => 'orocrm.campaign.end_date.label',
+                    'label'    => 'oro.campaign.end_date.label',
                     'required' => false,
                 ]
             )->add(
                 'description',
                 'oro_resizeable_rich_text',
                 [
-                    'label'    => 'orocrm.campaign.description.label',
+                    'label'    => 'oro.campaign.description.label',
                     'required' => false,
                 ]
             )
@@ -61,7 +61,7 @@ class CampaignType extends AbstractType
                 'budget',
                 'oro_money',
                 [
-                    'label'    => 'orocrm.campaign.budget.label',
+                    'label'    => 'oro.campaign.budget.label',
                     'required' => false,
                 ]
             )
@@ -69,13 +69,13 @@ class CampaignType extends AbstractType
                 'reportPeriod',
                 'choice',
                 [
-                    'label'   => 'orocrm.campaign.report_period.label',
+                    'label'   => 'oro.campaign.report_period.label',
                     'choices' => [
-                        Campaign::PERIOD_HOURLY  => 'orocrm.campaign.report_period.hour',
-                        Campaign::PERIOD_DAILY   => 'orocrm.campaign.report_period.day',
-                        Campaign::PERIOD_MONTHLY => 'orocrm.campaign.report_period.month',
+                        Campaign::PERIOD_HOURLY  => 'oro.campaign.report_period.hour',
+                        Campaign::PERIOD_DAILY   => 'oro.campaign.report_period.day',
+                        Campaign::PERIOD_MONTHLY => 'oro.campaign.report_period.month',
                     ],
-                    'tooltip' => 'orocrm.campaign.report_period.description'
+                    'tooltip' => 'oro.campaign.report_period.description'
                 ]
             );
     }
@@ -86,7 +86,7 @@ class CampaignType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
+            'data_class' => 'Oro\Bundle\CampaignBundle\Entity\Campaign',
             'validation_groups' => ['Campaign', 'Default']
         ]);
     }
@@ -104,6 +104,6 @@ class CampaignType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_campaign_form';
+        return 'oro_campaign_form';
     }
 }

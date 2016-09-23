@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerVoter extends AbstractTwoWaySyncVoter
 {

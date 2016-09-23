@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Datagrid;
+namespace Oro\Bundle\MagentoBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-
-use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 abstract class AbstractTwoWaySyncActionPermissionProvider
 {

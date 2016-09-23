@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity;
 
 use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class TestTrackingWebsite extends TrackingWebsite
 {

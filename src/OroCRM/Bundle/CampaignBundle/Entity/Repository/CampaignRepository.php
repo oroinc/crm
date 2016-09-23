@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
+namespace Oro\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -20,8 +20,8 @@ class CampaignRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('campaign.name as label', 'COUNT(lead.id) as number', 'MAX(campaign.createdAt) as maxCreated')
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->leftJoin('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->leftJoin('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->orderBy('maxCreated', 'DESC')
             ->groupBy('campaign.name')
             ->setMaxResults($recordsCount);
@@ -48,8 +48,8 @@ class CampaignRepository extends EntityRepository
             sprintf('COUNT(%s.id) as number', $leadAlias),
             'MAX(campaign.createdAt) as maxCreated'
         )
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->leftJoin('OroCRMSalesBundle:Lead', $leadAlias, 'WITH', sprintf('%s.campaign = campaign', $leadAlias))
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->leftJoin('OroSalesBundle:Lead', $leadAlias, 'WITH', sprintf('%s.campaign = campaign', $leadAlias))
             ->orderBy('maxCreated', 'DESC')
             ->groupBy('campaign.name');
 
@@ -67,8 +67,8 @@ class CampaignRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('campaign.name as label', 'COUNT(opportunities.id) as number')
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->join('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->join('lead.opportunities', 'opportunities')
             ->orderBy('number', 'DESC')
             ->groupBy('campaign.name')
@@ -92,8 +92,8 @@ class CampaignRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('campaign.name as label', sprintf('COUNT(%s.id) as number', $opportunitiesAlias))
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->join('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->join('lead.opportunities', $opportunitiesAlias)
             ->orderBy('number', 'DESC')
             ->groupBy('campaign.name');
@@ -116,8 +116,8 @@ class CampaignRepository extends EntityRepository
                 'campaign.name as label',
                 'SUM(CASE WHEN (opp.status=\'won\') THEN opp.closeRevenue ELSE 0 END) as closeRevenue'
             )
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->join('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->join('lead.opportunities', 'opp')
             ->orderBy('closeRevenue', 'DESC')
             ->groupBy('campaign.name')
@@ -149,8 +149,8 @@ class CampaignRepository extends EntityRepository
                     $opportunitiesAlias
                 )
             )
-            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
-            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->from('OroCampaignBundle:Campaign', 'campaign')
+            ->join('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->join('lead.opportunities', $opportunitiesAlias)
             ->orderBy('closeRevenue', 'DESC')
             ->groupBy('campaign.name');

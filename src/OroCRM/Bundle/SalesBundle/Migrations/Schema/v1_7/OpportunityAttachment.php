@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -40,7 +40,7 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
     {
         $attachmentExtension->addAttachmentAssociation(
             $schema,
-            'orocrm_sales_opportunity',
+            'oro_sales_opportunity',
             [
                 'image/*',
                 'application/pdf',

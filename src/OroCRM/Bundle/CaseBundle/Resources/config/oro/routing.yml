@@ -1,10 +1,10 @@
-orocrm_case_bundle:
-    resource: "@OroCRMCaseBundle/Controller"
+oro_case_bundle:
+    resource: "@OroCaseBundle/Controller"
     type:     annotation
     prefix:   /case
 
-orocrm_case_bundle_api:
-    resource: "@OroCRMCaseBundle/Resources/config/oro/routing_api.yml"
+oro_case_bundle_api:
+    resource: "@OroCaseBundle/Resources/config/oro/routing_api.yml"
     type: rest
     prefix: api/rest/{version}
     requirements:
@@ -12,11 +12,11 @@ orocrm_case_bundle_api:
     defaults:
         version:  latest
 
-orocrm_case_api_post_case_deprecated:
+oro_case_api_post_case_deprecated:
     path:            /api/rest/{version}/case.{_format}
     methods:         [POST]
     defaults:
-        _controller: OroCRM\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction
+        _controller: Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction
         _format:     json
         version:     latest
     requirements:

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\CampaignBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,6 +22,6 @@ class UpdateCampaignWithOrganization extends UpdateWithOrganization implements D
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMCampaignBundle:Campaign');
+        $this->update($manager, 'OroCampaignBundle:Campaign');
     }
 }

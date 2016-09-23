@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
+use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
 
 /**
  * Class FlowContactRequestTest
  *
- * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium
+ * @package Oro\Bundle\ContactUsBundle\Tests\Selenium
  */
 class FlowContactRequestTest extends Selenium2TestCase
 {
@@ -23,7 +23,7 @@ class FlowContactRequestTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->add()
             ->setFirstName($firstName)
             ->setLastName($lastName)
@@ -50,7 +50,7 @@ class FlowContactRequestTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->open([$email])
             ->resolve()

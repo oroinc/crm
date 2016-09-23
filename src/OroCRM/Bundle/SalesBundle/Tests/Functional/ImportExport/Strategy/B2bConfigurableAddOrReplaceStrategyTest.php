@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\ImportExport\Strategy;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
@@ -9,11 +9,10 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\ImportExport\Strategy\B2bConfigurableAddOrReplaceStrategy;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\ImportExport\Strategy\B2bConfigurableAddOrReplaceStrategy;
 
 /**
  * @dbIsolationPerTest
@@ -45,7 +44,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
 
         $this->loadFixtures(
             [
-                'OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
+                'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures'
             ]
         );
 
@@ -66,7 +65,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         $this->context = new StepExecutionProxyContext($this->stepExecution);
         $this->strategy->setImportExportContext($this->context);
         $this->strategy->setEntityName(
-            $container->getParameter('orocrm_sales.b2bcustomer.entity.class')
+            $container->getParameter('oro_sales.b2bcustomer.entity.class')
         );
     }
 

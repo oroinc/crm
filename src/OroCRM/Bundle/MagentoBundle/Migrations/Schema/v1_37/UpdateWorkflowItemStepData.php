@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37;
 
 use Psr\Log\LoggerInterface;
 
@@ -97,8 +97,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $this->logQuery($logger, $sql, $params, $types);
         $this->connection->executeUpdate($sql, $params, $types);
 
-        // Update workflow_step_id for orocrm_magento_order.
-        $sql = 'UPDATE orocrm_magento_order' .
+        // Update workflow_step_id for oro_magento_order.
+        $sql = 'UPDATE oro_magento_order' .
                ' SET workflow_step_id = :not_contacted_id' .
                ' WHERE workflow_step_id IN (' .
                    'SELECT s.id FROM oro_workflow_step s' .
@@ -197,8 +197,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $this->logQuery($logger, $sql, $params, $types);
         $this->connection->executeUpdate($sql, $params, $types);
 
-        // Update workflow_step_id for orocrm_magento_cart.
-        $sql = 'UPDATE orocrm_magento_cart ' .
+        // Update workflow_step_id for oro_magento_cart.
+        $sql = 'UPDATE oro_magento_cart ' .
                ' SET workflow_step_id = :open_id' .
                ' WHERE workflow_step_id IN (' .
                    'SELECT s.id FROM oro_workflow_step s' .

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\Query\Expr\Select;
 
@@ -9,11 +9,10 @@ use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\TagBundle\Grid\TagsExtension;
 use Oro\Bundle\DataGridBundle\Datagrid\Manager;
-
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Provider\MarketingListProvider;
 
 class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -237,14 +236,14 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMarketingList($typeName)
     {
-        $type = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')
+        $type = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListType')
             ->disableOriginalConstructor()
             ->getMock();
         $type->expects($this->any())
             ->method('getName')
             ->will($this->returnValue($typeName));
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->any())

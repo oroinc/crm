@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
-
-use OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider;
+use Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider;
 
 class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,18 +33,18 @@ class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRecipients(EmailRecipientsProviderArgs $args, array $recipients)
     {
-        $contactRepository = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository')
+        $contactRepository = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->registry->expects($this->once())
             ->method('getRepository')
-            ->with('OroCRMContactBundle:Contact')
+            ->with('OroContactBundle:Contact')
             ->will($this->returnValue($contactRepository));
 
         $this->emailRecipientsHelper->expects($this->once())
             ->method('getRecipients')
-            ->with($args, $contactRepository, 'c', 'OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->with($args, $contactRepository, 'c', 'Oro\Bundle\ContactBundle\Entity\Contact')
             ->will($this->returnValue($recipients));
 
         $this->assertEquals($recipients, $this->emailRecipientsProvider->getRecipients($args));

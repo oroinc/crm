@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Dashboard\Converters;
+namespace Oro\Bundle\SalesBundle\Dashboard\Converters;
 
 use Oro\Bundle\DashboardBundle\Provider\Converters\WidgetEntitySelectConverter;
-
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
+use Oro\Bundle\SalesBundle\Entity\LeadStatus;
 
 class WidgetLeadStatusSelectConverter extends WidgetEntitySelectConverter
 {

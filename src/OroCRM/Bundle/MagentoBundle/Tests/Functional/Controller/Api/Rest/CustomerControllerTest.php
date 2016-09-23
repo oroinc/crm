@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 
 /**
  * @outputBuffering enabled
@@ -45,7 +44,7 @@ class CustomerControllerTest extends WebTestCase
 
         $this->loadFixtures(
             [
-                'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
+                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
             ]
         );
     }
@@ -90,7 +89,7 @@ class CustomerControllerTest extends WebTestCase
         if (is_null($this->customerGroup)) {
             $this->customerGroup = self::getContainer()
                 ->get('doctrine')
-                ->getRepository('OroCRMMagentoBundle:CustomerGroup')
+                ->getRepository('OroMagentoBundle:CustomerGroup')
                 ->findOneByName(self::GROUP_NAME);
         } else {
             $this->customerGroup = false;

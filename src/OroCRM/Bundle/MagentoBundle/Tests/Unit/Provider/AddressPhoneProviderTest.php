@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Provider\AddressPhoneProvider;
 
 class AddressPhoneProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -40,7 +40,7 @@ class AddressPhoneProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetPhoneNumbers()
     {
         $entity  = new Address();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 

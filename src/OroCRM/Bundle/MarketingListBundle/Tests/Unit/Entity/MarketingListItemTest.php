@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListItem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MarketingListItemTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +50,7 @@ class MarketingListItemTest extends \PHPUnit_Framework_TestCase
         return array(
             array('entityId', 2),
             array('contactedTimes', 3),
-            array('marketingList', $this->getMock('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')),
+            array('marketingList', $this->getMock('Oro\Bundle\MarketingListBundle\Entity\MarketingList')),
             array('lastContactedAt', new \DateTime()),
             array('createdAt', new \DateTime()),
         );

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -11,8 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
 {
@@ -73,7 +72,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
             $query = sprintf('UPDATE %s SET definition = REPLACE(definition, :old, :new);', $table);
             $params = [
                 'old' => 'Lead::address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address',
-                'new' => 'Lead::addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress'
+                'new' => 'Lead::addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress'
             ];
             $this->executeQuery($logger, $dryRun, $query, $params);
 
@@ -84,8 +83,8 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
             );
             $params = [
                 'old' => '"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address',
-                'new' => '"addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress',
-                'entity' => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead'
+                'new' => '"addresses+Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress',
+                'entity' => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead'
             ];
             $this->executeQuery($logger, $dryRun, $query, $params);
         }

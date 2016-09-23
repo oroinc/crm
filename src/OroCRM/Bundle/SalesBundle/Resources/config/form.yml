@@ -1,368 +1,368 @@
 parameters:
-    orocrm_sales.opportunity.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType
-    orocrm_sales.opportunity.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityApiType
-    orocrm_sales.lead_to_opportunity.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
-    orocrm_sales.opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
-    orocrm_sales.lead_to_opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
+    oro_sales.opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityType
+    oro_sales.opportunity.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityApiType
+    oro_sales.lead_to_opportunity.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
+    oro_sales.opportunity.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\OpportunityHandler
+    oro_sales.lead_to_opportunity.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadToOpportunityHandler
 
-    orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
-    orocrm_sales.lead.address.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadAddressType
-    orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
-    orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
-    orocrm_sales.lead_phone.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
-    orocrm_sales.lead_phone.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
+    oro_sales.lead.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadType
+    oro_sales.lead.address.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadAddressType
+    oro_sales.lead.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\LeadApiType
+    oro_sales.lead.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadHandler
+    oro_sales.lead_phone.form.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadPhoneType
+    oro_sales.lead_phone.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
 
-    orocrm_sales.form.type.lead_select.class:        OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
-    orocrm_sales.form.type.opportunity_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType
-    orocrm_sales.form.type.b2bcustomer_select.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
+    oro_sales.form.type.lead_select.class:        Oro\Bundle\SalesBundle\Form\Type\LeadSelectType
+    oro_sales.form.type.opportunity_select.class: Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType
+    oro_sales.form.type.b2bcustomer_select.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
 
-    orocrm_sales.salesfunnel.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelType
-    orocrm_sales.salesfunnel.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
-    orocrm_sales.salesfunnel.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
+    oro_sales.salesfunnel.form.type.class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelType
+    oro_sales.salesfunnel.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
+    oro_sales.salesfunnel.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
 
-    orocrm_sales.b2bcustomer.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerType
-    orocrm_sales.b2bcustomer.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
-    orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
+    oro_sales.b2bcustomer.form.type.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType
+    oro_sales.b2bcustomer.form.type.api.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
+    oro_sales.b2bcustomer.form.handler.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
-    orocrm_sales.form.type.b2bcustomer_phone.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType
-    orocrm_sales.form.type.b2bcustomer_email.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType
+    oro_sales.form.type.b2bcustomer_phone.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType
+    oro_sales.form.type.b2bcustomer_email.class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType
 
-    orocrm_sales.form.handler.b2bcustomer_phone.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerPhoneHandler
-    orocrm_sales.form.handler.b2bcustomer_email.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerEmailHandler
+    oro_sales.form.handler.b2bcustomer_phone.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerPhoneHandler
+    oro_sales.form.handler.b2bcustomer_email.class: Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerEmailHandler
 
-    orocrm_sales.mailbox_process.lead.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
-    orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
+    oro_sales.mailbox_process.lead.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
+    oro_sales.lead_mailbox_process_source.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
-    orocrm_sales.lead_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
-    orocrm_sales.opportunity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
+    oro_sales.lead_data_channel_aware_select.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
+    oro_sales.opportunity_data_channel_aware_select.type.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
 
-    orocrm_sales.lead_email.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadEmailType
-    orocrm_sales.lead_email.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
+    oro_sales.lead_email.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadEmailType
+    oro_sales.lead_email.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
 
 services:
-    orocrm_sales.opportunity.form.type:
-        class: %orocrm_sales.opportunity.form.type.class%
+    oro_sales.opportunity.form.type:
+        class: %oro_sales.opportunity.form.type.class%
         arguments:
-            - '@orocrm_sales.provider.probability'
+            - '@oro_sales.provider.probability'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_entity_extend.enum_type_helper'
-            - '@orocrm_sales.builder.opportunity_relations'
+            - '@oro_sales.builder.opportunity_relations'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity }
+            - { name: form.type, alias: oro_sales_opportunity }
 
-    orocrm_sales.opportunity_status_config.form.type:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType
+    oro_sales.opportunity_status_config.form.type:
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType
         arguments:
             - '@oro_entity_config.config_manager'
             - '@oro_config.global'
             - '@oro_entity_extend.entity_config_type.enum.subscriber'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_status_config }
+            - { name: form.type, alias: oro_sales_opportunity_status_config }
 
-    orocrm_sales.opportunity_probability.form.type:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType
+    oro_sales.opportunity_probability.form.type:
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType
         arguments:
             - '@oro_entity_extend.enum_type_helper'
             - '@doctrine'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_probability }
+            - { name: form.type, alias: oro_sales_opportunity_probability }
 
-    orocrm_sales.opportunity_status_enum_value.form.type:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType
+    oro_sales.opportunity_status_enum_value.form.type:
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType
         arguments:
             - '@oro_entity_config.provider.enum'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_status_enum_value }
+            - { name: form.type, alias: oro_sales_opportunity_status_enum_value }
 
-    orocrm_sales.opportunity.form.type.api:
-        class: %orocrm_sales.opportunity.form.type.api.class%
-        parent: orocrm_sales.opportunity.form.type
+    oro_sales.opportunity.form.type.api:
+        class: %oro_sales.opportunity.form.type.api.class%
+        parent: oro_sales.opportunity.form.type
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_api }
+            - { name: form.type, alias: oro_sales_opportunity_api }
 
-    orocrm_sales.lead_to_opportunity.form.type:
-        class: %orocrm_sales.lead_to_opportunity.form.type.class%
+    oro_sales.lead_to_opportunity.form.type:
+        class: %oro_sales.lead_to_opportunity.form.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_to_opportunity }
+            - { name: form.type, alias: oro_sales_lead_to_opportunity }
 
-    orocrm_sales.opportunity.form:
+    oro_sales.opportunity.form:
         class:           Symfony\Component\Form\Form
         factory_method:  createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_opportunity_form"
-            - "orocrm_sales_opportunity"
+            - "oro_sales_opportunity_form"
+            - "oro_sales_opportunity"
 
-    orocrm_sales.opportunity.form.api:
+    oro_sales.opportunity.form.api:
         class:           Symfony\Component\Form\Form
         factory_method:  createNamed
         factory_service: form.factory
         arguments:
             - "opportunity"
-            - "orocrm_sales_opportunity_api"
+            - "oro_sales_opportunity_api"
 
-    orocrm_sales.lead_to_opportunity.form:
+    oro_sales.lead_to_opportunity.form:
         class:           Symfony\Component\Form\Form
         factory_method:  createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_lead_to_opportunity_form"
-            - "orocrm_sales_lead_to_opportunity"
+            - "oro_sales_lead_to_opportunity_form"
+            - "oro_sales_lead_to_opportunity"
 
-    orocrm_sales.opportunity.form.handler:
-        class: %orocrm_sales.opportunity.form.handler.class%
+    oro_sales.opportunity.form.handler:
+        class: %oro_sales.opportunity.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.opportunity.form"
+            - "@oro_sales.opportunity.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.lead_to_opportunity.form.handler:
-        class: %orocrm_sales.lead_to_opportunity.form.handler.class%
+    oro_sales.lead_to_opportunity.form.handler:
+        class: %oro_sales.lead_to_opportunity.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.lead_to_opportunity.form"
+            - "@oro_sales.lead_to_opportunity.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
-            - "@orocrm_sales.provider.lead_to_opportunity"
+            - "@oro_channel.provider.request_channel"
+            - "@oro_sales.provider.lead_to_opportunity"
 
-    orocrm_sales.opportunity.form.handler.api:
-        class: %orocrm_sales.opportunity.form.handler.class%
+    oro_sales.opportunity.form.handler.api:
+        class: %oro_sales.opportunity.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.opportunity.form.api"
+            - "@oro_sales.opportunity.form.api"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.lead.form.type:
-        class: %orocrm_sales.lead.form.type.class%
+    oro_sales.lead.form.type:
+        class: %oro_sales.lead.form.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead }
+            - { name: form.type, alias: oro_sales_lead }
 
-    orocrm_sales.lead.address.form.type:
-        class: %orocrm_sales.lead.address.form.type.class%
+    oro_sales.lead.address.form.type:
+        class: %oro_sales.lead.address.form.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_address }
+            - { name: form.type, alias: oro_sales_lead_address }
 
-    orocrm_sales.lead.form.type.api:
-        class: %orocrm_sales.lead.form.type.api.class%
+    oro_sales.lead.form.type.api:
+        class: %oro_sales.lead.form.type.api.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_api }
+            - { name: form.type, alias: oro_sales_lead_api }
 
-    orocrm_sales.lead.form:
+    oro_sales.lead.form:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_lead_form"
-            - "orocrm_sales_lead"
+            - "oro_sales_lead_form"
+            - "oro_sales_lead"
 
-    orocrm_sales.lead.form.api:
+    oro_sales.lead.form.api:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
             - "lead"
-            - "orocrm_sales_lead_api"
+            - "oro_sales_lead_api"
 
-    orocrm_sales.lead.form.handler:
-        class: %orocrm_sales.lead.form.handler.class%
+    oro_sales.lead.form.handler:
+        class: %oro_sales.lead.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.lead.form"
+            - "@oro_sales.lead.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.lead.form.handler.api:
-        class: %orocrm_sales.lead.form.handler.class%
+    oro_sales.lead.form.handler.api:
+        class: %oro_sales.lead.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.lead.form.api"
+            - "@oro_sales.lead.form.api"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.lead_address.form:
+    oro_sales.lead_address.form:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_lead_address_form"
-            - "orocrm_sales_lead_address"
+            - "oro_sales_lead_address_form"
+            - "oro_sales_lead_address"
             - ~
-            - { data_class: %orocrm_sales.leadaddress.entity.class% }
+            - { data_class: %oro_sales.leadaddress.entity.class% }
 
-    orocrm_sales.lead_address.form.handler:
+    oro_sales.lead_address.form.handler:
         class: %oro_address.form.handler.address.class%
         scope: request
         arguments:
-            - "@orocrm_sales.lead_address.form"
+            - "@oro_sales.lead_address.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
 
-    orocrm_sales.form.type.opportunity_select:
-        class: %orocrm_sales.form.type.opportunity_select.class%
+    oro_sales.form.type.opportunity_select:
+        class: %oro_sales.form.type.opportunity_select.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_select }
+            - { name: form.type, alias: oro_sales_opportunity_select }
 
-    orocrm_sales.form.type.lead_select:
-        class: %orocrm_sales.form.type.lead_select.class%
+    oro_sales.form.type.lead_select:
+        class: %oro_sales.form.type.lead_select.class%
         tags:
-            - { name: form.type, alias: "orocrm_sales_lead_select" }
+            - { name: form.type, alias: "oro_sales_lead_select" }
 
-    orocrm_sales.form.type.b2bcustomer_select:
-        class: %orocrm_sales.form.type.b2bcustomer_select.class%
+    oro_sales.form.type.b2bcustomer_select:
+        class: %oro_sales.form.type.b2bcustomer_select.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_b2bcustomer_select }
+            - { name: form.type, alias: oro_sales_b2bcustomer_select }
 
-    orocrm_sales.form.type.opportunity_status_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType
+    oro_sales.form.type.opportunity_status_select:
+        class: Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType
         arguments:
             - '@oro_config.user'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_status_select }
+            - { name: form.type, alias: oro_sales_opportunity_status_select }
 
-    orocrm_sales.form.type.b2bcustomer_with_channel_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelCreateOrSelectType
+    oro_sales.form.type.b2bcustomer_with_channel_select:
+        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelCreateOrSelectType
         arguments:
             - '@oro_security.security_facade'
         tags:
-            - { name: form.type, alias: orocrm_sales_b2bcustomer_with_channel_create_or_select }
+            - { name: form.type, alias: oro_sales_b2bcustomer_with_channel_create_or_select }
 
-    orocrm_sales.salesfunnel.form.type:
-        class: %orocrm_sales.salesfunnel.form.type.class%
+    oro_sales.salesfunnel.form.type:
+        class: %oro_sales.salesfunnel.form.type.class%
         tags:
-            - { name: form.type, alias: "orocrm_sales_funnel" }
+            - { name: form.type, alias: "oro_sales_funnel" }
 
-    orocrm_sales.salesfunnel.form.type.api:
-        class: %orocrm_sales.salesfunnel.form.type.api.class%
+    oro_sales.salesfunnel.form.type.api:
+        class: %oro_sales.salesfunnel.form.type.api.class%
         tags:
-            - { name: form.type, alias: "orocrm_sales_salesfunnel_api" }
+            - { name: form.type, alias: "oro_sales_salesfunnel_api" }
 
-    orocrm_sales.salesfunnel.form:
+    oro_sales.salesfunnel.form:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_salesfunnel_form"
-            - "orocrm_sales_funnel"
+            - "oro_sales_salesfunnel_form"
+            - "oro_sales_funnel"
 
-    orocrm_sales.salesfunnel.form.api:
+    oro_sales.salesfunnel.form.api:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
             - "salesfunnel"
-            - "orocrm_sales_salesfunnel_api"
+            - "oro_sales_salesfunnel_api"
 
-    orocrm_sales.salesfunnel.form.handler:
-        class: %orocrm_sales.salesfunnel.form.handler.class%
+    oro_sales.salesfunnel.form.handler:
+        class: %oro_sales.salesfunnel.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.salesfunnel.form"
+            - "@oro_sales.salesfunnel.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
 
-    orocrm_sales.salesfunnel.form.handler.api:
-        class: %orocrm_sales.salesfunnel.form.handler.class%
+    oro_sales.salesfunnel.form.handler.api:
+        class: %oro_sales.salesfunnel.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.salesfunnel.form.api"
+            - "@oro_sales.salesfunnel.form.api"
             - "@request"
             - "@doctrine.orm.entity_manager"
 
-    orocrm_sales.b2bcustomer.form.type:
-        class: %orocrm_sales.b2bcustomer.form.type.class%
+    oro_sales.b2bcustomer.form.type:
+        class: %oro_sales.b2bcustomer.form.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_b2bcustomer }
+            - { name: form.type, alias: oro_sales_b2bcustomer }
 
-    orocrm_sales.b2bcustomer.form.type.api:
-        class: %orocrm_sales.b2bcustomer.form.type.api.class%
+    oro_sales.b2bcustomer.form.type.api:
+        class: %oro_sales.b2bcustomer.form.type.api.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_b2bcustomer_api }
+            - { name: form.type, alias: oro_sales_b2bcustomer_api }
 
-    orocrm_sales.mailbox_process.lead.type:
-        class: %orocrm_sales.mailbox_process.lead.type.class%
+    oro_sales.mailbox_process.lead.type:
+        class: %oro_sales.mailbox_process.lead.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_mailbox_process_settings }
+            - { name: form.type, alias: oro_sales_lead_mailbox_process_settings }
 
-    orocrm_sales.lead_mailbox_process_source.type:
-        class: %orocrm_sales.lead_mailbox_process_source.type.class%
+    oro_sales.lead_mailbox_process_source.type:
+        class: %oro_sales.lead_mailbox_process_source.type.class%
         arguments:  ["@oro_entity_extend.enum_value_provider"]
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_mailbox_process_source }
+            - { name: form.type, alias: oro_sales_lead_mailbox_process_source }
 
-    orocrm_sales.b2bcustomer.form:
+    oro_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_b2bcustomer_form"
-            - "orocrm_sales_b2bcustomer"
+            - "oro_sales_b2bcustomer_form"
+            - "oro_sales_b2bcustomer"
 
-    orocrm_sales.b2bcustomer.form.api:
+    oro_sales.b2bcustomer.form.api:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments:
             - "b2bcustomer"
-            - "orocrm_sales_b2bcustomer_api"
+            - "oro_sales_b2bcustomer_api"
 
-    orocrm_sales.b2bcustomer.form.handler:
-        class: %orocrm_sales.b2bcustomer.form.handler.class%
+    oro_sales.b2bcustomer.form.handler:
+        class: %oro_sales.b2bcustomer.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.b2bcustomer.form"
+            - "@oro_sales.b2bcustomer.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.b2bcustomer.form.handler.api:
-        class: %orocrm_sales.b2bcustomer.form.handler.class%
+    oro_sales.b2bcustomer.form.handler.api:
+        class: %oro_sales.b2bcustomer.form.handler.class%
         scope: request
         arguments:
-            - "@orocrm_sales.b2bcustomer.form.api"
+            - "@oro_sales.b2bcustomer.form.api"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
+            - "@oro_channel.provider.request_channel"
 
-    orocrm_sales.lead_data_channel_aware_select.type:
-        class: %orocrm_sales.lead_data_channel_aware_select.type.class%
+    oro_sales.lead_data_channel_aware_select.type:
+        class: %oro_sales.lead_data_channel_aware_select.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_data_channel_aware_select }
+            - { name: form.type, alias: oro_sales_lead_data_channel_aware_select }
 
-    orocrm_sales.opportunity_data_channel_aware_select.type:
-        class: %orocrm_sales.opportunity_data_channel_aware_select.type.class%
+    oro_sales.opportunity_data_channel_aware_select.type:
+        class: %oro_sales.opportunity_data_channel_aware_select.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_data_channel_aware_select }
+            - { name: form.type, alias: oro_sales_opportunity_data_channel_aware_select }
 
-    orocrm_sales.type.widget_oppotunity_status_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType
+    oro_sales.type.widget_oppotunity_status_select:
+        class: Oro\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType
         arguments:
             - '@oro_entity_extend.enum_value_provider'
         tags:
-            - { name: form.type, alias: orocrm_type_widget_opportunity_status_select }
+            - { name: form.type, alias: oro_type_widget_opportunity_status_select }
 
-    orocrm_sales.type.lead_source_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadSourceSelectType
+    oro_sales.type.lead_source_select:
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadSourceSelectType
         arguments:
             - '@oro_entity_extend.enum_value_provider'
         tags:
-            - { name: form.type, alias: orocrm_type_widget_lead_source_select }
+            - { name: form.type, alias: oro_type_widget_lead_source_select }
 
-    orocrm_sales.type.lead_status_select:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
+    oro_sales.type.lead_status_select:
+        class: Oro\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
         arguments:
            - '@oro_entity_extend.enum_value_provider'
         tags:
-            - { name: form.type, alias: orocrm_type_widget_lead_status_select }
+            - { name: form.type, alias: oro_type_widget_lead_status_select }
 
-    orocrm_sales.widget_config_value.widget_opportunity_status.converter:
-        class: OroCRM\Bundle\SalesBundle\Dashboard\Converters\WidgetOpportunityStatusSelectConverter
+    oro_sales.widget_config_value.widget_opportunity_status.converter:
+        class: Oro\Bundle\SalesBundle\Dashboard\Converters\WidgetOpportunityStatusSelectConverter
         arguments:
             - '@oro_security.acl_helper'
             - '@oro_entity.entity_name_resolver'
@@ -370,26 +370,26 @@ services:
             - '@doctrine.orm.entity_manager'
             - 'opportunity_status'
         tags:
-            - { name: oro_dashboard.value.converter, alias: 'orocrm_type_widget_opportunity_status_select' }
+            - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_opportunity_status_select' }
 
-    orocrm_sales.widget_config_value.widget_lead_status.converter:
-        class: OroCRM\Bundle\SalesBundle\Dashboard\Converters\WidgetLeadStatusSelectConverter
+    oro_sales.widget_config_value.widget_lead_status.converter:
+        class: Oro\Bundle\SalesBundle\Dashboard\Converters\WidgetLeadStatusSelectConverter
         arguments:
             - '@oro_security.acl_helper'
             - '@oro_entity.entity_name_resolver'
             - '@oro_entity.doctrine_helper'
             - '@doctrine.orm.entity_manager'
-            - 'OroCRM\Bundle\SalesBundle\Entity\LeadStatus'
+            - 'Oro\Bundle\SalesBundle\Entity\LeadStatus'
         tags:
-            - { name: oro_dashboard.value.converter, alias: 'orocrm_type_widget_lead_status_select' }
+            - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_lead_status_select' }
 
-    orocrm_sales.form.type.lead_phone.type:
-        class: %orocrm_sales.lead_phone.form.type.class%
+    oro_sales.form.type.lead_phone.type:
+        class: %oro_sales.lead_phone.form.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_phone }
+            - { name: form.type, alias: oro_sales_lead_phone }
 
-    orocrm_sales.form.type.lead_phone.handler:
-        class: %orocrm_sales.lead_phone.form.handler.class%
+    oro_sales.form.type.lead_phone.handler:
+        class: %oro_sales.lead_phone.form.handler.class%
         scope: request
         arguments:
             - "@form.factory"
@@ -397,13 +397,13 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"
 
-    orocrm_sales.form.type.lead_email.type:
-        class: %orocrm_sales.lead_email.type.class%
+    oro_sales.form.type.lead_email.type:
+        class: %oro_sales.lead_email.type.class%
         tags:
-            - { name: form.type, alias: orocrm_sales_lead_email }
+            - { name: form.type, alias: oro_sales_lead_email }
 
-    orocrm_sales.form.type.lead_email.handler:
-        class: %orocrm_sales.lead_email.handler.class%
+    oro_sales.form.type.lead_email.handler:
+        class: %oro_sales.lead_email.handler.class%
         scope: request
         arguments:
             - "@form.factory"
@@ -411,42 +411,42 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"
 
-    orocrm_sales.form.type.b2bcustomer_phone:
+    oro_sales.form.type.b2bcustomer_phone:
         class: Symfony\Component\Form\Form
         factory: ["@form.factory", createNamed]
-        arguments: ["orocrm_b2bcustomer_phone", "orocrm_b2bcustomer_phone", null]
+        arguments: ["oro_b2bcustomer_phone", "oro_b2bcustomer_phone", null]
 
-    orocrm_sales.form.type.b2bcustomer_phone.type:
-        class: %orocrm_sales.form.type.b2bcustomer_phone.class%
+    oro_sales.form.type.b2bcustomer_phone.type:
+        class: %oro_sales.form.type.b2bcustomer_phone.class%
         tags:
-            - { name: form.type, alias: orocrm_b2bcustomer_phone }
+            - { name: form.type, alias: oro_b2bcustomer_phone }
 
-    orocrm_sales.form.type.b2bcustomer_phone.handler:
-        class: %orocrm_sales.form.handler.b2bcustomer_phone.class%
+    oro_sales.form.type.b2bcustomer_phone.handler:
+        class: %oro_sales.form.handler.b2bcustomer_phone.class%
         scope: request
         arguments:
-            - "@orocrm_sales.form.type.b2bcustomer_phone"
+            - "@oro_sales.form.type.b2bcustomer_phone"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_sales.validator.b2bcustomer_phone_delete"
+            - "@oro_sales.validator.b2bcustomer_phone_delete"
             - "@oro_security.security_facade"
 
-    orocrm_sales.form.type.b2bcustomer_email:
+    oro_sales.form.type.b2bcustomer_email:
         class: Symfony\Component\Form\Form
         factory: ["@form.factory", createNamed]
-        arguments: ["orocrm_b2bcustomer_email", "orocrm_b2bcustomer_email", null]
+        arguments: ["oro_b2bcustomer_email", "oro_b2bcustomer_email", null]
 
-    orocrm_sales.form.type.b2bcustomer_email.type:
-        class: %orocrm_sales.form.type.b2bcustomer_email.class%
+    oro_sales.form.type.b2bcustomer_email.type:
+        class: %oro_sales.form.type.b2bcustomer_email.class%
         tags:
-            - { name: form.type, alias: orocrm_b2bcustomer_email }
+            - { name: form.type, alias: oro_b2bcustomer_email }
 
-    orocrm_sales.form.type.b2bcustomer_email.handler:
-        class: %orocrm_sales.form.handler.b2bcustomer_email.class%
+    oro_sales.form.type.b2bcustomer_email.handler:
+        class: %oro_sales.form.handler.b2bcustomer_email.class%
         scope: request
         arguments:
-            - "@orocrm_sales.form.type.b2bcustomer_email"
+            - "@oro_sales.form.type.b2bcustomer_email"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_sales.validator.b2bcustomer_email_delete"
+            - "@oro_sales.validator.b2bcustomer_email_delete"
             - "@oro_security.security_facade"

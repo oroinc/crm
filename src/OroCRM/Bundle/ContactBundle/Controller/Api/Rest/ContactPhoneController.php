@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,8 +16,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @RouteResource("phone")
@@ -32,7 +31,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      *      description="Get all phones items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @param int $contactId
      * @return Response
      */
@@ -64,7 +63,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      *      description="Get contact primary phone",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getPrimaryAction($contactId)
@@ -129,7 +128,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
 
     protected function getContactManager()
     {
-        return $this->get('orocrm_contact.contact.manager.api');
+        return $this->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -137,7 +136,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact_phone.manager.api');
+        return $this->get('oro_contact.contact_phone.manager.api');
     }
 
     /**
@@ -158,7 +157,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_contact.form.type.contact_phone.handler');
+        return $this->get('oro_contact.form.type.contact_phone.handler');
     }
 
     /**
@@ -166,7 +165,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      */
     public function getForm()
     {
-        return $this->get('orocrm_contact.form.type.contact_phone.type');
+        return $this->get('oro_contact.form.type.contact_phone.type');
     }
 
     /**
@@ -174,6 +173,6 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      */
     public function getDeleteHandler()
     {
-        return $this->get('orocrm_contact.form.type.contact_phone.handler');
+        return $this->get('oro_contact.form.type.contact_phone.handler');
     }
 }

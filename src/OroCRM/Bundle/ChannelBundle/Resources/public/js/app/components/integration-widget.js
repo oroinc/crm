@@ -13,7 +13,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
     var $ = Backbone.$;
 
     /**
-     * @class   orocrmchannel.app.components.IntegrationWidgetView
+     * @class   orochannel.app.components.IntegrationWidgetView
      * @extends Backbone.View
      */
     var IntegrationWidgetView = Backbone.View.extend({
@@ -113,7 +113,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
 
         onRemoveIntegrationData: function() {
             var confirm = new DeleteConfirmation({
-                content: __('orocrm.channel.confirmation.delete_confirmation')
+                content: __('oro.channel.confirmation.delete_confirmation')
             });
             confirm.on('ok', _.bind(this.removeIntegrationData, this));
             confirm.open();
@@ -156,7 +156,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         _getUrl: function() {
             var entityId = this._getValue('id');
             var data = this._getValue('data');
-            var route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create';
+            var route = entityId ? 'oro_channel_integration_update' : 'oro_channel_integration_create';
             var type = this._getValue('type');
             var params = {};
 

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 
@@ -17,6 +17,6 @@ class LoadEmailTemplates extends AbstractEmailFixture
     {
         return $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/emails');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/emails');
     }
 }

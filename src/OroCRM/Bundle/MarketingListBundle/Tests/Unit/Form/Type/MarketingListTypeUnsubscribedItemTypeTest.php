@@ -1,7 +1,7 @@
 <?php
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListTypeUnsubscribedItemType;
+use Oro\Bundle\MarketingListBundle\Form\Type\MarketingListTypeUnsubscribedItemType;
 
 class MarketingListTypeUnsubscribedItemTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ class MarketingListTypeUnsubscribedItemTypeTest extends \PHPUnit_Framework_TestC
                 'marketingList',
                 'entity',
                 [
-                    'class'    => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
+                    'class'    => 'Oro\Bundle\MarketingListBundle\Entity\MarketingList',
                     'required' => true
                 ]
             );
@@ -58,6 +58,6 @@ class MarketingListTypeUnsubscribedItemTypeTest extends \PHPUnit_Framework_TestC
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_marketing_list_unsubscribed_item', $this->type->getName());
+        $this->assertEquals('oro_marketing_list_unsubscribed_item', $this->type->getName());
     }
 }

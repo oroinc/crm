@@ -20,7 +20,7 @@ oro:
                 entity_plural_label:  Lead Sources
                 entity_description:   Represents a list of all lead sources
 
-orocrm:
+oro:
     query_designer:
         aggregates:
             opportunity_status:
@@ -127,7 +127,7 @@ orocrm:
                 account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
 
         #
-        # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
+        # Oro/Bundle/SalesBundle/Entity/LeadStatus.php
         #
         leadstatus:
             entity_label:         Lead Status
@@ -136,7 +136,7 @@ orocrm:
             name.label:           Name
             label.label:          Label
         #
-        # OroCRM/Bundle/SalesBundle/Entity/OpportunityStatus.php
+        # Oro/Bundle/SalesBundle/Entity/OpportunityStatus.php
         #
         opportunitystatus:
             entity_label:         Opportunity Status
@@ -145,7 +145,7 @@ orocrm:
             name.label:           Name
             label.label:          Label
         #
-        # OroCRM/Bundle/SalesBundle/Entity/Opportunity.php
+        # Oro/Bundle/SalesBundle/Entity/Opportunity.php
         #
         opportunity:
             entity_label:         Opportunity
@@ -185,7 +185,7 @@ orocrm:
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
         #
-        # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
+        # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
         opportunityclosereason:
             entity_label:         Opportunity Close Reason
@@ -194,7 +194,7 @@ orocrm:
             name.label:           Name
             label.label:          Label
         #
-        # OroCRM/Bundle/SalesBundle/Entity/Lead.php
+        # Oro/Bundle/SalesBundle/Entity/Lead.php
         #
         lead:
             entity_label:         Lead
@@ -291,7 +291,7 @@ orocrm:
             region_code.label:       State ISO code
 
         #
-        # Entity OroCRM/Bundle/SalesBundle/Entity/LeadPhone.php
+        # Entity Oro/Bundle/SalesBundle/Entity/LeadPhone.php
         #
         leadphone:
             entity_description:  Represent lead's phone
@@ -303,7 +303,7 @@ orocrm:
             primary.label:       Primary
 
         #
-        # Entity OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+        # Entity Oro\Bundle\SalesBundle\Entity\LeadEmail
         #
         leademail:
             email.label:         Email
@@ -333,7 +333,7 @@ orocrm:
                 update: Update
                 delete: Delete
         #
-        # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
+        # Oro/Bundle/SalesBundle/Entity/B2bCustomer.php
         #
         b2bcustomer:
             entity_label:               Business Customer
@@ -386,7 +386,7 @@ orocrm:
             import: Import
 
         #
-        # Entity OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
+        # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
         #
         b2bcustomerphone:
             entity_description:  Represent Business Customer phone

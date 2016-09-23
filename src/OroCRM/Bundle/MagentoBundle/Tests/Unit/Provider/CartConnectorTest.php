@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
+use Oro\Bundle\MagentoBundle\Provider\CartConnector;
 
 class CartConnectorTest extends MagentoConnectorTestCase
 {
@@ -39,7 +38,7 @@ class CartConnectorTest extends MagentoConnectorTestCase
 
         $this->assertEquals('cart', $connector->getType());
         $this->assertEquals('mage_cart_import', $connector->getImportJobName());
-        $this->assertEquals('OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart', $connector->getImportEntityFQCN());
-        $this->assertEquals('orocrm.magento.connector.cart.label', $connector->getLabel());
+        $this->assertEquals('Oro\\Bundle\\MagentoBundle\\Entity\\Cart', $connector->getImportEntityFQCN());
+        $this->assertEquals('oro.magento.connector.cart.label', $connector->getLabel());
     }
 }

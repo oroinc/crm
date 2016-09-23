@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\ActivityContactBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -10,7 +10,7 @@ use JMS\JobQueueBundle\Entity\Job;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use OroCRM\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
+use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 
 class ActivityContactRecalculate extends AbstractFixture implements ContainerAwareInterface
 {

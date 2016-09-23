@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
-use OroCRM\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
 
 class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +29,7 @@ class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contactNameFormatter = $this
-            ->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter')
+            ->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter')
             ->disableOriginalConstructor()->getMock();
 
         $this->dqlNameFormatter = $this

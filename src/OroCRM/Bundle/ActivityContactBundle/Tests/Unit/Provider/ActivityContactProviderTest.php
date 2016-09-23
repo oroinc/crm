@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
-use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 
 class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,7 +55,7 @@ class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetSupportedActivityClasses()
     {
         $this->assertEquals(
-            ['OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity'],
+            ['Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity'],
             $this->provider->getSupportedActivityClasses()
         );
     }

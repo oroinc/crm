@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CartStrategy extends AbstractImportStrategy
 {
@@ -272,9 +271,9 @@ class CartStrategy extends AbstractImportStrategy
         $existingEntity = null;
 
         if ($entity instanceof Region) {
-            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            /** @var \Oro\Bundle\MagentoBundle\Entity\Region $magentoRegion */
             $magentoRegion = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                'Oro\Bundle\MagentoBundle\Entity\Region',
                 [
                     'regionId' => $entity->getCode()
                 ]

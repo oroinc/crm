@@ -1,4 +1,4 @@
-OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+Oro\Bundle\SalesBundle\Entity\Opportunity:
     properties:
         name:
             - NotBlank: ~
@@ -24,7 +24,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         status:
             - NotBlank: ~
 
-OroCRM\Bundle\SalesBundle\Entity\Lead:
+Oro\Bundle\SalesBundle\Entity\Lead:
     properties:
         name:
             - NotBlank: ~
@@ -46,7 +46,7 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
         status:
             - NotBlank: ~
 
-OroCRM\Bundle\SalesBundle\Entity\LeadAddress:
+Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
         - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
     properties:
@@ -57,7 +57,7 @@ OroCRM\Bundle\SalesBundle\Entity\LeadAddress:
         postalCode:
             - NotBlank: ~
 
-OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
+Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
         startDate:
             - NotBlank: ~
@@ -67,7 +67,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
         organization:
             - NotBlank: ~
 
-OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     properties:
         name:
             - NotBlank: ~

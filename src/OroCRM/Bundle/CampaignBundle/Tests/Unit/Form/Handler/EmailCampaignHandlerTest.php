@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
+use Oro\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler;
 use Symfony\Component\HttpFoundation\Request;
 
 class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +41,7 @@ class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessGet()
     {
-        $data = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $data = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -58,7 +58,7 @@ class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessUpdateInvalid()
     {
-        $data = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $data = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -82,7 +82,7 @@ class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessUpdateMarker()
     {
-        $data = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $data = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -106,7 +106,7 @@ class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $data = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $data = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,7 +129,7 @@ class EmailCampaignHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('flush');
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
-            ->with('OroCRMCampaignBundle:EmailCampaign')
+            ->with('OroCampaignBundle:EmailCampaign')
             ->will($this->returnValue($manager));
 
         $this->form->expects($this->once())

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class SalesFunnelApiType extends SalesFunnelType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
                 'intention'  => 'group',
                 'csrf_protection' => false,
             )
@@ -44,6 +44,6 @@ class SalesFunnelApiType extends SalesFunnelType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_salesfunnel_api';
+        return 'oro_sales_salesfunnel_api';
     }
 }

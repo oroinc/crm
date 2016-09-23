@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Selenium;
+namespace Oro\Bundle\CampaignBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
+use Oro\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
 
 /**
  * Class Campaign Test
  *
- * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium
+ * @package Oro\Bundle\CampaignBundle\Tests\Selenium
  * {@inheritdoc}
  */
 class CampaignTest extends Selenium2TestCase
@@ -22,7 +22,7 @@ class CampaignTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Campaigns $login */
-        $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
+        $login->openCampaigns('Oro\Bundle\CampaignBundle')
             ->assertTitle('All - Campaigns - Marketing')
             ->add()
             ->assertTitle('Create Campaign - Campaigns - Marketing')
@@ -46,7 +46,7 @@ class CampaignTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Campaigns $login */
-        $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
+        $login->openCampaigns('Oro\Bundle\CampaignBundle')
             ->filterBy('Code', $campaignCode)
             ->open(array($campaignCode))
             ->assertTitle("{$campaignCode} - Campaigns - Marketing")
@@ -69,14 +69,14 @@ class CampaignTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Campaigns $login */
-        $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
+        $login->openCampaigns('Oro\Bundle\CampaignBundle')
             ->filterBy('Code', $campaignCode)
             ->delete(array($campaignCode))
             ->assertMessage('Item deleted')
             ->assertTitle('All - Campaigns - Marketing');
 
         /** @var Campaigns $login */
-        $login = $login->openCampaigns('OroCRM\Bundle\CampaignBundle');
+        $login = $login->openCampaigns('Oro\Bundle\CampaignBundle');
         if ($login->getRowsCount() > 0) {
             $login->filterBy('Code', $campaignCode)
                 ->assertNoDataMessage('No entity was found to match your search');

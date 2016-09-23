@@ -1,2 +1,2 @@
 bundles:
-    - OroCRM\Bundle\CRMBundle\OroCRMBundle
+    - Oro\Bundle\CRMBundle\OroBundle

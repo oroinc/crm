@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Migrations\Schema\v1_9;
+namespace Oro\Bundle\CampaignBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -27,6 +27,6 @@ class AddTrackingVisitAssociation implements Migration, VisitEventAssociationExt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_campaign');
+        $this->extension->addVisitEventAssociation($schema, 'oro_campaign');
     }
 }

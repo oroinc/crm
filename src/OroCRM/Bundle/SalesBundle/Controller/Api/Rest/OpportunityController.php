@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -51,7 +50,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get all opportunities",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @AclAncestor("oro_sales_opportunity_view")
      * @return Response
      */
     public function cgetAction()
@@ -59,7 +58,7 @@ class OpportunityController extends RestController implements ClassResourceInter
         $page  = (int) $this->getRequest()->get('page', 1);
         $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        $contactIdFilter  = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroCRMContactBundle:Contact');
+        $contactIdFilter  = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroContactBundle:Contact');
         $filterParameters = [
             'contactId' => $contactIdFilter,
         ];
@@ -81,7 +80,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
+     * @AclAncestor("oro_sales_opportunity_view")
      * @return Response
      */
     public function getAction($id)
@@ -98,7 +97,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Update opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_update")
+     * @AclAncestor("oro_sales_opportunity_update")
      * @return Response
      */
     public function putAction($id)
@@ -113,7 +112,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Create new opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_create")
+     * @AclAncestor("oro_sales_opportunity_create")
      */
     public function postAction()
     {
@@ -130,10 +129,10 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_sales_opportunity_delete",
+     *      id="oro_sales_opportunity_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMSalesBundle:Opportunity"
+     *      class="OroSalesBundle:Opportunity"
      * )
      * @return Response
      */
@@ -149,7 +148,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.opportunity.manager.api');
+        return $this->get('oro_sales.opportunity.manager.api');
     }
 
     /**
@@ -157,7 +156,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.opportunity.form.api');
+        return $this->get('oro_sales.opportunity.form.api');
     }
 
     /**
@@ -165,6 +164,6 @@ class OpportunityController extends RestController implements ClassResourceInter
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.opportunity.form.handler.api');
+        return $this->get('oro_sales.opportunity.form.handler.api');
     }
 }

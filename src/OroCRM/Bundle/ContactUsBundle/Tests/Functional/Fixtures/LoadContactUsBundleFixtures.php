@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Functional\Fixtures;
+namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,7 +28,7 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
+        $this->factory = $container->get('oro_channel.builder.factory');
     }
 
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
-use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit_F
 
     protected function setUp()
     {
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -33,7 +33,7 @@ abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit_F
      */
     protected function createChannelEntity($id = null)
     {
-        return $this->createEntity('OroCRM\Bundle\ChannelBundle\Entity\Channel', $id);
+        return $this->createEntity('Oro\Bundle\ChannelBundle\Entity\Channel', $id);
     }
 
     /**

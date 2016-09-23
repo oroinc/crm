@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
 
 class ContextCustomerReaderTest extends MagentoConnectorTestCase
 {
@@ -69,7 +69,7 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
+        $iterator = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
 
         $iterator->expects($this->once())
             ->method('setEntitiesIdsBuffer')

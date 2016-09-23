@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 
 class CaseStatusTest extends \PHPUnit_Framework_TestCase
 {

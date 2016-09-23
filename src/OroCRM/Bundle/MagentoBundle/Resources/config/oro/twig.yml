@@ -1,2 +1,2 @@
 bundles:
-    - OroCRMMagentoBundle:Form:fields.html.twig
+    - OroMagentoBundle:Form:fields.html.twig

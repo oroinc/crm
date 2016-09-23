@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Type;
+namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +19,7 @@ class CaseCommentType extends AbstractType
             'message',
             'textarea',
             [
-                'label'     => 'orocrm.case.casecomment.message.label'
+                'label'     => 'oro.case.casecomment.message.label'
             ]
         );
 
@@ -27,7 +27,7 @@ class CaseCommentType extends AbstractType
             'public',
             'checkbox',
             [
-                'label'     => 'orocrm.case.casecomment.public.label',
+                'label'     => 'oro.case.casecomment.public.label',
                 'required'  => false,
             ]
         );
@@ -57,8 +57,8 @@ class CaseCommentType extends AbstractType
         $resolver->setDefaults(
             [
                 'public_field_hidden'   => true,
-                'data_class'            => 'OroCRM\\Bundle\\CaseBundle\\Entity\\CaseComment',
-                'intention'             => 'orocrm_case_comment',
+                'data_class'            => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseComment',
+                'intention'             => 'oro_case_comment',
                 'ownership_disabled'    => true,
                 'cascade_validation'    => true,
             ]
@@ -78,6 +78,6 @@ class CaseCommentType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_case_comment';
+        return 'oro_case_comment';
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form;
+namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form;
 
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 
 class ContactRequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,10 +24,10 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $phone                  = uniqid('123123');
         $createdAt              = new \DateTime();
         $updatedAt              = new \DateTime();
-        $lead                   = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead');
-        $opportunity            = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
+        $lead                   = $this->getMock('Oro\Bundle\SalesBundle\Entity\Lead');
+        $opportunity            = $this->getMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
         $contactReason          = $this->getMock(
-            'OroCRM\Bundle\ContactUsBundle\Entity\ContactReason',
+            'Oro\Bundle\ContactUsBundle\Entity\ContactReason',
             [],
             [uniqid('label')]
         );

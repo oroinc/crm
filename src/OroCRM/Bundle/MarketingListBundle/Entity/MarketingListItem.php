@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Entity;
+namespace Oro\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -8,8 +8,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * Marketing list item.
  *
- * @ORM\Table(name="orocrm_marketing_list_item",  uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="orocrm_ml_list_ent_unq")
+ * @ORM\Table(name="oro_marketing_list_item",  uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="oro_ml_list_ent_unq")
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
@@ -43,7 +43,7 @@ class MarketingListItem
      * @var MarketingList
      *
      * @ORM\ManyToOne(
-     *      targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList", inversedBy="marketingListItems"
+     *      targetEntity="Oro\Bundle\MarketingListBundle\Entity\MarketingList", inversedBy="marketingListItems"
      * )
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */

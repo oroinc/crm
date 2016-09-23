@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Model;
+namespace Oro\Bundle\MarketingListBundle\Model;
 
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
 class MarketingListItemConnector
 {
-    const MARKETING_LIST_ITEM_ENTITY = 'OroCRMMarketingListBundle:MarketingListItem';
+    const MARKETING_LIST_ITEM_ENTITY = 'OroMarketingListBundle:MarketingListItem';
 
     /**
      * @var ManagerRegistry

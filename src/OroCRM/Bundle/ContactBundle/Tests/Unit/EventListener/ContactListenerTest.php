@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
-use OroCRM\Bundle\ContactBundle\EventListener\ContactListener;
+use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {

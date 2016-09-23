@@ -1,13 +1,13 @@
 search:
-    OroCRM\Bundle\AccountBundle\Entity\Account:
-        alias: orocrm_account
-        label: orocrm.account.entity_plural_label
+    Oro\Bundle\AccountBundle\Entity\Account:
+        alias: oro_account
+        label: oro.account.entity_plural_label
         title_fields: [name]
         route:
-            name: orocrm_account_view
+            name: oro_account_view
             parameters:
                 id: id
-        search_template: OroCRMAccountBundle:Account:searchResult.html.twig
+        search_template: OroAccountBundle:Account:searchResult.html.twig
         fields:
             -
                 name: name

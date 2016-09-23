@@ -1,17 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
 
 abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
 {
     public function testInitialInterface()
     {
         $this->assertInstanceOf(
-            'OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface',
+            'Oro\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface',
             $this->getConnector($this->transportMock, $this->stepExecutionMock)
         );
     }

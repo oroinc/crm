@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 
 class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector implements
     ExtensionVersionAwareInterface,
@@ -20,7 +19,7 @@ class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector impl
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.newsletter_subscriber.initial.label';
+        return 'oro.magento.connector.newsletter_subscriber.initial.label';
     }
 
     /**

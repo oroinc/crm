@@ -1,2 +1,2 @@
 bundles:
-    - OroCRM\Bundle\ReportBundle\OroCRMReportBundle
+    - Oro\Bundle\ReportBundle\OroReportBundle

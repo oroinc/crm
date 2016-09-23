@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider\Utility;
+namespace Oro\Bundle\ChannelBundle\Provider\Utility;
 
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 class EntityStateProvider
 {

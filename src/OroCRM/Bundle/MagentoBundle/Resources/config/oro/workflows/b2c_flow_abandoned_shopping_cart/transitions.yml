@@ -26,7 +26,7 @@ workflows:
                             allowMinimize: false
                             dialogClass:   place-order-transaction-dialog
                 transition_definition: place_order_definition
-                form_type: orocrm_magento_order_place_form_type
+                form_type: oro_magento_order_place_form_type
                 form_options:
                     attribute_fields:
                         cart_id:
@@ -39,7 +39,7 @@ workflows:
                 step_to: converted_to_opportunity
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: orocrm_sales_opportunity_create
+                acl_resource: oro_sales_opportunity_create
                 frontend_options:
                     icon: 'icon-usd'
                 transition_definition: convert_to_opportunity_definition

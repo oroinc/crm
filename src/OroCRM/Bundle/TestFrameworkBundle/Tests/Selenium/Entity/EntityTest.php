@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Entity;
+namespace Oro\Bundle\TestFrameworkBundle\Tests\Selenium\Entity;
 
 use Oro\Bundle\EntityConfigBundle\Tests\Selenium\Pages\ConfigEntities;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
@@ -8,7 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 /**
  * Class EntityTest
  *
- * @package OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium
+ * @package Oro\Bundle\TestFrameworkBundle\Tests\Selenium
  */
 class EntityTest extends Selenium2TestCase
 {
@@ -33,7 +33,7 @@ class EntityTest extends Selenium2TestCase
             ->updateSchema()
             ->assertTitle('All - Entity Management - Entities - System')
             ->close()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->openAccounts('Oro\Bundle\AccountBundle')
             ->add()
             ->openConfigEntity('Oro\Bundle\EntityConfigBundle', false)
             ->checkEntityField($fieldName);

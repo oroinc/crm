@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
 
 use Psr\Log\LoggerInterface;
 
@@ -12,8 +12,7 @@ use Doctrine\DBAL\Types\Type;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Oro\Bundle\MigrationBundle\Exception\UnsupportedDatabasePlatformException;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class FillClosedAtField extends ParametrizedMigrationQuery
 {
@@ -85,7 +84,7 @@ SQL;
         $params         = [
             'field'       => 'status',
             'statuses'    => ['Closed Lost', 'Closed Won', 'Lost', 'Won'],
-            'objectClass' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+            'objectClass' => 'Oro\Bundle\SalesBundle\Entity\Opportunity'
         ];
         $types          = [
             'field'       => Type::STRING,
@@ -112,7 +111,7 @@ SQL;
 
         if ($platform instanceof PostgreSqlPlatform) {
             $updateSql = <<<SQL
-UPDATE orocrm_sales_opportunity o
+UPDATE oro_sales_opportunity o
 SET closed_at = afm.logged_at
 FROM 
 oro_audit a
@@ -133,7 +132,7 @@ a.object_id = o.id AND a.object_class = :objectClass
 SQL;
         } elseif ($platform instanceof MySqlPlatform) {
             $updateSql = <<<SQL
-UPDATE orocrm_sales_opportunity o
+UPDATE oro_sales_opportunity o
 INNER JOIN oro_audit a ON a.object_id = o.id AND a.object_class = :objectClass
 INNER JOIN
 (
@@ -157,7 +156,7 @@ SQL;
         $params = [
             'field'       => 'status',
             'statuses'    => ['Closed Lost', 'Closed Won', 'Lost', 'Won'],
-            'objectClass' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+            'objectClass' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
             'status_ids'  => [Opportunity::STATUS_WON, Opportunity::STATUS_LOST]
         ];
         $types  = [

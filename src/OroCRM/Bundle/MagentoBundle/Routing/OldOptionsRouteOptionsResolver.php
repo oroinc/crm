@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Routing;
+namespace Oro\Bundle\MagentoBundle\Routing;
 
 use Symfony\Component\Routing\Route;
 
@@ -24,7 +24,7 @@ class OldOptionsRouteOptionsResolver implements RouteOptionsResolverInterface
         if ($route->getPath() === '/magento/order/view/{id}') {
             $singleRoute = $routes->cloneRoute($route);
             $singleRoute->setPath('/magentoorder/view/{id}');
-            $routes->append('orocrm_magentoorder_view', $singleRoute);
+            $routes->append('oro_magentoorder_view', $singleRoute);
         }
 
         if (!in_array('GET', $route->getMethods(), true)) {

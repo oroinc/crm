@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Type;
+namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -21,7 +21,7 @@ class CaseEntityApiType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => true,
-                    'label'    => 'orocrm.case.caseentity.reported_at.label'
+                    'label'    => 'oro.case.caseentity.reported_at.label'
                 ]
             )
             ->add(
@@ -29,7 +29,7 @@ class CaseEntityApiType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => true,
-                    'label'    => 'orocrm.case.caseentity.closed_at.label'
+                    'label'    => 'oro.case.caseentity.closed_at.label'
                 ]
             );
 
@@ -61,7 +61,7 @@ class CaseEntityApiType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_case_entity_api';
+        return 'oro_case_entity_api';
     }
 
     /**
@@ -69,6 +69,6 @@ class CaseEntityApiType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_case_entity';
+        return 'oro_case_entity';
     }
 }

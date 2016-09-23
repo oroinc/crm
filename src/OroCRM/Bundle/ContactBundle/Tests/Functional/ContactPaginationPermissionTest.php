@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @outputBuffering enabled
@@ -17,7 +17,7 @@ class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
 
         // open first contact prepare entity pagination set
         $crawler = $this->openEntity(
-            'orocrm_contact_view',
+            'oro_contact_view',
             LoadContactEntitiesData::FIRST_ENTITY_NAME,
             $this->gridParams
         );
@@ -28,7 +28,7 @@ class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
         // change owner to second contact
         $em = $this->getContainer()->get('doctrine.orm.default_entity_manager');
         $contact = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneBy(['firstName' => LoadContactEntitiesData::SECOND_ENTITY_NAME]);
 
         $admin = $this->getContainer()

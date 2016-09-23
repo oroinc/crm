@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Functional\Command;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Functional\Command;
 
 use Doctrine\ORM\EntityManager;
 
@@ -10,9 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\DotmailerBundle\Entity\Contact;
 
 /**
@@ -25,7 +24,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
     {
         $this->initClient();
         $this->loadFixtures([
-            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData',
+            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData',
         ]);
     }
 
@@ -57,7 +56,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
      */
     protected function findContact($firstName)
     {
-        return $this->getRegistry()->getRepository('OroCRMContactBundle:Contact')->findOneByFirstName($firstName);
+        return $this->getRegistry()->getRepository('OroContactBundle:Contact')->findOneByFirstName($firstName);
     }
 
     /**

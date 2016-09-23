@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
     VersionedFixtureInterface,
@@ -35,7 +34,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
     {
         if (!$this->version) {
             /** @var BuilderFactory $builderFactory */
-            $builderFactory = $this->container->get('orocrm_channel.builder.factory');
+            $builderFactory = $this->container->get('oro_channel.builder.factory');
             $channel        = $builderFactory
                 ->createBuilder()
                 ->setChannelType(self::B2B_CHANNEL_TYPE)
@@ -68,7 +67,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture implements
         } elseif ('0.0' === $this->version) {
             $em = $this->container->get('doctrine')->getManager();
 
-            $channels = $em->getRepository('OroCRMChannelBundle:Channel')
+            $channels = $em->getRepository('OroChannelBundle:Channel')
                 ->findBy(['channelType' => self::B2B_CHANNEL_TYPE]);
 
             foreach ($channels as $channel) {

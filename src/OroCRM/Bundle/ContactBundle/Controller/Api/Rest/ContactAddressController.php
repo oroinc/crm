@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,8 +14,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 
 /**
  * @RouteResource("address")
@@ -33,7 +33,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get contact address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getAction($contactId, $addressId)
@@ -59,7 +59,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @param int $contactId
      *
      * @return JsonResponse
@@ -91,7 +91,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Delete address items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_delete")
+     * @AclAncestor("oro_contact_delete")
      * @param     $contactId
      * @param int $addressId
      *
@@ -123,7 +123,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get contact address by type",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getByTypeAction($contactId, $typeName)
@@ -151,7 +151,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get contact primary address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getPrimaryAction($contactId)
@@ -172,7 +172,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
 
     protected function getContactManager()
     {
-        return $this->get('orocrm_contact.contact.manager.api');
+        return $this->get('oro_contact.contact.manager.api');
     }
 
     /**
@@ -180,7 +180,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact_address.manager.api');
+        return $this->get('oro_contact.contact_address.manager.api');
     }
 
     /**

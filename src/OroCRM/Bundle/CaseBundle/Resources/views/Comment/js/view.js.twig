@@ -17,15 +17,15 @@
                     <i class="date"><%= createdAt %></i>
                 </span>
                 <% if (!public) { %>
-                    <span class="label"><%= _.__("orocrm.case.private") %></span>
+                    <span class="label"><%= _.__("oro.case.private") %></span>
                 <% } %>
             </div>
             <div class="message-item">
                 <div class="message"><%= briefMessage %></div>
             </div>
             <div class="actions">
-                <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.edit'|trans|e('html_attr')|raw }}"><i class="icon-edit hide-text">{{ 'orocrm.case.casecomment.action.edit'|trans|e('html')|raw }}</i></button>
-                <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.delete'|trans|e('html_attr')|raw }}"><i class="icon-trash hide-text">{{ 'orocrm.case.casecomment.action.delete'|trans|e('html')|raw }}</i></button>
+                <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.edit'|trans|e('html_attr')|raw }}"><i class="icon-edit hide-text">{{ 'oro.case.casecomment.action.edit'|trans|e('html')|raw }}</i></button>
+                <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'oro.case.casecomment.action.delete'|trans|e('html_attr')|raw }}"><i class="icon-trash hide-text">{{ 'oro.case.casecomment.action.delete'|trans|e('html')|raw }}</i></button>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
@@ -35,7 +35,7 @@
                     <div class="details">
                         <div>
                             <%= _.template(
-                                {{ 'orocrm.case.casecomment.message.updated_by'|trans|json_encode|raw }},
+                                {{ 'oro.case.casecomment.message.updated_by'|trans|json_encode|raw }},
                                 { interpolate: /\{\{(.+?)\}\}/g }
                             )({
                                 user: updatedBy.url

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\ContactBundle\Form\Type;
+namespace Oro\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,9 +14,9 @@ class ContactSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'contacts',
-                'create_form_route'  => 'orocrm_contact_create',
+                'create_form_route'  => 'oro_contact_create',
                 'configs'            => [
-                    'placeholder'             => 'orocrm.contact.form.choose_contact',
+                    'placeholder'             => 'oro.contact.form.choose_contact',
                     'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                     'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                 ],
@@ -45,6 +45,6 @@ class ContactSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_contact_select';
+        return 'oro_contact_select';
     }
 }

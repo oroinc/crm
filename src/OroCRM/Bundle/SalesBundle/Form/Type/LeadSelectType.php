@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,9 +14,9 @@ class LeadSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'leads',
-                'create_form_route'  => 'orocrm_sales_lead_create',
+                'create_form_route'  => 'oro_sales_lead_create',
                 'configs'            => [
-                    'placeholder' => 'orocrm.sales.form.choose_lead'
+                    'placeholder' => 'oro.sales.form.choose_lead'
                 ],
             ]
         );
@@ -43,6 +43,6 @@ class LeadSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_select';
+        return 'oro_sales_lead_select';
     }
 }

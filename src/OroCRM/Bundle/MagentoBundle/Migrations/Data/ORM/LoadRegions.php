@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
+use Oro\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,11 +35,11 @@ class LoadRegions extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $this->regionRepository = $manager->getRepository('OroCRMMagentoBundle:Region');
+        $this->regionRepository = $manager->getRepository('OroMagentoBundle:Region');
 
         $dir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMMagentoBundle/Migrations/Data/ORM');
+            ->locateResource('@OroMagentoBundle/Migrations/Data/ORM');
 
         if (($handler = fopen($dir . '/data/regions.csv', 'r')) !== false) {
             $header = fgetcsv($handler, 0, ",");

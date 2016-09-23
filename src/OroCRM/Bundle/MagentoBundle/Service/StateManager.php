@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Service;
+namespace Oro\Bundle\MagentoBundle\Service;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 

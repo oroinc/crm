@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\DependencyInjection\Compiler;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Reference;
 
-use OroCRM\Bundle\ActivityContactBundle\DependencyInjection\Compiler\DirectionProviderPass;
+use Oro\Bundle\ActivityContactBundle\DependencyInjection\Compiler\DirectionProviderPass;
 
 class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo('orocrm_activity_contact.provider'))
+            ->with($this->equalTo('oro_activity_contact.provider'))
             ->will($this->returnValue(false));
 
         $this->container->expects($this->never())
@@ -70,16 +70,16 @@ class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
 
         $this->container->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo('orocrm_activity_contact.provider'))
+            ->with($this->equalTo('oro_activity_contact.provider'))
             ->will($this->returnValue(true));
 
         $this->container->expects($this->once())
             ->method('getDefinition')
-            ->with($this->equalTo('orocrm_activity_contact.provider'))
+            ->with($this->equalTo('oro_activity_contact.provider'))
             ->will($this->returnValue($definition));
         $this->container->expects($this->once())
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('orocrm_activity_direction.provider'))
+            ->with($this->equalTo('oro_activity_direction.provider'))
             ->will($this->returnValue($serviceIds));
 
         $compilerPass = new DirectionProviderPass();
@@ -90,17 +90,17 @@ class DirectionProviderPassTest extends \PHPUnit_Framework_TestCase
     {
         $this->container->expects($this->once())
             ->method('hasDefinition')
-            ->with($this->equalTo('orocrm_activity_contact.provider'))
+            ->with($this->equalTo('oro_activity_contact.provider'))
             ->will($this->returnValue(true));
 
         $this->container->expects($this->once())
             ->method('findTaggedServiceIds')
-            ->with($this->equalTo('orocrm_activity_direction.provider'))
+            ->with($this->equalTo('oro_activity_direction.provider'))
             ->will($this->returnValue([]));
 
         $this->container->expects($this->never())
             ->method('getDefinition')
-            ->with($this->equalTo('orocrm_activity_contact.provider'));
+            ->with($this->equalTo('oro_activity_contact.provider'));
 
         $compilerPass = new DirectionProviderPass();
         $compilerPass->process($this->container);

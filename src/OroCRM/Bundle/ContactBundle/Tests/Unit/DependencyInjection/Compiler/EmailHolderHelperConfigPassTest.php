@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\DependencyInjection\Compiler;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\DependencyInjection\Compiler;
 
-use OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
+use Oro\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
 
 class EmailHolderHelperConfigPassTest extends \PHPUnit_Framework_TestCase
 {
@@ -45,7 +45,7 @@ class EmailHolderHelperConfigPassTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($serviceDef));
         $container->expects($this->once())
             ->method('getParameter')
-            ->with('orocrm_contact.entity.class')
+            ->with('oro_contact.entity.class')
             ->will($this->returnValue($entityClass));
 
         $serviceDef->expects($this->once())

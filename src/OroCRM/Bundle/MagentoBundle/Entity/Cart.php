@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -12,20 +12,19 @@ use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\MagentoBundle\Model\ExtendCart;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository")
+ * @package Oro\Bundle\OroMagentoBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="orocrm_magento_cart",
+ * @ORM\Table(name="oro_magento_cart",
  *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"}),
  *      @ORM\Index(name="magecart_updated_idx",columns={"updatedAt"})
@@ -35,7 +34,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *  }
  * )
  * @Config(
- *      routeView="orocrm_magento_cart_view",
+ *      routeView="oro_magento_cart_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-shopping-cart"
@@ -77,7 +76,7 @@ class Cart extends ExtendCart implements
     /**
      * @var CartItem[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartItem",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\CartItem",
      *     mappedBy="cart", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"originId" = "DESC"})
@@ -100,7 +99,7 @@ class Cart extends ExtendCart implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -196,7 +195,7 @@ class Cart extends ExtendCart implements
     /**
      * @var CartAddress $shippingAddress
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -211,7 +210,7 @@ class Cart extends ExtendCart implements
     /**
      * @var CartAddress $billingAddress
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\CartAddress", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -233,7 +232,7 @@ class Cart extends ExtendCart implements
     /**
      * @var CartStatus
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartStatus")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\CartStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -248,7 +247,7 @@ class Cart extends ExtendCart implements
     /**
      * @var Opportunity
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity")
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $opportunity;

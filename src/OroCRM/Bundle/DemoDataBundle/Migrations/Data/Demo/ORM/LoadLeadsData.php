@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -19,10 +19,10 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -56,10 +56,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -110,7 +110,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $sources = $enumRepo->findAll();
         $randomSource = count($sources)-1;
 
-        $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
+        $leads = $this->em->getRepository('OroSalesBundle:Lead')->findAll();
 
         foreach ($leads as $lead) {
             /** @var Lead $lead */
@@ -125,7 +125,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "leads.csv", "r");
         if ($handle) {

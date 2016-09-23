@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Dashboard\Provider;
+namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
 use Doctrine\ORM\Query\Expr as Expr;
 
@@ -11,8 +11,7 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class OpportunityByStatusProvider
 {
@@ -105,6 +104,6 @@ class OpportunityByStatusProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->registry->getRepository('OroCRMSalesBundle:Opportunity');
+        return $this->registry->getRepository('OroSalesBundle:Opportunity');
     }
 }

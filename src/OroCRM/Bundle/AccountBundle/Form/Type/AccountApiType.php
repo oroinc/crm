@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Form\Type;
+namespace Oro\Bundle\AccountBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class AccountApiType extends AccountType
     {
         $resolver->setDefaults(
             array(
-                'data_class'           => 'OroCRM\Bundle\AccountBundle\Entity\Account',
+                'data_class'           => 'Oro\Bundle\AccountBundle\Entity\Account',
                 'intention'            => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false,

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class LeadApiType extends LeadType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
                 'intention'  => 'group',
                 'csrf_protection' => false,
             )
@@ -44,6 +44,6 @@ class LeadApiType extends LeadType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_api';
+        return 'oro_sales_lead_api';
     }
 }

@@ -1,20 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_newsl_subscr")
+ * @ORM\Table(name="oro_magento_newsl_subscr")
  * @Config(
  *      defaultValues={
  *          "entity"={
@@ -90,7 +89,7 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var Customer
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscribers")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscribers")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
@@ -98,7 +97,7 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $store;

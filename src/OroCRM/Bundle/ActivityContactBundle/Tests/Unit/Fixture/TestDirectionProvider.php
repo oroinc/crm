@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class TestDirectionProvider implements DirectionProviderInterface
 {
@@ -13,7 +13,7 @@ class TestDirectionProvider implements DirectionProviderInterface
      */
     public function getSupportedClass()
     {
-        return 'OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity';
+        return 'Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity';
     }
 
     /**

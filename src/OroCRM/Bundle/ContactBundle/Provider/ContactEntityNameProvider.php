@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Provider;
+namespace Oro\Bundle\ContactBundle\Provider;
 
 use Oro\Bundle\LocaleBundle\Provider\EntityNameProvider;
 
 class ContactEntityNameProvider extends EntityNameProvider
 {
-    const CLASS_NAME = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const CLASS_NAME = 'Oro\Bundle\ContactBundle\Entity\Contact';
 
     /**
      * {@inheritdoc}

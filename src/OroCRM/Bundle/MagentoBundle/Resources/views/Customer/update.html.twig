@@ -1,14 +1,14 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroCRMMagentoBundle:Include:fields.html.twig'] %}
-{% set formAction = entity.id ? path('orocrm_magento_customer_update', {id: entity.id}) : path('orocrm_magento_customer_create') %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroMagentoBundle:Include:fields.html.twig'] %}
+{% set formAction = entity.id ? path('oro_magento_customer_update', {id: entity.id}) : path('oro_magento_customer_create') %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({params : {'%customer.name%': fullname, '%entityName%': 'orocrm.magento.customer.entity_label'|trans} }) %}
+{% oro_title_set({params : {'%customer.name%': fullname, '%entityName%': 'oro.magento.customer.entity_label'|trans} }) %}
 
 {% block navButtons %}
-    {{ UI.cancelButton(path('orocrm_magento_customer_index')) }}
+    {{ UI.cancelButton(path('oro_magento_customer_index')) }}
     {% set html = UI.saveAndCloseButton() %}
-    {% if form.vars.value.id or resource_granted('orocrm_magento_customer_update') %}
+    {% if form.vars.value.id or resource_granted('oro_magento_customer_update') %}
         {% set html = html ~ UI.saveAndStayButton() %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
@@ -18,13 +18,13 @@
     {% if entity.id %}
         {% set breadcrumbs = {
             'entity': entity,
-            'indexPath': path('orocrm_magento_customer_index'),
-            'indexLabel': 'orocrm.magento.customer.entity_plural_label'|trans,
+            'indexPath': path('oro_magento_customer_index'),
+            'indexLabel': 'oro.magento.customer.entity_plural_label'|trans,
             'entityTitle': fullname
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.magento.customer.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.magento.customer.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -52,7 +52,7 @@
 
     {% if form.generatedPassword is defined %}
         {% set formRows = formRows|merge([
-            '<h5 class="user-fieldset"><span>' ~ 'orocrm.magento.customer.password.section'|trans ~'</span></h5>',
+            '<h5 class="user-fieldset"><span>' ~ 'oro.magento.customer.password.section'|trans ~'</span></h5>',
             form_row(form.generatedPassword)
         ]) %}
     {% endif %}
@@ -66,7 +66,7 @@
                 'data': formRows
             },
             {
-                'title': 'orocrm.magento.customer.addresses.label'|trans,
+                'title': 'oro.magento.customer.addresses.label'|trans,
                 'data': [
                     form_widget(form.addresses),
                 ]

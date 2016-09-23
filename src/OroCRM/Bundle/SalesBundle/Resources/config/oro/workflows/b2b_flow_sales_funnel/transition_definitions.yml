@@ -3,26 +3,26 @@ workflows:
         transition_definitions:
             start_from_lead:
                 preconditions:
-                    '@channel_entity_availiable': [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Lead']]
+                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Lead']]
                 actions:
                     - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
                             '@empty': [$sales_funnel.id]
                         parameters: ~
                     - '@redirect': # redirect to Sales funnel view page
-                        route: 'orocrm_sales_salesfunnel_view'
+                        route: 'oro_sales_salesfunnel_view'
                         route_parameters:
                             id: $sales_funnel.id
             start_from_opportunity:
                 preconditions:
-                    '@channel_entity_availiable': [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
+                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Opportunity']]
                 actions:
                     - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
                             '@empty': [$sales_funnel.id]
                         parameters: ~
                     - '@redirect': # redirect to Sales funnel view page
-                        route: 'orocrm_sales_salesfunnel_view'
+                        route: 'oro_sales_salesfunnel_view'
                         route_parameters:
                             id: $sales_funnel.id
             disqualify_definition:
@@ -53,7 +53,7 @@ workflows:
                             parameters:
                                 - '@not_equal': [$lead.status.id, 'qualified']
                                 - '@not_equal': [$lead.status.id, 'canceled']
-                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\Opportunity', 'Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     '@or':
                         parameters:
@@ -70,7 +70,7 @@ workflows:
                             '@empty': $lead.contact
                         actions:
                             - '@create_entity': # create Contact based on Lead
-                                class: OroCRM\Bundle\ContactBundle\Entity\Contact
+                                class: Oro\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
                                 data:
                                     namePrefix: $lead.namePrefix
@@ -89,7 +89,7 @@ workflows:
                                         value: $.result.leadAddress
                                         actions:
                                             - '@create_entity': # create Contact Address based on Lead address
-                                                class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactAddress
                                                 attribute: $.result.address
                                                 data:
                                                     label: $.result.leadAddress.label
@@ -121,7 +121,7 @@ workflows:
                                         value: $.result.leadEmail
                                         actions:
                                             - '@create_entity': # create Contact Address based on Lead address
-                                                class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactEmail
                                                 attribute: $.result.email
                                                 data:
                                                     email: $.result.leadEmail.email
@@ -142,7 +142,7 @@ workflows:
                                         value: $.result.leadPhone
                                         actions:
                                             - '@create_entity': # create Contact Phone based on Lead Phone
-                                                class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactPhone
                                                 attribute: $.result.phone
                                                 data:
                                                     phone: $.result.leadPhone.phone
@@ -161,7 +161,7 @@ workflows:
                                 - '@not_empty': $new_company_name
                         actions:
                             - '@find_entity': # try to find b2bcustomer by company name
-                                class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
                                 attribute: $new_b2bcustomer
                                 where:
                                     name: $new_company_name
@@ -170,7 +170,7 @@ workflows:
                                 conditions:
                                     '@empty': $new_b2bcustomer
                                 parameters:
-                                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+                                    class: Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     where:
                                         name: $new_company_name
@@ -181,7 +181,7 @@ workflows:
                                         - '@empty': $new_account
                                         - '@empty': $new_b2bcustomer
                                 parameters:
-                                    class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                                    class:     Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     data:
                                         name: $new_company_name
@@ -189,7 +189,7 @@ workflows:
                                 conditions:
                                     '@empty': $new_b2bcustomer
                                 parameters:
-                                    class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                    class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
                                     attribute: $new_b2bcustomer
                                     data:
                                         name:      $new_company_name
@@ -205,7 +205,7 @@ workflows:
                             method: setContact
                             method_parameters: [$lead.contact]
                     - '@create_entity': # create an opportunity
-                        class:     OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        class:     Oro\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
                         flush:     true
                         data:
@@ -229,7 +229,7 @@ workflows:
                             parameters:
                                 - '@not_equal': [$opportunity.status.id, 'won']
                                 - '@not_equal': [$opportunity.status.id, 'lost']
-                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status NOT IN ("won", "lost")
                     '@and':
                         - '@greater_or_equal':
@@ -264,7 +264,7 @@ workflows:
                         identifier: 'won'
                         attribute: $opportunity.status
                     - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: 'won'
                         attribute: $close_reason
                     - '@assign_value':
@@ -291,7 +291,7 @@ workflows:
                         identifier: 'lost'
                         attribute: $opportunity.status
                     - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
                         attribute: $close_reason
                     - '@assign_value':

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
 class CustomerInfoReader extends AbstractInfoReader
 {

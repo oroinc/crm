@@ -1,0 +1,20 @@
+<?php
+
+namespace Oro\Bundle\CampaignBundle\Migrations\Schema\v1_6;
+
+use Doctrine\DBAL\Schema\Schema;
+
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
+class OroCampaignBundle implements Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function up(Schema $schema, QueryBag $queries)
+    {
+        $table = $schema->getTable('oro_campaign_email_stats');
+        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'oro_ec_litem_unq');
+    }
+}

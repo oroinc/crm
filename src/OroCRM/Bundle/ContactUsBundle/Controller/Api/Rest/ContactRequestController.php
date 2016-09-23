@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactUsBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -29,7 +29,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
      *      description="Get contact request item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contactus_request_view")
+     * @AclAncestor("oro_contactus_request_view")
      * @return Response
      */
     public function getAction($id)
@@ -42,7 +42,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact_us.contact_request.manager.api');
+        return $this->get('oro_contact_us.contact_request.manager.api');
     }
 
     /**
@@ -50,7 +50,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_contact_us.contact_request.form.handler');
+        return $this->get('oro_contact_us.contact_request.form.handler');
     }
 
     /**
@@ -58,6 +58,6 @@ class ContactRequestController extends RestController implements ClassResourceIn
      */
     public function getForm()
     {
-        return $this->get('orocrm_contact_us.embedded_form');
+        return $this->get('oro_contact_us.embedded_form');
     }
 }

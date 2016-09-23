@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 
 class RegionSoapIteratorTest extends BaseIteratorTestCase
 {

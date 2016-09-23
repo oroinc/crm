@@ -9,11 +9,11 @@
     {% if entity.originId and entity.channel.transport.adminUrl|default(false) %}
         {{
             UI.clientButton({
-                'dataUrl': path('orocrm_magento_customer_orderplace', {'id': entity.id }),
+                'dataUrl': path('oro_magento_customer_orderplace', {'id': entity.id }),
                 'aCss':    'no-hash',
                 'iCss':    'icon-money',
                 'dataId':  entity.id,
-                'label' : 'orocrm.magento.customer.create_order'|trans,
+                'label' : 'oro.magento.customer.create_order'|trans,
                 'widget' : {
                     'type' : 'dialog',
                     'options' : {
@@ -23,7 +23,7 @@
                         'loadingMaskEnabled':  false,
                         'dialogOptions' : {
                             'dialogClass':   'place-order-transaction-dialog',
-                            'title' :        'orocrm.magento.customer.create_order'|trans,
+                            'title' :        'oro.magento.customer.create_order'|trans,
                             'allowMaximize': true,
                             'allowMinimize': false,
                             'width':         1000,
@@ -36,21 +36,21 @@
             })
         }}
     {% endif %}
-    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { customer: entity } %}
+    {% include 'OroMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { customer: entity } %}
     {% if resource_granted('EDIT', entity) %}
         {% if entity.guest %}
             {{ UI.clientButton({
-                'dataUrl': path('orocrm_magento_customer_register', { 'id': entity.id }),
+                'dataUrl': path('oro_magento_customer_register', { 'id': entity.id }),
                 'aCss': 'no-hash customer-registration customer-register-action',
-                'label': 'orocrm.magento.customer.register.label'|trans,
+                'label': 'oro.magento.customer.register.label'|trans,
             }) }}
             <div class="pull-left"
-                 data-page-component-module="orocrmmagento/js/app/components/customer-registration-manager"
+                 data-page-component-module="oromagento/js/app/components/customer-registration-manager"
                  data-page-component-options="{{ {entityId: entity.id}|json_encode }}"></div>
         {% endif %}
         {{ UI.editButton({
-            'path' : path('orocrm_magento_customer_update', { 'id': entity.id }),
-            'entity_label': 'orocrm.magento.customer.entity_label'|trans
+            'path' : path('oro_magento_customer_update', { 'id': entity.id }),
+            'entity_label': 'oro.magento.customer.entity_label'|trans
         }) }}
     {% endif %}
     {{ parent() }}
@@ -59,8 +59,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_customer_index'),
-        'indexLabel': 'orocrm.magento.customer.entity_plural_label'|trans,
+        'indexPath': path('oro_magento_customer_index'),
+        'indexLabel': 'oro.magento.customer.entity_plural_label'|trans,
         'entityTitle': fullname
     } %}
     {{ parent() }}
@@ -70,7 +70,7 @@
     {% set customerInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url':         path('orocrm_magento_customer_info', {id: entity.id})
+            'url':         path('oro_magento_customer_info', {id: entity.id})
         }) }}
     {% endset %}
 
@@ -80,20 +80,20 @@
         <div class="responsive-cell" id="magento-without-border-tabs">
             {% set tabs = [
                 {
-                    'alias': 'orocrm_magento_customer_orders',
+                    'alias': 'oro_magento_customer_orders',
                     'widgetType': 'block',
-                    'label': "orocrm.magento.order.entity_plural_label"|trans,
+                    'label': "oro.magento.order.entity_plural_label"|trans,
                     'url': path(
-                            'orocrm_magento_customer_orders_widget',
+                            'oro_magento_customer_orders_widget',
                             {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
                 },
                 {
-                    'alias': 'orocrm_magento_customer_carts',
+                    'alias': 'oro_magento_customer_carts',
                     'widgetType': 'block',
-                    'label': "orocrm.magento.cart.entity_plural_label"|trans,
+                    'label': "oro.magento.cart.entity_plural_label"|trans,
                     'url': path(
-                        'orocrm_magento_customer_carts_widget',
+                        'oro_magento_customer_carts_widget',
                         {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
                 }
@@ -107,15 +107,15 @@
             {{ oro_widget_render({
                 'widgetType': 'block',
                 'contentClasses': [],
-                'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
-                'title': 'orocrm.magento.customer.address_book.title'|trans
+                'url': path('oro_magento_customer_address_book', {id: entity.id}),
+                'title': 'oro.magento.customer.address_book.title'|trans
             }) }}
         </div>
     {% endset %}
     {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
 
     {% set websiteActivityTabsWidget %}
-        {% placeholder orocrm_website_activity with {'customers': [entity], byChannel: false} %}
+        {% placeholder oro_website_activity with {'customers': [entity], byChannel: false} %}
     {% endset %}
 
     {% set dataBlocks = [
@@ -125,13 +125,13 @@
             'subblocks': generalSubBlocks
         },
         {
-            'title': 'orocrm.magento.customer.sales.label'|trans,
+            'title': 'oro.magento.customer.sales.label'|trans,
             'subblocks': [
                 {'data' : [salesTabsWidget] }
             ]
         },
         {
-            'title': 'orocrm.magento.website_activity.label'|trans,
+            'title': 'oro.magento.website_activity.label'|trans,
             'priority': 1050,
             'subblocks': [
                 {'data' : [websiteActivityTabsWidget] }
@@ -144,14 +144,14 @@
             {% for newsletterSubscriber in entity.newsletterSubscribers %}
                 {{ oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_magento_newsletter_subscriber_info', {id: newsletterSubscriber.id})
+                    'url': path('oro_magento_newsletter_subscriber_info', {id: newsletterSubscriber.id})
                 }) }}
             {% endfor %}
         {% endset %}
         {% if newsletterSubscriberBlock %}
             {% set dataBlocks = dataBlocks|merge([
                 {
-                    'title': 'orocrm.magento.newslettersubscriber.label'|trans,
+                    'title': 'oro.magento.newslettersubscriber.label'|trans,
                     'subblocks': [
                         {'data' : [newsletterSubscriberBlock] }
                     ]

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Dashboard;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Dashboard;
 
 use DateTime;
 
@@ -8,9 +8,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+use Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 
 class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +47,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->trackingVisitProvider =
-            $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider')
+            $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -80,22 +79,22 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
         $from = new DateTime();
         $expectedArrayData = [
             [
-                'label'    => 'orocrm.magento.dashboard.purchase_chart.visited',
+                'label'    => 'oro.magento.dashboard.purchase_chart.visited',
                 'value'    => 10,
                 'isNozzle' => false,
             ],
             [
-                'label'    => 'orocrm.magento.dashboard.purchase_chart.deeply_visited',
+                'label'    => 'oro.magento.dashboard.purchase_chart.deeply_visited',
                 'value'    => 5,
                 'isNozzle' => false,
             ],
             [
-                'label'    => 'orocrm.magento.dashboard.purchase_chart.added_to_cart',
+                'label'    => 'oro.magento.dashboard.purchase_chart.added_to_cart',
                 'value'    => 30,
                 'isNozzle' => false,
             ],
             [
-                'label'    => 'orocrm.magento.dashboard.purchase_chart.purchased',
+                'label'    => 'oro.magento.dashboard.purchase_chart.purchased',
                 'value'    => 13,
                 'isNozzle' => true,
             ]
@@ -132,7 +131,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getDeeplyVisitedCount')
             ->will($this->returnValue(5));
-        $cartRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository')
+        $cartRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $cartRepository->expects($this->once())
@@ -140,9 +139,9 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(30));
         $this->registry->expects($this->at(0))
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Cart')
+            ->with('OroMagentoBundle:Cart')
             ->will($this->returnValue($cartRepository));
-        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+        $orderRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $orderRepository->expects($this->once())
@@ -150,7 +149,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(13));
         $this->registry->expects($this->at(1))
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
+            ->with('OroMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
          $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
             ->disableOriginalConstructor()

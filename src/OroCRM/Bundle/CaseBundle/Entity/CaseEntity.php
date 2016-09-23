@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Entity;
+namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,23 +10,22 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\CaseBundle\Model\ExtendCaseEntity;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="orocrm_case"
+ *      name="oro_case"
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_case_index",
- *      routeView="orocrm_case_view",
+ *      routeName="oro_case_index",
+ *      routeView="oro_case_view",
  *      defaultValues={
  *          "dataaudit"={
  *              "auditable"=true
@@ -171,7 +170,7 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -186,7 +185,7 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

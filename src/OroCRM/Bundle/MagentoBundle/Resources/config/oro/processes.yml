@@ -3,7 +3,7 @@ processes:
         magento_customer_creation:
             label:   'Create Account and Contact for Magento Customer'
             enabled: true
-            entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+            entity:  Oro\Bundle\MagentoBundle\Entity\Customer
             order:   10
             exclude_definitions: [magento_customer_export, magento_customer_address_export]
             actions_configuration:
@@ -22,7 +22,7 @@ processes:
                                 '@empty': $.lastName
                             parameters: [$.lastName, 'N/A']
                         - '@create_entity': # create Contact
-                            class:     OroCRM\Bundle\ContactBundle\Entity\Contact
+                            class:     Oro\Bundle\ContactBundle\Entity\Contact
                             attribute: $contact
                             data:
                                 birthday:     $birthday
@@ -40,7 +40,7 @@ processes:
                                 '@not_empty': $email
                             actions:
                                 - '@create_entity': # create Contact Email
-                                    class:     OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                    class:     Oro\Bundle\ContactBundle\Entity\ContactEmail
                                     attribute: $.contactEmail
                                     data:
                                         email:   $email
@@ -55,7 +55,7 @@ processes:
                             value: $.magentoAddress
                             actions:
                                 - '@create_entity': # create Contact Address
-                                    class:     OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                    class:     Oro\Bundle\ContactBundle\Entity\ContactAddress
                                     attribute: $.magentoAddress.contactAddress
                                     data:
                                         label:        $.magentoAddress.label
@@ -83,7 +83,7 @@ processes:
                                           '@not_empty': $.magentoAddress.phone
                                       actions:
                                           - '@create_entity': # create Contact phone
-                                              class:     OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                              class:     Oro\Bundle\ContactBundle\Entity\ContactPhone
                                               attribute: $.magentoAddress.contactPhone
                                               data:
                                                   phone:   $.magentoAddress.phone
@@ -122,7 +122,7 @@ processes:
                                     - '@empty': $lastName
                             parameters: [$.accountName, 'N/A']
                         - '@create_entity': # create Account
-                            class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                            class:     Oro\Bundle\AccountBundle\Entity\Account
                             attribute: $account
                             data:
                                 defaultContact: $contact
@@ -134,7 +134,7 @@ processes:
         magento_customer_export:
             label:   'Export Magento Customer to Magento'
             enabled: true
-            entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+            entity:  Oro\Bundle\MagentoBundle\Entity\Customer
             order:   20
             exclude_definitions: [magento_customer_export, magento_customer_creation]
             preconditions:
@@ -158,13 +158,13 @@ processes:
                     actions:
                         - '@assign_constant_value':
                             attribute: $.scheduleSyncState
-                            value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_TO_MAGENTO
+                            value: Oro\Bundle\MagentoBundle\Entity\Customer::SYNC_TO_MAGENTO
                         - '@assign_constant_value':
                             attribute: $.remoteRemovedState
-                            value: OroCRM\Bundle\MagentoBundle\Entity\Customer::MAGENTO_REMOVED
+                            value: Oro\Bundle\MagentoBundle\Entity\Customer::MAGENTO_REMOVED
                         - '@create_object':
                             attribute: $.stateManager
-                            class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                            class: Oro\Bundle\MagentoBundle\Service\StateManager
                         - '@call_method':
                             attribute: $.isSyncRequested
                             object: $.stateManager
@@ -190,7 +190,7 @@ processes:
                                         changeSet: $.changeSet
                                         twoWaySyncStrategy: $.twoWaySyncStrategy
                                         writer_skip_clear: true
-                                        processorAlias: orocrm_magento # to enable magento normalizers
+                                        processorAlias: oro_magento # to enable magento normalizers
                                     attribute: $.jobResult
                                 - '@call_method':
                                     object: $.stateManager
@@ -200,7 +200,7 @@ processes:
         magento_customer_address_export:
             label:   'Export Magento Customer Address to Magento'
             enabled: true
-            entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
+            entity:  Oro\Bundle\MagentoBundle\Entity\Address
             order:   20
             exclude_definitions: [magento_customer_address_export, magento_customer_creation]
             preconditions:
@@ -226,13 +226,13 @@ processes:
                     actions:
                         - '@assign_constant_value':
                             attribute: $.scheduleSyncState
-                            value: OroCRM\Bundle\MagentoBundle\Entity\Address::SYNC_TO_MAGENTO
+                            value: Oro\Bundle\MagentoBundle\Entity\Address::SYNC_TO_MAGENTO
                         - '@assign_constant_value':
                             attribute: $.remoteRemovedState
-                            value: OroCRM\Bundle\MagentoBundle\Entity\Address::MAGENTO_REMOVED
+                            value: Oro\Bundle\MagentoBundle\Entity\Address::MAGENTO_REMOVED
                         - '@create_object':
                             attribute: $.stateManager
-                            class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                            class: Oro\Bundle\MagentoBundle\Service\StateManager
                         - '@call_method':
                             attribute: $.isSyncRequested
                             object: $.stateManager
@@ -258,7 +258,7 @@ processes:
                                         changeSet: $.changeSet
                                         twoWaySyncStrategy: $.twoWaySyncStrategy
                                         writer_skip_clear: true
-                                        processorAlias: orocrm_magento # to enable magento normalizers
+                                        processorAlias: oro_magento # to enable magento normalizers
                                     attribute: $.jobResult
                                 - '@call_method':
                                     object: $.stateManager
@@ -268,17 +268,17 @@ processes:
         magento_analytics_customer_calculate:
             label:   'Calculate RFM analytics for Magento Customer'
             enabled: true
-            entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
+            entity:  Oro\Bundle\MagentoBundle\Entity\Order
             order:   30
             preconditions:
                 '@not_empty': $customer
             actions_configuration:
                 - '@assign_constant_value':
                     attribute: $.dataChannelStatusActive
-                    value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+                    value: Oro\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
                 - '@assign_constant_value':
                     attribute: $.commandName
-                    value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
+                    value: Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
                 - '@tree':
                     conditions:
                         '@and':
@@ -313,13 +313,13 @@ processes:
             actions_configuration:
                 - '@assign_constant_value':
                     attribute: $.dataChannelStatusActive
-                    value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+                    value: Oro\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
                 - '@assign_constant_value':
                     attribute: $.commandName
-                    value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
+                    value: Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
                 - '@find_entity':
                     parameters:
-                        class: OroCRM\Bundle\ChannelBundle\Entity\Channel
+                        class: Oro\Bundle\ChannelBundle\Entity\Channel
                         attribute: $.dataChannel
                         where:
                             dataSource: $channel.id
@@ -346,7 +346,7 @@ processes:
         magento_schedule_integration:
             label:   'Shedule integration'
             enabled: true
-            entity:  OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+            entity:  Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport
             order:   10
             actions_configuration:
                 - '@find_entity':

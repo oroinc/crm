@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -9,10 +9,10 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 
-use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class OrderListener
 {
@@ -131,7 +131,7 @@ class OrderListener
     protected function updateCustomerLifetime(EntityManager $entityManager, Order $order)
     {
         /** @var CustomerRepository $customerRepository */
-        $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
+        $customerRepository = $entityManager->getRepository('OroMagentoBundle:Customer');
 
         $subtotalAmount = $order->getSubtotalAmount();
         if ($subtotalAmount) {

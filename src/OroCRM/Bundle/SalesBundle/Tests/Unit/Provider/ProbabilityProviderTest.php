@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
-
-use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class ProbabilityProviderTest extends \PHPUnit_Framework_TestCase
 {

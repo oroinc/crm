@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener;
+use Oro\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener;
 
 class AccountWidgetsDataGridListenerTest extends \PHPUnit_Framework_TestCase
 {

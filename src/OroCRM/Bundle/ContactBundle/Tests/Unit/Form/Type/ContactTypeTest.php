@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\ContactBundle\Form\Type\ContactType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactType;
 
 class ContactTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_contact', $this->type->getName());
+        $this->assertEquals('oro_contact', $this->type->getName());
     }
 
     public function testBuildForm()
@@ -52,7 +52,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
             'source' => 'translatable_entity',
             'assignedTo' => 'oro_user_organization_acl_select',
-            'reportsTo' => 'orocrm_contact_select',
+            'reportsTo' => 'oro_contact_select',
             'method' => 'translatable_entity',
             'addresses' => 'oro_address_collection',
             'emails' => 'oro_email_collection',

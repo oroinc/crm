@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class AclContactTest extends Selenium2TestCase
 {
@@ -51,7 +51,7 @@ class AclContactTest extends Selenium2TestCase
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Label_' . $role))
             ->setBusinessUnit()
-            ->setOrganization('OroCRM')
+            ->setOrganization('Oro')
             ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')
@@ -72,7 +72,7 @@ class AclContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
             ->setFirstName($contactName . '_first')
@@ -129,7 +129,7 @@ class AclContactTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openContacts('OroCRM\Bundle\ContactBundle')
+            ->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
             ->assertNoActionMenu('Delete')
             ->open(array($contactEmail))
@@ -147,7 +147,7 @@ class AclContactTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openContacts('OroCRM\Bundle\ContactBundle')
+            ->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
             ->assertNoActionMenu('Update')
             ->open(array($contactEmail))
@@ -165,7 +165,7 @@ class AclContactTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openContacts('OroCRM\Bundle\ContactBundle')
+            ->openContacts('Oro\Bundle\ContactBundle')
             ->assertElementNotPresent("//div[@class='btn-group']//a[contains(., 'Create Contact')]");
     }
 
@@ -180,7 +180,7 @@ class AclContactTest extends Selenium2TestCase
             ->setUsername($username)
             ->setPassword('123123q')
             ->submit()
-            ->openContacts('OroCRM\Bundle\ContactBundle')
+            ->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('403 - Forbidden');
     }
 

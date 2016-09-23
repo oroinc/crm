@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,9 +15,8 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 
 /**
  * @RouteResource("address")
@@ -32,7 +31,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      * @param int $leadId
      *
      * @return JsonResponse
@@ -66,7 +65,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      *      description="Get lead primary address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
     public function getPrimaryAction($leadId)
@@ -92,7 +91,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      *      description="Delete address items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_delete")
+     * @AclAncestor("oro_sales_lead_delete")
      * @param     $leadId
      * @param int $addressId
      *
@@ -121,7 +120,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      */
     public function getLeadManager()
     {
-        return $this->get('orocrm_sales.lead.manager.api');
+        return $this->get('oro_sales.lead.manager.api');
     }
 
     /**
@@ -129,7 +128,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.lead_address.manager.api');
+        return $this->get('oro_sales.lead_address.manager.api');
     }
 
     /**

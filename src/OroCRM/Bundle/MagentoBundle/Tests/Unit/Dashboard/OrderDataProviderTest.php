@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use DateTime;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
-
-use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
+use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +77,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
+                    'label'      => 'oro.magento.dashboard.average_order_amount_chart.order_amount',
                     'type'       => 'currency'
                 ]
             ]
@@ -87,18 +86,18 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.month',
+                    'label'      => 'oro.magento.dashboard.average_order_amount_chart.month',
                     'type'       => 'month'
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
+                    'label'      => 'oro.magento.dashboard.average_order_amount_chart.order_amount',
                     'type'       => 'currency'
                 ]
             ]
         ];
 
-        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+        $orderRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $start           = new \DateTime('2012-01-01');
@@ -121,7 +120,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->registry->expects($this->once())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
+            ->with('OroMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
 
         $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
@@ -191,7 +190,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('formatDate')
             ->will($this->onConsecutiveCalls('2015-05-05', '2015-05-10', '2015-05-10', '2015-05-15'));
 
-        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+        $orderRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $orderRepository->expects($this->at(0))
@@ -205,7 +204,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->registry->expects($this->any())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
+            ->with('OroMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
 
         $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
@@ -286,7 +285,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'count',
-                            'label' => 'orocrm.magento.dashboard.orders_over_time_chart.order_count',
+                            'label' => 'oro.magento.dashboard.orders_over_time_chart.order_count',
                             'type' => 'integer'
                         ],
                     ],
@@ -300,7 +299,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'count',
-                            'label' => 'orocrm.magento.dashboard.orders_over_time_chart.order_count',
+                            'label' => 'oro.magento.dashboard.orders_over_time_chart.order_count',
                             'type' => 'integer'
                         ],
                     ],
@@ -341,7 +340,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('formatDate')
             ->will($this->onConsecutiveCalls('2015-05-05', '2015-05-10', '2015-05-10', '2015-05-15'));
 
-        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+        $orderRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $orderRepository->expects($this->at(0))
@@ -354,7 +353,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($sourceData[1]));
         $this->registry->expects($this->any())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
+            ->with('OroMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
         $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
             ->disableOriginalConstructor()
@@ -431,7 +430,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'amount',
-                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'label' => 'oro.magento.dashboard.revenue_over_time_chart.revenue',
                             'type' => 'currency'
                         ],
                     ],
@@ -445,7 +444,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'amount',
-                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'label' => 'oro.magento.dashboard.revenue_over_time_chart.revenue',
                             'type' => 'currency'
                         ],
                     ],

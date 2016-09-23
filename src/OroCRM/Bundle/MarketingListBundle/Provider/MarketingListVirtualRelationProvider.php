@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Provider;
+namespace Oro\Bundle\MarketingListBundle\Provider;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -90,7 +90,7 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
         if (null === $this->marketingListByEntity) {
             $this->marketingListByEntity = [];
 
-            $repository = $this->doctrineHelper->getEntityRepository('OroCRMMarketingListBundle:MarketingList');
+            $repository = $this->doctrineHelper->getEntityRepository('OroMarketingListBundle:MarketingList');
             $qb = $repository->createQueryBuilder('ml')
                 ->select('ml.entity')
                 ->distinct(true);
@@ -113,21 +113,21 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
         $idField = $this->doctrineHelper->getSingleEntityIdentifierFieldName($className);
 
         return [
-            'label' => 'orocrm.marketinglist.entity_label',
+            'label' => 'oro.marketinglist.entity_label',
             'relation_type' => 'oneToMany',
-            'related_entity_name' => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
+            'related_entity_name' => 'Oro\Bundle\MarketingListBundle\Entity\MarketingList',
             'query' => [
                 'join' => [
                     'left' => [
                         [
-                            'join' => 'OroCRMMarketingListBundle:MarketingListItem',
+                            'join' => 'OroMarketingListBundle:MarketingListItem',
                             'alias' => self::MARKETING_LIST_ITEM_RELATION_NAME,
                             'conditionType' => Join::WITH,
                             'condition' => 'entity.' . $idField
                                     . ' = ' . self::MARKETING_LIST_ITEM_RELATION_NAME . '.entityId'
                         ],
                         [
-                            'join' => 'OroCRMMarketingListBundle:MarketingList',
+                            'join' => 'OroMarketingListBundle:MarketingList',
                             'alias' => self::RELATION_NAME,
                             'conditionType' => Join::WITH,
                             'condition' => self::RELATION_NAME . ".entity = '{$className}'"

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler;
 
 class AddressHandlerTest extends AbstractHandlerTest
 {

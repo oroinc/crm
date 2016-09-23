@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
+use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class RegionStrategy extends AbstractImportStrategy
 {

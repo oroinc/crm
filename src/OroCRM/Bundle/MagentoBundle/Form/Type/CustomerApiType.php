@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerApiType extends AbstractType
 {
@@ -33,7 +32,7 @@ class CustomerApiType extends AbstractType
             'website',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:Website',
+                'class'    => 'OroMagentoBundle:Website',
                 'property' => 'name'
             ]
         );
@@ -42,7 +41,7 @@ class CustomerApiType extends AbstractType
             'store',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:Store',
+                'class'    => 'OroMagentoBundle:Store',
                 'property' => 'name'
             ]
         );
@@ -51,7 +50,7 @@ class CustomerApiType extends AbstractType
             'group',
             'translatable_entity',
             [
-                'class'    => 'OroCRMMagentoBundle:CustomerGroup',
+                'class'    => 'OroMagentoBundle:CustomerGroup',
                 'property' => 'name',
                 'required' => false
             ]
@@ -61,7 +60,7 @@ class CustomerApiType extends AbstractType
             'dataChannel',
             'translatable_entity',
             [
-                'class'    => 'OroCRMChannelBundle:Channel',
+                'class'    => 'OroChannelBundle:Channel',
                 'property' => 'name',
                 'required' => false
             ]
@@ -74,7 +73,7 @@ class CustomerApiType extends AbstractType
                 'label'    => '',
                 'type'     => 'oro_typed_address',
                 'required' => true,
-                'options'  => ['data_class' => 'OroCRM\Bundle\MagentoBundle\Entity\Address']
+                'options'  => ['data_class' => 'Oro\Bundle\MagentoBundle\Entity\Address']
             ]
         );
 
@@ -99,7 +98,7 @@ class CustomerApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                 'csrf_protection' => false
             ]
         );

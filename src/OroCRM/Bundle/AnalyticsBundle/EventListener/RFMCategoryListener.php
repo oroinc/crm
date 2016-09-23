@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
+namespace Oro\Bundle\AnalyticsBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class RFMCategoryListener
 {

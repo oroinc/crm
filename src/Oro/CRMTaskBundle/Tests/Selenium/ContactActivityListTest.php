@@ -3,8 +3,8 @@
 namespace Oro\CRMTaskBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactTaskActivityListTest extends Selenium2TestCase
 {
@@ -17,7 +17,7 @@ class ContactTaskActivityListTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('All - Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
@@ -40,11 +40,11 @@ class ContactTaskActivityListTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $task = $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $task = $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open([$contactName])
             ->runActionInGroup('Add task')
-            ->openTask('OroCRM\Bundle\TaskBundle');
+            ->openTask('Oro\Bundle\TaskBundle');
 
         /** @var Task $task */
         $task

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Validator;
+namespace Oro\Bundle\AnalyticsBundle\Validator;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -9,7 +9,7 @@ use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class CategoriesValidator extends ConstraintValidator
 {
@@ -154,7 +154,7 @@ class CategoriesValidator extends ConstraintValidator
      */
     public function validatedBy()
     {
-        return 'orocrm_analytics.validator.categories';
+        return 'oro_analytics.validator.categories';
     }
 
     /**

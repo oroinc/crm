@@ -1,6 +1,6 @@
 oro_entity:
     virtual_fields:
-        OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+        Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             primaryEmail:
                 query:
                     select:
@@ -17,7 +17,7 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
-        OroCRM\Bundle\SalesBundle\Entity\Lead:
+        Oro\Bundle\SalesBundle\Entity\Lead:
             primaryEmail:
                 query:
                     select:

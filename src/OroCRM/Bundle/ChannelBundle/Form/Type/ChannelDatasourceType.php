@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -9,12 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-
-use OroCRM\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
+use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 
 class ChannelDatasourceType extends AbstractType
 {
-    const NAME = 'orocrm_channel_datasource_form';
+    const NAME = 'oro_channel_datasource_form';
 
     /** @var ManagerRegistry */
     protected $registry;

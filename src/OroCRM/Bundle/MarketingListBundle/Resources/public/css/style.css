@@ -1,12 +1,12 @@
-#orocrm_marketing_list-column-list .name-cell {
+#oro_marketing_list-column-list .name-cell {
     padding-left: 28px;
 }
 
-#orocrm_marketing_list-column-list .name-cell.has-icon {
+#oro_marketing_list-column-list .name-cell.has-icon {
     padding-left: 10px;
 }
 
-#orocrm_marketing_list-column-list .name-cell .entity-field-path {
+#oro_marketing_list-column-list .name-cell .entity-field-path {
     padding-left: 2px
 }
 

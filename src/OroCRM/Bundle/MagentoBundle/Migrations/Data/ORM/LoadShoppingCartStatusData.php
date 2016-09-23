@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 use Oro\Bundle\MigrationBundle\Fixture\LoadedFixtureVersionAwareInterface;
 
@@ -47,7 +46,7 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
             $data = $this->dataV1;
         } elseif ($this->version === '1.0') {
             // remove not needed status from version 1.0
-            $converted = $manager->find('OroCRM\Bundle\MagentoBundle\Entity\CartStatus', 'converted');
+            $converted = $manager->find('Oro\Bundle\MagentoBundle\Entity\CartStatus', 'converted');
             if ($converted) {
                 $manager->remove($converted);
             }

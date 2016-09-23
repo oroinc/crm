@@ -19,12 +19,12 @@ define(function(require) {
                 success: function(response) {
                     if (response.successful) {
                         mediator.once('page:afterChange', function() {
-                            messenger.notificationMessage('success', __('orocrm.magento.subscription.success'));
+                            messenger.notificationMessage('success', __('oro.magento.subscription.success'));
                         });
 
                         mediator.execute('refreshPage');
                     } else {
-                        messenger.notificationMessage('error', __('orocrm.magento.subscription.error'));
+                        messenger.notificationMessage('error', __('oro.magento.subscription.error'));
                         if (console) {
                             console.warn(response.error);
                         }

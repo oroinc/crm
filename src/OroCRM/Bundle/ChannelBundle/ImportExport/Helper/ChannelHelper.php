@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\ImportExport\Helper;
+namespace Oro\Bundle\ChannelBundle\ImportExport\Helper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelHelper
 {
@@ -42,7 +41,7 @@ class ChannelHelper
             $em = $this->registry->getManager();
             $id = $this->integrationToChannelMap[$integration->getId()];
 
-            $channel = $em->getPartialReference('OroCRMChannelBundle:Channel', $id);
+            $channel = $em->getPartialReference('OroChannelBundle:Channel', $id);
 
             return $channel;
         } elseif (!$optional) {
@@ -65,7 +64,7 @@ class ChannelHelper
         $em = $this->registry->getManager();
         $qb = $em->createQueryBuilder()
             ->select('c.id, i.id as integrationId')
-            ->from('OroCRMChannelBundle:Channel', 'c')
+            ->from('OroChannelBundle:Channel', 'c')
             ->innerJoin('c.dataSource', 'i');
 
         $result = $qb->getQuery()->getArrayResult();

@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Transport;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Transport;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,12 +37,12 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->method('decryptData')
             ->with($this->encryptedApiKey)
             ->will($this->returnValue($this->decryptedApiKey));
-        $wsdlManager = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\WsdlManager')
+        $wsdlManager = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\WsdlManager')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->transport = $this->getMock(
-            'OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport',
+            'Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport',
             ['getSoapClient'],
             [$encoder, $wsdlManager]
         );
@@ -182,77 +181,77 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         return [
             'Orders without extension'                     => [
                 'getOrders',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\OrderSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\OrderSoapIterator'
             ],
             'Orders with extension'                        => [
                 'getOrders',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\OrderBridgeIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\OrderBridgeIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts with extension'                         => [
                 'getCarts',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CartsBridgeIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CartsBridgeIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts without extension should provoke error' => [
                 'getCarts',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CartsBridgeIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CartsBridgeIterator',
                 false,
                 '\LogicException'
             ],
             'Regions without extension'                    => [
                 'getRegions',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator'
             ],
             'Regions with extension'                       => [
                 'getRegions',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Websites without extension'                   => [
                 'getWebsites',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\WebsiteSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\WebsiteSoapIterator'
             ],
             'Websites with extension'                      => [
                 'getWebsites',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\WebsiteSoapIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\WebsiteSoapIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Stores without extension'                     => [
                 'getStores',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\StoresSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\StoresSoapIterator'
             ],
             'Stores with extension'                        => [
                 'getStores',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\StoresSoapIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\StoresSoapIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customer groups without extension'            => [
                 'getCustomerGroups',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerGroupSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerGroupSoapIterator'
             ],
             'Customer groups with extension'               => [
                 'getCustomerGroups',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerGroupSoapIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerGroupSoapIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customers without extension'                  => [
                 'getCustomers',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerSoapIterator'
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerSoapIterator'
             ],
             'Customers with extension'                     => [
                 'getCustomers',
-                'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerBridgeIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerBridgeIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Newsletter Subscribers with extension' => [
                 'getNewsletterSubscribers',
-                'OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
+                'Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Newsletter Subscribers without extension' => [
                 'getNewsletterSubscribers',
-                'OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
+                'Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
                 false,
                 '\LogicException'
             ]

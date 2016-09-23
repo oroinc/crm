@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,11 +17,10 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Model\ExtendLead;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -29,15 +28,15 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Table(
- *      name="orocrm_sales_lead",
+ *      name="oro_sales_lead",
  *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt"})}
  * )
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_sales_lead_index",
- *      routeView="orocrm_sales_lead_view",
+ *      routeName="oro_sales_lead_index",
+ *      routeView="oro_sales_lead_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-phone",
@@ -63,7 +62,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "category"="sales_data"
  *          },
  *          "form"={
- *              "form_type"="orocrm_sales_lead_select",
+ *              "form_type"="oro_sales_lead_select",
  *              "grid_name"="sales-lead-grid",
  *          },
  *          "dataaudit"={
@@ -109,7 +108,7 @@ class Lead extends ExtendLead implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -240,7 +239,7 @@ class Lead extends ExtendLead implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadPhone", mappedBy="owner",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\LeadPhone", mappedBy="owner",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -260,7 +259,7 @@ class Lead extends ExtendLead implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadEmail",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\LeadEmail",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -358,7 +357,7 @@ class Lead extends ExtendLead implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadAddress",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\LeadAddress",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -431,7 +430,7 @@ class Lead extends ExtendLead implements
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", mappedBy="lead")
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity", mappedBy="lead")
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
@@ -470,7 +469,7 @@ class Lead extends ExtendLead implements
     /**
      * @var B2bCustomer
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(

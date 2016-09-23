@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Manager;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Manager;
 
 use Doctrine\ORM\EntityManager;
 
@@ -25,7 +25,7 @@ class MagentoDeleteManagerTest extends WebTestCase
         $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
         $this->em = $this->client->getKernel()->getContainer()->get('doctrine.orm.entity_manager');
 
-        $fixtures = ['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'];
+        $fixtures = ['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'];
         $this->loadFixtures($fixtures);
     }
 
@@ -41,21 +41,21 @@ class MagentoDeleteManagerTest extends WebTestCase
 
     public function testDeleteChannel()
     {
-        $channel   = $this->em->find('OroCRMChannelBundle:Channel', self::$channelId);
+        $channel   = $this->em->find('OroChannelBundle:Channel', self::$channelId);
 
         $integration = $channel->getDataSource();
 
         $integrationId = $integration->getId();
 
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $integration));
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $integration));
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $integration));
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroMagentoBundle:Cart', $integration));
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroMagentoBundle:Order', $integration));
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroMagentoBundle:Website', $integration));
         $this->client->getKernel()->getContainer()->get('oro_integration.delete_manager')->delete(
             $integration
         );
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $integrationId));
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $integrationId));
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $integrationId));
+        $this->assertEquals(0, $this->getRecordsCount('OroMagentoBundle:Cart', $integrationId));
+        $this->assertEquals(0, $this->getRecordsCount('OroMagentoBundle:Order', $integrationId));
+        $this->assertEquals(0, $this->getRecordsCount('OroMagentoBundle:Website', $integrationId));
     }
 
     /**

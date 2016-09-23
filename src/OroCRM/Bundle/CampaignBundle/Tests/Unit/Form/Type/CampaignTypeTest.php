@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType;
+use Oro\Bundle\CampaignBundle\Form\Type\CampaignType;
 
 class CampaignTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +57,7 @@ class CampaignTypeTest extends \PHPUnit_Framework_TestCase
     {
         $typeName = $this->type->getName();
         $this->assertInternalType('string', $typeName);
-        $this->assertSame('orocrm_campaign_form', $typeName);
+        $this->assertSame('oro_campaign_form', $typeName);
     }
 
     public function testSetDefaultOptions()
@@ -66,7 +66,7 @@ class CampaignTypeTest extends \PHPUnit_Framework_TestCase
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with([
-                'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
+                'data_class' => 'Oro\Bundle\CampaignBundle\Entity\Campaign',
                 'validation_groups' => ['Campaign', 'Default']
             ]);
 

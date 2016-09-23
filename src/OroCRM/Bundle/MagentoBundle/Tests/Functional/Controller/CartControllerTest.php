@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
@@ -10,7 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  */
 class CartControllerTest extends AbstractController
 {
-    /** @var \OroCRM\Bundle\MagentoBundle\Entity\Cart */
+    /** @var \Oro\Bundle\MagentoBundle\Entity\Cart */
     public static $cart;
 
     protected function postFixtureLoad()
@@ -44,7 +44,7 @@ class CartControllerTest extends AbstractController
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_magento_cart_view',
+                'oro_magento_cart_view',
                 ['id' => $this->getMainEntityId(), 'isRemoved' => 0]
             )
         );

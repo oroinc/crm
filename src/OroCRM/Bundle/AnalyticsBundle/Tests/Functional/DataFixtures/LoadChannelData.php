@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadChannelData extends AbstractFixture
 {
@@ -17,14 +17,14 @@ class LoadChannelData extends AbstractFixture
      */
     protected $data = [
         'not_supports' => [
-            'customerIdentity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity',
+            'customerIdentity' => 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity',
             'name' => 'CustomerIdentityChannel',
             'channelType' => 'b2b',
             'status' => Channel::STATUS_ACTIVE,
             'reference' => 'Channel.CustomerIdentity'
         ],
         'supports' => [
-            'customerIdentity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'customerIdentity' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
             'name' => 'CustomerChannel',
             'channelType' => 'magento',
             'status' => Channel::STATUS_ACTIVE,
@@ -32,7 +32,7 @@ class LoadChannelData extends AbstractFixture
             'reference' => 'Channel.CustomerChannel'
         ],
         'second supported' => [
-            'customerIdentity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'customerIdentity' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
             'name' => 'CustomerChannel2',
             'channelType' => 'magento',
             'status' => Channel::STATUS_ACTIVE,
@@ -40,7 +40,7 @@ class LoadChannelData extends AbstractFixture
             'reference' => 'Channel.CustomerChannel2'
         ],
         'rfm disabled' => [
-            'customerIdentity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'customerIdentity' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
             'name' => 'CustomerChannel3',
             'channelType' => 'magento',
             'status' => Channel::STATUS_ACTIVE,
@@ -48,7 +48,7 @@ class LoadChannelData extends AbstractFixture
             'reference' => 'Channel.CustomerChannel3'
         ],
         'notActive' => [
-            'customerIdentity' => 'OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface',
+            'customerIdentity' => 'Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface',
             'name' => 'AnalyticsAwareInterfaceChannel',
             'channelType' => 'magento',
             'status' => Channel::STATUS_INACTIVE,

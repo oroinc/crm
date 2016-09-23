@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class LoadB2bCustomerPhoneData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -18,7 +18,7 @@ class LoadB2bCustomerPhoneData extends AbstractFixture implements DependentFixtu
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData'
+            'Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData'
         ];
     }
 

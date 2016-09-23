@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\CustomerConnector;
 
 class InitialCustomerConnector extends AbstractMagentoConnector implements InitialConnectorInterface
 {
@@ -14,7 +14,7 @@ class InitialCustomerConnector extends AbstractMagentoConnector implements Initi
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.customer.initial.label';
+        return 'oro.magento.connector.customer.initial.label';
     }
 
     /**

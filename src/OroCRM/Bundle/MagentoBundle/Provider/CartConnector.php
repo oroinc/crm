@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 class CartConnector extends AbstractMagentoConnector implements ExtensionAwareInterface
 {
@@ -11,7 +11,7 @@ class CartConnector extends AbstractMagentoConnector implements ExtensionAwareIn
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.cart.label';
+        return 'oro.magento.connector.cart.label';
     }
 
     /**

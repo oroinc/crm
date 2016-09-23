@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -19,7 +19,7 @@ class OpportunityDataChannelAwareSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_opportunity_data_channel_aware_select';
+        return 'oro_sales_opportunity_data_channel_aware_select';
     }
 
     /**
@@ -38,10 +38,10 @@ class OpportunityDataChannelAwareSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias'           => 'opportunities',
-                'create_form_route'            => 'orocrm_sales_opportunity_data_channel_aware_create',
-                'grid_view_widget_route'       => 'orocrm_sales_datagrid_opportunity_datachannel_aware',
+                'create_form_route'            => 'oro_sales_opportunity_data_channel_aware_create',
+                'grid_view_widget_route'       => 'oro_sales_datagrid_opportunity_datachannel_aware',
                 'configs'                      => [
-                    'placeholder' => 'orocrm.sales.form.choose_opportunity'
+                    'placeholder' => 'oro.sales.form.choose_opportunity'
                 ],
                 'channel_field'                => 'dataChannel',
                 'channel_required'             => true,

@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\ChannelBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
  * Class Channel
- * @package OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\ChannelBundle\Tests\Selenium\Pages
  * @method Channels openChannels(string $bundlePath)
  * @method Channel add()
  * @method Channel open(array $filter)

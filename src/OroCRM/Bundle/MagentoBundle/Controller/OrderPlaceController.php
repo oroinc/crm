@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 
@@ -14,9 +14,8 @@ use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 /**
  * @Route("/order/place")
@@ -27,23 +26,23 @@ class OrderPlaceController extends Controller
     const SYNC_ERROR      = 'error';
 
     /**
-     * @Route("/cart/{id}", name="orocrm_magento_orderplace_cart", requirements={"id"="\d+"}))
+     * @Route("/cart/{id}", name="oro_magento_orderplace_cart", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
-     * @Template("OroCRMMagentoBundle:OrderPlace:widget/place.html.twig")
+     * @Template("OroMagentoBundle:OrderPlace:widget/place.html.twig")
      * @param Cart $cart
      * @return array
      */
     public function cartAction(Cart $cart)
     {
         $urlGenerator = $this
-            ->get('orocrm_magento.service.magento_url_generator')
+            ->get('oro_magento.service.magento_url_generator')
             ->setChannel($cart->getChannel())
             ->setFlowName('oro_sales_new_order')
             ->setOrigin('quote')
             ->generate(
                 $cart->getOriginId(),
-                'orocrm_magento_orderplace_success',
-                'orocrm_magento_orderplace_error'
+                'oro_magento_orderplace_success',
+                'oro_magento_orderplace_error'
             );
 
         $translator = $this->get('translator');
@@ -56,7 +55,7 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/sync/{id}", name="orocrm_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
+     * @Route("/sync/{id}", name="oro_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
      * @param Cart $cart
      * @return JsonResponse
@@ -87,19 +86,19 @@ class OrderPlaceController extends Controller
                 throw new \LogicException('Unable to load information.');
             }
 
-            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($cart, 'cart');
+            $order = $em->getRepository('OroMagentoBundle:Order')->getLastPlacedOrderBy($cart, 'cart');
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
             }
 
-            $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_success');
+            $redirectUrl = $this->generateUrl('oro_magento_order_view', ['id' => $order->getId()]);
+            $message = $this->get('translator')->trans('oro.magento.controller.synchronization_success');
             $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
-            $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
+            $cart->setStatusMessage('oro.magento.controller.synchronization_failed_status');
             $em->flush($cart);
-            $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
+            $redirectUrl = $this->generateUrl('oro_magento_cart_view', ['id' => $cart->getId()]);
+            $message = $this->get('translator')->trans('oro.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
         }
 
@@ -113,23 +112,23 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/customer/{id}", name="orocrm_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
+     * @Route("/customer/{id}", name="oro_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
-     * @Template("OroCRMMagentoBundle:OrderPlace:widget/place.html.twig")
+     * @Template("OroMagentoBundle:OrderPlace:widget/place.html.twig")
      * @param Customer $customer
      * @return array
      */
     public function customerAction(Customer $customer)
     {
         $urlGenerator = $this
-            ->get('orocrm_magento.service.magento_url_generator')
+            ->get('oro_magento.service.magento_url_generator')
             ->setChannel($customer->getChannel())
             ->setFlowName('oro_sales_new_order')
             ->setOrigin('customer')
             ->generate(
                 $customer->getOriginId(),
-                'orocrm_magento_orderplace_success',
-                'orocrm_magento_orderplace_error'
+                'oro_magento_orderplace_success',
+                'oro_magento_orderplace_error'
             );
 
         $translator = $this->get('translator');
@@ -144,7 +143,7 @@ class OrderPlaceController extends Controller
     /**
      * @Route(
      *   "/customer_sync/{id}",
-     *   name="orocrm_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
+     *   name="oro_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
      * )
      * @AclAncestor("oro_workflow")
      * @param Customer $customer
@@ -161,17 +160,17 @@ class OrderPlaceController extends Controller
             if (!$isOrderLoaded) {
                 throw new \LogicException('Unable to load order.');
             }
-            $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($customer, 'customer');
+            $order = $em->getRepository('OroMagentoBundle:Order')->getLastPlacedOrderBy($customer, 'customer');
             if (null === $order) {
                 throw new \LogicException('Unable to load order.');
             }
 
-            $redirectUrl = $this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.synchronization_success');
+            $redirectUrl = $this->generateUrl('oro_magento_order_view', ['id' => $order->getId()]);
+            $message = $this->get('translator')->trans('oro.magento.controller.synchronization_success');
             $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
-            $redirectUrl = $this->generateUrl('orocrm_magento_customer_view', ['id' => $customer->getId()]);
-            $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
+            $redirectUrl = $this->generateUrl('oro_magento_customer_view', ['id' => $customer->getId()]);
+            $message = $this->get('translator')->trans('oro.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
         }
         return new JsonResponse(
@@ -184,7 +183,7 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/success", name="orocrm_magento_orderplace_success")
+     * @Route("/success", name="oro_magento_orderplace_success")
      * @AclAncestor("oro_workflow")
      * @Template
      */
@@ -194,7 +193,7 @@ class OrderPlaceController extends Controller
     }
 
     /**
-     * @Route("/error", name="orocrm_magento_orderplace_error"))
+     * @Route("/error", name="oro_magento_orderplace_error"))
      * @AclAncestor("oro_workflow")
      * @Template
      */
@@ -221,7 +220,7 @@ class OrderPlaceController extends Controller
      */
     protected function loadOrderInformation(Channel $channel, array $configuration = [])
     {
-        $orderInformationLoader = $this->get('orocrm_magento.service.order.information_loader');
+        $orderInformationLoader = $this->get('oro_magento.service.order.information_loader');
 
         return $orderInformationLoader->load($channel, $configuration);
     }
@@ -233,7 +232,7 @@ class OrderPlaceController extends Controller
      */
     protected function loadCartInformation(Channel $channel, array $configuration = [])
     {
-        $cartInformationLoader = $this->get('orocrm_magento.service.cart.information_loader');
+        $cartInformationLoader = $this->get('oro_magento.service.cart.information_loader');
 
         return $cartInformationLoader->load($channel, $configuration);
     }

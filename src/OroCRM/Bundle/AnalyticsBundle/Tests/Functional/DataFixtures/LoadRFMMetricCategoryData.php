@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadRFMMetricCategoryData extends AbstractFixture implements DependentFixtureInterface
 {

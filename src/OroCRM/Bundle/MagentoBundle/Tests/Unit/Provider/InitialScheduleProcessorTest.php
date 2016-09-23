@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
+use Oro\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
 
 class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 {
@@ -386,7 +386,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
      */
     protected function getIntegration(array $connectors = [], \DateTime $syncStartDate = null, $realConnector = null)
     {
-        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+        $dictionaryConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
             ->disableOriginalConstructor()
             ->getMock();
         $dictionaryConnector->expects($this->any())

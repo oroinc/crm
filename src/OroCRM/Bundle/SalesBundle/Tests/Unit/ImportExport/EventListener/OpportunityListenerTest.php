@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\ImportExport\EventListener;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\ImportExport\EventListener;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
-use OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
 
 class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
 {

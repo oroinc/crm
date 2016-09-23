@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,9 +15,9 @@ class CustomerSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.magento.form.choose_customer',
+                    'placeholder' => 'oro.magento.form.choose_customer',
                 ),
-                'autocomplete_alias' => 'orocrm_magento.customers'
+                'autocomplete_alias' => 'oro_magento.customers'
             )
         );
     }
@@ -35,7 +35,7 @@ class CustomerSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_customer_select';
+        return 'oro_customer_select';
     }
 
     /**

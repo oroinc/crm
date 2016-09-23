@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider\Opportunity;
+namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -10,8 +10,7 @@ use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class IndeterminateForecastProvider
 {
@@ -92,7 +91,7 @@ class IndeterminateForecastProvider
                     $this->getOpportunityRepository()
                         ->getForecastQB($alias)
                         ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
-                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                    'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     $filters,
                     $alias
                 );
@@ -129,6 +128,6 @@ class IndeterminateForecastProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->doctrine->getRepository('OroCRMSalesBundle:Opportunity');
+        return $this->doctrine->getRepository('OroSalesBundle:Opportunity');
     }
 }

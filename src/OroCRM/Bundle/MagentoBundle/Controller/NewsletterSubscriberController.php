@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -10,9 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
  * @Route("/newsletter-subscriber")
@@ -20,14 +19,14 @@ use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 class NewsletterSubscriberController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_newsletter_subscriber_index")
-     * @AclAncestor("orocrm_magento_newsletter_subscriber_view")
+     * @Route("/", name="oro_magento_newsletter_subscriber_index")
+     * @AclAncestor("oro_magento_newsletter_subscriber_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_magento.entity.newsletter_subscriber.class')
+            'entity_class' => $this->container->getParameter('oro_magento.entity.newsletter_subscriber.class')
         ];
     }
 
@@ -35,12 +34,12 @@ class NewsletterSubscriberController extends Controller
      * @param NewsletterSubscriber $newsletterSubscriber
      * @return array
      *
-     * @Route("/view/{id}", name="orocrm_magento_newsletter_subscriber_view", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="oro_magento_newsletter_subscriber_view", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_view",
+     *      id="oro_magento_newsletter_subscriber_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
      * @Template
      */
@@ -53,14 +52,14 @@ class NewsletterSubscriberController extends Controller
      * @param NewsletterSubscriber $newsletterSubscriber
      * @return array
      *
-     * @Route("/info/{id}", name="orocrm_magento_newsletter_subscriber_info", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="oro_magento_newsletter_subscriber_info", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_view",
+     *      id="oro_magento_newsletter_subscriber_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
-     * @Template("OroCRMMagentoBundle:NewsletterSubscriber/widget:info.html.twig")
+     * @Template("OroMagentoBundle:NewsletterSubscriber/widget:info.html.twig")
      */
     public function infoAction(NewsletterSubscriber $newsletterSubscriber)
     {
@@ -73,14 +72,14 @@ class NewsletterSubscriberController extends Controller
      *
      * @Route(
      *      "/subscribe/{id}",
-     *      name="orocrm_magento_newsletter_subscriber_subscribe",
+     *      name="oro_magento_newsletter_subscriber_subscribe",
      *      requirements={"id"="\d+"})
      * )
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_subscribe",
+     *      id="oro_magento_newsletter_subscriber_subscribe",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function subscribeAction(NewsletterSubscriber $newsletterSubscriber)
@@ -94,14 +93,14 @@ class NewsletterSubscriberController extends Controller
      *
      * @Route(
      *      "/unsubscribe/{id}",
-     *      name="orocrm_magento_newsletter_subscriber_unsubscribe",
+     *      name="oro_magento_newsletter_subscriber_unsubscribe",
      *      requirements={"id"="\d+"})
      * )
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_unsubscribe",
+     *      id="oro_magento_newsletter_subscriber_unsubscribe",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function unsubscribeAction(NewsletterSubscriber $newsletterSubscriber)
@@ -115,14 +114,14 @@ class NewsletterSubscriberController extends Controller
      *
      * @Route(
      *      "/subscribe/customer/{id}",
-     *      name="orocrm_magento_newsletter_subscriber_subscribe_customer",
+     *      name="oro_magento_newsletter_subscriber_subscribe_customer",
      *      requirements={"id"="\d+"})
      * )
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_subscribe_customer",
+     *      id="oro_magento_newsletter_subscriber_subscribe_customer",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function subscribeByCustomerAction(Customer $customer)
@@ -136,14 +135,14 @@ class NewsletterSubscriberController extends Controller
      *
      * @Route(
      *      "/unsubscribe/customer/{id}",
-     *      name="orocrm_magento_newsletter_subscriber_unsubscribe_customer",
+     *      name="oro_magento_newsletter_subscriber_unsubscribe_customer",
      *      requirements={"id"="\d+"})
      * )
      * @Acl(
-     *      id="orocrm_magento_newsletter_subscriber_unsubscribe_customer",
+     *      id="oro_magento_newsletter_subscriber_unsubscribe_customer",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:NewsletterSubscriber"
+     *      class="OroMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function unsubscribeByCustomerAction(Customer $customer)
@@ -167,7 +166,7 @@ class NewsletterSubscriberController extends Controller
                 'entity' => $newsletterSubscriber,
                 'statusIdentifier' => $statusIdentifier,
                 'writer_skip_clear' => true,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -184,7 +183,7 @@ class NewsletterSubscriberController extends Controller
      */
     protected function processCustomerSubscription(Customer $customer, $status)
     {
-        $newsletterSubscribers = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->get('oro_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
         $jobResult = ['successful' => false];

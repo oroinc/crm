@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class MagentoSoapTransportTest extends AbstractEntityTestCase
 {
@@ -15,7 +15,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport';
+        return 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport';
     }
 
     /**

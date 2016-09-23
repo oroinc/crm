@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider;
+use Oro\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider;
 
 class ActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
 {

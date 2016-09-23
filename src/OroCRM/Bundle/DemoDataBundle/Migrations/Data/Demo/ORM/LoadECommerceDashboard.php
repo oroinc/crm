@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -54,7 +54,7 @@ class LoadECommerceDashboard extends AbstractDashboardFixture implements Depende
         $dashboard = $this->findAdminDashboardModel($manager, 'e_commerce');
         if (!$dashboard) {
             $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
-            $dashboard->setLabel($this->container->get('translator')->trans('orocrm.magento.dashboard.e_commerce'));
+            $dashboard->setLabel($this->container->get('translator')->trans('oro.magento.dashboard.e_commerce'));
         }
 
         foreach ($this->widgets as $widgetData) {

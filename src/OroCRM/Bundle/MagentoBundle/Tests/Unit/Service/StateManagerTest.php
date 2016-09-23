@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
+use Oro\Bundle\MagentoBundle\Service\StateManager;
 
 class StateManagerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -11,18 +11,17 @@ use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Source;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -72,8 +71,8 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactGroupData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactGroupData',
         ];
     }
 
@@ -106,9 +105,9 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
 
-        $this->accounts = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contactGroups = $this->em->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $this->em->getRepository('OroCRMContactBundle:Source')->findAll();
+        $this->accounts = $this->em->getRepository('OroAccountBundle:Account')->findAll();
+        $this->contactGroups = $this->em->getRepository('OroContactBundle:Group')->findAll();
+        $this->contactSources = $this->em->getRepository('OroContactBundle:Source')->findAll();
         $this->organization = $this->getReference('default_organization');
     }
 
@@ -121,7 +120,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     {
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {

@@ -1,56 +1,56 @@
 acls:
-    orocrm_case_view:
+    oro_case_view:
         type: entity
-        class: OroCRMCaseBundle:CaseEntity
+        class: OroCaseBundle:CaseEntity
         permission: VIEW
         group_name: ""
         bindings: ~
 
-    orocrm_case_create:
+    oro_case_create:
         type: entity
-        class: OroCRMCaseBundle:CaseEntity
+        class: OroCaseBundle:CaseEntity
         permission: CREATE
         group_name: ""
         bindings: ~
 
-    orocrm_case_update:
+    oro_case_update:
         type: entity
-        class: OroCRMCaseBundle:CaseEntity
+        class: OroCaseBundle:CaseEntity
         permission: EDIT
         group_name: ""
         bindings: ~
 
-    orocrm_case_delete:
+    oro_case_delete:
         type: entity
-        class: OroCRMCaseBundle:CaseEntity
+        class: OroCaseBundle:CaseEntity
         permission: DELETE
         group_name: ""
         bindings: ~
 
-    orocrm_case_comment_view:
+    oro_case_comment_view:
         type: entity
-        class: OroCRMCaseBundle:CaseComment
+        class: OroCaseBundle:CaseComment
         permission: VIEW
         group_name: ""
         bindings: ~
 
-    orocrm_case_comment_create:
+    oro_case_comment_create:
         type: entity
-        class: OroCRMCaseBundle:CaseComment
+        class: OroCaseBundle:CaseComment
         permission: CREATE
         group_name: ""
         bindings: ~
 
-    orocrm_case_comment_update:
+    oro_case_comment_update:
         type: entity
-        class: OroCRMCaseBundle:CaseComment
+        class: OroCaseBundle:CaseComment
         permission: EDIT
         group_name: ""
         bindings: ~
 
-    orocrm_case_comment_delete:
+    oro_case_comment_delete:
         type: entity
-        class: OroCRMCaseBundle:CaseComment
+        class: OroCaseBundle:CaseComment
         permission: DELETE
         group_name: ""
         bindings: ~

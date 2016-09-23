@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Twig;
+namespace Oro\Bundle\ChannelBundle\Twig;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 
 class LifetimeValueExtension extends \Twig_Extension
 {
-    const EXTENSION_NAME = 'orocrm_channel_lifetime_value';
+    const EXTENSION_NAME = 'oro_channel_lifetime_value';
 
     /** @var AmountProvider */
     protected $amountProvider;
@@ -26,7 +26,7 @@ class LifetimeValueExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        $lifetimeValue = new \Twig_SimpleFunction('orocrm_channel_account_lifetime', [$this, 'getLifetimeValue']);
+        $lifetimeValue = new \Twig_SimpleFunction('oro_channel_account_lifetime', [$this, 'getLifetimeValue']);
 
         return [$lifetimeValue->getName() => $lifetimeValue];
     }

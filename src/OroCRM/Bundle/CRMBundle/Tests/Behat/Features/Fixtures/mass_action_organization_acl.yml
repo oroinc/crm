@@ -5,27 +5,27 @@ Oro\Bundle\OrganizationBundle\Entity\Organization:
     businessUnits: ['@business_unit']
     users: ['@admin']
 
-OroCRM\Bundle\ChannelBundle\Entity\Channel:
+Oro\Bundle\ChannelBundle\Entity\Channel:
   custom-channel:
     name: Custom Channel
     owner: '@organization-system'
     channelType: 'custom'
     status: true
-    customerIdentity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
+    customerIdentity: Oro\Bundle\ChannelBundle\Entity\CustomerIdentity
 
-OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+Oro\Bundle\ChannelBundle\Entity\EntityName:
   entity-name-1:
     channel: '@custom-channel'
-    __construct: [OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity]
+    __construct: [Oro\Bundle\ChannelBundle\Entity\CustomerIdentity]
   entity-name-2:
     channel: '@custom-channel'
-    __construct: [OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest]
+    __construct: [Oro\Bundle\ContactUsBundle\Entity\ContactRequest]
 
 OroPro\Bundle\OrganizationBundle\Entity\UserOrganization:
   user-org:
     __construct: ['@admin', '@organization-system']
 
-OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
+Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
   contact-{1..5}:
     firstName: <firstName()>
     lastName: <lastName()>

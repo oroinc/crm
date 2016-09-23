@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Event;
+namespace Oro\Bundle\ChannelBundle\Event;
 
 /**
  * This event dispatched each time when channel form is submitted
@@ -9,5 +9,5 @@ namespace OroCRM\Bundle\ChannelBundle\Event;
  */
 class ChannelSaveEvent extends AbstractEvent
 {
-    const EVENT_NAME = 'orocrm_channel.channel.save_succeed';
+    const EVENT_NAME = 'oro_channel.channel.save_succeed';
 }

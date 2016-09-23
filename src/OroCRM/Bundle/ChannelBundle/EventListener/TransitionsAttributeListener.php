@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Component\Action\Model\ContextAccessor;
-
-use OroCRM\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
+use Oro\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
 
 class TransitionsAttributeListener
 {

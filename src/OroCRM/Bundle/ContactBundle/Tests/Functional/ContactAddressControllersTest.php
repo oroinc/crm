@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
@@ -24,19 +24,19 @@ class ContactAddressControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_contact_index'));
+        $this->client->request('GET', $this->getUrl('oro_contact_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_contact_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
-        $form['orocrm_contact_form[owner]'] = '1';
+        $form['oro_contact_form[firstName]'] = 'Contact_fname';
+        $form['oro_contact_form[lastName]'] = 'Contact_lname';
+        $form['oro_contact_form[owner]'] = '1';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -62,7 +62,7 @@ class ContactAddressControllersTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_contact_address_create',
+                'oro_contact_address_create',
                 array('contactId' => $result['id'], '_widgetContainer' => 'dialog')
             )
         );
@@ -75,30 +75,30 @@ class ContactAddressControllersTest extends WebTestCase
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
 
-        $form['orocrm_contact_address_form[street]'] = 'Street';
-        $form['orocrm_contact_address_form[city]'] = 'City';
-        $form['orocrm_contact_address_form[postalCode]'] = 'Zip code';
+        $form['oro_contact_address_form[street]'] = 'Street';
+        $form['oro_contact_address_form[city]'] = 'City';
+        $form['oro_contact_address_form[postalCode]'] = 'Zip code';
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[country]" id="orocrm_contact_address_form_country" ' .
+            '<select name="oro_contact_address_form[country]" id="oro_contact_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="AF">Afghanistan</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[country]'] = 'AF';
+        $form['oro_contact_address_form[country]'] = 'AF';
 
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[region]" id="orocrm_contact_address_form_region" ' .
+            '<select name="oro_contact_address_form[region]" id="oro_contact_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="AF-BDS">Badakhshān</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[region]'] = 'AF-BDS';
+        $form['oro_contact_address_form[region]'] = 'AF-BDS';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -133,7 +133,7 @@ class ContactAddressControllersTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_contact_address_update',
+                'oro_contact_address_update',
                 array('contactId' => $id, 'id' => $address['id'], '_widgetContainer' => 'dialog')
             )
         );
@@ -148,24 +148,24 @@ class ContactAddressControllersTest extends WebTestCase
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[country]" id="orocrm_contact_address_form_country" ' .
+            '<select name="oro_contact_address_form[country]" id="oro_contact_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="ZW">Zimbabwe</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[country]'] = 'ZW';
+        $form['oro_contact_address_form[country]'] = 'ZW';
 
         $doc->loadHTML(
-            '<select name="orocrm_contact_address_form[region]" id="orocrm_contact_address_form_region" ' .
+            '<select name="oro_contact_address_form[region]" id="oro_contact_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="ZW-MA">Manicaland</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_contact_address_form[region]'] = 'ZW-MA';
+        $form['oro_contact_address_form[region]'] = 'ZW-MA';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);

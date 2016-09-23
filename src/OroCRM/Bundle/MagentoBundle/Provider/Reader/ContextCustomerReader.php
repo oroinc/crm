@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
+use Oro\Bundle\MagentoBundle\Provider\CustomerConnector;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCustomerReader extends CustomerConnector
 {

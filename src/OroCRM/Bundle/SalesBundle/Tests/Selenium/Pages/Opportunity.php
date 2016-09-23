@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 /**
  * Class Opportunity
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Pages
  */
 class Opportunity extends AbstractPageEntity
 {
@@ -33,23 +33,23 @@ class Opportunity extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $closeDate;
 
-    protected $owned = "//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_owner')]/a";
+    protected $owned = "//div[starts-with(@id,'s2id_oro_sales_opportunity_form_owner')]/a";
 
     public function init()
     {
-        $this->name = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_name']");
-        $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a");
+        $this->name = $this->test->byXpath("//*[@data-ftid='oro_sales_opportunity_form_name']");
+        $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_sales_opportunity_form_contact')]/a");
         $this->b2b_customer = $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_customer')]/a");
+            ->byXpath("//div[starts-with(@id,'s2id_oro_sales_opportunity_form_customer')]/a");
         $this->probability = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_probability']");
+            ->byXpath("//*[@data-ftid='oro_sales_opportunity_form_probability']");
         $this->budget = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_budgetAmount']");
+            ->byXpath("//*[@data-ftid='oro_sales_opportunity_form_budgetAmount']");
         $this->closeReason = $this->test->select($this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']"));
+            ->byXpath("//*[@data-ftid='oro_sales_opportunity_form_closeReason']"));
         $this->closeRevenue = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeRevenue']");
-        $this->closeDate = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeDate']/..".
+            ->byXpath("//*[@data-ftid='oro_sales_opportunity_form_closeRevenue']");
+        $this->closeDate = $this->test->byXpath("//*[@data-ftid='oro_sales_opportunity_form_closeDate']/..".
             "/following-sibling::input[contains(@class,'datepicker-input')]");
 
         return $this;
@@ -86,13 +86,13 @@ class Opportunity extends AbstractPageEntity
     public function getContact()
     {
         return $this->test->byXpath(
-            "//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a/span"
+            "//div[starts-with(@id,'s2id_oro_sales_opportunity_form_contact')]/a/span"
         )->text();
     }
 
     public function setChannel($channel)
     {
-        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_dataChannel')]/a");
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_sales_opportunity_form_dataChannel')]/a");
         $element->click();
         $this->waitForAjax();
         if ($this->isElementPresent("//div[@id='select2-drop']/div/input")) {
@@ -126,7 +126,7 @@ class Opportunity extends AbstractPageEntity
     public function getB2BCustomer()
     {
         return $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_customer')]/a/span")->text();
+            ->byXpath("//div[starts-with(@id,'s2id_oro_sales_opportunity_form_customer')]/a/span")->text();
     }
 
     public function setProbability($probability)
@@ -157,7 +157,7 @@ class Opportunity extends AbstractPageEntity
 
     public function setCustomerNeed($customerNeed)
     {
-        return $this->setContentToTinymceElement('orocrm_sales_opportunity_form_customerNeed', $customerNeed);
+        return $this->setContentToTinymceElement('oro_sales_opportunity_form_customerNeed', $customerNeed);
     }
 
     public function getCustomerNeed()
@@ -167,7 +167,7 @@ class Opportunity extends AbstractPageEntity
 
     public function setProposedSolution($proposedSolution)
     {
-        return $this->setContentToTinymceElement('orocrm_sales_opportunity_form_proposedSolution', $proposedSolution);
+        return $this->setContentToTinymceElement('oro_sales_opportunity_form_proposedSolution', $proposedSolution);
     }
 
     public function getPhone()

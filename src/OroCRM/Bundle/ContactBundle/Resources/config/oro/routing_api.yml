@@ -1,22 +1,22 @@
-orocrm_contact_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactController.php"
+oro_contact_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactController.php"
     type:         rest
 
-orocrm_contact_group_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactGroupController.php"
+oro_contact_group_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactGroupController.php"
     type:         rest
 
-orocrm_contact_address_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactAddressController.php"
+oro_contact_address_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactAddressController.php"
     type:         rest
-    parent:       orocrm_contact_api
+    parent:       oro_contact_api
 
-orocrm_contact_phone_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactPhoneController.php"
+oro_contact_phone_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactPhoneController.php"
     type:         rest
-    parent:       orocrm_contact_api
+    parent:       oro_contact_api
 
-orocrm_contact_email_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactEmailController.php"
+oro_contact_email_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactEmailController.php"
     type:         rest
-    parent:       orocrm_contact_api
+    parent:       oro_contact_api

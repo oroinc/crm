@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Controller;
+namespace Oro\Bundle\CaseBundle\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -11,39 +11,38 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
 
 class CommentController extends Controller
 {
     /**
      * @Route(
      *      "/{id}/comment/list.{_format}",
-     *      name="orocrm_case_comment_list",
+     *      name="oro_case_comment_list",
      *      requirements={"id"="\d+", "_format"="json"}, defaults={"_format"="json"}
      * )
-     * @AclAncestor("orocrm_case_comment_view")
+     * @AclAncestor("oro_case_comment_view")
      */
     public function commentsListAction(CaseEntity $case)
     {
         $order = $this->getRequest()->get('sorting', 'DESC');
-        $comments = $this->get('orocrm_case.manager')->getCaseComments($case, $order);
+        $comments = $this->get('oro_case.manager')->getCaseComments($case, $order);
 
         return new JsonResponse(
-            $this->get('orocrm_case.view_factory')->createCommentViewList($comments)
+            $this->get('oro_case.view_factory')->createCommentViewList($comments)
         );
     }
 
     /**
      * @Route(
      *      "/{id}/widget/comment",
-     *      name="orocrm_case_widget_comments",
+     *      name="oro_case_widget_comments",
      *      requirements={"id"="\d+"}
      * )
-     * @AclAncestor("orocrm_case_comment_view")
-     * @Template("OroCRMCaseBundle:Comment:comments.html.twig")
+     * @AclAncestor("oro_case_comment_view")
+     * @Template("OroCaseBundle:Comment:comments.html.twig")
      */
     public function commentsWidgetAction(CaseEntity $case)
     {
@@ -55,20 +54,20 @@ class CommentController extends Controller
     /**
      * @Route(
      *      "/{caseId}/comment/create",
-     *      name="orocrm_case_comment_create",
+     *      name="oro_case_comment_create",
      *      requirements={"caseId"="\d+"}
      * )
      * @ParamConverter("case", options={"id"="caseId"})
-     * @AclAncestor("orocrm_case_comment_create")
-     * @Template("OroCRMCaseBundle:Comment:update.html.twig")
+     * @AclAncestor("oro_case_comment_create")
+     * @Template("OroCaseBundle:Comment:update.html.twig")
      */
     public function createAction(CaseEntity $case)
     {
-        $comment = $this->get('orocrm_case.manager')->createComment($case);
+        $comment = $this->get('oro_case.manager')->createComment($case);
         $comment->setOwner($this->getUser());
 
         $formAction = $this->get('oro_entity.routing_helper')
-            ->generateUrlByRequest('orocrm_case_comment_create', $this->getRequest(), ['caseId' => $case->getId()]);
+            ->generateUrlByRequest('oro_case_comment_create', $this->getRequest(), ['caseId' => $case->getId()]);
 
         return $this->update($comment, $formAction);
     }
@@ -76,15 +75,15 @@ class CommentController extends Controller
     /**
      * @Route(
      *      "/comment/{id}/update",
-     *      name="orocrm_case_comment_update",
+     *      name="oro_case_comment_update",
      *      requirements={"id"="\d+"}
      * )
-     * @AclAncestor("orocrm_case_comment_update")
+     * @AclAncestor("oro_case_comment_update")
      * @Template
      */
     public function updateAction(CaseComment $comment)
     {
-        $formAction = $this->get('router')->generate('orocrm_case_comment_update', ['id' => $comment->getId()]);
+        $formAction = $this->get('router')->generate('oro_case_comment_update', ['id' => $comment->getId()]);
 
         $user = $this->getUser();
         if ($user instanceof User) {
@@ -101,13 +100,13 @@ class CommentController extends Controller
      */
     protected function update(CaseComment $comment, $formAction)
     {
-        $saved = $this->get('orocrm_case.form.handler.comment')->process($comment);
+        $saved = $this->get('oro_case.form.handler.comment')->process($comment);
 
         return [
             'saved'      => $saved,
             'entity'     => $comment,
-            'data'       => $saved ? $this->get('orocrm_case.view_factory')->createCommentView($comment) : null,
-            'form'       => $this->get('orocrm_case.form.comment')->createView(),
+            'data'       => $saved ? $this->get('oro_case.view_factory')->createCommentView($comment) : null,
+            'form'       => $this->get('oro_case.form.comment')->createView(),
             'formAction' => $formAction,
         ];
     }

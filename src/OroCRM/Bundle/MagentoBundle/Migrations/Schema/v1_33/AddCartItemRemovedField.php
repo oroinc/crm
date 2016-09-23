@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_33;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_33;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,7 +14,7 @@ class AddCartItemRemovedField implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_cart_item');
+        $table = $schema->getTable('oro_magento_cart_item');
         $table->addColumn('is_removed', 'boolean', ['notnull' => true, 'default' => false]);
     }
 }

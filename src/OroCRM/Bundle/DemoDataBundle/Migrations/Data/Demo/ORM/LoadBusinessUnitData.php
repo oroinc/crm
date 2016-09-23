@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -77,7 +77,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
 
         $oroUnit
             ->setName('Acme, West')
-            ->setWebsite('http://www.orocrm.com')
+            ->setWebsite('http://www.oro.com')
             ->setOrganization($organization)
             ->setEmail('west@acme.inc')
             ->setPhone('798-682-5918')

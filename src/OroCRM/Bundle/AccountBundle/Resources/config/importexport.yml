@@ -1,45 +1,45 @@
 parameters:
-    orocrm_account.importexport.template_fixture.account.class: OroCRM\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
-    orocrm_account.importexport.strategy.account.add_or_replace.class: OroCRM\Bundle\AccountBundle\ImportExport\Strategy\AccountAddOrReplaceStrategy
+    oro_account.importexport.template_fixture.account.class: Oro\Bundle\AccountBundle\ImportExport\TemplateFixture\AccountFixture
+    oro_account.importexport.strategy.account.add_or_replace.class: Oro\Bundle\AccountBundle\ImportExport\Strategy\AccountAddOrReplaceStrategy
 
 services:
-    orocrm_account.importexport.data_converter:
+    oro_account.importexport.data_converter:
         parent: oro_importexport.data_converter.configurable
 
-    orocrm_account.importexport.template_fixture.data_converter.account:
+    oro_account.importexport.template_fixture.data_converter.account:
         parent: oro_importexport.data_converter.template_fixture.configurable
 
     # Strategy
-    orocrm_account.importexport.strategy.account.add_or_replace:
-        class: %orocrm_account.importexport.strategy.account.add_or_replace.class%
+    oro_account.importexport.strategy.account.add_or_replace:
+        class: %oro_account.importexport.strategy.account.add_or_replace.class%
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     # Import processor
-    orocrm_account.importexport.processor.import:
+    oro_account.importexport.processor.import:
         parent: oro_importexport.processor.import_abstract
         calls:
-             - [setDataConverter, ["@orocrm_account.importexport.data_converter"]]
-             - [setStrategy, ["@orocrm_account.importexport.strategy.account.add_or_replace"]]
+             - [setDataConverter, ["@oro_account.importexport.data_converter"]]
+             - [setStrategy, ["@oro_account.importexport.strategy.account.add_or_replace"]]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: %orocrm_account.account.entity.class%, alias: orocrm_account.add_or_replace }
-            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_account.account.entity.class%, alias: orocrm_account.add_or_replace }
+            - { name: oro_importexport.processor, type: import, entity: %oro_account.account.entity.class%, alias: oro_account.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %oro_account.account.entity.class%, alias: oro_account.add_or_replace }
 
     # Export processor
-    orocrm_account.importexport.processor.export:
+    oro_account.importexport.processor.export:
         parent: oro_importexport.processor.export_abstract
         calls:
-            - [setDataConverter, ["@orocrm_account.importexport.data_converter"]]
+            - [setDataConverter, ["@oro_account.importexport.data_converter"]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
+            - { name: oro_importexport.processor, type: export, entity: %oro_account.account.entity.class%, alias: oro_account }
 
-    orocrm_account.importexport.processor.export_template:
+    oro_account.importexport.processor.export_template:
         parent: oro_importexport.processor.export_abstract
         calls:
-            - [setDataConverter, ["@orocrm_account.importexport.template_fixture.data_converter.account"]]
+            - [setDataConverter, ["@oro_account.importexport.template_fixture.data_converter.account"]]
         tags:
-            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_account.account.entity.class%, alias: orocrm_account }
+            - { name: oro_importexport.processor, type: export_template, entity: %oro_account.account.entity.class%, alias: oro_account }
 
-    orocrm_account.importexport.template_fixture.account:
-        class: %orocrm_account.importexport.template_fixture.account.class%
+    oro_account.importexport.template_fixture.account:
+        class: %oro_account.importexport.template_fixture.account.class%
         tags:
             - { name: oro_importexport.template_fixture }

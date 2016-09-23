@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Validator;
+namespace Oro\Bundle\SalesBundle\Validator;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 
 class B2bCustomerEmailDeleteValidator
 {

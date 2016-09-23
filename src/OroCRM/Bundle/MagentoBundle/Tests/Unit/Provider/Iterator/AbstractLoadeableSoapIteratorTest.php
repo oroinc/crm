@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator;
 
 class AbstractLoadeableSoapIteratorTest extends BaseIteratorTestCase
 {
@@ -14,7 +14,7 @@ class AbstractLoadeableSoapIteratorTest extends BaseIteratorTestCase
         parent::setUp();
 
         $this->iterator = $this
-            ->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\AbstractLoadeableSoapIterator')
+            ->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\AbstractLoadeableSoapIterator')
             ->setMethods(['getData'])
             ->setConstructorArgs([$this->transport])
             ->getMockForAbstractClass();

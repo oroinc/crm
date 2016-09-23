@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
@@ -9,17 +9,16 @@ use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 /**
  * @dbIsolation
  */
 class ChannelOwnerSetListenerTest extends WebTestCase
 {
-    const FIXTURE_NS = 'OroCRM\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\';
+    const FIXTURE_NS = 'Oro\\Bundle\\MagentoBundle\\Tests\\Functional\\Fixture\\';
 
     public function setUp()
     {

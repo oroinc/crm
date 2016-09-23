@@ -1,13 +1,13 @@
 search:
-    OroCRM\Bundle\MagentoBundle\Entity\Order:
-        alias:                          orocrm_magento_order
-        label:                          orocrm.magento.order.entity_plural_label
+    Oro\Bundle\MagentoBundle\Entity\Order:
+        alias:                          oro_magento_order
+        label:                          oro.magento.order.entity_plural_label
         title_fields:                   [incrementId]
         route:
-            name:                       orocrm_magento_order_view
+            name:                       oro_magento_order_view
             parameters:
                 id:                     id
-        search_template:                OroCRMMagentoBundle:Order:searchResult.html.twig
+        search_template:                OroMagentoBundle:Order:searchResult.html.twig
         fields:
             -
                 name:                   incrementId
@@ -66,15 +66,15 @@ search:
                         target_type:   integer
                         target_fields: [dataChannelId]
 
-    OroCRM\Bundle\MagentoBundle\Entity\Cart:
-        alias:                          orocrm_magento_cart
-        label:                          orocrm.magento.cart.entity_plural_label
+    Oro\Bundle\MagentoBundle\Entity\Cart:
+        alias:                          oro_magento_cart
+        label:                          oro.magento.cart.entity_plural_label
         title_fields:                   [originId]
         route:
-            name:                       orocrm_magento_cart_view
+            name:                       oro_magento_cart_view
             parameters:
                 id:                     id
-        search_template:                OroCRMMagentoBundle:Cart:searchResult.html.twig
+        search_template:                OroMagentoBundle:Cart:searchResult.html.twig
         fields:
             -
                 name:                   originId
@@ -154,15 +154,15 @@ search:
                         target_fields: [dataChannelId]
 
 
-    OroCRM\Bundle\MagentoBundle\Entity\Customer:
-        alias:                          orocrm_magento_customer
-        label:                          orocrm.magento.customer.entity_plural_label
+    Oro\Bundle\MagentoBundle\Entity\Customer:
+        alias:                          oro_magento_customer
+        label:                          oro.magento.customer.entity_plural_label
         title_fields:                   [firstName, lastName]
         route:
-            name:                       orocrm_magento_customer_view
+            name:                       oro_magento_customer_view
             parameters:
                 id:                     id
-        search_template:                OroCRMMagentoBundle:Customer:searchResult.html.twig
+        search_template:                OroMagentoBundle:Customer:searchResult.html.twig
         fields:
             -
                 name:                   namePrefix

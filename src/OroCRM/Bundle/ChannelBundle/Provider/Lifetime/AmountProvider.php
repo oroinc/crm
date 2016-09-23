@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Provider\Lifetime;
+namespace Oro\Bundle\ChannelBundle\Provider\Lifetime;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class AmountProvider
 {
@@ -64,9 +64,9 @@ class AmountProvider
     public function getChannelAccountLifetimeQueryBuilder($addChannelParam = false)
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
+        $em = $this->registry->getManagerForClass('OroChannelBundle:LifetimeValueHistory');
         $qb = $em->createQueryBuilder();
-        $qb->from('OroCRMChannelBundle:LifetimeValueHistory', 'h');
+        $qb->from('OroChannelBundle:LifetimeValueHistory', 'h');
         $qb->select('SUM(h.amount)');
         $qb->andWhere('h.account = :account');
         if ($addChannelParam) {
@@ -93,10 +93,10 @@ class AmountProvider
     public function getAccountsLifetimeQueryBuilder($ids = null)
     {
         /** @var EntityManager $em */
-        $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
+        $em = $this->registry->getManagerForClass('OroChannelBundle:LifetimeValueHistory');
         $qb = $em->createQueryBuilder();
         $qb->select('IDENTITY(h.account) AS accountId, SUM(h.amount) AS lifetimeValue')
-            ->from('OroCRMChannelBundle:LifetimeValueHistory', 'h')
+            ->from('OroChannelBundle:LifetimeValueHistory', 'h')
             ->leftJoin('h.dataChannel', 'ch')
             ->andWhere('ch.status = :channelStatus')
             ->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE))

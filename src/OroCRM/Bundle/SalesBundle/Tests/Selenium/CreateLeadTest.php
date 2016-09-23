@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 /**
  * Class CreateLeadTest
  *
- * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales
+ * @package Oro\Bundle\SalesBundle\Tests\Selenium\Sales
  */
 class CreateLeadTest extends Selenium2TestCase
 {
@@ -47,7 +47,7 @@ class CreateLeadTest extends Selenium2TestCase
         $login = $this->login();
         $channelName = $this->createChannel($login);
         /** @var Leads $login */
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
+        $login->openLeads('Oro\Bundle\SalesBundle')
             ->assertTitle('All - Leads - Sales')
             ->add()
             ->assertTitle('Create Lead - Leads - Sales')
@@ -59,7 +59,7 @@ class CreateLeadTest extends Selenium2TestCase
             ->setPhone('712-566-3002')
             ->setEmail($name . '@mail.com')
             ->setCompany('Some Company')
-            ->setWebsite('http://www.orocrm.com')
+            ->setWebsite('http://www.oro.com')
             ->setEmployees('100')
             ->setOwner('admin')
             ->setAddress($this->addressPrimary, 1)
@@ -90,7 +90,7 @@ class CreateLeadTest extends Selenium2TestCase
     {
         $channelName = 'Channel_'.mt_rand();
         /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+        $login->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
@@ -114,7 +114,7 @@ class CreateLeadTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Leads $login */
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
+        $login->openLeads('Oro\Bundle\SalesBundle')
             ->filterBy('Lead name', $name)
             ->open(array($name))
             ->assertTitle("{$name} - Leads - Sales")
@@ -138,7 +138,7 @@ class CreateLeadTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Leads $login */
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
+        $login->openLeads('Oro\Bundle\SalesBundle')
             ->filterBy('Lead name', $name)
             ->open(array($name))
             ->delete()

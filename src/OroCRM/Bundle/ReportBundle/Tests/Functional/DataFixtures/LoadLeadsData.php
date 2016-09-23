@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -21,15 +21,14 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -70,7 +69,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->container             = $container;
         $this->workflowManager       = $container->get('oro_workflow.manager');
-        $this->channelBuilderFactory = $container->get('orocrm_channel.builder.factory');
+        $this->channelBuilderFactory = $container->get('oro_channel.builder.factory');
     }
 
     /**

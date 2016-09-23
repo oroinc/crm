@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 
 class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
 {
@@ -42,7 +41,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $this->context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
             ->getMock();
 
-        $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -163,7 +162,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
                 $this->returnValueMap(
                     [
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'Oro\Bundle\MagentoBundle\Entity\Customer',
                             [
                                 'email' => $customerEmail,
                                 'channel' => $this->channel
@@ -233,7 +232,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
                 $this->returnValueMap(
                     [
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'Oro\Bundle\MagentoBundle\Entity\Customer',
                             [
                                 'email' => $customerEmail,
                                 'channel' => $this->channel

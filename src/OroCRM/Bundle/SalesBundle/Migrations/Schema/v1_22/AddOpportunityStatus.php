@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -18,8 +18,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class AddOpportunityStatus implements
     Migration,
@@ -64,7 +63,7 @@ class AddOpportunityStatus implements
     {
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
-        $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
+        $extendOptionsManager->removeColumnOptions('oro_sales_opportunity', 'status');
 
         $immutableCodes = ['in_progress', 'won', 'lost'];
 
@@ -92,7 +91,7 @@ class AddOpportunityStatus implements
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
-            'orocrm_sales_opportunity',
+            'oro_sales_opportunity',
             'status',
             Opportunity::INTERNAL_STATUS_CODE,
             false,

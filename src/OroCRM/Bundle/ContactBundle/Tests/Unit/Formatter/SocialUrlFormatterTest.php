@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Formatter;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Formatter;
 
-use OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
-use OroCRM\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
+use Oro\Bundle\ContactBundle\Model\Social;
 
 class SocialUrlFormatterTest extends \PHPUnit_Framework_TestCase
 {

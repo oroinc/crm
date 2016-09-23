@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
+namespace Oro\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignStatisticsRepository extends EntityRepository
 {
@@ -25,7 +25,7 @@ class EmailCampaignStatisticsRepository extends EntityRepository
                     'SUM(ecs.unsubscribeCount) as unsubscribe'
                 ]
             )
-            ->from('OroCRMCampaignBundle:EmailCampaignStatistics', 'ecs')
+            ->from('OroCampaignBundle:EmailCampaignStatistics', 'ecs')
             ->where($qb->expr()->eq('ecs.emailCampaign', ':emailCampaign'))
             ->setParameter('emailCampaign', $emailCampaign);
 

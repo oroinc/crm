@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Transport;
+namespace Oro\Bundle\CampaignBundle\Transport;
 
 interface VisibilityTransportInterface
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class OrganizationAnnotationVoter extends AbstractTwoWaySyncVoter
 {
-    const RESOURCE_CREATE = 'orocrm_magento_customer_create';
+    const RESOURCE_CREATE = 'oro_magento_customer_create';
 
     /**
      * @var array

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -18,7 +18,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 /**
  * @RouteResource("lead")
@@ -35,7 +35,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get lead address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      * @deprecated since 1.10. Use /api/rest/{version}/leads/{leadId}/addresses.{_format} instead.
      * @return Response
      */
@@ -78,7 +78,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get all lead items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
     public function cgetAction()
@@ -98,7 +98,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      * @return Response
      */
     public function getAction($id)
@@ -115,7 +115,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Update lead",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_update")
+     * @AclAncestor("oro_sales_lead_update")
      * @return Response
      */
     public function putAction($id)
@@ -130,7 +130,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Create new lead",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_create")
+     * @AclAncestor("oro_sales_lead_create")
      */
     public function postAction()
     {
@@ -147,10 +147,10 @@ class LeadController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_sales_lead_delete",
+     *      id="oro_sales_lead_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      * @return Response
      */
@@ -166,7 +166,7 @@ class LeadController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.lead.manager.api');
+        return $this->get('oro_sales.lead.manager.api');
     }
 
     /**
@@ -174,7 +174,7 @@ class LeadController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.lead.form.api');
+        return $this->get('oro_sales.lead.form.api');
     }
 
     /**
@@ -182,6 +182,6 @@ class LeadController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.lead.form.handler.api');
+        return $this->get('oro_sales.lead.form.handler.api');
     }
 }

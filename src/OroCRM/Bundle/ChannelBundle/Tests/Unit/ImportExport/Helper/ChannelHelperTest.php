@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\ImportExport\Helper;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\ImportExport\Helper;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
-
-use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 
 class ChannelHelperTest extends OrmTestCase
 {
@@ -29,10 +28,10 @@ class ChannelHelperTest extends OrmTestCase
         $config         = $this->em->getConfiguration();
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
-            'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
+            'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
         );
         $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
+        $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
         $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->any())

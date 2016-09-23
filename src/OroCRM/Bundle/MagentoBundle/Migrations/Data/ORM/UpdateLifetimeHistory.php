@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -13,11 +13,11 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
 class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInterface
 {
@@ -41,7 +41,7 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $settingsProvider = $this->container->get('orocrm_channel.provider.settings_provider');
+        $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
         $lifetimeSettings = $settingsProvider->getLifetimeValueSettings();
         if (!array_key_exists(ChannelType::TYPE, $lifetimeSettings)) {
             return;
@@ -50,11 +50,11 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
         $customerIdentityClass = $magentoChannelSettings['entity'];
         $lifetimeField = $magentoChannelSettings['field'];
 
-        $accountClass = $this->container->getParameter('orocrm_account.account.entity.class');
-        $channelClass = $this->container->getParameter('orocrm_channel.entity.class');
+        $accountClass = $this->container->getParameter('oro_account.account.entity.class');
+        $channelClass = $this->container->getParameter('oro_channel.entity.class');
 
         /** @var LifetimeHistoryRepository $lifetimeRepo */
-        $lifetimeRepo = $manager->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
+        $lifetimeRepo = $manager->getRepository('OroChannelBundle:LifetimeValueHistory');
 
         $brokenAccountQb = $this->getBrokenAccountsQueryBuilder($customerIdentityClass, $lifetimeField, $lifetimeRepo);
         $brokenAccountsData = new BufferedQueryResultIterator($brokenAccountQb);

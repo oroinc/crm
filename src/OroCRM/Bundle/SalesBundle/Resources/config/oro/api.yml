@@ -1,11 +1,11 @@
 api:
     entity_aliases:
-        # move this to "entity.yml" after the OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus entity will be removed
+        # move this to "entity.yml" after the Oro\Bundle\SalesBundle\Entity\OpportunityStatus entity will be removed
         # so, the alias for "Extend\Entity\EV_Opportunity_Status" should be "opportunitystatus", not "salesopportunitystatus"
         Extend\Entity\EV_Opportunity_Status:
             alias:        opportunitystatus
             plural_alias: opportunitystatuses
-        # move this to "entity.yml" after the OroCRM\Bundle\SalesBundle\Entity\LeadStatus entity will be removed
+        # move this to "entity.yml" after the Oro\Bundle\SalesBundle\Entity\LeadStatus entity will be removed
         # so, the alias for "Extend\Entity\EV_Lead_Status" should be "leadstatus", not "salesleadstatus"
         Extend\Entity\EV_Lead_Status:
             alias:        leadstatus
@@ -13,11 +13,11 @@ api:
 
     entities:
         # deprecated since 1.10. Enum type is used instead
-        OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus: { exclude: true }
+        Oro\Bundle\SalesBundle\Entity\OpportunityStatus: { exclude: true }
         # deprecated since 1.10. Enum type is used instead
-        OroCRM\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
+        Oro\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
-        OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+        Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             fields:
                 phones:
                     data_type: array
@@ -63,15 +63,15 @@ api:
                         options:
                             data_field: email
 
-        OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone:
+        Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail:
+        Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\SalesBundle\Entity\Lead:
+        Oro\Bundle\SalesBundle\Entity\Lead:
             fields:
                 address:
                     exclude: true
@@ -119,15 +119,15 @@ api:
                         options:
                             data_field: email
 
-        OroCRM\Bundle\SalesBundle\Entity\LeadAddress: ~
+        Oro\Bundle\SalesBundle\Entity\LeadAddress: ~
 
-        OroCRM\Bundle\SalesBundle\Entity\LeadPhone:
+        Oro\Bundle\SalesBundle\Entity\LeadPhone:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\SalesBundle\Entity\LeadEmail:
+        Oro\Bundle\SalesBundle\Entity\LeadEmail:
             # this entity does not have own Data API resource
             actions: false
 
-        OroCRM\Bundle\SalesBundle\Entity\Opportunity: ~
-        OroCRM\Bundle\SalesBundle\Entity\SalesFunnel: ~
+        Oro\Bundle\SalesBundle\Entity\Opportunity: ~
+        Oro\Bundle\SalesBundle\Entity\SalesFunnel: ~

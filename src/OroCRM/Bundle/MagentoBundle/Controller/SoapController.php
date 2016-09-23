@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -11,14 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class SoapController extends Controller
 {
@@ -26,13 +25,13 @@ class SoapController extends Controller
      * @param Request $request
      * @return JsonResponse
      *
-     * @Route("/check", name="orocrm_magento_soap_check")
+     * @Route("/check", name="oro_magento_soap_check")
      * @AclAncestor("oro_integration_update")
      */
     public function checkAction(Request $request)
     {
-        $wsdlManager = $this->get('orocrm_magento.wsdl_manager');
-        $transport = $this->get('orocrm_magento.transport.soap_transport');
+        $wsdlManager = $this->get('oro_magento.wsdl_manager');
+        $transport = $this->get('oro_magento.transport.soap_transport');
         $transport->setMultipleAttemptsEnabled(false);
         $transportEntity = $this->getTransportEntity($request, $transport);
 
@@ -106,7 +105,7 @@ class SoapController extends Controller
             $websites,
             [
                 'id' => StoresSoapIterator::ALL_WEBSITES,
-                'label' => $translator->trans('orocrm.magento.magentosoaptransport.all_sites')
+                'label' => $translator->trans('oro.magento.magentosoaptransport.all_sites')
             ]
         );
 

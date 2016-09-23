@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\AccountBundle\Form\Handler\AccountHandler;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
 
 class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 {

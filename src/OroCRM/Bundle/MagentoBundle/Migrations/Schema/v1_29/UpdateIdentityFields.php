@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_29;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_29;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -15,12 +15,12 @@ class UpdateIdentityFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\Address', 'country');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\Address', 'region');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'email');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup', 'name');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\Store', 'code');
-        $this->removeIdentity($queries, 'OroCRM\Bundle\MagentoBundle\Entity\Website', 'code');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\Address', 'country');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\Address', 'region');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\Customer', 'email');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\CustomerGroup', 'name');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\Store', 'code');
+        $this->removeIdentity($queries, 'Oro\Bundle\MagentoBundle\Entity\Website', 'code');
     }
 
     /**

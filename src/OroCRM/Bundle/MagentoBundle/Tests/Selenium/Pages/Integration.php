@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\MagentoBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integration as ParentIntegration;
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integrations;
 
 /**
  * Class Integration
- * @package OroCRM\Bundle\MagentoBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\MagentoBundle\Tests\Selenium\Pages
  * {@inheritdoc}
  */
 class Integration extends ParentIntegration

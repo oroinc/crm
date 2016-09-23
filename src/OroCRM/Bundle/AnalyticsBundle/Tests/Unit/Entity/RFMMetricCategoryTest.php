@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Entity;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,8 +39,8 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
     public function settersAndGettersDataProvider()
     {
         return [
-                ['channel', $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel'),
-                    $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel')],
+                ['channel', $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel'),
+                    $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel')],
                 ['owner', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'),
                     $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
                 ['category_type', RFMMetricCategory::TYPE_RECENCY, RFMMetricCategory::TYPE_RECENCY],

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
@@ -26,9 +26,8 @@ use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationTypeSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
-
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
-use OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
+use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 
 class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 {
@@ -118,7 +117,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             new DefaultTranslator()
         );
 
-        $settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
         return [

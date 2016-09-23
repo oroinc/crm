@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Controller;
+namespace Oro\Bundle\ReportBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -15,7 +15,7 @@ class ReportController extends Controller
     /**
      * @Route(
      *      "/static/{reportGroupName}/{reportName}/{_format}",
-     *      name="orocrm_report_index",
+     *      name="oro_report_index",
      *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
@@ -24,7 +24,7 @@ class ReportController extends Controller
      */
     public function indexAction($reportGroupName, $reportName)
     {
-        $gridName  = implode('-', ['orocrm_report', $reportGroupName, $reportName]);
+        $gridName  = implode('-', ['oro_report', $reportGroupName, $reportName]);
         $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
 
         return [

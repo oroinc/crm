@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
+namespace Oro\Bundle\MagentoBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -13,21 +13,20 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
-
-use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
-use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
+use Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 
 class DashboardController extends Controller
 {
     /**
      * @Route(
      *      "/sales_flow_b2c/chart/{widget}",
-     *      name="orocrm_magento_dashboard_sales_flow_b2c_chart",
+     *      name="oro_magento_dashboard_sales_flow_b2c_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     * @Template("OroSalesBundle:Dashboard:salesFlowChart.html.twig")
      *
      * @param Request $request
      * @param $widget
@@ -44,11 +43,11 @@ class DashboardController extends Controller
         $dateFrom = $dateRange['start'];
 
         /** @var WorkflowAwareManager $workflowManager */
-        $workflowManager = $this->get('orocrm_magento.manager.abandoned_shopping_cart_flow');
+        $workflowManager = $this->get('oro_magento.manager.abandoned_shopping_cart_flow');
         $workflow        = $workflowManager->getWorkflow();
 
         /** @var CartRepository $shoppingCartRepository */
-        $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
+        $shoppingCartRepository = $this->getDoctrine()->getRepository('OroMagentoBundle:Cart');
 
         $data = $shoppingCartRepository->getFunnelChartData(
             $dateFrom,
@@ -82,10 +81,10 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/average_order_amount_by_customer",
-     *      name="orocrm_magento_dashboard_average_order_amount",
+     *      name="oro_magento_dashboard_average_order_amount",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:ordersByCustomers.html.twig")
+     * @Template("OroMagentoBundle:Dashboard:ordersByCustomers.html.twig")
      *
      * @param Request $request
      *
@@ -94,7 +93,7 @@ class DashboardController extends Controller
     public function averageOrderAmountAction(Request $request)
     {
         $widgetAttributes  = $this->get('oro_dashboard.widget_configs');
-        $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
+        $orderDataProvider = $this->get('oro_magento.dashboard.data_provider.order');
         $chartViewBuilder  = $this->get('oro_chart.view_builder');
 
         $data              = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
@@ -111,11 +110,11 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_new_customers_chart",
-     *      name="orocrm_magento_dashboard_new_customers_chart",
+     *      "/oro_magento_dashboard_new_customers_chart",
+     *      name="oro_magento_dashboard_new_customers_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:newCustomersChart.html.twig")
+     * @Template("OroMagentoBundle:Dashboard:newCustomersChart.html.twig")
      *
      * @param Request $request
      *
@@ -124,7 +123,7 @@ class DashboardController extends Controller
     public function newCustomersAction(Request $request)
     {
         $widgetAttributes     = $this->get('oro_dashboard.widget_configs');
-        $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
+        $customerDataProvider = $this->get('oro_magento.dashboard.data_provider.customer');
         $chartViewBuilder     = $this->get('oro_chart.view_builder');
 
         $data              = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
@@ -140,11 +139,11 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_purchase_chart",
-     *      name="orocrm_magento_dashboard_purchase_chart",
+     *      "/oro_magento_dashboard_purchase_chart",
+     *      name="oro_magento_dashboard_purchase_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:purchaseChart.html.twig")
+     * @Template("OroMagentoBundle:Dashboard:purchaseChart.html.twig")
      */
     public function purchaseAction()
     {
@@ -164,11 +163,11 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_revenue_over_time_chart",
-     *      name="orocrm_magento_dashboard_revenue_over_time_chart",
+     *      "/oro_magento_dashboard_revenue_over_time_chart",
+     *      name="oro_magento_dashboard_revenue_over_time_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:revenueOverTimeChart.html.twig")
+     * @Template("OroMagentoBundle:Dashboard:revenueOverTimeChart.html.twig")
      */
     public function revenueOverTimeAction()
     {
@@ -189,11 +188,11 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_orders_over_time_chart",
-     *      name="orocrm_magento_dashboard_orders_over_time_chart",
+     *      "/oro_magento_dashboard_orders_over_time_chart",
+     *      name="oro_magento_dashboard_orders_over_time_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:ordersOverTimeChart.html.twig")
+     * @Template("OroMagentoBundle:Dashboard:ordersOverTimeChart.html.twig")
      */
     public function ordersOverTimeAction()
     {
@@ -233,7 +232,7 @@ class DashboardController extends Controller
      */
     protected function getOrderDataProvider()
     {
-        return $this->get('orocrm_magento.dashboard.data_provider.order');
+        return $this->get('oro_magento.dashboard.data_provider.order');
     }
 
     /**
@@ -241,6 +240,6 @@ class DashboardController extends Controller
      */
     public function getPurchaseDataProvider()
     {
-        return $this->get('orocrm_magento.dashboard.data_provider.purchase');
+        return $this->get('oro_magento.dashboard.data_provider.purchase');
     }
 }

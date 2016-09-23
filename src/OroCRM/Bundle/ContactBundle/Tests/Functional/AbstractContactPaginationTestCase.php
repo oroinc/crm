@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Crawler;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData;
 
 /**
  * @outputBuffering enabled
@@ -36,8 +36,8 @@ class AbstractContactPaginationTestCase extends WebTestCase
         LoadContactEntitiesData::$owner = LoadUserData::USER_NAME;
         $this->initClient([], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData']);
-        $this->loadFixtures(['OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData']);
+        $this->loadFixtures(['Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData']);
+        $this->loadFixtures(['Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData']);
         $this->client->mergeServerParameters($this->generateBasicAuthHeader(
             LoadUserData::USER_NAME,
             LoadUserData::USER_PASSWORD
@@ -49,7 +49,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
      */
     protected function assertContactEntityGrid($params = [])
     {
-        $this->client->request('GET', $this->getUrl('orocrm_contact_index', $params));
+        $this->client->request('GET', $this->getUrl('oro_contact_index', $params));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
@@ -102,7 +102,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
     protected function getContactByName($name)
     {
         $contact = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneBy(['firstName' => $name]);
 
         // guard

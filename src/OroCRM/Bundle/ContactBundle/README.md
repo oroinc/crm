@@ -1,4 +1,4 @@
-OroCRMContactBundle
+OroContactBundle
 ===================
 
 Customer contacts entity management

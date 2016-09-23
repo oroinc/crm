@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class NewsletterSubscriberVoter extends AbstractTwoWaySyncVoter
 {

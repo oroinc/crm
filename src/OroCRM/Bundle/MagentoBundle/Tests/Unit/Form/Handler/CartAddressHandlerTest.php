@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\CartAddressHandler;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Form\Handler\CartAddressHandler;
 
 class CartAddressHandlerTest extends AbstractHandlerTest
 {
@@ -54,7 +53,7 @@ class CartAddressHandlerTest extends AbstractHandlerTest
 
     public function testAddCartAddressOnSuccess()
     {
-        $cart = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Cart')
+        $cart = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Cart')
             ->disableOriginalConstructor()
             ->getMock();
 

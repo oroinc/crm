@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use FOS\RestBundle\Util\Codes;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
-use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData;
+use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
+use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData;
 
 /**
  * @outputBuffering enabled
@@ -19,7 +18,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([
-            'OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData'
+            'Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData'
         ]);
     }
 
@@ -86,7 +85,7 @@ class RestB2bCustomerPhoneApiTest extends WebTestCase
 
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(
-            '{"code":500,"message":"orocrm.sales.phone.error.delete.more_one"}',
+            '{"code":500,"message":"oro.sales.phone.error.delete.more_one"}',
             $this->client->getResponse()->getContent()
         );
     }

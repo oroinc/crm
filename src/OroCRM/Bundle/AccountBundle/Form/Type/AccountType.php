@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Form\Type;
+namespace Oro\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
 
@@ -14,9 +14,8 @@ use Symfony\Component\Form\FormView;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountType extends AbstractType
 {
@@ -50,7 +49,7 @@ class AccountType extends AbstractType
         $this->entityNameResolver = $entityNameResolver;
         $this->router             = $router;
         $this->securityFacade     = $securityFacade;
-        $this->canViewContact     = $this->securityFacade->isGranted('orocrm_contact_view');
+        $this->canViewContact     = $this->securityFacade->isGranted('oro_contact_view');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -60,7 +59,7 @@ class AccountType extends AbstractType
             'name',
             'text',
             array(
-                'label' => 'orocrm.account.name.label',
+                'label' => 'oro.account.name.label',
                 'required' => true,
             )
         );
@@ -70,7 +69,7 @@ class AccountType extends AbstractType
                 'default_contact',
                 'oro_entity_identifier',
                 array(
-                    'class'    => 'OroCRMContactBundle:Contact',
+                    'class'    => 'OroContactBundle:Contact',
                     'multiple' => false
                 )
             );
@@ -80,11 +79,11 @@ class AccountType extends AbstractType
                 'contacts',
                 'oro_multiple_entity',
                 array(
-                    'add_acl_resource'      => 'orocrm_contact_view',
-                    'class'                 => 'OroCRMContactBundle:Contact',
+                    'add_acl_resource'      => 'oro_contact_view',
+                    'class'                 => 'OroContactBundle:Contact',
                     'default_element'       => 'default_contact',
                     'required'              => false,
-                    'selector_window_title' => 'orocrm.account.form.select_contacts',
+                    'selector_window_title' => 'oro.account.form.select_contacts',
                 )
             );
         }
@@ -99,7 +98,7 @@ class AccountType extends AbstractType
             /** @var Account $account */
             $account = $form->getData();
             $view->children['contacts']->vars['grid_url']
-                = $this->router->generate('orocrm_account_widget_contacts_info', array('id' => $account->getId()));
+                = $this->router->generate('oro_account_widget_contacts_info', array('id' => $account->getId()));
             $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
             $view->children['contacts']->vars['initial_elements']
                 = $this->getInitialElements($account->getContacts(), $defaultContactId);
@@ -125,7 +124,7 @@ class AccountType extends AbstractType
                 $result[] = array(
                     'id' => $contact->getId(),
                     'label' => $this->entityNameResolver->getName($contact),
-                    'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
+                    'link' => $this->router->generate('oro_contact_info', array('id' => $contact->getId())),
                     'extraData' => array(
                         array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
                         array('label' => 'Email', 'value' => $primaryEmail ? $primaryEmail->getEmail() : null),
@@ -144,7 +143,7 @@ class AccountType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\AccountBundle\Entity\Account',
+                'data_class' => 'Oro\Bundle\AccountBundle\Entity\Account',
                 'intention' => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation' => true
@@ -165,6 +164,6 @@ class AccountType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_account';
+        return 'oro_account';
     }
 }

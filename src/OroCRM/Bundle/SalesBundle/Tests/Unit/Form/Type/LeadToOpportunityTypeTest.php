@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormEvent;
@@ -13,11 +13,10 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
-
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
-use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
+use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +37,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['remove', 'add'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+        $lead = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
                 ->setMethods(['getContact'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -72,7 +71,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
                 ->setMethods(['remove', 'add'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+        $lead = $this->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
                 ->setMethods(['getContact'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -126,10 +125,10 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
           [
               'fields' => [
                   'closeReason'  => 'translatable_entity',
-                  'contact'  => 'orocrm_contact_select',
-                  'customer' => 'orocrm_sales_b2bcustomer_with_channel_create_or_select',
+                  'contact'  => 'oro_contact_select',
+                  'customer' => 'oro_sales_b2bcustomer_with_channel_create_or_select',
                   'name'  => 'text',
-                  'dataChannel'  => 'orocrm_channel_select_type',
+                  'dataChannel'  => 'oro_channel_select_type',
                   'closeDate'  => 'oro_date',
                   'probability'  => 'oro_percent',
                   'budgetAmount' => 'oro_money',
@@ -137,7 +136,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
                   'customerNeed'  => 'oro_resizeable_rich_text',
                   'proposedSolution'  => 'oro_resizeable_rich_text',
                   'notes'  => 'oro_resizeable_rich_text',
-                  'status'  => 'orocrm_sales_opportunity_status_select',
+                  'status'  => 'oro_sales_opportunity_status_select',
               ]
           ]
         ];

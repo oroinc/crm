@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
+namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 
 class ContactAddStrategy extends AbstractImportStrategy
 {

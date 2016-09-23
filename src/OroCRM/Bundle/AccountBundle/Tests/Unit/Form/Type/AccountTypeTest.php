@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\AccountBundle\Form\Type\AccountType;
+use Oro\Bundle\AccountBundle\Form\Type\AccountType;
 
 class AccountTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,7 +46,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->securityFacade->expects($this->once())
             ->method('isGranted')
-            ->with('orocrm_contact_view')
+            ->with('oro_contact_view')
             ->will($this->returnValue(true));
 
         $builder->expects($this->at(0))
@@ -74,7 +74,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->securityFacade->expects($this->once())
             ->method('isGranted')
-            ->with('orocrm_contact_view')
+            ->with('oro_contact_view')
             ->will($this->returnValue(false));
 
         $builder->expects($this->at(0))
@@ -101,32 +101,32 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
-        $this->assertEquals('orocrm_account', $type->getName());
+        $this->assertEquals('oro_account', $type->getName());
     }
 
     public function testFinishView()
     {
         $this->securityFacade->expects($this->once())
             ->method('isGranted')
-            ->with('orocrm_contact_view')
+            ->with('oro_contact_view')
             ->will($this->returnValue(true));
 
         $this->router->expects($this->at(0))
             ->method('generate')
-            ->with('orocrm_account_widget_contacts_info', array('id' => 100))
+            ->with('oro_account_widget_contacts_info', array('id' => 100))
             ->will($this->returnValue('/test-path/100'));
         $this->router->expects($this->at(1))
             ->method('generate')
-            ->with('orocrm_contact_info', array('id' => 1))
+            ->with('oro_contact_info', array('id' => 1))
             ->will($this->returnValue('/test-info/1'));
 
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+        $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
         $contact->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $phone = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
+        $phone = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\ContactPhone')
             ->disableOriginalConstructor()
             ->getMock();
         $phone->expects($this->once())
@@ -135,7 +135,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contact->expects($this->once())
             ->method('getPrimaryPhone')
             ->will($this->returnValue($phone));
-        $email = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
+        $email = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\ContactEmail')
             ->disableOriginalConstructor()
             ->getMock();
         $email->expects($this->once())
@@ -151,7 +151,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->with($contact)
             ->will($this->returnValue('John Doe'));
 
-        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
+        $account = $this->getMockBuilder('Oro\Bundle\AccountBundle\Entity\Account')
             ->disableOriginalConstructor()
             ->getMock();
         $account->expects($this->once())
@@ -197,7 +197,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->securityFacade->expects($this->exactly(1))
             ->method('isGranted')
-            ->with('orocrm_contact_view')
+            ->with('oro_contact_view')
             ->will($this->returnValue(false));
 
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')

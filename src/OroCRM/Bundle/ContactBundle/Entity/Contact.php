@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity;
+namespace Oro\Bundle\ContactBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -17,9 +17,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Model\ExtendContact;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -28,9 +27,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository")
  * @ORM\Table(
- *      name="orocrm_contact",
+ *      name="oro_contact",
  *      indexes={
  *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"}),
  *          @ORM\Index(name="contact_updated_at_idx",columns={"updatedAt"}),
@@ -39,8 +38,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_contact_index",
- *      routeView="orocrm_contact_view",
+ *      routeName="oro_contact_index",
+ *      routeView="oro_contact_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-group",
@@ -66,7 +65,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *              "category"="account_management"
  *          },
  *          "form"={
- *              "form_type"="orocrm_contact_select",
+ *              "form_type"="oro_contact_select",
  *              "grid_name"="contacts-select-grid",
  *          },
  *          "dataaudit"={
@@ -289,7 +288,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Source
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Source")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Source")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
      * @Oro\Versioned
      * @ConfigField(
@@ -311,7 +310,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Method
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Method")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Method")
      * @ORM\JoinColumn(name="method_name", referencedColumnName="name")
      * @Oro\Versioned
      * @ConfigField(
@@ -380,7 +379,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -442,11 +441,11 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\ContactEmail",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
+     * @Soap\ComplexType("Oro\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -466,11 +465,11 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\ContactPhone", mappedBy="owner",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
+     * @Soap\ComplexType("Oro\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -622,7 +621,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\ContactAddress",
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -646,8 +645,8 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
-     * @ORM\JoinTable(name="orocrm_contact_to_contact_grp",
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Group")
+     * @ORM\JoinTable(name="oro_contact_to_contact_grp",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -668,8 +667,8 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
-     * @ORM\JoinTable(name="orocrm_account_to_contact")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
+     * @ORM\JoinTable(name="oro_account_to_contact")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -761,7 +760,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     /**
      * @var Account[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\AccountBundle\Entity\Account",
      *    mappedBy="defaultContact", cascade={"persist"}
      * )
      * @ConfigField(
@@ -813,7 +812,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      */
     public function getClass()
     {
-        return 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+        return 'Oro\Bundle\ContactBundle\Entity\Contact';
     }
 
     /**

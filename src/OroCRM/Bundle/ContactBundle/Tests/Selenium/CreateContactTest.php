@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class CreateContactTest extends Selenium2TestCase
 {
@@ -42,7 +42,7 @@ class CreateContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('All - Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
@@ -77,7 +77,7 @@ class CreateContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')
             ->setLastName($contactName . '_last')
@@ -109,7 +109,7 @@ class CreateContactTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first_autocomplete')
             ->setLastName($contactName . '_last_autocomplete')
@@ -139,7 +139,7 @@ class CreateContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
@@ -163,14 +163,14 @@ class CreateContactTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
             ->delete()
             ->assertTitle('All - Contacts - Customers')
             ->assertMessage('Contact deleted');
 
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->assertNoDataMessage('No contact was found to match your search');
     }

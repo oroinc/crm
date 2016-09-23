@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
+namespace Oro\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -31,7 +31,7 @@ class ControllersTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_report_index',
+                'oro_report_index',
                 array(
                     'reportGroupName' => $group,
                     'reportName'      => $report,
@@ -71,37 +71,37 @@ class ControllersTest extends WebTestCase
     {
         return array(
             'life_time_value'  => array(
-                'orocrm_report-accounts',
+                'oro_report-accounts',
                 'life_time_value',
                 'accounts',
                 'Account life time value'
             ),
             'by_opportunities' => array(
-                'orocrm_report-accounts',
+                'oro_report-accounts',
                 'by_opportunities',
                 'accounts',
                 'Accounts by opportunities'
             ),
             'by_status'        => array(
-                'orocrm_report-opportunities',
+                'oro_report-opportunities',
                 'by_status',
                 'opportunities',
                 'Opportunities by status'
             ),
             'won_by_period'    => array(
-                'orocrm_report-opportunities',
+                'oro_report-opportunities',
                 'won_by_period',
                 'opportunities',
                 'Won opportunities by date period'
             ),
             'total_forecast'    => array(
-                'orocrm_report-opportunities',
+                'oro_report-opportunities',
                 'total_forecast',
                 'opportunities',
                 'Forecast'
             ),
             'by_date'          => array(
-                'orocrm_report-leads',
+                'oro_report-leads',
                 'by_date',
                 'leads',
                 'Number leads by date'

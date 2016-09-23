@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -29,7 +29,7 @@ class OrderItemsApiType extends OrderItemType
         $builder->add('discountPercent', 'oro_percent', ['required' => false]);
         $builder->add('discountAmount', 'oro_money', ['required' => false]);
         $builder->add('rowTotal', 'oro_money', ['required' => false]);
-        $builder->add('order', 'orocrm_order_select');
+        $builder->add('order', 'oro_order_select');
         $builder->add('productType', 'text', ['required' => false]);
         $builder->add('productOptions', 'text', ['required' => false]);
         $builder->add('isVirtual', 'checkbox', ['required' => false]);
@@ -45,7 +45,7 @@ class OrderItemsApiType extends OrderItemType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\OrderItem',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\OrderItem',
                 'csrf_protection' => false
             ]
         );

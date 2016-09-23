@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
 
 class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,11 +26,11 @@ class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()
             ->setMethods(['isChannelEntity', 'getDependentEntityData'])
             ->getMock();
-        $this->stateProvider    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
+        $this->stateProvider    = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();
 
         $this->exclusionProvider = new EntityExclusionProvider($this->settingsProvider, $this->stateProvider);

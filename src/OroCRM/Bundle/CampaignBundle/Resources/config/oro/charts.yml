@@ -4,13 +4,13 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.campaign.trackingevent.report.date.label
+                label: oro.campaign.trackingevent.report.date.label
                 required: true
                 default_type: string
                 field_name: logTime
             value:
                 name: value
-                label: orocrm.campaign.trackingevent.report.visits_count.label
+                label: oro.campaign.trackingevent.report.visits_count.label
                 required: true
                 default_type: integer
                 field_name: visitsCount
@@ -22,5 +22,5 @@ charts:
             chartFontColor: '#454545'
             chartHighlightColor: '#FF5E5E'
             groupingOption: name
-        data_transformer: orocrm_campaign.data_transformer.multi_line
-        template: OroCRMCampaignBundle:Chart:multiline.html.twig
+        data_transformer: oro_campaign.data_transformer.multi_line
+        template: OroCampaignBundle:Chart:multiline.html.twig

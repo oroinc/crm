@@ -1,17 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 /**
  * Add initial connectors to connectors list.

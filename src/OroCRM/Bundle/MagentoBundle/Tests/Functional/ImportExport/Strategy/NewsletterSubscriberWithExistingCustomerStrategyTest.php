@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy;
 
 /**
  * @dbIsolation
@@ -36,10 +35,10 @@ class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
 
         $this->strategy = $this->getContainer()
-            ->get('orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update');
+            ->get('oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update');
 
         $this->stepExecution = new StepExecution('step', new JobExecution());
         $this->context = new StepExecutionProxyContext($this->stepExecution);

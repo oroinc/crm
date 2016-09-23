@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
+namespace Oro\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
 
@@ -20,8 +20,8 @@ class ControllersCrmTest extends BaseControllersTest
         $this->client->useHashNavigation(true);
         $this->loadFixtures(
             array(
-                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
-                'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
+                'Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',
+                'Oro\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadsData',
             )
         );
     }

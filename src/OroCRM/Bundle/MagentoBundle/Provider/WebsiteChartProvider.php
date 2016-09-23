@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
@@ -8,8 +8,7 @@ use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
-
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -31,9 +30,9 @@ abstract class WebsiteChartProvider
      * @var array Map of events to legend labels
      */
     public static $legendLabelsMap = [
-        TCI::EVENT_CART_ITEM_ADDED => 'orocrm.magento.website_activity.chart.legend.event_cart_item_added',
-        TCI::EVENT_CHECKOUT_STARTED => 'orocrm.magento.website_activity.chart.legend.event_checkout_started',
-        TCI::EVENT_VISIT => 'orocrm.magento.website_activity.chart.legend.event_visit',
+        TCI::EVENT_CART_ITEM_ADDED => 'oro.magento.website_activity.chart.legend.event_cart_item_added',
+        TCI::EVENT_CHECKOUT_STARTED => 'oro.magento.website_activity.chart.legend.event_checkout_started',
+        TCI::EVENT_VISIT => 'oro.magento.website_activity.chart.legend.event_visit',
     ];
 
     /** @var TrackingVisitEventProvider */

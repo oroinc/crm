@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -41,10 +41,10 @@ class B2bBigNumberProvider
      */
     public function getNewLeadsCount($dateRange, $owners = [])
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Lead', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Lead')
+            ->getRepository('OroSalesBundle:Lead')
             ->getNewLeadsCount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -56,10 +56,10 @@ class B2bBigNumberProvider
      */
     public function getLeadsCount($dateRange, $owners = [])
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Lead', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Lead')
+            ->getRepository('OroSalesBundle:Lead')
             ->getLeadsCount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -72,7 +72,7 @@ class B2bBigNumberProvider
     public function getOpenLeadsCount($dateRange, $owners = [])
     {
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Lead')
+            ->getRepository('OroSalesBundle:Lead')
             ->getOpenLeadsCount($this->aclHelper, $owners);
     }
 
@@ -84,10 +84,10 @@ class B2bBigNumberProvider
      */
     public function getNewOpportunitiesCount($dateRange, $owners = [])
     {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getNewOpportunitiesCount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -99,10 +99,10 @@ class B2bBigNumberProvider
      */
     public function getOpportunitiesCount(array $dateRange, $owners = [])
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getOpportunitiesCount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -114,10 +114,10 @@ class B2bBigNumberProvider
      */
     public function getTotalServicePipelineAmount(array $dateRange, $owners = [])
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getTotalServicePipelineAmount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -129,10 +129,10 @@ class B2bBigNumberProvider
      */
     public function getOpenWeightedPipelineAmount($dateRange, $owners = [])
     {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getOpenWeightedPipelineAmount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -144,10 +144,10 @@ class B2bBigNumberProvider
      */
     public function getNewOpportunitiesAmount($dateRange, $owners = [])
     {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getNewOpportunitiesAmount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -160,10 +160,10 @@ class B2bBigNumberProvider
      */
     public function getWonOpportunitiesToDateCount($dateRange, $owners = [])
     {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getWonOpportunitiesToDateCount($this->aclHelper, $start, $end, $owners);
     }
 
@@ -175,10 +175,10 @@ class B2bBigNumberProvider
      */
     public function getWonOpportunitiesToDateAmount($dateRange, $owners = [])
     {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMSalesBundle:Opportunity', 'createdAt');
+        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
-            ->getRepository('OroCRMSalesBundle:Opportunity')
+            ->getRepository('OroSalesBundle:Opportunity')
             ->getWonOpportunitiesToDateAmount($this->aclHelper, $start, $end, $owners);
     }
 }

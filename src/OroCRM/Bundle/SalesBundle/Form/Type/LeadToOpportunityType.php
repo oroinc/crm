@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,11 +10,11 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class LeadToOpportunityType extends AbstractType
 {
-    const NAME = 'orocrm_sales_lead_to_opportunity';
+    const NAME = 'oro_sales_lead_to_opportunity';
 
     /** @var bool */
     protected $useFullContactForm = false;
@@ -56,7 +56,7 @@ class LeadToOpportunityType extends AbstractType
         $entity = $event->getData();
         if ($entity instanceof Opportunity && !$entity->getLead()->getContact()) {
             $form->remove('contact');
-            $form->add('contact', 'orocrm_contact');
+            $form->add('contact', 'oro_contact');
             $this->useFullContactForm = true;
         }
     }
@@ -74,7 +74,7 @@ class LeadToOpportunityType extends AbstractType
      */
     public function getParent()
     {
-        return 'orocrm_sales_opportunity';
+        return 'oro_sales_opportunity';
     }
 
     /**

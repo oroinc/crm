@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class LoadContactEmailData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -17,7 +17,7 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData'
+            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData'
         ];
     }
 

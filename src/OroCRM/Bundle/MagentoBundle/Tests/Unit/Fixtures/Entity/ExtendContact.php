@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ExtendContact extends Contact
 {

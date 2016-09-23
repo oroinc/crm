@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Form\Handler\OrderHandler;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Form\Handler\OrderHandler;
 
 class OrderHandlerTest extends AbstractHandlerTest
 {
@@ -75,7 +75,7 @@ class OrderHandlerTest extends AbstractHandlerTest
         $this->manager->expects($this->once())
             ->method('flush');
 
-        $address = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\OrderAddress')
+        $address = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\OrderAddress')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,7 +85,7 @@ class OrderHandlerTest extends AbstractHandlerTest
 
         $this->entity->addAddress($address);
 
-        $item = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\OrderItem')
+        $item = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\OrderItem')
             ->disableOriginalConstructor()
             ->getMock();
 

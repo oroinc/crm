@@ -6,7 +6,7 @@ workflows:
                 step_to: qualified
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: orocrm_sales_opportunity_create
+                acl_resource: oro_sales_opportunity_create
                 frontend_options:
                     icon: 'icon-ok'
                     class: 'btn-primary'
@@ -19,7 +19,7 @@ workflows:
                                 constraints:
                                   - NotBlank: ~
                         b2bcustomer:
-                            form_type: orocrm_sales_b2bcustomer_select
+                            form_type: oro_sales_b2bcustomer_select
                             options:
                                 required: false
                                 channel_id: $dataChannel.id
@@ -43,7 +43,7 @@ workflows:
                                     - '@empty':     $b2bcustomer
                                     - '@not_empty': $company_name
                             parameters:
-                                class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
                                 attribute: $b2bcustomer
                                 where:
                                     name: $company_name

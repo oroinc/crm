@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler;
+namespace Oro\Bundle\ContactBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,7 +21,7 @@ class PhoneProviderConfigPass implements CompilerPassInterface
         $serviceDef = $container->getDefinition(self::SERVICE_KEY);
         $serviceDef->addMethodCall(
             'addTargetEntity',
-            [$container->getParameter('orocrm_contact.entity.class')]
+            [$container->getParameter('oro_contact.entity.class')]
         );
     }
 }

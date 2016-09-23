@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadStatusSelectType extends AbstractType
 {
-    const NAME = 'orocrm_type_widget_lead_status_select';
+    const NAME = 'oro_type_widget_lead_status_select';
 
     /** @var EnumValueProvider */
     protected $enumValueProvider;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Validator;
+namespace Oro\Bundle\MarketingListBundle\Validator;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraint;
@@ -8,8 +8,8 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
-use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
-use OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
+use Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use Oro\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
 
 class ContactInformationColumnValidator extends ConstraintValidator
 {

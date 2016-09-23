@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Controller\Api\Rest;
+namespace Oro\Bundle\CampaignBundle\Controller\Api\Rest;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -11,7 +11,6 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 
 /**
@@ -30,10 +29,10 @@ class CampaignController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_campaign_delete",
+     *      id="oro_campaign_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMCampaignBundle:Campaign"
+     *      class="OroCampaignBundle:Campaign"
      * )
      * @return Response
      */
@@ -47,7 +46,7 @@ class CampaignController extends RestController implements ClassResourceInterfac
      */
     public function getManager()
     {
-        return $this->get('orocrm_campaign.campaign.manager.api');
+        return $this->get('oro_campaign.campaign.manager.api');
     }
 
     /**

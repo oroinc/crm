@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Formatter;
+namespace Oro\Bundle\ContactBundle\Formatter;
 
 class SocialUrlFormatter
 {

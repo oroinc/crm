@@ -1,4 +1,4 @@
-OroCRMActivityContactBundle
+OroActivityContactBundle
 =============================
 
 General
@@ -26,7 +26,7 @@ In the simplest way:
 
 ```
     tags:
-        - {name: orocrm_activity_direction.provider}
+        - {name: oro_activity_direction.provider}
 ```
 
 Install and update features

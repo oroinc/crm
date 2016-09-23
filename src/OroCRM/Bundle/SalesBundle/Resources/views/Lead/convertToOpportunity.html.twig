@@ -4,11 +4,11 @@
 
 {% set pageComponent = {
     'module': 'oroui/js/app/components/view-component',
-    'options': {'view': 'orocrmsales/js/app/views/opportunity-status-select-view'},
+    'options': {'view': 'orosales/js/app/views/opportunity-status-select-view'},
     'layout': 'separate'
 } %}
 
-{% set formAction = path('orocrm_sales_lead_convert_to_opportunity', {
+{% set formAction = path('oro_sales_lead_convert_to_opportunity', {
     'id': entity.lead.id
 }) %}
 
@@ -20,14 +20,14 @@
 {% endblock %}
 
 {% block navButtons %}
-    {{ UI.cancelButton(path('orocrm_sales_lead_view', { 'id': entity.lead.id })) }}
+    {{ UI.cancelButton(path('oro_sales_lead_view', { 'id': entity.lead.id })) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_sales_lead_view',
+        'route': 'oro_sales_lead_view',
         'params': {'id': entity.lead.id}
     }) %}
-    {% if resource_granted('orocrm_sales_lead_convert_to_opportunity') %}
+    {% if resource_granted('oro_sales_lead_convert_to_opportunity') %}
         {% set html = UI.saveAndCloseButton({
-            'route': 'orocrm_sales_opportunity_view',
+            'route': 'oro_sales_opportunity_view',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -37,7 +37,7 @@
 {% block pageHeader %}
     {% set title = 'oro.ui.convert_entity'|trans({
         '%name%': name,
-        '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans
+        '%entityName%': 'oro.sales.opportunity.entity_label'|trans
     }) %}
     {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
 {% endblock pageHeader %}
@@ -139,7 +139,7 @@
                 ]
             },
             {
-                'title': 'orocrm.contact.addresses.label'|trans,
+                'title': 'oro.contact.addresses.label'|trans,
                 'data': [form_widget(form.contact.addresses)]
             }
         ]

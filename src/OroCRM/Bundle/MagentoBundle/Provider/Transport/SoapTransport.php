@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
+namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
@@ -8,28 +8,27 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Service\WsdlManager;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
 /**
  * Magento SOAP transport
  * used to fetch and pull data to/from Magento instance
  * with sessionId param using SOAP requests
  *
- * @package OroCRM\Bundle\MagentoBundle
+ * @package Oro\Bundle\MagentoBundle
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
@@ -612,7 +611,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getLabel()
     {
-        return 'orocrm.magento.transport.soap.label';
+        return 'oro.magento.transport.soap.label';
     }
 
     /**
@@ -620,7 +619,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getSettingsFormType()
     {
-        return 'orocrm_magento_soap_transport_setting_form_type';
+        return 'oro_magento_soap_transport_setting_form_type';
     }
 
     /**
@@ -628,7 +627,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getSettingsEntityFQCN()
     {
-        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
+        return 'Oro\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
     }
 
     /**

@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Model;
+namespace Oro\Bundle\SalesBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class B2bGuesser
 {
@@ -74,7 +73,7 @@ class B2bGuesser
      */
     protected function findCustomerByCompanyName($companyName)
     {
-        $repository = $this->manager->getRepository('OroCRMSalesBundle:B2bCustomer');
+        $repository = $this->manager->getRepository('OroSalesBundle:B2bCustomer');
 
         $queryBuilder = $repository->createQueryBuilder('c');
         $result = $queryBuilder
@@ -96,11 +95,11 @@ class B2bGuesser
      */
     protected function findCustomerByAccountName($companyName)
     {
-        $repository = $this->manager->getRepository('OroCRMSalesBundle:B2bCustomer');
+        $repository = $this->manager->getRepository('OroSalesBundle:B2bCustomer');
 
         $queryBuilder = $repository->createQueryBuilder('c');
         $result = $queryBuilder
-            ->innerJoin('OroCRMAccountBundle:Account', 'a', 'WITH', 'c.account = a')
+            ->innerJoin('OroAccountBundle:Account', 'a', 'WITH', 'c.account = a')
             ->where('a.name = :company_name')
             ->setParameter('company_name', $companyName)
             ->getQuery()
@@ -133,7 +132,7 @@ class B2bGuesser
      */
     protected function findAccountByCompanyName($companyName)
     {
-        $repository = $this->manager->getRepository('OroCRMAccountBundle:Account');
+        $repository = $this->manager->getRepository('OroAccountBundle:Account');
 
         $result = $repository->createQueryBuilder('a')
             ->where('a.name = :company_name')

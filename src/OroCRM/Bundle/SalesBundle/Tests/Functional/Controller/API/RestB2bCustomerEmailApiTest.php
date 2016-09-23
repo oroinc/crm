@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller\API;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData;
-use OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
+use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData;
+use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 
 /**
  * @outputBuffering enabled
@@ -18,7 +17,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([
-            'OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData'
+            'Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData'
         ]);
     }
 
@@ -84,7 +83,7 @@ class RestB2bCustomerEmailApiTest extends WebTestCase
 
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(
-            '{"code":500,"message":"orocrm.sales.email.error.delete.more_one"}',
+            '{"code":500,"message":"oro.sales.email.error.delete.more_one"}',
             $this->client->getResponse()->getContent()
         );
     }

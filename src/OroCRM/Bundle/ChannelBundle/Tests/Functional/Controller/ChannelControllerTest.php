@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller;
 
 use Symfony\Component\Form\Form;
 
@@ -28,15 +28,15 @@ class ChannelControllerTest extends WebTestCase
 
     public function testCreateChannel()
     {
-        $crawler      = $this->client->request('GET', $this->getUrl('orocrm_channel_create'));
+        $crawler      = $this->client->request('GET', $this->getUrl('oro_channel_create'));
         $name         = 'Simple channel';
         $form         = $crawler->selectButton('Save and Close')->form();
         $channelType  = 'custom';
 
-        $form['orocrm_channel_form[name]']        = $name;
-        $form['orocrm_channel_form[channelType]'] = $channelType;
-        $form['orocrm_channel_form[entities]']    = json_encode(
-            ['OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity']
+        $form['oro_channel_form[name]']        = $name;
+        $form['oro_channel_form[channelType]'] = $channelType;
+        $form['oro_channel_form[entities]']    = json_encode(
+            ['Oro\Bundle\ChannelBundle\Entity\CustomerIdentity']
         );
 
         $this->client->followRedirects(true);
@@ -67,7 +67,7 @@ class ChannelControllerTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_view', ['id' => $id])
+            $this->getUrl('oro_channel_view', ['id' => $id])
         );
 
         $result = $this->client->getResponse();
@@ -100,12 +100,12 @@ class ChannelControllerTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_update', ['id' => $result['id']])
+            $this->getUrl('oro_channel_update', ['id' => $result['id']])
         );
         /** @var Form $form */
         $form                              = $crawler->selectButton('Save and Close')->form();
         $name                              = 'name' . $this->generateRandomString();
-        $form['orocrm_channel_form[name]'] = $name;
+        $form['oro_channel_form[name]'] = $name;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -128,7 +128,7 @@ class ChannelControllerTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_change_status', ['id' => $channel['id']])
+            $this->getUrl('oro_channel_change_status', ['id' => $channel['id']])
         );
 
         $this->client->getResponse();
@@ -146,7 +146,7 @@ class ChannelControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_api_delete_channel', ['id' => $channel['id']])
+            $this->getUrl('oro_api_delete_channel', ['id' => $channel['id']])
         );
 
         $response = $this->client->getResponse();
@@ -172,7 +172,7 @@ class ChannelControllerTest extends WebTestCase
      */
     public function testGrid($filters)
     {
-        $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel']);
+        $this->loadFixtures(['Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel']);
 
         if (isset($filters['gridParameters']['id'])) {
             $gridId = $filters['gridParameters']['gridName'] . '[' . $filters['gridParameters']['id'] . ']';

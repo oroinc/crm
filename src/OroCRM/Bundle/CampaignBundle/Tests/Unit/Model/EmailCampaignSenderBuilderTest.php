@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Model;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder;
 
 class EmailCampaignSenderBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class EmailCampaignSenderBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->campaignSender = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender')
+            ->getMockBuilder('Oro\Bundle\CampaignBundle\Model\EmailCampaignSender')
             ->disableOriginalConstructor()
             ->getMock();
 

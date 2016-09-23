@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
 
 /**
  * @outputBuffering enabled
@@ -18,7 +17,7 @@ class CartAddressControllerTest extends WebTestCase
 
         $this->loadFixtures(
             [
-                'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
             ]
         );
     }

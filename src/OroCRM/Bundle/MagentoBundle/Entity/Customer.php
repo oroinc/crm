@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,14 +12,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
@@ -28,10 +27,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
+ * @package Oro\Bundle\OroMagentoBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
  * @ORM\Table(
- *      name="orocrm_magento_customer",
+ *      name="oro_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
  *      indexes={
  *          @ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"}),
@@ -40,8 +39,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      }
  * )
  * @Config(
- *      routeName="orocrm_magento_customer_index",
- *      routeView="orocrm_magento_customer_view",
+ *      routeName="oro_magento_customer_index",
+ *      routeView="oro_magento_customer_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user"
@@ -223,7 +222,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Website")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -238,7 +237,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -273,7 +272,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var CustomerGroup
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\CustomerGroup")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -288,7 +287,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -303,7 +302,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -318,7 +317,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Address",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\Address",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
@@ -335,7 +334,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\Cart",
      *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
      * )
      * @ConfigField(
@@ -351,7 +350,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\Order",
      *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
      * )
      * @ConfigField(
@@ -467,7 +466,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var NewsletterSubscriber[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber",
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber",
      *      mappedBy="customer", cascade={"remove"}, orphanRemoval=true)
      * @ConfigField(
      *      defaultValues={

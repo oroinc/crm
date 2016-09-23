@@ -1,7 +1,7 @@
 Add Address: Add Address
-oro.importexport.import.orocrm_contact.add_or_replace: Add and Replace
-oro.importexport.import.orocrm_contact.add: Add
-orocrm:
+oro.importexport.import.oro_contact.add_or_replace: Add and Replace
+oro.importexport.import.oro_contact.add: Add
+oro:
     dashboard:
         my_contacts_activity:
             title:       Recently accessed contacts

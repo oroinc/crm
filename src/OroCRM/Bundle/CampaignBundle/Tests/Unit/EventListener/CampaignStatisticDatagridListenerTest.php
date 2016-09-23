@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
-use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->registry = $this
@@ -106,7 +106,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($gridName))
             ->will($this->returnValue($id));
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -150,7 +150,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->registry->expects($this->once())
             ->method('getRepository')
-            ->with('OroCRMCampaignBundle:EmailCampaign')
+            ->with('OroCampaignBundle:EmailCampaign')
             ->will($this->returnValue($repository));
     }
 

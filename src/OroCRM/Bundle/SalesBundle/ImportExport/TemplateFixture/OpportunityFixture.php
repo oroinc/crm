@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -15,7 +14,7 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
+        return 'Oro\Bundle\SalesBundle\Entity\Opportunity';
     }
 
     /**
@@ -41,10 +40,10 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $contactRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $leadRepo         = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
-        $channelRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
+        $leadRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
+        $channelRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 

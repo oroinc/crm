@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Datagrid;
+namespace Oro\Bundle\MagentoBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
@@ -118,7 +117,7 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
     {
         if ($this->subscribeGranted === null) {
             $this->subscribeGranted = $this->securityFacade
-                ->isGranted('orocrm_magento_newsletter_subscriber_subscribe_customer');
+                ->isGranted('oro_magento_newsletter_subscriber_subscribe_customer');
         }
 
         return $this->subscribeGranted;
@@ -131,7 +130,7 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
     {
         if ($this->unsubscribeGranted === null) {
             $this->unsubscribeGranted = $this->securityFacade
-                ->isGranted('orocrm_magento_newsletter_subscriber_unsubscribe_customer');
+                ->isGranted('oro_magento_newsletter_subscriber_unsubscribe_customer');
         }
 
         return $this->unsubscribeGranted;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -18,7 +18,7 @@ class CustomerSearchControllerTest extends WebTestCase
         $this->markTestSkipped('Due to BAP-8365');
 
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData']);
 
         $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
     }

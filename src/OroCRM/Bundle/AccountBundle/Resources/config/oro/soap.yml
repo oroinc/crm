@@ -1,2 +1,2 @@
 classes:
-  - OroCRM\Bundle\AccountBundle\Controller\Api\Soap\AccountController
+  - Oro\Bundle\AccountBundle\Controller\Api\Soap\AccountController

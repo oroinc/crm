@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -6,25 +6,25 @@
 {% block navButtons %}
     {% if send_allowed %}
         {{ UI.button({
-            'path' : path('orocrm_email_campaign_send', { id: entity.id }),
-            'title': 'orocrm.campaign.emailcampaign.send'|trans,
-            'label': 'orocrm.campaign.emailcampaign.send'|trans,
+            'path' : path('oro_email_campaign_send', { id: entity.id }),
+            'title': 'oro.campaign.emailcampaign.send'|trans,
+            'label': 'oro.campaign.emailcampaign.send'|trans,
             'iCss': 'icon-envelope'
         })  }}
     {% endif %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
-            'path' : path('orocrm_email_campaign_update', { id: entity.id }),
-            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+            'path' : path('oro_email_campaign_update', { id: entity.id }),
+            'entity_label': 'oro.campaign.emailcampaign.entity_label'|trans
         })  }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_emailcampaign', {'id': entity.id}),
-            'dataRedirect': path('orocrm_email_campaign_index'),
+            'dataRedirect': path('oro_email_campaign_index'),
             'aCss': 'no-hash remove-button',
             'dataId': entity.id,
-            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+            'entity_label': 'oro.campaign.emailcampaign.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -32,8 +32,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
-        'indexPath':   path('orocrm_email_campaign_index'),
-        'indexLabel':  'orocrm.campaign.emailcampaign.entity_plural_label'|trans,
+        'indexPath':   path('oro_email_campaign_index'),
+        'indexLabel':  'oro.campaign.emailcampaign.entity_plural_label'|trans,
         'entityTitle': entity.name|default('N/A'),
     } %}
     {{ parent() }}
@@ -43,21 +43,21 @@
     {{ parent() }}
     <div class="status-enabled pull-left">
         {% if entity.sent %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ 'orocrm.campaign.emailcampaign.status.sent'|trans }}</div>
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ 'oro.campaign.emailcampaign.status.sent'|trans }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ 'orocrm.campaign.emailcampaign.status.not_sent'|trans }}</div>
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ 'oro.campaign.emailcampaign.status.not_sent'|trans }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
 
 {% block content_data %}
     {% set campaignInformationWidget %}
-        {% include 'OroCRMCampaignBundle:EmailCampaign:widget/view.html.twig' %}
+        {% include 'OroCampaignBundle:EmailCampaign:widget/view.html.twig' %}
     {% endset %}
 
     {%- set emailCampaignStatisticsData -%}
         {% if show_stats %}
-            {% include 'OroCRMCampaignBundle:EmailCampaign:widget/stats.html.twig' %}
+            {% include 'OroCampaignBundle:EmailCampaign:widget/stats.html.twig' %}
         {% endif %}
     {%- endset -%}
 
@@ -68,7 +68,7 @@
     {%- set listData -%}
         {% if entity.marketingList is not empty %}
             {{ dataGrid.renderGrid(
-                constant('OroCRM\\Bundle\\MarketingListBundle\\Datagrid\\ConfigurationProvider::GRID_PREFIX') ~ entity.marketingList.id,
+                constant('Oro\\Bundle\\MarketingListBundle\\Datagrid\\ConfigurationProvider::GRID_PREFIX') ~ entity.marketingList.id,
                 {
                     'emailCampaign': entity.id
                 }
@@ -80,13 +80,13 @@
     {% if emailCampaignStatisticsData is not empty %}
         {% set generalSectionSubblocks = generalSectionSubblocks|merge([{
             'data': [emailCampaignStatisticsData],
-            'title': 'orocrm.campaign.emailcampaignstatistics.block.label'|trans
+            'title': 'oro.campaign.emailcampaignstatistics.block.label'|trans
         }]) %}
     {% endif %}
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
+            'title': 'oro.campaign.emailcampaign.block.general'|trans,
             'class': 'active',
             'subblocks': generalSectionSubblocks
         }
@@ -94,14 +94,14 @@
     {% if emailCampaignStatusData is not empty %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'orocrm.campaign.emailcampaign.block.status'|trans,
+                'title': 'oro.campaign.emailcampaign.block.status'|trans,
                 'subblocks': [{'data' : [emailCampaignStatusData]}]
             }
         ])
         %}
     {% endif %}
     {% set dataBlocks = dataBlocks|merge([{
-        'title': 'orocrm.campaign.emailcampaign.block.recipients'|trans,
+        'title': 'oro.campaign.emailcampaign.block.recipients'|trans,
         'subblocks': [
             {
                 'spanClass': 'empty',

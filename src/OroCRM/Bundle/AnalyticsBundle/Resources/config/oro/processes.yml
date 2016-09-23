@@ -3,7 +3,7 @@ processes:
         analytics_channel_calculate_rfm:
             label:   'Calculate RFM analytics for Channel'
             enabled: true
-            entity:  OroCRM\Bundle\ChannelBundle\Entity\Channel
+            entity:  Oro\Bundle\ChannelBundle\Entity\Channel
             order:   30
             preconditions:
                 '@and':
@@ -13,7 +13,7 @@ processes:
             actions_configuration:
                 - '@assign_constant_value':
                     attribute: $.commandName
-                    value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
+                    value: Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
                 - '@tree':
                     actions:
                         - '@format_string':

@@ -1,6 +1,6 @@
 datagrids:
     sales-opportunity-grid:
-        extended_entity_name: %orocrm_sales.opportunity.class%
+        extended_entity_name: %oro_sales.opportunity.class%
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -8,7 +8,7 @@ datagrids:
             entityHint: opportunities
             export: true
             entity_pagination: true
-        acl_resource: orocrm_sales_opportunity_view
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -32,7 +32,7 @@ datagrids:
                     - customer.id as customerId
                     - customer.name as customerName
                 from:
-                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                    - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
@@ -46,9 +46,9 @@ datagrids:
             enable: true
         columns:
             channelName:
-                label:         orocrm.sales.opportunity.data_channel.label
+                label:         oro.sales.opportunity.data_channel.label
             name:
-                label:         orocrm.sales.opportunity.name.label
+                label:         oro.sales.opportunity.name.label
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -57,7 +57,7 @@ datagrids:
                 frontend_type: datetime
                 renderable: false
             contactName:
-                label:         orocrm.sales.opportunity.contact.label
+                label:         oro.sales.opportunity.contact.label
                 frontend_type: relation
                 inline_editing:
                     enable: true
@@ -68,32 +68,32 @@ datagrids:
                         search_handler_name: contacts
                         label_field_name: fullName
             customerName:
-                label: orocrm.sales.opportunity.customer.label
+                label: oro.sales.opportunity.customer.label
                 renderable: false
             closeRevenue:
-                label:         orocrm.sales.opportunity.close_revenue.label
+                label:         oro.sales.opportunity.close_revenue.label
                 frontend_type: currency
                 renderable: false
             closeReasonLabel:
-                label:         orocrm.sales.opportunity.close_reason.label
+                label:         oro.sales.opportunity.close_reason.label
                 renderable: false
             closeDate:
-                label:         orocrm.sales.opportunity.close_date.label
+                label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
             budgetAmount:
-                label:         orocrm.sales.opportunity.budget_amount.label
+                label:         oro.sales.opportunity.budget_amount.label
                 frontend_type: currency
             probability:
-                label:         orocrm.sales.opportunity.probability.label
+                label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
                 frontend_type: select
-                label:         orocrm.sales.opportunity.status.label
+                label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
-                label:         orocrm.contact.email.label
+                label:         oro.contact.email.label
             ownerName:
-                label:         orocrm.sales.opportunity.owner.label
+                label:         oro.sales.opportunity.owner.label
                 inline_editing:
                     enable: true
                     editor:
@@ -102,7 +102,7 @@ datagrids:
                             value_field_name: owner
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
+                        permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Opportunity
         fields_acl:
             columns:
                 channelName:
@@ -139,11 +139,11 @@ datagrids:
             contact: ~
             view_link:
                 type:       url
-                route:      orocrm_sales_opportunity_view
+                route:      oro_sales_opportunity_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_opportunity_update
+                route:      oro_sales_opportunity_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -189,7 +189,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 name:
@@ -219,7 +219,7 @@ datagrids:
                     enabled: false
                     options:
                         field_options:
-                            class: OroCRMSalesBundle:OpportunityCloseReason
+                            class: OroSalesBundle:OpportunityCloseReason
                             property: label
                             translatable_options: false
                 closeDate:
@@ -253,24 +253,24 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_opportunity_view
+                acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_opportunity_update
+                acl_resource:  oro_sales_opportunity_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_opportunity_delete
+                acl_resource:  oro_sales_opportunity_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
-        views_list: "@orocrm_sales.opportunity.datagrid_view_list"
+        views_list: "@oro_sales.opportunity.datagrid_view_list"
         appearances:
             board:
                 opportunity-by-status:
@@ -279,13 +279,13 @@ datagrids:
                         property: status
                         order_by:
                             priority: ASC
-                    card_view: orocrmsales/js/app/views/board/opportunity-card-view
+                    card_view: orosales/js/app/views/board/opportunity-card-view
                     default_transition:
                         class: orodatagrid/js/app/transitions/update-main-property-transition
-                    acl_resource: orocrm_sales_opportunity_update
+                    acl_resource: oro_sales_opportunity_update
 
     sales-lead-grid:
-        extended_entity_name: %orocrm_sales.lead.entity.class%
+        extended_entity_name: %oro_sales.lead.entity.class%
         mixins:
             - activity-contact-data-hidden-mixin
             - activity-contact-days-since-last-contact-hidden-mixin
@@ -293,7 +293,7 @@ datagrids:
             entityHint: leads
             export: true
             entity_pagination: true
-        acl_resource: orocrm_sales_lead_view
+        acl_resource: oro_sales_lead_view
         source:
             type: orm
             query:
@@ -334,7 +334,7 @@ datagrids:
                     - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - own.id as owner
                 from:
-                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                    - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -354,17 +354,17 @@ datagrids:
             enable: true
         columns:
             channelName:
-                label:         orocrm.sales.lead.data_channel.label
+                label:         oro.sales.lead.data_channel.label
             name:
-                label:         orocrm.sales.lead.name.label
+                label:         oro.sales.lead.name.label
             status:
                 frontend_type: select
-                label:         orocrm.sales.lead.status.label
+                label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
-                label:         orocrm.sales.lead.first_name.label
+                label:         oro.sales.lead.first_name.label
             lastName:
-                label:         orocrm.sales.lead.last_name.label
+                label:         oro.sales.lead.last_name.label
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -373,35 +373,35 @@ datagrids:
                 frontend_type: datetime
                 renderable: false
             jobTitle:
-                label:         orocrm.sales.lead.job_title.label
+                label:         oro.sales.lead.job_title.label
                 renderable: false
             companyName:
-                label:         orocrm.sales.lead.company_name.label
+                label:         oro.sales.lead.company_name.label
                 renderable: false
             industry:
-                label:         orocrm.sales.lead.industry.label
+                label:         oro.sales.lead.industry.label
                 renderable: false
             website:
-                label:         orocrm.sales.lead.website.label
+                label:         oro.sales.lead.website.label
                 renderable: false
             numberOfEmployees:
-                label:         orocrm.sales.lead.datagrid.number_of_employees
+                label:         oro.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
                 renderable: false
             sourceName:
-                label:         orocrm.sales.lead.source.label
+                label:         oro.sales.lead.source.label
                 renderable: false
             customerName:
-                label: orocrm.sales.lead.customer.label
+                label: oro.sales.lead.customer.label
                 renderable: false
             email:
-                label:         orocrm.sales.lead.email.label
+                label:         oro.sales.lead.email.label
                 inline_editing:
                     enable: true
                     editor:
                         view: oroform/js/app/views/editor/text-editor-view
                     save_api_accessor:
-                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        class: orosales/js/datagrid/inline-editing/save-api-accessor
                         field_name: email
                         route_create_entity:
                             name: oro_api_post_leademail
@@ -410,18 +410,18 @@ datagrids:
                             name: oro_api_delete_leademail
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_SalesBundle_Entity_LeadEmail
+                            className: Oro_Bundle_SalesBundle_Entity_LeadEmail
                         route_parameters_rename_map:
                             emailId: id
             phone:
-                label:         orocrm.sales.lead.phone_number.label
+                label:         oro.sales.lead.phone_number.label
                 frontend_type: phone
                 inline_editing:
                     enable: true
                     editor:
                         view: oroform/js/app/views/editor/text-editor-view
                     save_api_accessor:
-                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        class: orosales/js/datagrid/inline-editing/save-api-accessor
                         field_name: phone
                         route_create_entity:
                             name: oro_api_post_lead_phone
@@ -430,23 +430,23 @@ datagrids:
                             name: oro_api_delete_lead_phone
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_SalesBundle_Entity_LeadPhone
+                            className: Oro_Bundle_SalesBundle_Entity_LeadPhone
                         route_parameters_rename_map:
                             phoneId: id
             countryName:
-                label:         orocrm.sales.lead.datagrid.country
+                label:         oro.sales.lead.datagrid.country
             regionLabel:
-                label:         orocrm.sales.lead.datagrid.region
+                label:         oro.sales.lead.datagrid.region
             addressPostalCode:
-                label:         orocrm.sales.lead.datagrid.postal_code
+                label:         oro.sales.lead.datagrid.postal_code
             addressCity:
-                label:        orocrm.sales.lead.datagrid.city
+                label:        oro.sales.lead.datagrid.city
                 renderable:    false
             addressStreet:
-                label:         orocrm.sales.lead.datagrid.street
+                label:         oro.sales.lead.datagrid.street
                 renderable:    false
             ownerName:
-                label:         orocrm.sales.lead.owner.label
+                label:         oro.sales.lead.owner.label
                 inline_editing:
                     enable: true
                     editor:
@@ -455,16 +455,16 @@ datagrids:
                             value_field_name: owner
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Lead
+                        permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Lead
             contactName:
-                label:         orocrm.sales.lead.contact.label
+                label:         oro.sales.lead.contact.label
                 renderable: false
             twitter:
-                label:         orocrm.sales.lead.twitter.label
+                label:         oro.sales.lead.twitter.label
                 frontend_type: string
                 renderable:    false
             linkedIn:
-                label:         orocrm.sales.lead.linked_in.label
+                label:         oro.sales.lead.linked_in.label
                 frontend_type: string
                 renderable:    false
         properties:
@@ -474,11 +474,11 @@ datagrids:
             phoneId: ~
             view_link:
                 type:       url
-                route:      orocrm_sales_lead_view
+                route:      oro_sales_lead_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_lead_update
+                route:      oro_sales_lead_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -541,20 +541,20 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_lead_view
+                acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_lead_update
+                acl_resource:  oro_sales_lead_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_lead_delete
+                acl_resource:  oro_sales_lead_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -568,7 +568,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 status:
@@ -633,7 +633,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -675,14 +675,14 @@ datagrids:
                     type: string
                     data_name: l.linkedIn
                     enabled: false
-        views_list: "@orocrm_sales.lead.datagrid_view_list"
+        views_list: "@oro_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
-        extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
+        extended_entity_name: %oro_sales.salesfunnel.entity.class%
         options:
             entityHint: sales process
             entity_pagination: true
-        acl_resource: orocrm_sales_salesfunnel_view
+        acl_resource: oro_sales_salesfunnel_view
         source:
             type: orm
             query:
@@ -697,7 +697,7 @@ datagrids:
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
-                    - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
+                    - { table: %oro_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
                     left:
                         - { join: salesFunnel.lead, alias: lead }
@@ -706,35 +706,35 @@ datagrids:
                         - { join: salesFunnel.owner, alias: owner }
         columns:
             id:
-                label: orocrm.sales.salesfunnel.id.label
+                label: oro.sales.salesfunnel.id.label
             channelName:
-                label: orocrm.sales.salesfunnel.data_channel.label
+                label: oro.sales.salesfunnel.data_channel.label
             startDate:
-                label: orocrm.sales.salesfunnel.start_date.label
+                label: oro.sales.salesfunnel.start_date.label
                 frontend_type: date
             leadName:
-                label: orocrm.sales.salesfunnel.lead.label
+                label: oro.sales.salesfunnel.lead.label
             opportunityName:
-                label: orocrm.sales.salesfunnel.opportunity.label
+                label: oro.sales.salesfunnel.opportunity.label
             opportunityBudget:
-                label: orocrm.sales.opportunity.budget_amount.label
+                label: oro.sales.opportunity.budget_amount.label
                 frontend_type: currency
             opportunityRevenue:
-                label: orocrm.sales.opportunity.close_revenue.label
+                label: oro.sales.opportunity.close_revenue.label
                 frontend_type: currency
             opportunityProbability:
-                label: orocrm.sales.opportunity.probability.label
+                label: oro.sales.opportunity.probability.label
                 frontend_type: percent
             ownerName:
-                label: orocrm.sales.salesfunnel.owner.label
+                label: oro.sales.salesfunnel.owner.label
         properties:
             view_link:
                 type:       url
-                route:      orocrm_sales_salesfunnel_view
+                route:      oro_sales_salesfunnel_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_salesfunnel_update
+                route:      oro_sales_salesfunnel_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -765,20 +765,20 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_salesfunnel_view
+                acl_resource:  oro_sales_salesfunnel_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_salesfunnel_update
+                acl_resource:  oro_sales_salesfunnel_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_salesfunnel_delete
+                acl_resource:  oro_sales_salesfunnel_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -792,7 +792,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 startDate:
@@ -858,10 +858,10 @@ datagrids:
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
-        extended_entity_name: %orocrm_sales.lead.entity.class%
+        extended_entity_name: %oro_sales.lead.entity.class%
         options:
             entityHint: leads
-        acl_resource: orocrm_sales_lead_view
+        acl_resource: oro_sales_lead_view
         source:
             type: orm
             query:
@@ -882,7 +882,7 @@ datagrids:
                             END, ''
                         ) as regionLabel
                 from:
-                    - { table: %orocrm_sales.lead.entity.class%, alias: lead }
+                    - { table: %oro_sales.lead.entity.class%, alias: lead }
                 join:
                     left:
                         - { join: lead.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
@@ -895,25 +895,25 @@ datagrids:
                         - lead.status NOT IN('qualified', 'canceled')
         columns:
             id:
-                label: orocrm.sales.lead.id.label
+                label: oro.sales.lead.id.label
                 renderable: false
             name:
-                label: orocrm.sales.lead.name.label
+                label: oro.sales.lead.name.label
             firstName:
-                label: orocrm.sales.lead.first_name.label
+                label: oro.sales.lead.first_name.label
             lastName:
-                label: orocrm.sales.lead.last_name.label
+                label: oro.sales.lead.last_name.label
             email:
-                label: orocrm.sales.lead.email.label
+                label: oro.sales.lead.email.label
             phone:
-                label:         orocrm.sales.lead.phone_number.label
+                label:         oro.sales.lead.phone_number.label
                 frontend_type: phone
             countryName:
-                label: orocrm.sales.lead.datagrid.country
+                label: oro.sales.lead.datagrid.country
             regionLabel:
-                label: orocrm.sales.lead.datagrid.region
+                label: oro.sales.lead.datagrid.region
             addressPostalCode:
-                label: orocrm.sales.lead.datagrid.postal_code
+                label: oro.sales.lead.datagrid.postal_code
         sorters:
             columns:
                 name:
@@ -965,7 +965,7 @@ datagrids:
                          field_options:
                              class: OroAddressBundle:Country
                              property: name
-                             query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                             query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
                  regionLabel:
                      type: string
@@ -978,10 +978,10 @@ datagrids:
 
     # opportunities with "In progress" status for Sales Funnel flow
     sales-funnel-opportunity-grid:
-        extended_entity_name: %orocrm_sales.opportunity.class%
+        extended_entity_name: %oro_sales.opportunity.class%
         options:
             entityHint: opportunities
-        acl_resource: orocrm_sales_opportunity_view
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -992,7 +992,7 @@ datagrids:
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - email.email as primaryEmail
                 from:
-                    - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
+                    - { table: %oro_sales.opportunity.class%, alias: opportunity }
                 join:
                     left:
                         - { join: opportunity.contact , alias: contact }
@@ -1002,17 +1002,17 @@ datagrids:
                         - opportunity.status NOT IN('won', 'lost')
         columns:
             id:
-                label: orocrm.sales.opportunity.id.label
+                label: oro.sales.opportunity.id.label
                 renderable: false
             name:
-                label: orocrm.sales.opportunity.name.label
+                label: oro.sales.opportunity.name.label
             contactName:
-                label: orocrm.sales.opportunity.contact.label
+                label: oro.sales.opportunity.contact.label
             probability:
-                label: orocrm.sales.opportunity.probability.label
+                label: oro.sales.opportunity.probability.label
                 frontend_type: percent
             primaryEmail:
-                label: orocrm.contact.email.label
+                label: oro.contact.email.label
         fields_acl:
             columns:
                 name:
@@ -1055,8 +1055,8 @@ datagrids:
                     data_name: email.email
 
     base-sales-b2bcustomers-grid:
-        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
-        acl_resource: orocrm_sales_b2bcustomer_view
+        extended_entity_name: %oro_sales.b2bcustomer.entity.class%
+        acl_resource: oro_sales_b2bcustomer_view
         source:
             type: orm
             query:
@@ -1072,7 +1072,7 @@ datagrids:
                     - c.updatedAt
                     - channel.name as channelName
                 from:
-                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                    - { table: %oro_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
@@ -1082,11 +1082,11 @@ datagrids:
             enable: true
         columns:
             channelName:
-                label:          orocrm.sales.b2bcustomer.data_channel.label
+                label:          oro.sales.b2bcustomer.data_channel.label
             name:
-                label:          orocrm.sales.b2bcustomer.name.label
+                label:          oro.sales.b2bcustomer.name.label
             lifetime:
-                label:          orocrm.sales.b2bcustomer.lifetime.label
+                label:          oro.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
             createdAt:
                 label:          oro.ui.created_at
@@ -1095,14 +1095,14 @@ datagrids:
                 label:          oro.ui.updated_at
                 frontend_type:  datetime
             phone:
-                label:         orocrm.sales.lead.phone_number.label
+                label:         oro.sales.lead.phone_number.label
                 frontend_type: phone
                 inline_editing:
                     enable: true
                     editor:
                         view: oroform/js/app/views/editor/text-editor-view
                     save_api_accessor:
-                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        class: orosales/js/datagrid/inline-editing/save-api-accessor
                         field_name: phone
                         route_create_entity:
                             name: oro_api_post_b2bcustomer_phone
@@ -1111,17 +1111,17 @@ datagrids:
                             name: oro_api_delete_b2bcustomer_phone
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerPhone
+                            className: Oro_Bundle_SalesBundle_Entity_B2bCustomerPhone
                         route_parameters_rename_map:
                             phoneId: id
             email:
-                label:         orocrm.sales.b2bcustomer.email.label
+                label:         oro.sales.b2bcustomer.email.label
                 inline_editing:
                     enable: true
                     validation_rules:
                         Email: true
                     save_api_accessor:
-                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        class: orosales/js/datagrid/inline-editing/save-api-accessor
                         field_name: email
                         route_create_entity:
                             name: oro_api_post_b2bcustomer_email
@@ -1130,7 +1130,7 @@ datagrids:
                             name: oro_api_delete_b2bcustomer_email
                             http_method: DELETE
                         default_route_parameters:
-                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerEmail
+                            className: Oro_Bundle_SalesBundle_Entity_B2bCustomerEmail
                         route_parameters_rename_map:
                             emailId: id
         sorters:
@@ -1151,7 +1151,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                  name:
@@ -1212,43 +1212,43 @@ datagrids:
                         - { join: sa.region, alias: saRegion }
         columns:
             ownerName:
-                label: orocrm.sales.b2bcustomer.owner.label
+                label: oro.sales.b2bcustomer.owner.label
                 renderable: false
             accountName:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
+                label: oro.sales.b2bcustomer.datagrid.columns.account_name.label
                 renderable: false
             contactName:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.contact_name.label
+                label: oro.sales.b2bcustomer.datagrid.columns.contact_name.label
                 renderable: false
             baCountryName:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_country.label
+                label: oro.sales.b2bcustomer.datagrid.columns.billing_address_country.label
                 renderable: false
             baRegionLabel:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_region.label
+                label: oro.sales.b2bcustomer.datagrid.columns.billing_address_region.label
                 renderable: false
             baCity:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_city.label
+                label: oro.sales.b2bcustomer.datagrid.columns.billing_address_city.label
                 renderable: false
             baStreet:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_street.label
+                label: oro.sales.b2bcustomer.datagrid.columns.billing_address_street.label
                 renderable: false
             baPostalCode:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_postal_code.label
+                label: oro.sales.b2bcustomer.datagrid.columns.billing_address_postal_code.label
                 renderable: false
             saCountryName:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_country.label
+                label: oro.sales.b2bcustomer.datagrid.columns.shipping_address_country.label
                 renderable: false
             saRegionLabel:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_region.label
+                label: oro.sales.b2bcustomer.datagrid.columns.shipping_address_region.label
                 renderable: false
             saCity:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_city.label
+                label: oro.sales.b2bcustomer.datagrid.columns.shipping_address_city.label
                 renderable: false
             saStreet:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_street.label
+                label: oro.sales.b2bcustomer.datagrid.columns.shipping_address_street.label
                 renderable: false
             saPostalCode:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
+                label: oro.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
                 renderable: false
         sorters:
             columns:
@@ -1291,7 +1291,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 baRegionLabel:
                     type: string
@@ -1318,7 +1318,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 saRegionLabel:
                     type: string
@@ -1340,11 +1340,11 @@ datagrids:
             id: ~
             view_link:
                 type:   url
-                route:  orocrm_sales_b2bcustomer_view
+                route:  oro_sales_b2bcustomer_view
                 params: [ id ]
             update_link:
                 type:   url
-                route:  orocrm_sales_b2bcustomer_update
+                route:  oro_sales_b2bcustomer_update
                 params: [ id ]
             delete_link:
                 type:   url
@@ -1353,20 +1353,20 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_b2bcustomer_view
+                acl_resource:  oro_sales_b2bcustomer_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_b2bcustomer_update
+                acl_resource:  oro_sales_b2bcustomer_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_b2bcustomer_delete
+                acl_resource:  oro_sales_b2bcustomer_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -1382,7 +1382,7 @@ datagrids:
                         - { join: c.account, alias: account }
         columns:
             accountName:
-                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
+                label: oro.sales.b2bcustomer.datagrid.columns.account_name.label
         sorters:
             columns:
                 accountName: { data_name: accountName }
@@ -1393,8 +1393,8 @@ datagrids:
                     data_name: accountName
 
     base-sales-b2bcustomer-leads-grid:
-        extended_entity_name: %orocrm_sales.lead.entity.class%
-        acl_resource: orocrm_sales_lead_view
+        extended_entity_name: %oro_sales.lead.entity.class%
+        acl_resource: oro_sales_lead_view
         source:
             type: orm
             query:
@@ -1418,7 +1418,7 @@ datagrids:
                         ) as regionLabel
 
                 from:
-                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                    - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -1431,11 +1431,11 @@ datagrids:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_sales_lead_view
+                route:      oro_sales_lead_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_lead_update
+                route:      oro_sales_lead_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -1465,20 +1465,20 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_lead_view
+                acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_lead_update
+                acl_resource:  oro_sales_lead_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_lead_delete
+                acl_resource:  oro_sales_lead_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -1494,28 +1494,28 @@ datagrids:
                 - customerId
         columns:
             name:
-                label:         orocrm.sales.lead.name.label
+                label:         oro.sales.lead.name.label
             status:
                 frontend_type: select
-                label:         orocrm.sales.lead.status.label
+                label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
-                label:         orocrm.sales.lead.first_name.label
+                label:         oro.sales.lead.first_name.label
             lastName:
-                label:         orocrm.sales.lead.last_name.label
+                label:         oro.sales.lead.last_name.label
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
             email:
-                label:         orocrm.sales.lead.email.label
+                label:         oro.sales.lead.email.label
             phone:
-                label:         orocrm.sales.lead.phone_number.label
+                label:         oro.sales.lead.phone_number.label
             countryName:
-                label:         orocrm.sales.lead.datagrid.country
+                label:         oro.sales.lead.datagrid.country
             regionLabel:
-                label:         orocrm.sales.lead.datagrid.region
+                label:         oro.sales.lead.datagrid.region
             addressPostalCode:
-                label:         orocrm.sales.lead.datagrid.postal_code
+                label:         oro.sales.lead.datagrid.postal_code
         sorters:
             columns:
                 name:
@@ -1551,7 +1551,7 @@ datagrids:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
                     type: string
@@ -1563,8 +1563,8 @@ datagrids:
                     enabled: false
 
     base-sales-b2bcustomer-opportunities-grid:
-        extended_entity_name: %orocrm_sales.opportunity.class%
-        acl_resource: orocrm_sales_opportunity_view
+        extended_entity_name: %oro_sales.opportunity.class%
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -1579,7 +1579,7 @@ datagrids:
                     - s.id as status
                     - email.email as primaryEmail
                 from:
-                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                    - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
@@ -1629,11 +1629,11 @@ datagrids:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_sales_opportunity_view
+                route:      oro_sales_opportunity_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_sales_opportunity_update
+                route:      oro_sales_opportunity_update
                 params:     [ id ]
             delete_link:
                 type:       url
@@ -1642,20 +1642,20 @@ datagrids:
         actions:
             view:
                 type:          navigate
-                acl_resource:  orocrm_sales_opportunity_view
+                acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
-                acl_resource:  orocrm_sales_opportunity_update
+                acl_resource:  oro_sales_opportunity_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
-                acl_resource:  orocrm_sales_opportunity_delete
+                acl_resource:  oro_sales_opportunity_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -1671,25 +1671,25 @@ datagrids:
                 - customerId
         columns:
             name:
-                label:         orocrm.sales.opportunity.name.label
+                label:         oro.sales.opportunity.name.label
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
             closeDate:
-                label:         orocrm.sales.opportunity.close_date.label
+                label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
             budgetAmount:
-                label:         orocrm.sales.opportunity.budget_amount.label
+                label:         oro.sales.opportunity.budget_amount.label
                 frontend_type: currency
             probability:
-                label:         orocrm.sales.opportunity.probability.label
+                label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
                 frontend_type: select
-                label:         orocrm.sales.opportunity.status.label
+                label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
-                label:         orocrm.contact.email.label
+                label:         oro.contact.email.label
         sorters:
             columns:
                 name:
@@ -1710,7 +1710,7 @@ datagrids:
                 createdAt: DESC
 
     sales-lead-for-context-grid:
-        extended_entity_name: %orocrm_sales.lead.entity.class%
+        extended_entity_name: %oro_sales.lead.entity.class%
         options:
             entityHint: leads
             entity_pagination: true
@@ -1718,7 +1718,7 @@ datagrids:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
-        acl_resource: orocrm_sales_lead_view
+        acl_resource: oro_sales_lead_view
         source:
             type: orm
             query:
@@ -1731,7 +1731,7 @@ datagrids:
                     - s.id as status
                     - channel.name as channelName
                 from:
-                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                    - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
@@ -1741,21 +1741,21 @@ datagrids:
                 - HINT_TRANSLATABLE
         columns:
             id:
-                label:         orocrm.sales.lead.id.label
+                label:         oro.sales.lead.id.label
             channelName:
-                label:         orocrm.sales.lead.data_channel.label
+                label:         oro.sales.lead.data_channel.label
             name:
-                label:         orocrm.sales.lead.name.label
+                label:         oro.sales.lead.name.label
             status:
                 frontend_type: select
-                label:         orocrm.sales.lead.status.label
+                label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
-                label:         orocrm.sales.lead.first_name.label
+                label:         oro.sales.lead.first_name.label
             lastName:
-                label:         orocrm.sales.lead.last_name.label
+                label:         oro.sales.lead.last_name.label
             email:
-                label:         orocrm.sales.lead.email.label
+                label:         oro.sales.lead.email.label
         sorters:
             columns:
                 channelName:
@@ -1779,7 +1779,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                  name:
@@ -1800,7 +1800,7 @@ datagrids:
                     data_name: email.email
 
     sales-opportunity-for-context-grid:
-        extended_entity_name: %orocrm_sales.opportunity.class%
+        extended_entity_name: %oro_sales.opportunity.class%
         options:
             entityHint: opportunities
             entity_pagination: true
@@ -1808,7 +1808,7 @@ datagrids:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
-        acl_resource: orocrm_sales_opportunity_view
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -1821,7 +1821,7 @@ datagrids:
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
-                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                    - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact , alias: contact }
@@ -1831,19 +1831,19 @@ datagrids:
                         - { join: o.owner, alias: owner }
         columns:
             id:
-                label:         orocrm.sales.opportunity.id.label
+                label:         oro.sales.opportunity.id.label
             channelName:
-                label:         orocrm.sales.opportunity.data_channel.label
+                label:         oro.sales.opportunity.data_channel.label
             name:
-                label:         orocrm.sales.opportunity.name.label
+                label:         oro.sales.opportunity.name.label
             status:
                 frontend_type: select
-                label:         orocrm.sales.opportunity.status.label
+                label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
-                label:         orocrm.contact.email.label
+                label:         oro.contact.email.label
             ownerName:
-                label:         orocrm.sales.opportunity.owner.label
+                label:         oro.sales.opportunity.owner.label
         fields_acl:
             columns:
                 channelName:
@@ -1877,7 +1877,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 name:
@@ -1902,8 +1902,8 @@ datagrids:
                             translatable_options: false
 
     orocrm-sales-b2bcustomers-for-context-grid:
-        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
-        acl_resource: orocrm_sales_b2bcustomer_view
+        extended_entity_name: %oro_sales.b2bcustomer.entity.class%
+        acl_resource: oro_sales_b2bcustomer_view
         source:
             type: orm
             query:
@@ -1913,19 +1913,19 @@ datagrids:
                     - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
                     - channel.name as channelName
                 from:
-                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                    - { table: %oro_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
         columns:
             id:
-                label:          orocrm.sales.b2bcustomer.id.label
+                label:          oro.sales.b2bcustomer.id.label
             channelName:
-                label:          orocrm.sales.b2bcustomer.data_channel.label
+                label:          oro.sales.b2bcustomer.data_channel.label
             name:
-                label:          orocrm.sales.b2bcustomer.name.label
+                label:          oro.sales.b2bcustomer.name.label
             lifetime:
-                label:          orocrm.sales.b2bcustomer.lifetime.label
+                label:          oro.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
         sorters:
             columns:
@@ -1941,7 +1941,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                  name:
@@ -1958,8 +1958,8 @@ datagrids:
             routerEnabled: false
 
     dashboard-my-sales-opportunity-grid:
-        extended_entity_name: %orocrm_sales.opportunity.class%
-        acl_resource: orocrm_sales_opportunity_view
+        extended_entity_name: %oro_sales.opportunity.class%
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -1971,29 +1971,29 @@ datagrids:
                     - o.probability
                     - o.closeDate
                 from:
-                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                    - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.status, alias: s }
         columns:
             name:
-                label: orocrm.sales.opportunity.name.label
+                label: oro.sales.opportunity.name.label
                 frontend_type: html
                 type: link
-                route: orocrm_sales_opportunity_view
+                route: oro_sales_opportunity_view
                 params: {id: id}
             budgetAmount:
-                label:         orocrm.sales.opportunity.budget_amount.label
+                label:         oro.sales.opportunity.budget_amount.label
                 frontend_type: currency
             status:
                 frontend_type: select
-                label:         orocrm.sales.opportunity.status.label
+                label:         oro.sales.opportunity.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             probability:
-                label:         orocrm.sales.opportunity.probability.label
+                label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             closeDate:
-                label:         orocrm.sales.opportunity.close_date.label
+                label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
         fields_acl:
             columns:
@@ -2016,10 +2016,10 @@ datagrids:
                     default_per_page: 10
 
     dashboard-my-sales-lead-grid:
-        extended_entity_name: %orocrm_sales.lead.entity.class%
+        extended_entity_name: %oro_sales.lead.entity.class%
         mixins:
             - activity-contact-last-contacted-date-data-mixin
-        acl_resource: orocrm_sales_opportunity_view
+        acl_resource: oro_sales_opportunity_view
         source:
             type: orm
             query:
@@ -2028,20 +2028,20 @@ datagrids:
                     - l.name
                     - s.id as status
                 from:
-                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                    - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
         columns:
             name:
-                label: orocrm.sales.lead.name.label
+                label: oro.sales.lead.name.label
                 frontend_type: html
                 type: link
-                route: orocrm_sales_lead_view
+                route: oro_sales_lead_view
                 params: {id: id}
             status:
                 frontend_type: select
-                label:         orocrm.sales.lead.status.label
+                label:         oro.sales.lead.status.label
                 choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
         options:
             entityHint: opportunities

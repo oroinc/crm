@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
  * Class Contacts
  *
- * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\ContactBundle\Tests\Selenium\Pages
  * @method Contacts openContacts(string $bundlepath)
  * @method Contact add()
  * @method Contact open(array $filter)

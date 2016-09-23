@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Validator\Constraints;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Validator\Constraints;
 
-use OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
+use Oro\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint;
 
 class ContactInformationColumnConstraintTest extends \PHPUnit_Framework_TestCase
 {

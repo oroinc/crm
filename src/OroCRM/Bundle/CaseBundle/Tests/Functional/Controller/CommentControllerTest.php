@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
 
 /**
  * @outputBuffering enabled
@@ -26,13 +26,13 @@ class CommentControllerTest extends WebTestCase
     {
         $this->initClient([], $this->generateBasicAuthHeader());
 
-        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
     }
 
     protected function postFixtureLoad()
     {
         $case = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMCaseBundle:CaseEntity')
+            ->getRepository('OroCaseBundle:CaseEntity')
             ->findOneBySubject('Case #1');
 
         $this->assertNotNull($case);
@@ -44,7 +44,7 @@ class CommentControllerTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_comment_create', ['caseId' => self::$caseId, '_widgetContainer' => 'dialog']),
+            $this->getUrl('oro_case_comment_create', ['caseId' => self::$caseId, '_widgetContainer' => 'dialog']),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -53,7 +53,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
 
         $form = $crawler->selectButton('Save')->form();
-        $form['orocrm_case_comment_form[message]'] = 'New comment';
+        $form['oro_case_comment_form[message]'] = 'New comment';
 
         /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(
@@ -69,7 +69,7 @@ class CommentControllerTest extends WebTestCase
 
         /** @var CaseComment $comment */
         $comment = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMCaseBundle:CaseComment')
+            ->getRepository('OroCaseBundle:CaseComment')
             ->findOneByMessage('New comment');
 
         $this->assertNotNull($comment);
@@ -84,7 +84,7 @@ class CommentControllerTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_comment_update', ['id' => $id, '_widgetContainer' => 'dialog']),
+            $this->getUrl('oro_case_comment_update', ['id' => $id, '_widgetContainer' => 'dialog']),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -93,7 +93,7 @@ class CommentControllerTest extends WebTestCase
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
 
         $form = $crawler->selectButton('Save')->form();
-        $form['orocrm_case_comment_form[message]'] = 'Updated comment';
+        $form['oro_case_comment_form[message]'] = 'Updated comment';
 
         /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(
@@ -117,7 +117,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_comment_list', ['id' => self::$caseId]),
+            $this->getUrl('oro_case_comment_list', ['id' => self::$caseId]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -129,7 +129,7 @@ class CommentControllerTest extends WebTestCase
 
         /** @var CaseComment $comment */
         $comment = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMCaseBundle:CaseComment')
+            ->getRepository('OroCaseBundle:CaseComment')
             ->find($id);
 
         $this->getContainer()->get('doctrine.orm.entity_manager')->refresh($comment);
@@ -169,7 +169,7 @@ class CommentControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_widget_comments', ['id' => self::$caseId, '_widgetContainer' => 'widget']),
+            $this->getUrl('oro_case_widget_comments', ['id' => self::$caseId, '_widgetContainer' => 'widget']),
             [],
             [],
             $this->generateWsseAuthHeader()

@@ -1,4 +1,4 @@
-{% block orocrm_sales_opportunity_widget %}
+{% block oro_sales_opportunity_widget %}
     <div class="row-fluid">
         <fieldset class="form-horizontal">
             <div class="responsive-block">
@@ -33,14 +33,14 @@
             </div>
         </fieldset>
     </div>
-{% endblock orocrm_sales_opportunity_widget %}
+{% endblock oro_sales_opportunity_widget %}
 
-{% block orocrm_sales_lead_widget %}
+{% block oro_sales_lead_widget %}
     <div class="row-fluid row-fluid-divider">
         <fieldset class="form-horizontal">
             <div class="responsive-block">
                 <h5 class="user-fieldset">
-                    <span>{{ 'orocrm.sales.lead.details.label'|trans }}</span>
+                    <span>{{ 'oro.sales.lead.details.label'|trans }}</span>
                 </h5>
                 {% if form.owner is defined %}
                     {{ form_row(form.owner) }}
@@ -79,15 +79,15 @@
             </div>
             <div class="responsive-cell">
                 <h5 class="user-fieldset">
-                    <span>{{ 'orocrm.sales.lead.addresses.label'|trans }}</span>
+                    <span>{{ 'oro.sales.lead.addresses.label'|trans }}</span>
                 </h5>
                 {{ form_widget(form.addresses) }}
             </div>
         </fieldset>
     </div>
-{% endblock orocrm_sales_lead_widget %}
+{% endblock oro_sales_lead_widget %}
 
-{% block orocrm_sales_opportunity_status_enum_value_widget %}
+{% block oro_sales_opportunity_status_enum_value_widget %}
     <div class="float-holder {% if form.label.vars.errors|length > 0 %} validation-error{% endif %}">
         <div class="input-append input-append-sortable collection-element-primary">
             {{ form_widget(form.label, {disabled: disabled}) }}
@@ -95,7 +95,7 @@
                 disabled: disabled or form.probability.vars.disabled,
                 attr: {
                     class: 'add-on-input',
-                    title: 'orocrm.sales.system_configuration.fields.opportunity_status_probabilities.probability.tooltip'
+                    title: 'oro.sales.system_configuration.fields.opportunity_status_probabilities.probability.tooltip'
                 }
             }) }}
             <span class="add-on ui-sortable-handle{% if disabled %} disabled{% endif %}"
@@ -113,37 +113,37 @@
     {{ form_rest(form) }}
 {% endblock %}
 
-{% block orocrm_sales_lead_address_widget %}
+{% block oro_sales_lead_address_widget %}
     {% if form.parent is not empty %}
         <div {{ block('widget_container_attributes') }}>
-            {{ block('orocrm_sales_lead_address_rows') }}
+            {{ block('oro_sales_lead_address_rows') }}
         </div>
     {% else %}
-        {{ block('orocrm_sales_lead_address_rows') }}
+        {{ block('oro_sales_lead_address_rows') }}
     {% endif %}
-{% endblock orocrm_sales_lead_address_widget %}
+{% endblock oro_sales_lead_address_widget %}
 
-{% block orocrm_sales_lead_address_rows %}
+{% block oro_sales_lead_address_rows %}
     {{ form_row(form.id) }}
-    {{ form_row(form.primary, {label: 'orocrm.sales.leadaddress.primary.label'}) }}
-    {{ form_row(form.label, {label: 'orocrm.sales.leadaddress.label.label'}) }}
-    {{ form_row(form.namePrefix, {label: 'orocrm.sales.leadaddress.name_prefix.label'}) }}
-    {{ form_row(form.firstName, {label: 'orocrm.sales.leadaddress.first_name.label'}) }}
-    {{ form_row(form.middleName, {label: 'orocrm.sales.leadaddress.middle_name.label'}) }}
-    {{ form_row(form.lastName, {label: 'orocrm.sales.leadaddress.last_name.label'}) }}
-    {{ form_row(form.nameSuffix, {label: 'orocrm.sales.leadaddress.name_suffix.label'}) }}
-    {{ form_row(form.organization, {label: 'orocrm.sales.leadaddress.organization.label'}) }}
-    {{ form_row(form.country, {label: 'orocrm.sales.leadaddress.country.label'}) }}
-    {{ form_row(form.street, {label: 'orocrm.sales.leadaddress.street.label'}) }}
-    {{ form_row(form.street2, {label: 'orocrm.sales.leadaddress.street2.label'}) }}
-    {{ form_row(form.city, {label: 'orocrm.sales.leadaddress.city.label'}) }}
-    {{ form_row(form.region_text, {label: 'orocrm.sales.leadaddress.region_text.label'}) }}
-    {{ form_row(form.region, {label: 'orocrm.sales.leadaddress.region.label'}) }}
-    {{ form_row(form.postalCode, {label: 'orocrm.sales.leadaddress.postal_code.label'}) }}
+    {{ form_row(form.primary, {label: 'oro.sales.leadaddress.primary.label'}) }}
+    {{ form_row(form.label, {label: 'oro.sales.leadaddress.label.label'}) }}
+    {{ form_row(form.namePrefix, {label: 'oro.sales.leadaddress.name_prefix.label'}) }}
+    {{ form_row(form.firstName, {label: 'oro.sales.leadaddress.first_name.label'}) }}
+    {{ form_row(form.middleName, {label: 'oro.sales.leadaddress.middle_name.label'}) }}
+    {{ form_row(form.lastName, {label: 'oro.sales.leadaddress.last_name.label'}) }}
+    {{ form_row(form.nameSuffix, {label: 'oro.sales.leadaddress.name_suffix.label'}) }}
+    {{ form_row(form.organization, {label: 'oro.sales.leadaddress.organization.label'}) }}
+    {{ form_row(form.country, {label: 'oro.sales.leadaddress.country.label'}) }}
+    {{ form_row(form.street, {label: 'oro.sales.leadaddress.street.label'}) }}
+    {{ form_row(form.street2, {label: 'oro.sales.leadaddress.street2.label'}) }}
+    {{ form_row(form.city, {label: 'oro.sales.leadaddress.city.label'}) }}
+    {{ form_row(form.region_text, {label: 'oro.sales.leadaddress.region_text.label'}) }}
+    {{ form_row(form.region, {label: 'oro.sales.leadaddress.region.label'}) }}
+    {{ form_row(form.postalCode, {label: 'oro.sales.leadaddress.postal_code.label'}) }}
     {{ form_rest(form) }}
 {%  endblock %}
 
-{% block _orocrm_sales_lead_form_address_collection_widget %}
+{% block _oro_sales_lead_form_address_collection_widget %}
     {{ block('oro_address_collection_widget') }}
     {% set id = id ~ '_collection' %}
     {{ _self.oro_adddress_collection_prefill_names(_context) }}

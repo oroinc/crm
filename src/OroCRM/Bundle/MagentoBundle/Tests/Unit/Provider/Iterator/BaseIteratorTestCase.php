@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -18,7 +18,7 @@ class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->transport = $this->getMockBuilder('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
 

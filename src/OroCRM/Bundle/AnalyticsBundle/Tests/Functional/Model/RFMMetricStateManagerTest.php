@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Model;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Model;
 
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @dbIsolation
@@ -21,8 +21,8 @@ class RFMMetricStateManagerTest extends WebTestCase
 
         $this->loadFixtures(
             [
-                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
-                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadJobData'
+                'Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
+                'Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadJobData'
             ]
         );
     }
@@ -61,7 +61,7 @@ class RFMMetricStateManagerTest extends WebTestCase
             $this->assertNotEmpty($entity->getMonetary());
         }
 
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->resetMetrics($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->resetMetrics($channel);
 
         $em = $this->getContainer()
             ->get('oro_entity.doctrine_helper')
@@ -81,15 +81,15 @@ class RFMMetricStateManagerTest extends WebTestCase
         /** @var RFMAwareInterface[] $entities */
         $entities = $this->getContainer()
             ->get('oro_entity.doctrine_helper')
-            ->getEntityRepository('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->getEntityRepository('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->findAll();
         $this->assertNotEmpty($entities);
 
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->resetMetrics();
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->resetMetrics();
 
         $em = $this->getContainer()
             ->get('oro_entity.doctrine_helper')
-            ->getEntityManager('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+            ->getEntityManager('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         foreach ($entities as $entity) {
             $em->refresh($entity);
@@ -110,8 +110,8 @@ class RFMMetricStateManagerTest extends WebTestCase
 
         $this->assertEmpty($entities);
 
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation();
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -126,7 +126,7 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.AnalyticsAwareInterface');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -141,7 +141,7 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel3');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -154,7 +154,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function testScheduleChannelShouldNotAddJobIfGenericExists()
     {
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
@@ -167,7 +167,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
         $this->assertCount(1, $entities);
 
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -186,11 +186,11 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Channel $channel2 */
         $channel2 = $this->getReference('Channel.CustomerChannel2');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -204,7 +204,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
         $this->assertCount(2, $entities);
 
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -223,11 +223,11 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Channel $channel2 */
         $channel2 = $this->getReference('Channel.CustomerChannel2');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -246,8 +246,8 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -274,7 +274,7 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         $job = $this->loadJob();
         $em = $this->getManager($job);
-        $jobs = $this->getContainer()->get('orocrm_analytics.model.state_manager')->getJob();
+        $jobs = $this->getContainer()->get('oro_analytics.model.state_manager')->getJob();
         /** @var Job $job */
         foreach ($jobs as $job) {
             $job->setState(Job::STATE_RUNNING);
@@ -299,8 +299,8 @@ class RFMMetricStateManagerTest extends WebTestCase
      */
     protected function loadJob()
     {
-        $this->assertFalse($this->getContainer()->get('orocrm_analytics.model.state_manager')->isJobRunning());
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+        $this->assertFalse($this->getContainer()->get('oro_analytics.model.state_manager')->isJobRunning());
+        $this->getContainer()->get('oro_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
         $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME);
         $em = $this->getManager($job);

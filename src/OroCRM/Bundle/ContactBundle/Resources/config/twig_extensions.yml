@@ -1,11 +1,11 @@
 parameters:
-    orocrm_contact.twig.extension.social_url.class: OroCRM\Bundle\ContactBundle\Twig\SocialUrlExtension
+    oro_contact.twig.extension.social_url.class: Oro\Bundle\ContactBundle\Twig\SocialUrlExtension
 
 services:
-    orocrm_contact.twig.extension.social_url:
-        class: %orocrm_contact.twig.extension.social_url.class%
+    oro_contact.twig.extension.social_url:
+        class: %oro_contact.twig.extension.social_url.class%
         arguments:
-            - '@orocrm_contact.social_url_formatter'
+            - '@oro_contact.social_url_formatter'
         tags:
             - { name: twig.extension }
 

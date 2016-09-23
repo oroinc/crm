@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
+namespace Oro\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 /**
  * Class AssignContactTest
  *
- * @package OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts
+ * @package Oro\Bundle\AccountBundle\Tests\Selenium\Accounts
  */
 class AssignContactTest extends Selenium2TestCase
 {
@@ -22,7 +22,7 @@ class AssignContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('All - Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
@@ -47,7 +47,7 @@ class AssignContactTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->assertTitle('All - Accounts - Customers')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')

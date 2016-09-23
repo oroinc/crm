@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Controller\Api\Rest;
+namespace Oro\Bundle\AccountBundle\Controller\Api\Rest;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
@@ -15,12 +15,11 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
-use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @RouteResource("account")
@@ -47,7 +46,7 @@ class AccountController extends RestController implements ClassResourceInterface
      *      description="Get all account items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_view")
+     * @AclAncestor("oro_account_view")
      * @return Response
      */
     public function cgetAction()
@@ -67,7 +66,7 @@ class AccountController extends RestController implements ClassResourceInterface
      *      description="Get account item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_view")
+     * @AclAncestor("oro_account_view")
      * @return Response
      */
     public function getAction($id)
@@ -84,7 +83,7 @@ class AccountController extends RestController implements ClassResourceInterface
      *      description="Update account",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_update")
+     * @AclAncestor("oro_account_update")
      * @return Response
      */
     public function putAction($id)
@@ -99,7 +98,7 @@ class AccountController extends RestController implements ClassResourceInterface
      *      description="Create new account",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_create")
+     * @AclAncestor("oro_account_create")
      */
     public function postAction()
     {
@@ -116,10 +115,10 @@ class AccountController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_account_delete",
+     *      id="oro_account_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMAccountBundle:Account"
+     *      class="OroAccountBundle:Account"
      * )
      * @return Response
      */
@@ -135,7 +134,7 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_account.account.manager.api');
+        return $this->get('oro_account.account.manager.api');
     }
 
     /**
@@ -143,7 +142,7 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_account.form.account.api');
+        return $this->get('oro_account.form.account.api');
     }
 
     /**
@@ -151,7 +150,7 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_account.form.handler.account.api');
+        return $this->get('oro_account.form.handler.account.api');
     }
 
     protected function getPreparedItem($entity, $resultFields = [])
@@ -159,7 +158,7 @@ class AccountController extends RestController implements ClassResourceInterface
         $result = parent::getPreparedItem($entity, $resultFields);
 
         /** @var AmountProvider $amountProvider  */
-        $amountProvider = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+        $amountProvider = $this->get('oro_channel.provider.lifetime.amount_provider');
 
         $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
 
@@ -179,7 +178,7 @@ class AccountController extends RestController implements ClassResourceInterface
             $entities
         );
 
-        $ap = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+        $ap = $this->get('oro_channel.provider.lifetime.amount_provider');
         $lifetimeValues = $ap->getAccountsLifetimeQueryBuilder($ids)
             ->getQuery()
             ->getArrayResult();

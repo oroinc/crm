@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Schema\Schema;
@@ -10,7 +10,6 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 
@@ -76,29 +75,29 @@ class FillActivityAssociationTables implements
         $this->fillActivityTables($queries);
         $this->fillActivityListTables($queries);
 
-        // Remove orocrm_contactus_req_emails
-        $table = $schema->getTable('orocrm_contactus_req_emails');
+        // Remove oro_contactus_req_emails
+        $table = $schema->getTable('oro_contactus_req_emails');
         if ($table->hasForeignKey('FK_E494F7AE427EB8A5')) {
             $table->removeForeignKey('FK_E494F7AE427EB8A5');
         }
         if ($table->hasForeignKey('FK_E494F7AEA832C1C9')) {
             $table->removeForeignKey('FK_E494F7AEA832C1C9');
         }
-        // Delete foreign keys for orocrm_contactus_request_emails table,
-        // that was renamed to orocrm_contactus_req_emails
+        // Delete foreign keys for oro_contactus_request_emails table,
+        // that was renamed to oro_contactus_req_emails
         if ($table->hasForeignKey('FK_4DEF4058427EB8A5')) {
             $table->removeForeignKey('FK_4DEF4058427EB8A5');
         }
         if ($table->hasForeignKey('FK_4DEF4058A832C1C9')) {
             $table->removeForeignKey('FK_4DEF4058A832C1C9');
         }
-        $schema->dropTable('orocrm_contactus_req_emails');
+        $schema->dropTable('oro_contactus_req_emails');
 
-        // Remove orocrm_contactus_request_calls
-        $table = $schema->getTable('orocrm_contactus_request_calls');
+        // Remove oro_contactus_request_calls
+        $table = $schema->getTable('oro_contactus_request_calls');
         $table->removeForeignKey('FK_6F7A50CE427EB8A5');
         $table->removeForeignKey('FK_6F7A50CE50A89B2C');
-        $schema->dropTable('orocrm_contactus_request_calls');
+        $schema->dropTable('oro_contactus_request_calls');
 
     }
 
@@ -143,11 +142,11 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (email_id, contactrequest_id)' .
                ' SELECT email_id, request_id' .
-               ' FROM orocrm_contactus_req_emails';
+               ' FROM oro_contactus_req_emails';
 
         return sprintf(
             $sql,
-            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
+            $this->activityExtension->getAssociationTableName('oro_email', 'oro_contactus_request')
         );
     }
 
@@ -158,11 +157,11 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (call_id, contactrequest_id)' .
                ' SELECT call_id, request_id' .
-               ' FROM orocrm_contactus_request_calls';
+               ' FROM oro_contactus_request_calls';
 
         return sprintf(
             $sql,
-            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_contactus_request')
+            $this->activityExtension->getAssociationTableName('oro_call', 'oro_contactus_request')
         );
     }
 
@@ -179,8 +178,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
-            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
+            $this->activityListExtension->getAssociationTableName('oro_contactus_request'),
+            $this->activityExtension->getAssociationTableName('oro_email', 'oro_contactus_request')
         );
     }
 
@@ -197,8 +196,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
-            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_contactus_request')
+            $this->activityListExtension->getAssociationTableName('oro_contactus_request'),
+            $this->activityExtension->getAssociationTableName('oro_call', 'oro_contactus_request')
         );
     }
 }

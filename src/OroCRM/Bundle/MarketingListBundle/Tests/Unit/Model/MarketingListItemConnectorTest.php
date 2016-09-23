@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Model;
 
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
+use Oro\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 
 class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
     public function testContactExisting()
     {
         $entityId = 42;
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingListItem = $this->assertContactedExisting($marketingList, $entityId);
@@ -53,7 +53,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
     public function testContactNew()
     {
         $entityId = 42;
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -74,7 +74,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $em->expects($this->once())
             ->method('persist')
-            ->with($this->isInstanceOf('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'));
+            ->with($this->isInstanceOf('Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'));
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with(MarketingListItemConnector::MARKETING_LIST_ITEM_ENTITY)
@@ -82,7 +82,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
 
         $marketingListItem = $this->connector->contact($marketingList, $entityId);
         $this->assertInstanceOf(
-            'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem',
+            'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem',
             $marketingListItem
         );
 
@@ -93,7 +93,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
     public function testContactResultRow()
     {
         $entityId = 42;
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -107,7 +107,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertContactedExisting($marketingList, $entityId);
         $marketingListItem = $this->connector->contactResultRow($marketingList, array('id' => $entityId));
         $this->assertInstanceOf(
-            'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem',
+            'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem',
             $marketingListItem
         );
     }
@@ -119,7 +119,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
     public function testContactResultRowException()
     {
         $entityId = 42;
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingList->expects($this->once())
@@ -134,7 +134,7 @@ class MarketingListItemConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function assertContactedExisting($marketingList, $entityId)
     {
-        $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
+        $marketingListItem = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListItem')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingListItem->expects($this->once())

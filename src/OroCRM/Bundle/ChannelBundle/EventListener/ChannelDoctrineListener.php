@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
@@ -9,12 +9,12 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
+use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelDoctrineListener
 {
@@ -86,12 +86,12 @@ class ChannelDoctrineListener
                     /** @var Account $account */
                     $account = is_object($data['account'])
                         ? $data['account']
-                        : $this->em->getReference('OroCRMAccountBundle:Account', $data['account']);
+                        : $this->em->getReference('OroAccountBundle:Account', $data['account']);
 
                     /** @var Channel $channel */
                     $channel = is_object($data['channel'])
                         ? $data['channel']
-                        : $this->em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
+                        : $this->em->getReference('OroChannelBundle:Channel', $data['channel']);
 
                     $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
                     $toOutDate[] = [$account, $channel, $entity];
@@ -266,7 +266,7 @@ class ChannelDoctrineListener
     protected function getLifetimeRepository()
     {
         if (null === $this->lifetimeRepo) {
-            $this->lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
+            $this->lifetimeRepo = $this->em->getRepository('OroChannelBundle:LifetimeValueHistory');
         }
 
         return $this->lifetimeRepo;

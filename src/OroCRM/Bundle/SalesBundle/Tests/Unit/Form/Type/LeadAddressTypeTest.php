@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Form\Type\LeadAddressType;
+use Oro\Bundle\SalesBundle\Form\Type\LeadAddressType;
 
 class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class LeadAddressTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testName()
     {
-        $this->assertEquals('orocrm_sales_lead_address', $this->type->getName());
+        $this->assertEquals('oro_sales_lead_address', $this->type->getName());
     }
 
     public function getParent()

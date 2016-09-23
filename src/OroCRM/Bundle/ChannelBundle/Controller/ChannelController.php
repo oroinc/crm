@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Controller;
+namespace Oro\Bundle\ChannelBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,24 +9,23 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_channel_index",
+     *      name="oro_channel_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format"="html"}
      * )
      * @Acl(
-     *      id="orocrm_channel_view",
+     *      id="oro_channel_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMChannelBundle:Channel"
+     *      class="OroChannelBundle:Channel"
      * )
      * @Template()
      */
@@ -36,14 +35,14 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_channel_create")
+     * @Route("/create", name="oro_channel_create")
      * @Acl(
-     *      id="orocrm_channel_create",
+     *      id="oro_channel_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMChannelBundle:Channel"
+     *      class="OroChannelBundle:Channel"
      * )
-     * @Template("OroCRMChannelBundle:Channel:update.html.twig")
+     * @Template("OroChannelBundle:Channel:update.html.twig")
      */
     public function createAction()
     {
@@ -51,12 +50,12 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", requirements={"id"="\d+"}, name="orocrm_channel_update")
+     * @Route("/update/{id}", requirements={"id"="\d+"}, name="oro_channel_update")
      * @Acl(
-     *      id="orocrm_channel_update",
+     *      id="oro_channel_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMChannelBundle:Channel"
+     *      class="OroChannelBundle:Channel"
      * )
      * @Template()
      */
@@ -72,12 +71,12 @@ class ChannelController extends Controller
      */
     protected function update(Channel $channel)
     {
-        $handler = $this->get('orocrm_channel.channel_form.handler');
+        $handler = $this->get('oro_channel.channel_form.handler');
 
         if ($handler->process($channel)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.channel.controller.message.saved')
+                $this->get('translator')->trans('oro.channel.controller.message.saved')
             );
 
             return $this->get('oro_ui.router')->redirect($channel);
@@ -93,17 +92,17 @@ class ChannelController extends Controller
      * @Route(
      *      "/status/change/{id}",
      *      requirements={"id"="\d+"},
-     *      name="orocrm_channel_change_status"
+     *      name="oro_channel_change_status"
      *  )
-     * @AclAncestor("orocrm_channel_update")
+     * @AclAncestor("oro_channel_update")
      */
     public function changeStatusAction(Channel $channel)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $message = 'orocrm.channel.controller.message.status.deactivated';
+            $message = 'oro.channel.controller.message.status.deactivated';
             $channel->setStatus(Channel::STATUS_INACTIVE);
         } else {
-            $message = 'orocrm.channel.controller.message.status.activated';
+            $message = 'oro.channel.controller.message.status.activated';
             $channel->setStatus(Channel::STATUS_ACTIVE);
         }
 
@@ -118,7 +117,7 @@ class ChannelController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'orocrm_channel_view',
+                'oro_channel_view',
                 [
                     'id' => $channel->getId(),
                     '_enableContentProviders' => 'mainMenu'
@@ -128,8 +127,8 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", requirements={"id"="\d+"}, name="orocrm_channel_view")
-     * @AclAncestor("orocrm_channel_view")
+     * @Route("/view/{id}", requirements={"id"="\d+"}, name="oro_channel_view")
+     * @AclAncestor("oro_channel_view")
      * @Template()
      */
     public function viewAction(Channel $channel)
@@ -140,8 +139,8 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route("/widget/info/{id}", name="orocrm_channel_widget_info", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_channel_view")
+     * @Route("/widget/info/{id}", name="oro_channel_widget_info", requirements={"id"="\d+"})
+     * @AclAncestor("oro_channel_view")
      * @Template()
      */
     public function infoAction(Channel $channel)

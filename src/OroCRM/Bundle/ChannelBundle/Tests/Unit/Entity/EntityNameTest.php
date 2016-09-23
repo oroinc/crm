@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 class EntityNameTest extends AbstractEntityTestCase
 {
@@ -18,7 +18,7 @@ class EntityNameTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $name   = 'testName';
 
         return [
@@ -32,6 +32,6 @@ class EntityNameTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\EntityName';
+        return 'Oro\Bundle\ChannelBundle\Entity\EntityName';
     }
 }

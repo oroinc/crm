@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
@@ -23,19 +23,19 @@ class ControllersGroupTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_contact_group_index'));
+        $this->client->request('GET', $this->getUrl('oro_contact_group_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_group_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_contact_group_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_group_form[label]'] = 'Contact Group Label';
-        $form['orocrm_contact_group_form[owner]'] = 1;
-        //$form['orocrm_contact_group_form[appendContacts]'] = 1;
+        $form['oro_contact_group_form[label]'] = 'Contact Group Label';
+        $form['oro_contact_group_form[owner]'] = 1;
+        //$form['oro_contact_group_form[appendContacts]'] = 1;
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
@@ -60,11 +60,11 @@ class ControllersGroupTest extends WebTestCase
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_contact_group_update', array('id' => $result['id']))
+            $this->getUrl('oro_contact_group_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_group_form[label]'] = 'Contact Group Label Updated';
+        $form['oro_contact_group_form[label]'] = 'Contact Group Label Updated';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

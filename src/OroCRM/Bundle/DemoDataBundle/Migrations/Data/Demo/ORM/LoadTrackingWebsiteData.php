@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,10 +15,9 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
 
 class LoadTrackingWebsiteData extends AbstractFixture implements
     ContainerAwareInterface,
@@ -54,7 +53,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData'
         ];
     }
 
@@ -64,7 +63,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
     public function load(ObjectManager $om)
     {
         $organization = $this->getReference('default_organization');
-        $customers = $om->getRepository('OroCRMMagentoBundle:Customer')->findAll();
+        $customers = $om->getRepository('OroMagentoBundle:Customer')->findAll();
 
         $websites = $this->persistTrackingWebsites($om, $organization);
         $eventDictionary = $this->persistEventDictionaries($om, $websites);
@@ -92,7 +91,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
      */
     protected function persistTrackingWebsites(ObjectManager $om, Organization $organization)
     {
-        $channels = $om->getRepository('OroCRMChannelBundle:Channel')->findBy([
+        $channels = $om->getRepository('OroChannelBundle:Channel')->findBy([
             'channelType' => ChannelType::TYPE
         ]);
 

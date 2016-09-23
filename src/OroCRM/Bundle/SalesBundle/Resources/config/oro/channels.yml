@@ -1,9 +1,9 @@
 channels:
    entity_data:
        -
-          name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+          name: Oro\Bundle\SalesBundle\Entity\Opportunity
           dependent:
-              - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+              - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
           navigation_items:
               - application_menu.sales_tab.opportunity_list
               - shortcuts.shortcut_list_opportunities
@@ -15,7 +15,7 @@ channels:
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
 
        -
-          name: OroCRM\Bundle\SalesBundle\Entity\Lead
+          name: Oro\Bundle\SalesBundle\Entity\Lead
           navigation_items:
               - application_menu.sales_tab.lead_list
               - shortcuts.shortcut_list_leads
@@ -23,25 +23,25 @@ channels:
               - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
 
        -
-          name: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+          name: Oro\Bundle\SalesBundle\Entity\SalesFunnel
           dependencies:
-              - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-              - OroCRM\Bundle\SalesBundle\Entity\Lead
+              - Oro\Bundle\SalesBundle\Entity\Opportunity
+              - Oro\Bundle\SalesBundle\Entity\Lead
           dependencies_condition: OR
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
 
        -
-          name: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+          name: Oro\Bundle\SalesBundle\Entity\B2bCustomer
           navigation_items:
               - application_menu.customers_tab.b2bcustomer_list
 
    channel_types:
         b2b:
-            label: orocrm.sales.channel_type.b2b.label
+            label: oro.sales.channel_type.b2b.label
             entities:
-                - OroCRM\Bundle\SalesBundle\Entity\Lead
-                - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-            customer_identity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                - Oro\Bundle\SalesBundle\Entity\Lead
+                - Oro\Bundle\SalesBundle\Entity\Opportunity
+            customer_identity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
             lifetime_value: lifetime
             priority: -20

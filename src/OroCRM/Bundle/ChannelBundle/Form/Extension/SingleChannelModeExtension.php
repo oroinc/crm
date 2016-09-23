@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\Extension;
+namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,9 +11,8 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 class SingleChannelModeExtension extends AbstractTypeExtension
 {

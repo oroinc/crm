@@ -1,326 +1,326 @@
 parameters:
     # entity
-    orocrm_channel.entity.class:                                       OroCRM\Bundle\ChannelBundle\Entity\Channel
+    oro_channel.entity.class:                                       Oro\Bundle\ChannelBundle\Entity\Channel
 
     # builder
-    orocrm_channel.builder.factory.class:                              OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory
+    oro_channel.builder.factory.class:                              Oro\Bundle\ChannelBundle\Builder\BuilderFactory
 
     # handlers
-    orocrm_channel.channel_form.handler.class:                         OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelHandler
-    orocrm_channel.channel_integration_form.handler.class:             OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
+    oro_channel.channel_form.handler.class:                         Oro\Bundle\ChannelBundle\Form\Handler\ChannelHandler
+    oro_channel.channel_integration_form.handler.class:             Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler
 
     # forms
-    orocrm_channel.form.type.channel.class:                               OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType
-    orocrm_channel.form.type.entity.class:                                OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType
-    orocrm_channel.form.type.channel_datasource.class:                    OroCRM\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
-    orocrm_channel.form.type.channel_select.class:                        OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
-    orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
-    orocrm_channel.form.type.multiple_entity_channel_aware.class:         OroCRM\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
-    orocrm_channel.form.embedded_type_extension.class:                    OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
-    orocrm_channel.form.integration_type_extension.class:                 OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
-    orocrm_channel.form.guesser.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser
+    oro_channel.form.type.channel.class:                               Oro\Bundle\ChannelBundle\Form\Type\ChannelType
+    oro_channel.form.type.entity.class:                                Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType
+    oro_channel.form.type.channel_datasource.class:                    Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType
+    oro_channel.form.type.channel_select.class:                        Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType
+    oro_channel.form.type.create_or_select_inline_channel_aware.class: Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
+    oro_channel.form.type.multiple_entity_channel_aware.class:         Oro\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
+    oro_channel.form.embedded_type_extension.class:                    Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+    oro_channel.form.integration_type_extension.class:                 Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+    oro_channel.form.guesser.channel.class:                            Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser
 
 
     # manager
-    orocrm_channel.manager.channel.api.class:                             OroCRM\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
-    orocrm_channel.manager.customer_search.api.class:                     OroCRM\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager
+    oro_channel.manager.channel.api.class:                             Oro\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
+    oro_channel.manager.customer_search.api.class:                     Oro\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager
 
     # providers
-    orocrm_channel.provider.settings_provider.class:                   OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
-    orocrm_channel.provider.exclusion_provider.class:                  OroCRM\Bundle\ChannelBundle\Provider\EntityExclusionProvider
-    orocrm_channel.provider.channel_entity_exclusion_provider.class:   OroCRM\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
-    orocrm_channel.provider.state_provider.class:                      OroCRM\Bundle\ChannelBundle\Provider\StateProvider
-    orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
-    orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
-    orocrm_channel.provider.request_channel.class:                     OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider
-    orocrm_channel.provider.lifetime.amount_provider.class:            OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
-    orocrm_channel.provider.lifetime.average_widget_provider.class:    OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider
+    oro_channel.provider.settings_provider.class:                   Oro\Bundle\ChannelBundle\Provider\SettingsProvider
+    oro_channel.provider.exclusion_provider.class:                  Oro\Bundle\ChannelBundle\Provider\EntityExclusionProvider
+    oro_channel.provider.channel_entity_exclusion_provider.class:   Oro\Bundle\ChannelBundle\Provider\ChannelEntityExclusionProvider
+    oro_channel.provider.state_provider.class:                      Oro\Bundle\ChannelBundle\Provider\StateProvider
+    oro_channel.provider.entity_metadata.class:                     Oro\Bundle\ChannelBundle\Provider\MetadataProvider
+    oro_channel.provider.utils.entity_state_provider.class:         Oro\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
+    oro_channel.provider.request_channel.class:                     Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider
+    oro_channel.provider.lifetime.amount_provider.class:            Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
+    oro_channel.provider.lifetime.average_widget_provider.class:    Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider
 
     # datagrid
-    orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
+    oro_channel.datagrid.extension.orm_channel_limitation.class:    Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
 
     # autocomplete
-    orocrm_channel.autocomplete.channel_limitation_handler.class:      OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
+    oro_channel.autocomplete.channel_limitation_handler.class:      Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler
 
     # config resolver
-    orocrm_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
+    oro_channel.config_resolver.class:                              Oro\Component\Config\Resolver\SystemAwareResolver
 
     # event listener
-    orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
-    orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
-    orocrm_channel.event_listener.update_integration_connectors.class: OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
-    orocrm_channel.event_listener.change_integration_status.class:     OroCRM\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
-    orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
-    orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
-    orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
-    orocrm_channel.event_listener.timezone_change.class:               OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
-    orocrm_channel.event_listener.job_execution.class:                 OroCRM\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
-    orocrm_channel.event_listener.transitions_attribute.class:         OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
+    oro_channel.event_listener.navigation.class:                    Oro\Bundle\ChannelBundle\EventListener\NavigationListener
+    oro_channel.form.subscriber.channel_subscriber.class:           Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
+    oro_channel.event_listener.update_integration_connectors.class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
+    oro_channel.event_listener.change_integration_status.class:     Oro\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
+    oro_channel.event_listener.channel_before_deleted.class:        Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
+    oro_channel.event_listener.embedded_form.class:                 Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
+    oro_channel.event_listener.doctrine.class:                      Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
+    oro_channel.event_listener.timezone_change.class:               Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
+    oro_channel.event_listener.job_execution.class:                 Oro\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
+    oro_channel.event_listener.transitions_attribute.class:         Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
 
     #twig
-    orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
-    orocrm_channel.twig.lifetime_value_extension.class:                OroCRM\Bundle\ChannelBundle\Twig\LifetimeValueExtension
+    oro_channel.twig.metadata_extension.class:                      Oro\Bundle\ChannelBundle\Twig\MetadataExtension
+    oro_channel.twig.lifetime_value_extension.class:                Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
 
     #validators
-    orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
+    oro_channel.validators.channel_integration_validator.class:     Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
 
     # import/export
-    orocrm_channel.importexport.helper.channel.class:                  OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
+    oro_channel.importexport.helper.channel.class:                  Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
 
     # conditions
-    oro_workflow.condition.channel_entity_availiable.class:            OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability
+    oro_workflow.condition.channel_entity_availiable.class:            Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability
 
 services:
-    orocrm_channel.builder.factory:
-        class: %orocrm_channel.builder.factory.class%
+    oro_channel.builder.factory:
+        class: %oro_channel.builder.factory.class%
         arguments:
           - "@doctrine"
-          - "@orocrm_channel.provider.settings_provider"
+          - "@oro_channel.provider.settings_provider"
 
     # forms
-    orocrm_channel.form.type.channel:
-        class: %orocrm_channel.form.type.channel.class%
+    oro_channel.form.type.channel:
+        class: %oro_channel.form.type.channel.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
-            - "@orocrm_channel.form.subscriber.channel_subscriber"
+            - "@oro_channel.provider.settings_provider"
+            - "@oro_channel.form.subscriber.channel_subscriber"
         tags:
-            - { name: form.type, alias: orocrm_channel_form }
+            - { name: form.type, alias: oro_channel_form }
 
-    orocrm_channel.form.type.entity:
-        class: %orocrm_channel.form.type.entity.class%
+    oro_channel.form.type.entity:
+        class: %oro_channel.form.type.entity.class%
         tags:
-            - { name: form.type, alias: orocrm_channel_entities }
+            - { name: form.type, alias: oro_channel_entities }
 
-    orocrm_channel.form.type.channel_datasource:
-        class: %orocrm_channel.form.type.channel_datasource.class%
+    oro_channel.form.type.channel_datasource:
+        class: %oro_channel.form.type.channel_datasource.class%
         arguments:
             - "@doctrine"
             - %oro_integration.entity.class%
         tags:
-            - { name: form.type, alias: orocrm_channel_datasource_form }
+            - { name: form.type, alias: oro_channel_datasource_form }
 
-    orocrm_channel.form.type.channel_select:
-        class: %orocrm_channel.form.type.channel_select.class%
+    oro_channel.form.type.channel_select:
+        class: %oro_channel.form.type.channel_select.class%
         arguments:
-            - '@orocrm_channel.provider.channels_by_entities'
+            - '@oro_channel.provider.channels_by_entities'
         tags:
-            - { name: form.type, alias: orocrm_channel_select_type }
+            - { name: form.type, alias: oro_channel_select_type }
 
-    orocrm_channel.form.type.create_or_select_inline_channel_aware:
-        class: %orocrm_channel.form.type.create_or_select_inline_channel_aware.class%
+    oro_channel.form.type.create_or_select_inline_channel_aware:
+        class: %oro_channel.form.type.create_or_select_inline_channel_aware.class%
         tags:
             - { name: form.type, alias: oro_entity_create_or_select_inline_channel_aware }
 
-    orocrm_channel.form.type.multiple_entity_channel_aware:
-        class: %orocrm_channel.form.type.multiple_entity_channel_aware.class%
+    oro_channel.form.type.multiple_entity_channel_aware:
+        class: %oro_channel.form.type.multiple_entity_channel_aware.class%
         tags:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
-    orocrm_channel.form.channel:
+    oro_channel.form.channel:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
-        arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
+        arguments:                    ["oro_channel_form", "oro_channel_form", null]
 
-    orocrm_channel.form.guesser.channel:
-        class: %orocrm_channel.form.guesser.channel.class%
+    oro_channel.form.guesser.channel:
+        class: %oro_channel.form.guesser.channel.class%
         tags:
             - { name: form.type_guesser, priority: 20 }
 
     # handlers
-    orocrm_channel.channel_form.handler:
-        class: %orocrm_channel.channel_form.handler.class%
+    oro_channel.channel_form.handler:
+        class: %oro_channel.channel_form.handler.class%
         scope: request
         arguments:
             - "@request"
-            - "@orocrm_channel.form.channel"
+            - "@oro_channel.form.channel"
             - "@doctrine"
             - "@event_dispatcher"
 
-    orocrm_channel.channel_integration_form.handler:
-        class: %orocrm_channel.channel_integration_form.handler.class%
+    oro_channel.channel_integration_form.handler:
+        class: %oro_channel.channel_integration_form.handler.class%
         scope: request
         arguments:
             - "@request"
             - "@form.factory"
 
     # Channel API
-    orocrm_channel.manager.channel.api:
-        class: %orocrm_channel.manager.channel.api.class%
+    oro_channel.manager.channel.api:
+        class: %oro_channel.manager.channel.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %orocrm_channel.entity.class%
+            - %oro_channel.entity.class%
             - "@doctrine.orm.entity_manager"
 
-    orocrm_channel.manager.customer_search.api:
-        class: %orocrm_channel.manager.customer_search.api.class%
+    oro_channel.manager.customer_search.api:
+        class: %oro_channel.manager.customer_search.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %orocrm_channel.entity.class%
+            - %oro_channel.entity.class%
             - "@doctrine.orm.entity_manager"
             - "@oro_search.index"
             - "@event_dispatcher"
 
     # Providers
-    orocrm_channel.provider.settings_provider:
-        class: %orocrm_channel.provider.settings_provider.class%
+    oro_channel.provider.settings_provider:
+        class: %oro_channel.provider.settings_provider.class%
         arguments:
             - []
-            - "@orocrm_channel.config_resolver"
+            - "@oro_channel.config_resolver"
 
-    orocrm_channel.provider.exclusion_provider:
-        class: %orocrm_channel.provider.exclusion_provider.class%
+    oro_channel.provider.exclusion_provider:
+        class: %oro_channel.provider.exclusion_provider.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
-            - "@orocrm_channel.provider.state_provider"
+            - "@oro_channel.provider.settings_provider"
+            - "@oro_channel.provider.state_provider"
         tags:
             - { name: oro_entity.exclusion_provider.default }
 
-    orocrm_channel.provider.metadata_provider:
-        class: %orocrm_channel.provider.entity_metadata.class%
+    oro_channel.provider.metadata_provider:
+        class: %oro_channel.provider.entity_metadata.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
             - "@oro_entity.entity_provider"
             - "@oro_entity_config.config_manager"
             - "@router"
 
-    orocrm_channel.provider.request_channel:
-        class: %orocrm_channel.provider.request_channel.class%
+    oro_channel.provider.request_channel:
+        class: %oro_channel.provider.request_channel.class%
         arguments:
             - "@request"
             - "@doctrine"
         scope: request
 
     # datagrid
-    orocrm_channel.datagrid.extension.orm_channel_limitation:
-        class: %orocrm_channel.datagrid.extension.orm_channel_limitation.class%
+    oro_channel.datagrid.extension.orm_channel_limitation:
+        class: %oro_channel.datagrid.extension.orm_channel_limitation.class%
         tags:
             - { name: oro_datagrid.extension }
 
     # autocomplete
-    orocrm_channel.autocomplete.channel_limitation_handler:
-        class: %orocrm_channel.autocomplete.channel_limitation_handler.class%
+    oro_channel.autocomplete.channel_limitation_handler:
+        class: %oro_channel.autocomplete.channel_limitation_handler.class%
         calls:
             - [initDoctrinePropertiesByManagerRegistry, ["@doctrine"]]
             - [initSearchIndexer, ["@oro_search.index", %oro_search.entities_config%]]
             - [setAclHelper,["@oro_security.acl_helper"]]
 
     # config resolver
-    orocrm_channel.provider.channel_entity_exclusion_provider:
-        class: %orocrm_channel.provider.channel_entity_exclusion_provider.class%
+    oro_channel.provider.channel_entity_exclusion_provider:
+        class: %oro_channel.provider.channel_entity_exclusion_provider.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
 
-    orocrm_channel.provider.channel_entity_provider:
+    oro_channel.provider.channel_entity_provider:
         class: %oro_entity.entity_provider.class%
         parent: oro_entity.entity_provider.abstract
         calls:
-            - [setExclusionProvider,  ["@orocrm_channel.provider.channel_entity_exclusion_provider"]]
+            - [setExclusionProvider,  ["@oro_channel.provider.channel_entity_exclusion_provider"]]
 
-    orocrm_channel.provider.state_provider:
-        class: %orocrm_channel.provider.state_provider.class%
+    oro_channel.provider.state_provider:
+        class: %oro_channel.provider.state_provider.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
-            - "@orocrm_channel.state_cache"
+            - "@oro_channel.provider.settings_provider"
+            - "@oro_channel.state_cache"
             - "@doctrine"
             - "@oro_security.security_facade.link"
             - "@oro_security.acl_helper"
         tags:
-            - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
-            - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
-            - { name: kernel.event_listener, event: 'orocrm_channel.channel.status_change', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'oro_channel.channel.save_succeed', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'oro_channel.channel.delete_succeed', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'oro_channel.channel.status_change', method: processChannelChange}
 
-    orocrm_channel.provider.utils.entity_state_provider:
-        class: %orocrm_channel.provider.utils.entity_state_provider.class%
+    oro_channel.provider.utils.entity_state_provider:
+        class: %oro_channel.provider.utils.entity_state_provider.class%
         abstract: true
         calls:
-            - [setStateProvider,  ["@orocrm_channel.provider.state_provider"]]
+            - [setStateProvider,  ["@oro_channel.provider.state_provider"]]
 
-    orocrm_channel.provider.lifetime.amount_provider:
-        class: %orocrm_channel.provider.lifetime.amount_provider.class%
+    oro_channel.provider.lifetime.amount_provider:
+        class: %oro_channel.provider.lifetime.amount_provider.class%
         arguments:
             - "@doctrine"
 
-    orocrm_channel.provider.lifetime.average_widget_provider:
-        class: %orocrm_channel.provider.lifetime.average_widget_provider.class%
+    oro_channel.provider.lifetime.average_widget_provider:
+        class: %oro_channel.provider.lifetime.average_widget_provider.class%
         arguments:
             - '@doctrine'
             - '@oro_locale.settings'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
 
-    orocrm_channel.config_resolver:
-        class: %orocrm_channel.config_resolver.class%
+    oro_channel.config_resolver:
+        class: %oro_channel.config_resolver.class%
         arguments:
             - "@service_container"
 
     # event listeners
-    orocrm_channel.event_listener.navigation:
-        class: %orocrm_channel.event_listener.navigation.class%
+    oro_channel.event_listener.navigation:
+        class: %oro_channel.event_listener.navigation.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
-            - "@orocrm_channel.provider.state_provider"
+            - "@oro_channel.provider.settings_provider"
+            - "@oro_channel.provider.state_provider"
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
             - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }
 
-    orocrm_channel.state_cache:
+    oro_channel.state_cache:
           parent: oro.cache.abstract
           calls:
-              - [setNamespace, [ 'orocrm_channel_state' ] ]
+              - [setNamespace, [ 'oro_channel_state' ] ]
 
-    orocrm_channel.form.subscriber.channel_subscriber:
-        class: %orocrm_channel.form.subscriber.channel_subscriber.class%
+    oro_channel.form.subscriber.channel_subscriber:
+        class: %oro_channel.form.subscriber.channel_subscriber.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
 
-    orocrm_channel.event_listener.change_integration_status:
-        class: %orocrm_channel.event_listener.change_integration_status.class%
+    oro_channel.event_listener.change_integration_status:
+        class: %oro_channel.event_listener.change_integration_status.class%
         arguments:
             - "@doctrine"
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
+            - { name: kernel.event_listener, event: oro_channel.channel.status_change, method: onChannelStatusChange }
 
-    orocrm_channel.event_listener.update_integration_connectors:
-        class: %orocrm_channel.event_listener.update_integration_connectors.class%
+    oro_channel.event_listener.update_integration_connectors:
+        class: %oro_channel.event_listener.update_integration_connectors.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
             - "@doctrine"
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSave }
+            - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSave }
 
-    orocrm_channel.event_listener.channel_succeed_deleted:
-        class: %orocrm_channel.event_listener.channel_before_deleted.class%
+    oro_channel.event_listener.channel_succeed_deleted:
+        class: %oro_channel.event_listener.channel_before_deleted.class%
         arguments:
             - "@oro_integration.delete_manager"
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.before_delete, method: onChannelBeforeDelete }
+            - { name: kernel.event_listener, event: oro_channel.channel.before_delete, method: onChannelBeforeDelete }
 
-    orocrm_channel.event_listener.embedded_form:
-        class: %orocrm_channel.event_listener.embedded_form.class%
+    oro_channel.event_listener.embedded_form:
+        class: %oro_channel.event_listener.embedded_form.class%
         calls:
             - [setRequest, ['@?request=']]
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
-    orocrm_channel.event_listener.doctrine:
-      class: %orocrm_channel.event_listener.doctrine.class%
+    oro_channel.event_listener.doctrine:
+      class: %oro_channel.event_listener.doctrine.class%
       arguments:
-          - "@orocrm_channel.provider.settings_provider"
+          - "@oro_channel.provider.settings_provider"
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
-    orocrm_channel.event_listener.timezone_change:
-      class: %orocrm_channel.event_listener.timezone_change.class%
+    oro_channel.event_listener.timezone_change:
+      class: %oro_channel.event_listener.timezone_change.class%
       arguments:
           - "@doctrine"
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
-    orocrm_channel.event_listener.job_execution:
-        class: %orocrm_channel.event_listener.job_execution.class%
+    oro_channel.event_listener.job_execution:
+        class: %oro_channel.event_listener.job_execution.class%
         arguments:
             - "@oro_entity.doctrine_helper"
             - "@security.token_storage"
@@ -328,44 +328,44 @@ services:
             - { name: kernel.event_subscriber }
 
     #twig
-    orocrm_channel.twig.metadata_extension:
-        class: %orocrm_channel.twig.metadata_extension.class%
+    oro_channel.twig.metadata_extension:
+        class: %oro_channel.twig.metadata_extension.class%
         arguments:
-            - "@orocrm_channel.provider.metadata_provider"
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.metadata_provider"
+            - "@oro_channel.provider.settings_provider"
         tags:
             - { name: twig.extension }
 
-    orocrm_channel.form.integration_type_extension:
-        class: %orocrm_channel.form.integration_type_extension.class%
+    oro_channel.form.integration_type_extension:
+        class: %oro_channel.form.integration_type_extension.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
         tags:
             - { name: form.type_extension, alias: oro_integration_channel_form }
 
-    orocrm_channel.form.embedded_type_extension:
-        class: %orocrm_channel.form.embedded_type_extension.class%
+    oro_channel.form.embedded_type_extension:
+        class: %oro_channel.form.embedded_type_extension.class%
         tags:
             - { name: form.type_extension, alias: embedded_form }
 
-    orocrm_channel.twig.lifetime_value_extension:
-        class: %orocrm_channel.twig.lifetime_value_extension.class%
+    oro_channel.twig.lifetime_value_extension:
+        class: %oro_channel.twig.lifetime_value_extension.class%
         arguments:
-            - "@orocrm_channel.provider.lifetime.amount_provider"
+            - "@oro_channel.provider.lifetime.amount_provider"
         tags:
             - { name: twig.extension }
 
     #validators
-    orocrm_channel.validators.channel_integration_validator:
-        class: %orocrm_channel.validators.channel_integration_validator.class%
+    oro_channel.validators.channel_integration_validator:
+        class: %oro_channel.validators.channel_integration_validator.class%
         arguments:
-            - "@orocrm_channel.provider.settings_provider"
+            - "@oro_channel.provider.settings_provider"
         tags:
-            - { name: validator.constraint_validator, alias: orocrm_channel.validator.channel_integration }
+            - { name: validator.constraint_validator, alias: oro_channel.validator.channel_integration }
 
     # import/export
-    orocrm_channel.importexport.helper.channel:
-        class: %orocrm_channel.importexport.helper.channel.class%
+    oro_channel.importexport.helper.channel:
+        class: %oro_channel.importexport.helper.channel.class%
         arguments:
             - "@doctrine"
 
@@ -373,25 +373,25 @@ services:
     oro_workflow.condition.custom:
         class: %oro_workflow.condition.channel_entity_availiable.class%
         arguments:
-            - "@orocrm_channel.provider.state_provider"
+            - "@oro_channel.provider.state_provider"
         tags:
             - { name: oro_workflow.condition, alias: channel_entity_availiable }
 
-    orocrm_channel.provider.channels_by_entities:
-        class: OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider
+    oro_channel.provider.channels_by_entities:
+        class: Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_security.acl_helper'
 
-    orocrm_channel.form.extension.single_channel_mode:
-        class: OroCRM\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension
+    oro_channel.form.extension.single_channel_mode:
+        class: Oro\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension
         arguments:
-            - '@orocrm_channel.provider.channels_by_entities'
+            - '@oro_channel.provider.channels_by_entities'
         tags:
-            - { name: form.type_extension, alias: orocrm_channel_select_type }
+            - { name: form.type_extension, alias: oro_channel_select_type }
 
-    orocrm_channel.event_listener.transitions_attribute:
-        class: %orocrm_channel.event_listener.transitions_attribute.class%
+    oro_channel.event_listener.transitions_attribute:
+        class: %oro_channel.event_listener.transitions_attribute.class%
         arguments:
             - '@form.factory'
             - '@oro_action.context_accessor'

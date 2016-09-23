@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\API;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @outputBuffering enabled
@@ -32,7 +31,7 @@ class RestContactApiTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([
-            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadAccountData'
+            'Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadAccountData'
         ]);
     }
 
@@ -269,7 +268,7 @@ class RestContactApiTest extends WebTestCase
      */
     protected function getContactGroup()
     {
-        $contactGroups = $this->getEntityManager()->getRepository('OroCRMContactBundle:Group')->findAll();
+        $contactGroups = $this->getEntityManager()->getRepository('OroContactBundle:Group')->findAll();
         if (0 == count($contactGroups)) {
             return null;
         }

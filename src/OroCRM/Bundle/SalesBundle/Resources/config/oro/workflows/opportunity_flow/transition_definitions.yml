@@ -22,13 +22,13 @@ workflows:
                         identifier: 'won'
                         attribute: $opportunity.status
                     - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: 'won'
                         attribute: $close_reason
                     - '@assign_value':
                         - [$close_reason_name, 'won']
                     - '@call_service_method':
-                        service: orocrm_sales.provider.probability
+                        service: oro_sales.provider.probability
                         method: get
                         method_parameters: [$opportunity.status]
                         attribute: $opportunity.probability
@@ -47,13 +47,13 @@ workflows:
                         identifier: 'lost'
                         attribute: $opportunity.status
                     - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
                         attribute: $close_reason
                     - '@assign_value':
                         - [$close_revenue, 0]
                     - '@call_service_method':
-                        service: orocrm_sales.provider.probability
+                        service: oro_sales.provider.probability
                         method: get
                         method_parameters: [$opportunity.status]
                         attribute: $opportunity.probability

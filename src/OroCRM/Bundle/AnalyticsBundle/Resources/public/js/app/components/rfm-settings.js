@@ -13,7 +13,7 @@ define(function(require) {
                 '<td class="rfm-cell-frequency"></td>' +
                 '<td class="rfm-cell-monetary"></td>' +
                 '<td class="action-cell">' +
-                    '<a href="#" class="action-delete" title="<%= _.__("orocrm.analytics.delete_row") %>">' +
+                    '<a href="#" class="action-delete" title="<%= _.__("oro.analytics.delete_row") %>">' +
                         '<i class="icon-remove hide-text"></i>' +
                     '</a>' +
                 '</td>' +
@@ -71,10 +71,10 @@ define(function(require) {
                 getIndexInput($row).val(idx);
 
                 if (i === 0) {
-                    postfix = '<br><small>' + __('orocrm.analytics.best') + '</small>';
+                    postfix = '<br><small>' + __('oro.analytics.best') + '</small>';
                 }
                 if (i === rowsNum - 1) {
-                    postfix = '<br><small>' + __('orocrm.analytics.worst') + '</small>';
+                    postfix = '<br><small>' + __('oro.analytics.worst') + '</small>';
                 }
                 $row.find('.rfm-cell-index').html(idx + postfix);
             }
@@ -88,7 +88,7 @@ define(function(require) {
 
                 nextInput.val(val);
 
-                getRfmCell(nextRow, type).find('strong').html(val ? val : __('orocrm.analytics.na'));
+                getRfmCell(nextRow, type).find('strong').html(val ? val : __('oro.analytics.na'));
             });
         };
 
@@ -138,9 +138,9 @@ define(function(require) {
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
-                    $('<span>' + __('orocrm.analytics.less') + ' </span>').insertBefore($input);
+                    $('<span>' + __('oro.analytics.less') + ' </span>').insertBefore($input);
                 } else {
-                    $('<span>' + __('orocrm.analytics.more') + ' </span>').insertBefore($input);
+                    $('<span>' + __('oro.analytics.more') + ' </span>').insertBefore($input);
                 }
 
                 setupChangeVal($row, type);
@@ -158,11 +158,11 @@ define(function(require) {
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
-                    $('<span>' + __('orocrm.analytics.from') + '</span> <strong></strong>' +
-                    '<br><span>' + __('orocrm.analytics.to') + ' </span>').insertBefore($input);
+                    $('<span>' + __('oro.analytics.from') + '</span> <strong></strong>' +
+                    '<br><span>' + __('oro.analytics.to') + ' </span>').insertBefore($input);
                 } else {
-                    $('<span>' + __('orocrm.analytics.from') + ' </span>').insertBefore($input);
-                    $('<br><span> ' + __('orocrm.analytics.to') + '</span> <strong></strong>').insertAfter($input);
+                    $('<span>' + __('oro.analytics.from') + ' </span>').insertBefore($input);
+                    $('<br><span> ' + __('oro.analytics.to') + '</span> <strong></strong>').insertAfter($input);
                 }
 
                 setupChangeVal($row, type);
@@ -180,9 +180,9 @@ define(function(require) {
                 var $input = getVisibleInput($row, type);
 
                 if (rfmElements[type].isIncreasing) {
-                    $('<span>' + __('orocrm.analytics.more') + '</span> <strong></strong>').insertBefore($input);
+                    $('<span>' + __('oro.analytics.more') + '</span> <strong></strong>').insertBefore($input);
                 } else {
-                    $('<span>' + __('orocrm.analytics.less') + '</span> <strong></strong>').insertBefore($input);
+                    $('<span>' + __('oro.analytics.less') + '</span> <strong></strong>').insertBefore($input);
                 }
             }
 

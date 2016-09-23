@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\ChannelBundle\Entity\Manager;
+namespace Oro\Bundle\ChannelBundle\Entity\Manager;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -20,9 +20,9 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 {
     const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
 
-    const CHANNEL_ENTITY_CLASS = 'OroCRM\Bundle\ChannelBundle\Entity\Channel';
+    const CHANNEL_ENTITY_CLASS = 'Oro\Bundle\ChannelBundle\Entity\Channel';
 
-    const CUSTOMER_IDENTITY_INTERFACE = 'OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface';
+    const CUSTOMER_IDENTITY_INTERFACE = 'Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface';
 
     /** @var SearchIndexer */
     protected $searchIndexer;
@@ -257,7 +257,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
                 $this->getObjectManager()->getMetadataFactory()->getAllMetadata(),
                 function (ClassMetadata $metadata) {
                     // @todo: should be removed in CRM-3263
-                    if ($metadata->name === 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity') {
+                    if ($metadata->name === 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity') {
                         return false;
                     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\DependencyInjection\CompilerPass;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use OroCRM\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass\RFMBuilderPass;
+use Oro\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass\RFMBuilderPass;
 
 class RFMBuilderPassTest extends \PHPUnit_Framework_TestCase
 {

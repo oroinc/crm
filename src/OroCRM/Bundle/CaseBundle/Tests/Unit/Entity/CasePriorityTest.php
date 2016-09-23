@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
 class CasePriorityTest extends \PHPUnit_Framework_TestCase
 {

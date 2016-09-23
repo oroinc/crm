@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
+namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 
 class CartApiEntityManager extends ApiEntityManager
 {
@@ -69,7 +68,7 @@ class CartApiEntityManager extends ApiEntityManager
     {
         $result = $this->entitySerializer->serializeEntities(
             [$entity],
-            'OroCRM\Bundle\MagentoBundle\Entity\CartAddress',
+            'Oro\Bundle\MagentoBundle\Entity\CartAddress',
             $this->getAddressSerializationConfig()
         );
 

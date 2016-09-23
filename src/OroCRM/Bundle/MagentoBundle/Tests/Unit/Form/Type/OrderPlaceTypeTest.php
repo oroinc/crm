@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType;
 
 class OrderPlaceTypeTest extends \PHPUnit_Framework_TestCase
 {

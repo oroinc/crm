@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_27;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_27;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,10 +14,10 @@ class AddSyncState implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $customerTable = $schema->getTable('orocrm_magento_customer');
+        $customerTable = $schema->getTable('oro_magento_customer');
         $customerTable->addColumn('sync_state', 'integer', ['notnull' => false]);
 
-        $addressTable = $schema->getTable('orocrm_magento_customer_addr');
+        $addressTable = $schema->getTable('oro_magento_customer_addr');
         $addressTable->addColumn('sync_state', 'integer', ['notnull' => false]);
 
         $transportTable = $schema->getTable('oro_integration_transport');

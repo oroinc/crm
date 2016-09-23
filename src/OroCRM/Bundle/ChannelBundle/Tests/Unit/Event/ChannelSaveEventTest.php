@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Event;
 
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelSaveEventTest extends \PHPUnit_Framework_TestCase
 {

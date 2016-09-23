@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Schema\Schema;
@@ -10,7 +10,6 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 
@@ -76,29 +75,29 @@ class FillActivityAssociationTables implements
         $this->fillActivityTables($queries);
         $this->fillActivityListTables($queries);
 
-        // Remove orocrm_magento_cart_emails
-        $table = $schema->getTable('orocrm_magento_cart_emails');
+        // Remove oro_magento_cart_emails
+        $table = $schema->getTable('oro_magento_cart_emails');
         $table->removeForeignKey('FK_11B0F84B1AD5CDBF');
         $table->removeForeignKey('FK_11B0F84BA832C1C9');
-        $schema->dropTable('orocrm_magento_cart_emails');
+        $schema->dropTable('oro_magento_cart_emails');
 
-        // Remove orocrm_magento_cart_calls
-        $table = $schema->getTable('orocrm_magento_cart_calls');
+        // Remove oro_magento_cart_calls
+        $table = $schema->getTable('oro_magento_cart_calls');
         $table->removeForeignKey('FK_83A847751AD5CDBF');
         $table->removeForeignKey('FK_83A8477550A89B2C');
-        $schema->dropTable('orocrm_magento_cart_calls');
+        $schema->dropTable('oro_magento_cart_calls');
 
-        // Remove orocrm_magento_order_emails
-        $table = $schema->getTable('orocrm_magento_order_emails');
+        // Remove oro_magento_order_emails
+        $table = $schema->getTable('oro_magento_order_emails');
         $table->removeForeignKey('FK_10E2A9508D9F6D38');
         $table->removeForeignKey('FK_10E2A950A832C1C9');
-        $schema->dropTable('orocrm_magento_order_emails');
+        $schema->dropTable('oro_magento_order_emails');
 
-        // Remove orocrm_magento_order_calls
-        $table = $schema->getTable('orocrm_magento_order_calls');
+        // Remove oro_magento_order_calls
+        $table = $schema->getTable('oro_magento_order_calls');
         $table->removeForeignKey('FK_A885A3450A89B2C');
         $table->removeForeignKey('FK_A885A348D9F6D38');
-        $schema->dropTable('orocrm_magento_order_calls');
+        $schema->dropTable('oro_magento_order_calls');
     }
 
     /**
@@ -162,9 +161,9 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (email_id, cart_id)' .
                ' SELECT email_id, cart_id' .
-               ' FROM orocrm_magento_cart_emails';
+               ' FROM oro_magento_cart_emails';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_magento_cart'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_email', 'oro_magento_cart'));
     }
 
     /**
@@ -174,9 +173,9 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (call_id, cart_id)' .
                ' SELECT call_id, cart_id' .
-               ' FROM orocrm_magento_cart_calls';
+               ' FROM oro_magento_cart_calls';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_cart'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'oro_magento_cart'));
     }
 
     /**
@@ -186,9 +185,9 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (email_id, order_id)' .
                ' SELECT email_id, order_id' .
-               ' FROM orocrm_magento_order_emails';
+               ' FROM oro_magento_order_emails';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_magento_order'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_email', 'oro_magento_order'));
     }
 
     /**
@@ -198,9 +197,9 @@ class FillActivityAssociationTables implements
     {
         $sql = 'INSERT INTO %s (call_id, order_id)' .
                ' SELECT call_id, order_id' .
-               ' FROM orocrm_magento_order_calls';
+               ' FROM oro_magento_order_calls';
 
-        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_order'));
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('oro_call', 'oro_magento_order'));
     }
 
     /**
@@ -216,8 +215,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_magento_cart'),
-            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_magento_cart')
+            $this->activityListExtension->getAssociationTableName('oro_magento_cart'),
+            $this->activityExtension->getAssociationTableName('oro_email', 'oro_magento_cart')
         );
     }
 
@@ -234,8 +233,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_magento_cart'),
-            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_cart')
+            $this->activityListExtension->getAssociationTableName('oro_magento_cart'),
+            $this->activityExtension->getAssociationTableName('oro_call', 'oro_magento_cart')
         );
     }
 
@@ -252,8 +251,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_magento_order'),
-            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_magento_order')
+            $this->activityListExtension->getAssociationTableName('oro_magento_order'),
+            $this->activityExtension->getAssociationTableName('oro_email', 'oro_magento_order')
         );
     }
 
@@ -270,8 +269,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_magento_order'),
-            $this->activityExtension->getAssociationTableName('oro_call', 'orocrm_magento_order')
+            $this->activityListExtension->getAssociationTableName('oro_magento_order'),
+            $this->activityExtension->getAssociationTableName('oro_call', 'oro_magento_order')
         );
     }
 }

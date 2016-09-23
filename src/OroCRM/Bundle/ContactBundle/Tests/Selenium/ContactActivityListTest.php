@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Call;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactActivityListTest extends Selenium2TestCase
 {
@@ -17,7 +17,7 @@ class ContactActivityListTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('All - Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
@@ -41,7 +41,7 @@ class ContactActivityListTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $call = $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $call = $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open([$contactName])
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')

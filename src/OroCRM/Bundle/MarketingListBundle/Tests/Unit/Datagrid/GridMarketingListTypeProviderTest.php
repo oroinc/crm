@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
-use OroCRM\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class GridMarketingListTypeProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Twig;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Twig;
 
-use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
-use OroCRM\Bundle\ChannelBundle\Twig\LifetimeValueExtension;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension;
 
 class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider')
+        $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider')
             ->disableOriginalConstructor()->getMock();
 
         $this->extension = new LifetimeValueExtension($this->provider);
@@ -29,8 +29,8 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
     public function testGetLifetimeValue()
     {
         $expectedResult = 12.33;
-        $account        = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channel        = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account        = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel        = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $this->provider->expects($this->once())->method('getAccountLifeTimeValue')
             ->with($this->equalTo($account), $this->equalTo($channel))
@@ -41,11 +41,11 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals($this->extension->getName(), 'orocrm_channel_lifetime_value');
+        $this->assertEquals($this->extension->getName(), 'oro_channel_lifetime_value');
     }
 
     public function testGetFunctions()
     {
-        $this->assertArrayHasKey('orocrm_channel_account_lifetime', $this->extension->getFunctions());
+        $this->assertArrayHasKey('oro_channel_account_lifetime', $this->extension->getFunctions());
     }
 }

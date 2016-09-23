@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Controller\Api\Soap;
+namespace Oro\Bundle\CaseBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
-use OroCRM\Bundle\CaseBundle\Model\CaseApiEntityManager;
-use OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Model\CaseApiEntityManager;
+use Oro\Bundle\CaseBundle\Model\CommentApiEntityManager;
 
 class CommentController extends SoapController
 {
@@ -17,8 +16,8 @@ class CommentController extends SoapController
      * @Soap\Method("getCaseComments")
      * @Soap\Param("caseId", phpType="int")
      * @Soap\Param("order", phpType="string")
-     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap[]")
-     * @AclAncestor("orocrm_case_comment_view")
+     * @Soap\Result(phpType="Oro\Bundle\CaseBundle\Entity\CaseCommentSoap[]")
+     * @AclAncestor("oro_case_comment_view")
      */
     public function cgetAction($caseId, $order = 'DESC')
     {
@@ -31,8 +30,8 @@ class CommentController extends SoapController
     /**
      * @Soap\Method("getCaseComment")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Result(phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
-     * @AclAncestor("orocrm_case_comment_view")
+     * @Soap\Result(phpType="Oro\Bundle\CaseBundle\Entity\CaseCommentSoap")
+     * @AclAncestor("oro_case_comment_view")
      */
     public function getAction($id)
     {
@@ -42,9 +41,9 @@ class CommentController extends SoapController
     /**
      * @Soap\Method("createCaseComment")
      * @Soap\Param("caseId", phpType="int")
-     * @Soap\Param("comment", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
+     * @Soap\Param("comment", phpType="Oro\Bundle\CaseBundle\Entity\CaseCommentSoap")
      * @Soap\Result(phpType="int")
-     * @AclAncestor("orocrm_case_comment_create")
+     * @AclAncestor("oro_case_comment_create")
      */
     public function createAction($caseId)
     {
@@ -55,9 +54,9 @@ class CommentController extends SoapController
     /**
      * @Soap\Method("updateCaseComment")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Param("comment", phpType="OroCRM\Bundle\CaseBundle\Entity\CaseCommentSoap")
+     * @Soap\Param("comment", phpType="Oro\Bundle\CaseBundle\Entity\CaseCommentSoap")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("orocrm_case_comment_update")
+     * @AclAncestor("oro_case_comment_update")
      */
     public function updateAction($id)
     {
@@ -68,7 +67,7 @@ class CommentController extends SoapController
      * @Soap\Method("deleteCaseComment")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("orocrm_case_comment_delete")
+     * @AclAncestor("oro_case_comment_delete")
      */
     public function deleteAction($id)
     {
@@ -80,7 +79,7 @@ class CommentController extends SoapController
      */
     public function getManager()
     {
-        return $this->container->get('orocrm_case.manager.comment.api');
+        return $this->container->get('oro_case.manager.comment.api');
     }
 
     /**
@@ -88,7 +87,7 @@ class CommentController extends SoapController
      */
     protected function getCaseManager()
     {
-        return $this->container->get('orocrm_case.manager.api');
+        return $this->container->get('oro_case.manager.api');
     }
 
     /**
@@ -96,7 +95,7 @@ class CommentController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_case.form.comment.api');
+        return $this->container->get('oro_case.form.comment.api');
     }
 
     /**
@@ -104,7 +103,7 @@ class CommentController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_case.form.handler.comment.api');
+        return $this->container->get('oro_case.form.handler.comment.api');
     }
 
     /**

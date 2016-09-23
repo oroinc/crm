@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LeadTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +29,8 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $now          = new \DateTime('now');
         $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $customer     = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $customer     = $this->getMock('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
+        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [

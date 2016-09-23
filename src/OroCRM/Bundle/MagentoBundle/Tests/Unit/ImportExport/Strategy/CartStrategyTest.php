@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -10,13 +10,12 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
 
 class CartStrategyTest extends AbstractStrategyTest
 {
@@ -58,7 +57,7 @@ class CartStrategyTest extends AbstractStrategyTest
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
         $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $strategy->setImportExportContext($context);
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Cart');
 
         $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
@@ -279,14 +278,14 @@ class CartStrategyTest extends AbstractStrategyTest
 
         $this->databaseHelper->expects($this->once())
             ->method('find')
-            ->with('OroCRM\Bundle\MagentoBundle\Entity\Cart', 'identifier')
+            ->with('Oro\Bundle\MagentoBundle\Entity\Cart', 'identifier')
             ->will($this->returnValue($newCart));
 
         $strategy = $this->getStrategy();
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
         $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $strategy->setImportExportContext($context);
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Cart');
         $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
             ->will($this->returnValue($execution));

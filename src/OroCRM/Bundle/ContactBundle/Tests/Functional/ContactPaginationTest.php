@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -16,7 +16,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     {
         $this->client->followRedirects(true);
         $crawler = $this->openEntity(
-            'orocrm_contact_view',
+            'oro_contact_view',
             LoadContactEntitiesData::FIRST_ENTITY_NAME,
             $this->gridParams
         );
@@ -27,7 +27,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     {
         $this->client->followRedirects(true);
         $crawler = $this->openEntity(
-            'orocrm_contact_update',
+            'oro_contact_update',
             LoadContactEntitiesData::FIRST_ENTITY_NAME,
             $this->gridParams
         );
@@ -38,7 +38,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     {
         $this->client->followRedirects(true);
         $crawler = $this->openEntity(
-            'orocrm_contact_view',
+            'oro_contact_view',
             LoadContactEntitiesData::SECOND_ENTITY_NAME,
             $this->gridParams
         );
@@ -71,7 +71,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     {
         $this->client->followRedirects(true);
         $crawler = $this->openEntity(
-            'orocrm_contact_view',
+            'oro_contact_view',
             LoadContactEntitiesData::FIRST_ENTITY_NAME,
             $this->gridParams
         );
@@ -82,7 +82,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
         }
 
         $crawler = $this->openEntity(
-            'orocrm_contact_view',
+            'oro_contact_view',
             LoadContactEntitiesData::FOURTH_ENTITY_NAME,
             $this->gridParamsFiltered
         );

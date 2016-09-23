@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
 
-use OroCRM\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
+use Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
 
 class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
      */
-    protected $interface = 'OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface';
+    protected $interface = 'Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface';
 
     /**
      * @var RFMAwareFilter
@@ -36,13 +36,13 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function applicableDataProvider()
     {
-        $channelInvalid = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channelInvalid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
         $channelInvalid->expects($this->any())
             ->method('getCustomerIdentity')
             ->will($this->returnValue(new \stdClass()));
-        $channelValid = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channelValid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
         $customerIdentity = $this->getMock($this->interface);
@@ -81,14 +81,14 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function applicableForViewDataProvider()
     {
-        $channelInvalid = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channelInvalid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
         $channelInvalid->expects($this->any())
             ->method('getCustomerIdentity')
             ->will($this->returnValue(new \stdClass()));
 
-        $channelValidDisabledRFM = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channelValidDisabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
         $customerIdentity = $this->getMock($this->interface);
@@ -96,7 +96,7 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerIdentity')
             ->will($this->returnValue($customerIdentity));
 
-        $channelValidEnabledRFM = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channelValidEnabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
         $customerIdentity = $this->getMock($this->interface);

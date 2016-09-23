@@ -1,38 +1,38 @@
 include:
     - contacts.yml
 
-OroCRM\Bundle\TaskBundle\Entity\Task:
+Oro\Bundle\TaskBundle\Entity\Task:
   task-{1..30}:
     subject: '<sentence()>'
     owner: '@admin'
     organization: '@organization'
 
-OroCRM\Bundle\AccountBundle\Entity\Account:
+Oro\Bundle\AccountBundle\Entity\Account:
   account-{1..30}:
     name: 'prefix_<firstName()>'
     owner: '@admin'
     organization: '@organization'
 
-OroCRM\Bundle\ChannelBundle\Entity\Channel:
+Oro\Bundle\ChannelBundle\Entity\Channel:
   b2bchannel:
     name: 'Sales Channel'
     status: true
     channelType: b2b
-    customerIdentity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
     owner: '@organization'
 
-OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+Oro\Bundle\ChannelBundle\Entity\EntityName:
   channel-entity-b2bcustomer:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\B2bCustomer]
+    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
     channel: '@b2bchannel'
   channel-entity-lead:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\Lead]
+    __construct: [Oro\Bundle\SalesBundle\Entity\Lead]
     channel: '@b2bchannel'
   channel-entity-opportunity:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\Opportunity]
+    __construct: [Oro\Bundle\SalesBundle\Entity\Opportunity]
     channel: '@b2bchannel'
 
-OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
   b2bcustomer-{1..30}:
     name: '<firstName()>'
     account: '@account-*'

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -31,13 +31,13 @@ class CreateLeadPhone implements Migration, OrderedMigrationInterface
     }
 
     /**
-     * Create orocrm_lead_phone table
+     * Create oro_lead_phone table
      *
      * @param Schema $schema
      */
     protected function createOrocrmLeadPhoneTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_sales_lead_phone');
+        $table = $schema->createTable('oro_sales_lead_phone');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('phone', 'string', ['length' => 255]);
@@ -49,15 +49,15 @@ class CreateLeadPhone implements Migration, OrderedMigrationInterface
     }
 
     /**
-     * Add orocrm_lead_phone foreign keys.
+     * Add oro_lead_phone foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmLeadPhoneForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_lead_phone');
+        $table = $schema->getTable('oro_sales_lead_phone');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead'),
+            $schema->getTable('oro_sales_lead'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]

@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Entity;
+namespace Oro\Bundle\CaseBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\SoapBundle\Entity\SoapEntityInterface;
 
 /**
- * @Soap\Alias("OroCRM.Bundle.CaseBundle.Entity.CaseEntity")
+ * @Soap\Alias("Oro.Bundle.CaseBundle.Entity.CaseEntity")
  */
 class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
 {

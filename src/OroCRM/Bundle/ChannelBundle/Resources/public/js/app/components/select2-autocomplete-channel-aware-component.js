@@ -6,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
     var BaseSelect2View = require('oroform/js/app/views/select2-autocomplete-view');
-    var viewFactory = require('orocrmchannel/js/app/factory/select2-channel-aware-view-factory');
+    var viewFactory = require('orochannel/js/app/factory/select2-channel-aware-view-factory');
     var Select2View = viewFactory(BaseSelect2View);
 
     Select2AutocompleteChannelAwareComponent = Select2AutocompleteComponent.extend({

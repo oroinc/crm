@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\EventListener\Datagrid;
+namespace Oro\Bundle\ReportBundle\EventListener\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -13,8 +13,7 @@ use Oro\Bundle\FilterBundle\Filter\DateFilterUtility;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * Apply query modifications to the Opportunity By Status Report
@@ -56,7 +55,7 @@ class OpportunitiesByStatusReportListener
     }
 
     /**
-     * event: oro_datagrid.datagrid.build.before.orocrm_report-opportunities-by_status
+     * event: oro_datagrid.datagrid.build.before.oro_report-opportunities-by_status
      *
      * @param BuildBefore $event
      */
@@ -74,7 +73,7 @@ class OpportunitiesByStatusReportListener
     /**
      * Move the date filters into join clause to avoid filtering statuses from the report
      *
-     * event: oro_datagrid.datagrid.build.after.orocrm_report-opportunities-by_status
+     * event: oro_datagrid.datagrid.build.after.oro_report-opportunities-by_status
      *
      * @param BuildAfter $event
      */

@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -16,7 +15,7 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
+        return 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
     }
 
     /**
@@ -43,11 +42,11 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
     {
         $addressRepo = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
         $userRepo    = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $contactRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $leadRepo    = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
-        $accountRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channelRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $opportunityRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
+        $contactRepo = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
+        $leadRepo    = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
+        $accountRepo = $this->templateManager->getEntityRepository('Oro\Bundle\AccountBundle\Entity\Account');
+        $channelRepo = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $opportunityRepo = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Opportunity');
 
         switch ($key) {
             case 'Jerry Coleman':

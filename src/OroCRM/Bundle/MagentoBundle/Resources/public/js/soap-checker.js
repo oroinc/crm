@@ -18,7 +18,7 @@ define([
          * Check url
          * @property string
          */
-        route:           'orocrm_magento_soap_check',
+        route:           'oro_magento_soap_check',
         url:             null,
         id:              null,
         requiredOptions: [
@@ -89,7 +89,7 @@ define([
                 .always(_.bind(function(response, status) {
                     mediator.execute('hideLoading');
                     if (status !== 'success') {
-                        this.renderResult('error', __('orocrm.magento.error'));
+                        this.renderResult('error', __('oro.magento.error'));
                     }
                 }, this));
         },
@@ -121,14 +121,14 @@ define([
             if (res.isExtensionInstalled || false) {
                 if (res.isSupportedVersion || false) {
                     this.renderResult('success', __(
-                        'orocrm.magento.success_bridge',
+                        'oro.magento.success_bridge',
                         {extension_version: res.extensionVersion}
                     ));
                 } else {
                     this.renderResult(
                         'warning',
                         __(
-                            'orocrm.magento.outdated_warning',
+                            'oro.magento.outdated_warning',
                             {
                                 extension_version: res.extensionVersion,
                                 required_version: res.requiredExtensionVersion
@@ -137,12 +137,12 @@ define([
                     );
                 }
             } else {
-                this.renderResult('success', __('orocrm.magento.success'));
+                this.renderResult('success', __('oro.magento.success'));
             }
         },
 
         renderErrorMessage: function() {
-            this.renderResult('error', __('orocrm.magento.not_valid_parameters'));
+            this.renderResult('error', __('oro.magento.not_valid_parameters'));
         },
 
         /**

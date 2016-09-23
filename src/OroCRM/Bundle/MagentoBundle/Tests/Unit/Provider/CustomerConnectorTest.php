@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
+use Oro\Bundle\MagentoBundle\Provider\CustomerConnector;
 
 class CustomerConnectorTest extends MagentoConnectorTestCase
 {
@@ -39,8 +38,8 @@ class CustomerConnectorTest extends MagentoConnectorTestCase
 
         $this->assertEquals('customer', $connector->getType());
         $this->assertEquals('mage_customer_import', $connector->getImportJobName());
-        $this->assertEquals('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer', $connector->getImportEntityFQCN());
-        $this->assertEquals('orocrm.magento.connector.customer.label', $connector->getLabel());
+        $this->assertEquals('Oro\\Bundle\\MagentoBundle\\Entity\\Customer', $connector->getImportEntityFQCN());
+        $this->assertEquals('oro.magento.connector.customer.label', $connector->getLabel());
     }
 
     protected function supportsForceMode()

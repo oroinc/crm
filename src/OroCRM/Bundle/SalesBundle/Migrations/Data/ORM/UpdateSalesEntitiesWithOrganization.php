@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,8 +22,8 @@ class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization impleme
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMSalesBundle:Lead');
-        $this->update($manager, 'OroCRMSalesBundle:Opportunity');
-        $this->update($manager, 'OroCRMSalesBundle:SalesFunnel');
+        $this->update($manager, 'OroSalesBundle:Lead');
+        $this->update($manager, 'OroSalesBundle:Opportunity');
+        $this->update($manager, 'OroSalesBundle:SalesFunnel');
     }
 }

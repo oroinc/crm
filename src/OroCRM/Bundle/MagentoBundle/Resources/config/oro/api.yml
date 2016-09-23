@@ -1,10 +1,10 @@
 api:
     entities:
-        OroCRM\Bundle\MagentoBundle\Entity\Address: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Cart: ~
-        OroCRM\Bundle\MagentoBundle\Entity\CartAddress: ~
-        OroCRM\Bundle\MagentoBundle\Entity\CartItem: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Customer:
+        Oro\Bundle\MagentoBundle\Entity\Address: ~
+        Oro\Bundle\MagentoBundle\Entity\Cart: ~
+        Oro\Bundle\MagentoBundle\Entity\CartAddress: ~
+        Oro\Bundle\MagentoBundle\Entity\CartItem: ~
+        Oro\Bundle\MagentoBundle\Entity\Customer:
             fields:
                 orders:
                     exclude: true
@@ -22,16 +22,16 @@ api:
                         add_relationship: false
                         delete_relationship: false
 
-#        OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup: ~
-#        OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
-#        OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Order: ~
-        OroCRM\Bundle\MagentoBundle\Entity\OrderAddress: ~
-        OroCRM\Bundle\MagentoBundle\Entity\OrderItem: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Product: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Region: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Store: ~
-        OroCRM\Bundle\MagentoBundle\Entity\Website: ~
+#        Oro\Bundle\MagentoBundle\Entity\CustomerGroup: ~
+#        Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
+#        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
+        Oro\Bundle\MagentoBundle\Entity\Order: ~
+        Oro\Bundle\MagentoBundle\Entity\OrderAddress: ~
+        Oro\Bundle\MagentoBundle\Entity\OrderItem: ~
+        Oro\Bundle\MagentoBundle\Entity\Product: ~
+        Oro\Bundle\MagentoBundle\Entity\Region: ~
+        Oro\Bundle\MagentoBundle\Entity\Store: ~
+        Oro\Bundle\MagentoBundle\Entity\Website: ~
 
         # remove this exclusion when NewsletterSubscriber entity will be enabled for Data API
         Extend\Entity\EV_Mage_Subscr_Status: { exclude: true}

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
+namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
@@ -15,7 +15,7 @@ class CustomerApiEntityManager extends ApiEntityManager
             'excluded_fields' => ['carts', 'orders', 'newsletterSubscribers'],
             'fields'          => [
                 'birthday'     => [
-                    'data_transformer' => 'orocrm_magento.customer_birthday_type_transformer'
+                    'data_transformer' => 'oro_magento.customer_birthday_type_transformer'
                 ],
                 'website'      => ['fields' => 'id'],
                 'store'        => ['fields' => 'id'],

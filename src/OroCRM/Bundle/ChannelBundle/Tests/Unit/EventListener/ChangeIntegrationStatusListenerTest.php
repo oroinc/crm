@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
-use OroCRM\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener;
+use Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
+use Oro\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +30,7 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->registry        = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
-        $this->event           = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent')
+        $this->event           = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent')
             ->disableOriginalConstructor()->getMock();
         $this->em          = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();

@@ -16,7 +16,7 @@
     {{ soapCheckerOptions|json_encode|raw }}
 {% endmacro %}
 
-{% block orocrm_magento_soap_transport_check_button_widget %}
+{% block oro_magento_soap_transport_check_button_widget %}
     {% set entity = form.parent.vars.value %}
     <div class="control-group">
         <div class="controls">
@@ -31,11 +31,11 @@
             {% if entity is defined and entity.id is not empty %}
                 {% if entity.isExtensionInstalled %}
                     {% if not entity.supportedExtensionVersion %}
-                        {% set message = 'orocrm.magento.magentosoaptransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
+                        {% set message = 'oro.magento.magentosoaptransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
                         {% set messageType = 'warning' %}
                     {% endif %}
                 {% else %}
-                    {% set message = 'orocrm.magento.magentosoaptransport.message.native_soap'|trans %}
+                    {% set message = 'oro.magento.magentosoaptransport.message.native_soap'|trans %}
                     {% set messageType = 'info' %}
                 {% endif %}
 
@@ -47,11 +47,11 @@
     </div>
 {% endblock %}
 
-{% block orocrm_magento_soap_transport_check_button_row %}
+{% block oro_magento_soap_transport_check_button_row %}
     {{ block('button_row') }}
 {% endblock %}
 
-{% block orocrm_magento_website_select_row %}
+{% block oro_magento_website_select_row %}
     {% spaceless %}
         <div class="control-group{% if attr.class is defined %} {{ attr.class }}{% endif %}">
             {% if label is not sameas(false) %}
@@ -79,12 +79,12 @@
     {% endspaceless %}
 {% endblock %}
 
-{% block orocrm_magento_order_place_form_type_row %}
+{% block oro_magento_order_place_form_type_row %}
     {% set cartId = form.cart_id.vars.data %}
     {{ oro_widget_render({
         'widgetType': 'block',
         'alias': 'order-place-widget',
-        'url': path('orocrm_magento_orderplace_cart', {id: cartId}),
+        'url': path('oro_magento_orderplace_cart', {id: cartId}),
         'loadingMaskEnabled': true
     }) }}
 
@@ -99,7 +99,7 @@
     </script>
 {% endblock %}
 
-{% block orocrm_magento_customer_addresses_widget %}
+{% block oro_magento_customer_addresses_widget %}
     <div {% if form.vars.value and form.vars.value.originId %}class="collection-remove-disabled"{% endif %}>
         {{ form_widget(form) }}
     </div>

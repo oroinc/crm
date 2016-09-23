@@ -9,9 +9,9 @@
         "symfony/symfony": "2.8.*, !=2.8.10"
     },
     "autoload": {
-        "psr-0": { "OroCRM\\Bundle\\CaseBundle": "" }
+        "psr-0": { "Oro\\Bundle\\CaseBundle": "" }
     },
-    "target-dir": "OroCRM/Bundle/CaseBundle",
+    "target-dir": "Oro/Bundle/CaseBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -9,8 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Product;
+use Oro\Bundle\MagentoBundle\Entity\Product;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
@@ -19,8 +18,8 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class ProductController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_product_index")
-     * @AclAncestor("orocrm_magento_product_view")
+     * @Route("/", name="oro_magento_product_index")
+     * @AclAncestor("oro_magento_product_view")
      * @Template
      */
     public function indexAction()
@@ -29,12 +28,12 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_magento_product_view", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="oro_magento_product_view", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_product_view",
+     *      id="oro_magento_product_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Product"
+     *      class="OroMagentoBundle:Product"
      * )
      * @Template
      */
@@ -44,8 +43,8 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_magento_product_info", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_product_view")
+     * @Route("/info/{id}", name="oro_magento_product_info", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_product_view")
      * @Template
      */
     public function infoAction(Product $customer)

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Entity;
+namespace Oro\Bundle\MarketingListBundle\Entity;
 
 interface MarketingListStateItemInterface
 {

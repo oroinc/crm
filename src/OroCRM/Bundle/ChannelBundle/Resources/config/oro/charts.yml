@@ -4,14 +4,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.channel.dashboard.average_lifetime_sales_chart.month
+                label: oro.channel.dashboard.average_lifetime_sales_chart.month
                 required: true
                 default_type: string
                 type: month
                 field_name: month_year
             value:
                 name: value
-                label: orocrm.channel.dashboard.average_lifetime_sales_chart.axis_label
+                label: oro.channel.dashboard.average_lifetime_sales_chart.axis_label
                 required: true
                 default_type: decimal
                 type: currency

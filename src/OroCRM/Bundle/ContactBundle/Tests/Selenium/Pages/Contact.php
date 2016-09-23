@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
  * Class Contact
  *
- * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
+ * @package Oro\Bundle\ContactBundle\Tests\Selenium\Pages
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Contact extends AbstractPageEntity
@@ -32,18 +32,18 @@ class Contact extends AbstractPageEntity
 
 
     /** @var string **/
-    protected $owner = "//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a";
+    protected $owner = "//div[starts-with(@id,'s2id_oro_contact_form_owner')]/a";
 
     public function init()
     {
-        $this->namePrefix = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_namePrefix']");
-        $this->firstName = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_firstName']");
-        $this->lastName = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_lastName']");
-        $this->nameSuffix = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_nameSuffix']");
-        $this->email = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_emails_0_email']");
-        $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_assignedTo')]/a");
-        $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_reportsTo')]/a");
-        $this->addressCollection = $this->test->byXpath("//div[@data-ftid='orocrm_contact_form_addresses']");
+        $this->namePrefix = $this->test->byXpath("//*[@data-ftid='oro_contact_form_namePrefix']");
+        $this->firstName = $this->test->byXpath("//*[@data-ftid='oro_contact_form_firstName']");
+        $this->lastName = $this->test->byXpath("//*[@data-ftid='oro_contact_form_lastName']");
+        $this->nameSuffix = $this->test->byXpath("//*[@data-ftid='oro_contact_form_nameSuffix']");
+        $this->email = $this->test->byXpath("//*[@data-ftid='oro_contact_form_emails_0_email']");
+        $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_contact_form_assignedTo')]/a");
+        $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_contact_form_reportsTo')]/a");
+        $this->addressCollection = $this->test->byXpath("//div[@data-ftid='oro_contact_form_addresses']");
 
         return $this;
     }
@@ -86,9 +86,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressTypes($values, $addressId = 0)
     {
-        $xpath = "//input[@name = 'orocrm_contact_form[addresses][{$addressId}][types][]'";
+        $xpath = "//input[@name = 'oro_contact_form[addresses][{$addressId}][types][]'";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpath = "//input[@name='orocrm_contact_address_form[types][]'";
+            $xpath = "//input[@name='oro_contact_address_form[types][]'";
         }
         foreach ($values as $type) {
             $this->test->byXpath("{$xpath} and @value = '{$type}']")->click();
@@ -99,9 +99,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressPrimary($value, $addressId = 0)
     {
-        $primary = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_primary']";
+        $primary = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_primary']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $primary = ("//input[@data-ftid='orocrm_contact_address_form_primary']");
+            $primary = ("//input[@data-ftid='oro_contact_address_form_primary']");
         }
         if ($value) {
             $this->test->byXpath($primary)->click();
@@ -115,7 +115,7 @@ class Contact extends AbstractPageEntity
         $values = array();
         $types = $this->test->elements(
             $this->test->using('xpath')
-                ->value("//input[@name = 'orocrm_contact_form[addresses][{$addressId}][types][]']")
+                ->value("//input[@name = 'oro_contact_form[addresses][{$addressId}][types][]']")
         );
         foreach ($types as $type) {
             /** @var \PHPUnit_Extensions_Selenium2TestCase_Element $type */
@@ -130,14 +130,14 @@ class Contact extends AbstractPageEntity
     public function getAddressPrimary($addressId = 0)
     {
         return $this->test
-            ->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_primary']")->selected();
+            ->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_primary']")->selected();
     }
 
     public function setAddressFirstName($value, $addressId = 0)
     {
-        $addressFirstName = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_firstName']";
+        $addressFirstName = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_firstName']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $addressFirstName = "//input[@data-ftid='orocrm_contact_address_form_firstName']";
+            $addressFirstName = "//input[@data-ftid='oro_contact_address_form_firstName']";
         }
         $addressFirstName = $this->test->byXpath($addressFirstName);
         $this->test->moveto($addressFirstName);
@@ -152,15 +152,15 @@ class Contact extends AbstractPageEntity
     public function getAddressFirstName($addressId = 0)
     {
         $addressFirstName = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_firstName']");
+            ->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_firstName']");
         return $addressFirstName->attribute('value');
     }
 
     public function setAddressLastName($value, $addressId = 0)
     {
-        $addressLastName = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_lastName']";
+        $addressLastName = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_lastName']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $addressLastName = "//input[@data-ftid='orocrm_contact_address_form_lastName']";
+            $addressLastName = "//input[@data-ftid='oro_contact_address_form_lastName']";
         }
         $addressLastName = $this->test->byXpath($addressLastName);
         $this->test->moveto($addressLastName);
@@ -175,15 +175,15 @@ class Contact extends AbstractPageEntity
     public function getAddressLastName($addressId = 0)
     {
         $addressLastName = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_lastName']");
+            ->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_lastName']");
         return $addressLastName->attribute('value');
     }
 
     public function setAddressStreet($value, $addressId = 0)
     {
-        $street = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_street']";
+        $street = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_street']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $street = "//input[@data-ftid='orocrm_contact_address_form_street']";
+            $street = "//input[@data-ftid='oro_contact_address_form_street']";
         }
         $street = $this->test->byXpath($street);
         $this->test->moveto($street);
@@ -196,15 +196,15 @@ class Contact extends AbstractPageEntity
 
     public function getAddressStreet($addressId = 0)
     {
-        $street = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_street']");
+        $street = $this->test->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_street']");
         return $street->attribute('value');
     }
 
     public function setAddressCity($value, $addressId = 0)
     {
-        $xpathCity = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_city']";
+        $xpathCity = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_city']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpathCity = "//input[@data-ftid='orocrm_contact_address_form_city']";
+            $xpathCity = "//input[@data-ftid='oro_contact_address_form_city']";
         }
         $city = $this->test->byXpath($xpathCity);
         $this->test->moveto($city);
@@ -216,15 +216,15 @@ class Contact extends AbstractPageEntity
 
     public function getAddressCity($addressId = 0)
     {
-        $city = $this->test->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_city']");
+        $city = $this->test->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_city']");
         return $city->attribute('value');
     }
 
     public function setAddressPostalCode($value, $addressId = 0)
     {
-        $xpathZipcode = "//input[@data-ftid='orocrm_contact_form_addresses_{$addressId}_postalCode']";
+        $xpathZipcode = "//input[@data-ftid='oro_contact_form_addresses_{$addressId}_postalCode']";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpathZipcode = "//input[@data-ftid='orocrm_contact_address_form_postalCode']";
+            $xpathZipcode = "//input[@data-ftid='oro_contact_address_form_postalCode']";
         }
         $zipcode = $this->test->byXpath($xpathZipcode);
         $this->test->moveto($zipcode);
@@ -237,15 +237,15 @@ class Contact extends AbstractPageEntity
     public function getAddressPostalCode($addressId = 0)
     {
         $zipcode = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_contact_form_addresses_{$addressId}_postalCode']");
+            ->byXpath("//*[@data-ftid='oro_contact_form_addresses_{$addressId}_postalCode']");
         return $zipcode->attribute('value');
     }
 
     public function setAddressCountry($value, $addressId = 0)
     {
-        $country = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a";
+        $country = "//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_country')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $country = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_country')]/a";
+            $country = "//div[starts-with(@id,'s2id_oro_contact_address_form_country')]/a";
         }
         $country = $this->test->byXpath($country);
         $this->test->moveto($country);
@@ -266,9 +266,9 @@ class Contact extends AbstractPageEntity
 
     public function typeAddressCountry($value, $addressId = 0)
     {
-        $country = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a";
+        $country = "//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_country')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $country = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_country')]/a";
+            $country = "//div[starts-with(@id,'s2id_oro_contact_address_form_country')]/a";
         }
         $country = $this->test->byXpath($country);
         $this->test->moveto($country);
@@ -290,15 +290,15 @@ class Contact extends AbstractPageEntity
     public function getAddressCountry($addressId = 0)
     {
         return $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_country')]/a/span")
+            ->byXpath("//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_country')]/a/span")
             ->text();
     }
 
     public function setAddressRegion($region, $addressId = 0)
     {
-        $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a";
+        $xpath = "//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_region')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_region')]/a";
+            $xpath = "//div[starts-with(@id,'s2id_oro_contact_address_form_region')]/a";
         }
         $xpath = $this->test->byXpath($xpath);
         $this->test->moveto($xpath);
@@ -318,9 +318,9 @@ class Contact extends AbstractPageEntity
 
     public function typeAddressRegion($region, $addressId = 0)
     {
-        $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a";
+        $xpath = "//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_region')]/a";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpath = "//div[starts-with(@id,'s2id_orocrm_contact_address_form_region')]/a";
+            $xpath = "//div[starts-with(@id,'s2id_oro_contact_address_form_region')]/a";
         }
         $xpath = $this->test->byXpath($xpath);
         $this->test->moveto($xpath);
@@ -341,7 +341,7 @@ class Contact extends AbstractPageEntity
     public function getAddressRegion($addressId = 0)
     {
         return $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_addresses_{$addressId}_region')]/a/span")
+            ->byXpath("//div[starts-with(@id,'s2id_oro_contact_form_addresses_{$addressId}_region')]/a/span")
             ->text();
     }
 
@@ -352,13 +352,13 @@ class Contact extends AbstractPageEntity
             $this->test->byXpath("//button[@data-action-name='add_address']")->click();
             $this->waitForAjax();
         } elseif (!$this->isElementPresent(
-            "//div[@data-ftid='orocrm_contact_form_addresses']/div[@data-content='{$addressId}' or " .
-            "@data-content='orocrm_contact_form[addresses][{$addressId}]']"
+            "//div[@data-ftid='oro_contact_form_addresses']/div[@data-content='{$addressId}' or " .
+            "@data-content='oro_contact_form[addresses][{$addressId}]']"
         )
         ) {
             //click Add
             $addButton = $this->test->byXpath(
-                "//div[@class='row-oro'][div[@data-ftid='orocrm_contact_form_addresses']]" .
+                "//div[@class='row-oro'][div[@data-ftid='oro_contact_form_addresses']]" .
                 "//a[@class='btn add-list-item']"
             );
             $this->test->moveto($addButton);

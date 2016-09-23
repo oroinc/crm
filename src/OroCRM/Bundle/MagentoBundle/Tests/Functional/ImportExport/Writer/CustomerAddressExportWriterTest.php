@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
+use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Service\StateManager;
 
 /**
  * @dbIsolation
@@ -18,7 +18,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
     {
         parent::setUp();
 
-        $this->getContainer()->get('orocrm_magento.importexport.writer.customer_address')->setTransport(
+        $this->getContainer()->get('oro_magento.importexport.writer.customer_address')->setTransport(
             $this->transport
         );
     }
@@ -53,7 +53,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -117,7 +117,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
                 ],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -162,7 +162,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 
@@ -202,7 +202,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
-                'processorAlias' => 'orocrm_magento'
+                'processorAlias' => 'oro_magento'
             ]
         );
 

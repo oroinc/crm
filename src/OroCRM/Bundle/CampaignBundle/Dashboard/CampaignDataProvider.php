@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Dashboard;
+namespace Oro\Bundle\CampaignBundle\Dashboard;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository;
+use Oro\Bundle\CampaignBundle\Entity\Repository\CampaignRepository;
 
 class CampaignDataProvider
 {
@@ -85,6 +85,6 @@ class CampaignDataProvider
      */
     protected function getCampaignRepository()
     {
-        return $this->registry->getRepository('OroCRMCampaignBundle:Campaign');
+        return $this->registry->getRepository('OroCampaignBundle:Campaign');
     }
 }

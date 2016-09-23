@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Metadata\MetadataFactory;
 
@@ -15,8 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
-
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
 
 class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\EventListener\Config;
+namespace Oro\Bundle\SalesBundle\EventListener\Config;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigGetEvent;
 

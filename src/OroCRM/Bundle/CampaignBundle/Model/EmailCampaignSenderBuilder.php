@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Model;
+namespace Oro\Bundle\CampaignBundle\Model;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignSenderBuilder
 {

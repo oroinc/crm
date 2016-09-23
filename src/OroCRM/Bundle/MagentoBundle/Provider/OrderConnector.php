@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 class OrderConnector extends AbstractMagentoConnector
 {
@@ -11,7 +11,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.order.label';
+        return 'oro.magento.connector.order.label';
     }
 
     /**

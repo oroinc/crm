@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\DataFixtures;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class LoadB2bCustomerEntitiesData extends AbstractFixture
 {

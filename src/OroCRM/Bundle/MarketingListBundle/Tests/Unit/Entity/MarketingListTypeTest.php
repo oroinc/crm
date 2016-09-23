@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MarketingListTypeTest extends \PHPUnit_Framework_TestCase

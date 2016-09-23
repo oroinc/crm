@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Service\AutomaticDiscovery;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Service\AutomaticDiscovery;
 
 use Doctrine\Common\Collections\Criteria;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy;
+use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy;
 
 /**
  * @dbIsolation
@@ -25,9 +24,9 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadAddressDiscoveryData']);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadAddressDiscoveryData']);
 
-        $this->strategy = $this->getContainer()->get('orocrm_magento.strategy.automatic_discovery.default');
+        $this->strategy = $this->getContainer()->get('oro_magento.strategy.automatic_discovery.default');
     }
 
     /**
@@ -42,7 +41,7 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
         $entity = $this->getReference($reference);
 
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $repo = $em->getRepository('OroCRMMagentoBundle:Customer');
+        $repo = $em->getRepository('OroMagentoBundle:Customer');
 
         $qb = $repo->createQueryBuilder(AutomaticDiscovery::ROOT_ALIAS);
 

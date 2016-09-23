@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\CartConnector;
+use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class InitialCartConnector extends AbstractMagentoConnector implements
     ExtensionAwareInterface,
@@ -17,7 +17,7 @@ class InitialCartConnector extends AbstractMagentoConnector implements
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.cart.initial.label';
+        return 'oro.magento.connector.cart.initial.label';
     }
 
     /**

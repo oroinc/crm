@@ -1,4 +1,4 @@
-OroCRM\Bundle\AccountBundle\Entity\Account:
+Oro\Bundle\AccountBundle\Entity\Account:
     exclusion_policy: ALL
     properties:
         name:

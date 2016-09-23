@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
+namespace Oro\Bundle\SalesBundle\Tests\Selenium\Pages;
 
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 
 trait SalesHelperTrait
 {
@@ -16,7 +16,7 @@ trait SalesHelperTrait
         $name = 'Lead_' . mt_rand();
         /** @var Leads $page */
         $page = new Leads($this, false);
-        $page->openLeads('OroCRM\Bundle\SalesBundle')
+        $page->openLeads('Oro\Bundle\SalesBundle')
             ->add()
             ->setName($name)
             ->setFirstName($name . '_first_name')
@@ -25,7 +25,7 @@ trait SalesHelperTrait
             ->setPhone('712-566-3002')
             ->setEmail($name . '@mail.com')
             ->setCompany('Some Company')
-            ->setWebsite('http://www.orocrm.com')
+            ->setWebsite('http://www.oro.com')
             ->setEmployees('100')
             ->setOwner('admin')
             ->setAddress($address)
@@ -43,7 +43,7 @@ trait SalesHelperTrait
 
         /** @var Channels $page */
         $page = new Channels($this, false);
-        $page->openChannels('OroCRM\Bundle\ChannelBundle')
+        $page->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
@@ -69,7 +69,7 @@ trait SalesHelperTrait
 
         /** @var Opportunities $page */
         $page = new Opportunities($this, false);
-        $page->openOpportunities('OroCRM\Bundle\SalesBundle')
+        $page->openOpportunities('Oro\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
             ->setChannel($channelName)
@@ -103,7 +103,7 @@ trait SalesHelperTrait
 
         /** @var Accounts $page */
         $page = new Accounts($this, false);
-        $page->openAccounts('OroCRM\Bundle\AccountBundle')
+        $page->openAccounts('Oro\Bundle\AccountBundle')
             ->add()
             ->setName($accountName)
             ->setOwner('admin')
@@ -122,7 +122,7 @@ trait SalesHelperTrait
         $name = 'B2BCustomer_'.mt_rand();
         /** @var B2BCustomers $page */
         $page = new B2BCustomers($this, false);
-        $page->openB2BCustomers('OroCRM\Bundle\SalesBundle')
+        $page->openB2BCustomers('Oro\Bundle\SalesBundle')
             ->add()
             ->setName($name)
             ->setOwner('admin')

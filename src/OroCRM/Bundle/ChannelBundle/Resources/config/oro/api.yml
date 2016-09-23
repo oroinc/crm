@@ -1,6 +1,6 @@
 api:
     entities:
-        OroCRM\Bundle\ChannelBundle\Entity\Channel:
+        Oro\Bundle\ChannelBundle\Entity\Channel:
             actions:
                 create: false
                 update: false

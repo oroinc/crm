@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Acl\Voter;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Acl\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter;
+use Oro\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter;
 
 class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,7 +123,7 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
      */
     public function attributesDataProvider()
     {
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 

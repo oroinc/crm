@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Entity\Provider;
+namespace Oro\Bundle\ContactBundle\Entity\Provider;
 
 use Doctrine\ORM\EntityManager;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
 
 class EmailOwnerProvider implements EmailOwnerProviderInterface
@@ -14,7 +14,7 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
      */
     public function getEmailOwnerClass()
     {
-        return 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+        return 'Oro\Bundle\ContactBundle\Entity\Contact';
     }
 
     /**
@@ -26,7 +26,7 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
         $contact = null;
 
         /** @var ContactEmail $emailEntity */
-        $emailEntity = $em->getRepository('OroCRMContactBundle:ContactEmail')
+        $emailEntity = $em->getRepository('OroContactBundle:ContactEmail')
             ->findOneBy(array('email' => $email));
         if ($emailEntity !== null) {
             $contact = $emailEntity->getOwner();

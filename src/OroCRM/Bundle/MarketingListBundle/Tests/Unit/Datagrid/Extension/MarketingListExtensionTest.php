@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid\Extension;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Datagrid\Extension;
 
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Func;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +24,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,14 +125,14 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function applicableDataProvider()
     {
-        $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $nonManualMarketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $nonManualMarketingList->expects($this->once())
             ->method('isManual')
             ->will($this->returnValue(false));
 
-        $manualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $manualMarketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
         $manualMarketingList->expects($this->once())
@@ -157,7 +157,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     public function testVisitDatasource($dqlParts, $expected, $isObject = false)
     {
         $marketingListId        = 1;
-        $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $nonManualMarketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 

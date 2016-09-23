@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Model;
+namespace Oro\Bundle\ChannelBundle\Model;
 
 class ExtendCustomerIdentity
 {

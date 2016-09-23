@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
 
 class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class ChannelEntityTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testType()
     {
-        $this->assertSame('orocrm_channel_entities', $this->type->getName());
+        $this->assertSame('oro_channel_entities', $this->type->getName());
         $this->assertSame('hidden', $this->type->getParent());
 
         $this->assertInstanceOf('Symfony\Component\Form\AbstractType', $this->type);

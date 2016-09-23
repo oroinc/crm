@@ -1,19 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Command;
+namespace Oro\Bundle\MagentoBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Component\Log\OutputLogger;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Command\AbstractSyncCronCommand;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 
 class CartExpirationSyncCommand extends AbstractSyncCronCommand
 {
@@ -59,7 +58,7 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
         }
 
         /** @var CartExpirationProcessor $processor */
-        $processor  = $this->getService('orocrm_magento.provider.cart_expiration_processor');
+        $processor  = $this->getService('oro_magento.provider.cart_expiration_processor');
         $repository = $this->getService('doctrine.orm.entity_manager')->getRepository('OroIntegrationBundle:Channel');
         if ($channelId) {
             $channel = $repository->getOrLoadById($channelId);

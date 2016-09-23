@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\TrackingBundle\Entity\TrackingEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification;
-use OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\TestTrackingWebsite;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification;
+use Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\Entity\TestTrackingWebsite;
 
 class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +33,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
         $this->extendConfigProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()
             ->getMock();
         $doctrine = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
@@ -107,10 +106,10 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             [
-                'OroCRM\Bundle\MagentoBundle\Entity\Order',
-                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                'OroCRM\Bundle\MagentoBundle\Entity\Product',
-                'OroCRM\Bundle\MagentoBundle\Entity\Cart'
+                'Oro\Bundle\MagentoBundle\Entity\Order',
+                'Oro\Bundle\MagentoBundle\Entity\Customer',
+                'Oro\Bundle\MagentoBundle\Entity\Product',
+                'Oro\Bundle\MagentoBundle\Entity\Cart'
             ],
             $this->provider->getEventTargets()
         );
@@ -208,7 +207,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
             [
                 'cart item added',
                 100,
-                'OroCRMMagentoBundle:Product',
+                'OroMagentoBundle:Product',
                 [
                     'originId' => 100
                 ],
@@ -217,7 +216,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
             [
                 'order successfully placed',
                 108.8,
-                'OroCRMMagentoBundle:Order',
+                'OroMagentoBundle:Order',
                 [
                     'subtotalAmount' => 108.8,
                     'dataChannel' => $channel
@@ -227,7 +226,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
             [
                 'order placed',
                 1000098,
-                'OroCRMMagentoBundle:Order',
+                'OroMagentoBundle:Order',
                 [
                     'incrementId' => 1000098,
                     'dataChannel' => $channel
@@ -237,7 +236,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
             [
                 'user entered checkout',
                 45.78,
-                'OroCRMMagentoBundle:Cart',
+                'OroMagentoBundle:Cart',
                 [
                     'subTotal' => 45.78,
                     'dataChannel' => $channel
@@ -247,7 +246,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
             [
                 'user logged out',
                 123,
-                'OroCRMMagentoBundle:Customer',
+                'OroMagentoBundle:Customer',
                 [
                     'originId' => 123,
                     'dataChannel' => $channel

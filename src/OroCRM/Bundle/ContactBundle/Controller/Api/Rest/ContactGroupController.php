@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -40,7 +40,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Get all contact group items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_group_view")
+     * @AclAncestor("oro_contact_group_view")
      * @return Response
      */
     public function cgetAction()
@@ -60,7 +60,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_group_view")
+     * @AclAncestor("oro_contact_group_view")
      * @return Response
      */
     public function getAction($id)
@@ -77,7 +77,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Update contact group",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_group_update")
+     * @AclAncestor("oro_contact_group_update")
      * @return Response
      */
     public function putAction($id)
@@ -92,7 +92,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Create new contact group",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_group_create")
+     * @AclAncestor("oro_contact_group_create")
      */
     public function postAction()
     {
@@ -109,10 +109,10 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_contact_group_delete",
+     *      id="oro_contact_group_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMContactBundle:Group"
+     *      class="OroContactBundle:Group"
      * )
      * @return Response
      */
@@ -128,7 +128,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.group.manager.api');
+        return $this->get('oro_contact.group.manager.api');
     }
 
     /**
@@ -136,7 +136,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getForm()
     {
-        return $this->get('orocrm_contact.form.group.api');
+        return $this->get('oro_contact.form.group.api');
     }
 
     /**
@@ -144,6 +144,6 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_contact.form.handler.group.api');
+        return $this->get('oro_contact.form.handler.group.api');
     }
 }

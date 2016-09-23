@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Validator;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
@@ -9,10 +9,9 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
-use OroCRM\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
+use Oro\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
 
 class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,17 +79,17 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
             [new \stdClass(), $this->getIntegration()],
             [new \DateTime(), new \stdClass()],
             [new \DateTime(), $this->getIntegration('Oro\Bundle\IntegrationBundle\Entity\Transport')],
-            [new \DateTime(), $this->getIntegration('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')],
-            [new \DateTime(), $this->getIntegration('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1)],
+            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')],
+            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1)],
             [
                 new \DateTime(),
-                $this->getIntegration('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
+                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
                 '2014-12-12',
                 true,
             ],
             [
                 new \DateTime('2014-12-01'),
-                $this->getIntegration('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
+                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
                 '2014-12-12',
             ],
         ];

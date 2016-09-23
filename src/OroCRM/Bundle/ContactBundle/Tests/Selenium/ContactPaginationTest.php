@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactPaginationTest extends Selenium2TestCase
 {
@@ -16,7 +16,7 @@ class ContactPaginationTest extends Selenium2TestCase
         $login = $this->login();
         /** Precondition - mass delete all existing contact */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->massDelete()
             ->assertNoDataMessageAndDisplayed('No records found');
     }
@@ -56,7 +56,7 @@ class ContactPaginationTest extends Selenium2TestCase
         $this->createContact($login, $thirdContact);
 
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             /** Sorting by email in ascending order*/
             ->sortBy('Email', 'asc')
             /** Open first contact and check if it correct */
@@ -85,7 +85,7 @@ class ContactPaginationTest extends Selenium2TestCase
             ->checkEntityFieldData('Emails', $secondContact['email']);
             /** Mass delete all created contacts */
             /** @var Contacts $login */
-            $login->openContacts('OroCRM\Bundle\ContactBundle')
+            $login->openContacts('Oro\Bundle\ContactBundle')
             ->massDelete();
     }
 
@@ -96,7 +96,7 @@ class ContactPaginationTest extends Selenium2TestCase
     public function createContact(Login $login, $contactData)
     {
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactData['firstName'])
             ->setLastName($contactData['secondName'])

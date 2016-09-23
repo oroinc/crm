@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
+namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelRepository extends EntityRepository
 {
@@ -23,7 +22,7 @@ class ChannelRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c.id', 'c.name');
-        $qb->from('OroCRMChannelBundle:Channel', 'c', 'c.id')
+        $qb->from('OroChannelBundle:Channel', 'c', 'c.id')
             ->where($qb->expr()->eq('c.status', ':status'))
             ->setParameter('status', Channel::STATUS_ACTIVE);
 

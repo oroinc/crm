@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Autocomplete;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Autocomplete;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
-
-use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
+use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 
 class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_ENTITY_NAME            = 'OroCRM\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
-    const TEST_ENTITY_ALIAS           = 'orocrm_channel_stub';
+    const TEST_ENTITY_NAME            = 'Oro\\Bundle\\ChannelBundle\\Tests\\Unit\\Stubs\\Entity\\StubEntity';
+    const TEST_ENTITY_ALIAS           = 'oro_channel_stub';
     const TEST_SEARCH_FIELD           = 'some_field';
     const TEST_CHANNEL_SEARCH_FIELD   = 'some_fieldDataChannel';
     const TEST_CHANNEL_RELATION_FIELD = 'some_fieldDataChannel';
@@ -89,7 +88,7 @@ class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
                         $self->assertSame([$entityAlias], $query->getFrom());
                         if ($channelId) {
                             $this->assertEquals(
-                                'from orocrm_channel_stub where (integer some_fieldDataChannel = 1 '
+                                'from oro_channel_stub where (integer some_fieldDataChannel = 1 '
                                 . 'and text all_text ~ "someQuery") limit 11',
                                 $query->getStringQuery()
                             );

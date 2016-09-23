@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 /**
  * @outputBuffering enabled
@@ -8,7 +8,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
  */
 class CustomerControllerTest extends AbstractController
 {
-    /** @var \OroCRM\Bundle\MagentoBundle\Entity\Customer */
+    /** @var \Oro\Bundle\MagentoBundle\Entity\Customer */
     public static $customer;
 
     protected function postFixtureLoad()
@@ -28,7 +28,7 @@ class CustomerControllerTest extends AbstractController
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_customer_view', ['id' => $this->getMainEntityId()])
+            $this->getUrl('oro_magento_customer_view', ['id' => $this->getMainEntityId()])
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
@@ -61,7 +61,7 @@ class CustomerControllerTest extends AbstractController
      */
     public function testCreate()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_customer_create'));
+        $this->client->request('GET', $this->getUrl('oro_magento_customer_create'));
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
     }
 
@@ -80,7 +80,7 @@ class CustomerControllerTest extends AbstractController
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_magento_customer_update', ['id' => $result['id']])
+            $this->getUrl('oro_magento_customer_update', ['id' => $result['id']])
         );
         $this->assertResponseStatusCodeEquals($this->client->getResponse(), 200);
     }

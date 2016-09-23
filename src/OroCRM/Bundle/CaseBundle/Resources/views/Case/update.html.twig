@@ -1,40 +1,40 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.case.caseentity.entity_label'|trans }}) %}
+{% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'oro.case.caseentity.entity_label'|trans }}) %}
 
 {% set entityId = entity.id %}
-{% set formAction = entityId ? path('orocrm_case_update', { 'id': entityId}) : path('orocrm_case_create') %}
+{% set formAction = entityId ? path('oro_case_update', { 'id': entityId}) : path('oro_case_create') %}
 
 {% block navButtons %}
     {% set html = UI.saveAndCloseButton({
-        'route': 'orocrm_case_view',
+        'route': 'oro_case_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('orocrm_case_create') %}
+    {% if resource_granted('oro_case_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_case_create'
+            'route': 'oro_case_create'
         }) %}
     {% endif %}
-    {% if resource_granted('orocrm_case_update') %}
+    {% if resource_granted('oro_case_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'orocrm_case_update',
+            'route': 'oro_case_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
-    {{ UI.cancelButton(path('orocrm_case_index')) }}
+    {{ UI.cancelButton(path('oro_case_index')) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}
     {% if entityId %}
         {% set breadcrumbs = {
             'entity': entity,
-            'indexPath': path('orocrm_case_index'),
-            'indexLabel': 'orocrm.case.caseentity.entity_plural_label'|trans,
+            'indexPath': path('oro_case_index'),
+            'indexLabel': 'oro.case.caseentity.entity_plural_label'|trans,
             'entityTitle': entity.subject
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.case.caseentity.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.case.caseentity.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -43,7 +43,7 @@
     {% set id = 'case-form' %}
 
     {% set dataBlocks = [{
-        'title': 'orocrm.case.block.general'|trans,
+        'title': 'oro.case.block.general'|trans,
         'class': 'active',
         'subblocks': [
             {
@@ -70,7 +70,7 @@
     {% endfor %}
     {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'orocrm.case.block.additional'|trans,
+            'title': 'oro.case.block.additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,

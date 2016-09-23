@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +27,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.customer.manager.api');
+        return $this->get('oro_magento.customer.manager.api');
     }
 
     /**
@@ -35,7 +35,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.customer.api');
+        return $this->get('oro_magento.form.customer.api');
     }
 
     /**
@@ -43,7 +43,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.customer.api');
+        return $this->get('oro_magento.form.handler.customer.api');
     }
 
     /**
@@ -88,7 +88,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      description="Get all magento customers",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      *
      * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
@@ -124,7 +124,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      description="Get magento customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      *
      * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
      *
@@ -146,7 +146,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *
      * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
      *
-     * @AclAncestor("orocrm_magento_customer_create")
+     * @AclAncestor("oro_magento_customer_create")
      *
      */
     public function postAction()
@@ -164,7 +164,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      description="Update magento customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_update")
+     * @AclAncestor("oro_magento_customer_update")
      *
      * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.
      *
@@ -186,10 +186,10 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_customer_delete",
+     *      id="oro_magento_customer_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:Customer"
+     *      class="OroMagentoBundle:Customer"
      * )
      *
      * @deprecated since 1.8. Use /api/rest/{version}/magentocustomers/{id}.{_format} instead.

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
+namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
@@ -59,8 +59,8 @@ class ImportExportTest extends WebTestCase
     public function strategyDataProvider()
     {
         return [
-            'add'            => ['orocrm_contact.add', 1, 0],
-            'add or replace' => ['orocrm_contact.add_or_replace', 0, 1],
+            'add'            => ['oro_contact.add', 1, 0],
+            'add or replace' => ['oro_contact.add_or_replace', 0, 1],
         ];
     }
 
@@ -89,7 +89,7 @@ class ImportExportTest extends WebTestCase
             $this->getUrl(
                 'oro_importexport_import_form',
                 array(
-                    'entity'           => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                    'entity'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
                     '_widgetContainer' => 'dialog'
                 )
             )
@@ -165,7 +165,7 @@ class ImportExportTest extends WebTestCase
             $this->getUrl(
                 'oro_importexport_export_instant',
                 array(
-                    'processorAlias' => 'orocrm_contact',
+                    'processorAlias' => 'oro_contact',
                     '_format'        => 'json'
                 )
             )
@@ -302,7 +302,7 @@ class ImportExportTest extends WebTestCase
             ->get('oro_importexport.handler.export')
             ->getExportResult(
                 JobExecutor::JOB_EXPORT_TEMPLATE_TO_CSV,
-                'orocrm_contact',
+                'oro_contact',
                 ProcessorRegistry::TYPE_EXPORT_TEMPLATE
             );
 
@@ -324,7 +324,7 @@ class ImportExportTest extends WebTestCase
             ->get('oro_importexport.handler.export')
             ->handleExport(
                 JobExecutor::JOB_EXPORT_TO_CSV,
-                'orocrm_contact',
+                'oro_contact',
                 ProcessorRegistry::TYPE_EXPORT
             );
 

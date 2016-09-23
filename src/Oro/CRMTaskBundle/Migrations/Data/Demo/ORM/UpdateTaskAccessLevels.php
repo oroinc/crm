@@ -29,7 +29,7 @@ class UpdateTaskAccessLevels extends AbstractFixture implements ContainerAwareIn
      */
     public function getDependencies()
     {
-        return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'];
+        return ['Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'];
     }
 
     /**
@@ -78,7 +78,7 @@ class UpdateTaskAccessLevels extends AbstractFixture implements ContainerAwareIn
             $role = $this->getRole($roleName);
             if ($role) {
                 $sid = $manager->getSid($role);
-                $oid = $manager->getOid('entity:OroCRM\Bundle\TaskBundle\Entity\Task');
+                $oid = $manager->getOid('entity:Oro\Bundle\TaskBundle\Entity\Task');
                 $extension = $manager->getExtensionSelector()->select($oid);
                 $maskBuilders = $extension->getAllMaskBuilders();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -8,8 +8,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityStatusSelectType extends AbstractType
 {
@@ -67,6 +66,6 @@ class OpportunityStatusSelectType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_sales_opportunity_status_select';
+        return 'oro_sales_opportunity_status_select';
     }
 }

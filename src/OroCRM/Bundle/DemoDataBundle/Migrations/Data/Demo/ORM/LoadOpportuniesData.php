@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -32,10 +31,10 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -51,8 +50,8 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function initSupportingEntities()
     {
         $this->organization = $this->getReference('default_organization');
-        $this->contacts     = $this->em->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $this->b2bCustomers = $this->em->getRepository('OroCRMSalesBundle:B2bCustomer')->findAll();
+        $this->contacts     = $this->em->getRepository('OroContactBundle:Contact')->findAll();
+        $this->b2bCustomers = $this->em->getRepository('OroSalesBundle:B2bCustomer')->findAll();
     }
 
     public function loadOpportunities()

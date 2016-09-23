@@ -1,4 +1,4 @@
-OroCRM\Bundle\MarketingListBundle\Entity\MarketingList:
+Oro\Bundle\MarketingListBundle\Entity\MarketingList:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ name ]
     properties:
@@ -19,10 +19,10 @@ OroCRM\Bundle\MarketingListBundle\Entity\MarketingList:
 
 Oro\Bundle\SegmentBundle\Entity\Segment:
     constraints:
-        - OroCRM\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint:
+        - Oro\Bundle\MarketingListBundle\Validator\Constraints\ContactInformationColumnConstraint:
             groups: ["marketing_list"]
 
-OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem:
+Oro\Bundle\MarketingListBundle\Entity\MarketingListItem:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ entityId, marketingList ]
     properties:
@@ -34,7 +34,7 @@ OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem:
             - NotBlank:     ~
 
 
-OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem:
+Oro\Bundle\MarketingListBundle\Entity\MarketingListItem:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ entityId, marketingList ]
     properties:
@@ -46,7 +46,7 @@ OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem:
             - NotBlank:     ~
 
 
-OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem:
+Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ entityId, marketingList ]
     properties:
@@ -59,7 +59,7 @@ OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem:
 
 
 
-OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem:
+Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: [ entityId, marketingList ]
     properties:

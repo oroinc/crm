@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
-use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class IntegrationSyncAfterEventListener
 {

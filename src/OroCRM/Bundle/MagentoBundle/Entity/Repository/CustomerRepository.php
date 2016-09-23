@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
+namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class CustomerRepository extends ChannelAwareEntityRepository
 {
@@ -20,7 +19,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
      */
     public function calculateLifetimeValue(Customer $customer)
     {
-        $qb = $this->getEntityManager()->getRepository('OroCRMMagentoBundle:Order')
+        $qb = $this->getEntityManager()->getRepository('OroMagentoBundle:Order')
             ->createQueryBuilder('o');
 
         $qb
@@ -51,7 +50,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
-            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->from('OroMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
             ->having('COUNT(orders.id) > 0')
             ->andWhere($qb->expr()->between('customer.createdAt', ':dateStart', ':dateEnd'))
@@ -76,7 +75,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
-            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->from('OroMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
             ->having('COUNT(orders.id) > 0')
             ->andWhere('customer.createdAt < :dateStart')
@@ -141,7 +140,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
     {
         $qb = $this
             ->createQueryBuilder('c')
-            ->update('OroCRMMagentoBundle:Customer', 'c')
+            ->update('OroMagentoBundle:Customer', 'c')
             ->set('c.lifetime', 'c.lifetime + :value')
             ->setParameter('value', $value)
             ->where('c.id = :id')
@@ -157,7 +156,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
-            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->from('OroMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
             ->having('COUNT(orders.id) > 0');
         $this->applyActiveChannelLimitation($qb);
@@ -172,7 +171,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
-            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->from('OroMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
             ->having('COUNT(orders.id) > 0');
         $this->applyActiveChannelLimitation($qb);

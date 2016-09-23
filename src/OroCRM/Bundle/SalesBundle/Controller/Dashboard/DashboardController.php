@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
+namespace Oro\Bundle\SalesBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -8,19 +8,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
-use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
+use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 
 class DashboardController extends Controller
 {
     /**
      * @Route(
      *      "/opportunities_by_lead_source/chart/{widget}",
-     *      name="orocrm_sales_dashboard_opportunities_by_lead_source_chart",
+     *      name="oro_sales_dashboard_opportunities_by_lead_source_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
+     * @Template("OroSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
@@ -29,7 +28,7 @@ class DashboardController extends Controller
         );
 
         // prepare chart data
-        $dataProvider = $this->get('orocrm_sales.provider.opportunity_by_lead_source');
+        $dataProvider = $this->get('oro_sales.provider.opportunity_by_lead_source');
 
         $byAmount = (bool) $options->get('byAmount', false);
 
@@ -65,10 +64,10 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/opportunity_state/chart/{widget}",
-     *      name="orocrm_sales_dashboard_opportunity_by_state_chart",
+     *      name="oro_sales_dashboard_opportunity_by_state_chart",
      *      requirements={"widget"="[\w-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:opportunityByStatus.html.twig")
+     * @Template("OroSalesBundle:Dashboard:opportunityByStatus.html.twig")
      */
     public function opportunityByStatusAction($widget)
     {
@@ -85,7 +84,7 @@ class DashboardController extends Controller
                 'formatter'  => 'formatCurrency'
             ];
         }
-        $items = $this->get('orocrm_sales.provider.opportunity_by_status')
+        $items = $this->get('oro_sales.provider.opportunity_by_status')
             ->getOpportunitiesGroupedByStatus($options);
         $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
@@ -107,10 +106,10 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/sales_flow_b2b/chart/{widget}",
-     *      name="orocrm_sales_dashboard_sales_flow_b2b_chart",
+     *      name="oro_sales_dashboard_sales_flow_b2b_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     * @Template("OroSalesBundle:Dashboard:salesFlowChart.html.twig")
      */
     public function mySalesFlowB2BAction($widget)
     {
@@ -128,7 +127,7 @@ class DashboardController extends Controller
         $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenue'];
 
         /** @var SalesFunnelRepository $salesFunnerRepository */
-        $salesFunnerRepository = $this->getDoctrine()->getRepository('OroCRMSalesBundle:SalesFunnel');
+        $salesFunnerRepository = $this->getDoctrine()->getRepository('OroSalesBundle:SalesFunnel');
 
         $data = $salesFunnerRepository->getFunnelChartData(
             $dateFrom,

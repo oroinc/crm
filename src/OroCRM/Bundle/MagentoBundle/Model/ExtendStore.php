@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Model;
+namespace Oro\Bundle\MagentoBundle\Model;
 
 class ExtendStore
 {

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_7;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -16,7 +16,7 @@ class OroCrmMagentoBundle implements Migration
         $integrationTransport = $schema->getTable('oro_integration_transport');
         $integrationTransport->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
 
-        $cart = $schema->getTable('orocrm_magento_cart');
+        $cart = $schema->getTable('oro_magento_cart');
         $cart->addColumn('status_message', 'string', ['notnull' => false, 'length' => 255]);
     }
 }

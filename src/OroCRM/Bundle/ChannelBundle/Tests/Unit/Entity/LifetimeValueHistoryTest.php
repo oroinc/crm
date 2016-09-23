@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Util\ClassUtils;
 
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LifetimeValueHistoryTest extends AbstractEntityTestCase
 {
@@ -16,7 +16,7 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory';
+        return 'Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory';
     }
 
     /**
@@ -26,8 +26,8 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
     {
         $someDateTime = new \DateTime();
         $someAmount   = 123.12;
-        $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $status       = true;
 
         return [

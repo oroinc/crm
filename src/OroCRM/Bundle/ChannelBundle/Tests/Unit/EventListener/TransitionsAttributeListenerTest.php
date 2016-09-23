@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\PreloadedExtension;
@@ -9,12 +9,11 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 use Oro\Bundle\ActionBundle\Model\Attribute;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
-use OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
-use OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type\TestForm;
+use Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
+use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type\TestForm;
 
 class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,8 +28,8 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $formArray = [
-            'orocrm_channel_entities' => new ChannelEntityType(),
-            'orocrm_sales_opportunity_select' => new OpportunitySelectType(),
+            'oro_channel_entities' => new ChannelEntityType(),
+            'oro_sales_opportunity_select' => new OpportunitySelectType(),
             'oro_entity_create_or_select_inline_channel_aware' => new CreateOrSelectInlineChannelAwareType(),
             'oro_entity_create_or_select_inline' => new TestForm('oro_entity_create_or_select_inline'),
             'oro_jqueryselect2_hidden' => new TestForm('oro_jqueryselect2_hidden')
@@ -66,7 +65,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     public function testNotAbstractChannelAwareType()
     {
         $attribute = new Attribute();
-        $attributeOptions = ['form_type' => 'orocrm_channel_entities'];
+        $attributeOptions = ['form_type' => 'oro_channel_entities'];
         $options = ['option1', 'option2'];
 
         $event = new TransitionsAttributeEvent($attribute, $attributeOptions, $options);
@@ -78,7 +77,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     public function testAbstractChannelAwareType()
     {
         $propertyPath = new PropertyPath('data.dataChannel.id');
-        $formType = 'orocrm_sales_opportunity_select';
+        $formType = 'oro_sales_opportunity_select';
         $expectedAttrOptions = [
             'form_type' => $formType,
             'options' => ['channel_id' => self::EXPECTED_CHANNEL_ID]

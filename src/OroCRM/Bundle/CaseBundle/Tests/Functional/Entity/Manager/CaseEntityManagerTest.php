@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Tests\Functional;
+namespace Oro\Bundle\ReportBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Model\CaseEntityManager;
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 
 /**
  * @outputBuffering enabled
@@ -30,17 +30,17 @@ class CaseEntityManagerTest extends WebTestCase
 
         $this->loadFixtures(
             array(
-                'OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData',
+                'Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData',
             )
         );
 
-        $this->manager = $this->getContainer()->get('orocrm_case.manager');
+        $this->manager = $this->getContainer()->get('oro_case.manager');
     }
 
     public function testCreateCase()
     {
         $case = $this->manager->createCase();
-        $this->assertInstanceOf('OroCRM\Bundle\CaseBundle\Entity\CaseEntity', $case);
+        $this->assertInstanceOf('Oro\Bundle\CaseBundle\Entity\CaseEntity', $case);
         $this->assertEquals(CaseStatus::STATUS_OPEN, $case->getStatus()->getName());
         $this->assertEquals(CaseSource::SOURCE_OTHER, $case->getSource()->getName());
         $this->assertEquals(CasePriority::PRIORITY_NORMAL, $case->getPriority()->getName());
@@ -50,7 +50,7 @@ class CaseEntityManagerTest extends WebTestCase
     {
         $case = $this->manager->createCase();
         $comment = $this->manager->createComment($case);
-        $this->assertInstanceOf('OroCRM\Bundle\CaseBundle\Entity\CaseComment', $comment);
+        $this->assertInstanceOf('Oro\Bundle\CaseBundle\Entity\CaseComment', $comment);
         $this->assertEquals($case, $comment->getCase());
     }
 
@@ -60,7 +60,7 @@ class CaseEntityManagerTest extends WebTestCase
     public function testGetComments($caseSubject, $order, $expectedCommentsMessage)
     {
         $case = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMCaseBundle:CaseEntity')
+            ->getRepository('OroCaseBundle:CaseEntity')
             ->findOneBySubject($caseSubject);
 
         $this->assertNotEmpty($case);

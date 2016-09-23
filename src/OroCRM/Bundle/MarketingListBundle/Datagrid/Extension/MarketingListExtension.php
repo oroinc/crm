@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Datagrid\Extension;
+namespace Oro\Bundle\MarketingListBundle\Datagrid\Extension;
 
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Func;
@@ -10,8 +10,7 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
+use Oro\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 /**
  * For segment based marketing lists show not only segment results but also already contacted entities.
@@ -138,7 +137,7 @@ class MarketingListExtension extends AbstractExtension
 
         $itemsQb
             ->select('item.entityId')
-            ->from('OroCRMMarketingListBundle:MarketingListItem', 'item')
+            ->from('OroMarketingListBundle:MarketingListItem', 'item')
             ->andWhere('item.marketingList = :marketingListId')
             ->andWhere('item.entityId = ' . $qb->getRootAliases()[0]);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Form\Type;
 
 use Oro\Bundle\EntityBundle\Form\Type\EntityChoiceType;
 
@@ -19,6 +19,6 @@ class ContactInformationEntityChoiceType extends EntityChoiceType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_marketing_list_contact_information_entity_choice';
+        return 'oro_marketing_list_contact_information_entity_choice';
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
-use OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
+use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
 
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\PreloadedExtension;
@@ -90,7 +90,7 @@ class IntegrationTypeExtensionTest extends FormIntegrationTestCase
      */
     protected function setUp()
     {
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->extension = new IntegrationTypeExtension($this->settingsProvider);
         parent::setUp();

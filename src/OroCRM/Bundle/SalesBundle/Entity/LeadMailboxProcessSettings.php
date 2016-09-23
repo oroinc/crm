@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
 
 /**
  * @ORM\Entity
@@ -25,7 +24,7 @@ class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
     /**
      * @var Channel
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="lead_channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $channel;

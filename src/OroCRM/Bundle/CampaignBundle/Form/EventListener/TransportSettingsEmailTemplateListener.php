@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\EventListener;
+namespace Oro\Bundle\CampaignBundle\Form\EventListener;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\EmailBundle\Entity\Repository\EmailTemplateRepository;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
 {
@@ -87,7 +87,7 @@ class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
     protected function getMarketingListById($id)
     {
         return $this->registry
-            ->getRepository('OroCRMMarketingListBundle:MarketingList')
+            ->getRepository('OroMarketingListBundle:MarketingList')
             ->find($id);
     }
 

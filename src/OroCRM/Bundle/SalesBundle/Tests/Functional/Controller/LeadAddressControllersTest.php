@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
+namespace Oro\Bundle\SalesBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
@@ -20,7 +20,7 @@ class LeadAddressControllersTest extends WebTestCase
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     public function testCreateAddress()
@@ -29,7 +29,7 @@ class LeadAddressControllersTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_sales_lead_address_create',
+                'oro_sales_lead_address_create',
                 array('leadId' => $id, '_widgetContainer' => 'dialog')
             )
         );
@@ -42,30 +42,30 @@ class LeadAddressControllersTest extends WebTestCase
         $formNode = $form->getNode();
         $formNode->setAttribute('action', $formNode->getAttribute('action') . '?_widgetContainer=dialog');
 
-        $form['orocrm_sales_lead_address_form[street]'] = 'Street';
-        $form['orocrm_sales_lead_address_form[city]'] = 'City';
-        $form['orocrm_sales_lead_address_form[postalCode]'] = 'Zip code';
+        $form['oro_sales_lead_address_form[street]'] = 'Street';
+        $form['oro_sales_lead_address_form[city]'] = 'City';
+        $form['oro_sales_lead_address_form[postalCode]'] = 'Zip code';
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_address_form[country]" id="orocrm_sales_lead_address_form_country" ' .
+            '<select name="oro_sales_lead_address_form[country]" id="oro_sales_lead_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="AF">Afghanistan</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_sales_lead_address_form[country]'] = 'AF';
+        $form['oro_sales_lead_address_form[country]'] = 'AF';
 
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_address_form[region]" id="orocrm_sales_lead_address_form_region" ' .
+            '<select name="oro_sales_lead_address_form[region]" id="oro_sales_lead_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="AF-BDS">Badakhshān</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_sales_lead_address_form[region]'] = 'AF-BDS';
+        $form['oro_sales_lead_address_form[region]'] = 'AF-BDS';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -100,7 +100,7 @@ class LeadAddressControllersTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_sales_lead_address_update',
+                'oro_sales_lead_address_update',
                 array('leadId' => $id, 'id' => $address['id'], '_widgetContainer' => 'dialog')
             )
         );
@@ -115,24 +115,24 @@ class LeadAddressControllersTest extends WebTestCase
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_address_form[country]" id="orocrm_sales_lead_address_form_country" ' .
+            '<select name="oro_sales_lead_address_form[country]" id="oro_sales_lead_address_form_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="ZW">Zimbabwe</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_sales_lead_address_form[country]'] = 'ZW';
+        $form['oro_sales_lead_address_form[country]'] = 'ZW';
 
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_address_form[region]" id="orocrm_sales_lead_address_form_region" ' .
+            '<select name="oro_sales_lead_address_form[region]" id="oro_sales_lead_address_form_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="ZW-MA">Manicaland</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-        $form['orocrm_sales_lead_address_form[region]'] = 'ZW-MA';
+        $form['oro_sales_lead_address_form[region]'] = 'ZW-MA';
 
         $this->client->followRedirects(true);
         $this->client->submit($form);

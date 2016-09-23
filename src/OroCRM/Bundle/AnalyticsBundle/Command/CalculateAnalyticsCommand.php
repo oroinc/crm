@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Command;
+namespace Oro\Bundle\AnalyticsBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -11,9 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\AnalyticsBundle\Model\StateManager;
+use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Model\StateManager;
 
 class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
@@ -91,7 +91,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     protected function getChannels($channelId = null)
     {
-        $className = $this->getContainer()->getParameter('orocrm_channel.entity.class');
+        $className = $this->getContainer()->getParameter('oro_channel.entity.class');
         $qb = $this->getDoctrineHelper()->getEntityRepository($className)->createQueryBuilder('c');
 
         $qb->orderBy($qb->expr()->asc('c.id'));
@@ -103,7 +103,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             $qb->setParameter('id', $channelId);
         }
 
-        $analyticsInterface = $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface');
+        $analyticsInterface = $this->getContainer()->getParameter('oro_analytics.model.analytics_aware_interface');
 
         return new \CallbackFilterIterator(
             new BufferedQueryResultIterator($qb),
@@ -120,7 +120,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     protected function getAnalyticBuilder()
     {
-        return $this->getContainer()->get('orocrm_analytics.builder');
+        return $this->getContainer()->get('oro_analytics.builder');
     }
 
     /**
@@ -136,6 +136,6 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     protected function getStateManager()
     {
-        return $this->getContainer()->get('orocrm_analytics.model.state_manager');
+        return $this->getContainer()->get('oro_analytics.model.state_manager');
     }
 }

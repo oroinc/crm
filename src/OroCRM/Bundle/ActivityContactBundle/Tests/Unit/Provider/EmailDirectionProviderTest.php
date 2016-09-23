@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Inflector\Inflector;
 
@@ -8,10 +8,9 @@ use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
 use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
-
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
-use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
+use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Bundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\ActivityContactBundle\Bundle\Tests\Unit\DependencyInjection;
 
-use OroCRM\Bundle\ActivityContactBundle\DependencyInjection\Configuration;
+use Oro\Bundle\ActivityContactBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,13 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
 
 use Doctrine\Common\Util\Inflector;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor;
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
-
-use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
+use Oro\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 
 class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
 {

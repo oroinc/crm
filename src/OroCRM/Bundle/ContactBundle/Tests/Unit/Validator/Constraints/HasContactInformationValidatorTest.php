@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Validator\Constraints;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Validator\Constraints;
 
 use Symfony\Component\Validator\ExecutionContextInterface;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
-use OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
+use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
 
 class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,8 +79,8 @@ class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'At least one of the fields %fields% must be defined.',
                 [
-                    '%fields%' => 'orocrm.contact.first_name.label, orocrm.contact.last_name.label, ' .
-                                  'orocrm.contact.emails.label or orocrm.contact.phones.label'
+                    '%fields%' => 'oro.contact.first_name.label, oro.contact.last_name.label, ' .
+                                  'oro.contact.emails.label or oro.contact.phones.label'
                 ]
             );
 
@@ -98,7 +98,7 @@ class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Validator expects $value to be instance of "OroCRM\Bundle\ContactBundle\Entity\Contact"
+     * @expectedExceptionMessage Validator expects $value to be instance of "Oro\Bundle\ContactBundle\Entity\Contact"
      */
     public function testInvalidArgument()
     {

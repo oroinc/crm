@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,23 +11,22 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
+use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
 
 /**
  * @ORM\Table(
- *      name="orocrm_sales_funnel",
+ *      name="oro_sales_funnel",
  *      indexes={@ORM\Index(name="sales_start_idx",columns={"startDate"})}
  *
  * )
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *      routeName="orocrm_sales_salesfunnel_index",
- *      routeView="orocrm_sales_salesfunnel_view",
+ *      routeName="oro_sales_salesfunnel_index",
+ *      routeView="oro_sales_salesfunnel_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-filter"
@@ -87,7 +86,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     /**
      * @var Lead
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", cascade={"persist"})
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */
@@ -96,7 +95,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     /**
      * @var Opportunity
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity", cascade={"persist"})
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      */
@@ -166,7 +165,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @param  \OroCRM\Bundle\SalesBundle\Entity\Lead $lead
+     * @param  \Oro\Bundle\SalesBundle\Entity\Lead $lead
      * @return SalesFunnel
      */
     public function setLead($lead)
@@ -177,7 +176,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @return \OroCRM\Bundle\SalesBundle\Entity\Lead
+     * @return \Oro\Bundle\SalesBundle\Entity\Lead
      */
     public function getLead()
     {
@@ -185,7 +184,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @param  \OroCRM\Bundle\SalesBundle\Entity\Opportunity $opportunity
+     * @param  \Oro\Bundle\SalesBundle\Entity\Opportunity $opportunity
      * @return SalesFunnel
      */
     public function setOpportunity($opportunity)
@@ -196,7 +195,7 @@ class SalesFunnel extends ExtendSalesFunnel implements
     }
 
     /**
-     * @return \OroCRM\Bundle\SalesBundle\Entity\Opportunity
+     * @return \Oro\Bundle\SalesBundle\Entity\Opportunity
      */
     public function getOpportunity()
     {

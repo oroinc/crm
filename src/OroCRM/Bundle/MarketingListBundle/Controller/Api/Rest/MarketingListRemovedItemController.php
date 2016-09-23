@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
 
 /**
  * @Rest\RouteResource("marketinglist_removeditem")
- * @Rest\NamePrefix("orocrm_api_")
+ * @Rest\NamePrefix("oro_api_")
  */
 class MarketingListRemovedItemController extends RestController implements ClassResourceInterface
 {
@@ -31,7 +31,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      *     description="Create new MarketingListRemovedItem",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_removed_item_create")
+     * @AclAncestor("oro_marketing_list_removed_item_create")
      */
     public function postAction()
     {
@@ -47,7 +47,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      *     description="Delete MarketingListRemovedItem",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_removed_item_delete")
+     * @AclAncestor("oro_marketing_list_removed_item_delete")
      *
      * @return Response
      */
@@ -66,7 +66,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      *      "/marketinglist/{marketingList}/remove/{id}"
      * )
      * @ApiDoc(description="Remove marketing list entity item", resource=true)
-     * @AclAncestor("orocrm_marketing_list_removed_item_delete")
+     * @AclAncestor("oro_marketing_list_removed_item_delete")
      *
      * @param MarketingList $marketingList
      * @param int           $id
@@ -99,7 +99,7 @@ class MarketingListRemovedItemController extends RestController implements Class
                 array(
                     'successful' => true,
                     'message'    => $this->get('translator')->trans(
-                        'orocrm.marketinglist.controller.removed',
+                        'oro.marketinglist.controller.removed',
                         ['%entityName%' => $this->get('translator')->trans($entityName)]
                     )
                 ),
@@ -119,7 +119,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      *     description="Delete MarketingListRemovedItem by marketing list entity",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_marketing_list_removed_item_delete")
+     * @AclAncestor("oro_marketing_list_removed_item_delete")
      *
      * @return Response
      */
@@ -156,7 +156,7 @@ class MarketingListRemovedItemController extends RestController implements Class
                 array(
                     'successful' => true,
                     'message'    => $this->get('translator')->trans(
-                        'orocrm.marketinglist.controller.unremoved',
+                        'oro.marketinglist.controller.unremoved',
                         ['%entityName%' => $this->get('translator')->trans($entityName)]
                     )
                 ),
@@ -170,7 +170,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      */
     public function getManager()
     {
-        return $this->get('orocrm_marketing_list.marketing_list_removed_item.manager.api');
+        return $this->get('oro_marketing_list.marketing_list_removed_item.manager.api');
     }
 
     /**
@@ -178,7 +178,7 @@ class MarketingListRemovedItemController extends RestController implements Class
      */
     public function getForm()
     {
-        return $this->get('orocrm_marketing_list.form.marketing_list_removed_item');
+        return $this->get('oro_marketing_list.form.marketing_list_removed_item');
     }
 
     /**
@@ -186,6 +186,6 @@ class MarketingListRemovedItemController extends RestController implements Class
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_marketing_list.form.handler.marketing_list_removed_item');
+        return $this->get('oro_marketing_list.form.handler.marketing_list_removed_item');
     }
 }

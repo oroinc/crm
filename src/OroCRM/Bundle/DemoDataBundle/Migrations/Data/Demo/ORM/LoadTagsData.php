@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -17,9 +17,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -56,9 +55,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
         ];
     }
 
@@ -93,8 +92,8 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         }
 
         $this->usersRepository    = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->accountsRepository = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $this->contactsRepository = $this->em->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $this->accountsRepository = $this->em->getRepository('OroAccountBundle:Account')->findAll();
+        $this->contactsRepository = $this->em->getRepository('OroContactBundle:Contact')->findAll();
 
         $this->tagManager   = $this->container->get('oro_tag.tag.manager');
         $this->organization = $this->getReference('default_organization');

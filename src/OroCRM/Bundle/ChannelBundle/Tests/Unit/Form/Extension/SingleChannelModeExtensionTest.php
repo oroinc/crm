@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
-use OroCRM\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension;
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,7 +26,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->channelsProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -35,7 +35,7 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     protected function modifyOrocrmLeadTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_sales_lead');
+        $table = $schema->getTable('oro_sales_lead');
         $table->removeForeignKey('FK_73DB46339B6B5FBA');
         $table->dropIndex('IDX_73DB46339B6B5FBA');
         $table->dropColumn('account_id');
@@ -48,7 +48,7 @@ class DropFields implements Migration, OrderedMigrationInterface
             AND entity_id IN (
                 SELECT id
                 FROM oro_entity_config
-                WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
+                WHERE class_name = 'Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Lead'
             );
 DQL
             );
@@ -61,7 +61,7 @@ DQL
      */
     protected function modifyOrocrmOpportunityTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table = $schema->getTable('oro_sales_opportunity');
         $table->removeForeignKey('FK_C0FE4AAC9B6B5FBA');
         $table->dropIndex('IDX_C0FE4AAC9B6B5FBA');
         $table->dropColumn('account_id');
@@ -74,7 +74,7 @@ DQL
             AND entity_id IN (
                 SELECT id
                 FROM oro_entity_config
-                WHERE class_name = 'OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
+                WHERE class_name = 'Oro\\\\Bundle\\\\SalesBundle\\\\Entity\\\\Opportunity'
             );
 DQL
             );
@@ -87,7 +87,7 @@ DQL
      */
     protected function modifyOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_account');
+        $table = $schema->getTable('oro_account');
 
         $table->dropColumn('extend_website');
         $table->dropColumn('extend_employees');
@@ -120,7 +120,7 @@ DQL
                     AND entity_id IN (
                       SELECT id
                       FROM oro_entity_config
-                      WHERE class_name = 'OroCRM\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account'
+                      WHERE class_name = 'Oro\\\\Bundle\\\\AccountBundle\\\\Entity\\\\Account'
                     )
                 ;
 DQL

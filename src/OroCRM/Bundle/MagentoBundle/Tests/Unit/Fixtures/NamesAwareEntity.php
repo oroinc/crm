@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Fixtures;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NamesAwareTrait;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NamesAwareTrait;
 
 class NamesAwareEntity
 {

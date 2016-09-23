@@ -1,9 +1,9 @@
-OroCRM\Bundle\ContactBundle\Entity\ContactEmail:
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
   contact-email-{1..30}:
     email: <email()>
     primary: true
 
-OroCRM\Bundle\ContactBundle\Entity\Contact:
+Oro\Bundle\ContactBundle\Entity\Contact:
   contact-1:
     namePrefix: Mr
     firstName: Aadi

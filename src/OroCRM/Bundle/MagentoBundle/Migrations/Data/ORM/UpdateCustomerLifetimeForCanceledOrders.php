@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 /**
  * Recalculate lifetime value for customers that have canceled orders.
@@ -25,7 +25,7 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
     public function load(ObjectManager $manager)
     {
         /** @var EntityManager $manager */
-        $this->customerRepository = $manager->getRepository('OroCRMMagentoBundle:Customer');
+        $this->customerRepository = $manager->getRepository('OroMagentoBundle:Customer');
 
         // Calculate lifetime value for all customers
         $queryBuilder = $this->customerRepository->createQueryBuilder('customer');
@@ -67,7 +67,7 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
         }
         foreach ($channels as $channelId) {
             /** @var Channel $channel */
-            $channel = $manager->getReference('OroCRMChannelBundle:Channel', $channelId);
+            $channel = $manager->getReference('OroChannelBundle:Channel', $channelId);
             $this->updateLifetimeForAccounts($channel);
         }
     }
@@ -80,7 +80,7 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
     {
         $qb = $this->customerRepository
             ->createQueryBuilder('c')
-            ->update('OroCRMMagentoBundle:Customer', 'c')
+            ->update('OroMagentoBundle:Customer', 'c')
             ->set('c.lifetime', $value)
             ->where('c.id = :id')
             ->setParameter('id', $customerId);

@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\EventListener\Datagrid;
+namespace Oro\Bundle\ReportBundle\EventListener\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class AccountsByOpportunitiesReportListener
 {
@@ -70,7 +69,7 @@ class AccountsByOpportunitiesReportListener
         $selects[] = 'COUNT(o.id) as '.self::TOTALOPS_LABEL;
         $grandTotals[self::TOTALOPS_LABEL] = ['expr' => 'COUNT(o.id)'];
         $columns[self::TOTALOPS_LABEL] = [
-            'label' => 'orocrm.report.datagrid.columns.'.self::TOTALOPS_LABEL,
+            'label' => 'oro.report.datagrid.columns.'.self::TOTALOPS_LABEL,
             'frontend_type' => 'integer'
         ];
         $sorters[self::TOTALOPS_LABEL] = ['data_name' => self::TOTALOPS_LABEL];

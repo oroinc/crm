@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Utils;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Utils;
 
-use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class ValidationUtilsTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,11 +26,11 @@ class ValidationUtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function entityProvider()
     {
-        $order = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Order');
+        $order = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Order');
         $order->expects($this->any())->method('getIncrementId')->will($this->returnValue(self::TEST_INCREMENT_ID));
-        $cart = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $cart = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Cart');
         $cart->expects($this->any())->method('getOriginId')->will($this->returnValue(self::TEST_ORIGIN_ID));
-        $cartStatus = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\CartStatus', [], ['test']);
+        $cartStatus = $this->getMock('Oro\Bundle\MagentoBundle\Entity\CartStatus', [], ['test']);
 
         return [
             'should take increment ID'                       => [$order, self::TEST_INCREMENT_ID],

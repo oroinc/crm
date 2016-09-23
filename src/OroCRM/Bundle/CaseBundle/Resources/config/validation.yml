@@ -1,4 +1,4 @@
-OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
+Oro\Bundle\CaseBundle\Entity\CaseEntity:
     properties:
         subject:
             - NotBlank: ~

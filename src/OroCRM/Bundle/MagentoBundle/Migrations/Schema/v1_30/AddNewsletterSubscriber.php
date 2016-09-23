@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_30;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_30;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -32,13 +32,13 @@ class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterfac
     }
 
     /**
-     * Create orocrm_magento_newsl_subscr table
+     * Create oro_magento_newsl_subscr table
      *
      * @param Schema $schema
      */
     protected function createOrocrmMagentoNewslSubscrTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_magento_newsl_subscr');
+        $table = $schema->createTable('oro_magento_newsl_subscr');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -74,13 +74,13 @@ class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterfac
     }
 
     /**
-     * Add orocrm_magento_newsl_subscr foreign keys.
+     * Add oro_magento_newsl_subscr foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmMagentoNewslSubscrForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_magento_newsl_subscr');
+        $table = $schema->getTable('oro_magento_newsl_subscr');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -94,13 +94,13 @@ class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterfac
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_customer'),
+            $schema->getTable('oro_magento_customer'),
             ['customer_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_store'),
+            $schema->getTable('oro_magento_store'),
             ['store_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
@@ -112,7 +112,7 @@ class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterfac
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']

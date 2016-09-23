@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Entity;
+namespace Oro\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,16 +11,16 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
+use Oro\Bundle\MarketingListBundle\Model\ExtendMarketingList;
 
 /**
  * Marketing list
  *
- * @ORM\Table(name="orocrm_marketing_list")
+ * @ORM\Table(name="oro_marketing_list")
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @Config(
- *      routeName="orocrm_marketing_list_index",
+ *      routeName="oro_marketing_list_index",
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt"
@@ -39,7 +39,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
  *              "category"="marketing"
  *          },
  *          "form"={
- *              "form_type"="orocrm_marketing_list_select",
+ *              "form_type"="oro_marketing_list_select",
  *              "grid_name"="orocrm-marketing-list-grid",
  *          },
  *          "grid"={
@@ -82,7 +82,7 @@ class MarketingList extends ExtendMarketingList
     /**
      * @var MarketingListType
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MarketingListBundle\Entity\MarketingListType")
      * @ORM\JoinColumn(name="type", referencedColumnName="name", nullable=false)
      **/
     protected $type;

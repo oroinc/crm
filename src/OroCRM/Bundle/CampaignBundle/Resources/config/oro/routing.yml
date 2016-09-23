@@ -1,15 +1,15 @@
-orocrm_campaign_bundle:
-    resource:     "@OroCRMCampaignBundle/Controller"
+oro_campaign_bundle:
+    resource:     "@OroCampaignBundle/Controller"
     type:         annotation
     prefix:       /
 
-orocrm_campaign_dashboard:
-    resource:     "@OroCRMCampaignBundle/Controller/Dashboard"
+oro_campaign_dashboard:
+    resource:     "@OroCampaignBundle/Controller/Dashboard"
     type:         annotation
     prefix:       /dashboard
 
-orocrm_campaign_bundle_api:
-    resource:     "@OroCRMCampaignBundle/Resources/config/oro/routing_api.yml"
+oro_campaign_bundle_api:
+    resource:     "@OroCampaignBundle/Resources/config/oro/routing_api.yml"
     type:         rest
     prefix:       api/rest/{version}
     requirements:

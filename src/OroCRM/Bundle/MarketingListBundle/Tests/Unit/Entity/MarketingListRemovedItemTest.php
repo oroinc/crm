@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MarketingListRemovedItemTest extends \PHPUnit_Framework_TestCase
@@ -49,7 +49,7 @@ class MarketingListRemovedItemTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('entityId', 2),
-            array('marketingList', $this->getMock('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')),
+            array('marketingList', $this->getMock('Oro\Bundle\MarketingListBundle\Entity\MarketingList')),
             array('createdAt', new \DateTime()),
         );
     }

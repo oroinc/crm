@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -10,12 +10,11 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
-
-use OroCRM\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
+use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 
 /**
  * Class ForecastOfOpportunities
- * @package OroCRM\Bundle\SalesBundle\Provider
+ * @package Oro\Bundle\SalesBundle\Provider
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ForecastOfOpportunities
@@ -105,7 +104,7 @@ class ForecastOfOpportunities
                 $queryFilter
             );
             $result['deviation']     = $this->translator
-                ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
+                ->trans('oro.sales.dashboard.forecast_of_opportunities.no_changes');
             $result                  = $this->prepareData(
                 $dataType,
                 $lessIsBetter,

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\Serializer\Exception\RuntimeException;
 
@@ -44,7 +44,7 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         return $this->magentoNormalizer->supportsDenormalization($data, $type, $format, $context)
             && !empty($context[Serializer::PROCESSOR_ALIAS_KEY])
-            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'orocrm_magento') !== false;
+            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'oro_magento') !== false;
     }
 
     /**
@@ -54,6 +54,6 @@ class DateTimeNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         return $this->magentoNormalizer->supportsNormalization($data, $format, $context)
             && !empty($context[Serializer::PROCESSOR_ALIAS_KEY])
-            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'orocrm_magento') !== false;
+            && strpos($context[Serializer::PROCESSOR_ALIAS_KEY], 'oro_magento') !== false;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -12,8 +12,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
 {
@@ -96,7 +95,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     {
         $sql = 'SELECT r.id, r.definition, r.entity FROM oro_report r';
 
-        $className = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+        $className = 'Oro\Bundle\SalesBundle\Entity\Lead';
         $oldField = 'status_label';
         $newField = 'status';
         $this->logQuery($logger, $sql);
@@ -116,7 +115,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
     {
         $sql = 'SELECT s.id, s.definition, s.entity FROM oro_segment s';
 
-        $className = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+        $className = 'Oro\Bundle\SalesBundle\Entity\Lead';
         $oldField = 'status_label';
         $newField = 'status';
         $this->logQuery($logger, $sql);
@@ -254,7 +253,7 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      */
     protected function fixFilterCriterion($def, $field, $key)
     {
-        $paramOldClassName = 'OroCRM\Bundle\SalesBundle\Entity\LeadStatus';
+        $paramOldClassName = 'Oro\Bundle\SalesBundle\Entity\LeadStatus';
         $paramNewClassName = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
         if (isset($field['criterion']['data']['params']['class'])
             && $field['criterion']['data']['params']['class'] === $paramOldClassName

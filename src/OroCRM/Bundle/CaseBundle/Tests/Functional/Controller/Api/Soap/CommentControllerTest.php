@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -38,18 +38,18 @@ class CommentControllerTest extends WebTestCase
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
         $this->initSoapClient();
     }
 
     protected function postFixtureLoad()
     {
         $case = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMCaseBundle:CaseEntity')
+            ->getRepository('OroCaseBundle:CaseEntity')
             ->findOneBySubject('Case #1');
 
         $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneByEmail('daniel.case@example.com');
 
         $this->assertNotNull($case);

@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 /**
  * Hide menu items that were not enabled it config

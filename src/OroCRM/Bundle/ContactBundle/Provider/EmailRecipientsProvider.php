@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Provider;
+namespace Oro\Bundle\ContactBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsProviderInterface;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
-
-use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository;
+use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 
 class EmailRecipientsProvider implements EmailRecipientsProviderInterface
 {
@@ -39,7 +38,7 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
             $args,
             $this->getContactRepository(),
             'c',
-            'OroCRM\Bundle\ContactBundle\Entity\Contact'
+            'Oro\Bundle\ContactBundle\Entity\Contact'
         );
     }
 
@@ -48,7 +47,7 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
      */
     public function getSection()
     {
-        return 'orocrm.contact.entity_plural_label';
+        return 'oro.contact.entity_plural_label';
     }
 
     /**
@@ -56,6 +55,6 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
      */
     protected function getContactRepository()
     {
-        return $this->registry->getRepository('OroCRMContactBundle:Contact');
+        return $this->registry->getRepository('OroContactBundle:Contact');
     }
 }

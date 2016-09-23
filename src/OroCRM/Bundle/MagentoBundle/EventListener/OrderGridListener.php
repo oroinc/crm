@@ -1,9 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper;
-
 use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 
@@ -199,7 +198,7 @@ class OrderGridListener
                     'join'          => 'o.addresses',
                     'alias'         => 'address',
                     'conditionType' => 'WITH',
-                    'condition'     => 'address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa '
+                    'condition'     => 'address.id IN (SELECT oa.id FROM OroMagentoBundle:OrderAddress oa '
                         . 'LEFT JOIN oa.types type WHERE type.name = \'billing\' OR type.name IS NULL)'
                 ],
                 ['join' => 'address.country', 'alias' => 'country'],

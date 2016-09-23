@@ -1,19 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
-    const LEAD_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+    const LEAD_CLASS = 'Oro\Bundle\SalesBundle\Entity\Lead';
     const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
 
     /** @var Registry */
@@ -37,7 +36,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsEntityFQCN()
     {
-        return 'OroCRM\Bundle\SalesBundle\Entity\LeadMailboxProcessSettings';
+        return 'Oro\Bundle\SalesBundle\Entity\LeadMailboxProcessSettings';
     }
 
     /**
@@ -45,7 +44,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getSettingsFormType()
     {
-        return 'orocrm_sales_lead_mailbox_process_settings';
+        return 'oro_sales_lead_mailbox_process_settings';
     }
 
     /**
@@ -53,7 +52,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function getLabel()
     {
-        return 'orocrm.sales.mailbox.process.lead.label';
+        return 'oro.sales.mailbox.process.lead.label';
     }
 
     /**
@@ -93,6 +92,6 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     protected function getChannelRepository()
     {
-        return $this->registry->getRepository('OroCRMChannelBundle:Channel');
+        return $this->registry->getRepository('OroChannelBundle:Channel');
     }
 }

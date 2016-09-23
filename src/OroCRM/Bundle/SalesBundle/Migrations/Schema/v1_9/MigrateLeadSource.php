@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_9;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -30,7 +30,7 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
     {
         $this->extendExtension->addEnumField(
             $schema,
-            'orocrm_sales_lead',
+            'oro_sales_lead',
             'source',
             'lead_source'
         );

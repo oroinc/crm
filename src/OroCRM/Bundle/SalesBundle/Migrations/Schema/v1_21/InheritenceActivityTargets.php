@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_21;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -38,20 +38,20 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
     {
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'orocrm_account',
-            'orocrm_sales_lead',
+            'oro_account',
+            'oro_sales_lead',
             ['contact', 'accounts']
         );
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'orocrm_account',
-            'orocrm_sales_opportunity',
+            'oro_account',
+            'oro_sales_opportunity',
             ['customer', 'account']
         );
         $activityListExtension->addInheritanceTargets(
             $schema,
-            'orocrm_account',
-            'orocrm_sales_b2bcustomer',
+            'oro_account',
+            'oro_sales_b2bcustomer',
             ['account']
         );
     }

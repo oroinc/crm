@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerType;
+use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
 
 class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetName()
     {
         $type = new B2bCustomerType();
-        $this->assertEquals('orocrm_sales_b2bcustomer', $type->getName());
+        $this->assertEquals('oro_sales_b2bcustomer', $type->getName());
     }
 
     public function testAddEntityFields()
@@ -25,9 +25,9 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     [
                         [['name', 'text'], $this->returnSelf()],
-                        [['account', 'orocrm_account_select'], $this->returnSelf()],
-                        [['contact', 'orocrm_contact_select'], $this->returnSelf()],
-                        [['channel', 'orocrm_channel_select_type'], $this->returnSelf()],
+                        [['account', 'oro_account_select'], $this->returnSelf()],
+                        [['contact', 'oro_contact_select'], $this->returnSelf()],
+                        [['channel', 'oro_channel_select_type'], $this->returnSelf()],
                         [['shippingAddress', 'oro_address'], $this->returnSelf()],
                         [['billingAddress', 'oro_address'], $this->returnSelf()]
                     ]

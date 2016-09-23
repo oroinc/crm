@@ -11,9 +11,9 @@
         "oro/testframework-bundle" : "dev-master"
     },
     "autoload": {
-        "psr-0": { "OroCRM\\Bundle\\TestFrameworkBundle": "" }
+        "psr-0": { "Oro\\Bundle\\TestFrameworkBundle": "" }
     },
-    "target-dir": "OroCRM/Bundle/TestFrameworkBundle",
+    "target-dir": "Oro/Bundle/TestFrameworkBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

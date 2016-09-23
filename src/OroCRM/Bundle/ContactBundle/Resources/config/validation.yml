@@ -1,6 +1,6 @@
-OroCRM\Bundle\ContactBundle\Entity\Contact:
+Oro\Bundle\ContactBundle\Entity\Contact:
     constraints:
-        - OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformation: ~
+        - Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation: ~
     properties:
         firstName:
             - Length:
@@ -26,7 +26,7 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of phones must be set as primary.
 
-OroCRM\Bundle\ContactBundle\Entity\Group:
+Oro\Bundle\ContactBundle\Entity\Group:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
     properties:
@@ -39,7 +39,7 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
             - NotBlank: ~
 
 # Prevent required values for all child of AbstractAddress
-OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
+Oro\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:
         - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
     properties:

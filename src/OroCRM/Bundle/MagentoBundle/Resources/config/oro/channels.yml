@@ -1,14 +1,14 @@
 channels:
    entity_data:
        -
-          name: OroCRM\Bundle\MagentoBundle\Entity\Cart
+          name: Oro\Bundle\MagentoBundle\Entity\Cart
           dependent:
-              - OroCRM\Bundle\MagentoBundle\Entity\CartAddress
-              - OroCRM\Bundle\MagentoBundle\Entity\CartItem
-              - OroCRM\Bundle\MagentoBundle\Entity\CartStatus
-              - OroCRM\Bundle\MagentoBundle\Entity\Store
-              - OroCRM\Bundle\MagentoBundle\Entity\Website
-              - OroCRM\Bundle\MagentoBundle\Entity\Region
+              - Oro\Bundle\MagentoBundle\Entity\CartAddress
+              - Oro\Bundle\MagentoBundle\Entity\CartItem
+              - Oro\Bundle\MagentoBundle\Entity\CartStatus
+              - Oro\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\Region
           navigation_items:
               - application_menu.sales_tab.magento_cart
           belongs_to:
@@ -16,13 +16,13 @@ channels:
               connector: cart
 
        -
-          name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+          name: Oro\Bundle\MagentoBundle\Entity\Customer
           dependent:
-              - OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup
-              - OroCRM\Bundle\MagentoBundle\Entity\Address
-              - OroCRM\Bundle\MagentoBundle\Entity\Region
-              - OroCRM\Bundle\MagentoBundle\Entity\Website
-              - OroCRM\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\CustomerGroup
+              - Oro\Bundle\MagentoBundle\Entity\Address
+              - Oro\Bundle\MagentoBundle\Entity\Region
+              - Oro\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\Store
           navigation_items:
               - application_menu.customers_tab.magento_customer
           belongs_to:
@@ -30,13 +30,13 @@ channels:
               connector: customer
 
        -
-          name: OroCRM\Bundle\MagentoBundle\Entity\Order
+          name: Oro\Bundle\MagentoBundle\Entity\Order
           dependent:
-              - OroCRM\Bundle\MagentoBundle\Entity\OrderAddress
-              - OroCRM\Bundle\MagentoBundle\Entity\OrderItem
-              - OroCRM\Bundle\MagentoBundle\Entity\Region
-              - OroCRM\Bundle\MagentoBundle\Entity\Store
-              - OroCRM\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\OrderAddress
+              - Oro\Bundle\MagentoBundle\Entity\OrderItem
+              - Oro\Bundle\MagentoBundle\Entity\Region
+              - Oro\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\Website
           navigation_items:
               - application_menu.sales_tab.magento_order
           belongs_to:
@@ -44,9 +44,9 @@ channels:
               connector: order
 
        -
-          name: OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+          name: Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
           dependent:
-              - OroCRM\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\Store
           navigation_items:
               - application_menu.marketing_tab.magento_newsletter_subscriber
           belongs_to:
@@ -55,11 +55,11 @@ channels:
 
    channel_types:
         magento:
-            label: orocrm.magento.channel_type.label
+            label: oro.magento.channel_type.label
             entities:
-                - OroCRM\Bundle\MagentoBundle\Entity\Cart
-                - OroCRM\Bundle\MagentoBundle\Entity\Order
-                - OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+                - Oro\Bundle\MagentoBundle\Entity\Cart
+                - Oro\Bundle\MagentoBundle\Entity\Order
+                - Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
             integration_type: magento
-            customer_identity: OroCRM\Bundle\MagentoBundle\Entity\Customer
+            customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
             lifetime_value: lifetime

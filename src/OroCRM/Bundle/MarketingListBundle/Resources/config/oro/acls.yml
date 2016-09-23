@@ -1,35 +1,35 @@
 acls:
-    orocrm_marketing_list_delete:
+    oro_marketing_list_delete:
         type: entity
-        class: OroCRMMarketingListBundle:MarketingList
+        class: OroMarketingListBundle:MarketingList
         permission: DELETE
         group_name: ""
         bindings: ~
 
-    orocrm_marketing_list_removed_item_create:
+    oro_marketing_list_removed_item_create:
         type: entity
-        class: OroCRMMarketingListBundle:MarketingListRemovedItem
+        class: OroMarketingListBundle:MarketingListRemovedItem
         permission: CREATE
         group_name: ""
         bindings: ~
 
-    orocrm_marketing_list_removed_item_delete:
+    oro_marketing_list_removed_item_delete:
         type: entity
-        class: OroCRMMarketingListBundle:MarketingListRemovedItem
+        class: OroMarketingListBundle:MarketingListRemovedItem
         permission: DELETE
         group_name: ""
         bindings: ~
 
-    orocrm_marketinglist_unsubscribed_item_create:
+    oro_marketinglist_unsubscribed_item_create:
         type: entity
-        class: OroCRMMarketingListBundle:MarketingListUnsubscribedItem
+        class: OroMarketingListBundle:MarketingListUnsubscribedItem
         permission: CREATE
         group_name: ""
         bindings: ~
 
-    orocrm_marketinglist_unsubscribed_item_delete:
+    oro_marketinglist_unsubscribed_item_delete:
         type: entity
-        class: OroCRMMarketingListBundle:MarketingListUnsubscribedItem
+        class: OroMarketingListBundle:MarketingListUnsubscribedItem
         permission: DELETE
         group_name: ""
         bindings: ~

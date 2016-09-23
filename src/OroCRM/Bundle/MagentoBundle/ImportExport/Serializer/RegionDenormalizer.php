@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Serializer;
 
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Region;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\Entity\Region;
+use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class RegionDenormalizer implements DenormalizerInterface
 {

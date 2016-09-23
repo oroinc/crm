@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Model;
+namespace Oro\Bundle\CampaignBundle\Model;
 
 class ExtendEmailCampaign
 {

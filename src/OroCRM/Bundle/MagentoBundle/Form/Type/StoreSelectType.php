@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class StoreSelectType extends AbstractType
 {
-    const NAME = 'orocrm_magento_store_select';
+    const NAME = 'oro_magento_store_select';
 
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class StoreSelectType extends AbstractType
                 'autocomplete_alias' => 'magento_store',
                 'grid_name' => 'magento-store-by-channel-grid',
                 'configs' => [
-                    'placeholder' => 'orocrm.magento.store.placeholder'
+                    'placeholder' => 'oro.magento.store.placeholder'
                 ]
             ]
         );

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_12;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_12;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -13,7 +13,7 @@ class OroCrmMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $cart = $schema->getTable('orocrm_magento_cart');
+        $cart = $schema->getTable('oro_magento_cart');
         $cart->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $cart->addIndex(['user_owner_id'], 'IDX_96661A809EB185F9', []);
         $cart->addForeignKeyConstraint(
@@ -24,7 +24,7 @@ class OroCrmMagentoBundle implements Migration
             'FK_96661A809EB185F9'
         );
 
-        $customer = $schema->getTable('orocrm_magento_customer');
+        $customer = $schema->getTable('oro_magento_customer');
         $customer->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $customer->addIndex(['user_owner_id'], 'IDX_2A61EE7D9EB185F9', []);
         $customer->addForeignKeyConstraint(
@@ -35,7 +35,7 @@ class OroCrmMagentoBundle implements Migration
             'FK_2A61EE7D9EB185F9'
         );
 
-        $order = $schema->getTable('orocrm_magento_order');
+        $order = $schema->getTable('oro_magento_order');
         $order->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $order->addIndex(['user_owner_id'], 'IDX_4D09F3059EB185F9', []);
         $order->addForeignKeyConstraint(

@@ -1,10 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Grid;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Grid;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
-use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
 /**
  * @outputBuffering enabled
@@ -16,7 +15,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
     {
         parent::setUp();
 
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Command;
+namespace Oro\Bundle\ChannelBundle\Command;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -8,8 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 
 class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements CronCommandInterface
 {
@@ -50,7 +49,7 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
     public function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var LifetimeValueAverageAggregationRepository $repo */
-        $repo  = $this->getService('doctrine')->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
+        $repo  = $this->getService('doctrine')->getRepository('OroChannelBundle:LifetimeValueAverageAggregation');
         $force = $input->getOption('force');
         if ($force) {
             $output->writeln('<comment>Removing existing data...</comment>');

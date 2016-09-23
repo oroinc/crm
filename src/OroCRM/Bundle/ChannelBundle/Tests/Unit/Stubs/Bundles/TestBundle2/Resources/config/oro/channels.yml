@@ -1,9 +1,9 @@
 channels:
    entity_data:
        -
-          name: OroCRM\Bundle\TestBundle2\Entity\Entity
+          name: Oro\Bundle\TestBundle2\Entity\Entity
           dependent:
-              - OroCRM\Bundle\TestBundle2\Entity\EntityContact
+              - Oro\Bundle\TestBundle2\Entity\EntityContact
           navigation_items:
               - application_menu.activities_tab.contact
 

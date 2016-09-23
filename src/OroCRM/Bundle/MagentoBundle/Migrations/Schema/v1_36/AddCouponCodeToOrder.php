@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_36;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_36;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,7 +14,7 @@ class AddCouponCodeToOrder implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_order');
+        $table = $schema->getTable('oro_magento_order');
         $table->addColumn('coupon_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
     }
 }

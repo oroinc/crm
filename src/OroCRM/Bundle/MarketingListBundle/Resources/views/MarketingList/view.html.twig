@@ -8,17 +8,17 @@
 
 {% block navButtons %}
     {% placeholder marketing_list_nav_buttons with {entity: entity} %}
-    {% if entity.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_STATIC') and resource_granted('EDIT', entity) %}
+    {% if entity.type.name == constant('Oro\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_STATIC') and resource_granted('EDIT', entity) %}
         {{ UI.clientButton({
-            'dataUrl': path('orocrm_api_post_marketinglist_segment_run', { 'id': entity.segment.id }) ,
+            'dataUrl': path('oro_api_post_marketinglist_segment_run', { 'id': entity.segment.id }) ,
             'aCss':   'no-hash run-button btn',
-            'label' : 'orocrm.marketinglist.refresh_list'|trans,
+            'label' : 'oro.marketinglist.refresh_list'|trans,
             'iCss':   'icon-refresh',
             'dataAttributes': {
                 'page-component-module': 'orosegment/js/app/components/refresh-button',
                 'page-component-options': {
-                    'successMessage': 'orocrm.marketinglist.refresh_dialog.success',
-                    'content': 'orocrm.marketinglist.refresh_dialog.content',
+                    'successMessage': 'oro.marketinglist.refresh_dialog.success',
+                    'content': 'oro.marketinglist.refresh_dialog.content',
                     'reloadRequired': true
                 }|json_encode,
             }
@@ -26,18 +26,18 @@
     {% endif %}
     {% if isDesktopVersion() and resource_granted('EDIT', entity) %}
         {{ UI.editButton({
-            'path' : path('orocrm_marketing_list_update', { id: entity.id }),
-            'entity_label': 'orocrm.marketinglist.entity_label'|trans
+            'path' : path('oro_marketing_list_update', { id: entity.id }),
+            'entity_label': 'oro.marketinglist.entity_label'|trans
         }) }}
     {% endif %}
     {% if isDesktopVersion() and resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
-            'dataUrl': path('orocrm_api_delete_marketinglist', {'id': entity.id}),
-            'dataRedirect': path('orocrm_marketing_list_index'),
+            'dataUrl': path('oro_api_delete_marketinglist', {'id': entity.id}),
+            'dataRedirect': path('oro_marketing_list_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-user',
             'dataId': entity.id,
-            'entity_label': 'orocrm.marketinglist.entity_label'|trans
+            'entity_label': 'oro.marketinglist.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -45,8 +45,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_marketing_list_index'),
-        'indexLabel': 'orocrm.marketinglist.entity_plural_label'|trans,
+        'indexPath': path('oro_marketing_list_index'),
+        'indexLabel': 'oro.marketinglist.entity_plural_label'|trans,
         'entityTitle': entity.name
     } %}
     {{ parent() }}
@@ -56,15 +56,15 @@
     {%- set listInformation -%}
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
-                {{ UI.renderProperty('orocrm.marketinglist.name.label'|trans, entity.name) }}
-                {{ UI.renderProperty('orocrm.marketinglist.type.label'|trans, entity.type.label|trans) }}
-                {{ UI.renderHtmlProperty('orocrm.marketinglist.description.label'|trans, entity.description) }}
+                {{ UI.renderProperty('oro.marketinglist.name.label'|trans, entity.name) }}
+                {{ UI.renderProperty('oro.marketinglist.type.label'|trans, entity.type.label|trans) }}
+                {{ UI.renderHtmlProperty('oro.marketinglist.description.label'|trans, entity.description) }}
 
                 {%- set entityData -%}
                     <i class="{{ config.icon }} hide-text"></i>&nbsp;{{ config.label }}
                 {%- endset -%}
 
-                {{ UI.renderHtmlProperty('orocrm.marketinglist.entity.label'|trans, entityData) }}
+                {{ UI.renderHtmlProperty('oro.marketinglist.entity.label'|trans, entityData) }}
 
                 {% if entity.segment is not empty %}
                     {%- set segmentData -%}
@@ -91,7 +91,7 @@
                         {% endif %}
                     {%- endif -%}
                 {%- endset -%}
-                {{ UI.renderHtmlProperty('orocrm.marketinglist.owner.label'|trans, ownerData) }}
+                {{ UI.renderHtmlProperty('oro.marketinglist.owner.label'|trans, ownerData) }}
             </div>
             <div class="responsive-block">
                 {{ entityConfig.renderDynamicFields(entity) }}
@@ -126,7 +126,7 @@
     {% endif %}
     {% set dataBlocks = [
         {
-            'title': 'orocrm.marketinglist.block.general'|trans,
+            'title': 'oro.marketinglist.block.general'|trans,
             'class': 'active',
             'subblocks': generalSectionBlocks
         },
@@ -137,14 +137,14 @@
             ]
         },
         {
-            'title' : 'orocrm.marketinglist.block.removed'|trans,
+            'title' : 'oro.marketinglist.block.removed'|trans,
             'subblocks': [
                 {'data' : [removedItemsGrid]}
             ]
         }
     ] %}
 
-    <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
+    <div data-page-component-module="oromarketinglist/js/app/components/grid-linker"
          data-page-component-options="{{ [
              {main: itemsGridName, secondary: removedItemsGridName},
              {main: removedItemsGridName, secondary: itemsGridName}

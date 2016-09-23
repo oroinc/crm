@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Dashboard;
+namespace Oro\Bundle\MagentoBundle\Dashboard;
 
 use DateTime;
 
@@ -13,10 +13,9 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
-use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 
 class PurchaseDataProvider
 {
@@ -77,22 +76,22 @@ class PurchaseDataProvider
     {
         $items = [
             [
-                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.visited'),
+                'label'    => $this->translator->trans('oro.magento.dashboard.purchase_chart.visited'),
                 'value'    => $this->trackingVisitProvider->getVisitedCount($from, $to),
                 'isNozzle' => false
             ],
             [
-                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.deeply_visited'),
+                'label'    => $this->translator->trans('oro.magento.dashboard.purchase_chart.deeply_visited'),
                 'value'    => $this->trackingVisitProvider->getDeeplyVisitedCount($from, $to),
                 'isNozzle' => false
             ],
             [
-                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.added_to_cart'),
+                'label'    => $this->translator->trans('oro.magento.dashboard.purchase_chart.added_to_cart'),
                 'value'    => $this->getCartRepository()->getCustomersCountWhatMakeCarts($this->aclHelper, $from, $to),
                 'isNozzle' => false
             ],
             [
-                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
+                'label'    => $this->translator->trans('oro.magento.dashboard.purchase_chart.purchased'),
                 'value'    => $this->getOrderRepository()->getUniqueBuyersCount($this->aclHelper, $from, $to),
                 'isNozzle' => true
             ]
@@ -121,7 +120,7 @@ class PurchaseDataProvider
      */
     protected function getCartRepository()
     {
-        return $this->registry->getRepository('OroCRMMagentoBundle:Cart');
+        return $this->registry->getRepository('OroMagentoBundle:Cart');
     }
 
     /**
@@ -129,6 +128,6 @@ class PurchaseDataProvider
      */
     protected function getOrderRepository()
     {
-        return $this->registry->getRepository('OroCRMMagentoBundle:Order');
+        return $this->registry->getRepository('OroMagentoBundle:Order');
     }
 }

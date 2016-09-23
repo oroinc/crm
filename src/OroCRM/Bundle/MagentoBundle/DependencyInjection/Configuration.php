@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\DependencyInjection;
+namespace Oro\Bundle\MagentoBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-use OroCRM\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
+use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 
 class Configuration implements ConfigurationInterface
 {

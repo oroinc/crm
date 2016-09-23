@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 /**
  * Class BatchFilterBag
  * Magento API filter container
  *
- * @package OroCRM:MagentoBundle
+ * @package Oro:MagentoBundle
  */
 class BatchFilterBag
 {

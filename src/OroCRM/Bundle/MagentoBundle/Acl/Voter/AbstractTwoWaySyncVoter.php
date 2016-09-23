@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Acl\Voter;
 
-use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
+use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
-
-use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
 {

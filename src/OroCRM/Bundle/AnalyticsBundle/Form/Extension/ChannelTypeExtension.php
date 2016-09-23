@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Form\Extension;
+namespace Oro\Bundle\AnalyticsBundle\Form\Extension;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -14,12 +14,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
@@ -181,11 +181,11 @@ class ChannelTypeExtension extends AbstractTypeExtension
             RFMAwareInterface::RFM_STATE_KEY,
             'checkbox',
             [
-                'label' => 'orocrm.analytics.form.rfm_enable.label',
+                'label' => 'oro.analytics.form.rfm_enable.label',
                 'mapped' => false,
                 'required' => false,
                 'data' => $rfmEnabled,
-                'tooltip' => 'orocrm.analytics.rfm.tooltip'
+                'tooltip' => 'oro.analytics.rfm.tooltip'
             ]
         );
         $this->addRFMTypes($form, $categories);
@@ -221,8 +221,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 RFMCategorySettingsType::NAME,
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
-                    'label' => sprintf('orocrm.analytics.form.%s.label', $type),
-                    'tooltip' => sprintf('orocrm.analytics.%s.tooltip', $type),
+                    'label' => sprintf('oro.analytics.form.%s.label', $type),
+                    'tooltip' => sprintf('oro.analytics.%s.tooltip', $type),
                     'mapped' => false,
                     'required' => false,
                     'error_bubbling' => false,

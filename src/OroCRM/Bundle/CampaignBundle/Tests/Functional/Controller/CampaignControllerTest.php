@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\CampaignBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -23,13 +23,13 @@ class CampaignControllerTest extends WebTestCase
     {
         $crawler                                   = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_campaign_create')
+            $this->getUrl('oro_campaign_create')
         );
         $form                                      = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_campaign_form[name]']        = 'new name';
-        $form['orocrm_campaign_form[code]']        = self::TEST_CODE;
-        $form['orocrm_campaign_form[description]'] = 'some description';
-        $form['orocrm_campaign_form[budget]']      = 154.54;
+        $form['oro_campaign_form[name]']        = 'new name';
+        $form['oro_campaign_form[code]']        = self::TEST_CODE;
+        $form['oro_campaign_form[description]'] = 'some description';
+        $form['oro_campaign_form[budget]']      = 154.54;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -48,13 +48,13 @@ class CampaignControllerTest extends WebTestCase
         $result   = reset($result['data']);
         $crawler  = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_campaign_update', ['id' => $result['id']])
+            $this->getUrl('oro_campaign_update', ['id' => $result['id']])
         );
 
         $form                                 = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_campaign_form[name]']   = 'new name';
-        $form['orocrm_campaign_form[budget]'] = 177;
-        $form['orocrm_campaign_form[code]']   = self::UPDATED_TEST_CODE;
+        $form['oro_campaign_form[name]']   = 'new name';
+        $form['oro_campaign_form[budget]'] = 177;
+        $form['oro_campaign_form[code]']   = self::UPDATED_TEST_CODE;
 
         $this->client->followRedirects(true);
 

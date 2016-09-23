@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\DependencyInjection;
+namespace Oro\Bundle\ContactBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-use OroCRM\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ContactBundle\Model\Social;
 
 class Configuration implements ConfigurationInterface
 {

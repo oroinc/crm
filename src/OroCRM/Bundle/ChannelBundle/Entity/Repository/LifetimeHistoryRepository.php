@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
+namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
@@ -39,7 +39,7 @@ class LifetimeHistoryRepository extends EntityRepository
     /**
      * Update status of history entries based on data given
      * Generates following DQL for each channel passed:
-     *      UPDATE OroCRMChannelBundle:LifetimeValueHistory l SET status = :status
+     *      UPDATE OroChannelBundle:LifetimeValueHistory l SET status = :status
      *      WHERE l.dataChannel = :dataChannel
      *              AND (
      *                  (l.id <> :exclusionEntityId1 and l.account = :account1)
@@ -65,7 +65,7 @@ class LifetimeHistoryRepository extends EntityRepository
             $qb   = $this->getEntityManager()->createQueryBuilder();
             $expr = $qb->expr();
 
-            $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
+            $qb->update('OroChannelBundle:LifetimeValueHistory', 'l');
             $qb->set('l.status', ':status');
             $qb->setParameter('status', $qb->expr()->literal($status));
             $qb->andWhere('l.dataChannel = :channel');

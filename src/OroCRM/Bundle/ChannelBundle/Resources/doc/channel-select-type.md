@@ -9,13 +9,13 @@ with  `entities` set.
 ```php
     $builder->add(
         'dataChannel',
-        'orocrm_channel_select_type',
+        'oro_channel_select_type',
         [
             'required' => true,
-            'label'    => 'orocrm.some_field_name.label',
+            'label'    => 'oro.some_field_name.label',
             'entities' => [
-                'OroCRM\\Bundle\\AcmeBundle\\Entity\\Entity1',
-                'OroCRM\\Bundle\\AcmeBundle\\Entity\\Entity2'
+                'Oro\\Bundle\\AcmeBundle\\Entity\\Entity1',
+                'Oro\\Bundle\\AcmeBundle\\Entity\\Entity2'
             ]
         ]
     );

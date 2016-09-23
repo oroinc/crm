@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Validator;
+namespace Oro\Bundle\ChannelBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 

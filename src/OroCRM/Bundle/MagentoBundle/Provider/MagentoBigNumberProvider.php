@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -8,11 +8,10 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class MagentoBigNumberProvider
 {
@@ -47,7 +46,7 @@ class MagentoBigNumberProvider
      */
     public function getRevenueValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
 
         $qb = $this->getOrderRepository()->getRevenueValueQB();
         $this->applyDateFiltering($qb, 'orders.createdAt', $start, $end);
@@ -63,7 +62,7 @@ class MagentoBigNumberProvider
      */
     public function getOrdersNumberValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
         $qb = $this->getOrderRepository()->getOrdersNumberValueQB();
         $this->applyDateFiltering($qb, 'o.createdAt', $start, $end);
         $value = $this->aclHelper->apply($qb)->getOneOrNullResult();
@@ -78,7 +77,7 @@ class MagentoBigNumberProvider
      */
     public function getAOVValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
 
         $qb = $this->getOrderRepository()->getAOVValueQB();
         $this->applyDateFiltering($qb, 'o.createdAt', $start, $end);
@@ -94,7 +93,7 @@ class MagentoBigNumberProvider
      */
     public function getDiscountedOrdersPercentValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
         $qb = $this->getOrderRepository()->getDiscountedOrdersPercentQB();
         $this->applyDateFiltering($qb, 'o.createdAt', $start, $end);
         $value = $this->aclHelper->apply($qb)->getOneOrNullResult();
@@ -109,7 +108,7 @@ class MagentoBigNumberProvider
      */
     public function getNewCustomersCountValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Customer', 'createdAt');
         $qb = $this->getCustomerRepository()->getNewCustomersNumberWhoMadeOrderQB();
         $this->applyDateFiltering($qb, 'orders.createdAt', $start, $end);
         $this->applyDateFiltering($qb, 'customer.createdAt', $start, $end);
@@ -125,7 +124,7 @@ class MagentoBigNumberProvider
      */
     public function getReturningCustomersCountValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Customer', 'createdAt');
         $qb = $this->getCustomerRepository()->getReturningCustomersWhoMadeOrderQB();
         $this->applyDateFiltering($qb, 'orders.createdAt', $start, $end);
         if ($start) {
@@ -145,7 +144,7 @@ class MagentoBigNumberProvider
      */
     public function getAbandonedRevenueValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Cart', 'createdAt');
 
         $qb = $this->getCartRepository()->getAbandonedRevenueQB();
         $this->applyDateFiltering($qb, 'cart.createdAt', $start, $end);
@@ -161,7 +160,7 @@ class MagentoBigNumberProvider
      */
     public function getAbandonedCountValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Cart', 'createdAt');
 
         $qb    = $this->getCartRepository()->getAbandonedCountQB();
         $value = $this->aclHelper->apply($qb)->getOneOrNullResult();
@@ -177,7 +176,7 @@ class MagentoBigNumberProvider
      */
     public function getAbandonRateValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Cart', 'createdAt');
         $qb = $this->getCartRepository()->getGrandTotalSumQB();
         $this->applyDateFiltering($qb, 'cart.createdAt', $start, $end);
         $allCards = $this->aclHelper->apply($qb)->getOneOrNullResult();
@@ -218,7 +217,7 @@ class MagentoBigNumberProvider
     {
         $result = 0;
 
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
         $visits = (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
@@ -239,7 +238,7 @@ class MagentoBigNumberProvider
     {
         $result = 0;
 
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Customer', 'createdAt');
 
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
@@ -257,7 +256,7 @@ class MagentoBigNumberProvider
      */
     protected function getOrderRepository()
     {
-        return $this->doctrine->getRepository('OroCRMMagentoBundle:Order');
+        return $this->doctrine->getRepository('OroMagentoBundle:Order');
     }
 
     /**
@@ -265,7 +264,7 @@ class MagentoBigNumberProvider
      */
     protected function getCustomerRepository()
     {
-        return $this->doctrine->getRepository('OroCRMMagentoBundle:Customer');
+        return $this->doctrine->getRepository('OroMagentoBundle:Customer');
     }
 
     /**
@@ -273,7 +272,7 @@ class MagentoBigNumberProvider
      */
     protected function getCartRepository()
     {
-        return $this->doctrine->getRepository('OroCRMMagentoBundle:Cart');
+        return $this->doctrine->getRepository('OroMagentoBundle:Cart');
     }
 
     /**
@@ -281,7 +280,7 @@ class MagentoBigNumberProvider
      */
     protected function getChannelRepository()
     {
-        return $this->doctrine->getRepository('OroCRMChannelBundle:Channel');
+        return $this->doctrine->getRepository('OroChannelBundle:Channel');
     }
 
     /**

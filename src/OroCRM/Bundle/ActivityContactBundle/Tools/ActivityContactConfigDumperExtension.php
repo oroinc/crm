@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tools;
+namespace Oro\Bundle\ActivityContactBundle\Tools;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AbstractEntityConfigDumperExtension;
-
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExtension
 {

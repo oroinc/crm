@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_32;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_32;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
@@ -46,88 +46,88 @@ class UpdateCreatedUpdatedLabels implements Migration
     {
         return [
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Address',
                 'field'      => 'created',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.address.created.label'
+                'replace'    => 'oro.magento.address.created.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Address',
                 'field'      => 'updated',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.address.updated.label'
+                'replace'    => 'oro.magento.address.updated.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\CartAddress',
                 'field'      => 'updated',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.cartaddress.updated.label'
+                'replace'    => 'oro.magento.cartaddress.updated.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\CartAddress',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\CartAddress',
                 'field'      => 'created',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.cartaddress.created.label'
+                'replace'    => 'oro.magento.cartaddress.created.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Cart',
                 'field'      => 'createdAt',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.cart.created_at.label'
+                'replace'    => 'oro.magento.cart.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Cart',
                 'field'      => 'updatedAt',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.cart.updated_at.label'
+                'replace'    => 'oro.magento.cart.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\CartItem',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
                 'field'      => 'createdAt',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.cartitem.created_at.label'
+                'replace'    => 'oro.magento.cartitem.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\CartItem',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
                 'field'      => 'updatedAt',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.cartitem.updated_at.label'
+                'replace'    => 'oro.magento.cartitem.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                 'field'      => 'createdAt',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.customer.created_at.label'
+                'replace'    => 'oro.magento.customer.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Customer',
                 'field'      => 'updatedAt',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.customer.updated_at.label'
+                'replace'    => 'oro.magento.customer.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Order',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Order',
                 'field'      => 'createdAt',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.order.created_at.label'
+                'replace'    => 'oro.magento.order.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Order',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Order',
                 'field'      => 'updatedAt',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.order.updated_at.label'
+                'replace'    => 'oro.magento.order.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Product',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Product',
                 'field'      => 'createdAt',
                 'value'      => 'oro.ui.created_at',
-                'replace'    => 'orocrm.magento.product.created_at.label'
+                'replace'    => 'oro.magento.product.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\MagentoBundle\Entity\Product',
+                'entityName' => 'Oro\Bundle\MagentoBundle\Entity\Product',
                 'field'      => 'updatedAt',
                 'value'      => 'oro.ui.updated_at',
-                'replace'    => 'orocrm.magento.product.updated_at.label'
+                'replace'    => 'oro.magento.product.updated_at.label'
             ]
         ];
     }

@@ -4,5 +4,5 @@ elements:
     class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
     options:
       mapping:
-        Account Name: 'orocrm_account_form[name]'
-        Description: 'orocrm_account_form[extend_description]'
+        Account Name: 'oro_account_form[name]'
+        Description: 'oro_account_form[extend_description]'

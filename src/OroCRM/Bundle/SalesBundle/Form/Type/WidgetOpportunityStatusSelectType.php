@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -9,7 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 class WidgetOpportunityStatusSelectType extends AbstractType
 {
-    const NAME = 'orocrm_type_widget_opportunity_status_select';
+    const NAME = 'oro_type_widget_opportunity_status_select';
 
     /** @var EnumValueProvider */
     protected $enumValueProvider;

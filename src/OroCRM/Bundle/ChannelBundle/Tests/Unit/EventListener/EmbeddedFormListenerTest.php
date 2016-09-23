@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
-use OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
+use Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
 
 class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +78,7 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnEmbeddedFormSubmit()
     {
-        $formEntity = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
+        $formEntity = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
             ->disableOriginalConstructor()->getMock();
         $formEntity->expects($this->never())
             ->method('getDataChannel');
@@ -91,14 +91,14 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnEmbeddedFormSubmitWithDataChannel()
     {
-        $formEntity = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
+        $formEntity = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
             ->disableOriginalConstructor()->getMock();
 
-        $dataChannel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $dataChannel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $formEntity->expects($this->once())
             ->method('getDataChannel')
             ->will($this->returnValue($dataChannel));
-        $data = $this->getMock('OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface');
+        $data = $this->getMock('Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface');
         $data->expects($this->once())
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);

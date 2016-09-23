@@ -1,21 +1,20 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
-use OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
-use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\SalesBundle\Model\B2bGuesser;
+use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -29,7 +28,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $b2bGuesser = $this
-            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Model\B2bGuesser')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Model\B2bGuesser')
             ->disableOriginalConstructor()
             ->getMock();
         $entityFieldProvider = $this
@@ -38,7 +37,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $changeLeadStatus = $this
-            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Model\ChangeLeadStatus')
             ->setMethods(['qualify'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -59,7 +58,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
     public function testPrepareOpportunityForFormWithContact()
     {
         $lead = $this
-            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
             ->setMethods(['getContact', 'getName', 'getStatus'])
             ->getMock();
 

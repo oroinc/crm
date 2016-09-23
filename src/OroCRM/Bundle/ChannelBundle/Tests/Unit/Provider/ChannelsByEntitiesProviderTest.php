@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
-use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,14 +32,14 @@ class ChannelsByEntitiesProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->repo = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
         $doctrineHelper
             ->expects($this->once())
             ->method('getEntityRepositoryForClass')
-            ->with('OroCRMChannelBundle:Channel')
+            ->with('OroChannelBundle:Channel')
             ->willReturn($this->repo);
 
         $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')

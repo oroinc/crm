@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Form\Handler;
+namespace Oro\Bundle\MarketingListBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
 
@@ -15,8 +15,8 @@ use Symfony\Component\Validator\ValidatorInterface;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\SegmentBundle\Entity\SegmentType;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class MarketingListHandler
 {
@@ -121,7 +121,7 @@ class MarketingListHandler
             $segment = new Segment();
         }
         $segmentName = $this->translator->trans(
-            'orocrm.marketinglist.segment',
+            'oro.marketinglist.segment',
             ['%name%' => $marketingList->getName()]
         );
         $segment

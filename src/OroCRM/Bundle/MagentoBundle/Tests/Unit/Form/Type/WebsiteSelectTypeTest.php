@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
+use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
 
 class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = new WebsiteSelectType();
 
-        $this->assertSame('orocrm_magento_website_select', $type->getName());
+        $this->assertSame('oro_magento_website_select', $type->getName());
         $this->assertSame('choice', $type->getParent());
     }
 

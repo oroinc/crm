@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Form\Type;
+namespace Oro\Bundle\AnalyticsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RFMCategoryType extends AbstractType
 {
-    const NAME = 'orocrm_analytics_rfm_category';
+    const NAME = 'oro_analytics_rfm_category';
 
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class RFMCategoryType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
+                'data_class' => 'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
             ]
         );
     }

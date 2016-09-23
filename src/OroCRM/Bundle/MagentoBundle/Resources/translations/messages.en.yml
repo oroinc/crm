@@ -1,6 +1,6 @@
 "Website ID: %websiteId%, Stores: %storesList%": "Website ID: %websiteId%, Stores: %storesList%"
 
-orocrm:
+oro:
     magento:
         dashboard:
             e_commerce: Ecommerce

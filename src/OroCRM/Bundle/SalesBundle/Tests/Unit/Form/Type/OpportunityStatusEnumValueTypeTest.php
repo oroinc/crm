@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -8,8 +8,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Range;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +16,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = $this->getFormType();
 
-        $this->assertEquals('orocrm_sales_opportunity_status_enum_value', $type->getName());
+        $this->assertEquals('oro_sales_opportunity_status_enum_value', $type->getName());
     }
 
     public function testBuildForm()

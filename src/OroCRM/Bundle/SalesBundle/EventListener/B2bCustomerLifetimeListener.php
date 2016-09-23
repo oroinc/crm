@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\EventListener;
+namespace Oro\Bundle\SalesBundle\EventListener;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
@@ -9,10 +9,9 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 class B2bCustomerLifetimeListener
 {
@@ -45,7 +44,7 @@ class B2bCustomerLifetimeListener
         $entities = array_filter(
             $entities,
             function ($entity) {
-                return 'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity' === ClassUtils::getClass($entity);
+                return 'Oro\\Bundle\\SalesBundle\\Entity\\Opportunity' === ClassUtils::getClass($entity);
             }
         );
 
@@ -97,7 +96,7 @@ class B2bCustomerLifetimeListener
         }
 
         $this->initializeFromEventArgs($args);
-        $repo = $this->em->getRepository('OroCRMSalesBundle:B2bCustomer');
+        $repo = $this->em->getRepository('OroSalesBundle:B2bCustomer');
 
         $flushRequired = false;
         foreach ($this->queued as $b2bCustomer) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
-use OroCRM\Bundle\SalesBundle\Model\ExtendLeadEmail;
+use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_sales_lead_email", indexes={
+ * @ORM\Table("oro_sales_lead_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  * @Config(

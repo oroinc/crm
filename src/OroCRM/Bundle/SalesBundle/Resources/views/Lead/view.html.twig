@@ -7,14 +7,14 @@
     {% if resource_granted('EDIT', entity) %}
         {% if (isDisqualifyAndConvertAllowed)  %}
             {{ UI.button({
-                'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
+                'path':  path('oro_sales_lead_disqualify', {'id': entity.id}),
                 'aCss':  'btn btn-danger action-button',
                 'iCss':  'icon-ban-circle',
                 'label': 'Disqualify',
                 'title': 'Disqualify',
             }) }}
             {{ UI.button({
-                'path':  path('orocrm_sales_lead_convert_to_opportunity', {'id': entity.id}),
+                'path':  path('oro_sales_lead_convert_to_opportunity', {'id': entity.id}),
                 'aCss':  'btn action-button',
                 'iCss':  'icon-usd',
                 'label': 'Convert to Opportunity',
@@ -22,18 +22,18 @@
             }) }}
         {% endif %}
         {{ UI.editButton({
-            'path' : path('orocrm_sales_lead_update', { 'id': entity.id }),
-            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+            'path' : path('oro_sales_lead_update', { 'id': entity.id }),
+            'entity_label': 'oro.sales.lead.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_lead', {'id': entity.id}),
-            'dataRedirect': path('orocrm_sales_lead_index'),
+            'dataRedirect': path('oro_sales_lead_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-lead',
             'dataId': entity.id,
-            'entity_label': 'orocrm.sales.lead.entity_label'|trans
+            'entity_label': 'oro.sales.lead.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -46,8 +46,8 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_sales_lead_index'),
-        'indexLabel': 'orocrm.sales.lead.entity_plural_label'|trans,
+        'indexPath': path('oro_sales_lead_index'),
+        'indexLabel': 'oro.sales.lead.entity_plural_label'|trans,
         'entityTitle': entity.name
     } %}
     {{ parent() }}
@@ -68,7 +68,7 @@
     {% set leadInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_sales_lead_info', {id: entity.id}),
+            'url': path('oro_sales_lead_info', {id: entity.id}),
             'title': 'Lead Information'|trans
         }) }}
     {% endset %}
@@ -77,7 +77,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'contentClasses': [],
-            'url': path('orocrm_sales_lead_address_book', {id: entity.id}),
+            'url': path('oro_sales_lead_address_book', {id: entity.id}),
             'title': 'Address Book'|trans
         }) }}
     {% endset %}

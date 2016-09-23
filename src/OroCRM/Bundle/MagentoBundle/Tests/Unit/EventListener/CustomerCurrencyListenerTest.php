@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
-use OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener;
+use Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener;
 
 class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrePersistEntityWithCurrency()
     {
-        $entity = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -83,7 +83,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getCurrency')
             ->will($this->returnValue($currency));
 
-        $entity = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())

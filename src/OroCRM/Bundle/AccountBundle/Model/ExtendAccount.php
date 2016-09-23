@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Model;
+namespace Oro\Bundle\AccountBundle\Model;
 
 class ExtendAccount
 {

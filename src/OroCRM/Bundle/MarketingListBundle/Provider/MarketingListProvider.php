@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Provider;
+namespace Oro\Bundle\MarketingListBundle\Provider;
 
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\Select;
@@ -13,9 +13,8 @@ use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\TagBundle\Grid\TagsExtension;
-
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListProvider
 {

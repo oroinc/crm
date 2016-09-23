@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Handler;
+namespace Oro\Bundle\ContactBundle\Handler;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -11,11 +11,11 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 /**
  * Class ContactEmailApiHandler
- * @package OroCRM\Bundle\ContactBundle\Handler
+ * @package Oro\Bundle\ContactBundle\Handler
  */
 class ContactEmailApiHandler extends AbstractEntityApiHandler
 {
-    const ENTITY_CLASS = 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail';
+    const ENTITY_CLASS = 'Oro\Bundle\ContactBundle\Entity\ContactEmail';
 
     /**
      * @var OroEntityManager

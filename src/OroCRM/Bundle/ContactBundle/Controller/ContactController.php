@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller;
+namespace Oro\Bundle\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -10,23 +10,22 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class ContactController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="orocrm_contact_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_contact_view", requirements={"id"="\d+"})
      *
      * @Template
      * @Acl(
-     *      id="orocrm_contact_view",
+     *      id="oro_contact_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMContactBundle:Contact"
+     *      class="OroContactBundle:Contact"
      * )
      */
     public function viewAction(Contact $contact)
@@ -37,15 +36,15 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="oro_contact_info", requirements={"id"="\d+"})
      *
      * @Template
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      */
     public function infoAction(Contact $contact)
     {
         if (!$this->getRequest()->get('_wid')) {
-            return $this->redirect($this->get('router')->generate('orocrm_contact_view', ['id' => $contact->getId()]));
+            return $this->redirect($this->get('router')->generate('oro_contact_view', ['id' => $contact->getId()]));
         }
 
         return array(
@@ -55,13 +54,13 @@ class ContactController extends Controller
 
     /**
      * Create contact form
-     * @Route("/create", name="orocrm_contact_create")
-     * @Template("OroCRMContactBundle:Contact:update.html.twig")
+     * @Route("/create", name="oro_contact_create")
+     * @Template("OroContactBundle:Contact:update.html.twig")
      * @Acl(
-     *      id="orocrm_contact_create",
+     *      id="oro_contact_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMContactBundle:Contact"
+     *      class="OroContactBundle:Contact"
      * )
      */
     public function createAction()
@@ -72,7 +71,7 @@ class ContactController extends Controller
         if ($entityClass) {
             $entityClass = $this->get('oro_entity.routing_helper')->resolveEntityClass($entityClass);
             $entityId    = $this->getRequest()->get('entityId');
-            if ($entityId && $entityClass === $this->container->getParameter('orocrm_account.account.entity.class')) {
+            if ($entityId && $entityClass === $this->container->getParameter('oro_account.account.entity.class')) {
                 $repository = $this->getDoctrine()->getRepository($entityClass);
                 /** @var Account $account */
                 $account = $repository->find($entityId);
@@ -91,14 +90,14 @@ class ContactController extends Controller
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"})
+     * @Route("/update/{id}", name="oro_contact_update", requirements={"id"="\d+"})
      *
      * @Template
      * @Acl(
-     *      id="orocrm_contact_update",
+     *      id="oro_contact_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMContactBundle:Contact"
+     *      class="OroContactBundle:Contact"
      * )
      */
     public function updateAction(Contact $entity)
@@ -109,18 +108,18 @@ class ContactController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_contact_index",
+     *      name="oro_contact_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      *
      * @Template
-     * @AclAncestor("orocrm_contact_view")
+     * @AclAncestor("oro_contact_view")
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_contact.entity.class')
+            'entity_class' => $this->container->getParameter('oro_contact.entity.class')
         ];
     }
 
@@ -129,7 +128,7 @@ class ContactController extends Controller
      */
     protected function getManager()
     {
-        return $this->get('orocrm_contact.contact.manager');
+        return $this->get('oro_contact.contact.manager');
     }
 
     protected function update(Contact $entity = null)
@@ -140,15 +139,15 @@ class ContactController extends Controller
 
         return $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_contact.form.contact'),
-            $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message'),
-            $this->get('orocrm_contact.form.handler.contact')
+            $this->get('oro_contact.form.contact'),
+            $this->get('translator')->trans('oro.contact.controller.contact.saved.message'),
+            $this->get('oro_contact.form.handler.contact')
         );
     }
 
     /**
-     * @Route("/widget/account-contacts/{id}", name="orocrm_account_widget_contacts", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_contact_view")
+     * @Route("/widget/account-contacts/{id}", name="oro_account_widget_contacts", requirements={"id"="\d+"})
+     * @AclAncestor("oro_contact_view")
      * @Template()
      */
     public function accountContactsAction(Account $account)

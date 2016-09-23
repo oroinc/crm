@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
+namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -10,8 +10,7 @@ use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -81,7 +80,7 @@ class OpportunityRepository extends EntityRepository
                     $alias
                 )
             )
-            ->leftJoin('OroCRMSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
+            ->leftJoin('OroSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
             ->groupBy('s.name')
             ->orderBy($orderBy, $direction);
 

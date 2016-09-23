@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_28;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_28;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
 
@@ -28,6 +27,6 @@ class AddTrackingIdentifierAssociation implements Migration, IdentifierEventExte
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
+        $this->extension->addIdentifierAssociation($schema, 'oro_magento_customer');
     }
 }

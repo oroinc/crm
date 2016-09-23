@@ -1,7 +1,7 @@
 datagrids:
     orcrm-contact-requests-grid:
-        extended_entity_name: %orocrm_contact_us.contactrequest.entity.class%
-        acl_resource: orocrm_contactus_request_view
+        extended_entity_name: %oro_contact_us.contactrequest.entity.class%
+        acl_resource: oro_contactus_request_view
         source:
             type: orm
             query:
@@ -14,22 +14,22 @@ datagrids:
                     - cr.createdAt
                     - channel.name as channelName
                 from:
-                    - { table: %orocrm_contact_us.contactrequest.entity.class%, alias: cr }
+                    - { table: %oro_contact_us.contactrequest.entity.class%, alias: cr }
                 join:
                     left:
                         - { join: cr.dataChannel, alias: channel }
         columns:
             channelName:
-                label:         orocrm.contactus.contactrequest.data_channel.label
+                label:         oro.contactus.contactrequest.data_channel.label
             firstName:
-                label:         orocrm.contactus.contactrequest.first_name.label
+                label:         oro.contactus.contactrequest.first_name.label
             lastName:
-                label:         orocrm.contactus.contactrequest.last_name.label
+                label:         oro.contactus.contactrequest.last_name.label
             phone:
-                label:         orocrm.contactus.contactrequest.phone.label
+                label:         oro.contactus.contactrequest.phone.label
                 frontend_type: phone
             emailAddress:
-                label:         orocrm.contactus.contactrequest.email_address.label
+                label:         oro.contactus.contactrequest.email_address.label
             createdAt:
                 frontend_type: datetime
                 label:         oro.ui.created_at
@@ -56,7 +56,7 @@ datagrids:
                     data_name: channel.id
                     options:
                         field_options:
-                            class: OroCRMChannelBundle:Channel
+                            class: OroChannelBundle:Channel
                             property: name
                             translatable_options: false
                 firstName:
@@ -78,32 +78,32 @@ datagrids:
             id: ~
             view_link:
                 type:       url
-                route:      orocrm_contactus_request_view
+                route:      oro_contactus_request_view
                 params:     [ id ]
             update_link:
                 type:       url
-                route:      orocrm_contactus_request_update
+                route:      oro_contactus_request_update
                 params:     [ id ]
             delete_link:
                 type:       url
-                route:      orocrm_contactus_request_delete
+                route:      oro_contactus_request_delete
                 params:     [ id ]
         actions:
             view:
-                acl_resource: orocrm_contactus_request_view
+                acl_resource: oro_contactus_request_view
                 type:         navigate
                 label:        oro.grid.action.view
                 icon:         eye-open
                 link:         view_link
                 rowAction:    true
             update:
-                acl_resource: orocrm_contactus_request_edit
+                acl_resource: oro_contactus_request_edit
                 type:         navigate
                 label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
             delete:
-                acl_resource: orocrm_contactus_request_delete
+                acl_resource: oro_contactus_request_delete
                 type:         delete
                 label:        oro.grid.action.delete
                 icon:         trash

@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Cache;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Cache;
 
-use OroCRM\Bundle\MagentoBundle\Cache\WsdlCacheClearer;
+use Oro\Bundle\MagentoBundle\Cache\WsdlCacheClearer;
 
 class WsdlCacheClearerTest extends \PHPUnit_Framework_TestCase
 {
     public function testClear()
     {
-        $wsdlManager = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\WsdlManager')
+        $wsdlManager = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Service\WsdlManager')
             ->disableOriginalConstructor()
             ->getMock();
         $wsdlManager->expects($this->once())

@@ -21,7 +21,7 @@ workflows:
                 preconditions:
                     '@and':
                         - '@equal': [$cart.status.name, 'open']
-                        - '@channel_entity_availiable': [$cart.dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
+                        - '@channel_entity_availiable': [$cart.dataChannel, ['Oro\Bundle\SalesBundle\Entity\Opportunity']]
                 conditions:
                     '@and':
                         - '@not_empty':
@@ -32,7 +32,7 @@ workflows:
                             message: 'Owner must be set'
                 actions:
                     - '@find_entity': # Set cart status to converted_to_opportunity
-                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        class: Oro\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'converted_to_opportunity'
                         attribute: $cart.status
                     - '@request_enum_entity':
@@ -40,7 +40,7 @@ workflows:
                         identifier:  'in_progress'
                         attribute:   $.result.opportunity_status
                     - '@create_entity': # create an opportunity
-                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        class: Oro\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $cart.opportunity
                         data:
                             name: $opportunity_name
@@ -56,7 +56,7 @@ workflows:
                     '@equal': [$cart.status.name, 'open']
                 actions:
                     - '@find_entity': # Set cart status to lost
-                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        class: Oro\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'lost'
                         attribute: $cart.status
 
@@ -72,6 +72,6 @@ workflows:
                         - [$opportunity_owner, ~]
                         - [$opportunity_budget, ~]
                     - '@find_entity': # Set cart status to open
-                        class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
+                        class: Oro\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'open'
                         attribute: $cart.status

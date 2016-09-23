@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\MarketingListBundle\Form\Type;
+namespace Oro\Bundle\MarketingListBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -14,9 +14,9 @@ class MarketingListSelectType extends AbstractType
         $resolver->setDefaults(
             [
                 'autocomplete_alias' => 'marketing_lists',
-                'create_form_route' => 'orocrm_marketing_list_create',
+                'create_form_route' => 'oro_marketing_list_create',
                 'configs' => [
-                    'placeholder' => 'orocrm.marketinglist.form.choose_marketing_list'
+                    'placeholder' => 'oro.marketinglist.form.choose_marketing_list'
                 ],
             ]
         );
@@ -43,6 +43,6 @@ class MarketingListSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_marketing_list_select';
+        return 'oro_marketing_list_select';
     }
 }

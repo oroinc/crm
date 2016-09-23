@@ -1,44 +1,44 @@
 placeholders:
     placeholders:
-        orocrm_account_channel_info_magento:
+        oro_account_channel_info_magento:
             items:
-                orocrm_magento_account_channel_info: ~
-        orocrm_account_orders:
+                oro_magento_account_channel_info: ~
+        oro_account_orders:
             items:
-                orocrm_account_orders_grid: ~
+                oro_account_orders_grid: ~
         page_header_stats_after:
             items:
-                orocrm_magento_customer_stats:
+                oro_magento_customer_stats:
                     order: 30
-        orocrm_website_summary:
+        oro_website_summary:
             items:
-                orocrm_magento_website_metrics: ~
-                orocrm_magento_website_events_chart: ~
-                orocrm_magento_website_channel_chart: ~
-        orocrm_website_activity:
+                oro_magento_website_metrics: ~
+                oro_magento_website_events_chart: ~
+                oro_magento_website_channel_chart: ~
+        oro_website_activity:
             items:
-                orocrm_magento_website_activity: ~
+                oro_magento_website_activity: ~
 
     items:
-        orocrm_magento_account_channel_info:
-            action: OroCRMMagentoBundle:Customer:accountCustomersInfo
-        orocrm_account_orders_grid:
-            template: OroCRMMagentoBundle:Order:accountOrdersPlaceholder.html.twig
-        orocrm_magento_customer_stats:
-            applicable: "@orocrm_magento.placeholder.filter->isApplicable($entity$)"
-            template: OroCRMMagentoBundle:Customer:customerStats.html.twig
-        orocrm_magento_website_metrics:
-            template: OroCRMMagentoBundle:Customer:websiteMetrics.html.twig
-            applicable: "@orocrm_magento.placeholder.filter->containsApplicable($customers$)"
-            data: "@orocrm_magento.provider.website_metrics->getTemplateData($customers$)"
-        orocrm_magento_website_events_chart:
-            template: OroCRMMagentoBundle:Customer:websiteChart.html.twig
-            applicable: "@orocrm_magento.placeholder.filter->isEventsChartApplicable($customers$, $byChannel$)"
-            data: "@orocrm_magento.provider.website_events_chart->getTemplateData($customers$)"
-        orocrm_magento_website_channel_chart:
-            template: OroCRMMagentoBundle:Customer:websiteChart.html.twig
-            applicable: "@orocrm_magento.placeholder.filter->isChannelChartApplicable($customers$, $byChannel$)"
-            data: "@orocrm_magento.provider.website_channel_chart->getTemplateData($customers$)"
-        orocrm_magento_website_activity:
-            template: OroCRMMagentoBundle:Customer:websiteActivity.html.twig
-            applicable: "@orocrm_magento.placeholder.filter->containsApplicable($customers$)"
+        oro_magento_account_channel_info:
+            action: OroMagentoBundle:Customer:accountCustomersInfo
+        oro_account_orders_grid:
+            template: OroMagentoBundle:Order:accountOrdersPlaceholder.html.twig
+        oro_magento_customer_stats:
+            applicable: "@oro_magento.placeholder.filter->isApplicable($entity$)"
+            template: OroMagentoBundle:Customer:customerStats.html.twig
+        oro_magento_website_metrics:
+            template: OroMagentoBundle:Customer:websiteMetrics.html.twig
+            applicable: "@oro_magento.placeholder.filter->containsApplicable($customers$)"
+            data: "@oro_magento.provider.website_metrics->getTemplateData($customers$)"
+        oro_magento_website_events_chart:
+            template: OroMagentoBundle:Customer:websiteChart.html.twig
+            applicable: "@oro_magento.placeholder.filter->isEventsChartApplicable($customers$, $byChannel$)"
+            data: "@oro_magento.provider.website_events_chart->getTemplateData($customers$)"
+        oro_magento_website_channel_chart:
+            template: OroMagentoBundle:Customer:websiteChart.html.twig
+            applicable: "@oro_magento.placeholder.filter->isChannelChartApplicable($customers$, $byChannel$)"
+            data: "@oro_magento.provider.website_channel_chart->getTemplateData($customers$)"
+        oro_magento_website_activity:
+            template: OroMagentoBundle:Customer:websiteActivity.html.twig
+            applicable: "@oro_magento.placeholder.filter->containsApplicable($customers$)"

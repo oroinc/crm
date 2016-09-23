@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
-use OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
 
 /**
  * Class CreateContactRequestTest
  *
- * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium
+ * @package Oro\Bundle\ContactUsBundle\Tests\Selenium
  */
 class CreateContactRequestTest extends Selenium2TestCase
 {
@@ -20,7 +20,7 @@ class CreateContactRequestTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+        $login->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
@@ -44,7 +44,7 @@ class CreateContactRequestTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->assertTitle('All - Contact Requests - Activities')
             ->add()
             ->assertTitle('Create contact request - Contact Requests - Activities')
@@ -71,14 +71,14 @@ class CreateContactRequestTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->open([$email])
             ->edit()
             ->setEmail($newEmail)
             ->save()
             ->assertMessage('Contact request has been saved successfully');
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->assertNoDataMessage('No contact request was found to match your search.');
 
@@ -93,14 +93,14 @@ class CreateContactRequestTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->open([$email])
             ->delete()
             ->assertMessage('Contact Request deleted')
             ->assertTitle('All - Contact Requests - Activities');
         /** @var ContactRequests $login */
-        $login->openContactRequests('OroCRM\Bundle\ContactUsBundle');
+        $login->openContactRequests('Oro\Bundle\ContactUsBundle');
         if ($login->getRowsCount() > 0) {
             $login->filterBy('Email', $email)
                 ->assertNoDataMessage('No contact request was found to match your search.');

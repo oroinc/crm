@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
 /**
  * @outputBuffering enabled
@@ -38,13 +37,13 @@ class CaseControllerTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
 
-        $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->loadFixtures(['Oro\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
     }
 
     protected function postFixtureLoad()
     {
         $contact = $this->getContainer()->get('doctrine.orm.entity_manager')
-            ->getRepository('OroCRMContactBundle:Contact')
+            ->getRepository('OroContactBundle:Contact')
             ->findOneByEmail('daniel.case@example.com');
 
         $this->assertNotNull($contact);
@@ -60,7 +59,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            $this->getUrl('orocrm_case_api_post_case'),
+            $this->getUrl('oro_case_api_post_case'),
             $request
         );
 
@@ -76,7 +75,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_cases'),
+            $this->getUrl('oro_case_api_get_cases'),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -113,7 +112,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_case', ['id' => $id]),
+            $this->getUrl('oro_case_api_get_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -163,7 +162,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('orocrm_case_api_put_case', ['id' => $id]),
+            $this->getUrl('oro_case_api_put_case', ['id' => $id]),
             ['case' => $putData],
             [],
             $this->generateWsseAuthHeader()
@@ -174,7 +173,7 @@ class CaseControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_case', ['id' => $id])
+            $this->getUrl('oro_case_api_get_case', ['id' => $id])
         );
 
         $updatedCase = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -199,7 +198,7 @@ class CaseControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('orocrm_case_api_delete_case', ['id' => $id]),
+            $this->getUrl('oro_case_api_delete_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()
@@ -208,7 +207,7 @@ class CaseControllerTest extends WebTestCase
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_case_api_get_case', ['id' => $id]),
+            $this->getUrl('oro_case_api_get_case', ['id' => $id]),
             [],
             [],
             $this->generateWsseAuthHeader()

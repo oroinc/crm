@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
+use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
@@ -40,6 +40,6 @@ class B2bCustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_sales_b2bcustomer_select', $this->type->getName());
+        $this->assertEquals('oro_sales_b2bcustomer_select', $this->type->getName());
     }
 }

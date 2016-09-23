@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\OrderApiType;
+use Oro\Bundle\MagentoBundle\Form\Type\OrderApiType;
 
 class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,9 +55,9 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
             'discountPercent'     => 'oro_percent',
             'totalAmount'         => 'oro_money',
             'status'              => 'text',
-            'customer'            => 'orocrm_customer_select',
+            'customer'            => 'oro_customer_select',
             'addresses'           => 'oro_address_collection',
-            'items'               => 'orocrm_order_item_collection',
+            'items'               => 'oro_order_item_collection',
             'owner'               => 'translatable_entity',
             'dataChannel'         => 'translatable_entity',
             'store'               => 'translatable_entity',
@@ -86,7 +86,7 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Order',
+                    'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Order',
                     'csrf_protection' => false
                 ]
             );

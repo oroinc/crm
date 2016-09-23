@@ -20,9 +20,9 @@ define(function(require) {
         },
 
         afterLayoutInit: function() {
-            var customer = this.pageComponent('orocrm_sales_opportunity_form_customer').$sourceElement;
-            var channel = this.pageComponent('orocrm_sales_opportunity_form_dataChannel').view.$el;
-            var status = this.pageComponent('orocrm_sales_opportunity_form_status').view.$el;
+            var customer = this.pageComponent('oro_sales_opportunity_form_customer').$sourceElement;
+            var channel = this.pageComponent('oro_sales_opportunity_form_dataChannel').view.$el;
+            var status = this.pageComponent('oro_sales_opportunity_form_status').view.$el;
             var probability = this.$('input[data-name="field__probability"]:enabled');
             var probabilities = status.data('probabilities');
             var shouldChangeProbability = false;

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller;
+namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -10,9 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 /**
@@ -21,24 +20,24 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 class CartController extends Controller
 {
     /**
-     * @Route("/", name="orocrm_magento_cart_index")
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @Route("/", name="oro_magento_cart_index")
+     * @AclAncestor("oro_magento_cart_view")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_magento.cart.entity.class')
+            'entity_class' => $this->container->getParameter('oro_magento.cart.entity.class')
         ];
     }
 
     /**
-     * @Route("/view/{id}", name="orocrm_magento_cart_view", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="oro_magento_cart_view", requirements={"id"="\d+"}))
      * @Acl(
-     *      id="orocrm_magento_cart_view",
+     *      id="oro_magento_cart_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMMagentoBundle:Cart"
+     *      class="OroMagentoBundle:Cart"
      * )
      * @Template
      */
@@ -48,8 +47,8 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_magento_cart_widget_info", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @Route("/info/{id}", name="oro_magento_cart_widget_info", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_cart_view")
      * @Template
      */
     public function infoAction(Cart $cart)
@@ -60,11 +59,11 @@ class CartController extends Controller
     /**
      * @Route(
      *      "/widget/grid/{id}/{isRemoved}",
-     *      name="orocrm_magento_cart_widget_items",
+     *      name="oro_magento_cart_widget_items",
      *      requirements={"id"="\d+", "isRemoved"="\d+"}
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
-     * @ParamConverter("cart", class="OroCRMMagentoBundle:Cart", options={"id" = "id"})
+     * @AclAncestor("oro_magento_cart_view")
+     * @ParamConverter("cart", class="OroMagentoBundle:Cart", options={"id" = "id"})
      * @Template
      */
     public function itemsAction(Cart $cart, $isRemoved = false)
@@ -75,11 +74,11 @@ class CartController extends Controller
     /**
      * @Route(
      *        "/widget/account_cart/{customerId}/{channelId}",
-     *         name="orocrm_magento_widget_customer_carts",
+     *         name="oro_magento_widget_customer_carts",
      *         requirements={"customerId"="\d+", "channelId"="\d+"}
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
-     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id" = "customerId"})
+     * @AclAncestor("oro_magento_cart_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id" = "customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
      * @Template
      */
@@ -91,11 +90,11 @@ class CartController extends Controller
     /**
      * @Route(
      *        "/widget/customer_cart/{customerId}/{channelId}",
-     *         name="orocrm_magento_customer_carts_widget",
+     *         name="oro_magento_customer_carts_widget",
      *         requirements={"customerId"="\d+", "channelId"="\d+"}
      * )
-     * @AclAncestor("orocrm_magento_cart_view")
-     * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id" = "customerId"})
+     * @AclAncestor("oro_magento_cart_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id" = "customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
      * @Template
      */
@@ -105,13 +104,13 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/actualize/{id}", name="orocrm_magento_cart_actualize", requirements={"id"="\d+"}))
-     * @AclAncestor("orocrm_magento_cart_view")
+     * @Route("/actualize/{id}", name="oro_magento_cart_actualize", requirements={"id"="\d+"}))
+     * @AclAncestor("oro_magento_cart_view")
      */
     public function actualizeAction(Cart $cart)
     {
         $result = false;
-        $connector = $this->get('orocrm_magento.mage.cart_connector');
+        $connector = $this->get('oro_magento.mage.cart_connector');
 
         try {
             $processor = $this->get('oro_integration.sync.processor');
@@ -127,15 +126,15 @@ class CartController extends Controller
         if ($result === true) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+                $this->get('translator')->trans('oro.magento.controller.synchronization_success')
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+                $this->get('translator')->trans('oro.magento.controller.synchronization_error')
             );
         }
 
-        return $this->redirect($this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]));
+        return $this->redirect($this->generateUrl('oro_magento_cart_view', ['id' => $cart->getId()]));
     }
 }

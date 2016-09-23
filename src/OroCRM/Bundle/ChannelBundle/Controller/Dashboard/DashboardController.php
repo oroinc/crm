@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Controller\Dashboard;
+namespace Oro\Bundle\ChannelBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -15,17 +15,17 @@ class DashboardController extends Controller
     /**
      * @Route(
      *      "/chart/{widget}",
-     *      name="orocrm_channel_dashboard_average_lifetime_sales_chart",
+     *      name="oro_channel_dashboard_average_lifetime_sales_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMChannelBundle:Dashboard:averageLifetimeSales.html.twig")
+     * @Template("OroChannelBundle:Dashboard:averageLifetimeSales.html.twig")
      */
     public function averageLifetimeSalesAction($widget)
     {
         $dateRange = $this->get('oro_dashboard.widget_configs')
             ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
             ->get('dateRange');
-        $data = $this->get('orocrm_channel.provider.lifetime.average_widget_provider')->getChartData($dateRange);
+        $data = $this->get('oro_channel.provider.lifetime.average_widget_provider')->getChartData($dateRange);
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],

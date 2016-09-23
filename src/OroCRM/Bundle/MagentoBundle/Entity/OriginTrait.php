@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 

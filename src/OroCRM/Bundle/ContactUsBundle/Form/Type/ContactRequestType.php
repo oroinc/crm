@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\ContactUsBundle\Form\Type;
+namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +22,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_contactus_contact_request';
+        return 'oro_contactus_contact_request';
     }
 
     /**
@@ -33,12 +33,12 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
         if ($options['dataChannelField']) {
             $builder->add(
                 'dataChannel',
-                'orocrm_channel_select_type',
+                'oro_channel_select_type',
                 [
                     'required' => true,
-                    'label' => 'orocrm.contactus.contactrequest.data_channel.label',
+                    'label' => 'oro.contactus.contactrequest.data_channel.label',
                     'entities' => [
-                        'OroCRM\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'
+                        'Oro\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'
                     ],
                 ]
             );
@@ -47,20 +47,20 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
         $builder->add(
             'firstName',
             'text',
-            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.first_name.label']
+            ['required' => true, 'label' => 'oro.contactus.contactrequest.first_name.label']
         );
         $builder->add(
             'lastName',
             'text',
-            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.last_name.label']
+            ['required' => true, 'label' => 'oro.contactus.contactrequest.last_name.label']
         );
         $builder->add(
             'emailAddress',
             'text',
-            ['required' => true, 'label' => 'orocrm.contactus.contactrequest.email_address.label']
+            ['required' => true, 'label' => 'oro.contactus.contactrequest.email_address.label']
         );
-        $builder->add('phone', 'text', ['required' => false, 'label' => 'orocrm.contactus.contactrequest.phone.label']);
-        $builder->add('comment', 'textarea', ['label' => 'orocrm.contactus.contactrequest.comment.label']);
+        $builder->add('phone', 'text', ['required' => false, 'label' => 'oro.contactus.contactrequest.phone.label']);
+        $builder->add('comment', 'textarea', ['label' => 'oro.contactus.contactrequest.comment.label']);
         $builder->add('submit', 'submit');
     }
 
@@ -71,7 +71,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
     {
         $resolver->setDefaults(
             [
-            'data_class' => 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
+            'data_class' => 'Oro\Bundle\ContactUsBundle\Entity\ContactRequest',
             'dataChannelField' => false
             ]
         );

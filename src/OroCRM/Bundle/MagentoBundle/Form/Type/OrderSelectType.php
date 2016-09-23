@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,11 +15,11 @@ class OrderSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.magento.form.choose_order',
-                    'result_template_twig' => 'OroCRMMagentoBundle:Order:Autocomplete/result.html.twig',
-                    'selection_template_twig' => 'OroCRMMagentoBundle:Order:Autocomplete/selection.html.twig'
+                    'placeholder' => 'oro.magento.form.choose_order',
+                    'result_template_twig' => 'OroMagentoBundle:Order:Autocomplete/result.html.twig',
+                    'selection_template_twig' => 'OroMagentoBundle:Order:Autocomplete/selection.html.twig'
                 ),
-                'autocomplete_alias' => 'orocrm_magento.orders'
+                'autocomplete_alias' => 'oro_magento.orders'
             )
         );
     }
@@ -37,7 +37,7 @@ class OrderSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_order_select';
+        return 'oro_order_select';
     }
 
     /**

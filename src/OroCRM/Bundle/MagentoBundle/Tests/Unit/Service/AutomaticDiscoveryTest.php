@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Doctrine\ORM\Query\Expr;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
-
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
+use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 
 class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,12 +42,12 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->defaultStrategy = $this
-            ->getMock('OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
+            ->getMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $this->metadataProvider = $this
             ->getMockBuilder('Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->entityClass = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        $this->entityClass = 'Oro\Bundle\MagentoBundle\Entity\Customer';
 
         return new AutomaticDiscovery(
             $this->doctrineHelper,
@@ -221,7 +220,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface $customStrategy */
         $customStrategy = $this
-            ->getMock('OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
+            ->getMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $customStrategy->expects($this->once())
             ->method('apply')
             ->with($qb, AutomaticDiscovery::ROOT_ALIAS, 'test2', $config[Configuration::DISCOVERY_NODE], $entity);

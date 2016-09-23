@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\EventListener;
+namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Manager\DeleteManager;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
 
 class ChannelBeforeDeleteListener
 {

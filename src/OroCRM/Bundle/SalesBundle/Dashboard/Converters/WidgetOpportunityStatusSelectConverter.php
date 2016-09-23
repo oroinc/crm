@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Dashboard\Converters;
+namespace Oro\Bundle\SalesBundle\Dashboard\Converters;
 
 use Doctrine\ORM\EntityManager;
 

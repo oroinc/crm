@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
-use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
+use Oro\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
 class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,11 +63,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         array $chartConfig,
         array $dateRange
     ) {
-        $channelRepository = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
+        $channelRepository = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
+        $customerRepository = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,7 +76,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnCallback(
                     function ($entityName) use ($channelRepository, $customerRepository) {
-                        if ($entityName == 'OroCRMChannelBundle:Channel') {
+                        if ($entityName == 'OroChannelBundle:Channel') {
                             return $channelRepository;
                         }
                         return $customerRepository;
@@ -229,7 +229,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'cnt',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count',
+                            'label'      => 'oro.magento.dashboard.new_magento_customers_chart.customer_count',
                         ],
                     ],
                 ],
@@ -242,7 +242,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                         'value' => [
                             'field_name' => 'cnt',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
+                            'label'      => 'oro.magento.dashboard.new_magento_customers_chart.customer_count'
                         ]
                     ]
                 ],

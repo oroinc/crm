@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Provider\ContactPhoneProvider;
 
 class ContactPhoneProviderTest extends \PHPUnit_Framework_TestCase
 {

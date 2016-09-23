@@ -4,14 +4,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.dashboard.average_order_amount_chart.month
+                label: oro.magento.dashboard.average_order_amount_chart.month
                 required: true
                 default_type: string
                 type: month
                 field_name: date
             value:
                 name: value
-                label: orocrm.magento.dashboard.average_order_amount_chart.order_amount
+                label: oro.magento.dashboard.average_order_amount_chart.order_amount
                 required: true
                 default_type: decimal
                 type: currency
@@ -26,14 +26,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.dashboard.new_magento_customers_chart.month
+                label: oro.magento.dashboard.new_magento_customers_chart.month
                 required: true
                 default_type: string
                 type: month
                 field_name: date
             value:
                 name: value
-                label: orocrm.magento.dashboard.new_magento_customers_chart.customer_count
+                label: oro.magento.dashboard.new_magento_customers_chart.customer_count
                 required: true
                 default_type: integer
                 field_name: cnt
@@ -46,14 +46,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.dashboard.revenue_over_time_chart.date
+                label: oro.magento.dashboard.revenue_over_time_chart.date
                 required: true
                 default_type: date
                 type: date
                 field_name: date
             value:
                 name: value
-                label: orocrm.magento.dashboard.revenue_over_time_chart.revenue
+                label: oro.magento.dashboard.revenue_over_time_chart.revenue
                 required: true
                 default_type: decimal
                 field_name: amount
@@ -67,14 +67,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.dashboard.orders_over_time_chart.date
+                label: oro.magento.dashboard.orders_over_time_chart.date
                 required: true
                 default_type: date
                 type: date
                 field_name: date
             value:
                 name: value
-                label: orocrm.magento.dashboard.orders_over_time_chart.order_count
+                label: oro.magento.dashboard.orders_over_time_chart.order_count
                 required: true
                 default_type: integer
                 field_name: count
@@ -87,20 +87,20 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.dashboard.purchase_chart.label
+                label: oro.magento.dashboard.purchase_chart.label
                 required: true
                 default_type: string
                 field_name: label
             value:
                 name: value
-                label: orocrm.magento.dashboard.purchase_chart.value
+                label: oro.magento.dashboard.purchase_chart.value
                 required: true
                 default_type: integer
                 type: integer
                 field_name: value
             isNozzle:
                 name: isNozzle
-                label: orocrm.magento.dashboard.purchase_chart.is_nozzle
+                label: oro.magento.dashboard.purchase_chart.is_nozzle
                 required: true
                 default_type: boolean
         template: OroChartBundle:Chart:flow.html.twig
@@ -109,14 +109,14 @@ charts:
         data_schema:
             label:
                 name: label
-                label: orocrm.magento.website_activity.chart.day
+                label: oro.magento.website_activity.chart.day
                 required: true
                 default_type: string
                 type: day
                 field_name: date
             value:
                 name: value
-                label: orocrm.magento.website_activity.chart.event_count
+                label: oro.magento.website_activity.chart.event_count
                 required: true
                 default_type: integer
                 field_name: count

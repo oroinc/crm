@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_20;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_20;
 
 use Psr\Log\LoggerInterface;
 
@@ -55,7 +55,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
             . ' WHERE oec.class_name = :class'
             . ' ))';
 
-        $params = ['class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
+        $params = ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
         $this->logQuery($logger, $sql, $params);
         if (!$dryRun) {
             $this->connection->executeUpdate($sql, $params);
@@ -76,7 +76,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
             . ' WHERE class_name = :class'
             . ' )';
 
-        $params = ['class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
+        $params = ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead', 'field' => 'extend_source'];
         $this->logQuery($logger, $sql, $params);
         if (!$dryRun) {
             $this->connection->executeUpdate($sql, $params);
@@ -91,7 +91,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
     {
         $rows = $this->connection->fetchAll(
             'SELECT id, data FROM oro_entity_config WHERE class_name = :class',
-            ['class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead']
+            ['class' => 'Oro\Bundle\SalesBundle\Entity\Lead']
         );
         foreach ($rows as $row) {
             $data = $this->connection->convertToPHPValue($row['data'], 'array');

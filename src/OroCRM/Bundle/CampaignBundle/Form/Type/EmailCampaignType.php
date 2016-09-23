@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Form\Type;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
@@ -9,8 +9,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignType extends AbstractType
 {
@@ -54,13 +54,13 @@ class EmailCampaignType extends AbstractType
             ->add(
                 'name',
                 'text',
-                ['label' => 'orocrm.campaign.emailcampaign.name.label']
+                ['label' => 'oro.campaign.emailcampaign.name.label']
             )
             ->add(
                 'senderEmail',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.sender_email.label',
+                    'label'    => 'oro.campaign.emailcampaign.sender_email.label',
                     'required' => false
                 ]
             )
@@ -68,7 +68,7 @@ class EmailCampaignType extends AbstractType
                 'senderName',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.sender_name.label',
+                    'label'    => 'oro.campaign.emailcampaign.sender_name.label',
                     'required' => false
                 ]
             )
@@ -77,35 +77,35 @@ class EmailCampaignType extends AbstractType
                 'choice',
                 [
                     'choices' => [
-                        EmailCampaign::SCHEDULE_MANUAL   => 'orocrm.campaign.emailcampaign.schedule.manual',
-                        EmailCampaign::SCHEDULE_DEFERRED => 'orocrm.campaign.emailcampaign.schedule.deferred'
+                        EmailCampaign::SCHEDULE_MANUAL   => 'oro.campaign.emailcampaign.schedule.manual',
+                        EmailCampaign::SCHEDULE_DEFERRED => 'oro.campaign.emailcampaign.schedule.deferred'
                     ],
-                    'label'   => 'orocrm.campaign.emailcampaign.schedule.label',
+                    'label'   => 'oro.campaign.emailcampaign.schedule.label',
                 ]
             )
             ->add(
                 'scheduledFor',
                 'oro_datetime',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.scheduled_for.label',
+                    'label'    => 'oro.campaign.emailcampaign.scheduled_for.label',
                     'required' => false,
                 ]
             )
             ->add(
                 'campaign',
-                'orocrm_campaign_select',
-                ['label' => 'orocrm.campaign.emailcampaign.campaign.label']
+                'oro_campaign_select',
+                ['label' => 'oro.campaign.emailcampaign.campaign.label']
             )
             ->add(
                 'marketingList',
-                'orocrm_marketing_list_select',
-                ['label' => 'orocrm.campaign.emailcampaign.marketing_list.label', 'required' => true]
+                'oro_marketing_list_select',
+                ['label' => 'oro.campaign.emailcampaign.marketing_list.label', 'required' => true]
             )
             ->add(
                 'description',
                 'oro_resizeable_rich_text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.description.label',
+                    'label'    => 'oro.campaign.emailcampaign.description.label',
                     'required' => false,
                 ]
             );
@@ -119,7 +119,7 @@ class EmailCampaignType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign',
+                'data_class' => 'Oro\Bundle\CampaignBundle\Entity\EmailCampaign',
                 'cascade_validation' => true
             ]
         );
@@ -138,7 +138,7 @@ class EmailCampaignType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_email_campaign';
+        return 'oro_email_campaign';
     }
 
     /**
@@ -150,7 +150,7 @@ class EmailCampaignType extends AbstractType
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
                 $options = [
-                    'label' => 'orocrm.campaign.emailcampaign.transport.label',
+                    'label' => 'oro.campaign.emailcampaign.transport.label',
                     'required' => true,
                     'mapped' => false
                 ];
@@ -169,7 +169,7 @@ class EmailCampaignType extends AbstractType
                 }
 
                 $form = $event->getForm();
-                $form->add('transport', 'orocrm_campaign_email_transport_select', $options);
+                $form->add('transport', 'oro_campaign_email_transport_select', $options);
             }
         );
     }

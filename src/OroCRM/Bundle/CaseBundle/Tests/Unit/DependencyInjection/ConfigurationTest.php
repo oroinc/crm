@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\CaseBundle\Tests\Unit\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Processor;
 
-use OroCRM\Bundle\CaseBundle\DependencyInjection\Configuration;
+use Oro\Bundle\CaseBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

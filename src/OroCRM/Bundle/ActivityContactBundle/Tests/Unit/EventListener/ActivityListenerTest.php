@@ -1,18 +1,17 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\EventListener;
+namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\EventListener;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
-
-use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener;
-use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
-use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
-use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
-use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
+use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
+use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
 
 class ActivityListenerTest extends \PHPUnit_Framework_TestCase
 {

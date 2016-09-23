@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
@@ -9,7 +9,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 /**
  * Listener for grid "magento-customers-group-by-channel-grid".
  *
- * @see \OroCRM\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
+ * @see \Oro\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
  */
 class CustomerGroupGridListener
 {

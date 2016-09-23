@@ -1,4 +1,4 @@
-orocrm:
+oro:
     report:
         menu:
             static_reports_tab.label: Reports

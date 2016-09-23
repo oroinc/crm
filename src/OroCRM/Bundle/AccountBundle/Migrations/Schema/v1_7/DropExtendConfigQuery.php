@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_7;
+namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_7;
 
 use Psr\Log\LoggerInterface;
 
@@ -47,7 +47,7 @@ DQL;
             'extend_rating',
             'shippingAddress',
             'billingAddress',
-            'OroCRM\\Bundle\\AccountBundle\\Entity\\Account',
+            'Oro\\Bundle\\AccountBundle\\Entity\\Account',
         ];
 
         $this->logQuery($logger, $updateSql, $params);

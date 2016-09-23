@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Form\EventListener;
+namespace Oro\Bundle\ChannelBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -8,9 +8,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelTypeSubscriber implements EventSubscriberInterface
 {
@@ -146,9 +145,9 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
                 if (false !== $integrationType) {
                     $form->add(
                         'dataSource',
-                        'orocrm_channel_datasource_form',
+                        'oro_channel_datasource_form',
                         [
-                            'label'          => 'orocrm.channel.data_source.label',
+                            'label'          => 'oro.channel.data_source.label',
                             'type'           => $integrationType,
                             'required'       => true,
                             'error_bubbling' => false

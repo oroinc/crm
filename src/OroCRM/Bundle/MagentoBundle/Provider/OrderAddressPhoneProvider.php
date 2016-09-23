@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 
 class OrderAddressPhoneProvider implements PhoneProviderInterface
 {

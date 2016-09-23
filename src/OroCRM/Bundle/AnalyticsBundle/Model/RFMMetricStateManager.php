@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Model;
+namespace Oro\Bundle\AnalyticsBundle\Model;
 
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class RFMMetricStateManager extends StateManager
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -12,8 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 
 class LoadCampaignData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -43,7 +43,7 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData'
         ];
     }
 
@@ -62,11 +62,11 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
     {
         $this->organization = $this->getReference('default_organization');
         $this->users = $manager->getRepository('OroUserBundle:User')->findAll();
-        $this->leads = $manager->getRepository('OroCRMSalesBundle:Lead')->findAll();
+        $this->leads = $manager->getRepository('OroSalesBundle:Lead')->findAll();
 
         $dictionaryDir = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "campaigns.csv", "r");
         if ($handle) {

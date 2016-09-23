@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
+namespace Oro\Bundle\SalesBundle\QueryDesigner;
 
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FunctionInterface;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\AbstractQueryConverter;

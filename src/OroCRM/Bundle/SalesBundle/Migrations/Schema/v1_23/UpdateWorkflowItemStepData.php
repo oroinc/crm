@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_23;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_23;
 
 use Psr\Log\LoggerInterface;
 
@@ -286,7 +286,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'status_id'            => Type::STRING,
         ];
 
-        $sql = 'UPDATE orocrm_sales_opportunity SET workflow_step_id = :new_workflow_step_id' .
+        $sql = 'UPDATE oro_sales_opportunity SET workflow_step_id = :new_workflow_step_id' .
                ' WHERE workflow_step_id = :old_workflow_step_id AND status_id = :status_id';
 
         foreach ($params as $param) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +27,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.customer.manager.api');
+        return $this->get('oro_magento.customer.manager.api');
     }
 
     /**
@@ -35,7 +35,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.customer.api');
+        return $this->get('oro_magento.form.customer.api');
     }
 
     /**
@@ -43,7 +43,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.customer.api');
+        return $this->get('oro_magento.form.handler.customer.api');
     }
 
     /**
@@ -87,7 +87,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *      description="Get all magento customers",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      *
      * @return Response
      */
@@ -119,7 +119,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *      description="Get magento customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("oro_magento_customer_view")
      *
      * @return Response
      */
@@ -135,7 +135,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *      description="Create new magento customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_create")
+     * @AclAncestor("oro_magento_customer_create")
      *
      */
     public function postAction()
@@ -152,7 +152,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *      description="Update magento customer",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_customer_update")
+     * @AclAncestor("oro_magento_customer_update")
      *
      * @return Response
      */
@@ -171,10 +171,10 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_customer_delete",
+     *      id="oro_magento_customer_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:Customer"
+     *      class="OroMagentoBundle:Customer"
      * )
      * @return Response
      */

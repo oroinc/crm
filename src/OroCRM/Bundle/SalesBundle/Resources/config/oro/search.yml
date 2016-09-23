@@ -1,12 +1,12 @@
 search:
-    OroCRM\Bundle\SalesBundle\Entity\Lead:
-        alias:                          orocrm_sales_lead
+    Oro\Bundle\SalesBundle\Entity\Lead:
+        alias:                          oro_sales_lead
         title_fields:                   [name]
         route:
-            name:                       orocrm_sales_lead_view
+            name:                       oro_sales_lead_view
             parameters:
                 id:                     id
-        search_template:                OroCRMSalesBundle:Lead:searchResult.html.twig
+        search_template:                OroSalesBundle:Lead:searchResult.html.twig
         fields:
             -
                 name:                   name
@@ -53,14 +53,14 @@ search:
                         target_type:   integer
                         target_fields: [dataChannelId]
 
-    OroCRM\Bundle\SalesBundle\Entity\Opportunity:
-        alias:                          orocrm_sales_opportunity
+    Oro\Bundle\SalesBundle\Entity\Opportunity:
+        alias:                          oro_sales_opportunity
         title_fields:                   [name]
         route:
-            name:                       orocrm_sales_opportunity_view
+            name:                       oro_sales_opportunity_view
             parameters:
                 id:                     id
-        search_template:                OroCRMSalesBundle:Opportunity:searchResult.html.twig
+        search_template:                OroSalesBundle:Opportunity:searchResult.html.twig
         fields:
             -
                 name:                   name
@@ -116,14 +116,14 @@ search:
                         target_fields: [dataChannelId]
 
 
-    OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
-        alias:                          orocrm_sales_funnel
+    Oro\Bundle\SalesBundle\Entity\SalesFunnel:
+        alias:                          oro_sales_funnel
         title_fields:                   [lead, opportunity]
         route:
-            name:                       orocrm_sales_salesfunnel_view
+            name:                       oro_sales_salesfunnel_view
             parameters:
                 id:                     id
-        search_template:                OroCRMSalesBundle:SalesFunnel:searchResult.html.twig
+        search_template:                OroSalesBundle:SalesFunnel:searchResult.html.twig
         fields:
             -
                 name:                   lead
@@ -170,14 +170,14 @@ search:
                         target_type:   integer
                         target_fields: [dataChannelId]
 
-    OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
-        alias:                          orocrm_sales_b2bcustomer
+    Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+        alias:                          oro_sales_b2bcustomer
         title_fields:                   [name]
         route:
-            name:                       orocrm_sales_b2bcustomer_view
+            name:                       oro_sales_b2bcustomer_view
             parameters:
                 id:                     id
-        search_template:                OroCRMSalesBundle:B2bCustomer:searchResult.html.twig
+        search_template:                OroSalesBundle:B2bCustomer:searchResult.html.twig
         fields:
             -
                 name:                   name

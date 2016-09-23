@@ -7,6 +7,6 @@ imports:
 workflows:
     b2b_flow_lead:
         label: 'Unqualified Sales Lead'
-        entity: OroCRM\Bundle\SalesBundle\Entity\Lead
+        entity: Oro\Bundle\SalesBundle\Entity\Lead
         entity_attribute: lead
         start_step: new

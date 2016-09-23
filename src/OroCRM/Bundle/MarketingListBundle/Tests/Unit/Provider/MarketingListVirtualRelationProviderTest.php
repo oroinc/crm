@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider;
 
 class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +44,7 @@ class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCa
      */
     public function fieldDataProvider()
     {
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,7 +76,7 @@ class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCa
     public function testGetVirtualRelations()
     {
         $className = 'stdClass';
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -95,7 +95,7 @@ class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCa
      */
     public function relationsDataProvider()
     {
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -176,7 +176,7 @@ class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCa
 
         $this->doctrineHelper->expects($this->once())
             ->method('getEntityRepository')
-            ->with('OroCRMMarketingListBundle:MarketingList')
+            ->with('OroMarketingListBundle:MarketingList')
             ->will($this->returnValue($repository));
     }
 

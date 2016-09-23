@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
+use Oro\Bundle\MagentoBundle\Model\ExtendOrderItem;
 
 /**
- * @ORM\Table("orocrm_magento_order_items")
+ * @ORM\Table("oro_magento_order_items")
  * @ORM\Entity
  * @Config(
  *      defaultValues={

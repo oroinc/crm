@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactReason;
+use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
 class ContactReasonTest extends \PHPUnit_Framework_TestCase
 {

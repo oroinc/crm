@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Dashboard\Provider;
+namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -8,8 +8,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 /**
  * Provides chart data for 'Opportunity By Lead Source' dashboard widget
@@ -180,11 +179,11 @@ class WidgetOpportunityByLeadSourceProvider
     protected function translateSource($source)
     {
         if (null === $source) {
-            return $this->translator->trans('orocrm.sales.lead.source.unclassified');
+            return $this->translator->trans('oro.sales.lead.source.unclassified');
         }
 
         if ('' === $source) {
-            return $this->translator->trans('orocrm.sales.lead.source.others');
+            return $this->translator->trans('oro.sales.lead.source.others');
         }
 
         return $this->enumValueTranslator->transEnum($source, 'lead_source');
@@ -195,6 +194,6 @@ class WidgetOpportunityByLeadSourceProvider
      */
     protected function getOpportunityRepository()
     {
-        return $this->registry->getRepository('OroCRMSalesBundle:Opportunity');
+        return $this->registry->getRepository('OroSalesBundle:Opportunity');
     }
 }

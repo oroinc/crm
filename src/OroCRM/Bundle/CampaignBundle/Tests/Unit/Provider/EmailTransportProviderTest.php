@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 
 class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,7 +10,7 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
     {
         $provider = new EmailTransportProvider();
         $name = 'test';
-        $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transport = $this->getMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
         $transport->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($name));
@@ -28,21 +28,21 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
     {
         $choices = ['t1' => 'Transport 1', 't2' => 'Transport 2'];
         $provider = new EmailTransportProvider();
-        $transportOne = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportOne = $this->getMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
         $transportOne->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue('t1'));
         $transportOne->expects($this->once())
             ->method('getLabel')
             ->will($this->returnValue('Transport 1'));
-        $transportTwo = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportTwo = $this->getMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
         $transportTwo->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue('t2'));
         $transportTwo->expects($this->once())
             ->method('getLabel')
             ->will($this->returnValue('Transport 2'));
-        $transportTree = $this->getMock('OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider\TransportStub');
+        $transportTree = $this->getMock('Oro\Bundle\CampaignBundle\Tests\Unit\Provider\TransportStub');
         $transportTree->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('t3'));

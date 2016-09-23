@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Form\Extension;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Form\Extension;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -11,9 +11,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
+use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,8 +35,8 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->extension = new ChannelTypeExtension(
             $this->doctrineHelper,
-            'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface',
-            'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
+            'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface',
+            'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
         );
     }
 
@@ -124,7 +124,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->getChannelMock('\stdClass')
             ],
             'supported identity' => [
-                $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 1,
                 1
             ],
@@ -137,7 +137,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getChannelMock($identityClass = null)
     {
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         if ($identityClass) {
             $channel->expects($this->any())
@@ -155,7 +155,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreSetData(array $categories)
     {
-        $channel = $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub');
+        $channel = $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
@@ -204,7 +204,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('recency'),
-                        $this->equalTo('orocrm_analytics_rfm_category_settings'),
+                        $this->equalTo('oro_analytics_rfm_category_settings'),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals(
@@ -218,7 +218,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('frequency'),
-                        $this->equalTo('orocrm_analytics_rfm_category_settings'),
+                        $this->equalTo('oro_analytics_rfm_category_settings'),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals(
@@ -232,7 +232,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         $this->equalTo('monetary'),
-                        $this->equalTo('orocrm_analytics_rfm_category_settings'),
+                        $this->equalTo('oro_analytics_rfm_category_settings'),
                         $this->callback(
                             function ($options) {
                                 $this->assertEquals($this->getCollection([]), $options['data']);
@@ -327,31 +327,31 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
         return [
             'empty customer identity' => [$this->getChannelMock(), false],
             'has not state form' => [
-                $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 false,
             ],
             'empty data' => [
-                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => [],
                 'expectedData' => ['rfm_enabled' => false],
             ],
             'data was not changed' => [
-                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => false],
             ],
             'enable' => [
-                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => true,
                 'actualData' => ['rfm_enabled' => false],
                 'expectedData' => ['rfm_enabled' => true],
             ],
             'disable' => [
-                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => true],
@@ -410,7 +410,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetExtendedType()
     {
-        $this->assertEquals('orocrm_channel_form', $this->extension->getExtendedType());
+        $this->assertEquals('oro_channel_form', $this->extension->getExtendedType());
     }
 
     /**

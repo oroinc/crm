@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
@@ -11,10 +11,10 @@ use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
-use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
+use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 
 abstract class AbstractImportStrategy extends DefaultMagentoImportStrategy implements
     LoggerAwareInterface,

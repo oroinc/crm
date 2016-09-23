@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter;
+use Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter;
 
 class WebsiteDataConverterTest extends \PHPUnit_Framework_TestCase
 {

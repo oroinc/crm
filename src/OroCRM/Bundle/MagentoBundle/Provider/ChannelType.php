@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
@@ -14,7 +14,7 @@ class ChannelType implements ChannelInterface, IconAwareIntegrationInterface
      */
     public function getLabel()
     {
-        return 'orocrm.magento.channel_type.label';
+        return 'oro.magento.channel_type.label';
     }
 
     /**
@@ -22,6 +22,6 @@ class ChannelType implements ChannelInterface, IconAwareIntegrationInterface
      */
     public function getIcon()
     {
-        return 'bundles/orocrmmagento/img/magento-logo.png';
+        return 'bundles/oromagento/img/magento-logo.png';
     }
 }

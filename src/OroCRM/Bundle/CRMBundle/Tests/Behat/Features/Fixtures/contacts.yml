@@ -1,4 +1,4 @@
-OroCRM\Bundle\ContactBundle\Entity\Contact:
+Oro\Bundle\ContactBundle\Entity\Contact:
   contact-{1..30}:
     firstName: '<firstName()>'
     lastName: '<lastName()>'

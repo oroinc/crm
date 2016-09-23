@@ -1,2 +1,2 @@
 bundles:
-    - { name: OroCRM\Bundle\SalesBundle\OroCRMSalesBundle, priority: 40 }
+    - { name: Oro\Bundle\SalesBundle\OroSalesBundle, priority: 40 }

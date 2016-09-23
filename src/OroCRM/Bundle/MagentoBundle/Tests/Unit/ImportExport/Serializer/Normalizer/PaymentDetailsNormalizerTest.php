@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
+namespace Oro\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer;
 
 class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +43,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSupportsDenormalization($expected, $type)
     {
-        $this->normalizer->setSupportedClass('OroCRM\Bundle\MagentoBundle\Entity\Order');
+        $this->normalizer->setSupportedClass('Oro\Bundle\MagentoBundle\Entity\Order');
 
         $type = is_object($type) ? get_class($type) : gettype($type);
 
@@ -92,7 +91,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
         );
 
         /** @var Order $order */
-        $order = $this->normalizer->denormalize($data, 'OroCRM\Bundle\MagentoBundle\Entity\Order');
+        $order = $this->normalizer->denormalize($data, 'Oro\Bundle\MagentoBundle\Entity\Order');
 
         $this->assertEquals($expected, $order->getPaymentDetails());
     }

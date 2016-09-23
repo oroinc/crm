@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
 
 class CustomerIdentityTest extends AbstractEntityTestCase
 {
@@ -14,7 +14,7 @@ class CustomerIdentityTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity';
+        return 'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity';
     }
 
     /**
@@ -23,9 +23,9 @@ class CustomerIdentityTest extends AbstractEntityTestCase
     public function getDataProvider()
     {
         $name    = 'Some name';
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $contact = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $owner   = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
 
         $someDateTime = new \DateTime();

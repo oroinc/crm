@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Model\Action;
+namespace Oro\Bundle\MagentoBundle\Model\Action;
 
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Component\Action\Action\AbstractAction;
 use Oro\Component\Action\Exception\InvalidParameterException;
 use Oro\Component\Action\Model\ContextAccessor;
-
-use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 /**
  * Similar entities discovery

@@ -1,50 +1,50 @@
 parameters:
-    orocrm_contact.form.type.contact_phone.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactPhoneType
-    orocrm_contact.form.type.contact_email.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactEmailType
+    oro_contact.form.type.contact_phone.class: Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType
+    oro_contact.form.type.contact_email.class: Oro\Bundle\ContactBundle\Form\Type\ContactEmailType
 
     #handler
-    orocrm_contact.form.handler.contact_phone.class: OroCRM\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
-    orocrm_contact.form.handler.contact_email.class: OroCRM\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
+    oro_contact.form.handler.contact_phone.class: Oro\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
+    oro_contact.form.handler.contact_email.class: Oro\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
 
 services:
-    orocrm_contact.form.type.contact_phone:
+    oro_contact.form.type.contact_phone:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
-        arguments: ["orocrm_contact_phone", "orocrm_contact_phone", null]
+        arguments: ["oro_contact_phone", "oro_contact_phone", null]
 
-    orocrm_contact.form.type.contact_phone.type:
-        class: %orocrm_contact.form.type.contact_phone.class%
+    oro_contact.form.type.contact_phone.type:
+        class: %oro_contact.form.type.contact_phone.class%
         tags:
-            - { name: form.type, alias: orocrm_contact_phone }
+            - { name: form.type, alias: oro_contact_phone }
 
-    orocrm_contact.form.type.contact_phone.handler:
-        class: %orocrm_contact.form.handler.contact_phone.class%
+    oro_contact.form.type.contact_phone.handler:
+        class: %oro_contact.form.handler.contact_phone.class%
         scope: request
         arguments:
-            - "@orocrm_contact.form.type.contact_phone"
+            - "@oro_contact.form.type.contact_phone"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_contact.validator.contact_phone_delete"
+            - "@oro_contact.validator.contact_phone_delete"
             - "@oro_security.security_facade"
 
-    orocrm_contact.form.type.contact_email:
+    oro_contact.form.type.contact_email:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
-        arguments: ["orocrm_contact_email", "orocrm_contact_email", null]
+        arguments: ["oro_contact_email", "oro_contact_email", null]
 
-    orocrm_contact.form.type.contact_email.type:
-        class: %orocrm_contact.form.type.contact_email.class%
+    oro_contact.form.type.contact_email.type:
+        class: %oro_contact.form.type.contact_email.class%
         tags:
-            - { name: form.type, alias: orocrm_contact_email }
+            - { name: form.type, alias: oro_contact_email }
 
-    orocrm_contact.form.type.contact_email.handler:
-        class: %orocrm_contact.form.handler.contact_email.class%
+    oro_contact.form.type.contact_email.handler:
+        class: %oro_contact.form.handler.contact_email.class%
         scope: request
         arguments:
-            - "@orocrm_contact.form.type.contact_email"
+            - "@oro_contact.form.type.contact_email"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@orocrm_contact.validator.contact_email_delete"
+            - "@oro_contact.validator.contact_email_delete"
             - "@oro_security.security_facade"

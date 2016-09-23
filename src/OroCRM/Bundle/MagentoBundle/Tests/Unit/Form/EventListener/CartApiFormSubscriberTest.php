@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
 
 class CartApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,7 +65,7 @@ class CartApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function preSetProvider()
     {
-        $cart = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Cart')
+        $cart = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Cart')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -85,12 +85,12 @@ class CartApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cart = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Cart')
+        $cart = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Cart')
             ->setMethods(['getCartItems'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cartItem = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\CartItem')
+        $cartItem = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\CartItem')
             ->disableOriginalConstructor()
             ->getMock();
 

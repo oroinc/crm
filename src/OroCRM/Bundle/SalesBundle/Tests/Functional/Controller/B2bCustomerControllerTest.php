@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @outputBuffering enabled
@@ -36,7 +35,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     protected function postFixtureLoad()
@@ -48,7 +47,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_sales_b2bcustomer_index'));
+        $this->client->request('GET', $this->getUrl('oro_sales_b2bcustomer_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
@@ -64,14 +63,14 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_sales_b2bcustomer_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_sales_b2bcustomer_create'));
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
 
-        $form['orocrm_sales_b2bcustomer_form[name]'] = $name;
-        $form['orocrm_sales_b2bcustomer_form[account]'] = self::$account->getId();
-        $form['orocrm_sales_b2bcustomer_form[dataChannel]'] = self::$channel->getId();
-        $form['orocrm_sales_b2bcustomer_form[owner]']   = 1;
+        $form['oro_sales_b2bcustomer_form[name]'] = $name;
+        $form['oro_sales_b2bcustomer_form[account]'] = self::$account->getId();
+        $form['oro_sales_b2bcustomer_form[dataChannel]'] = self::$channel->getId();
+        $form['oro_sales_b2bcustomer_form[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -103,14 +102,14 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_b2bcustomer_update', ['id' => $result['id']])
+            $this->getUrl('oro_sales_b2bcustomer_update', ['id' => $result['id']])
         );
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
-        $form['orocrm_sales_b2bcustomer_form[name]'] = $name;
-        $form['orocrm_sales_b2bcustomer_form[owner]']   = 1;
+        $form['oro_sales_b2bcustomer_form[name]'] = $name;
+        $form['oro_sales_b2bcustomer_form[owner]']   = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -135,7 +134,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_b2bcustomer_view', ['id' => $returnValue['id']])
+            $this->getUrl('oro_sales_b2bcustomer_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();
@@ -155,7 +154,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_sales_b2bcustomer_widget_info',
+                'oro_sales_b2bcustomer_widget_info',
                 ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
@@ -182,7 +181,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_sales_b2bcustomer_view', ['id' => $returnValue['id']])
+            $this->getUrl('oro_sales_b2bcustomer_view', ['id' => $returnValue['id']])
         );
 
         $result = $this->client->getResponse();

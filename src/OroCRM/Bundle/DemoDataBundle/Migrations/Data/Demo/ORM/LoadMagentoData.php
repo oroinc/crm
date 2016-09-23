@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -15,23 +15,22 @@ use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -60,7 +59,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     public function getDependencies()
     {
         return [
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
+            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
         ];
     }
 
@@ -164,7 +163,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $name = static::$channelNames[$i++];
 
         /** @var $factory BuilderFactory */
-        $factory = $this->container->get('orocrm_channel.builder.factory');
+        $factory = $this->container->get('oro_channel.builder.factory');
         $builder = $factory->createBuilderForIntegration($integration);
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
@@ -257,7 +256,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     protected function persistDemoCarts(ObjectManager $om, array $customers)
     {
         /** @var CartStatus $status */
-        $status = $om->getRepository('OroCRMMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
+        $status = $om->getRepository('OroMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
 
         $carts = [];
         for ($i = 0; $i < 10; ++$i) {
@@ -544,8 +543,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         Channel $channel,
         Organization $organization
     ) {
-        $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
-        $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $accounts = $om->getRepository('OroAccountBundle:Account')->findAll();
+        $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
         $customers = [];
 
         $buffer = range(0, count($accounts) - 1);

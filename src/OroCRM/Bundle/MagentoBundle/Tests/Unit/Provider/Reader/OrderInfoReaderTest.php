@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader;
 
 class OrderInfoReaderTest extends AbstractInfoReaderTest
 {

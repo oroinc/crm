@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
+namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +14,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
@@ -44,7 +43,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      description="Get all sales funnels",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_salesfunnel_view")
+     * @AclAncestor("oro_sales_salesfunnel_view")
      * @return Response
      */
     public function cgetAction()
@@ -64,7 +63,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      description="Get opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_salesfunnel_view")
+     * @AclAncestor("oro_sales_salesfunnel_view")
      * @return Response
      */
     public function getAction($id)
@@ -81,7 +80,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      description="Update sales funnel",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_salesfunnel_update")
+     * @AclAncestor("oro_sales_salesfunnel_update")
      * @return Response
      */
     public function putAction($id)
@@ -96,7 +95,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      description="Create new sales funnel",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_salesfunnel_create")
+     * @AclAncestor("oro_sales_salesfunnel_create")
      */
     public function postAction()
     {
@@ -113,10 +112,10 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_sales_salesfunnel_delete",
+     *      id="oro_sales_salesfunnel_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMSalesBundle:SalesFunnel"
+     *      class="OroSalesBundle:SalesFunnel"
      * )
      * @return Response
      */
@@ -132,7 +131,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      */
     public function getManager()
     {
-        return $this->get('orocrm_sales.salesfunnel.manager.api');
+        return $this->get('oro_sales.salesfunnel.manager.api');
     }
 
     /**
@@ -140,7 +139,7 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      */
     public function getForm()
     {
-        return $this->get('orocrm_sales.salesfunnel.form.api');
+        return $this->get('oro_sales.salesfunnel.form.api');
     }
 
     /**
@@ -148,6 +147,6 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_sales.salesfunnel.form.handler.api');
+        return $this->get('oro_sales.salesfunnel.form.handler.api');
     }
 }

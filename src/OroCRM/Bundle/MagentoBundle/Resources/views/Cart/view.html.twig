@@ -6,9 +6,9 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_magento_cart_index'),
-        'indexLabel': 'orocrm.magento.cart.entity_plural_label'|trans,
-        'entityTitle': 'orocrm.magento.entity_number'|trans({'%entityName%': 'orocrm.magento.cart.entity_label'|trans, '%entityNumber%': entity.originId})
+        'indexPath': path('oro_magento_cart_index'),
+        'indexLabel': 'oro.magento.cart.entity_plural_label'|trans,
+        'entityTitle': 'oro.magento.entity_number'|trans({'%entityName%': 'oro.magento.cart.entity_label'|trans, '%entityNumber%': entity.originId})
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -23,9 +23,9 @@
 
 {% block navButtons %}
     {{ UI.button({
-        'path':  path('orocrm_magento_cart_actualize', {'id': entity.id}),
-        'label': 'orocrm.magento.cart.refresh_label'|trans,
-        'title': 'orocrm.magento.cart.refresh_label'|trans,
+        'path':  path('oro_magento_cart_actualize', {'id': entity.id}),
+        'label': 'oro.magento.cart.refresh_label'|trans,
+        'title': 'oro.magento.cart.refresh_label'|trans,
         'iCss': 'icon-refresh'
     }) }}
 {% endblock navButtons %}
@@ -36,8 +36,8 @@
     {% set cartInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_magento_cart_widget_info', {id: entity.id}),
-            'title': 'orocrm.magento.cart_information'|trans
+            'url': path('oro_magento_cart_widget_info', {id: entity.id}),
+            'title': 'oro.magento.cart_information'|trans
         }) }}
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [cartInformationWidget] }]) %}
@@ -46,8 +46,8 @@
         {% set customerInformationWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_magento_customer_info', {id: entity.customer.id}),
-                'title': 'orocrm.magento.customer_information'|trans
+                'url': path('oro_magento_customer_info', {id: entity.customer.id}),
+                'title': 'oro.magento.customer_information'|trans
             }) }}
         {% endset %}
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformationWidget] }]) %}
@@ -57,7 +57,7 @@
         {% set opportunityInfoWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
-                'url': path('orocrm_sales_opportunity_info', { id: entity.opportunity.id }),
+                'url': path('oro_sales_opportunity_info', { id: entity.opportunity.id }),
                 'title': 'Opportunity Information'
             }) }}
         {% endset %}
@@ -68,20 +68,20 @@
         <div class="responsive-cell" id="magento-without-border-tabs">
             {% set tabs = [
                 {
-                    'alias': 'orocrm_magento_cart_items_active',
+                    'alias': 'oro_magento_cart_items_active',
                     'widgetType': 'block',
-                    'label': "orocrm.magento.cart.active_cart_items.label"|trans,
+                    'label': "oro.magento.cart.active_cart_items.label"|trans,
                     'url': path(
-                            'orocrm_magento_cart_widget_items',
+                            'oro_magento_cart_widget_items',
                             { id: entity.id, isRemoved: 0 }
                     )
                 },
                 {
-                    'alias': 'orocrm_magento_cart_items_deleted',
+                    'alias': 'oro_magento_cart_items_deleted',
                     'widgetType': 'block',
-                    'label': "orocrm.magento.cart.deleted_cart_items.label"|trans,
+                    'label': "oro.magento.cart.deleted_cart_items.label"|trans,
                     'url': path(
-                        'orocrm_magento_cart_widget_items',
+                        'oro_magento_cart_widget_items',
                         { id: entity.id, isRemoved: 1 }
                     )
                 }
@@ -92,12 +92,12 @@
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.magento.general_information'|trans,
+            'title': 'oro.magento.general_information'|trans,
             'class': 'active',
             'subblocks': generalSubblocks
         },
         {
-            'title': 'orocrm.magento.cart.cart_items.label'|trans,
+            'title': 'oro.magento.cart.cart_items.label'|trans,
             'subblocks': [
                 {'data' : [itemsTabsWidget] }
             ]

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass;
+namespace Oro\Bundle\ChannelBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -8,12 +8,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Oro\Component\Config\Loader\CumulativeConfigLoader;
 use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
-
-use OroCRM\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
+use Oro\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
 
 class SettingsPass implements CompilerPassInterface
 {
-    const SETTINGS_PROVIDER_ID = 'orocrm_channel.provider.settings_provider';
+    const SETTINGS_PROVIDER_ID = 'oro_channel.provider.settings_provider';
 
     /**
      * {@inheritDoc}
@@ -23,7 +22,7 @@ class SettingsPass implements CompilerPassInterface
         $settingsProvider = $container->getDefinition(self::SETTINGS_PROVIDER_ID);
         $configs          = [];
         $configLoader     = new CumulativeConfigLoader(
-            'orocrm_channel_settings',
+            'oro_channel_settings',
             new YamlCumulativeFileLoader('Resources/config/oro/channels.yml')
         );
         $resources        = $configLoader->load($container);

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
+namespace Oro\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer;
+use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer;
 
 class DateTimeNormalizerTest extends \PHPUnit_Framework_TestCase
 {

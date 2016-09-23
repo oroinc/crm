@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -26,7 +26,7 @@ class B2bCustomerEmailType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail',
                 'intention' => 'b2bcustomer',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation' => true,
@@ -48,6 +48,6 @@ class B2bCustomerEmailType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_b2bcustomer_email';
+        return 'oro_b2bcustomer_email';
     }
 }

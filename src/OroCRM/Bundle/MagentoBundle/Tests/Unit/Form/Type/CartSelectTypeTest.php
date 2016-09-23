@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType;
+use Oro\Bundle\MagentoBundle\Form\Type\CartSelectType;
 
 class CartSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,11 +27,11 @@ class CartSelectTypeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'configs'            => [
-                        'placeholder'             => 'orocrm.magento.form.choose_cart',
-                        'result_template_twig'    => 'OroCRMMagentoBundle:Cart:Autocomplete/result.html.twig',
-                        'selection_template_twig' => 'OroCRMMagentoBundle:Cart:Autocomplete/selection.html.twig'
+                        'placeholder'             => 'oro.magento.form.choose_cart',
+                        'result_template_twig'    => 'OroMagentoBundle:Cart:Autocomplete/result.html.twig',
+                        'selection_template_twig' => 'OroMagentoBundle:Cart:Autocomplete/selection.html.twig'
                     ],
-                    'autocomplete_alias' => 'orocrm_magento.carts',
+                    'autocomplete_alias' => 'oro_magento.carts',
                 ]
             );
 
@@ -40,7 +40,7 @@ class CartSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_cart_select', $this->type->getName());
+        $this->assertEquals('oro_cart_select', $this->type->getName());
     }
 
     public function testGetParent()

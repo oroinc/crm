@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormView;
@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Form\Handler\ChannelHandler as IntegrationChannelHandler;
-
-use OroCRM\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
+use Oro\Bundle\ChannelBundle\Form\Handler\ChannelIntegrationHandler;
 
 class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 {

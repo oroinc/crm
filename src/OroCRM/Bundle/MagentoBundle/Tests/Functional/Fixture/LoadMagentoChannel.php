@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -15,23 +15,22 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -78,7 +77,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
+        $this->factory = $container->get('oro_channel.builder.factory');
     }
 
     /**
@@ -329,8 +328,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setGender(Gender::MALE);
         $customer->setGroup($this->customerGroup);
         // TODO: DateTimeZones should be removed in BAP-8710. Tests should be passed for:
-        //  - OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\CustomerControllerTest
-        //  - OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\MagentoCustomerControllerTest
+        //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\CustomerControllerTest
+        //  - Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\MagentoCustomerControllerTest
         $customer->setCreatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->setUpdatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->addAddress($address);
@@ -444,7 +443,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
      */
     protected function getStatus()
     {
-        $status = $this->em->getRepository('OroCRMMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
+        $status = $this->em->getRepository('OroMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
 
         return $status;
     }

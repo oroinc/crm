@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Datagrid;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class GridMarketingListTypeProvider
 {
-    const MARKETING_LIST_TYPE = 'OroCRMMarketingListBundle:MarketingListType';
+    const MARKETING_LIST_TYPE = 'OroMarketingListBundle:MarketingListType';
 
     /**
      * @var RegistryInterface

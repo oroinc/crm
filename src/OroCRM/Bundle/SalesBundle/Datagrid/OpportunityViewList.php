@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Datagrid;
+namespace Oro\Bundle\SalesBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Entity\GridView;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
@@ -12,7 +12,7 @@ class OpportunityViewList extends AbstractViewsList
     protected $systemViews =  [
         [
             'name'         => 'opportunity.open',
-            'label'         => 'orocrm.sales.opportunity.datagrid.views.open',
+            'label'         => 'oro.sales.opportunity.datagrid.views.open',
             'is_default'    => true,
             'grid_name'     => 'sales-opportunity-grid',
             'type'          => GridView::TYPE_PUBLIC,
@@ -26,7 +26,7 @@ class OpportunityViewList extends AbstractViewsList
             'columns'       => []
         ], [
             'name'         => 'opportunity.overdue',
-            'label'         => 'orocrm.sales.opportunity.datagrid.views.overdue',
+            'label'         => 'oro.sales.opportunity.datagrid.views.overdue',
             'is_default'    => false,
             'grid_name'     => 'sales-opportunity-grid',
             'type'          => GridView::TYPE_PUBLIC,
@@ -47,7 +47,7 @@ class OpportunityViewList extends AbstractViewsList
     
         ], [
             'name'         => 'opportunity.recently_closed',
-            'label'         => 'orocrm.sales.opportunity.datagrid.views.recently_closed',
+            'label'         => 'oro.sales.opportunity.datagrid.views.recently_closed',
             'is_default'    => false,
             'grid_name'     => 'sales-opportunity-grid',
             'type'          => GridView::TYPE_PUBLIC,

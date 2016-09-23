@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
+namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\EmailBundle\Tests\Selenium\Pages\Email;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Call;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Calls;
-use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactContactedCountTest extends Selenium2TestCase
 {
@@ -22,7 +22,7 @@ class ContactContactedCountTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->assertTitle('All - Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
@@ -48,7 +48,7 @@ class ContactContactedCountTest extends Selenium2TestCase
         $login = $this->login();
         /** Log call to Contact */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
@@ -62,7 +62,7 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->verifyActivity('Call', $callSubject);
         /** Check that counter increased */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Times Contacted: 1', 'Last Contacted']);
@@ -79,7 +79,7 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->assertMessage('Call saved');
         /** Check that counter does not change */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Times Contacted: 1', 'Last Contacted']);
@@ -91,7 +91,7 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->assertMessage('Item deleted');
         /** Check that counter decreased */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Not contacted yet']);
@@ -108,7 +108,7 @@ class ContactContactedCountTest extends Selenium2TestCase
         $login = $this->login();
         /** Send email */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->runActionInGroup('Send email');
@@ -118,7 +118,7 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->send();
         /** Check that count increased */
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $login->openContacts('Oro\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Times Contacted: 1']);

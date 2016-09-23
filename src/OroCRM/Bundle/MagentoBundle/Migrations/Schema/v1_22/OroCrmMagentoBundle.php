@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_22;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
@@ -39,8 +38,8 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        if ($schema->hasTable('orocrm_task')) {
-            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
+        if ($schema->hasTable('oro_task')) {
+            $activityExtension->addActivityAssociation($schema, 'oro_task', 'oro_magento_customer');
         }
     }
 }

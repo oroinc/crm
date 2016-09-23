@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Controller;
+namespace Oro\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +12,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @Route("/lead")
@@ -23,19 +22,19 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 class LeadController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="orocrm_sales_lead_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_sales_lead_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_sales_lead_view",
+     *      id="oro_sales_lead_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      */
     public function viewAction(Lead $lead)
     {
         $isDisqualifyAndConvertAllowed = $this
-            ->get('orocrm_sales.provider.lead_to_opportunity')
+            ->get('oro_sales.provider.lead_to_opportunity')
             ->isDisqualifyAndConvertAllowed($lead);
         
         return array(
@@ -45,8 +44,8 @@ class LeadController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_sales_lead_info", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @Route("/info/{id}", name="oro_sales_lead_info", requirements={"id"="\d+"})
+     * @AclAncestor("oro_sales_lead_view")
      * @Template()
      */
     public function infoAction(Lead $lead)
@@ -58,13 +57,13 @@ class LeadController extends Controller
 
     /**
      * Create lead form
-     * @Route("/create", name="orocrm_sales_lead_create")
-     * @Template("OroCRMSalesBundle:Lead:update.html.twig")
+     * @Route("/create", name="oro_sales_lead_create")
+     * @Template("OroSalesBundle:Lead:update.html.twig")
      * @Acl(
-     *      id="orocrm_sales_lead_create",
+     *      id="oro_sales_lead_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      */
     public function createAction()
@@ -74,14 +73,14 @@ class LeadController extends Controller
 
     /**
      * Update user form
-     * @Route("/update/{id}", name="orocrm_sales_lead_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_sales_lead_update", requirements={"id"="\d+"}, defaults={"id"=0})
      *
      * @Template
      * @Acl(
-     *      id="orocrm_sales_lead_update",
+     *      id="oro_sales_lead_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      */
     public function updateAction(Lead $entity)
@@ -92,23 +91,23 @@ class LeadController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_sales_lead_index",
+     *      name="oro_sales_lead_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @AclAncestor("oro_sales_lead_view")
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('orocrm_sales.lead.entity.class')
+            'entity_class' => $this->container->getParameter('oro_sales.lead.entity.class')
         ];
     }
 
     /**
-     * @Route("/widget/account-leads/{id}", name="orocrm_sales_widget_account_leads", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @Route("/widget/account-leads/{id}", name="oro_sales_widget_account_leads", requirements={"id"="\d+"})
+     * @AclAncestor("oro_sales_lead_view")
      * @Template()
      */
     public function accountLeadsAction(Account $account)
@@ -119,13 +118,13 @@ class LeadController extends Controller
     /**
      * Create lead form with data channel
      *
-     * @Route("/create/{channelIds}", name="orocrm_sales_lead_data_channel_aware_create")
-     * @Template("OroCRMSalesBundle:Lead:update.html.twig")
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @Route("/create/{channelIds}", name="oro_sales_lead_data_channel_aware_create")
+     * @Template("OroSalesBundle:Lead:update.html.twig")
+     * @AclAncestor("oro_sales_lead_view")
      *
      * @ParamConverter(
      *      "channel",
-     *      class="OroCRMChannelBundle:Channel",
+     *      class="OroChannelBundle:Channel",
      *      options={"id" = "channelIds"}
      * )
      */
@@ -138,9 +137,9 @@ class LeadController extends Controller
     }
 
     /**
-     * @Route("/datagrid/lead-with-datachannel/{channelIds}", name="orocrm_sales_datagrid_lead_datachannel_aware")
-     * @Template("OroCRMSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
-     * @AclAncestor("orocrm_sales_lead_view")
+     * @Route("/datagrid/lead-with-datachannel/{channelIds}", name="oro_sales_datagrid_lead_datachannel_aware")
+     * @Template("OroSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
+     * @AclAncestor("oro_sales_lead_view")
      */
     public function leadWithDataChannelGridAction($channelIds, Request $request)
     {
@@ -162,60 +161,60 @@ class LeadController extends Controller
     /**
      * Change status for lead
      *
-     * @Route("/disqualify/{id}", name="orocrm_sales_lead_disqualify", requirements={"id"="\d+"})
+     * @Route("/disqualify/{id}", name="oro_sales_lead_disqualify", requirements={"id"="\d+"})
      * @Acl(
-     *      id="orocrm_sales_lead_disqualify",
+     *      id="oro_sales_lead_disqualify",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      */
     public function disqualifyAction(Lead $lead)
     {
-        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
+        if (!$this->get('oro_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
             throw new AccessDeniedException();
         }
         
-        if ($this->get('orocrm_sales.model.change_lead_status')->disqualify($lead)) {
+        if ($this->get('oro_sales.model.change_lead_status')->disqualify($lead)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
+                $this->get('translator')->trans('oro.sales.controller.lead.saved.message')
             );
         } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
-                $this->get('translator')->trans('orocrm.sales.lead.status.change_error_message')
+                $this->get('translator')->trans('oro.sales.lead.status.change_error_message')
             );
         }
 
-        return $this->redirectToRoute('orocrm_sales_lead_view', ['id' => $lead->getId()]);
+        return $this->redirectToRoute('oro_sales_lead_view', ['id' => $lead->getId()]);
     }
 
     /**
-     * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
+     * @Route("/convert/{id}", name="oro_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
      * @Acl(
-     *      id="orocrm_sales_lead_convert_to_opportunity",
+     *      id="oro_sales_lead_convert_to_opportunity",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMSalesBundle:Lead"
+     *      class="OroSalesBundle:Lead"
      * )
      * @Template()
      */
     public function convertToOpportunityAction(Lead $lead)
     {
-        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
+        if (!$this->get('oro_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
             throw new AccessDeniedException('Only one conversion per lead is allowed !');
         }
 
         $session = $this->get('session');
-        return $this->get('orocrm_sales.lead_to_opportunity.form.handler')->create(
+        return $this->get('oro_sales.lead_to_opportunity.form.handler')->create(
             $lead,
             $this->get('oro_form.model.update_handler'),
-            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            $this->get('translator')->trans('oro.sales.controller.opportunity.saved.message'),
             function () use ($session) {
                 $session->getFlashBag()->add(
                     'error',
-                    $this->get('translator')->trans('orocrm.sales.lead.convert.error')
+                    $this->get('translator')->trans('oro.sales.lead.convert.error')
                 );
             }
         );
@@ -230,9 +229,9 @@ class LeadController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->update(
             $entity,
-            $this->get('orocrm_sales.lead.form'),
-            $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message'),
-            $this->get('orocrm_sales.lead.form.handler')
+            $this->get('oro_sales.lead.form'),
+            $this->get('translator')->trans('oro.sales.controller.lead.saved.message'),
+            $this->get('oro_sales.lead.form.handler')
         );
     }
 }

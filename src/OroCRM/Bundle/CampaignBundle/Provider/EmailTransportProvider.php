@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Provider;
+namespace Oro\Bundle\CampaignBundle\Provider;
 
-use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
-use OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
+use Oro\Bundle\CampaignBundle\Transport\TransportInterface;
+use Oro\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
 
 class EmailTransportProvider
 {

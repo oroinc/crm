@@ -1,4 +1,4 @@
 bundles:
-    #Should be loaded after OroCRMCaseBundle, OroCallBundle, OroCRMMagentoBundle, OroCRMContactUsBundle,
+    #Should be loaded after OroCaseBundle, OroCallBundle, OroMagentoBundle, OroContactUsBundle,
     #because of migration priority
-    - { name: Oro\CRMCallBridgeBundle\OroCRMCallBridgeBundle, priority: 110 }
+    - { name: Oro\CRMCallBridgeBundle\OroCallBridgeBundle, priority: 110 }

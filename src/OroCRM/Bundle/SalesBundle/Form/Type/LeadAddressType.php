@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -33,7 +33,7 @@ class LeadAddressType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\LeadAddress',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadAddress',
             ]
         );
     }
@@ -59,6 +59,6 @@ class LeadAddressType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_lead_address';
+        return 'oro_sales_lead_address';
     }
 }

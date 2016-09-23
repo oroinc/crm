@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Controller;
+namespace Oro\Bundle\AnalyticsBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -8,9 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository;
+use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @Route("/analytics")
@@ -25,15 +25,15 @@ class RFMCategoryController extends Controller
     /**
      * @Route(
      *      "/rfm-category/view/channel/{entity}",
-     *      name="orocrm_analytics_rfm_category_channel_view",
+     *      name="oro_analytics_rfm_category_channel_view",
      *      requirements={"entity"="\d+"}
      * )
      * @ParamConverter(
      *      "channel",
-     *      class="OroCRMChannelBundle:Channel",
+     *      class="OroChannelBundle:Channel",
      *      options={"id" = "entity"}
      * )
-     * @AclAncestor("orocrm_channel_view")
+     * @AclAncestor("oro_channel_view")
      * @Template
      *
      * @param Channel $channel
@@ -72,7 +72,7 @@ class RFMCategoryController extends Controller
     {
         if (!$this->rfmMetricCategoryRepository) {
             $this->rfmMetricCategoryRepository = $this->getDoctrine()
-                ->getRepository($this->container->getParameter('orocrm_analytics.entity.rfm_category.class'));
+                ->getRepository($this->container->getParameter('oro_analytics.entity.rfm_category.class'));
         }
 
         return $this->rfmMetricCategoryRepository;

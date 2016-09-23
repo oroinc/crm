@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType;
 
 class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,9 +27,9 @@ class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'configs'            => [
-                        'placeholder' => 'orocrm.magento.form.choose_customer'
+                        'placeholder' => 'oro.magento.form.choose_customer'
                     ],
-                    'autocomplete_alias' => 'orocrm_magento.customers'
+                    'autocomplete_alias' => 'oro_magento.customers'
                 ]
             );
 
@@ -38,7 +38,7 @@ class CustomerSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_customer_select', $this->type->getName());
+        $this->assertEquals('oro_customer_select', $this->type->getName());
     }
 
     public function testGetParent()

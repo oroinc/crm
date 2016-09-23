@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualFieldProvider;
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider;
+use Oro\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualFieldProvider;
+use Oro\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider;
 
 class MarketingListItemVirtualFieldProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class MarketingListItemVirtualFieldProviderTest extends \PHPUnit_Framework_TestC
     protected function setUp()
     {
         $this->relationProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -148,7 +148,7 @@ class MarketingListItemVirtualFieldProviderTest extends \PHPUnit_Framework_TestC
                 [
                     'select' => [
                         'expr' => $mliAlias . '.contactedTimes',
-                        'label' => 'orocrm.marketinglist.marketinglistitem.contacted_times.label',
+                        'label' => 'oro.marketinglist.marketinglistitem.contacted_times.label',
                         'return_type' => 'integer'
                     ]
                 ]
@@ -158,7 +158,7 @@ class MarketingListItemVirtualFieldProviderTest extends \PHPUnit_Framework_TestC
                 [
                     'select' => [
                         'expr' => $mliAlias . '.lastContactedAt',
-                        'label' => 'orocrm.marketinglist.marketinglistitem.last_contacted_at.label',
+                        'label' => 'oro.marketinglist.marketinglistitem.last_contacted_at.label',
                         'return_type' => 'datetime'
                     ],
                 ]

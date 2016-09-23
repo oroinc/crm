@@ -15,7 +15,7 @@
             "": "src/"
         }
     },
-    "target-dir": "OroCRM/Bundle/ChannelBundle",
+    "target-dir": "Oro/Bundle/ChannelBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

@@ -1,6 +1,6 @@
 oro_entity:
     virtual_fields:
-        OroCRM\Bundle\ContactBundle\Entity\Contact:
+        Oro\Bundle\ContactBundle\Entity\Contact:
             primaryEmail:
                 query:
                     select:
@@ -19,12 +19,12 @@ oro_entity:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
 
     entity_aliases:
-        OroCRM\Bundle\ContactBundle\Entity\Group:
+        Oro\Bundle\ContactBundle\Entity\Group:
             alias:        contactgroup
             plural_alias: contactgroups
-        OroCRM\Bundle\ContactBundle\Entity\Method:
+        Oro\Bundle\ContactBundle\Entity\Method:
             alias:        contactmethod
             plural_alias: contactmethods
-        OroCRM\Bundle\ContactBundle\Entity\Source:
+        Oro\Bundle\ContactBundle\Entity\Source:
             alias:        contactsource
             plural_alias: contactsources

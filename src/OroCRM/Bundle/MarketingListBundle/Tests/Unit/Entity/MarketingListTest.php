@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\MarketingListBundle\Tests\Unit\Entity;
 
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class MarketingListTest extends \PHPUnit_Framework_TestCase
@@ -48,7 +48,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function propertiesDataProvider()
     {
         $type = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListType')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -69,7 +69,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function testMarketingListItems()
     {
         $this->assertCollectionMethods(
-            'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem',
+            'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem',
             'MarketingListItem'
         );
     }
@@ -77,7 +77,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function testMarketingListRemovedItems()
     {
         $this->assertCollectionMethods(
-            'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem',
+            'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem',
             'MarketingListRemovedItem'
         );
     }
@@ -85,7 +85,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function testMarketingListUnsubscribedItems()
     {
         $this->assertCollectionMethods(
-            'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem',
+            'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem',
             'MarketingListUnsubscribedItem'
         );
     }

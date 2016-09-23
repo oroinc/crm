@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
@@ -12,7 +12,7 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
  */
 class B2bCustomerEntityNameProvider implements EntityNameProviderInterface
 {
-    const CLASS_NAME = 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
+    const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
 
     /**
      * {@inheritdoc}

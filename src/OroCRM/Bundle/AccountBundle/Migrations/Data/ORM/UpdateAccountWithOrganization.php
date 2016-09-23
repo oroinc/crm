@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\AccountBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -22,6 +22,6 @@ class UpdateAccountWithOrganization extends UpdateWithOrganization implements De
      */
     public function load(ObjectManager $manager)
     {
-        $this->update($manager, 'OroCRMAccountBundle:Account');
+        $this->update($manager, 'OroAccountBundle:Account');
     }
 }

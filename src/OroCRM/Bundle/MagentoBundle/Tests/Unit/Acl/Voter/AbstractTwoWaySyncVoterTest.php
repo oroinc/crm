@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter;
-use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 abstract class AbstractTwoWaySyncVoterTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +29,7 @@ abstract class AbstractTwoWaySyncVoterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider')
             ->disableOriginalConstructor()
             ->getMock();
     }

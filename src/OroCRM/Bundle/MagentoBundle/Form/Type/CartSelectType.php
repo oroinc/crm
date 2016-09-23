@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,11 +15,11 @@ class CartSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'orocrm.magento.form.choose_cart',
-                    'result_template_twig' => 'OroCRMMagentoBundle:Cart:Autocomplete/result.html.twig',
-                    'selection_template_twig' => 'OroCRMMagentoBundle:Cart:Autocomplete/selection.html.twig'
+                    'placeholder' => 'oro.magento.form.choose_cart',
+                    'result_template_twig' => 'OroMagentoBundle:Cart:Autocomplete/result.html.twig',
+                    'selection_template_twig' => 'OroMagentoBundle:Cart:Autocomplete/selection.html.twig'
                 ),
-                'autocomplete_alias' => 'orocrm_magento.carts',
+                'autocomplete_alias' => 'oro_magento.carts',
             )
         );
     }
@@ -37,7 +37,7 @@ class CartSelectType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_cart_select';
+        return 'oro_cart_select';
     }
 
     /**

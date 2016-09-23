@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\DataTransformer;
+namespace Oro\Bundle\MagentoBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 

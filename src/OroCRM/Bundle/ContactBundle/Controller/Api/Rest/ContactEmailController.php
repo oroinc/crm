@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
+namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -71,7 +71,7 @@ class ContactEmailController extends RestController implements ClassResourceInte
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact_email.manager.api');
+        return $this->get('oro_contact.contact_email.manager.api');
     }
 
     /**
@@ -79,7 +79,7 @@ class ContactEmailController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_contact.form.type.contact_email.handler');
+        return $this->get('oro_contact.form.type.contact_email.handler');
     }
 
     /**
@@ -87,7 +87,7 @@ class ContactEmailController extends RestController implements ClassResourceInte
      */
     public function getForm()
     {
-        return $this->get('orocrm_contact.form.type.contact_email.type');
+        return $this->get('oro_contact.form.type.contact_email.type');
     }
 
     /**
@@ -95,6 +95,6 @@ class ContactEmailController extends RestController implements ClassResourceInte
      */
     public function getDeleteHandler()
     {
-        return $this->get('orocrm_contact.form.type.contact_email.handler');
+        return $this->get('oro_contact.form.type.contact_email.handler');
     }
 }

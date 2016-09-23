@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
 use Symfony\Component\Routing\RouterInterface;
 
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
-use OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,24 +19,24 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $testConfig = [
-        'OroCRM\Bundle\TestBundle1\Entity\Entity1' => [
-            'name'                   => 'OroCRM\Bundle\TestBundle1\Entity\Entity1',
+        'Oro\Bundle\TestBundle1\Entity\Entity1' => [
+            'name'                   => 'Oro\Bundle\TestBundle1\Entity\Entity1',
             'dependent'              => [],
             'navigation_items'       => [],
             'dependencies'           => [],
             'dependencies_condition' => 'OR',
             'belongs_to'             => ['integration' => 'testIntegrationType']
         ],
-        'OroCRM\Bundle\TestBundle1\Entity\Entity2' => [
-            'name'                   => 'OroCRM\Bundle\TestBundle2\Entity\Entity2',
+        'Oro\Bundle\TestBundle1\Entity\Entity2' => [
+            'name'                   => 'Oro\Bundle\TestBundle2\Entity\Entity2',
             'dependent'              => [],
             'navigation_items'       => [],
             'dependencies'           => [],
             'dependencies_condition' => 'AND',
             'belongs_to'             => ['integration' => 'testIntegrationType']
         ],
-        'OroCRM\Bundle\TestBundle2\Entity\Entity3' => [
-            'name'                   => 'OroCRM\Bundle\TestBundle2\Entity\Entity3',
+        'Oro\Bundle\TestBundle2\Entity\Entity3' => [
+            'name'                   => 'Oro\Bundle\TestBundle2\Entity\Entity3',
             'dependent'              => [],
             'navigation_items'       => [],
             'dependencies'           => [],
@@ -47,7 +46,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $entityConfig1 = [
-        'name'         => 'OroCRM\Bundle\TestBundle1\Entity\Entity1',
+        'name'         => 'Oro\Bundle\TestBundle1\Entity\Entity1',
         'label'        => 'Entity 1',
         'plural_label' => 'Entities 1',
         'icon'         => '',
@@ -55,7 +54,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $entityConfig2 = [
-        'name'         => 'OroCRM\Bundle\TestBundle2\Entity\Entity2',
+        'name'         => 'Oro\Bundle\TestBundle2\Entity\Entity2',
         'label'        => 'Entity 2',
         'plural_label' => 'Entities 2',
         'icon'         => '',
@@ -63,7 +62,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     /** @var array */
     protected $entityConfig3 = [
-        'name'         => 'OroCRM\Bundle\TestBundle2\Entity\Entity3',
+        'name'         => 'Oro\Bundle\TestBundle2\Entity\Entity3',
         'label'        => 'Entity 3',
         'plural_label' => 'Entities 3',
         'icon'         => '',
@@ -83,7 +82,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->settingsProvider   = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingsProvider   = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->settingsProvider->expects($this->once())
             ->method('getSettings')

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
-use OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
+use Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
 
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;

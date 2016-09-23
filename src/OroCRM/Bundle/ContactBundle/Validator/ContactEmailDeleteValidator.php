@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Validator;
+namespace Oro\Bundle\ContactBundle\Validator;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 
 class ContactEmailDeleteValidator
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Validator\Constraints;
+namespace Oro\Bundle\MagentoBundle\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 
@@ -9,7 +9,7 @@ class UniqueCustomerEmailConstraint extends Constraint
     /**
      * @var string
      */
-    public $message = 'orocrm.magento.unique_customer_email.message';
+    public $message = 'oro.magento.unique_customer_email.message';
 
     /**
      * {@inheritdoc}
@@ -24,6 +24,6 @@ class UniqueCustomerEmailConstraint extends Constraint
      */
     public function validatedBy()
     {
-        return 'orocrm_magento.validator.unique_customer_email';
+        return 'oro_magento.validator.unique_customer_email';
     }
 }

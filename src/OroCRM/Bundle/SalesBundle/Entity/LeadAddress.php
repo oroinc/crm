@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity;
+namespace Oro\Bundle\SalesBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -10,10 +10,10 @@ use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
-use OroCRM\Bundle\SalesBundle\Model\ExtendLeadAddress;
+use Oro\Bundle\SalesBundle\Model\ExtendLeadAddress;
 
 /**
- * @ORM\Table("orocrm_sales_lead_address")
+ * @ORM\Table("oro_sales_lead_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Entity;
 
 class EmailCampaignStatisticsTest extends AbstractEntityTestCase
 {
@@ -9,7 +9,7 @@ class EmailCampaignStatisticsTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics';
+        return 'Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics';
     }
 
     /**
@@ -17,10 +17,10 @@ class EmailCampaignStatisticsTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $campaign = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $campaign = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
-        $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
+        $marketingListItem = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListItem')
             ->disableOriginalConstructor()
             ->getMock();
         $date = new \DateTime();

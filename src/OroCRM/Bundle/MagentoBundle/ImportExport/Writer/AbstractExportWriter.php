@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
-use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategyInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\OriginAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategyInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractExportWriter extends PersistentBatchWriter
 {

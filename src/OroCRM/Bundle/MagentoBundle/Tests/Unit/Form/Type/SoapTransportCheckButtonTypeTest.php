@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType;
+use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType;
 
 class SoapTransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,7 +12,7 @@ class SoapTransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
     {
         $type = new SoapTransportCheckButtonType();
 
-        $this->assertSame('orocrm_magento_soap_transport_check_button', $type->getName());
+        $this->assertSame('oro_magento_soap_transport_check_button', $type->getName());
         $this->assertNull($type->getParent());
         $this->assertInstanceOf('Symfony\Component\Form\Extension\Core\Type\ButtonType', $type);
     }

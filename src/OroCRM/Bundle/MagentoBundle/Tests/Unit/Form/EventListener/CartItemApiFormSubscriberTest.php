@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\CartItemApiFormSubscriber;
 
 class CartItemApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +63,7 @@ class CartItemApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function preSetProvider()
     {
-        $cartItem = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\CartItem')
+        $cartItem = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\CartItem')
             ->disableOriginalConstructor()
             ->getMock();
 

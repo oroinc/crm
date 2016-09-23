@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\SerializerInterface;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor;
+use Oro\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor;
 
 class ContextProcessorTest extends \PHPUnit_Framework_TestCase
 {

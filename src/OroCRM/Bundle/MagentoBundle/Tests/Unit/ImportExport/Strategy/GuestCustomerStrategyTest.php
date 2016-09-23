@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
 
 class GuestCustomerStrategyTest extends AbstractStrategyTest
 {
@@ -40,7 +40,7 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
             ->disableOriginalConstructor()
             ->getMock()
         );
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         return $strategy;
     }

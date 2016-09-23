@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-use OroCRM\Bundle\MagentoBundle\Acl\Voter\CustomerVoter;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Acl\Voter\CustomerVoter;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
 {
@@ -44,7 +44,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
             ->with($object)
             ->will($this->returnValue($className));
 
-        $this->voter->setClassName('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $this->voter->setClassName('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         $this->doctrineHelper->expects($this->any())
             ->method('getSingleEntityIdentifier')
@@ -74,7 +74,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
      */
     public function attributesDataProvider()
     {
-        $className = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        $className = 'Oro\Bundle\MagentoBundle\Entity\Customer';
         $objectIdentityClass = 'Symfony\Component\Security\Acl\Model\ObjectIdentityInterface';
 
 
@@ -169,7 +169,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
      */
     protected function getCustomer($originId = null)
     {
-        $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $customer = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $customer->expects($this->any())
             ->method('getChannel')

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Controller;
+namespace Oro\Bundle\CampaignBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 
 /**
  * @Route("/campaign/event")
@@ -22,8 +22,8 @@ class CampaignEventController extends Controller
      * @param Campaign $campaign
      * @return array
      *
-     * @Route("/plot/{period}/{campaign}", name="orocrm_campaign_event_plot")
-     * @AclAncestor("orocrm_campaign_view")
+     * @Route("/plot/{period}/{campaign}", name="oro_campaign_event_plot")
+     * @AclAncestor("oro_campaign_view")
      * @Template
      */
     public function plotAction($period, Campaign $campaign)

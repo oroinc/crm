@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -8,8 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
-
-use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 
 class AmountProviderTest extends OrmTestCase
 {
@@ -25,12 +24,12 @@ class AmountProviderTest extends OrmTestCase
 
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
-            'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
+            'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'
         );
 
         $config = $this->em->getConfiguration();
         $config->setMetadataDriverImpl($metadataDriver);
-        $config->setEntityNamespaces(['OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
+        $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
         $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->any())
@@ -61,7 +60,7 @@ class AmountProviderTest extends OrmTestCase
             ->with($expectedSQL)
             ->will($this->returnValue($smt));
 
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
         $this->assertSame($result, $this->provider->getAccountLifeTimeValue($account, $channel));
     }
 
@@ -70,7 +69,7 @@ class AmountProviderTest extends OrmTestCase
      */
     public function lifetimeValueProvider()
     {
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'get account summary lifetime'    => [

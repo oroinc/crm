@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Event;
+namespace Oro\Bundle\ChannelBundle\Event;
 
 /**
  * This event dispatched when channel is deleted
@@ -8,5 +8,5 @@ namespace OroCRM\Bundle\ChannelBundle\Event;
  */
 class ChannelDeleteEvent extends AbstractEvent
 {
-    const EVENT_NAME = 'orocrm_channel.channel.delete_succeed';
+    const EVENT_NAME = 'oro_channel.channel.delete_succeed';
 }

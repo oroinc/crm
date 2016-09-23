@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Autocomplete;
+namespace Oro\Bundle\SalesBundle\Autocomplete;
 
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
 use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;

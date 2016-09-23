@@ -1,6 +1,6 @@
 datagrids:
     orocrm-marketing-list-grid:
-        extended_entity_name: OroCRM\Bundle\MarketingListBundle\Entity\MarketingList
+        extended_entity_name: Oro\Bundle\MarketingListBundle\Entity\MarketingList
         source:
             type: orm
             query:
@@ -13,7 +13,7 @@ datagrids:
                     - ml.lastRun
                     - segment.lastRun as segmentLastRun
                 from:
-                    - { table: OroCRM\Bundle\MarketingListBundle\Entity\MarketingList, alias: ml }
+                    - { table: Oro\Bundle\MarketingListBundle\Entity\MarketingList, alias: ml }
                 join:
                     inner:
                         - { join: ml.type, alias: type }
@@ -21,25 +21,25 @@ datagrids:
                         - { join: ml.segment, alias: segment }
         columns:
             name:
-                label:          orocrm.marketinglist.name.label
+                label:          oro.marketinglist.name.label
             entity:
-                label:          orocrm.marketinglist.entity.label
+                label:          oro.marketinglist.entity.label
                 type:           twig
                 template:       OroEntityBundle:Datagrid:Property/entity.html.twig
                 frontend_type:  html
                 context:
-                    entity_provider: '@orocrm_marketing_list.entity_provider'
+                    entity_provider: '@oro_marketing_list.entity_provider'
             listType:
-                label:          orocrm.marketinglist.type.label
+                label:          oro.marketinglist.type.label
                 type:           twig
-                choices:        '@orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
+                choices:        '@oro_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
                 frontend_type:  html
-                template:       OroCRMMarketingListBundle:MarketingList:Datagrid/Property/listType.html.twig
+                template:       OroMarketingListBundle:MarketingList:Datagrid/Property/listType.html.twig
             createdAt:
-                label:          orocrm.marketinglist.created_at.label
+                label:          oro.marketinglist.created_at.label
                 frontend_type:  datetime
             lastRun:
-                label:          orocrm.marketinglist.last_run.label
+                label:          oro.marketinglist.last_run.label
                 frontend_type:  datetime
         filters:
             columns:
@@ -59,7 +59,7 @@ datagrids:
                     data_name:          ml.type
                     options:
                         field_options:
-                            choices:    '@orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
+                            choices:    '@oro_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
                 createdAt:
                     type:       datetime
                     data_name:  ml.createdAt
@@ -75,16 +75,16 @@ datagrids:
             id: ~
             view_link:
                 type: url
-                route: orocrm_marketing_list_view
+                route: oro_marketing_list_view
                 params: [ id ]
             update_link:
                 type: url
-                route: orocrm_marketing_list_update
+                route: oro_marketing_list_update
                 params:
                     - id
             delete_link:
                 type: url
-                route: orocrm_api_delete_marketinglist
+                route: oro_api_delete_marketinglist
                 params:
                     - id
         actions:
@@ -93,11 +93,11 @@ datagrids:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_resource: orocrm_marketing_list_view
+                acl_resource: oro_marketing_list_view
                 rowAction:    true
             update:
                 type:          navigate
-                acl_resource:  orocrm_marketing_list_update
+                acl_resource:  oro_marketing_list_update
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
@@ -105,7 +105,7 @@ datagrids:
                     className: 'no-hash mobile-hide'
             delete:
                 type:          delete
-                acl_resource:  orocrm_marketing_list_delete
+                acl_resource:  oro_marketing_list_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
@@ -121,7 +121,7 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
@@ -140,20 +140,20 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
                             condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
         columns:
             contactedTimes:
-                label: orocrm.marketinglist.datagrid.contactedTimes
+                label: oro.marketinglist.datagrid.contactedTimes
             lastContactedAt:
-                label: orocrm.marketinglist.datagrid.lastContactedAt
+                label: oro.marketinglist.datagrid.lastContactedAt
                 frontend_type: datetime
         filters:
             columns:
@@ -165,7 +165,7 @@ datagrids:
                 lastContactedAt: { data_name: mli.lastContactedAt }
         properties:
             marketingList: ~
-        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
+        action_configuration: ['@oro_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
         options:
             skip_count_walker: true
             mixin: true
@@ -179,13 +179,13 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
                             condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
         columns:
             subscribed:
-                label: orocrm.marketinglist.datagrid.subscribed
+                label: oro.marketinglist.datagrid.subscribed
                 frontend_type: boolean
         filters:
             columns:
@@ -196,25 +196,25 @@ datagrids:
         properties:
             subscribe_link:
                 type: url
-                route: orocrm_api_subscribe_marketinglist_unsubscribeditem
+                route: oro_api_subscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_api_unsubscribe_marketinglist_unsubscribeditem
+                route: oro_api_unsubscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
         actions:
             subscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.subscribe
+                label:        oro.marketinglist.action.subscribe
                 link:         subscribe_link
                 icon:         plus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
+                acl_resource: oro_marketinglist_unsubscribed_item_delete
             unsubscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.unsubscribe
+                label:        oro.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_create
+                acl_resource: oro_marketinglist_unsubscribed_item_create
 
     orocrm-marketing-list-items-mixin:
         extends: orocrm-marketing-list-items-base-unsubscribe-mixin
@@ -226,21 +226,21 @@ datagrids:
         properties:
             remove_link:
                 type: url
-                route: orocrm_api_remove_marketinglist_removeditem
+                route: oro_api_remove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             remove:
                 type:         ajaxdelete
-                label:        orocrm.marketinglist.action.remove
+                label:        oro.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
-                acl_resource: orocrm_marketing_list_removed_item_create
+                acl_resource: oro_marketing_list_removed_item_create
                 defaultMessages:
-                    confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
-                    confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
-                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
-                    confirm_content: orocrm.marketinglist.remove_dialog.content
-                    success:         orocrm.marketinglist.remove_dialog.success
+                    confirm_title:   oro.marketinglist.remove_dialog.confirm_title
+                    confirm_ok:      oro.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  oro.marketinglist.remove_dialog.confirm_cancel
+                    confirm_content: oro.marketinglist.remove_dialog.content
+                    success:         oro.marketinglist.remove_dialog.success
 
     orocrm-marketing-list-removed-items-mixin:
         extends: orocrm-marketing-list-items-base-mixin
@@ -252,21 +252,21 @@ datagrids:
         properties:
             unremove_link:
                 type: url
-                route: orocrm_api_unremove_marketinglist_removeditem
+                route: oro_api_unremove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             unremove:
                 type:         ajaxdelete
-                label:        orocrm.marketinglist.action.unremove
+                label:        oro.marketinglist.action.unremove
                 link:         unremove_link
                 icon:         undo
-                acl_resource: orocrm_marketing_list_removed_item_delete
+                acl_resource: oro_marketing_list_removed_item_delete
                 defaultMessages:
-                    confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
-                    confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
-                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
-                    confirm_content: orocrm.marketinglist.unremove_dialog.content
-                    success:         orocrm.marketinglist.unremove_dialog.success
+                    confirm_title:   oro.marketinglist.unremove_dialog.confirm_title
+                    confirm_ok:      oro.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  oro.marketinglist.unremove_dialog.confirm_cancel
+                    confirm_content: oro.marketinglist.unremove_dialog.content
+                    success:         oro.marketinglist.unremove_dialog.success
 
     orocrm-marketing-list-entities-base-unsubscribe-mixin:
         source:
@@ -274,12 +274,12 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
                             condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
                             condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
@@ -295,7 +295,7 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
@@ -315,21 +315,21 @@ datagrids:
                 join:
                     inner:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
                             condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
         columns:
             contactedTimes:
-                label: orocrm.marketinglist.datagrid.contactedTimes
+                label: oro.marketinglist.datagrid.contactedTimes
             lastContactedAt:
-                label: orocrm.marketinglist.datagrid.lastContactedAt
+                label: oro.marketinglist.datagrid.lastContactedAt
                 frontend_type: datetime
         filters:
             columns:
@@ -341,7 +341,7 @@ datagrids:
                 lastContactedAt: { data_name: mli.lastContactedAt }
         properties:
             marketingList: ~
-        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
+        action_configuration: ['@oro_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
         options:
             skip_count_walker: true
             mixin: true
@@ -355,13 +355,13 @@ datagrids:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
                             condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
         columns:
             subscribed:
-                label: orocrm.marketinglist.datagrid.subscribed
+                label: oro.marketinglist.datagrid.subscribed
                 frontend_type: boolean
         filters:
             columns:
@@ -372,25 +372,25 @@ datagrids:
         properties:
             subscribe_link:
                 type: url
-                route: orocrm_api_subscribe_marketinglist_unsubscribeditem
+                route: oro_api_subscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
             unsubscribe_link:
                 type: url
-                route: orocrm_api_unsubscribe_marketinglist_unsubscribeditem
+                route: oro_api_unsubscribe_marketinglist_unsubscribeditem
                 params: [ marketingList, id ]
         actions:
             subscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.subscribe
+                label:        oro.marketinglist.action.subscribe
                 link:         subscribe_link
                 icon:         plus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
+                acl_resource: oro_marketinglist_unsubscribed_item_delete
             unsubscribe:
                 type:         ajax
-                label:        orocrm.marketinglist.action.unsubscribe
+                label:        oro.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
-                acl_resource: orocrm_marketinglist_unsubscribed_item_create
+                acl_resource: oro_marketinglist_unsubscribed_item_create
 
     orocrm-marketing-list-manual-items-mixin:
         extends: orocrm-marketing-list-manual-items-base-unsubscribe-mixin
@@ -402,21 +402,21 @@ datagrids:
         properties:
             remove_link:
                 type: url
-                route: orocrm_api_remove_marketinglist_removeditem
+                route: oro_api_remove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             remove:
                 type:         ajaxdelete
-                label:        orocrm.marketinglist.action.remove
+                label:        oro.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
-                acl_resource: orocrm_marketing_list_removed_item_create
+                acl_resource: oro_marketing_list_removed_item_create
                 defaultMessages:
-                    confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
-                    confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
-                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
-                    confirm_content: orocrm.marketinglist.remove_dialog.content
-                    success:         orocrm.marketinglist.remove_dialog.success
+                    confirm_title:   oro.marketinglist.remove_dialog.confirm_title
+                    confirm_ok:      oro.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  oro.marketinglist.remove_dialog.confirm_cancel
+                    confirm_content: oro.marketinglist.remove_dialog.content
+                    success:         oro.marketinglist.remove_dialog.success
 
     orocrm-marketing-list-manual-removed-items-mixin:
         extends: orocrm-marketing-list-manual-items-base-mixin
@@ -428,21 +428,21 @@ datagrids:
         properties:
             unremove_link:
                 type: url
-                route: orocrm_api_unremove_marketinglist_removeditem
+                route: oro_api_unremove_marketinglist_removeditem
                 params: [ marketingList, id ]
         actions:
             unremove:
                 type:         ajaxdelete
-                label:        orocrm.marketinglist.action.unremove
+                label:        oro.marketinglist.action.unremove
                 link:         unremove_link
                 icon:         undo
-                acl_resource: orocrm_marketing_list_removed_item_delete
+                acl_resource: oro_marketing_list_removed_item_delete
                 defaultMessages:
-                    confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
-                    confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
-                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
-                    confirm_content: orocrm.marketinglist.unremove_dialog.content
-                    success:         orocrm.marketinglist.unremove_dialog.success
+                    confirm_title:   oro.marketinglist.unremove_dialog.confirm_title
+                    confirm_ok:      oro.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  oro.marketinglist.unremove_dialog.confirm_cancel
+                    confirm_content: oro.marketinglist.unremove_dialog.content
+                    success:         oro.marketinglist.unremove_dialog.success
 
     orocrm-marketing-list-manual-entities-mixin:
         extends: orocrm-marketing-list-entities-base-unsubscribe-mixin
@@ -451,7 +451,7 @@ datagrids:
                 join:
                     inner:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            join: 'Oro\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'

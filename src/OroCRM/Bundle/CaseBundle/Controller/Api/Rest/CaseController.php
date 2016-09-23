@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Controller\Api\Rest;
+namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,14 +11,13 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\CaseBundle\Entity\CaseSource;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * @Rest\RouteResource("case")
- * @Rest\NamePrefix("orocrm_case_api_")
+ * @Rest\NamePrefix("oro_case_api_")
  */
 class CaseController extends RestController implements ClassResourceInterface
 {
@@ -41,7 +40,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Get all CaseEntity items",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("oro_case_view")
      * @return Response
      */
     public function cgetAction()
@@ -61,7 +60,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Get CaseEntity item",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_view")
+     * @AclAncestor("oro_case_view")
      * @return Response
      */
     public function getAction($id)
@@ -78,7 +77,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Update CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_update")
+     * @AclAncestor("oro_case_update")
      * @return Response
      */
     public function putAction($id)
@@ -93,7 +92,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Create new CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_create")
+     * @AclAncestor("oro_case_create")
      */
     public function postAction()
     {
@@ -109,7 +108,7 @@ class CaseController extends RestController implements ClassResourceInterface
      *     description="Delete CaseEntity",
      *     resource=true
      * )
-     * @AclAncestor("orocrm_case_delete")
+     * @AclAncestor("oro_case_delete")
      * @return Response
      */
     public function deleteAction($id)
@@ -122,7 +121,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getManager()
     {
-        return $this->get('orocrm_case.manager.api');
+        return $this->get('oro_case.manager.api');
     }
 
     /**
@@ -130,7 +129,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.entity.api');
+        return $this->get('oro_case.form.entity.api');
     }
 
     /**
@@ -138,7 +137,7 @@ class CaseController extends RestController implements ClassResourceInterface
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_case.form.handler.entity.api');
+        return $this->get('oro_case.form.handler.entity.api');
     }
 
     /**

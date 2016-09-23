@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_16;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_16;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
@@ -17,40 +17,40 @@ class UpdateCreatedUpdatedLabels implements Migration
     {
         $fields = [
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\Lead',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.sales.lead.created_at.label'
+                'replace' => 'oro.sales.lead.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\Lead',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.sales.lead.updated_at.label'
+                'replace' => 'oro.sales.lead.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.sales.opportunity.created_at.label'
+                'replace' => 'oro.sales.opportunity.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.sales.opportunity.updated_at.label'
+                'replace' => 'oro.sales.opportunity.updated_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at',
-                'replace' => 'orocrm.sales.salesfunnel.created_at.label'
+                'replace' => 'oro.sales.salesfunnel.created_at.label'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
+                'entityName' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at',
-                'replace' => 'orocrm.sales.salesfunnel.updated_at.label'
+                'replace' => 'oro.sales.salesfunnel.updated_at.label'
             ]
         ];
 

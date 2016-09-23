@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Model;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
-use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
+use Oro\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector;
 
 class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +25,7 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->marketingListItemConnector = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector')
+            ->getMockBuilder('Oro\Bundle\MarketingListBundle\Model\MarketingListItemConnector')
             ->disableOriginalConstructor()
             ->getMock();
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
@@ -48,11 +48,11 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
         $entityId = 1;
         $entityClass = get_class($entity);
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+        $marketingList = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $emailCampaign = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
+        $emailCampaign = $this->getMockBuilder('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
         $emailCampaign->expects($this->exactly(2))
@@ -64,7 +64,7 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
             ->with($entity)
             ->will($this->returnValue($entityId));
 
-        $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
+        $marketingListItem = $this->getMockBuilder('Oro\Bundle\MarketingListBundle\Entity\MarketingListItem')
             ->disableOriginalConstructor()
             ->getMock();
         $marketingListItem->expects($this->any())
@@ -110,7 +110,7 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
 
             $manager->expects($this->exactly(1))
                 ->method('persist')
-                ->with($this->isInstanceOf('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'));
+                ->with($this->isInstanceOf('Oro\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'));
         }
 
         $this->connector->setEntityName($entityClass);

@@ -2,24 +2,24 @@
 
 {% oro_title_set({params : {"%account.name%": resource_granted('VIEW', entity, 'name')
     ? entity.name|default('N/A')
-    : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}) }})
+    : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}) }})
 %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
-            'path': path('orocrm_account_update', {'id': entity.id}),
-            'entity_label': 'orocrm.account.entity_label'|trans
+            'path': path('oro_account_update', {'id': entity.id}),
+            'entity_label': 'oro.account.entity_label'|trans
         }) }}
     {% endif %}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
-            'dataRedirect': path('orocrm_account_index'),
+            'dataRedirect': path('oro_account_index'),
             'aCss': 'no-hash remove-button',
             'dataId': entity.id,
             'id': 'btn-remove-account',
-            'entity_label': 'orocrm.account.entity_label'|trans
+            'entity_label': 'oro.account.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -27,11 +27,11 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
-        'indexPath': path('orocrm_account_index'),
-        'indexLabel': 'orocrm.account.entity_plural_label'|trans,
+        'indexPath': path('oro_account_index'),
+        'indexLabel': 'oro.account.entity_plural_label'|trans,
         'entityTitle': resource_granted('VIEW', entity, 'name')
             ? entity.name|default('N/A')
-            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
+            : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}))
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -40,20 +40,20 @@
     {% set accountInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'title': 'orocrm.account.widgets.account_information'|trans,
-            'url': path('orocrm_account_widget_info', {id: entity.id})
+            'title': 'oro.account.widgets.account_information'|trans,
+            'url': path('oro_account_widget_info', {id: entity.id})
         }) }}
     {% endset %}
 
     {% set generalSectionBlocks = [{'data' : [accountInformationWidget]}]%}
 
-    {% if resource_granted('orocrm_contact_view') and resource_granted('VIEW', entity, 'contacts') %}
+    {% if resource_granted('oro_contact_view') and resource_granted('VIEW', entity, 'contacts') %}
         {% set contactsInformationWidget %}
             <div class="contact-widget-wrapper">
                 {{ oro_widget_render({
                     'widgetType': 'block',
-                    'url': path('orocrm_account_widget_contacts', {id: entity.id}),
-                    'title': 'orocrm.contact.widgets.account_contacts'|trans
+                    'url': path('oro_account_widget_contacts', {id: entity.id}),
+                    'title': 'oro.contact.widgets.account_contacts'|trans
                 }) }}
             </div>
         {% endset %}
@@ -65,7 +65,7 @@
 
     {% set dataBlocks = [
         {
-            'title': 'orocrm.account.sections.general'|trans,
+            'title': 'oro.account.sections.general'|trans,
             'class': 'active',
             'subblocks': generalSectionBlocks
         }
@@ -75,7 +75,7 @@
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
             {% spaceless %}
-                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.channelType %}
+                {% set placeHolderName = 'oro_account_channel_info_' ~ channel.channelType %}
                 {{ placeholder(placeHolderName, {'accountId': entity.id, 'channelId': channel.id}) }}
             {% endspaceless %}
         {%- endset -%}
@@ -94,12 +94,12 @@
 
     {# Render Website Activity Section if there is at least one applicable customer #}
     {% set websiteActivity %}
-        {%- placeholder orocrm_website_activity with {'customers': customers, 'byChannel': true} -%}
+        {%- placeholder oro_website_activity with {'customers': customers, 'byChannel': true} -%}
     {% endset %}
     {% if websiteActivity is not empty %}
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'orocrm.account.sections.website_activity'|trans,
+                'title': 'oro.account.sections.website_activity'|trans,
                 'priority': 1050,
                 'subblocks': [
                     {'data' : [websiteActivity]}

@@ -1,12 +1,12 @@
 search:
-    OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
-        alias:                          orocrm_case
+    Oro\Bundle\CaseBundle\Entity\CaseEntity:
+        alias:                          oro_case
         title_fields:                   [subject]
         route:
-            name:                       orocrm_case_view
+            name:                       oro_case_view
             parameters:
                 id:                     id
-        search_template:                OroCRMCaseBundle:Case:searchResult.html.twig
+        search_template:                OroCaseBundle:Case:searchResult.html.twig
         fields:
             -
                 name:                   subject
@@ -29,6 +29,6 @@ search:
                         target_type:    text
                         target_fields:  [message]
 
-    OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings:
-        alias:           orocrm_case_mailbox_process_settings
-        search_template: OroCRMCaseBundle:CaseMailboxProcessSettings:searchResult.html.twig
+    Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings:
+        alias:           oro_case_mailbox_process_settings
+        search_template: OroCaseBundle:CaseMailboxProcessSettings:searchResult.html.twig

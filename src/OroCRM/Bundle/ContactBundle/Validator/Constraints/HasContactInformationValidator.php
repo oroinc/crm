@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Validator\Constraints;
+namespace Oro\Bundle\ContactBundle\Validator\Constraints;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class HasContactInformationValidator extends ConstraintValidator
 {
@@ -33,7 +33,7 @@ class HasContactInformationValidator extends ConstraintValidator
         if (!$value instanceof Contact) {
             throw new \InvalidArgumentException(sprintf(
                 'Validator expects $value to be instance of "%s"',
-                'OroCRM\Bundle\ContactBundle\Entity\Contact'
+                'Oro\Bundle\ContactBundle\Entity\Contact'
             ));
         }
 
@@ -50,10 +50,10 @@ class HasContactInformationValidator extends ConstraintValidator
             [
                 '%fields%' => sprintf(
                     '%s, %s, %s or %s',
-                    $this->translator->trans('orocrm.contact.first_name.label'),
-                    $this->translator->trans('orocrm.contact.last_name.label'),
-                    $this->translator->trans('orocrm.contact.emails.label'),
-                    $this->translator->trans('orocrm.contact.phones.label')
+                    $this->translator->trans('oro.contact.first_name.label'),
+                    $this->translator->trans('oro.contact.last_name.label'),
+                    $this->translator->trans('oro.contact.emails.label'),
+                    $this->translator->trans('oro.contact.phones.label')
                 ),
             ]
         );

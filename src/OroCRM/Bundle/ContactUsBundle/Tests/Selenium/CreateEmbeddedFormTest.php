@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium;
+namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
@@ -8,7 +8,7 @@ use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
 /**
  * Class CreateEmbeddedFormTest
  *
- * @package OroCRM\Bundle\ContactUsBundle\Tests\Selenium
+ * @package Oro\Bundle\ContactUsBundle\Tests\Selenium
  */
 class CreateEmbeddedFormTest extends Selenium2TestCase
 {

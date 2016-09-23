@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class RFMAwareStub implements RFMAwareInterface
 {

@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Functional\EventListner;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListner;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 /**
  * @outputBuffering enabled
@@ -20,7 +19,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient();
-        $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
+        $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
     /**

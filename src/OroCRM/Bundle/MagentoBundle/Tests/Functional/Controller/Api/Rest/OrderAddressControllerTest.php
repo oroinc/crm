@@ -1,11 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 
 /**
  * @outputBuffering enabled
@@ -19,7 +18,7 @@ class OrderAddressControllerTest extends WebTestCase
 
         $this->loadFixtures(
             array(
-                'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
             )
         );
     }

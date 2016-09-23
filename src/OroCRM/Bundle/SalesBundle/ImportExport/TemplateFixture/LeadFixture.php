@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
+namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -17,7 +17,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
      */
     public function getEntityClass()
     {
-        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+        return 'Oro\Bundle\SalesBundle\Entity\Lead';
     }
 
     /**
@@ -43,9 +43,9 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $contactRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channelRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channelRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
@@ -79,7 +79,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setJobTitle('Manager');
                 $entity->addPhone(new LeadPhone('585-255-1127'));
                 $entity->addPhone(new LeadPhone('978-242-1314'));
-                $entity->setWebsite('http://orocrm.com');
+                $entity->setWebsite('http://oro.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');
 

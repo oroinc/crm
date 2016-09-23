@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Autocomplete;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
 class SearchElement
 {

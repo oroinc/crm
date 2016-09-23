@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 
 class LoadPriorityData extends AbstractTranslatableEntityFixture
@@ -27,7 +27,7 @@ class LoadPriorityData extends AbstractTranslatableEntityFixture
      */
     protected function loadEntities(ObjectManager $manager)
     {
-        $priorityRepository = $manager->getRepository('OroCRMCaseBundle:CasePriority');
+        $priorityRepository = $manager->getRepository('OroCaseBundle:CasePriority');
 
         $translationLocales = $this->getTranslationLocales();
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Command;
+namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 
 /**
  * @dbIsolation
@@ -13,7 +13,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], [], true);
-        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
+        $this->loadFixtures(['Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
     }
 
     /**

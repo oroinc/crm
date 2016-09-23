@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Model\Data\Transformer;
 
 use Oro\Bundle\ChartBundle\Model\Data\ArrayData;
 use Oro\Bundle\ChartBundle\Model\Data\MappedData;
-use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
-use OroCRM\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer;
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
+use Oro\Bundle\CampaignBundle\Model\Data\Transformer\MultiLineDataTransformer;
 
 class MultiLineDataTransformerTest extends \PHPUnit_Framework_TestCase
 {

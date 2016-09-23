@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Provider;
 
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
-use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
-use OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
+use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
+use Oro\Bundle\CampaignBundle\Transport\TransportInterface;
+use Oro\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
 
 class TransportStub implements TransportInterface, VisibilityTransportInterface
 {

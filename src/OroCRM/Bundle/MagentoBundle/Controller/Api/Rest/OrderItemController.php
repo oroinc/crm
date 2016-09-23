@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
+namespace Oro\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -17,10 +17,9 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Manager\OrderApiEntityManager;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
 /**
  * @NamePrefix("oro_api_")
@@ -32,7 +31,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      */
     public function getManager()
     {
-        return $this->get('orocrm_magento.order_item.manager.api');
+        return $this->get('oro_magento.order_item.manager.api');
     }
 
     /**
@@ -40,7 +39,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.order_item.api');
+        return $this->get('oro_magento.form.order_item.api');
     }
 
     /**
@@ -48,7 +47,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.order_item');
+        return $this->get('oro_magento.form.handler.order_item');
     }
 
     /**
@@ -59,10 +58,10 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_item_create",
+     *      id="oro_magento_order_item_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="OroCRMMagentoBundle:OrderItem"
+     *      class="OroMagentoBundle:OrderItem"
      * )
      * @param int $orderId
      *
@@ -101,7 +100,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *      description="Get order item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      *
      * @return Response
      */
@@ -122,7 +121,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *      description="Get all order items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_magento_order_view")
+     * @AclAncestor("oro_magento_order_view")
      *
      * @param int $orderId
      *
@@ -149,10 +148,10 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_item_update",
+     *      id="oro_magento_order_item_update",
      *      type="entity",
      *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:OrderItem"
+     *      class="OroMagentoBundle:OrderItem"
      * )
      * @return Response
      */
@@ -184,10 +183,10 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_magento_order_item_delete",
+     *      id="oro_magento_order_item_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMMagentoBundle:OrderItem"
+     *      class="OroMagentoBundle:OrderItem"
      * )
      * @return Response
      */
@@ -220,6 +219,6 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      */
     protected function getOrderManager()
     {
-        return $this->get('orocrm_magento.order.manager.api');
+        return $this->get('oro_magento.order.manager.api');
     }
 }

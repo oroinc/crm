@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -10,7 +10,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class CustomerGroupSelectType extends AbstractType
 {
-    const NAME = 'orocrm_magento_customer_group_select';
+    const NAME = 'oro_magento_customer_group_select';
 
     /**
      * @var SecurityFacade
@@ -40,7 +40,7 @@ class CustomerGroupSelectType extends AbstractType
                 'autocomplete_alias' => 'magento_customer_group',
                 'grid_name' => 'magento-customers-group-by-channel-grid',
                 'configs' => [
-                    'placeholder' => 'orocrm.magento.customergroup.placeholder'
+                    'placeholder' => 'oro.magento.customergroup.placeholder'
                 ]
             ]
         );

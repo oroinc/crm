@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM;
+namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -52,7 +52,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
 
         $fileName = $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
+            ->locateResource('@OroDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
 
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse(file_get_contents($fileName));

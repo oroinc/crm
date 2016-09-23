@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Model;
+namespace Oro\Bundle\ContactBundle\Model;
 
 class ExtendGroup
 {

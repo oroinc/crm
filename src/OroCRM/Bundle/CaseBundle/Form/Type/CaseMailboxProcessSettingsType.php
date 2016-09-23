@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Form\Type;
+namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 
@@ -12,10 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
-
-use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
-use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
 class CaseMailboxProcessSettingsType extends AbstractType
 {
@@ -32,7 +31,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_case_mailbox_process_settings';
+        return 'oro_case_mailbox_process_settings';
     }
 
     /**
@@ -41,7 +40,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings',
+            'data_class' => 'Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings',
         ]);
     }
 
@@ -55,7 +54,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
             'oro_user_organization_acl_select',
             [
                 'required'    => true,
-                'label'       => 'orocrm.case.caseentity.owner.label',
+                'label'       => 'oro.case.caseentity.owner.label',
                 'constraints' => [
                     new NotNull(),
                 ],
@@ -65,14 +64,14 @@ class CaseMailboxProcessSettingsType extends AbstractType
             'oro_user_organization_acl_select',
             [
                 'required' => false,
-                'label'    => 'orocrm.case.caseentity.assigned_to.label',
+                'label'    => 'oro.case.caseentity.assigned_to.label',
             ]
         )->add(
             'status',
             'entity',
             [
-                'label'         => 'orocrm.case.caseentity.status.label',
-                'class'         => 'OroCRMCaseBundle:CaseStatus',
+                'label'         => 'oro.case.caseentity.status.label',
+                'class'         => 'OroCaseBundle:CaseStatus',
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('status')
                         ->orderBy('status.order', 'ASC');
@@ -88,8 +87,8 @@ class CaseMailboxProcessSettingsType extends AbstractType
             'priority',
             'entity',
             [
-                'label'         => 'orocrm.case.caseentity.priority.label',
-                'class'         => 'OroCRMCaseBundle:CasePriority',
+                'label'         => 'oro.case.caseentity.priority.label',
+                'class'         => 'OroCaseBundle:CasePriority',
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('priority')
                         ->orderBy('priority.order', 'ASC');

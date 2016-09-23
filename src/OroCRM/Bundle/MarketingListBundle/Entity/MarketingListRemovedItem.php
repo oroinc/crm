@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Entity;
+namespace Oro\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Marketing list removed items.
  *
- * @ORM\Table(name="orocrm_ml_item_rm",  uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="orocrm_ml_list_ent_rm_unq")
+ * @ORM\Table(name="oro_ml_item_rm",  uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="oro_ml_list_ent_rm_unq")
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
@@ -36,7 +36,7 @@ class MarketingListRemovedItem implements MarketingListStateItemInterface
      * @var MarketingList
      *
      * @ORM\ManyToOne(
-     *     targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList", inversedBy="marketingListRemovedItems"
+     *     targetEntity="Oro\Bundle\MarketingListBundle\Entity\MarketingList", inversedBy="marketingListRemovedItems"
      * )
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */

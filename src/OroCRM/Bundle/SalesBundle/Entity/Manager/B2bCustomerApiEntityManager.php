@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Entity\Manager;
+namespace Oro\Bundle\SalesBundle\Entity\Manager;
 
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;

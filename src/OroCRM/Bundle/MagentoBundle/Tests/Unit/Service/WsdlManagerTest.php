@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Guzzle\Http\ClientInterface;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
+use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 
 class WsdlManagerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +56,7 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->requestChannelProvider
-            = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider')
+            = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider')
             ->disableOriginalConstructor()->getMock();
 
         $this->entity  = new B2bCustomer();

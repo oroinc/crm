@@ -1,4 +1,4 @@
-# OroCRMAnalyticsBundle
+# OroAnalyticsBundle
 
 The Bundle is aimed for analytical tools and means of the analysis results visualisation. 
 
@@ -12,7 +12,7 @@ Out of the box, the bundle is used to implement calculation and realization of (
 
 You can also implement additional metric builders.
 
-## OroCRMAnalyticsBundle Interfaces
+## OroAnalyticsBundle Interfaces
 
 The following interfaces defined in the bundle can be implemented for the aims of analysis:
 
@@ -21,14 +21,14 @@ The following interfaces defined in the bundle can be implemented for the aims o
 - `RFMAwareInterface` : must be implemented for an entity of a Channel to enable processing of its RFM metrics.  
 - `RFMAwareTrait`: can be used for an entity of a Channel to extend it with custom fields to
   keep RFM scores.
-- `RFMProviderInterface`: must be implemented for a provider function (added to the service container with `orocrm_analytics.builder.rfm` tag) for the provider to pass the metric values to the metric builder.
+- `RFMProviderInterface`: must be implemented for a provider function (added to the service container with `oro_analytics.builder.rfm` tag) for the provider to pass the metric values to the metric builder.
   
-## OroCRMAnalyticsBundle Visualization Tool Settings
+## OroAnalyticsBundle Visualization Tool Settings
 
 Settings of the tools designed for visualization of analytical results are kept in the bundle. 
 Currently, the only tool implemented enables users to define a sets of threashold values, such that all the RFM metrics within a specific interval are assigned a specific score that will be saved in the dedicated custom fields. Representation of the form in the UI and the fields available can be configured from the Analytics Bundle.
 
-## OroCRMAnalyticsBundle Recalculation Command 
+## OroAnalyticsBundle Recalculation Command 
 
 Recalculation is performed with **oro:cron:analytic:calculate** cron command.
 
@@ -41,7 +41,7 @@ You can use the "Option" to specify `ids` and calculate all specified metrics wi
 Please note that 'ids' can be defined only if a `channel` is defined.
 
 
-## RFM Metrics Collection and Processing with OroCRM
+## RFM Metrics Collection and Processing with Oro
 
 RFM are customer value assessment by Recency, Frequency and Monetary metrics.
 The metrics are configured at a Channel level and can be used to define columns, conditions and filters of segments and to create reports.
@@ -55,7 +55,7 @@ In order to collect RFM values of an entity:
     - implement `RFMAwareTrait` trait : now the entity has fields to save the scores into
     - define providers for each metric of the entity to be collected and implement `RFMProviderInterface` for each provider : now you have defined the functions to collect the metrics
 
-- Add the providers to the service container with `orocrm_analytics.builder.rfm` tag: now they can be used by the system
+- Add the providers to the service container with `oro_analytics.builder.rfm` tag: now they can be used by the system
 
 As soon as `RFMAwareInterface` is implemented, the  RFM Segment Configuration section will appear in the “Edit” form of the Channel. 
 Define the intervals for the scores for each of the metrics available.

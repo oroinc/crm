@@ -1,12 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Command;
+namespace Oro\Bundle\ChannelBundle\Tests\Functional\Command;
 
 use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 
 /**
  * @outputBuffering false
@@ -22,7 +21,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient();
-        $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData']);
+        $this->loadFixtures(['Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData']);
     }
 
     /**
@@ -75,7 +74,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
         /** @var LifetimeValueAverageAggregationRepository $repo */
         $repo = $this->getContainer()
             ->get('doctrine')
-            ->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
+            ->getRepository('OroChannelBundle:LifetimeValueAverageAggregation');
 
         $fileName                = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture'
             . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'expected_results.yml';
@@ -116,7 +115,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
     {
         if (null === $this->channelMap) {
             $items = $this->getContainer()->get('doctrine')
-                ->getRepository('OroCRMChannelBundle:Channel')
+                ->getRepository('OroChannelBundle:Channel')
                 ->createQueryBuilder('c')
                 ->select('c.id, c.name')
                 ->getQuery()

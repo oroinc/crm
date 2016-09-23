@@ -1,18 +1,18 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Selenium;
+namespace Oro\Bundle\CampaignBundle\Tests\Selenium;
 
 use Oro\Bundle\ReportBundle\Tests\Selenium\Pages\Reports;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
-use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
+use Oro\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
 
 /**
  * Class Campaign Test
  *
- * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium
+ * @package Oro\Bundle\CampaignBundle\Tests\Selenium
  * {@inheritdoc}
  */
 class CampaignManagementTest extends Selenium2TestCase
@@ -26,7 +26,7 @@ class CampaignManagementTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+        $login->openChannels('Oro\Bundle\ChannelBundle')
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
@@ -53,7 +53,7 @@ class CampaignManagementTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Campaigns $login */
-        $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
+        $login->openCampaigns('Oro\Bundle\CampaignBundle')
             ->add()
             ->assertTitle('Create Campaign - Campaigns - Marketing')
             ->setName($campaignCode)
@@ -78,7 +78,7 @@ class CampaignManagementTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Leads $login */
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
+        $login->openLeads('Oro\Bundle\SalesBundle')
             ->add()
             ->setName($leadName)
             ->setFirstName($leadName)
@@ -100,11 +100,11 @@ class CampaignManagementTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var SalesFunnels $login */
-        $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
+        $login->openSalesFunnels('Oro\Bundle\SalesBundle')
             ->startFromLead()
             ->selectEntity('Lead', $leadName)
             ->submit()
-            ->openWorkflow('OroCRM\Bundle\SalesBundle')
+            ->openWorkflow('Oro\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
             ->setCompanyName('Test company name_'.mt_rand())

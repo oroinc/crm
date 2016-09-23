@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerAwareTrait;
@@ -11,13 +11,12 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
 use Oro\Bundle\BatchBundle\Step\StepExecutionRestoreInterface;
-
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class ProxyEntityWriter implements
     ItemWriterInterface,

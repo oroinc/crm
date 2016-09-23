@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
@@ -17,8 +17,7 @@ use Oro\Bundle\EntityConfigBundle\Form\Type\ConfigScopeType;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\PropertyConfigContainer;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * Manage Opportunity statuses from the System Config
@@ -26,7 +25,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  */
 class OpportunityStatusConfigType extends AbstractType
 {
-    const NAME = 'orocrm_sales_opportunity_status_config';
+    const NAME = 'oro_sales_opportunity_status_config';
 
     /** @var EntityConfigManager */
     protected $entityConfigManager;
@@ -78,9 +77,9 @@ class OpportunityStatusConfigType extends AbstractType
         // replace items type with the extended form that includes 'probability'
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = [
-            'type' => 'orocrm_sales_opportunity_status_enum_value',
-            'label' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.label',
-            'tooltip' => 'orocrm.sales.system_configuration.groups.opportunity_status_probabilities.options.tooltip',
+            'type' => 'oro_sales_opportunity_status_enum_value',
+            'label' => 'oro.sales.system_configuration.groups.opportunity_status_probabilities.options.label',
+            'tooltip' => 'oro.sales.system_configuration.groups.opportunity_status_probabilities.options.tooltip',
         ];
 
         $builder->add(

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,14 +8,13 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 /**
  * Class MagentoSoapTransport
  *
- * @package OroCRM\Bundle\MagentoBundle\Entity
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
+ * @package Oro\Bundle\MagentoBundle\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport

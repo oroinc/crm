@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -20,7 +20,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 class TrackingEventsDataGridListener
 {
     const ASSOCIATION_KIND = 'association';
-    const CUSTOMER_CLASS_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+    const CUSTOMER_CLASS_NAME = 'Oro\Bundle\MagentoBundle\Entity\Customer';
 
     /**
      * @param PreBuild $event

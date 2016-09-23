@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Validator;
+namespace Oro\Bundle\ContactUsBundle\Validator;
 
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 
 class ContactRequestCallbackValidator
 {

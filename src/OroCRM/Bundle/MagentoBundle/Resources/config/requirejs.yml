@@ -1,5 +1,5 @@
 config:
     paths:
-        'orocrm/magento/soap-checker': 'bundles/orocrmmagento/js/soap-checker.js'
-        'orocrmmagento/js/app/components/subscription-manager': 'bundles/orocrmmagento/js/app/components/subscription-manager.js'
-        'orocrmmagento/js/app/components/customer-registration-manager': 'bundles/orocrmmagento/js/app/components/customer-registration-manager.js'
+        'orocrm/magento/soap-checker': 'bundles/oromagento/js/soap-checker.js'
+        'oromagento/js/app/components/subscription-manager': 'bundles/oromagento/js/app/components/subscription-manager.js'
+        'oromagento/js/app/components/customer-registration-manager': 'bundles/oromagento/js/app/components/customer-registration-manager.js'

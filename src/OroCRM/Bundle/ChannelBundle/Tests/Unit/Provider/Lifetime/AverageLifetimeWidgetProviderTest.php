@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
-use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
+use Oro\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
 
 class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,10 +61,10 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates)
     {
-        $channelRepo = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
+        $channelRepo = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()->getMock();
         $averageRepo = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository')
             ->disableOriginalConstructor()->getMock();
 
         $channelRepo->expects($this->once())->method('getAvailableChannelNames')
@@ -79,8 +78,8 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['OroCRMChannelBundle:Channel', null, $channelRepo],
-                        ['OroCRMChannelBundle:LifetimeValueAverageAggregation', null, $averageRepo]
+                        ['OroChannelBundle:Channel', null, $channelRepo],
+                        ['OroChannelBundle:LifetimeValueAverageAggregation', null, $averageRepo]
                     ]
                 )
             );

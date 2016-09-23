@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Autocomplete;
+namespace Oro\Bundle\ChannelBundle\Autocomplete;
 
 use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;

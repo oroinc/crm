@@ -9,7 +9,7 @@
         $(function () {
             var reloadStatistics = function () {
                 $.ajax({
-                    url: routing.generate('orocrm_activity_contact_metrics', {
+                    url: routing.generate('oro_activity_contact_metrics', {
                         entityClass: '{{ entityClassName }}',
                         entityId: '{{ entity.id }}'
                     }),
@@ -43,7 +43,7 @@
 </script>
 
 {% macro last_contacted_time(data, entity) %}
-    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+    {% set activity_scope_class = 'Oro\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
 
     {% set last_contact_date_key     = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
     {% set last_contact_date_in_key  = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
@@ -62,19 +62,19 @@
     <ul class="inline">
         {% if  resource_granted('VIEW', entity, contact_count_key) %}
             <li>
-            {{ 'orocrm.activity_contact.info_title_times'|trans({
+            {{ 'oro.activity_contact.info_title_times'|trans({
                 '{{ total_contacted }}': data[contact_count_key]|default(0)
             })|raw }}
             </li>
         {% endif %}
         <li style="padding-right:0">
-        {{ 'orocrm.activity_contact.info_title_last'|trans({
+        {{ 'oro.activity_contact.info_title_last'|trans({
             '{{ direction }}': direction,
             '{{ last_datetime }}': last_datetime
         })|raw }}
         </li>
     </ul>
     {% else %}
-        {{ 'orocrm.activity_contact.info_title_no_data'|trans }}
+        {{ 'oro.activity_contact.info_title_no_data'|trans }}
     {% endif %}
 {% endmacro %}

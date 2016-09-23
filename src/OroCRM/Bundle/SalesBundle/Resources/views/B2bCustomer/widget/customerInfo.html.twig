@@ -6,20 +6,20 @@
 {% if leadClassName in channel.entities %}
     {% set tabs = tabs|merge([
         {
-            'alias': 'orocrm_sales_b2bcustomer_leads' ~ uniqueSuffix,
+            'alias': 'oro_sales_b2bcustomer_leads' ~ uniqueSuffix,
             'widgetType': 'block',
-            'label': 'orocrm.sales.b2bcustomer.leads.label'|trans,
-            'url': path('orocrm_sales_b2bcustomer_widget_leads', {'id': customer.id})
+            'label': 'oro.sales.b2bcustomer.leads.label'|trans,
+            'url': path('oro_sales_b2bcustomer_widget_leads', {'id': customer.id})
         }
     ]) %}
 {% endif %}
 {% if opportunityClassName in channel.entities %}
     {% set tabs = tabs|merge([
         {
-            'alias': 'orocrm_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
+            'alias': 'oro_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
             'widgetType': 'block',
-            'label': 'orocrm.sales.b2bcustomer.opportunities.label'|trans,
-            'url': path('orocrm_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
+            'label': 'oro.sales.b2bcustomer.opportunities.label'|trans,
+            'url': path('oro_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
         }
     ]) %}
 {% endif %}
@@ -29,22 +29,22 @@
 <div class="widget-content row-fluid {% if hasTabs %}row-fluid-divider{% endif %}">
     <div class="responsive-cell form-horizontal">
         {% set customer_name_link %}
-            <a href="{{ path('orocrm_sales_b2bcustomer_view', {'id':customer.id}) }}">
+            <a href="{{ path('oro_sales_b2bcustomer_view', {'id':customer.id}) }}">
                 {{ customer.name|escape }}
             </a>
         {% endset %}
-        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.name.label'|trans, customer_name_link) }}
+        {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.name.label'|trans, customer_name_link) }}
 
-        {%- if resource_granted('orocrm_contact_view') and customer.contact -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': customer.contact.id}) ~ '">' ~ customer.contact|oro_format_name|escape ~ '</a>' %}
+        {%- if resource_granted('oro_contact_view') and customer.contact -%}
+            {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': customer.contact.id}) ~ '">' ~ customer.contact|oro_format_name|escape ~ '</a>' %}
         {%- else -%}
             {% set contactView = customer.contact ? customer.contact|oro_format_name : '' %}
         {%- endif -%}
 
-        {{ UI.renderHtmlProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
+        {{ UI.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
 
-        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress)) }}
-        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(customer.billingAddress)) }}
+        {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress)) }}
+        {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(customer.billingAddress)) }}
     </div>
 
     {% if hasTabs %}

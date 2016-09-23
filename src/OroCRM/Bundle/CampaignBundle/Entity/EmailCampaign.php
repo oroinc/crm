@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Entity;
+namespace Oro\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,13 +8,13 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaign;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use Oro\Bundle\CampaignBundle\Model\ExtendEmailCampaign;
+use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository")
  * @ORM\Table(
- *      name="orocrm_campaign_email",
+ *      name="oro_campaign_email",
  *      indexes={@ORM\Index(name="cmpgn_email_owner_idx", columns={"owner_id"})}
  * )
  * @ORM\HasLifecycleCallbacks()
@@ -125,7 +125,7 @@ class EmailCampaign extends ExtendEmailCampaign
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MarketingListBundle\Entity\MarketingList")
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $marketingList;
@@ -149,7 +149,7 @@ class EmailCampaign extends ExtendEmailCampaign
      * @var TransportSettings
      *
      * @ORM\OneToOne(
-     *     targetEntity="OroCRM\Bundle\CampaignBundle\Entity\TransportSettings",
+     *     targetEntity="Oro\Bundle\CampaignBundle\Entity\TransportSettings",
      *     cascade={"all"},
      *     orphanRemoval=true
      * )

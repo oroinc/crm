@@ -1,14 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
+namespace Oro\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 
 /**
  * Class CreateAccountTest
  *
- * @package OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts
+ * @package Oro\Bundle\AccountBundle\Tests\Selenium\Accounts
  */
 class CreateAccountTest extends Selenium2TestCase
 {
@@ -21,7 +21,7 @@ class CreateAccountTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->assertTitle('All - Accounts - Customers')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')
@@ -43,7 +43,7 @@ class CreateAccountTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->add()
             ->setName($accountName . '_autocomplete_test')
             ->setOwner('admin')
@@ -64,7 +64,7 @@ class CreateAccountTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->assertTitle("{$accountName} - Accounts - Customers")
@@ -87,7 +87,7 @@ class CreateAccountTest extends Selenium2TestCase
     {
         $login = $this->login();
         /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+        $login->openAccounts('Oro\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->delete()
@@ -95,7 +95,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->assertTitle('All - Accounts - Customers');
 
 
-        $login->openAccounts('OroCRM\Bundle\AccountBundle');
+        $login->openAccounts('Oro\Bundle\AccountBundle');
         if ($login->getRowsCount() > 0) {
             $login->filterBy('Account name', $accountName)
                 ->assertNoDataMessage('No account was found to match your search');

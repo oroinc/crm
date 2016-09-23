@@ -1,17 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\CaseBundle\Entity;
+namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-
-use OroCRM\Bundle\CaseBundle\Model\ExtendCaseComment;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\CaseBundle\Model\ExtendCaseComment;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_case_comment")
+ * @ORM\Table(name="oro_case_comment")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
@@ -49,7 +48,7 @@ class CaseComment extends ExtendCaseComment
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;

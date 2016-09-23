@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
 class NewsletterSubscriberExportWriter extends AbstractExportWriter
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -51,7 +51,7 @@ class CustomerAddressApiType extends AbstractType
             ]
         );
 
-        $builder->add('owner', 'orocrm_customer_select');
+        $builder->add('owner', 'oro_customer_select');
 
         $builder->add(
             'types',
@@ -75,7 +75,7 @@ class CustomerAddressApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'OroCRM\Bundle\MagentoBundle\Entity\Address',
+                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Address',
                 'csrf_protection' => false
             ]
         );

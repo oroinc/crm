@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
+use Oro\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
-    const GRID_PREFIX = 'orocrm_marketing_list_items_grid_';
+    const GRID_PREFIX = 'oro_marketing_list_items_grid_';
     /** @deprecated since 1.10. Use config->getName() instead */
     const GRID_NAME_OFFSET = '[name]';
 

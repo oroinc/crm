@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 
 use Symfony\Component\Form\FormEvents;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\OrderApiFormSubscriber;
 
 class OrderApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,7 +63,7 @@ class OrderApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
      */
     public function preSetProvider()
     {
-        $order = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Order')
+        $order = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Order')
             ->disableOriginalConstructor()
             ->getMock();
 

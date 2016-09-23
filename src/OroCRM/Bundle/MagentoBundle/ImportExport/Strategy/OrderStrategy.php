@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
+namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\AddressBundle\Entity\Region;
-
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends AbstractImportStrategy
 {
@@ -73,7 +72,7 @@ class OrderStrategy extends AbstractImportStrategy
     {
         if (!$customer || !$customer->getId()) {
             $customer = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                'Oro\Bundle\MagentoBundle\Entity\Customer',
                 [
                     'email' => $order->getCustomerEmail(),
                     'channel' => $order->getChannel()
@@ -199,9 +198,9 @@ class OrderStrategy extends AbstractImportStrategy
     protected function findRegionEntity($entity, $existingEntity)
     {
         if (!$existingEntity && $entity instanceof Region) {
-            /** @var \OroCRM\Bundle\MagentoBundle\Entity\Region $magentoRegion */
+            /** @var \Oro\Bundle\MagentoBundle\Entity\Region $magentoRegion */
             $magentoRegion = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Region',
+                'Oro\Bundle\MagentoBundle\Entity\Region',
                 [
                     'regionId' => $entity->getCode()
                 ]
@@ -229,7 +228,7 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
-        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\Customer', true)
+        if (is_a($entityName, 'Oro\Bundle\MagentoBundle\Entity\Customer', true)
             && empty($identityValues['originId'])
             && $this->existingEntity
         ) {

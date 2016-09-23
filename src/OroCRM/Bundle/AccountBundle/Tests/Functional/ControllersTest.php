@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Tests\Functional;
+namespace Oro\Bundle\AccountBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
@@ -23,18 +23,18 @@ class ControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_account_index'));
+        $this->client->request('GET', $this->getUrl('oro_account_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->getUrl('orocrm_account_create'));
+        $crawler = $this->client->request('GET', $this->getUrl('oro_account_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_account_form[name]'] = 'Account_name';
-        $form['orocrm_account_form[owner]'] = 1;
+        $form['oro_account_form[name]'] = 'Account_name';
+        $form['oro_account_form[owner]'] = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -60,11 +60,11 @@ class ControllersTest extends WebTestCase
         $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_account_update', array('id' => $result['id']))
+            $this->getUrl('oro_account_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_account_form[name]'] = 'Account_name_update';
+        $form['oro_account_form[name]'] = 'Account_name_update';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -83,7 +83,7 @@ class ControllersTest extends WebTestCase
     {
         $crawler = $this->client->request(
             'GET',
-            $this->getUrl('orocrm_account_view', array('id' => $id))
+            $this->getUrl('oro_account_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
@@ -99,7 +99,7 @@ class ControllersTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_account_widget_contacts_info',
+                'oro_account_widget_contacts_info',
                 array('id' => $id, '_widgetContainer' => 'dialog')
             )
         );
@@ -139,7 +139,7 @@ class ControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_account_view', array('id' => $id))
+            $this->getUrl('oro_account_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();

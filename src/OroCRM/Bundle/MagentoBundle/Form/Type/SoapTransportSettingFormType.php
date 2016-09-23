@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Form\Type;
+namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,13 +10,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
 
 class SoapTransportSettingFormType extends AbstractType
 {
-    const NAME = 'orocrm_magento_soap_transport_setting_form_type';
+    const NAME = 'oro_magento_soap_transport_setting_form_type';
 
     /** @var TransportInterface */
     protected $transport;
@@ -52,18 +51,18 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->add(
             'wsdlUrl',
             'text',
-            ['label' => 'orocrm.magento.magentosoaptransport.wsdl_url.label', 'required' => true]
+            ['label' => 'oro.magento.magentosoaptransport.wsdl_url.label', 'required' => true]
         );
         $builder->add(
             'apiUser',
             'text',
-            ['label' => 'orocrm.magento.magentosoaptransport.api_user.label', 'required' => true]
+            ['label' => 'oro.magento.magentosoaptransport.api_user.label', 'required' => true]
         );
         $builder->add(
             'apiKey',
             'password',
             [
-                'label'       => 'orocrm.magento.magentosoaptransport.api_key.label',
+                'label'       => 'oro.magento.magentosoaptransport.api_key.label',
                 'required'    => true,
                 'constraints' => [new NotBlank()]
             ]
@@ -71,14 +70,14 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->add(
             'isWsiMode',
             'checkbox',
-            ['label' => 'orocrm.magento.magentosoaptransport.is_wsi_mode.label', 'required' => false]
+            ['label' => 'oro.magento.magentosoaptransport.is_wsi_mode.label', 'required' => false]
         );
         $builder->add(
             'guestCustomerSync',
             'checkbox',
             [
-                'label' => 'orocrm.magento.magentosoaptransport.guest_customer_sync.label',
-                'tooltip' => 'orocrm.magento.magentosoaptransport.guest_customer_sync.tooltip',
+                'label' => 'oro.magento.magentosoaptransport.guest_customer_sync.label',
+                'tooltip' => 'oro.magento.magentosoaptransport.guest_customer_sync.tooltip',
                 'required' => false
             ]
         );
@@ -86,24 +85,24 @@ class SoapTransportSettingFormType extends AbstractType
             'syncStartDate',
             'oro_date',
             [
-                'label'      => 'orocrm.magento.magentosoaptransport.sync_start_date.label',
+                'label'      => 'oro.magento.magentosoaptransport.sync_start_date.label',
                 'required'   => true,
-                'tooltip'    => 'orocrm.magento.magentosoaptransport.sync_start_date.tooltip',
+                'tooltip'    => 'oro.magento.magentosoaptransport.sync_start_date.tooltip',
                 'empty_data' => new \DateTime('2007-01-01', new \DateTimeZone('UTC'))
             ]
         );
         $builder->add(
             'check',
-            'orocrm_magento_soap_transport_check_button',
+            'oro_magento_soap_transport_check_button',
             [
-                'label' => 'orocrm.magento.magentosoaptransport.check_connection.label'
+                'label' => 'oro.magento.magentosoaptransport.check_connection.label'
             ]
         );
         $builder->add(
             'websiteId',
-            'orocrm_magento_website_select',
+            'oro_magento_website_select',
             [
-                'label'    => 'orocrm.magento.magentosoaptransport.website_id.label',
+                'label'    => 'oro.magento.magentosoaptransport.website_id.label',
                 'required' => true
             ]
         );
@@ -122,7 +121,7 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->add(
             'adminUrl',
             'text',
-            ['label' => 'orocrm.magento.magentosoaptransport.admin_url.label', 'required' => false]
+            ['label' => 'oro.magento.magentosoaptransport.admin_url.label', 'required' => false]
         );
     }
 

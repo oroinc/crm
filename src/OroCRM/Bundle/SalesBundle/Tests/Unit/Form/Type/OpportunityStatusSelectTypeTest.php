@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-
-use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType;
 
 class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\UIBundle\Tests\Unit\DependencyInjection\Compiler;
 
-use OroCRM\Bundle\CampaignBundle\DependencyInjection\Compiler\TransportPass;
+use Oro\Bundle\CampaignBundle\DependencyInjection\Compiler\TransportPass;
 use Symfony\Component\DependencyInjection\Reference;
 
 class TransportPassTest extends \PHPUnit_Framework_TestCase

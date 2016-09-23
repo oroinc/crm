@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Datagrid;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Datagrid;
 
 use Symfony\Component\Config\Definition\Processor;
 
-use OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
+use Oro\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtensionConfiguration;
 
 class ChannelLimitationExtensionConfigurationTest extends \PHPUnit_Framework_TestCase
 {

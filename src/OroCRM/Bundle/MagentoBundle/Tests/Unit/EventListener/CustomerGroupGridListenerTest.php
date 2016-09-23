@@ -3,8 +3,7 @@
 namespace Oro\Bundle\CalendarBundle\Tests\Unit\EventListener\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
-
-use OroCRM\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener;
+use Oro\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener;
 
 class CustomerGroupGridListenerTest extends \PHPUnit_Framework_TestCase
 {

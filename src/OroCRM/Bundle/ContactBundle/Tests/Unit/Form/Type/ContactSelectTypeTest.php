@@ -1,9 +1,9 @@
 <?php
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Type;
+namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
 
 class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,6 +37,6 @@ class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_contact_select', $this->type->getName());
+        $this->assertEquals('oro_contact_select', $this->type->getName());
     }
 }

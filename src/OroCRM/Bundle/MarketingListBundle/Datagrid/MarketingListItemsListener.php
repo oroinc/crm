@@ -1,14 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
+namespace Oro\Bundle\MarketingListBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
-
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
+use Oro\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
 {
@@ -67,7 +66,7 @@ class MarketingListItemsListener
     }
 
     /**
-     * Accept orocrm_marketing_list_items_grid_* grids only in case when they has mixin to apply.
+     * Accept oro_marketing_list_items_grid_* grids only in case when they has mixin to apply.
      *
      * @param string       $gridName
      * @param ParameterBag $parameters

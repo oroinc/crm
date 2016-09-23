@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormBuilder;
 
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
-use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,11 +27,11 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->builder          = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()->getMock();
-        $this->settingsProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
+        $this->settingsProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
 
         $this->channelTypeSubscriber = $this
-            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber')
+            ->getMockBuilder('Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber')
             ->disableOriginalConstructor()->getMock();
 
         $this->settingsProvider->expects($this->any())->method('getSettings')
@@ -63,7 +63,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             [
                 'name'             => 'text',
-                'entities'         => 'orocrm_channel_entities',
+                'entities'         => 'oro_channel_entities',
                 'channelType'      => 'genemu_jqueryselect2_choice',
                 'status'           => 'choice'
             ],
@@ -73,7 +73,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('orocrm_channel_form', $this->type->getName());
+        $this->assertEquals('oro_channel_form', $this->type->getName());
     }
 
     public function testSetDefaultOptions()

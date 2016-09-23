@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Type;
+namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,16 +18,16 @@ class SalesFunnelType extends AbstractType
             ->add(
                 'startDate',
                 'oro_date',
-                array('required' => true, 'label' => 'orocrm.sales.salesfunnel.start_date.label')
+                array('required' => true, 'label' => 'oro.sales.salesfunnel.start_date.label')
             )
             ->add(
                 'dataChannel',
-                'orocrm_channel_select_type',
+                'oro_channel_select_type',
                 array(
                     'required' => true,
-                    'label' => 'orocrm.sales.salesfunnel.data_channel.label',
+                    'label' => 'oro.sales.salesfunnel.data_channel.label',
                     'entities' => [
-                        'OroCRM\\Bundle\\SalesBundle\\Entity\\SalesFunnel'
+                        'Oro\\Bundle\\SalesBundle\\Entity\\SalesFunnel'
                     ],
                 )
             );
@@ -40,7 +40,7 @@ class SalesFunnelType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
                 'cascade_validation' => false,
             )
         );
@@ -59,6 +59,6 @@ class SalesFunnelType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'orocrm_sales_funnel';
+        return 'oro_sales_funnel';
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
+namespace Oro\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType;
+use Oro\Bundle\CampaignBundle\Form\Type\EmailCampaignType;
 use Symfony\Component\Form\FormEvents;
 
 class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
@@ -13,7 +13,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $transportProvider = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider')
+            ->getMockBuilder('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,7 +53,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
     {
         $typeName = $this->type->getName();
         $this->assertInternalType('string', $typeName);
-        $this->assertSame('orocrm_email_campaign', $typeName);
+        $this->assertSame('oro_email_campaign', $typeName);
     }
 
     public function testSetDefaultOptions()
@@ -64,7 +64,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class'         => 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign',
+                    'data_class'         => 'Oro\Bundle\CampaignBundle\Entity\EmailCampaign',
                     'cascade_validation' => true
                 ]
             );

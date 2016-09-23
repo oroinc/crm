@@ -1,15 +1,14 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Form\Handler;
+namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-use OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

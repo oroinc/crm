@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Migrations\Schema\v1_0;
+namespace Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_0;
 
 use Psr\Log\LoggerInterface;
 
@@ -8,8 +8,7 @@ use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 class UpdateConfigQuery extends ParametrizedMigrationQuery
 {

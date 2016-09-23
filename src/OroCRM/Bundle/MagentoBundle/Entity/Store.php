@@ -1,23 +1,22 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Entity;
+namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
-use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
+use Oro\Bundle\MagentoBundle\Model\ExtendStore;
 
 /**
  * Class Store
  *
- * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
+ * @package Oro\Bundle\OroMagentoBundle\Entity
  * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
- *  name="orocrm_magento_store",
+ *  name="oro_magento_store",
  *  indexes={
  *      @ORM\Index(name="idx_website", columns={"website_id"})
  *  },
@@ -71,7 +70,7 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
     /**
      * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Website")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="cascade", nullable=false)
      * @ConfigField(
      *      defaultValues={
