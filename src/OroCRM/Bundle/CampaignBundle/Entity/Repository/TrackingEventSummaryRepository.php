@@ -26,6 +26,7 @@ class TrackingEventSummaryRepository extends EntityRepository
                     'DATE(trackingEvent.loggedAt) as loggedAtDate',
                 ]
             )
+            ->andWhere('trackingEvent.website IS NOT NULL')
             ->andWhere('trackingEvent.code = :trackingEventCode')
             ->andWhere('DATE(trackingEvent.loggedAt) < DATE(:today)')
             ->setParameter('trackingEventCode', $campaign->getCode())
