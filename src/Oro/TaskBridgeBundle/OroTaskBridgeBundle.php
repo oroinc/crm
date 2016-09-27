@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMTaskBundle;
+namespace Oro\TaskBridgeBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

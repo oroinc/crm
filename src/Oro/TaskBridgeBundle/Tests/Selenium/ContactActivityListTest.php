@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMTaskBundle\Tests\Selenium;
+namespace Oro\TaskBridgeBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
