@@ -250,9 +250,9 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'current_step_id' => Type::INTEGER,
         ];
         $sql = <<<SQL
-                UPDATE oro_workflow_item wi
-                SET wi.current_step_id = :current_step_id
-                WHERE wi.id IN (
+                UPDATE oro_workflow_item
+                SET current_step_id = :current_step_id
+                WHERE id IN (
                     SELECT
                         tl.workflow_item_id
                     FROM
