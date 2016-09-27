@@ -6,13 +6,13 @@
 
 Array of emails. 
 
-Format of data: [first@email.com, second@email.com]
+Format of data: [{"email": first@email.com}, {"email": second@email.com}]
 
 #### Update
 
 Array of emails. 
 
-Format of data: [first@email.com, second@email.com]
+Format of data: [{"email": first@email.com}, {"email": second@email.com}]
 
 The data should contain full collection of emails.
 
@@ -20,7 +20,7 @@ The data should contain full collection of emails.
 
 Array of emails. 
 
-Format of data: [first@email.com, second@email.com]
+Format of data: [{"email": first@email.com}, {"email": second@email.com}]
 
 The data should contain full collection of emails.
 
@@ -28,13 +28,13 @@ The data should contain full collection of emails.
 
 Array of phone numbers. 
 
-Format of data: [phonenumber1, phonenumber2]
+Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
 
 #### Update
 
 Array of phone numbers. 
 
-Format of data: [phonenumber1, phonenumber2]
+Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
 
 The data should contain full collection of phones.
 
@@ -42,7 +42,7 @@ The data should contain full collection of phones.
 
 Array of phone numbers. 
 
-Format of data: [phonenumber1, phonenumber2]
+Format of data: [{"phone": phonenumber1}, {"phone": phonenumber2}]
 
 The data should contain full collection of phones.
 
@@ -103,11 +103,11 @@ If was set **primaryPhone** data without **phones** field data and entity phones
 
 ### emails
 
-Array of emails. Format of data: [first@email.com, second@email.com]
+Single value or comma-separated list of emails. Format of data: first@email.com,second@email.com
 
 ### phones
 
-Array of phone numbers. Format of data: [phonenumber1, phonenumber2]
+Single value or comma-separated list of phone numbers. Format of data: phonenumber1,phonenumber2
 
 ### primaryEmail
 
@@ -115,7 +115,7 @@ Primary email address
 
 ### primaryPhone
 
-Primary phone
+Primary phone number
 
 # OroCRM\Bundle\SalesBundle\Entity\Opportunity
 
