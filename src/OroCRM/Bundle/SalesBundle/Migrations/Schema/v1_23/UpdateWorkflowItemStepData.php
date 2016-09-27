@@ -249,12 +249,22 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             'transition'      => Type::STRING,
             'current_step_id' => Type::INTEGER,
         ];
-        $sql = 'UPDATE oro_workflow_item SET current_step_id = :current_step_id WHERE id IN(' .
-                    ' SELECT workflow_item_id FROM oro_workflow_transition_log WHERE id IN(' .
-                        ' SELECT MAX(id) FROM oro_workflow_transition_log ' .
-                        ' GROUP BY workflow_item_id' .
-                    ') AND transition = :transition' .
-               ')';
+        $sql = <<<SQL
+                UPDATE oro_workflow_item wi
+                SET wi.current_step_id = :current_step_id
+                WHERE wi.id IN (
+                    SELECT
+                        tl.workflow_item_id
+                    FROM
+                        oro_workflow_transition_log tl
+                    WHERE tl.id =
+                          (
+                            SELECT MAX(id)
+                            FROM oro_workflow_transition_log
+                            WHERE tl.workflow_item_id = workflow_item_id
+                           ) AND tl.transition = :transition
+                )
+SQL;
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
             $this->connection->executeUpdate($sql, $params, $types);
