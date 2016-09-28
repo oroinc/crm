@@ -46,8 +46,6 @@ class OroCRMCallBridgeBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if (!$this->container->hasParameter('installed') || !$this->container->getParameter('installed')) {
-            OroCRMCallBridgeBundle::addCallActivityRelations($schema, $this->activityExtension);
-        }
+        OroCRMCallBridgeBundle::addCallActivityRelations($schema, $this->activityExtension);
     }
 }
