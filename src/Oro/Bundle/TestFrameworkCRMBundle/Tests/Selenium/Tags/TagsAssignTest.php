@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkBundle\Tests\Selenium\Tags;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium\Tags;
 
 use Oro\Bundle\TagBundle\Tests\Selenium\Pages\Tags;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;

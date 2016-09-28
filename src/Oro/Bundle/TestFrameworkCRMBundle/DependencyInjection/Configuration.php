@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkBundle\DependencyInjection;
+namespace Oro\Bundle\TestFrameworkCRMBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

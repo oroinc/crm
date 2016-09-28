@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkBundle\Tests\DataFixtures;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\DataFixtures;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

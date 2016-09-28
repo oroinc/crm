@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestsBundle\Tests\Selenium;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\SecurityBundle\Tests\Selenium\Pages\AclCheck;

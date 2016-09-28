@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkBundle\Tests\Selenium\Entity;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium\Entity;
 
 use Oro\Bundle\EntityConfigBundle\Tests\Selenium\Pages\ConfigEntities;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TestFrameworkBundle\Tests\Selenium\Acl;
+namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium\Acl;
 
 use Oro\Bundle\DataAuditBundle\Tests\Selenium\Pages\DataAudit;
 use Oro\Bundle\NavigationBundle\Tests\Selenium\Pages\Navigation;
