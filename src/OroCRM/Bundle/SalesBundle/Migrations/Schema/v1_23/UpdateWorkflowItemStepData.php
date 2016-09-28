@@ -244,10 +244,12 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $params = [
             'transition'      => 'close_won',
             'current_step_id' => $this->getStepIdByName($logger, 'won'),
+            'workflow_name'   => 'opportunity_flow'
         ];
         $types = [
             'transition'      => Type::STRING,
             'current_step_id' => Type::INTEGER,
+            'workflow_name'   => Type::STRING
         ];
         $sql = <<<SQL
                 UPDATE oro_workflow_item
@@ -263,7 +265,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
                             FROM oro_workflow_transition_log
                             WHERE tl.workflow_item_id = workflow_item_id
                            ) AND tl.transition = :transition
-                )
+                ) AND workflow_name = :workflow_name
 SQL;
         $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
