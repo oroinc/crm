@@ -66,7 +66,7 @@ Scenario: Edit Call from entity view page
     | Call date & time    | Sep 1, 2017, 9:30 PM                 |
     | Phone number        | (323) 879-6520                       |
     | Direction           | Outgoing                             |
-    | Duration            | 3:25
+    | Duration            | 3:25                                 |
 
 Scenario: Find and view call from call grid
   Given I go to Activities/Calls

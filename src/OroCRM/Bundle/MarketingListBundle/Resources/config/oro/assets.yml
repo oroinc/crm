@@ -1,0 +1,4 @@
+assets:
+    css:
+        orocrmmarketinglist:
+            - 'bundles/orocrmmarketinglist/css/style.css'
