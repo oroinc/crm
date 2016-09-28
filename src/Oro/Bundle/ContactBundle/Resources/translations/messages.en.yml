@@ -39,7 +39,7 @@ oro:
             update:       Update
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\Contact
+        # Entity Oro\Bundle\ContactBundle\Entity\Contact
         #
         entity_description:  Represent contact
         entity_label:        Contact
@@ -85,7 +85,7 @@ oro:
         default_in_accounts.label: Accounts Default Contact
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
+        # Entity Oro\Bundle\ContactBundle\Entity\ContactAddress
         #
         contactaddress:
             city.label:          City
@@ -117,7 +117,7 @@ oro:
             region_code.label:       State ISO code
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactEmail
+        # Entity Oro\Bundle\ContactBundle\Entity\ContactEmail
         #
         contactemail:
             email.label:         Email
@@ -129,7 +129,7 @@ oro:
             primary.label:       Primary
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\ContactPhone
+        # Entity Oro\Bundle\ContactBundle\Entity\ContactPhone
         #
         contactphone:
             entity_description:  Represent contact's phone
@@ -141,7 +141,7 @@ oro:
             primary.label:       Primary
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\Group
+        # Entity Oro\Bundle\ContactBundle\Entity\Group
         #
         group:
             entity_description:  Represent contact's group
@@ -155,7 +155,7 @@ oro:
             has_group.label:     Has group
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\Method
+        # Entity Oro\Bundle\ContactBundle\Entity\Method
         #
         method:
             entity_description:  Represent contact's method
@@ -165,7 +165,7 @@ oro:
             name.label:          Name
 
         #
-        # Entity oroCRM\Bundle\ContactBundle\Entity\Source
+        # Entity Oro\Bundle\ContactBundle\Entity\Source
         #
         source:
             entity_description:  Represent contact's source

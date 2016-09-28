@@ -22,7 +22,7 @@
         <div class="controls">
             <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
             <script type="text/javascript">
-                require(['orocrm/magento/soap-checker'], function (SoapChecker) {
+                require(['oro/magento/soap-checker'], function (SoapChecker) {
                     "use strict";
                     new SoapChecker({{ _self.getSoapCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
@@ -66,7 +66,7 @@
                         <i class="icon icon-refresh"></i>{{ 'Sync website list'|trans }}
                     </a>
                     <script type="text/javascript">
-                        require(['orocrm/magento/soap-checker'], function (SoapChecker) {
+                        require(['oro/magento/soap-checker'], function (SoapChecker) {
                             "use strict";
                             new SoapChecker({{ _self.getSoapCheckerOptions(form.parent, '.sync-website-list-link') }});
                         });
