@@ -14,6 +14,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Component\PropertyAccess\PropertyAccessor;
 use Oro\Component\Log\OutputLogger;
+
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Entity\Repository\ActivityListRepository;
@@ -23,7 +24,6 @@ use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\EventListener\ActivityListener;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
@@ -73,16 +73,19 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
 
         /** @var ConfigProvider $activityConfigProvider */
         $activityConfigProvider = $this->getContainer()->get('oro_entity_config.provider.activity');
+        /** @var ConfigProvider $extendConfigProvider */
+        $extendConfigProvider = $this->getContainer()->get('oro_entity_config.provider.extend');
 
         /** @var ActivityContactProvider $activityContactProvider */
         $activityContactProvider   = $this->getContainer()->get('oro_activity_contact.provider');
         $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
 
         $entityConfigsWithApplicableActivities = $activityConfigProvider->filter(
-            function (ConfigInterface $entity) use ($contactingActivityClasses) {
+            function (ConfigInterface $entity) use ($contactingActivityClasses, $extendConfigProvider) {
                 return
                     $entity->get('activities')
-                    && array_intersect($contactingActivityClasses, $entity->get('activities'));
+                    && array_intersect($contactingActivityClasses, $entity->get('activities')) &&
+                    $extendConfigProvider->getConfig($entity->getId()->getClassName())->is('is_extend');
             }
         );
 

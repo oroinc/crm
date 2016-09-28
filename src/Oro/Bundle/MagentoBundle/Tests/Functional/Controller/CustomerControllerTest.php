@@ -72,7 +72,7 @@ class CustomerControllerTest extends AbstractController
     {
         $response = $this->client->requestGrid(
             'magento-customers-grid',
-            ['magento-customers-grid[_filter][email][value]' => 'john@example.com']
+            ['magento-customers-grid[_filter][email][value]' => 'test@example.com']
         );
 
         $result = $this->getJsonResponseContent($response, 200);

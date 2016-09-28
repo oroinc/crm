@@ -18,6 +18,9 @@ use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ActivityListener
 {
     /** @var ActivityContactProvider */
@@ -140,6 +143,8 @@ class ActivityListener
      * Collect activities changes
      *
      * @param OnFlushEventArgs $args
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function onFlush(OnFlushEventArgs $args)
     {
@@ -149,6 +154,15 @@ class ActivityListener
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
+                $entityIdentifiersByClassName = $this->doctrineHelper->getEntityIdentifierFieldNamesForClass($class);
+
+                /**
+                 * Skip entities where we can't get single identifier
+                 */
+                if (count($entityIdentifiersByClassName) > 1) {
+                    return;
+                }
+
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
                 if (!isset($this->deletedEntities[$key])

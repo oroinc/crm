@@ -1,6 +1,6 @@
 Feature: Contact call activity
   In order to have view all phone collaboration with contact
-  As Oro sales rep
+  As OroCRM sales rep
   I need to log calls, edit, create and delete it
 
 Scenario: Log Call from contact view page
@@ -45,7 +45,7 @@ Scenario: View Call in view call page
     | Call date & time    | Aug 24, 2017, 11:00 AM               |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
-    | Duration            | 5:30                                 |
+    | Duration            | 5:25                                 |
 
 Scenario: Edit Call from entity view page
   Given I move backward one page
