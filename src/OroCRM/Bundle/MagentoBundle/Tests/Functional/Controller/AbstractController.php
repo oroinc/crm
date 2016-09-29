@@ -53,7 +53,7 @@ abstract class AbstractController extends WebTestCase
         $shouldPassIdentifier  = array_key_exists('id', $requestData['gridParameters']);
         $shouldPassIntegration = array_key_exists('channel', $requestData['gridParameters']);
         $shouldPassRemoved     = array_key_exists('is_removed', $requestData['gridParameters']);
-        $shouldAssertData      = $expectedResultCount === 1;
+        $shouldAssertData      = $expectedResultCount > 0;
 
         if ($shouldPassIdentifier) {
             $paramName = $gridName . '[' . $requestData['gridParameters']['id'] . ']';
@@ -78,10 +78,19 @@ abstract class AbstractController extends WebTestCase
         );
         $result   = $this->getJsonResponseContent($response, 200);
 
-        foreach ($result['data'] as $row) {
+        foreach ($result['data'] as $key => $row) {
             if ($shouldAssertData) {
-                foreach ($requestData['assert'] as $fieldName => $value) {
-                    $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                if (isset($requestData['asserts'])) {
+                    $assert = $requestData['asserts'][$key];
+                } else {
+                    $assert = $requestData['assert'];
+                }
+                foreach ($assert as $fieldName => $value) {
+                    if (is_string($row[$fieldName])) {
+                        $this->assertContains($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                    } else {
+                        $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
+                    }
                 }
                 break;
             }
