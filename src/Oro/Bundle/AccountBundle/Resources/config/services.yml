@@ -1,5 +1,5 @@
 parameters:
-    oro_account.account.entity.class:            Oro\Bundle\AccountBundle\Entity\Account
+    oro_account.entity.account.class:            Oro\Bundle\AccountBundle\Entity\Account
     oro_account.type.account.class:              Oro\Bundle\AccountBundle\Form\Type\AccountType
     oro_account.handler.account.class:           Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
     oro_account.form.type.account_select.class:  Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
@@ -46,7 +46,7 @@ services:
         class:                                      %oro_account.account.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - %oro_account.account.entity.class%
+            - %oro_account.entity.account.class%
             - "@doctrine.orm.entity_manager"
 
     oro_account.form.type.account.api:
@@ -75,7 +75,7 @@ services:
     oro_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
-            - %oro_account.account.entity.class%
+            - %oro_account.entity.account.class%
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: oro_account_view }
@@ -86,14 +86,14 @@ services:
            - "@oro_entity.entity_identifier_accessor"
            - "@oro_ui.twig.tab_extension"
            - 'account_activity_tab_panel'
-           - %oro_account.account.entity.class%
+           - %oro_account.entity.account.class%
         tags:
            - { name: oro_activity.activity_widget_provider, priority: -10 }
 
     oro_account.provider.phone.account:
         class: %oro_account.provider.phone.account.class%
         tags:
-            - { name: oro_address.phone_provider, class: %oro_account.account.entity.class% }
+            - { name: oro_address.phone_provider, class: %oro_account.entity.account.class% }
 
     oro_account.event_listener.datagrid.my_accounts_activity:
         class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener

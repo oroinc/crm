@@ -8,12 +8,12 @@ placeholders:
     items:
         oro_add_contact_button:
             template:   OroContactBundle:Contact:addContactButton.html.twig
-            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.account.entity.class%)"
+            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.entity.account.class%)"
             acl:        oro_contact_create
 
         oro_add_contact_link:
             template:   OroContactBundle:Contact:addContactLink.html.twig
-            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.account.entity.class%)"
+            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.entity.account.class%)"
             acl:        oro_contact_create
 
         contacts_launchpad:

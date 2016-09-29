@@ -11,7 +11,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - max(history.visitedAt) as visitDate
                 from:
-                    - { table: %oro_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.entity.account.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -60,7 +60,7 @@ datagrids:
                     default_per_page: 10
 
     accounts-grid:
-        extended_entity_name: %oro_account.account.entity.class%
+        extended_entity_name: %oro_account.entity.account.class%
         inline_editing:
             enable: true
         acl_resource: oro_account_view
@@ -78,7 +78,7 @@ datagrids:
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                     - accountOwner.id as owner
                 from:
-                    - { table: %oro_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.entity.account.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -214,7 +214,7 @@ datagrids:
         mass_actions:
             merge:
                 type: merge
-                entity_name: %oro_account.account.entity.class%
+                entity_name: %oro_account.entity.account.class%
                 data_identifier: a.id
         options:
             entityHint: account
@@ -360,7 +360,7 @@ datagrids:
                     excluded: '#removeContacts'
 
     accounts-select-grid:
-        extended_entity_name: %oro_account.account.entity.class%
+        extended_entity_name: %oro_account.entity.account.class%
         acl_resource: oro_account_view
         source:
             type: orm
@@ -373,7 +373,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
-                    - { table: %oro_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.entity.account.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
@@ -448,7 +448,7 @@ datagrids:
             entityHint: account
 
     accounts-for-context-grid:
-        extended_entity_name: %oro_account.account.entity.class%
+        extended_entity_name: %oro_account.entity.account.class%
         acl_resource: oro_account_view
         source:
             type: orm
@@ -461,7 +461,7 @@ datagrids:
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
-                    - { table: %oro_account.account.entity.class%, alias: a }
+                    - { table: %oro_account.entity.account.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }

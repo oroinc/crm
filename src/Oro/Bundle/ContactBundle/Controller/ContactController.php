@@ -71,7 +71,7 @@ class ContactController extends Controller
         if ($entityClass) {
             $entityClass = $this->get('oro_entity.routing_helper')->resolveEntityClass($entityClass);
             $entityId    = $this->getRequest()->get('entityId');
-            if ($entityId && $entityClass === $this->container->getParameter('oro_account.account.entity.class')) {
+            if ($entityId && $entityClass === $this->container->getParameter('oro_account.entity.account.class')) {
                 $repository = $this->getDoctrine()->getRepository($entityClass);
                 /** @var Account $account */
                 $account = $repository->find($entityId);

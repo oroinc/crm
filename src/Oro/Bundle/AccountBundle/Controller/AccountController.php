@@ -89,7 +89,7 @@ class AccountController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('oro_account.account.entity.class')
+            'entity_class' => $this->container->getParameter('oro_account.entity.account.class')
         ];
     }
 

@@ -21,8 +21,8 @@ services:
              - [setDataConverter, ["@oro_account.importexport.data_converter"]]
              - [setStrategy, ["@oro_account.importexport.strategy.account.add_or_replace"]]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: %oro_account.account.entity.class%, alias: oro_account.add_or_replace }
-            - { name: oro_importexport.processor, type: import_validation, entity: %oro_account.account.entity.class%, alias: oro_account.add_or_replace }
+            - { name: oro_importexport.processor, type: import, entity: %oro_account.entity.account.class%, alias: oro_account.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %oro_account.entity.account.class%, alias: oro_account.add_or_replace }
 
     # Export processor
     oro_account.importexport.processor.export:
@@ -30,14 +30,14 @@ services:
         calls:
             - [setDataConverter, ["@oro_account.importexport.data_converter"]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: %oro_account.account.entity.class%, alias: oro_account }
+            - { name: oro_importexport.processor, type: export, entity: %oro_account.entity.account.class%, alias: oro_account }
 
     oro_account.importexport.processor.export_template:
         parent: oro_importexport.processor.export_abstract
         calls:
             - [setDataConverter, ["@oro_account.importexport.template_fixture.data_converter.account"]]
         tags:
-            - { name: oro_importexport.processor, type: export_template, entity: %oro_account.account.entity.class%, alias: oro_account }
+            - { name: oro_importexport.processor, type: export_template, entity: %oro_account.entity.account.class%, alias: oro_account }
 
     oro_account.importexport.template_fixture.account:
         class: %oro_account.importexport.template_fixture.account.class%

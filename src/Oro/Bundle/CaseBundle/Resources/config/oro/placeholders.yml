@@ -12,7 +12,7 @@ placeholders:
             applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)"
         oro_account_cases_grid:
             template: OroCaseBundle:Case:accountCases.html.twig
-            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.account.entity.class%)"
+            applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_account.entity.account.class%)"
         oro_contact_cases_grid:
             template: OroCaseBundle:Case:contactCases.html.twig
             applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_contact.entity.class%)"

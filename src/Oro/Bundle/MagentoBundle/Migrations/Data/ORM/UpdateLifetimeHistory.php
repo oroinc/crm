@@ -50,7 +50,7 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
         $customerIdentityClass = $magentoChannelSettings['entity'];
         $lifetimeField = $magentoChannelSettings['field'];
 
-        $accountClass = $this->container->getParameter('oro_account.account.entity.class');
+        $accountClass = $this->container->getParameter('oro_account.entity.account.class');
         $channelClass = $this->container->getParameter('oro_channel.entity.class');
 
         /** @var LifetimeHistoryRepository $lifetimeRepo */
