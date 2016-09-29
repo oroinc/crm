@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -238,7 +237,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     }
 
     /**
-     * Add jobs to reindex magento entities
+     * Updates the search index for magento entities
      */
     protected function runReindex()
     {
