@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class OroAccountExtension extends Extension
 {
+    const ALIAS = 'oro_account';
+
     /**
      * {@inheritDoc}
      */
@@ -25,5 +27,13 @@ class OroAccountExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('importexport.yml');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAlias()
+    {
+        return self::ALIAS;
     }
 }
