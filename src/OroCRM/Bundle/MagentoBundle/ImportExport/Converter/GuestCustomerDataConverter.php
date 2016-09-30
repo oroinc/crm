@@ -20,15 +20,17 @@ class GuestCustomerDataConverter extends AbstractTreeDataConverter
     ];
 
     /**
-     * @param array $orderData
+     * Extract customer data from Order or Cart entity data
+     *
+     * @param array $entityData
      * @return array
      */
-    public static function extractCustomersValues(array $orderData)
+    public static function extractCustomersValues(array $entityData)
     {
-        $customerData = array_intersect_key($orderData, self::$conversionRules);
+        $customerData = array_intersect_key($entityData, self::$conversionRules);
 
-        if (!empty($orderData['store']['originId'])) {
-            $customerData['store_id'] = $orderData['store']['originId'];
+        if (!empty($entityData['store']['originId'])) {
+            $customerData['store_id'] = $entityData['store']['originId'];
         }
 
         return $customerData;
