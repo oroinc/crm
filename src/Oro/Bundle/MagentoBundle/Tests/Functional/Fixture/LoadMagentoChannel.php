@@ -77,7 +77,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
+        $this->factory = $container->get('oro_channel.builder.factory');
     }
 
     /**
