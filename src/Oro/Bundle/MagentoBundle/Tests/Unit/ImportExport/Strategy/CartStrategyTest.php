@@ -49,7 +49,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $this->context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
             ->getMock();
 
-        $this->transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -99,7 +99,7 @@ class CartStrategyTest extends AbstractStrategyTest
             ->will($this->returnValue($this->execution));
         $strategy->setStepExecution($this->stepExecution);
         $strategy->setImportExportContext($this->context);
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Cart');
 
         $reflection = new \ReflectionProperty(get_class($strategy), 'existingEntity');
         $reflection->setAccessible(true);
@@ -144,7 +144,7 @@ class CartStrategyTest extends AbstractStrategyTest
                 $this->returnValueMap(
                     [
                         [
-                            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                            'Oro\Bundle\MagentoBundle\Entity\Customer',
                             [
                                 'channel' => $entity->getChannel(),
                                 'email' => $entity->getEmail()
@@ -395,12 +395,12 @@ class CartStrategyTest extends AbstractStrategyTest
 
         $this->databaseHelper->expects($this->once())
             ->method('find')
-            ->with('OroCRM\Bundle\MagentoBundle\Entity\Cart', 'identifier')
+            ->with('Oro\Bundle\MagentoBundle\Entity\Cart', 'identifier')
             ->will($this->returnValue($newCart));
 
         $strategy = $this->getStrategy();
         $strategy->setImportExportContext($this->context);
-        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Cart');
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
             ->will($this->returnValue($this->execution));
         $strategy->setStepExecution($this->stepExecution);
