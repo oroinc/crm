@@ -4,7 +4,7 @@
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <% if (createdBy) { %>
-                    <span class="visual">
+                <span class="visual">
                         <img src="<% if (createdBy.avatar) { %><%- createdBy.avatar %><% } else { %>{{ asset('bundles/oroui/img/avatar-xsmall.png')|e('html_attr')|raw }}<% } %>" />
                         <% if (createdBy.url) { %>
                             <a class="user" href="<%= createdBy.url %>"><%- createdBy.fullName %></a>
@@ -17,7 +17,7 @@
                     <i class="date"><%= createdAt %></i>
                 </span>
                 <% if (!public) { %>
-                    <span class="label"><%= _.__("oro.case.private") %></span>
+                <span class="label"><%= _.__("oro.case.private") %></span>
                 <% } %>
             </div>
             <div class="message-item">
@@ -32,19 +32,19 @@
             <div class="message">
                 <%= message %>
                 <% if (updatedBy) { %>
-                    <div class="details">
-                        <div>
-                            <%= _.template(
-                                {{ 'oro.case.casecomment.message.updated_by'|trans|json_encode|raw }},
-                                { interpolate: /\{\{(.+?)\}\}/g }
-                            )({
-                                user: updatedBy.url
-                                    ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
-                                    : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
-                                date: '<i class="date">' + updatedAt + '</i>'
-                            }) %>
-                        </div>
+                <div class="details">
+                    <div>
+                        <%= _.template(
+                        {{ 'oro.case.casecomment.message.updated_by'|trans|json_encode|raw }},
+                        { interpolate: /\{\{(.+?)\}\}/g }
+                        )({
+                        user: updatedBy.url
+                        ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
+                        : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
+                        date: '<i class="date">' + updatedAt + '</i>'
+                        }) %>
                     </div>
+                </div>
                 <% } %>
             </div>
         </div>

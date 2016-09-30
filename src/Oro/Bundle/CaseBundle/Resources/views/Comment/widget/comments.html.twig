@@ -37,6 +37,6 @@
          data-page-component-module="oronote/js/app/components/notes-component"
          data-page-component-options="{{ options|json_encode }}"></div>
 
-    {% include 'OroCaseBundle:Comment:js/list.js.twig' with {'id': 'template-comment-list'} %}
-    {% include 'OroCaseBundle:Comment:js/view.js.twig' with {'id': 'template-comment-item'} %}
+    {% include 'OroCaseBundle:Comment:js/list.html.twig' with {'id': 'template-comment-list'} %}
+    {% include 'OroCaseBundle:Comment:js/view.html.twig' with {'id': 'template-comment-item'} %}
 {% endblock %}
