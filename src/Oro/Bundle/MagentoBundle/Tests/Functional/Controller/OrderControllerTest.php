@@ -61,14 +61,23 @@ class OrderControllerTest extends AbstractController
                         'gridName' => 'magento-order-grid'
                     ],
                     'gridFilters'         => [],
-                    'assert'              => [
-                        'channelName' => 'Magento channel',
-                        'firstName'   => 'John',
-                        'lastName'    => 'Doe',
-                        'status'      => 'open',
-                        'subTotal'    => '$0.00',
+                    'asserts' => [
+                        [
+                            'channelName' => 'Magento channel',
+                            'firstName'   => 'John',
+                            'lastName'    => 'Doe',
+                            'status'      => 'open',
+                            'subTotal'    => '$0.00',
+                        ],
+                        [
+                            'channelName' => 'Magento channel',
+                            'firstName'   => 'Guest Jack',
+                            'lastName'    => 'Guest White',
+                            'status'      => 'open',
+                            'subTotal'    => '$0.00',
+                        ]
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 2
                 ],
             ],
             'Magento order grid with filters'                => [

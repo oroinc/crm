@@ -71,13 +71,7 @@ class OrderStrategy extends AbstractImportStrategy
     protected function processCustomer(Order $order, Customer $customer = null)
     {
         if (!$customer || !$customer->getId()) {
-            $customer = $this->databaseHelper->findOneBy(
-                'Oro\Bundle\MagentoBundle\Entity\Customer',
-                [
-                    'email' => $order->getCustomerEmail(),
-                    'channel' => $order->getChannel()
-                ]
-            );
+            $customer = $this->findExistingCustomerByContext($order);
         }
 
         if ($customer instanceof Customer) {
@@ -91,6 +85,20 @@ class OrderStrategy extends AbstractImportStrategy
         if ($order->getCart()) {
             $order->getCart()->setCustomer($customer);
         }
+    }
+
+    /**
+     * Add order customer email to customer search context
+     *
+     * {@inheritdoc}
+     */
+    protected function getEntityCustomerSearchContext($order)
+    {
+        /** @var Order $order */
+        $searchContext = parent::getEntityCustomerSearchContext($order);
+        $searchContext['email'] = $order->getCustomerEmail();
+
+        return $searchContext;
     }
 
     /**
@@ -184,35 +192,8 @@ class OrderStrategy extends AbstractImportStrategy
             $entity->setName('');
         }
 
-        $existingEntity = $this->findRegionEntity($entity, $existingEntity);
-
-        return $existingEntity;
-    }
-
-    /**
-     * @param $entity
-     * @param $existingEntity
-     *
-     * @return null|object
-     */
-    protected function findRegionEntity($entity, $existingEntity)
-    {
         if (!$existingEntity && $entity instanceof Region) {
-            /** @var \Oro\Bundle\MagentoBundle\Entity\Region $magentoRegion */
-            $magentoRegion = $this->databaseHelper->findOneBy(
-                'Oro\Bundle\MagentoBundle\Entity\Region',
-                [
-                    'regionId' => $entity->getCode()
-                ]
-            );
-            if ($magentoRegion) {
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\AddressBundle\Entity\Region',
-                    [
-                        'combinedCode' => $magentoRegion->getCombinedCode()
-                    ]
-                );
-            }
+            $existingEntity = $this->findRegionEntity($entity);
         }
 
         return $existingEntity;
