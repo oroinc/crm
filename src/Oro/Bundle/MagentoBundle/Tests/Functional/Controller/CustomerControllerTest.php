@@ -21,7 +21,7 @@ class CustomerControllerTest extends AbstractController
     /** @return int */
     protected function getMainEntityId()
     {
-        return self::$customer->getid();
+        return self::$customer->getId();
     }
 
     public function testView()
