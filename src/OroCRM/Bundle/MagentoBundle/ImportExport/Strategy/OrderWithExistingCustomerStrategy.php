@@ -58,7 +58,12 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             }
         }
 
-        if (!$customer && $order->getIsGuest() && $transport->getGuestCustomerSync()) {
+        /**
+         * If Order created with registered customer but registered customer was deleted in Magento
+         * before it was synced order will not have connection to the customer
+         * Customer for such orders should be processed as guest if Guest Customer synchronization is allowed
+         */
+        if (!$customer && !$customerOriginId && $transport->getGuestCustomerSync()) {
             $this->appendDataToContext(
                 'postProcessGuestCustomers',
                 GuestCustomerDataConverter::extractCustomersValues((array)$this->context->getValue('itemData'))
@@ -72,70 +77,30 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
     /**
      * Get existing registered customer or existing guest customer
+     * If customer not found by Identifier
+     * find existing customer using entity data for entities containing customer like Order and Cart
      *
-     * @param Order $order
+     * @param Order $entity
+     *
      * @return null|Customer
      */
-    protected function findExistingCustomer(Order $order)
+    protected function findExistingCustomer(Order $entity)
     {
-        $customer = $order->getCustomer();
+        $existingEntity = null;
+        $customer = $entity->getCustomer();
 
-        if ($customer instanceof Customer) {
-            // Find from existing registered customers
-            /** @var Customer|null $existingEntity */
-            $existingEntity = null;
-            if ($customer->getId() || $customer->getOriginId()) {
-                $existingEntity = parent::findExistingEntity($customer);
-            }
-
-            if (!$existingEntity) {
-                $searchContext = $this->getSearchContext($order);
-                $existingEntity = $this->databaseHelper->findOneBy(
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
-                    $searchContext
-                );
-            }
-
-            return $existingEntity;
+        if ($customer->getId() || $customer->getOriginId()) {
+            $existingEntity = parent::findExistingEntity($customer);
+        }
+        if (!$existingEntity) {
+            $existingEntity = $this->findExistingCustomerByContext($entity);
         }
 
-        return null;
+        return $existingEntity;
     }
 
     /**
-     * Get search context for Guest customer by email, channel and website if exists
-     *
-     * @param Order $order
-     * @return array
-     */
-    protected function getSearchContext(Order $order)
-    {
-        $customer = $order->getCustomer();
-        $searchContext = [
-            'email' => $order->getCustomerEmail(),
-            'channel' => $customer->getChannel()
-        ];
-
-        if ($customer->getWebsite()) {
-            $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
-                [
-                    'originId' => $customer->getWebsite()->getOriginId(),
-                    'channel' => $customer->getChannel()
-                ]
-            );
-            if ($website) {
-                $searchContext['website'] = $website;
-            }
-        }
-
-        return $searchContext;
-    }
-
-    /**
-     * Get existing entity
-     * As guest customer entity not exist in Magento as separate entity and saved in order
-     * find guest by customer email
+     * Get existing customer entity by Identifier or using entity data
      *
      * @param object $entity
      * @param array $searchContext
@@ -143,8 +108,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {
-        if ($entity instanceof Customer && (!$entity->getOriginId() && $this->existingEntity)) {
-            return $this->findExistingCustomer($this->existingEntity);
+        if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
+            return $this->findExistingCustomerByContext($this->existingEntity);
         }
 
         return parent::findExistingEntity($entity, $searchContext);

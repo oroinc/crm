@@ -61,23 +61,8 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function getSearchContext(Customer $entity)
     {
-        $searchContext = [
-            'email' => $entity->getEmail(),
-            'channel' => $entity->getChannel()
-        ];
-
-        if ($entity->getWebsite()) {
-            $website = $this->databaseHelper->findOneBy(
-                'OroCRM\Bundle\MagentoBundle\Entity\Website',
-                [
-                    'originId' => $entity->getWebsite()->getOriginId(),
-                    'channel' => $entity->getChannel()
-                ]
-            );
-            if ($website) {
-                $searchContext['website'] = $website;
-            }
-        }
+        $searchContext = parent::getCustomerSearchContext($entity);
+        $searchContext['email'] = $entity->getEmail();
 
         return $searchContext;
     }
