@@ -29,7 +29,7 @@
         'entity': entity,
         'indexPath': path('orocrm_account_index'),
         'indexLabel': 'orocrm.account.entity_plural_label'|trans,
-        'escapeEntityTitle': resource_granted('VIEW', entity, 'name'),
+        'rawEntityTitle': not resource_granted('VIEW', entity, 'name'),
         'entityTitle': resource_granted('VIEW', entity, 'name')
             ? entity.name|default('N/A')
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
