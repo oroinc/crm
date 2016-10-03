@@ -1,4 +1,0 @@
-oro_dashboard_config:
-    dashboards:
-        e_commerce:
-            twig: OroDashboardBundle:Index:default.html.twig

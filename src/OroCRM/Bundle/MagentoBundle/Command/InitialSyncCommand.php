@@ -17,6 +17,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+use JMS\JobQueueBundle\Entity\Job;
+
+use Oro\Bundle\SearchBundle\Command\ReindexCommand;
+use Oro\Component\Log\OutputLogger;
+
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+
 class InitialSyncCommand extends Command implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
@@ -124,4 +133,5 @@ class InitialSyncCommand extends Command implements ContainerAwareInterface
     {
         return $this->container->get('oro_message_queue.message_producer');
     }
+
 }

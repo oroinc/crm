@@ -6,6 +6,10 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
+use Oro\Bundle\AddressBundle\Entity\Region;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Region as MagentoRegion;
 
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -85,5 +89,111 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
             $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         }
         return $this->propertyAccessor;
+    }
+
+    /**
+     * Get existing registered customer or existing guest customer
+     * Find existing customer using entity data for entities containing customer like Order and Cart
+     *
+     * @param object $entity
+     *
+     * @return null|Customer
+     */
+    protected function findExistingCustomerByContext($entity)
+    {
+        /** @var Customer|null $existingEntity */
+        $searchContext = $this->getEntityCustomerSearchContext($entity);
+        $existingEntity = $this->databaseHelper->findOneBy(
+            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            $searchContext
+        );
+
+        return $existingEntity;
+    }
+
+    /**
+     * Get search context for entity customer
+     *
+     * @param object $entity
+     *
+     * @return array
+     */
+    protected function getEntityCustomerSearchContext($entity)
+    {
+        $customer = $entity->getCustomer();
+        if ($customer instanceof Customer) {
+            $searchContext = $this->getCustomerSearchContext($customer);
+        } else {
+            $searchContext = [
+                'channel' => $entity->getChannel()
+            ];
+        }
+
+        return $searchContext;
+    }
+
+    /**
+     * Get customer search context by channel and website if exists
+     *
+     * @param Customer $customer
+     *
+     * @return array
+     */
+    protected function getCustomerSearchContext(Customer $customer)
+    {
+        $searchContext = [
+            'channel' => $customer->getChannel()
+        ];
+
+        if ($customer->getWebsite()) {
+            $website = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                [
+                    'originId' => $customer->getWebsite()->getOriginId(),
+                    'channel' => $customer->getChannel()
+                ]
+            );
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
+        }
+
+        return $searchContext;
+    }
+
+    /**
+     * Find existing Magento Region entity
+     * Find by Code if parameter $regionId not passed
+     *
+     * @param Region      $entity
+     * @param string|null $regionId
+     *
+     * @return null|MagentoRegion
+     */
+    protected function findRegionEntity(Region $entity, $regionId = null)
+    {
+        $existingEntity = null;
+
+        if (!$regionId) {
+            $regionId = $entity->getCode();
+        }
+
+        /** @var Region $magentoRegion */
+        $magentoRegion = $this->databaseHelper->findOneBy(
+            'OroCRM\Bundle\MagentoBundle\Entity\Region',
+            [
+                'regionId' => $regionId
+            ]
+        );
+        if ($magentoRegion) {
+            $existingEntity = $this->databaseHelper->findOneBy(
+                'Oro\Bundle\AddressBundle\Entity\Region',
+                [
+                    'combinedCode' => $magentoRegion->getCombinedCode()
+                ]
+            );
+        }
+
+        return $existingEntity;
     }
 }

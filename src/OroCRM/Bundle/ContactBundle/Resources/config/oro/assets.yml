@@ -1,0 +1,4 @@
+assets:
+    css:
+        orocrmcontact:
+            - 'bundles/orocrmcontact/css/less/style.less'

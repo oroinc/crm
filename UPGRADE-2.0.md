@@ -1,9 +1,13 @@
-UPGRADE FROM 1.10 to 2.0 
+UPGRADE FROM 1.10 to 2.0
 
 ####OroCRMSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Lead`
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Opportunity`
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\SalesFunnel`
+- `OroCRM/Bundle/SalesBundle/Entity/LeadMailboxProcessSettings` extends `OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings`
+
+####OroCRMCaseBundle:
+- `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
 
 ####OroCRMContactUsBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest`
@@ -13,8 +17,8 @@ UPGRADE FROM 1.10 to 2.0
 - Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\MagentoBundle\Entity\Order`
 - The `CartExpirationProcessor` now implements `SyncProcessorInterface`
 - The command class `CartExpirationSyncCommand` renamed to `SyncCartExpirationCommand`.
-- The `InitialSyncCommand` command arguments were changed to be compatible with SyncCommand ones. 
-- The `InitialSyncCommand` command option `--integration-id` renamed to `--integration`. 
+- The `InitialSyncCommand` command arguments were changed to be compatible with SyncCommand ones.
+- The `InitialSyncCommand` command option `--integration-id` renamed to `--integration`.
 - The `InitialSyncCommand` command option `--skip-dictionary` removed. Use argument skip-dictionary=foo instead.
 
 ####OroCRMChannelBundle:
@@ -23,6 +27,8 @@ UPGRADE FROM 1.10 to 2.0
 - `ChannelChangeStatusEvent` was removed.
 - The parameter `orocrm_channel.event_listener.change_integration_status.class` was removed.
 - The parameter `orocrm_channel.event_listener.timezone_change.class` was removed.
+- Channel configuration file now loads from `Resources/config/oro/channels.yml` instead of `Resources/config/channel_configuration.yml`.
+- Root node for channel config in `Resources/config/oro/channels.yml` were changed from `orocrm_channel` to `channels`.
 
 ####OroCRMAnalyticsBundle:
 - The class `StateManager` and its service `orocrm_analytics.model.state_manager` were removed.

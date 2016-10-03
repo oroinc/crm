@@ -6,14 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
 
 /**
  * @ORM\Entity
- * @Config
  */
 class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
 {

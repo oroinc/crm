@@ -1,10 +1,61 @@
-oro_api:
+api:
     entities:
         OroCRM\Bundle\ContactBundle\Entity\Contact:
             fields:
                 email:
                     exclude: true
+                phones:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        phone: ~
+                primaryPhone:
+                    data_type: string
+                    depends_on: [phones.phone, phones.primary]
+                    property_path: _
+                emails:
+                    data_type: array
+                    exclusion_policy: all
+                    fields:
+                        email: ~
+                primaryEmail:
+                    data_type: string
+                    depends_on: [emails.email, emails.primary]
+                    form_options:
+                        constraints:
+                            - Email: ~
+                    property_path: _
+            filters:
+                fields:
+                    phones:
+                        data_type: string
+                        allow_array: true
+                        property_path: phones.phone
+                    primaryPhone:
+                        data_type: string
+                        type: primaryField
+                        property_path: phones
+                        options:
+                            data_field: phone
+                    emails:
+                        data_type: string
+                        allow_array: true
+                        property_path: emails.email
+                    primaryEmail:
+                        data_type: string
+                        property_path: emails
+                        type: primaryField
+                        options:
+                            data_field: email
+
         OroCRM\Bundle\ContactBundle\Entity\ContactAddress: ~
-        OroCRM\Bundle\ContactBundle\Entity\ContactEmail: ~
-        OroCRM\Bundle\ContactBundle\Entity\ContactPhone: ~
+
+        OroCRM\Bundle\ContactBundle\Entity\ContactEmail:
+            # this entity does not have own Data API resource
+            actions: false
+
+        OroCRM\Bundle\ContactBundle\Entity\ContactPhone:
+            # this entity does not have own Data API resource
+            actions: false
+
         OroCRM\Bundle\ContactBundle\Entity\Group: ~
