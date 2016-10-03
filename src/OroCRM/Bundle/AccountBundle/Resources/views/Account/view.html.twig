@@ -1,6 +1,8 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
-{% oro_title_set({params : {"%account.name%": resource_granted('VIEW', entity, 'name')
+{% set hasGrantedNameView = resource_granted('VIEW', entity, 'name') %}
+
+{% oro_title_set({params : {"%account.name%": hasGrantedNameView
     ? entity.name|default('N/A')
     : 'view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}) }})
 %}
@@ -29,8 +31,8 @@
         'entity': entity,
         'indexPath': path('orocrm_account_index'),
         'indexLabel': 'orocrm.account.entity_plural_label'|trans,
-        'rawEntityTitle': not resource_granted('VIEW', entity, 'name'),
-        'entityTitle': resource_granted('VIEW', entity, 'name')
+        'rawEntityTitle': not hasGrantedNameView,
+        'entityTitle': hasGrantedNameView
             ? entity.name|default('N/A')
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'orocrm.account.name.label'|trans}))
     } %}
