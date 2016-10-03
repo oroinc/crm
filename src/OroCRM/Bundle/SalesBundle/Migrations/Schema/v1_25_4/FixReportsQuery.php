@@ -11,6 +11,9 @@ use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 use Oro\Component\PhpUtils\ArrayUtil;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class FixReportsQuery extends ParametrizedMigrationQuery
 {
     const LIMIT = 100;
