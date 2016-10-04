@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
@@ -25,17 +24,10 @@ use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 /**
  * @dbIsolationPerTest
  */
-class SyncInitialIntegrationProcessorTest extends WebTestCase
+class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
 {
     use ClassExtensionTrait;
-    
-    public function setUp()
-    {
-        parent::setUp();
-        
-        $this->initClient();
-    }
-    
+
     public function testShouldImplementMessageProcessorInterface()
     {
         self::assertClassImplements(MessageProcessorInterface::class, SyncInitialIntegrationProcessor::class);
