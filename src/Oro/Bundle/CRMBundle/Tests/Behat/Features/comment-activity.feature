@@ -1,7 +1,7 @@
 @fixture-comment-activity.yml
 Feature: Comment activity feature
   In order to have ability manage contact activity
-  As Oro sales rep
+  As OroCRM sales rep
   I need to view, filter, paginate activities in activity list
 
   Scenario: Contact grid
@@ -36,7 +36,7 @@ Feature: Comment activity feature
     And I collapse "Ask how his mood" in activity list
 
   Scenario: Edit comment
-    Given I login as "misty" user with "misty" password
+    Given I login as "misty" user
     And go to Customers/Contacts
     And click view Charlie in grid
     And collapse "Contact with Charlie" in activity list

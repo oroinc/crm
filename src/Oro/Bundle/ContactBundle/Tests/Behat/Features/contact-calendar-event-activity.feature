@@ -1,10 +1,10 @@
 Feature: Calendar event activity
   In order to have schedule for every day
-  As Oro sales rep
+  As OroCRM sales rep
   I need to create, edit, view and delete calendar events
 
 Scenario: Add calendar event
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And there are following users:
     | firstName | lastName | email              | username | organization  | organizations   | owner          | businessUnits    |
     | Theresa   | Peters   | theresa@peters.com | theresa  | @organization | [@organization] | @business_unit | [@business_unit] |

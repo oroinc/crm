@@ -4,7 +4,7 @@ Feature: Contact call activity
   I need to log calls, edit, create and delete it
 
 Scenario: Log Call from contact view page
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And the following contact:
     | firstName | lastName | email             |
     | Charlie   | Sheen    | charlie@sheen.com |
@@ -45,7 +45,7 @@ Scenario: View Call in view call page
     | Call date & time    | Aug 24, 2017, 11:00 AM               |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
-    | Duration            | 5:25                                 |
+    | Duration            | 5:30                                 |
 
 Scenario: Edit Call from entity view page
   Given I move backward one page
