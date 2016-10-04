@@ -4,7 +4,7 @@ Feature: Contacts CRUD
   I need to have ability create, view, update and delete contact entity
 
 Scenario: Required fields
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And there are following accounts:
     | Name               | Owner  | Organization  |
     | Warner Brothers    | @admin | @organization |

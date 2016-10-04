@@ -4,12 +4,12 @@ Feature: Mass Delete records with acl
 	I want give CRUD permissions to different user roles
 
 Scenario: User can but now can't delete records
-	Given I login as "admin" user with "admin" password
+	Given I login as administrator
 	And I have 5 Cases
 	And I go to Activities/Cases
 	And I keep in mind number of records in list
 	And select few records
-	And I set my permissions on Delete Cases to None
+	And I set administrator permissions on Delete Cases to None
 	When click "Delete" link from mass action dropdown
 #	@todo uncomment when BAP-10919 bug will resolved
 #	And confirm deletion
@@ -21,7 +21,7 @@ Scenario: User can't delete records
 	Then I shouldn't see Delete action
 
 Scenario: User can delete only his records but view all
-	Given my permissions on View Cases as Global and on Delete as User
+	Given administrator permissions on View Cases as Global and on Delete as User
 	And there are two users with their own 7 Cases
 	And keep in mind number of records in list
 	And I reload the page
@@ -42,7 +42,7 @@ Scenario: User can delete only his records but view all
 #	Then I should see message that I am able to delete only 50 records at once
 
 Scenario: User can delete more records than can view
-	Given my permissions on View Accounts as User and on Delete as Global
+	Given administrator permissions on View Accounts as User and on Delete as Global
 	And I have 3 Accounts
 	And there are two users with their own 7 Accounts
 	When I go to Customers/Accounts

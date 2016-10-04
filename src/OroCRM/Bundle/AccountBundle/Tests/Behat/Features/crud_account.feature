@@ -5,7 +5,7 @@ Feature: CRUD Account
   I need have form, grid and actions for Account entity
 
 Scenario: Create new Account
-  Given I login as "admin" user with "admin" password
+  Given I login as administrator
   And the following contacts:
     | First Name | Last Name | Email     |
     | Joan       | Anderson  | <email()> |
