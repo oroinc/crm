@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace OroCRM\Bundle\CRMCalendarBridgeBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;

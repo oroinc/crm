@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\CalendarBundle\Tests\Unit\EventListener\Datagrid;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;

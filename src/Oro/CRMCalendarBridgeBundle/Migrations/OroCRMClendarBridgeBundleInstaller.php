@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_9;
+namespace Oro\CRMCalendarBridgeBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\CRMCalendarBridgeBundle\Migrations\Schema\v1_0\OroCRMCalendarBridgeBundle;
 
-class CreateActivityAssociation implements Migration, ActivityExtensionAwareInterface
+class OroCRMClendarBridgeBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -25,13 +25,16 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
     /**
      * {@inheritdoc}
      */
-    public function up(Schema $schema, QueryBag $queries)
+    public function getMigrationVersion()
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
+        return 'v1_0';
     }
 
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    /**
+     * {@inheritdoc}
+     */
+    public function up(Schema $schema, QueryBag $queries)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_contact');
+        OroCRMCalendarBridgeBundle::addCalendarActivityAssociations($schema, $this->activityExtension);
     }
 }

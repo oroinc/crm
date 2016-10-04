@@ -1,10 +1,11 @@
 <?php
 
-namespace Oro\Bundle\CalendarBundle\Tests\Unit\EventListener\Datagrid;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 
 use OroCRM\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener;
+use OroCRM\Bundle\MagentoBundle\EventListener\StoreGridListener;
 
 class CustomerGroupGridListenerTest extends \PHPUnit_Framework_TestCase
 {
