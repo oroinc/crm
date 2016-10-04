@@ -2,10 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
-use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Doctrine\ORM\EntityRepository;
+use Guzzle\Http\Client;
+use Guzzle\Plugin\Cookie\Cookie;
+use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
+use Guzzle\Plugin\Cookie\CookiePlugin;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
@@ -26,6 +28,11 @@ class FeatureContext extends OroFeatureContext implements
     KernelAwareContext
 {
     use FixtureLoaderDictionary, ElementFactoryDictionary, KernelDictionary;
+
+    /**
+     * @var string Path to saved template
+     */
+    protected $template;
 
     /**
      * @Given /^(?:|I )open (Opportunity) creation page$/
@@ -316,5 +323,74 @@ class FeatureContext extends OroFeatureContext implements
         }
 
         return $customers;
+    }
+
+    /**
+     * @Given I go to Opportunity Index page
+     */
+    public function iGoToOpportunityIndexPage()
+    {
+        /** @var MainMenu $mainMenu */
+        $mainMenu = $this->createElement('MainMenu');
+        $mainMenu->openAndClick("Sales/Opportunities");
+    }
+
+    /**
+     * @When I download Data Template file
+     */
+    public function iDownloadDataTemplateFile()
+    {
+        $importButton = $this->getSession()
+            ->getPage()
+            ->findLink('Import');
+        self::assertNotNull($importButton);
+
+        $importButton
+            ->getParent()
+            ->find('css', 'a.dropdown-toggle')
+            ->click();
+        $link = $importButton->getParent()->findLink('Download Data Template');
+
+        self::assertNotNull($link);
+
+        $url = $this->locatePath($this->getContainer()->get('router')->generate(
+            'oro_importexport_export_template',
+            ['processorAlias' => 'orocrm_sales_opportunity']
+        ));
+        $this->template = tempnam(sys_get_temp_dir(), 'opportunity_template_');
+
+        $cookies = $this->getSession()->getDriver()->getWebDriverSession()->getCookie('PHPSESSID');
+        $cookie = new Cookie();
+        $cookie->setName($cookies[0]['name']);
+        $cookie->setValue($cookies[0]['value']);
+        $cookie->setDomain($cookies[0]['domain']);
+
+        $jar = new ArrayCookieJar();
+        $jar->add($cookie);
+
+        $client = new Client($this->getSession()->getCurrentUrl());
+        $client->addSubscriber(new CookiePlugin($jar));
+        $request = $client->get($url, null, ['save_to' => $this->template]);
+        $response = $request->send();
+
+        self::assertEquals(200, $response->getStatusCode());
+    }
+
+    /**
+     * @Then /^(?:|I )don't see (?P<column>([\w\s]+)) column$/
+     */
+    public function iDonTSeeBbCustomerNameColumn($column)
+    {
+        $csv = array_map('str_getcsv', file($this->template));
+        self::assertNotContains($column, $csv[0]);
+    }
+
+    /**
+     * @Then /^(?:|I )see (?P<column>([\w\s]+)) column$/
+     */
+    public function iSeeAccountColumn($column)
+    {
+        $csv = array_map('str_getcsv', file($this->template));
+        self::assertContains($column, $csv[0]);
     }
 }
