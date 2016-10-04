@@ -37,3 +37,10 @@ Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead o
     Before: `__construct(RegistryInterface $doctrine, NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, AclHelper $aclHelper, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper)`.
     After: `__construct(NumberFormatter $numberFormatter, DateTimeFormatter $dateTimeFormatter, TranslatorInterface $translator, DateHelper $dateHelper, OwnerHelper $ownerHelper, ForecastProvider $provider, FilterDateRangeConverter $filterDateRangeConverter)`.
 - The method `getForecastOfOpportunitiesValues` of `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` class was changed. Argument $getterName was changed to $dataKey.
+- The method OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener::onChannelSucceedSave was renamed to onChannelSave
+- The class OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener was renamed to ChangeIntegrationStatusListener
+- The class OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener was renamed to UpdateIntegrationConnectorsListener
+
+####OroCRMMagentoBundle:
+- The method OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener::onChannelSucceedSave was renamed to onChannelSave
+- The class OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener was renamed to UpdateIntegrationConnectorsListener
