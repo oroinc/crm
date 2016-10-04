@@ -154,21 +154,47 @@ orocrm:
             add_entity:           Add opportunity
             id.label:             Id
             name.label:           Opportunity name
-            close_date.label:     Expected close date
-            probability.label:    Probability
-            budget_amount.label:  Budget amount
-            close_revenue.label:  Close revenue
-            customer_need.label:  Customer need
-            proposed_solution.label: Proposed solution
-            status.label:         Status
-            close_reason.label:   Close reason
-            contact.label:        Contact
+            close_date:
+                label:            Expected close date
+                description:      The expected close date for open opportunity, and actual close date for the closed one
+            probability:
+                label:            Probability
+                description:      The perceived probability of opportunity being successfully closed
+            budget_amount:
+                label:            Budget amount
+                description:      The expected revenue of the opportunity
+            close_revenue:
+                label:            Close revenue
+                description:      The actual revenue received from the opportunity after it's been closed
+            customer_need:
+                label:            Customer need
+                description:      The detailed description of customers' needs that constitute the business opportunity
+            proposed_solution:
+                label:            Proposed solution
+                description:      The detailed description of the solution proposed to the customer by the sales representative
+            status:
+                label:            Status
+                description:      A stage in the process of a sale
+            close_reason:
+                label:            Close reason
+                description:      The reason for opportunity closure (both won and lost)
+            contact:
+                label:            Contact
+                description:      The person on the customer side who is directly related to the opportunity
             owner.label:          Owner
-            notes.label:          Additional comments
-            lead.label:           Lead
+            notes:
+                label:            Additional comments
+                description:      Any additional notes made by the sales representative
+            lead:
+                label:            Lead
+                description:      The sale prospect that has been successfully qualified into this opportunity
             organization.label:   Organization
-            customer.label:       Account
-            data_channel.label:   Channel
+            customer:
+                label:            Account
+                dewcription:      The profile of the customer to which this opportunity is related
+            data_channel:
+                label:            Channel
+                description:      The sales channel where the opportunity is created
             assigned.label:       Assigned
             created_at.label:     Created At
             updated_at.label:     Updated At
