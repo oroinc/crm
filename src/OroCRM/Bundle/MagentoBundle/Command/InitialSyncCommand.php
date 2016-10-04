@@ -11,11 +11,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use JMS\JobQueueBundle\Entity\Job;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -240,18 +237,18 @@ class InitialSyncCommand extends ContainerAwareCommand
     }
 
     /**
-     * Add jobs to reindex magento entities
+     * Updates the search index for magento entities
      */
     protected function runReindex()
     {
-        /** @var EntityManager $em */
-        $em  = $this->getContainer()->get('doctrine')->getManagerForClass('JMSJobQueueBundle:Job');
-        $jobs = [];
-        foreach ($this->indexedEntities as $entityClass) {
-            $job = new Job(ReindexCommand::COMMAND_NAME, ['class' => $entityClass]);
-            $em->persist($job);
-            $jobs[] = $job;
-        }
-        $em->flush($jobs);
+        $this->getSearchIndexer()->reindex($this->indexedEntities);
+    }
+
+    /**
+     * @return \Oro\Bundle\SearchBundle\Async\Indexer
+     */
+    protected function getSearchIndexer()
+    {
+        return $this->getContainer()->get('oro_search.async.indexer');
     }
 }
