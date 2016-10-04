@@ -87,7 +87,7 @@ class ContactInformationFieldHelper
     public function getEntityContactInformationColumns($entity)
     {
         $metadata = $this->doctrineHelper->getEntityMetadata($entity);
-        $columns = $metadata->getColumnNames();
+        $columns = $metadata->getFieldNames();
         $contactInformationColumns = array();
         foreach ($columns as $column) {
             if ($type = $this->getContactInformationFieldType($entity, $column)) {
