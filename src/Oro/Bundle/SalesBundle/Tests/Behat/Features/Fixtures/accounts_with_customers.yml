@@ -1,4 +1,4 @@
-OroCRM\Bundle\AccountBundle\Entity\Account:
+Oro\Bundle\AccountBundle\Entity\Account:
   charlieAccount1:
     name: Charlie Account 1
     owner: '@charlie'
@@ -16,7 +16,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
     owner: '@samantha'
     organization: '@organization'
 
-OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
   customer{1..2}:
     name: <firstName()> <lastName()>
     owner: '@charlie'

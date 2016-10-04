@@ -1,23 +1,23 @@
-OroCRM\Bundle\ChannelBundle\Entity\Channel:
+Oro\Bundle\ChannelBundle\Entity\Channel:
   salesChannel:
     name: Second Sales Channel
     status: 1
     channelType: b2b
-    customerIdentity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
     owner: '@organization'
 
-OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+Oro\Bundle\ChannelBundle\Entity\EntityName:
   b2b2:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\B2bCustomer]
+    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
     channel: '@salesChannel'
   lead2:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\Lead]
+    __construct: [Oro\Bundle\SalesBundle\Entity\Lead]
     channel: '@salesChannel'
   opportunity2:
-    __construct: [OroCRM\Bundle\SalesBundle\Entity\Opportunity]
+    __construct: [Oro\Bundle\SalesBundle\Entity\Opportunity]
     channel: '@salesChannel'
 
-OroCRM\Bundle\AccountBundle\Entity\Account:
+Oro\Bundle\AccountBundle\Entity\Account:
   charlieAccount3:
     name: Charlie Account 3
     owner: '@charlie'
@@ -35,7 +35,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
     owner: '@samantha'
     organization: '@organization'
 
-OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
   customer{11..12}:
     name (unique): <firstName()> <lastName()>
     owner: '@charlie'
