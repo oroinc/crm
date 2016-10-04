@@ -1,0 +1,70 @@
+OroCRM\Bundle\ChannelBundle\Entity\Channel:
+  salesChannel:
+    name: Second Sales Channel
+    status: 1
+    channelType: b2b
+    customerIdentity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+    owner: '@organization'
+
+OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+  b2b2:
+    __construct: [OroCRM\Bundle\SalesBundle\Entity\B2bCustomer]
+    channel: '@salesChannel'
+  lead2:
+    __construct: [OroCRM\Bundle\SalesBundle\Entity\Lead]
+    channel: '@salesChannel'
+  opportunity2:
+    __construct: [OroCRM\Bundle\SalesBundle\Entity\Opportunity]
+    channel: '@salesChannel'
+
+OroCRM\Bundle\AccountBundle\Entity\Account:
+  charlieAccount3:
+    name: Charlie Account 3
+    owner: '@charlie'
+    organization: '@organization'
+  samanthaAccount3:
+    name: Samantha Account 3
+    owner: '@samantha'
+    organization: '@organization'
+  charlieAccount4:
+    name: Charlie Account 4
+    owner: '@charlie'
+    organization: '@organization'
+  samanthaAccount4:
+    name: Samantha Account 4
+    owner: '@samantha'
+    organization: '@organization'
+
+OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
+  customer{11..12}:
+    name (unique): <firstName()> <lastName()>
+    owner: '@charlie'
+    organization: '@organization'
+    account: '@charlieAccount3'
+    dataChannel: '@salesChannel'
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer{13..14}:
+    name (unique): <firstName()> <lastName()>
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount3'
+    dataChannel: '@salesChannel'
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer{15..16}:
+    name (unique): <firstName()> <lastName()>
+    owner: '@charlie'
+    organization: '@organization'
+    account: '@charlieAccount4'
+    dataChannel: '@salesChannel'
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer{17..18}:
+    name (unique): <firstName()> <lastName()>
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount4'
+    dataChannel: '@salesChannel'
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
