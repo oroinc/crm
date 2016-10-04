@@ -1,6 +1,8 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 
-{% oro_title_set({params : {"%account.name%": resource_granted('VIEW', entity, 'name')
+{% set hasGrantedNameView = resource_granted('VIEW', entity, 'name') %}
+
+{% oro_title_set({params : {"%account.name%": hasGrantedNameView
     ? entity.name|default('N/A')
     : 'view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}) }})
 %}
@@ -29,7 +31,8 @@
         'entity': entity,
         'indexPath': path('oro_account_index'),
         'indexLabel': 'oro.account.entity_plural_label'|trans,
-        'entityTitle': resource_granted('VIEW', entity, 'name')
+        'rawEntityTitle': not hasGrantedNameView,
+        'entityTitle': hasGrantedNameView
             ? entity.name|default('N/A')
             : UI.renderDisabledLabel('view %fieldName% not granted'|trans({'%fieldName%': 'oro.account.name.label'|trans}))
     } %}
@@ -94,7 +97,7 @@
 
     {# Render Website Activity Section if there is at least one applicable customer #}
     {% set websiteActivity %}
-        {%- placeholder oro_website_activity with {'customers': customers, 'byChannel': true} -%}
+        {%- placeholder orocrm_website_activity with {'customers': customers, 'byChannel': true} -%}
     {% endset %}
     {% if websiteActivity is not empty %}
         {% set dataBlocks = dataBlocks|merge([
