@@ -90,7 +90,6 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         if (!$dryRun) {
             $this->connection->executeUpdate($sql, $params, $types);
         }
-
     }
 
     /**
