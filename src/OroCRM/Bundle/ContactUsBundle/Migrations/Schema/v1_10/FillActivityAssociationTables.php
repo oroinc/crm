@@ -99,7 +99,6 @@ class FillActivityAssociationTables implements
         $table->removeForeignKey('FK_6F7A50CE427EB8A5');
         $table->removeForeignKey('FK_6F7A50CE50A89B2C');
         $schema->dropTable('orocrm_contactus_request_calls');
-
     }
 
     /**
