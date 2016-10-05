@@ -2,7 +2,6 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
@@ -25,7 +24,6 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
 
         $this->initClient();
         $this->loadFixtures([LoadChannel::class]);
-        $this->getMessageProducer()->clear();
     }
 
     public function testCouldBeGetFromContainerAsService()
@@ -49,12 +47,12 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
         $channel->setStatus(true);
         $channel->setData([RFMAwareInterface::RFM_STATE_KEY => true]);
 
-        $this->getMessageProducer()->clear();
+        self::getMessageCollector()->clear();
 
         $this->getEntityManager()->persist($channel);
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = self::getMessageCollector()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
@@ -69,13 +67,5 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
     private function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return MessageCollector
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
     }
 }

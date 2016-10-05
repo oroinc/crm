@@ -7,7 +7,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 
@@ -22,7 +21,6 @@ class MagentoSoapTransportTest extends WebTestCase
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
-        $this->getMessageProduer()->clear();
     }
 
     public function testShouldScheduleSyncIntegrationIfSyncStartDateIsChanged()
@@ -40,7 +38,7 @@ class MagentoSoapTransportTest extends WebTestCase
 
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProduer()->getTopicSentMessages(Topics::SYNC_INTEGRATION);
+        $traces = self::getMessageCollector()->getTopicSentMessages(Topics::SYNC_INTEGRATION);
 
         self::assertCount(1, $traces);
 
@@ -59,13 +57,5 @@ class MagentoSoapTransportTest extends WebTestCase
     private function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return TraceableMessageProducer
-     */
-    private function getMessageProduer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
     }
 }

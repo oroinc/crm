@@ -5,7 +5,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMOrderData;
@@ -23,7 +22,6 @@ class OrderTest extends WebTestCase
 
         $this->initClient();
         $this->loadFixtures([LoadRFMOrderData::class]);
-        $this->getMessageProducer()->clear();
     }
 
     public function testShouldScheduleAnalyticsCalculateWhenOrderSubtotalAmountIsChanged()
@@ -38,12 +36,12 @@ class OrderTest extends WebTestCase
         self::assertNotEmpty($order->getDataChannel());
         self::assertNotEmpty($order->getCustomer());
 
-        $this->getMessageProducer()->clear();
+        self::getMessageCollector()->clear();
 
         $this->getEntityManager()->persist($order);
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = self::getMessageCollector()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $order->getDataChannel()->getId(),
@@ -58,13 +56,5 @@ class OrderTest extends WebTestCase
     private function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return TraceableMessageProducer
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
     }
 }

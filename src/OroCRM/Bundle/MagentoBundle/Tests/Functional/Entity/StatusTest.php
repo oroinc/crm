@@ -8,7 +8,6 @@ use Oro\Bundle\IntegrationBundle\Tests\Functional\DataFixtures\LoadChannelData a
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
@@ -26,7 +25,6 @@ class StatusTest extends WebTestCase
 
         $this->initClient();
         $this->loadFixtures([LoadChannel::class, LoadIntegrationData::class]);
-        $this->getMessageProducer()->clear();
     }
 
     public function testShouldScheduleAnalyticsCalculateWhenCompletedIntegrationStatusIsCreated()
@@ -40,7 +38,7 @@ class StatusTest extends WebTestCase
         $integration = $this->getReference('oro_integration:foo_integration');
         $channel->setDataSource($integration);
         $this->getEntityManager()->flush();
-        $this->getMessageProducer()->clear();
+        self::getMessageCollector()->clear();
 
         /** @var Status $status */
         $status = new Status();
@@ -54,7 +52,7 @@ class StatusTest extends WebTestCase
         $this->getEntityManager()->persist($status);
         $this->getEntityManager()->flush();
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
+        $traces = self::getMessageCollector()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
         self::assertCount(1, $traces);
         self::assertEquals([
             'channel_id' => $channel->getId(),
@@ -69,13 +67,5 @@ class StatusTest extends WebTestCase
     private function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return TraceableMessageProducer
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
     }
 }
