@@ -44,7 +44,7 @@ class UpdateCallAccessLevels extends AbstractFixture implements DependentFixture
 
         $fileName = $this->container
             ->get('kernel')
-            ->locateResource('@OroCallBridgeBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
+            ->locateResource('@OroCRMCallBridgeBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
 
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse(file_get_contents($fileName));
