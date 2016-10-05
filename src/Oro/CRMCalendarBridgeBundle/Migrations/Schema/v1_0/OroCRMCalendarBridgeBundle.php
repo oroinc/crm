@@ -27,7 +27,7 @@ class OroCRMCalendarBridgeBundle implements Migration, ActivityExtensionAwareInt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
+        self::addCalendarActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
