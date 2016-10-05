@@ -83,7 +83,6 @@ class ProxyEntityWriter implements
                     $uniqueKeys[] = $identifier;
                     $uniqueItems[] = $item;
                 }
-
             } else {
                 $uniqueItems[] = $item;
             }
