@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25_4;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_4;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -21,18 +21,18 @@ class FixReportsQuery extends ParametrizedMigrationQuery
     /** @var array */
     protected $fixes = [
         'filters' => [
-            'OroCRM\Bundle\SalesBundle\Entity\Opportunity' => 'status',
-            'OroCRM\Bundle\SalesBundle\Entity\Lead' => 'status',
+            'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'status',
+            'Oro\Bundle\SalesBundle\Entity\Lead' => 'status',
         ],
         'removedFields' => [
-            'status+OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus::label' => 'status',
-            'status+OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus::name' => 'status',
-            'status+OroCRM\Bundle\SalesBundle\Entity\LeadStatus::label' => 'status',
-            'status+OroCRM\Bundle\SalesBundle\Entity\LeadStatus::name' => 'status',
+            'status+Oro\Bundle\SalesBundle\Entity\OpportunityStatus::label' => 'status',
+            'status+Oro\Bundle\SalesBundle\Entity\OpportunityStatus::name' => 'status',
+            'status+Oro\Bundle\SalesBundle\Entity\LeadStatus::label' => 'status',
+            'status+Oro\Bundle\SalesBundle\Entity\LeadStatus::name' => 'status',
         ],
         'chainFilters' => [
-            'OroCRM\Bundle\SalesBundle\Entity\Opportunity::status',
-            'OroCRM\Bundle\SalesBundle\Entity\Lead::status',
+            'Oro\Bundle\SalesBundle\Entity\Opportunity::status',
+            'Oro\Bundle\SalesBundle\Entity\Lead::status',
         ],
     ];
 
