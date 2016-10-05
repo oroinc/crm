@@ -3,6 +3,7 @@
 namespace Oro\CRMCalendarBridgeBundle\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
