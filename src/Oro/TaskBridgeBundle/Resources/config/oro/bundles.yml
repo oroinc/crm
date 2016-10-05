@@ -1,2 +1,0 @@
-bundles:
-    - { name: Oro\TaskBridgeBundle\OroTaskBridgeBundle, priority: 200 }

@@ -1,0 +1,4 @@
+bundles:
+    #Should be loaded after OroCaseBundle, OroCallBundle, OroMagentoBundle, OroContactUsBundle,
+    #because of migration priority
+    - { name: Oro\Bridge\CrmCall\OroCRMCallBridgeBundle, priority: 110 }
