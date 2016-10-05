@@ -115,7 +115,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->organization = $this->organizationManager
             ->getRepository('OroOrganizationBundle:Organization')
             ->getFirst();
-
     }
 
     /**

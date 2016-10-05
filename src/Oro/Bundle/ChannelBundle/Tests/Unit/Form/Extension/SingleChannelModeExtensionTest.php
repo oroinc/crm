@@ -60,7 +60,6 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->extension->buildForm($builder, ['entities' => $entities, 'single_channel_mode' => true]);
-
     }
 
     /**

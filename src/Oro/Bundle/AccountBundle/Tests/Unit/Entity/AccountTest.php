@@ -21,7 +21,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($entity->getOrganization());
         $entity->setOrganization($organization);
         $this->assertSame($organization, $entity->getOrganization());
-
     }
 
     public function testBeforeSave()

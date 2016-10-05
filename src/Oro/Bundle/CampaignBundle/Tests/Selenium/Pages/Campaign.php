@@ -49,17 +49,14 @@ class Campaign extends AbstractPageEntity
 
     public function setEndDate()
     {
-
     }
 
     public function setDescription()
     {
-
     }
 
     public function setBudget()
     {
-
     }
 
     /**

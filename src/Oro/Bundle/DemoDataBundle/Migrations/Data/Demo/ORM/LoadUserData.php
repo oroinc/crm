@@ -53,7 +53,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
         $this->group = $entityManager->getRepository('OroUserBundle:Group');
         $this->user = $entityManager->getRepository('OroUserBundle:User');
         $this->tagManager = $container->get('oro_tag.tag.manager');
-
     }
 
     public function load(ObjectManager $manager)
