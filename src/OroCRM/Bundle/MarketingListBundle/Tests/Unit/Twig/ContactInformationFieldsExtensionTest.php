@@ -63,7 +63,7 @@ class ContactInformationFieldsExtensionTest extends \PHPUnit_Framework_TestCase
         $entity = '\stdClass';
         $contactInformation = array(array('name' => 'test'));
         $this->helper->expects($this->once())
-            ->method('getEntityContactInformationColumnsInfo')
+            ->method('getEntityContactInformationFieldsInfo')
             ->with($entity)
             ->will($this->returnValue($contactInformation));
         $this->assertEquals($contactInformation, $this->extension->getContactInformationFieldsInfo($entity));

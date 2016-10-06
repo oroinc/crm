@@ -79,20 +79,20 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetContactInformationColumnsNoDefinition()
+    public function testGetContactInformationFieldsNoDefinition()
     {
-        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationFields($this->queryDesigner));
     }
 
-    public function testGetContactInformationColumnsNoColumns()
+    public function testGetContactInformationFieldsNoColumns()
     {
         $this->queryDesigner->expects($this->once())
             ->method('getDefinition')
             ->will($this->returnValue(json_encode(array('columns' => array()))));
-        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationFields($this->queryDesigner));
     }
 
-    public function testGetContactInformationColumns()
+    public function testGetContactInformationFields()
     {
         $entity = 'Entity';
 
@@ -124,7 +124,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
                 'email' => array(array('name' => 'one')),
                 'phone' => array(array('name' => 'two'))
             ),
-            $this->helper->getQueryContactInformationColumns($this->queryDesigner)
+            $this->helper->getQueryContactInformationFields($this->queryDesigner)
         );
     }
 
@@ -192,7 +192,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetEntityContactInformationColumns()
+    public function testgetEntityContactInformationFields()
     {
         $entity = '\stdClass';
 
@@ -207,11 +207,11 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertContactInformationConfig($entity);
         $this->assertEquals(
             array('one' => 'email', 'two' => 'phone'),
-            $this->helper->getEntityContactInformationColumns($entity)
+            $this->helper->getEntityContactInformationFields($entity)
         );
     }
 
-    public function testGetEntityContactInformationColumnsInfo()
+    public function testGetEntityContactInformationFieldsInfo()
     {
         $entity = '\stdClass';
 
@@ -260,7 +260,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
                     'contact_information_type' => 'phone'
                 )
             ),
-            $this->helper->getEntityContactInformationColumnsInfo($entity)
+            $this->helper->getEntityContactInformationFieldsInfo($entity)
         );
     }
 
