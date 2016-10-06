@@ -146,7 +146,6 @@ class Contact extends AbstractPageEntity
         $addressFirstName->value($value);
 
         return $this;
-
     }
 
     public function getAddressFirstName($addressId = 0)
@@ -169,7 +168,6 @@ class Contact extends AbstractPageEntity
         $addressLastName->value($value);
 
         return $this;
-
     }
 
     public function getAddressLastName($addressId = 0)

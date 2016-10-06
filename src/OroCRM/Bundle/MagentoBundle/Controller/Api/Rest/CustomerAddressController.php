@@ -87,7 +87,6 @@ class CustomerAddressController extends RestController implements ClassResourceI
             } else {
                 $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
             }
-
         } else {
             $view = $this->view($this->getForm(), Codes::HTTP_NOT_FOUND);
         }
