@@ -67,7 +67,7 @@ class ContactInformationColumnValidatorTest extends \PHPUnit_Framework_TestCase
         $value = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
 
         $this->contactInformationFieldHelper->expects($this->once())
-            ->method('getQueryContactInformationColumns')
+            ->method('getQueryContactInformationFields')
             ->with($value)
             ->will($this->returnValue(['email' => ['testField']]));
 
@@ -89,7 +89,7 @@ class ContactInformationColumnValidatorTest extends \PHPUnit_Framework_TestCase
         $value = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
 
         $this->contactInformationFieldHelper->expects($this->once())
-            ->method('getQueryContactInformationColumns')
+            ->method('getQueryContactInformationFields')
             ->with($value)
             ->will($this->returnValue($contactInformationFields));
 
@@ -134,7 +134,7 @@ class ContactInformationColumnValidatorTest extends \PHPUnit_Framework_TestCase
         $value->test = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
 
         $this->contactInformationFieldHelper->expects($this->once())
-            ->method('getQueryContactInformationColumns')
+            ->method('getQueryContactInformationFields')
             ->with($value->test)
             ->will($this->returnValue($contactInformationFields));
 
