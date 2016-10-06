@@ -8,6 +8,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Async\Topics;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,15 +17,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
-use JMS\JobQueueBundle\Entity\Job;
-
-use Oro\Bundle\SearchBundle\Command\ReindexCommand;
-use Oro\Component\Log\OutputLogger;
-
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncCommand extends Command implements ContainerAwareInterface
 {
@@ -133,5 +125,4 @@ class InitialSyncCommand extends Command implements ContainerAwareInterface
     {
         return $this->container->get('oro_message_queue.message_producer');
     }
-
 }
