@@ -71,7 +71,6 @@ class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
     private function createMessageProducer()
     {
         $collector = new MessageCollector($this->getMock(MessageProducerInterface::class));
-        $collector->enable();
 
         return $collector;
     }
