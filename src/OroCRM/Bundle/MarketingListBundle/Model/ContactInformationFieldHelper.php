@@ -40,6 +40,18 @@ class ContactInformationFieldHelper
     }
 
     /**
+     * @deprecated since 1.9.9 to be removed in 2.0.0 use getQueryContactInformationFields instead.
+     *
+     * @param AbstractQueryDesigner $queryDesigner
+     *
+     * @return array
+     */
+    public function getQueryContactInformationColumns(AbstractQueryDesigner $queryDesigner)
+    {
+        return $this->getQueryContactInformationFields($queryDesigner);
+    }
+
+    /**
      * @param AbstractQueryDesigner $queryDesigner
      *
      * @return array
@@ -73,6 +85,19 @@ class ContactInformationFieldHelper
     /**
      * Get entity contact information fields.
      *
+     * @deprecated since 1.9.9 to be removed in 2.0.0 use getEntityContactInformationFields instead.
+     *
+     * @param string|object $entity
+     * @return array
+     */
+    public function getEntityContactInformationColumns($entity)
+    {
+        return $this->getEntityContactInformationFields($entity);
+    }
+
+    /**
+     * Get entity contact information fields.
+     *
      * @param string|object $entity
      * @return array
      */
@@ -88,6 +113,17 @@ class ContactInformationFieldHelper
         }
 
         return array_merge($contactInformationFields, $this->getEntityLevelContactInfoFields($entity));
+    }
+
+    /**
+     * @deprecated since 1.9.9 to be removed in 2.0.0 use getEntityContactInformationFieldsInfo instead.
+     *
+     * @param string $entity
+     * @return array
+     */
+    public function getEntityContactInformationColumnsInfo($entity)
+    {
+        return $this->getEntityContactInformationFieldsInfo($entity);
     }
 
     /**
@@ -134,6 +170,17 @@ class ContactInformationFieldHelper
         }
 
         return $contactInformationType;
+    }
+
+    /**
+     * @deprecated since 1.9.9 to be removed in 2.0.0 use getEntityLevelContactInfoFields instead.
+     *
+     * @param string $entity
+     * @return array
+     */
+    protected function getEntityLevelContactInfoColumns($entity)
+    {
+        return $this->getEntityLevelContactInfoFields($entity);
     }
 
     /**
