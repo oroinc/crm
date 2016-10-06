@@ -46,7 +46,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->messageProducer = new MessageCollector($this->getMock(MessageProducerInterface::class));
-        $this->messageProducer->enable();
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
         $this->processor->setDoctrineHelper($this->doctrineHelper);
