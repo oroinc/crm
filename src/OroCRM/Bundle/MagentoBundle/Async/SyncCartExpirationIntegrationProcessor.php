@@ -75,14 +75,12 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
             /** @var ChannelRepository $repository */
             $repository = $this->doctrine->getRepository(Channel::class);
             $channel = $repository->getOrLoadById($body['integrationId']);
-            if (!$channel) {
-                return false;
-            }
-            if (!$channel->isEnabled()) {
-                return false;
-            }
-            $connectors = $channel->getConnectors() ?: [];
-            if (!in_array('cart', $connectors)) {
+
+            if (! $channel ||
+                ! $channel->isEnabled() ||
+                ! is_array($channel->getConnectors()) ||
+                ! in_array('cart', $channel->getConnectors())
+            ) {
                 return false;
             }
 
