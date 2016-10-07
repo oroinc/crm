@@ -85,7 +85,6 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
         }
 
         $this->flush($this->em);
-
     }
 
     /**

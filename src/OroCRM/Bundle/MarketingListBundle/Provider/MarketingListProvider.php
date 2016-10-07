@@ -178,7 +178,6 @@ class MarketingListProvider
                 $gridParameters['grid-mixin'] = $mixin;
             }
             $this->dataGrid[$resultKey] = $this->dataGridManager->getDatagrid($dataGridName, $gridParameters);
-
         }
 
         return $this->dataGrid[$resultKey];

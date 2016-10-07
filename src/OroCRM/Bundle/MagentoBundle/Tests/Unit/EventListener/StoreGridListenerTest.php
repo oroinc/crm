@@ -112,7 +112,6 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
         $event = new BuildAfter($this->datagrid);
         $this->listener->onBuildAfter($event);
         $dataGrid2 = $event->getDatagrid();
-
     }
 
     public function testOnBuildAfterAclIntegrationAssignGranted()
