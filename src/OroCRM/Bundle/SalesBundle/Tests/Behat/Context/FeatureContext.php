@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Guzzle\Http\Client;
@@ -33,6 +34,11 @@ class FeatureContext extends OroFeatureContext implements
      * @var string Path to saved template
      */
     protected $template;
+
+    /**
+     * @var string Path to import file
+     */
+    protected $importFile;
 
     /**
      * @Given /^(?:|I )open (Opportunity) creation page$/
@@ -393,4 +399,63 @@ class FeatureContext extends OroFeatureContext implements
         $csv = array_map('str_getcsv', file($this->template));
         self::assertContains($column, $csv[0]);
     }
+
+    /**
+     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
+     */
+    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
+    {
+//        throw new PendingException();
+    }
+
+    /**
+     * @Given I fill template with data:
+     */
+    public function iFillTemplateWithData(TableNode $table)
+    {
+        $this->importFile = tempnam(sys_get_temp_dir(), 'opportunity_import_data_');
+        $fp = fopen($this->importFile, 'w');
+        $csv = array_map('str_getcsv', file($this->template));
+        $headers = array_shift($csv);
+        fputcsv($fp, $headers);
+
+        foreach ($table as $row) {
+            $values = [];
+            foreach ($headers as $header) {
+                $value = '';
+                foreach ($row as $rowHeader => $rowValue) {
+                    if (preg_match(sprintf('/^%s$/i', $rowHeader), $header)) {
+                        $value = $rowValue;
+                    }
+                }
+
+                $values[] = $value;
+            }
+            fputcsv($fp, $values);
+        }
+    }
+
+    /**
+     * @When I import file
+     */
+    public function iImportFile()
+    {
+        $page = $this->getSession()->getPage();
+        $page->clickLink('Import');
+        $this->waitForAjax();
+        $this->createElement('ImportFileField')->attachFile($this->importFile);
+        $page->pressButton('Submit');
+        $this->waitForAjax();
+        $page->pressButton('Import');
+        $this->waitForAjax();
+    }
+
+    /**
+     * @Then new Opportunity is created with relation to specified Account
+     */
+    public function newOpportunityIsCreatedWithRelationToSpecifiedAccount()
+    {
+        throw new \Exception();
+    }
+
 }
