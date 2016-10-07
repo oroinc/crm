@@ -64,7 +64,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
             'integrationId' => null,
         ], $body);
 
-        if (false == $body['integrationId']) {
+        if (! $body['integrationId']) {
             throw new \LogicException('The message invalid. It must have integrationId set');
         }
 

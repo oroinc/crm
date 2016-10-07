@@ -37,6 +37,8 @@ class StatusTest extends WebTestCase
         /** @var Integration $integration */
         $integration = $this->getReference('oro_integration:foo_integration');
         $channel->setDataSource($integration);
+        $channel->setStatus(Channel::STATUS_ACTIVE);
+        $channel->setData(['rfm_enabled' => true]);
         $this->getEntityManager()->flush();
         self::getMessageCollector()->clear();
 
@@ -48,7 +50,6 @@ class StatusTest extends WebTestCase
         $status->setMessage('');
         $status->getChannel()->setType('magento');
         $status->setConnector('order');
-
         $this->getEntityManager()->persist($status);
         $this->getEntityManager()->flush();
 

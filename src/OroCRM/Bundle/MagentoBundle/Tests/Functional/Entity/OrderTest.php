@@ -6,6 +6,7 @@ use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use OroCRM\Bundle\AnalyticsBundle\Async\Topics;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMOrderData;
 
@@ -31,13 +32,18 @@ class OrderTest extends WebTestCase
 
         /** @var Order $order */
         $order = $this->getReference('order_1');
+        $channel = $order->getDataChannel();
         $order->setSubtotalAmount(1234);
 
-        self::assertNotEmpty($order->getDataChannel());
+        self::assertInstanceOf(Channel::class, $channel);
         self::assertNotEmpty($order->getCustomer());
+
+        $channel->setStatus(Channel::STATUS_ACTIVE);
+        $channel->setData(['rfm_enabled' => true]);
 
         self::getMessageCollector()->clear();
 
+        $this->getEntityManager()->persist($channel);
         $this->getEntityManager()->persist($order);
         $this->getEntityManager()->flush();
 
