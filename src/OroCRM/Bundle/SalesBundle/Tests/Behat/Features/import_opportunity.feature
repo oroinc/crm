@@ -7,6 +7,7 @@ Feature: Import opportunity feature
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
     And I go to Opportunity Index page
+    And there is no records in grid
     When I download Data Template file
     Then I don't see Business Customer Name column
     And I see Account Customer name column
@@ -17,11 +18,15 @@ Feature: Import opportunity feature
       | Account Customer name | Channel Name        | Opportunity name | Status Id   |
       | Charlie               | First Sales Channel | Opportunity one  | in_progress |
       | Samantha              | First Sales Channel | Opportunity two  | in_progress |
-#    And Account is specified in  the import file
-#    And CRM has Account with that name
-#    And Account has relation to Customer with that name
     When I import file
-    Then new Opportunity is created with relation to specified Account
+    Then Charlie customer has Opportunity one opportunity
+    And Samantha customer has Opportunity two opportunity
+    And go to Opportunity Index page
+    And number of records should be 2
+    And I should see Opportunity one in grid with following data:
+      | Channel    | First Sales Channel |
+      | Status     | Open                |
+      | Owner      | John Doe            |
 
 #  Scenario: Import Opportunity with new Account
 #    Given CRM has 'sales channels'

@@ -332,7 +332,7 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Given I go to Opportunity Index page
+     * @Given /^(?:|I )go to Opportunity Index page$/
      */
     public function iGoToOpportunityIndexPage()
     {
@@ -365,11 +365,11 @@ class FeatureContext extends OroFeatureContext implements
         ));
         $this->template = tempnam(sys_get_temp_dir(), 'opportunity_template_');
 
-        $cookies = $this->getSession()->getDriver()->getWebDriverSession()->getCookie('PHPSESSID');
+        $cookies = $this->getSession()->getDriver()->getWebDriverSession()->getCookie()[0];
         $cookie = new Cookie();
-        $cookie->setName($cookies[0]['name']);
-        $cookie->setValue($cookies[0]['value']);
-        $cookie->setDomain($cookies[0]['domain']);
+        $cookie->setName($cookies['name']);
+        $cookie->setValue($cookies['value']);
+        $cookie->setDomain($cookies['domain']);
 
         $jar = new ArrayCookieJar();
         $jar->add($cookie);
@@ -451,11 +451,25 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Then new Opportunity is created with relation to specified Account
+     * @Then /^(?P<customerName>\w+) customer has (?P<opportunityName>[\w\s]+) opportunity$/
      */
-    public function newOpportunityIsCreatedWithRelationToSpecifiedAccount()
+    public function charlieCustomerHasOpportunityOneOpportunity($customerName, $opportunityName)
     {
-        throw new \Exception();
-    }
+        /** @var MainMenu $mainMenu */
+        $mainMenu = $this->createElement('MainMenu');
+        $mainMenu->openAndClick('Customers/ Business Customers');
+        $this->waitForAjax();
 
+        /** @var Grid $grid */
+        $grid = $this->createElement('Grid');
+        self::assertTrue($grid->isValid(), 'Grid not found');
+        $grid->clickActionLink($customerName, 'View');
+        $this->waitForAjax();
+
+        /** @var Grid $customerOpportunitiesGrid */
+        $customerOpportunitiesGrid = $this->createElement('CustomerOpportunitiesGrid');
+        $row = $customerOpportunitiesGrid->getRowByContent($opportunityName);
+
+        self::assertTrue($row->isValid());
+    }
 }
