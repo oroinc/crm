@@ -82,9 +82,11 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     public function loadUsersTags()
     {
+        $router = $this->container->get('router');
+
         $params = array(
             'account' => array(
-                "url" => "/account",
+                "url" => $router->generate('orocrm_account_index'),
                 "title_rendered" => "Accounts - Customers",
                 "title" => "{\"template\":\"Accounts - Customers\",\"short_template\":\"Accounts\",\"params\":[]}",
                 "position" => 0,
@@ -94,7 +96,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "remove" => false
             ),
             'contact' => array(
-                "url" => "/contact",
+                "url" => $router->generate('orocrm_contact_index'),
                 "title_rendered" => "Contacts - Customers",
                 "title" => "{\"template\":\"Contacts - Customers\",\"short_template\":\"Contacts\",\"params\":[]}",
                 "position" => 1,
@@ -104,7 +106,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "remove" => false
             ),
             'leads' => array(
-                "url" => "/lead",
+                "url" => $router->generate('orocrm_sales_lead_index'),
                 "title_rendered" => "Leads - Sales",
                 "title" => "{\"template\":\"Leads - Sales\",\"short_template\":\"Leads\",\"params\":[]}",
                 "position" => 2,
@@ -114,7 +116,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "remove" => false
             ),
             'opportunities' => array(
-                "url" => "/opportunity",
+                "url" => $router->generate('orocrm_sales_opportunity_index'),
                 "title_rendered" => "Opportunities - Sales",
                 "title"
                     => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",

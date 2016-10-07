@@ -928,10 +928,10 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param \DateTime $syncedAt
+     * @param \DateTime|null $syncedAt
      * @return Customer
      */
-    public function setSyncedAt(\DateTime $syncedAt)
+    public function setSyncedAt(\DateTime $syncedAt = null)
     {
         $this->syncedAt = $syncedAt;
 
@@ -947,10 +947,10 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param \DateTime $importedAt
+     * @param \DateTime|null $importedAt
      * @return Customer
      */
-    public function setImportedAt(\DateTime $importedAt)
+    public function setImportedAt(\DateTime $importedAt = null)
     {
         $this->importedAt = $importedAt;
 
