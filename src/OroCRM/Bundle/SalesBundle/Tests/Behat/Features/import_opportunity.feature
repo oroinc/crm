@@ -48,14 +48,15 @@ Feature: Import opportunity feature
     And import file
     Then "Account without Customer" Customer was created
     And Account without Customer customer has Opportunity four opportunity
-#
-#  Scenario: Import Opportunity with no Account
-#    Given CRM has 'sales channels'
-#    And Account has Business Customers
-#    And Account not specified in the import file
-#    And CRM has no Account with that name
-#    When I import file
-#    Then I see validation message 'Error in row #1. name: This value should not be blank'
+
+  Scenario: Import Opportunity with no Account
+    Given I go to Opportunity Index page
+    And I fill template with data:
+      | Channel Name        | Opportunity name  | Status Id   |
+      | First Sales Channel | Opportunity five  | in_progress |
+    When I try import file
+    Then I should see validation message "Error in row #1. Account Customer name: This value should not be blank."
+    And close ui dialog
 #
 #  Scenario: Import Opportunity if Account and Customer have different names
 #    Given CRM has 'sales channels'
