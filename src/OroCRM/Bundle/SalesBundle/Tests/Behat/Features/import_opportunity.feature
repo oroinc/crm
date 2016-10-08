@@ -28,15 +28,15 @@ Feature: Import opportunity feature
       | Status     | Open                |
       | Owner      | John Doe            |
 
-#  Scenario: Import Opportunity with new Account
-#    Given CRM has 'sales channels'
-#    And Account has Business Customers
-#    And Account specified in the import file
-#    And CRM has no Account with that name
-#    When I import file
-#    Then new Account and Customer are created
-#    And Customer name is equal to Account name
-#    And new Opportunity is created with relation to Account
+  Scenario: Import Opportunity with new Account
+    Given I fill template with data:
+      | Account Customer name | Channel Name        | Opportunity name  | Status Id   |
+      | Absolute new account  | First Sales Channel | Opportunity three | in_progress |
+    When I import file
+    Then "Absolute new account" Account was created
+    Then "Absolute new account" Customer was created
+    And Absolute new account customer has Opportunity three opportunity
+
 #
 #  Scenario: Import Opportunity with new Customer
 #    Given CRM has 'sales channels'
