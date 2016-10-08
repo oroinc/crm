@@ -37,17 +37,17 @@ Feature: Import opportunity feature
     Then "Absolute new account" Customer was created
     And Absolute new account customer has Opportunity three opportunity
 
-#
-#  Scenario: Import Opportunity with new Customer
-#    Given CRM has 'sales channels'
-#    And Account has Business Customers
-#    And Account specified in the import file
-#    And CRM has an Account with that name
-#    And Account has no Customers
-#    When I import file
-#    Then new Customer is created
-#    And Customer name is equal to Account name
-#    And new Opportunity is created with relation to Account
+  Scenario: Import Opportunity with new Customer
+    Given the following Account:
+      | Name                     | Owner   | organization  |
+      | Account without Customer | @admin  | @organization |
+    And I fill template with data:
+      | Account Customer name    | Channel Name        | Opportunity name  | Status Id   |
+      | Account without Customer | First Sales Channel | Opportunity four  | in_progress |
+    When I go to Opportunity Index page
+    And import file
+    Then "Account without Customer" Customer was created
+    And Account without Customer customer has Opportunity four opportunity
 #
 #  Scenario: Import Opportunity with no Account
 #    Given CRM has 'sales channels'
