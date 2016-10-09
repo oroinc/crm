@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Behat\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Guzzle\Http\Client;
@@ -405,7 +406,7 @@ class FeatureContext extends OroFeatureContext implements
      */
     public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
     {
-//        throw new PendingException();
+        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
     }
 
     /**
@@ -436,9 +437,19 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @When I import file
+     * @When /^(?:|I )import file$/
      */
     public function iImportFile()
+    {
+        $this->tryImportFile();
+        $this->getSession()->getPage()->pressButton('Import');
+        $this->waitForAjax();
+    }
+
+    /**
+     * @When /^(?:|I )try import file$/
+     */
+    public function tryImportFile()
     {
         $page = $this->getSession()->getPage();
         $page->clickLink('Import');
@@ -446,12 +457,37 @@ class FeatureContext extends OroFeatureContext implements
         $this->createElement('ImportFileField')->attachFile($this->importFile);
         $page->pressButton('Submit');
         $this->waitForAjax();
-        $page->pressButton('Import');
-        $this->waitForAjax();
     }
 
     /**
-     * @Then /^(?P<customerName>\w+) customer has (?P<opportunityName>[\w\s]+) opportunity$/
+     * @Then /^(?:|I )should see validation message "(?P<validationMessage>[^"]+)"$/
+     */
+    public function iShouldSeeValidationMessage($validationMessage)
+    {
+        $errorsHolder = $this->createElement('ImportErrors');
+        self::assertTrue($errorsHolder->isValid(), 'No import errors found');
+
+        $errors = $errorsHolder->findAll('css', 'ol li');
+        $existedErrors = [];
+
+        /** @var NodeElement $error */
+        foreach ($errors as $error) {
+            $error = $error->getHtml();
+            $existedErrors[] = $error;
+            if (false !== stripos($error, $validationMessage)) {
+                return;
+            }
+        }
+
+        self::fail(sprintf(
+            '"%s" error message not found in errors: "%s"',
+            $validationMessage,
+            implode('", "', $existedErrors)
+        ));
+    }
+
+    /**
+     * @Then /^(?P<customerName>[\w\s]+) customer has (?P<opportunityName>[\w\s]+) opportunity$/
      */
     public function charlieCustomerHasOpportunityOneOpportunity($customerName, $opportunityName)
     {

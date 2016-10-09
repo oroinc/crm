@@ -57,12 +57,13 @@ Feature: Import opportunity feature
     When I try import file
     Then I should see validation message "Error in row #1. Account Customer name: This value should not be blank."
     And close ui dialog
-#
-#  Scenario: Import Opportunity if Account and Customer have different names
-#    Given CRM has 'sales channels'
-#    And Account has Business Customers
-#    And Account specified in the import file
-#    And CRM has no Account with that name
-#    And Account has relation to Customers with different name
-#    When I import file
-#    Then I see validation message 'Error in row #1. name: Customer name is needed'
+
+  Scenario: Import Opportunity with
+    Given I go to Opportunity Index page
+    And I fill template with data:
+      | Account Customer name |
+      | Acme                  |
+    When I try import file
+    Then I should see validation message "Error in row #1. Opportunity name: This value should not be blank."
+    And I should see validation message "Error in row #1. Channel Name: This value should not be blank."
+    And I should see validation message "Error in row #1. Status Id: This value should not be blank."
