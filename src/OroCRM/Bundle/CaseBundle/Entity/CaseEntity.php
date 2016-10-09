@@ -544,10 +544,21 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param CaseComment $comment
      * @return CaseEntity
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function removeComment(CaseComment $comment)
+    {
+        $this->comments->removeElement($comment);
+
+        return $this;
+    }
+
+    /**
+     * @param \DateTime|null $createdAt
+     * @return CaseEntity
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
 
@@ -563,10 +574,10 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      * @return CaseEntity
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
 
