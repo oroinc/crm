@@ -489,7 +489,7 @@ class FeatureContext extends OroFeatureContext implements
     /**
      * @Then /^(?P<customerName>[\w\s]+) customer has (?P<opportunityName>[\w\s]+) opportunity$/
      */
-    public function charlieCustomerHasOpportunityOneOpportunity($customerName, $opportunityName)
+    public function customerHasOpportunity($customerName, $opportunityName)
     {
         /** @var MainMenu $mainMenu */
         $mainMenu = $this->createElement('MainMenu');
