@@ -1,0 +1,108 @@
+oro:
+    workflow:
+        b2b_flow_lead:
+            step:
+                new:
+                    label: New
+                qualified:
+                    label: Qualified
+                cancelled:
+                    label: Cancelled
+            attribute:
+                opportunity_name:
+                    label: orocrm.sales.opportunity.name.label
+                account:
+                    label: orocrm.account.entity_label
+                b2bcustomer:
+                    label: orocrm.sales.b2bcustomer.entity_label
+                company_name:
+                    label: orocrm.sales.lead.company_name.label
+                notes:
+                    label: orocrm.sales.lead.notes.label
+            transition:
+                qualify:
+                    label: Qualify
+                cancel:
+                    label: Disqualify
+                reactivate:
+                    label: Reactivate
+            label: 'Unqualified Sales Lead'
+        b2b_flow_sales_funnel:
+            step:
+                new_lead:
+                    label: 'New Lead'
+                disqualified_lead:
+                    label: 'Disqualified Lead'
+                new_opportunity:
+                    label: 'New Opportunity'
+                developed_opportunity:
+                    label: 'Developed Opportunity'
+                won_opportunity:
+                    label: 'Won Opportunity'
+                lost_opportunity:
+                    label: 'Lost Opportunity'
+            attribute:
+                new_notes:
+                    label: orocrm.sales.lead.notes.label
+                new_opportunity_name:
+                    label: orocrm.sales.opportunity.name.label
+                new_b2bcustomer:
+                    label: orocrm.sales.b2bcustomer.entity_label
+                new_account:
+                    label: orocrm.account.entity_label
+                new_company_name:
+                    label: orocrm.sales.lead.company_name.label
+                close_reason_name:
+                    label: orocrm.sales.opportunity.close_reason.label
+                close_date:
+                    label: orocrm.sales.opportunity.workflow.close_date.label
+            transition:
+                start_from_lead:
+                    label: 'Start from Lead'
+                start_from_opportunity:
+                    label: 'Start from Opportunity'
+                disqualify:
+                    label: Disqualify
+                follow_up:
+                    label: 'Follow up'
+                reactivate:
+                    label: Reactivate
+                qualify:
+                    label: Qualify
+                develop:
+                    label: Develop
+                close_as_won:
+                    label: 'Close as Won'
+                close_as_lost:
+                    label: 'Close as Lost'
+                reopen:
+                    label: Reopen
+                    warning_message: "This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.\n\nDo you want to proceed?\n"
+            label: 'B2B Sales Process Flow'
+        opportunity_flow:
+            step:
+                open:
+                    label: Open
+                won:
+                    label: Won
+                lost:
+                    label: Lost
+            attribute:
+                close_reason_name:
+                    label: orocrm.sales.opportunity.close_reason.label
+                close_date:
+                    label: orocrm.sales.opportunity.close_date.label
+                status:
+                    label: orocrm.sales.opportunity.status.label
+            transition:
+                __start__:
+                    label: 'Start Opportunity Management Flow'
+                develop:
+                    label: Develop
+                close_won:
+                    label: 'Close as Won'
+                close_lost:
+                    label: 'Close as Lost'
+                reopen:
+                    label: Reopen
+            label: 'Opportunity Management Flow'

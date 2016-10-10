@@ -2,7 +2,6 @@ workflows:
     opportunity_flow:
         transitions:
             __start__:
-                label: 'Start Opportunity Management Flow'
                 step_to: open
                 is_start: true
                 is_hidden: true
@@ -40,7 +39,6 @@ workflows:
                             method_parameters: [$opportunity.status]
                             attribute: $opportunity.probability
             develop:
-                label: 'Develop'
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
@@ -83,7 +81,6 @@ workflows:
                         proposed_solution:
                             form_type: oro_resizeable_rich_text
             close_won:
-                label: 'Close as Won'
                 step_to: won
                 is_unavailable_hidden: true
                 frontend_options:
@@ -109,7 +106,6 @@ workflows:
                                 attribute: $close_date
                         - '@assign_value': [$close_revenue, $budget_amount]
             close_lost:
-                label: 'Close as Lost'
                 step_to: lost
                 is_unavailable_hidden: true
                 frontend_options:
@@ -143,7 +139,6 @@ workflows:
                             parameters:
                                 attribute: $close_date
             reopen:
-                label: 'Reopen'
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:

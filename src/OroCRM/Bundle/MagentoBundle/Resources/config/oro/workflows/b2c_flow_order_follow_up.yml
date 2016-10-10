@@ -6,7 +6,6 @@ imports:
 
 workflows:
     b2c_flow_order_follow_up:
-        label: 'Order Follow Up'
         entity: OroCRM\Bundle\MagentoBundle\Entity\Order
         defaults: {active: true}
         priority: 0
