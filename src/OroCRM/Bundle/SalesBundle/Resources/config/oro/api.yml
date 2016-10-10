@@ -132,4 +132,7 @@ api:
 
         OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: @OroCRMSalesBundle/Resources/doc/api/api.md
+            fields:
+                closedAt:
+                    exclude: true
         OroCRM\Bundle\SalesBundle\Entity\SalesFunnel: ~
