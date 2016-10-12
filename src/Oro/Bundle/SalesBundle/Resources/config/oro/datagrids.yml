@@ -242,7 +242,7 @@ datagrids:
                 closeRevenueCurrency:
                     type: choice
                     data_name: closeRevenueCurrency
-                    label: orocrm.sales.opportunity.close_revenue_currency.label
+                    label: oro.sales.opportunity.close_revenue_currency.label
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
@@ -266,7 +266,7 @@ datagrids:
                 budgetAmountCurrency:
                     type: choice
                     data_name: budgetAmountCurrency
-                    label: orocrm.sales.opportunity.budget_amount_currency.label
+                    label: oro.sales.opportunity.budget_amount_currency.label
                     options:
                         field_options:
                             choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"

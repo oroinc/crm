@@ -8,7 +8,7 @@ query_designer:
                 - { name: SolutionDevelopmentCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
             query_type: [report]
         opportunity:
-            applicable: [{entity: OroSalesBundle:Opportunity, field: closeRevenue}]
+            applicable: [{entity: OroSalesBundle:Opportunity, field: closeRevenueValue}]
             functions:
                 - { name: WonRevenueSumFunction, return_type: money, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\WonRevenueSumFunction' }
             query_type: [report]
