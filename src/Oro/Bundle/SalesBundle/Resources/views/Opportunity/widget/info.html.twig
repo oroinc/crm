@@ -34,7 +34,7 @@
             {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
 
             {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
-            {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency : '', entity, 'budgetAmount') }}
+            {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
@@ -42,7 +42,7 @@
             {{ ui.renderHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_reason.label'|trans, entity.closeReason, entity, 'closeReason') }}
-            {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency : '', entity, 'closeRevenue') }}
+            {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue.value|length ? entity.closeRevenue.value|oro_format_currency({'currency': entity.closeRevenue.currency}) : '', entity, 'closeRevenue') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '', entity, 'closeDate') }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
         </div>

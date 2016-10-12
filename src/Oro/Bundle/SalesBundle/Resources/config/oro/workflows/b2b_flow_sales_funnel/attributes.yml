@@ -43,7 +43,11 @@ workflows:
             probability:
                 property_path: sales_funnel.opportunity.probability
             budget_amount:
+                label: Budget Amount
                 property_path: sales_funnel.opportunity.budgetAmount
+                type: entity
+                options:
+                    class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
             customer_need:
                 property_path: sales_funnel.opportunity.customerNeed
             proposed_solution:
@@ -54,7 +58,11 @@ workflows:
             close_reason:
                 property_path: sales_funnel.opportunity.closeReason
             close_revenue:
+                label: Close Revenue
                 property_path: sales_funnel.opportunity.closeRevenue
+                type: entity
+                options:
+                    class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
             close_date:
                 label: oro.sales.opportunity.workflow.close_date.label
                 property_path: sales_funnel.opportunity.closeDate

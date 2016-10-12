@@ -52,7 +52,7 @@ class B2bCustomerLifetimeListener
             if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation, just add to prev lifetime value and recalculate change set
                 $b2bCustomer = $entity->getCustomer();
-                $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $entity->getCloseRevenue());
+                $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $entity->getCloseRevenueValue());
                 $this->scheduleUpdate($b2bCustomer);
                 $this->uow->computeChangeSet(
                     $this->em->getClassMetadata(ClassUtils::getClass($b2bCustomer)),
@@ -147,7 +147,7 @@ class B2bCustomerLifetimeListener
             $opportunity->getCustomer()
             && $opportunity->getStatus()
             && $opportunity->getStatus()->getId() === B2bCustomerRepository::VALUABLE_STATUS
-            && ($takeZeroRevenue || $opportunity->getCloseRevenue() > 0);
+            && ($takeZeroRevenue || $opportunity->getCloseRevenueValue() > 0);
     }
 
     /**

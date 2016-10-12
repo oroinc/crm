@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\AccountBundle\Entity\Account;
@@ -171,7 +172,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $opportunity->setName('opname');
         $opportunity->setCustomer($this->getReference('default_b2bcustomer'));
         $opportunity->setDataChannel($this->getReference('default_channel'));
-        $opportunity->setBudgetAmount(50.00);
+        $budgetAmount = MultiCurrency::create(50.00, 'USD');
+        $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(10);
         $opportunity->setOrganization($this->organization);
 

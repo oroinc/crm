@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -56,7 +57,8 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));
                 $entity->setOrganization($organizationRepo->getEntity('default'));
-                $entity->setBudgetAmount(1000000);
+                $budgetAmount = MultiCurrency::create(100000, 'USD');
+                $entity->setBudgetAmount($budgetAmount);
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setLead($leadRepo->getEntity('Jerry Coleman'));
 
