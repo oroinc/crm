@@ -19,8 +19,10 @@ datagrids:
                     - o.updatedAt
                     - o.closeDate
                     - o.probability
-                    - o.budgetAmount
-                    - o.closeRevenue
+                    - o.budgetAmountValue as budgetAmount
+                    - o.closeRevenueValue  as closeRevenue
+                    - o.budgetAmountCurrency as budgetAmountCurrency
+                    - o.closeRevenueCurrency as closeRevenueCurrency
                     - s.id as status
                     - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
@@ -72,8 +74,18 @@ datagrids:
                 renderable: false
             closeRevenue:
                 label:         orocrm.sales.opportunity.close_revenue.label
-                frontend_type: currency
+                frontend_type: multi-currency
+                type:          callback
+                callable:      Oro\Bundle\CurrencyBundle\Converter\CurrencyToString::getConverterCallback
+                params:
+                    value:    closeRevenue
+                    currency: closeRevenueCurrency
                 renderable: false
+                inline_editing:
+                    enable: true
+                    save_api_accessor:
+                        currency_field: closeRevenueCurrency
+                        value_field: closeRevenueValue
             closeReasonLabel:
                 label:         orocrm.sales.opportunity.close_reason.label
                 renderable: false
@@ -82,7 +94,17 @@ datagrids:
                 frontend_type: date
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
-                frontend_type: currency
+                frontend_type: multi-currency
+                type:          callback
+                callable:      Oro\Bundle\CurrencyBundle\Converter\CurrencyToString::getConverterCallback
+                params:
+                    value:    budgetAmount
+                    currency: budgetAmountCurrency
+                inline_editing:
+                    enable: true
+                    save_api_accessor:
+                        currency_field: budgetAmountCurrency
+                        value_field: budgetAmountValue
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
@@ -119,12 +141,16 @@ datagrids:
                     data_name: o.customer
                 closeRevenue:
                     data_name: o.closeRevenue
+                closeRevenueCurrency:
+                    data_name: o.closeRevenueCurrency
                 closeReasonLabel:
                     data_name: o.closeReason
                 closeDate:
                     data_name: o.closeDate
                 budgetAmount:
-                    data_name: o.budgetAmount
+                    data_name: o.budgetAmountValue
+                budgetAmountCurrency:
+                    data_name: o.budgetAmountCurrency
                 probability:
                     data_name: o.probability
                 status:
@@ -164,13 +190,13 @@ datagrids:
                 customerName:
                     data_name: customerName
                 closeRevenue:
-                    data_name: o.closeRevenue
+                    data_name: closeRevenue
                 closeReasonLabel:
                     data_name: closeReason.label
                 closeDate:
                     data_name: o.closeDate
                 budgetAmount:
-                    data_name: o.budgetAmount
+                    data_name: budgetAmount
                 probability:
                     data_name: o.probability
                 status:
@@ -211,7 +237,16 @@ datagrids:
                     enabled: false
                 closeRevenue:
                     type: currency
-                    data_name: o.closeRevenue
+                    data_name: closeRevenue
+                    enabled: false
+                closeRevenueCurrency:
+                    type: choice
+                    data_name: closeRevenueCurrency
+                    label: orocrm.sales.opportunity.close_revenue_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                     enabled: false
                 closeReasonLabel:
                     type: entity
@@ -227,7 +262,15 @@ datagrids:
                     data_name: o.closeDate
                 budgetAmount:
                     type: currency
-                    data_name: o.budgetAmount
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: orocrm.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 probability:
                     type: percent
                     data_name: o.probability
@@ -691,8 +734,8 @@ datagrids:
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
-                    - opportunity.budgetAmount as opportunityBudget
-                    - opportunity.closeRevenue as opportunityRevenue
+                    - opportunity.budgetAmountValue as opportunityBudget
+                    - opportunity.closeRevenueValue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
@@ -753,9 +796,9 @@ datagrids:
                 opportunityName:
                     data_name: opportunity.name
                 opportunityBudget:
-                    data_name: opportunity.budgetAmount
+                    data_name: opportunity.budgetAmountValue
                 opportunityRevenue:
-                    data_name: opportunity.closeRevenue
+                    data_name: opportunity.closeRevenueValue
                 opportunityProbability:
                     data_name: opportunity.probability
                 ownerName:
@@ -1574,7 +1617,7 @@ datagrids:
                     - o.createdAt
                     - o.closeDate
                     - o.probability
-                    - o.budgetAmount
+                    - o.budgetAmountValue as budgetAmount
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
@@ -1598,7 +1641,7 @@ datagrids:
                     data_name: o.closeDate
                 budgetAmount:
                     type: currency
-                    data_name: o.budgetAmount
+                    data_name: o.budgetAmountValue
                 probability:
                     type: percent
                     data_name: o.probability
@@ -1618,7 +1661,7 @@ datagrids:
                 closeDate:
                     data_name: o.closeDate
                 budgetAmount:
-                    data_name: o.budgetAmount
+                    data_name: o.budgetAmountValue
                 probability:
                     data_name: o.probability
                 status:
@@ -1699,7 +1742,7 @@ datagrids:
                 closeDate:
                     data_name: o.closeDate
                 budgetAmount:
-                    data_name: o.budgetAmount
+                    data_name: o.budgetAmountValue
                 probability:
                     data_name: o.probability
                 status:
@@ -1966,7 +2009,7 @@ datagrids:
                 select:
                     - o.id
                     - o.name
-                    - o.budgetAmount
+                    - o.budgetAmountValue as budgetAmount
                     - s.id as status
                     - o.probability
                     - o.closeDate
@@ -2000,7 +2043,7 @@ datagrids:
                 name:
                     data_name: o.name
                 budgetAmount:
-                    data_name: o.budgetAmount
+                    data_name: o.budgetAmountValue
                 status:
                     data_name: o.status
                 probability:

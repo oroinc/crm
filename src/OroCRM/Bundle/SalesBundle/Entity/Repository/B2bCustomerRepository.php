@@ -21,7 +21,7 @@ class B2bCustomerRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->getRepository('OroCRMSalesBundle:Opportunity')
             ->createQueryBuilder('o');
-        $qb->select('SUM(o.closeRevenue)');
+        $qb->select('SUM(o.closeRevenueValue)');
         $qb->innerJoin('o.customer', 'c');
         $qb->innerJoin('o.status', 's');
         $qb->andWhere('c = :customer');
