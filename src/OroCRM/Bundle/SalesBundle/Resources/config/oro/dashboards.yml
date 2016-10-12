@@ -14,14 +14,14 @@ dashboards:
                     route:      orocrm_sales_opportunity_index
                     acl:        orocrm_sales_opportunity_view
                     position:   40
-                    applicable: "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+                    applicable: "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
         opportunities_by_lead_source_chart:
             label:       orocrm.sales.dashboard.opportunities_by_lead_source_chart.title
             route:       orocrm_sales_dashboard_opportunities_by_lead_source_chart
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.opportunities_by_lead_source_chart.description
             icon:        bundles/orocrmsales/img/opportunities_by_lead_source.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration:
                 owners:
                     type: oro_type_widget_owners
@@ -61,7 +61,7 @@ dashboards:
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.opportunities_by_state.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration:
                 owners:
                     type: oro_type_widget_owners
@@ -98,7 +98,7 @@ dashboards:
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.my_sales_flow_b2b_chart.description
             icon:        bundles/orocrmsales/img/my_sales_flow_b2b.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -125,7 +125,7 @@ dashboards:
             acl:         orocrm_campaign_view
             description: orocrm.campaign.dashboard.campaigns_opportunity.description
             icon:        bundles/orocrmcampaign/img/Top-5-opportunity-generating-campaigns.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -153,7 +153,7 @@ dashboards:
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.forecast_of_opportunities.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration_dialog_options:
                 resizable: true
                 minWidth: 780
@@ -296,7 +296,7 @@ dashboards:
             acl:         orocrm_channel_view
             description: orocrm.channel.dashboard.average_lifetime_sales_chart.description
             icon:        bundles/orocrmchannel/img/average_lifetime_sales_chart.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range

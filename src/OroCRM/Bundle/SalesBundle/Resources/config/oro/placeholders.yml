@@ -19,7 +19,7 @@ placeholders:
 
         opportunities_launchpad:
             template:   OroCRMSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
-            applicable: "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            applicable: "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_opportunity)"
 
         orocrm_sales_account_channel_info:
             action: OroCRMSalesBundle:B2bCustomer:accountCustomersInfo

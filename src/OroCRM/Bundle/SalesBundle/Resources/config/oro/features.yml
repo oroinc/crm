@@ -30,3 +30,24 @@ features:
             - campaigns_leads
             - campaigns_by_close_revenue
             - quick_launchpad.leads
+
+    sales_opportunity:
+        label: orocrm.sales.opportunity.feature.label
+        description: orocrm.sales.opportunity.feature.description
+        toggle: oro_crm_sales.opportunity_feature_enabled
+        routes:
+            - orocrm_sales_opportunity_view
+            - orocrm_sales_opportunity_info
+            - orocrm_sales_opportunity_create
+            - orocrm_sales_opportunity_update
+            - orocrm_sales_opportunity_index
+            - orocrm_sales_opportunity_data_channel_aware_create
+            - orocrm_sales_datagrid_opportunity_datachannel_aware
+        workflows:
+            - opportunity_flow
+        api_resources:
+            - OroCRM\Bundle\SalesBundle\Entity\Opportunity
+            - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+            - OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+        configuration:
+            - opportunity_status_probabilities
