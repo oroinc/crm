@@ -218,19 +218,29 @@ class ActivityListener
      * Save collected changes
      *
      * @param PostFlushEventArgs $args
+     *
+     * @throws \Exception
      */
     public function postFlush(PostFlushEventArgs $args)
     {
-        $em = $args->getEntityManager();
+        $entityManager = $args->getEntityManager();
         if (empty($this->deletedEntities) && empty($this->updatedEntities)) {
             return;
         }
+        $entityManager->beginTransaction();
 
-        $accessor = PropertyAccess::createPropertyAccessor();
-        $this->processDeletedEntities($em, $accessor);
-        $this->processUpdatedEntities($em, $accessor);
+        try {
+            $accessor = PropertyAccess::createPropertyAccessor();
+            $this->processDeletedEntities($entityManager, $accessor);
+            $this->processUpdatedEntities($entityManager, $accessor);
 
-        $em->flush();
+            $entityManager->flush();
+
+            $entityManager->commit();
+        } catch (\Exception $e) {
+            $entityManager->rollback();
+            throw $e;
+        }
     }
 
     /**
