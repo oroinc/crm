@@ -149,67 +149,11 @@ class ActivityListener
         $extendProvider   = $this->configManager->getProvider('extend');
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
-                $class = $this->doctrineHelper->getEntityClass($entity);
-                $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-                $key   = $class . '_' . $id;
-                if (!isset($this->deletedEntities[$key])
-                    && $this->activityContactProvider->isSupportedEntity($class)
-                ) {
-                    $targets     = $entity->getActivityTargetEntities();
-                    $targetsInfo = [];
-                    foreach ($targets as $target) {
-                        $targetClassName = ClassUtils::getClass($target);
-                        if (!TargetExcludeList::isExcluded($targetClassName) &&
-                            $extendProvider->getConfig($targetClassName)->is('is_extend')) {
-                            $targetsInfo[] = [
-                                'class' => $this->doctrineHelper->getEntityClass($target),
-                                'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
-                                'direction' => $this->activityContactProvider->getActivityDirection($entity, $target)
-                            ];
-                        }
-                    }
-                    $this->deletedEntities[$key] = [
-                        'class'       => $class,
-                        'id'          => $id,
-                        'contactDate' => $this->activityContactProvider->getActivityDate($entity),
-                        'targets'     => $targetsInfo
-                    ];
-                }
+                $this->collectDeleteEntities($entity, $extendProvider);
             }
 
             foreach ($entitiesToUpdate as $entity) {
-                $class = $this->doctrineHelper->getEntityClass($entity);
-                $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-                $key   = $class . '_' . $id;
-                if (!isset($this->updatedEntities[$key])
-                    && $this->activityContactProvider->isSupportedEntity($class)
-                ) {
-                    $changes            = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
-                    $isDirectionChanged = $this->activityContactProvider
-                        ->getActivityDirectionProvider($entity)
-                        ->isDirectionChanged($changes);
-
-                    $targets     = $entity->getActivityTargetEntities();
-                    $targetsInfo = [];
-                    foreach ($targets as $target) {
-                        $targetClassName = ClassUtils::getClass($target);
-                        if (!TargetExcludeList::isExcluded($targetClassName) &&
-                            $extendProvider->getConfig($targetClassName)->is('is_extend')) {
-                            $targetsInfo[] = [
-                                'class' => $this->doctrineHelper->getEntityClass($target),
-                                'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
-                                'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
-                                'is_direction_changed' => $isDirectionChanged
-                            ];
-                        }
-                    }
-                    $this->updatedEntities[$key] = [
-                        'class'       => $class,
-                        'id'          => $id,
-                        'contactDate' => $this->activityContactProvider->getActivityDate($entity),
-                        'targets'     => $targetsInfo
-                    ];
-                }
+                $this->collectUpdateEntities($args, $entity, $extendProvider);
             }
         }
     }
@@ -373,5 +317,85 @@ class ActivityListener
         return $currentDirection === DirectionProviderInterface::DIRECTION_INCOMING
             ? [ActivityScope::CONTACT_COUNT_IN, ActivityScope::CONTACT_COUNT_IN]
             : [ActivityScope::CONTACT_COUNT_OUT, ActivityScope::CONTACT_COUNT_OUT];
+    }
+
+    /**
+     * @param $entity
+     * @param $extendProvider
+     */
+    protected function collectDeleteEntities($entity, $extendProvider)
+    {
+        $class = $this->doctrineHelper->getEntityClass($entity);
+        $id = $this->doctrineHelper->getSingleEntityIdentifier($entity);
+        $key = $class . '_' . $id;
+        if (!isset($this->deletedEntities[$key])
+            && $this->activityContactProvider->isSupportedEntity($class)
+        ) {
+            $targets = $entity->getActivityTargetEntities();
+            $targetsInfo = [];
+            foreach ($targets as $target) {
+                $targetClassName = ClassUtils::getClass($target);
+                if (!TargetExcludeList::isExcluded($targetClassName)
+                    && $extendProvider->getConfig($targetClassName)->is('is_extend')
+                ) {
+                    $targetsInfo[] = [
+                        'class'     => $this->doctrineHelper->getEntityClass($target),
+                        'id'        => $this->doctrineHelper->getSingleEntityIdentifier($target),
+                        'direction' => $this->activityContactProvider->getActivityDirection($entity, $target)
+                    ];
+                }
+            }
+            $this->deletedEntities[$key] = [
+                'class'       => $class,
+                'id'          => $id,
+                'contactDate' => $this->activityContactProvider->getActivityDate($entity),
+                'targets'     => $targetsInfo
+            ];
+        }
+    }
+
+    /**
+     * @param OnFlushEventArgs $args
+     * @param                  $entity
+     * @param                  $extendProvider
+     */
+    protected function collectUpdateEntities(OnFlushEventArgs $args, $entity, $extendProvider)
+    {
+        $class = $this->doctrineHelper->getEntityClass($entity);
+        $id = $this->doctrineHelper->getSingleEntityIdentifier($entity);
+        $key = $class . '_' . $id;
+        if (!isset($this->updatedEntities[$key])
+            && $this->activityContactProvider->isSupportedEntity($class)
+        ) {
+            $changes = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
+            $isDirectionChanged = $this->activityContactProvider
+                ->getActivityDirectionProvider($entity)
+                ->isDirectionChanged($changes);
+
+            $targets = $entity->getActivityTargetEntities();
+            $targetsInfo = [];
+            foreach ($targets as $target) {
+                $targetClassName = ClassUtils::getClass($target);
+                if (!TargetExcludeList::isExcluded($targetClassName)
+                    && $extendProvider->getConfig($targetClassName)->is('is_extend')
+                ) {
+                    $targetsInfo[] = [
+                        'class'                => $this->doctrineHelper->getEntityClass($target),
+                        'id'                   => $this->doctrineHelper->getSingleEntityIdentifier($target),
+                        'direction'            => $this->activityContactProvider->getActivityDirection(
+                            $entity,
+                            $target
+                        ),
+                        'is_direction_changed' => $isDirectionChanged
+                    ];
+                }
+            }
+            $this->updatedEntities[$key] = [
+                'class'       => $class,
+                'id'          => $id,
+                'contactDate' => $this->activityContactProvider->getActivityDate($entity),
+                'targets'     => $targetsInfo
+            ];
+        }
     }
 }
