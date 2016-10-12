@@ -18,7 +18,7 @@ api:
         OroCRM\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
         OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
-            documentation_resource: @OroCRMSalesBundle/Resources/doc/api/api.md
+            documentation_resource: '@OroCRMSalesBundle/Resources/doc/api/b2b_customer.md'
             fields:
                 phones:
                     data_type: array
@@ -131,7 +131,7 @@ api:
             actions: false
 
         OroCRM\Bundle\SalesBundle\Entity\Opportunity:
-            documentation_resource: @OroCRMSalesBundle/Resources/doc/api/api.md
+            documentation_resource: '@OroCRMSalesBundle/Resources/doc/api/opportunity.md'
             fields:
                 closedAt:
                     exclude: true

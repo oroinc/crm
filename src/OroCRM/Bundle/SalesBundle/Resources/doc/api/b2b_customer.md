@@ -1,6 +1,6 @@
-# OroCRM\Bundle\ContactBundle\Entity\Contact
+# OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
 
-## Fields
+## FIELDS
 
 ### emails
 
@@ -72,7 +72,6 @@ The **emails** field data should contain **primaryEmail** field.
 If was set **primaryEmail** data without **emails** field data and entity emails collection does not have this record, 
  new email address will be automatically added to the emails collection.
  
-
 ### primaryPhone
 
 Phone number that should be set as the primary one.
@@ -99,7 +98,7 @@ The **phones** field data should contain **primaryPhone** field.
 If was set **primaryPhone** data without **phones** field data and entity phones collection does not have this record, 
  new email phone will be automatically added to the phones collection.
 
-## Filters
+## FILTERS
 
 ### emails
 
