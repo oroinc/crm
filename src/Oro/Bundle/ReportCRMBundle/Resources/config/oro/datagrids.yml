@@ -194,9 +194,9 @@ datagrids:
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
-                        CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(opportunity.closeRevenue, 0) ELSE 0 END
+                        CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(opportunity.closeRevenueValue, 0) ELSE 0 END
                       ) as closeRevenue
-                    - SUM(COALESCE(opportunity.budgetAmount, 0)) as budgetAmount
+                    - SUM(COALESCE(opportunity.budgetAmountValue, 0)) as budgetAmount
                 groupBy: statusLabel
         totals:
             total:
@@ -213,10 +213,10 @@ datagrids:
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
-                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
+                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenueValue ELSE 0 END)
                         formatter: currency
                     budgetAmount:
-                        expr: SUM(COALESCE(opportunity.budgetAmount, 0))
+                        expr: SUM(COALESCE(opportunity.budgetAmountValue, 0))
                         formatter: currency
         columns:
             statusPriority:        { label: statusPriority, renderable: false, manageable: false }
@@ -288,7 +288,7 @@ datagrids:
                     - MAX(o.closeDate) as quarterPeriodSorting
 
                     - YEAR(o.closeDate) as yearPeriod
-                    - SUM(o.closeRevenue) as value
+                    - SUM(o.closeRevenueValue) as value
                     - COUNT(o.id) as cnt
                 from:
                     - { table: OroSalesBundle:Opportunity, alias: o }
@@ -319,7 +319,7 @@ datagrids:
                     cnt:
                         expr: COUNT( o.id )
                     value:
-                        expr: SUM( o.closeRevenue )
+                        expr: SUM( o.closeRevenueValue )
                         formatter: currency
 
         columns:
@@ -377,8 +377,8 @@ datagrids:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
                     - SUM( (CASE WHEN (s.id NOT IN ('lost', 'won')) THEN 1 ELSE 0 END) ) as inProgressCount
-                    - SUM( o.budgetAmount ) as budgetAmount
-                    - SUM( o.budgetAmount * o.probability ) as weightedForecast
+                    - SUM( o.budgetAmountValue ) as budgetAmount
+                    - SUM( o.budgetAmountValue * o.probability ) as weightedForecast
                 from:
                     - { table: OroSalesBundle:Opportunity, alias: o }
                 join:
@@ -407,10 +407,10 @@ datagrids:
                     inProgressCount:
                         expr: SUM( (CASE WHEN (s.id NOT IN ('lost', 'won')) THEN 1 ELSE 0 END) )
                     budgetAmount:
-                        expr: SUM( o.budgetAmount )
+                        expr: SUM( o.budgetAmountValue )
                         formatter: currency
                     weightedForecast:
-                        expr: SUM( o.budgetAmount * o.probability )
+                        expr: SUM( o.budgetAmountValue * o.probability )
                         formatter: currency
         columns:
             ownerName:        { label: oro.reportcrm.datagrid.columns.ownerName,        frontend_type: string }

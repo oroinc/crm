@@ -63,7 +63,8 @@ workflows:
                                     placeholder: oro.contact.form.choose_contact
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
-                        budget_amount: ~
+                        budget_amount:
+                            form_type: oro_multicurrency
                         status:
                             form_type: oro_sales_opportunity_status_select
                             options:
@@ -92,7 +93,8 @@ workflows:
                 transition_definition: close_won_definition
                 form_options:
                     attribute_fields:
-                        close_revenue: ~
+                        close_revenue:
+                            form_type: oro_multicurrency
                         close_date:
                             options:
                                 constraints:
@@ -118,6 +120,8 @@ workflows:
                 transition_definition: close_lost_definition
                 form_options:
                     attribute_fields:
+                        close_revenue:
+                            form_type: oro_multicurrency
                         close_reason_name:
                             form_type: choice
                             options:
@@ -166,7 +170,8 @@ workflows:
                                     placeholder: oro.contact.form.choose_contact
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
-                        budget_amount: ~
+                        budget_amount:
+                            form_type: oro_multicurrency
                         status:
                             form_type: oro_sales_opportunity_status_select
                             options:

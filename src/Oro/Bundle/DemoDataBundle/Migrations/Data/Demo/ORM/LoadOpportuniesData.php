@@ -101,7 +101,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($this->em->getReference($enumClass, $statusName));
-        
+
         return $opportunity;
     }
 }

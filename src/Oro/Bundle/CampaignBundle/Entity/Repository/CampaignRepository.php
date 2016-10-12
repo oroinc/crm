@@ -114,7 +114,7 @@ class CampaignRepository extends EntityRepository
         $qb
             ->select(
                 'campaign.name as label',
-                'SUM(CASE WHEN (opp.status=\'won\') THEN opp.closeRevenue ELSE 0 END) as closeRevenue'
+                'SUM(CASE WHEN (opp.status=\'won\') THEN opp.closeRevenueValue ELSE 0 END) as closeRevenue'
             )
             ->from('OroCampaignBundle:Campaign', 'campaign')
             ->join('OroSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
@@ -144,7 +144,7 @@ class CampaignRepository extends EntityRepository
             ->select(
                 'campaign.name as label',
                 sprintf(
-                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenue ELSE 0 END) as closeRevenue',
+                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenueValue ELSE 0 END) as closeRevenue',
                     $opportunitiesAlias,
                     $opportunitiesAlias
                 )

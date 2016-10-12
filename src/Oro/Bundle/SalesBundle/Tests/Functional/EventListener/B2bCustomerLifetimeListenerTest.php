@@ -4,11 +4,11 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListner;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\OpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @outputBuffering enabled
@@ -35,7 +35,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity->setName(uniqid('name'));
         $opportunity->setCustomer($b2bCustomer);
         $opportunity->setDataChannel($this->getReference('default_channel'));
-        $opportunity->setCloseRevenue(50);
+        $closeRevenue = MultiCurrency::create(50, 'USD');
+        $opportunity->setCloseRevenue($closeRevenue);
         $opportunity2 = clone $opportunity;
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
@@ -78,7 +79,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
-        $opportunity->setCloseRevenue(100);
+        $closeRevenue = MultiCurrency::create(100, 'USD');
+        $opportunity->setCloseRevenue($closeRevenue);
 
         $em->persist($opportunity);
         $em->flush();
@@ -153,7 +155,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity = new Opportunity();
         $opportunity->setName('unset_b2bcustomer_test');
         $opportunity->setDataChannel($this->getReference('default_channel'));
-        $opportunity->setCloseRevenue(50);
+        $closeRevenue = MultiCurrency::create(50, 'USD');
+        $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
@@ -185,8 +188,9 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
         $opportunity->setDataChannel($this->getReference('default_channel'));
-        $opportunity->setCloseRevenue(50);
-        $opportunity->setBudgetAmount(50.00);
+        $closeRevenue = $budgetAmount = MultiCurrency::create(50.00, 'USD');
+        $opportunity->setCloseRevenue($closeRevenue);
+        $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(10);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setOrganization($organization);
