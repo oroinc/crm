@@ -18,6 +18,7 @@ api:
         Oro\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/b2b_customer.md'
             fields:
                 phones:
                     data_type: array
@@ -129,5 +130,9 @@ api:
             # this entity does not have own Data API resource
             actions: false
 
-        Oro\Bundle\SalesBundle\Entity\Opportunity: ~
+        Oro\Bundle\SalesBundle\Entity\Opportunity:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
+            fields:
+                closedAt:
+                    exclude: true
         Oro\Bundle\SalesBundle\Entity\SalesFunnel: ~
