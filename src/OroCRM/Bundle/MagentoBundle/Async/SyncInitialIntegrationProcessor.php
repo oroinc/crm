@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
-use Oro\Bundle\SearchBundle\Async\Indexer;
+use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
@@ -48,7 +48,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
     private $jobRunner;
 
     /**
-     * @var Indexer
+     * @var IndexerInterface
      */
     private $indexer;
 
@@ -65,7 +65,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         OptionalListenerManager $optionalListenerManager,
         ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
         JobRunner $jobRunner,
-        Indexer $indexer
+        IndexerInterface $indexer
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->initialSyncProcessor = $initialSyncProcessor;
