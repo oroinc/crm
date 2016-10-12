@@ -284,6 +284,8 @@ orocrm:
                 change_error_message:  Unable to change lead status.
             convert:
                  error:           Unable to convert lead to opportunity
+            feature.label:        Lead
+            feature.description:  Enables Lead entity
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -468,6 +470,7 @@ orocrm:
             groups:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
+                lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
                     title:          Probabilities
@@ -476,6 +479,8 @@ orocrm:
                         Manage opportunity statuses and assign default probabilities to them,
                         except for system statuses Closed Won and Closed Lost.
             fields:
+                sales_lead:
+                    feature_enabled.label:                     Enable Lead
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
 

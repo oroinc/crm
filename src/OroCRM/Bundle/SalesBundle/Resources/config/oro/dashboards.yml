@@ -8,7 +8,7 @@ dashboards:
                     route:      orocrm_sales_lead_index
                     acl:        orocrm_sales_lead_view
                     position:   20
-                    applicable: "@orocrm_sales.provider.enitity_state->isEntityLeadEnabled()"
+                    applicable: "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_lead)"
                 opportunities:
                     label:      orocrm.sales.opportunity.entity_plural_label
                     icon:       usd
@@ -113,7 +113,7 @@ dashboards:
             acl:         orocrm_campaign_view
             description: orocrm.campaign.dashboard.campaigns_leads.description
             icon:        bundles/orocrmcampaign/img/Lead-generation-of-most-recently-created-campaigns.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityLeadEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_lead)"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -141,7 +141,7 @@ dashboards:
             acl:         orocrm_campaign_view
             description: orocrm.campaign.dashboard.campaigns_by_close_revenue.description
             icon:        bundles/orocrmcampaign/img/Top-5-revenue-generating-campaigns.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityLeadEnabled()"
+            applicable:  "@oro_featuretoggle.checker.feature_checker->isFeatureEnabled(sales_lead)"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range

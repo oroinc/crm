@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\WorkflowBundle\Exception\WorkflowNotFoundException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAwareInterface
@@ -32,7 +33,15 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
     {
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->container->get('oro_workflow.manager');
-        $workflowManager->deactivateWorkflow('b2b_flow_lead');
-        $workflowManager->deactivateWorkflow('opportunity_flow');
+
+        try {
+            $workflowManager->deactivateWorkflow('b2b_flow_lead');
+        } catch (WorkflowNotFoundException $e) {
+        }
+
+        try {
+            $workflowManager->deactivateWorkflow('opportunity_flow');
+        } catch (WorkflowNotFoundException $e) {
+        }
     }
 }

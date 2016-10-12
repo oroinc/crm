@@ -1,0 +1,26 @@
+features:
+    sales_lead:
+        label: orocrm.sales.lead.feature.label
+        description: orocrm.sales.lead.feature.description
+        toggle: oro_crm_sales.lead_feature_enabled
+        routes:
+            - orocrm_sales_lead_view
+            - orocrm_sales_lead_info
+            - orocrm_sales_lead_create
+            - orocrm_sales_lead_update
+            - orocrm_sales_lead_index
+            - orocrm_sales_widget_account_leads
+            - orocrm_sales_lead_data_channel_aware_create
+            - orocrm_sales_datagrid_lead_datachannel_aware
+            - orocrm_sales_lead_disqualify
+            - orocrm_sales_lead_convert_to_opportunity
+        workflows:
+            - b2b_flow_lead
+        processes:
+            - convert_mailbox_email_to_lead
+        api_resources:
+            - OroCRM\Bundle\SalesBundle\Entity\Lead
+            - OroCRM\Bundle\SalesBundle\Entity\LeadAddress
+            - OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+            - OroCRM\Bundle\SalesBundle\Entity\LeadPhone
+            - OroCRM\Bundle\SalesBundle\Entity\LeadStatus
