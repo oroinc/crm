@@ -21,9 +21,9 @@ use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_5\OroSalesBundle as SalesNoteMigration;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroSalesBundle as SalesOrganizations;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
