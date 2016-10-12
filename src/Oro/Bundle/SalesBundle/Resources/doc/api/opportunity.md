@@ -1,4 +1,4 @@
-# OroCRM\Bundle\SalesBundle\Entity\Opportunity
+# Oro\Bundle\SalesBundle\Entity\Opportunity
 
 ## ACTIONS
 
