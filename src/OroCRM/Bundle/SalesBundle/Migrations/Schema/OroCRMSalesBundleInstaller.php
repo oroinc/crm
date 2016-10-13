@@ -16,6 +16,8 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
+use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
@@ -27,6 +29,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_27\AddMultiCurrencyFields;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -38,7 +41,8 @@ class OroCRMSalesBundleInstaller implements
     NoteExtensionAwareInterface,
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    RenameExtensionAwareInterface
 {
     /** @var ExtendExtension */
     protected $extendExtension;
@@ -54,6 +58,9 @@ class OroCRMSalesBundleInstaller implements
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
+
+    /** @var RenameExtension */
+    protected $renameExtension;
 
     /**
      * {@inheritdoc}
@@ -98,9 +105,17 @@ class OroCRMSalesBundleInstaller implements
     /**
      * {@inheritdoc}
      */
+    public function setRenameExtension(RenameExtension $renameExtension)
+    {
+        $this->renameExtension = $renameExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMigrationVersion()
     {
-        return 'v1_26';
+        return 'v1_27';
     }
 
     /**
@@ -175,14 +190,24 @@ class OroCRMSalesBundleInstaller implements
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:percent)']
         );
         $table->addColumn(
-            'budget_amount',
+            'budget_amount_value',
             'money',
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
         );
         $table->addColumn(
-            'close_revenue',
+            'budget_amount_currency',
+            'currency',
+            ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
+        );
+        $table->addColumn(
+            'close_revenue_value',
             'money',
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'close_revenue_currency',
+            'currency',
+            ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
         );
         $table->addColumn('customer_need', 'text', ['notnull' => false]);
         $table->addColumn('proposed_solution', 'text', ['notnull' => false]);

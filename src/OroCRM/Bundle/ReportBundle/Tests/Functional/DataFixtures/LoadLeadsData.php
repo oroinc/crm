@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -155,15 +156,18 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 'company_name' => $lead->getCompanyName(),
             ]
         );
+        //@TODO change test according to CRM-6344
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
             $opportunity   = $leadWorkflowItem->getResult()->get('opportunity');
+            $budgetAmount = MultiCurrency::create(mt_rand(10, 10000), 'USD');
+            $closeRevenue = MultiCurrency::create(mt_rand(10, 10000), 'USD');
             $salesFlowItem = $this->workflowManager->startWorkflow(
                 'opportunity_flow',
                 $opportunity,
                 '__start__',
                 [
-                    'budget_amount'     => mt_rand(10, 10000),
+                    'budget_amount'     => $budgetAmount,
                     'customer_need'     => mt_rand(10, 10000),
                     'proposed_solution' => mt_rand(10, 10000),
                     'probability'       => round(mt_rand(50, 85) / 100.00, 2)
@@ -177,7 +181,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         $salesFlowItem,
                         'close_won',
                         [
-                            'close_revenue' => mt_rand(100, 1000),
+                            'close_revenue' => $closeRevenue,
                             'close_date'    => new \DateTime('now'),
                         ]
                     );
@@ -188,7 +192,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         'close_lost',
                         [
                             'close_reason_name' => 'cancelled',
-                            'close_revenue'     => mt_rand(100, 1000),
+                            'close_revenue'     => $closeRevenue,
                             'close_date'        => new \DateTime('now'),
                         ]
                     );

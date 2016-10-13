@@ -150,10 +150,11 @@ orocrm:
         opportunity:
             entity_label:         Opportunity
             entity_plural_label:  Opportunities
-            entity_description:   Represent opportunity
-            add_entity:           Add opportunity
+            entity_description:   The Opportunity represent highly probable potential or actual sales to a new or established customer.
             id.label:             Id
-            name.label:           Opportunity name
+            name:
+                label:            Opportunity name
+                description:      The name used to refer to the opportunity in the system
             close_date:
                 label:            Expected close date
                 description:      The expected close date for open opportunity, and actual close date for the closed one
@@ -163,9 +164,17 @@ orocrm:
             budget_amount:
                 label:            Budget amount
                 description:      The expected revenue of the opportunity
+            budget_amount_value:
+                label:            Budget Amount Value
+            budget_amount_currency:
+                label:            Budget Amount Currency
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed
+            close_revenue_value:
+                label:            Close revenue Value
+            close_revenue_currency:
+                label:            Close revenue Currency
             customer_need:
                 label:            Customer need
                 description:      The detailed description of customers' needs that constitute the business opportunity
@@ -191,14 +200,17 @@ orocrm:
             organization.label:   Organization
             customer:
                 label:            Account
-                dewcription:      The profile of the customer to which this opportunity is related
+                description:      A B2B customer the opportunity is created for
             data_channel:
                 label:            Channel
-                description:      The sales channel where the opportunity is created
+                description:      One of active channels, from which the application will get information on this opportunity.
             assigned.label:       Assigned
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
+
+            add_entity:           Add opportunity
+
             workflow:
                 close_date.label: Close date
             datagrid:
