@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             [
                 'lead_feature_enabled' => [
-                    'value' => false,
+                    'value' => true,
                     'type'  => 'boolean',
                 ],
                 'default_opportunity_probabilities' => [
