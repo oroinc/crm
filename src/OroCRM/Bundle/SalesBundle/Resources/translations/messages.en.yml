@@ -199,7 +199,7 @@ orocrm:
             organization.label:   Organization
             customer:
                 label:            Account
-                dewcription:      The profile of the customer to which this opportunity is related
+                description:      The profile of the customer to which this opportunity is related
             data_channel:
                 label:            Channel
                 description:      The sales channel where the opportunity is created
