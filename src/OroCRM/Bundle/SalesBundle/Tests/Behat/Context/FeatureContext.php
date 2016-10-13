@@ -23,6 +23,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Tests\Behat\Element\OpportunityProbabilitiesConfigForm;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
@@ -507,5 +508,40 @@ class FeatureContext extends OroFeatureContext implements
         $row = $customerOpportunitiesGrid->getRowByContent($opportunityName);
 
         self::assertTrue($row->isValid());
+    }
+
+    /**
+     * @Given CRM has next (Opportunity Probabilities):
+     */
+    public function crmHasNextOpportunityProbabilities(TableNode $table)
+    {
+        /** @var MainMenu $mainMenu */
+        $mainMenu = $this->createElement('MainMenu');
+        $mainMenu->openAndClick('System/ Configuration');
+        $this->waitForAjax();
+
+        $sidebarMenu = $this->createElement('SidebarConfigMenu');
+        $sidebarMenu->clickLink('Opportunity');
+        $this->waitForAjax();
+
+        /** @var OpportunityProbabilitiesConfigForm $form */
+        $form = $this->createElement('OpportunityProbabilitiesConfigForm');
+        $form->fill($table);
+
+        $this->getSession()->getPage()->pressButton('Save settings');
+    }
+
+    /**
+     * @Then Opportunity (Probability) must comply to (Status):
+     */
+    public function opportunityProbabilityMustComplyToStatus(TableNode $table)
+    {
+        $page = $this->createElement('OroForm');
+
+        foreach ($table as $item) {
+            $page->fillField('Status', $item['Status']);
+            $this->waitForAjax();
+            self::assertEquals($item['Probability'], $page->findField('Probability')->getValue());
+        }
     }
 }
