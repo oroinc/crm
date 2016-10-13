@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -67,7 +69,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
-    ChannelAwareInterface
+    ChannelAwareInterface,
+    MultiCurrencyHolderInterface
 {
     use ChannelEntityTrait;
 
@@ -227,31 +230,33 @@ class Opportunity extends ExtendOpportunity implements
     protected $probability;
 
     /**
-     * @var double
+     * Changes to this value object wont affect entity change set
+     * To change persisted price value you should create and set new Multicurrency
      *
-     * @ORM\Column(name="budget_amount", type="money", nullable=true)
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "form"={
-     *          "form_type"="oro_money",
-     *          "form_options"={
-     *              "constraints"={{"Range":{"min":0}}},
-     *          }
-     *      },
-     *      "dataaudit"={"auditable"=true, "immutable"=true},
-     *      "importexport"={
-     *          "order"=40
-     *      }
-     *  }
-     * )
+     * @var Multicurrency
      */
     protected $budgetAmount;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="budget_amount_currency", type="currency", length=3, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
+     *      "importexport"={
+     *          "order"=55
+     *      }
+     *  }
+     * )
+     */
+    protected $budgetAmountCurrency;
+
+    /**
      * @var double
      *
-     * @ORM\Column(name="close_revenue", type="money", nullable=true)
+     * @ORM\Column(name="budget_amount_value", type="money", nullable=true)
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
@@ -270,7 +275,55 @@ class Opportunity extends ExtendOpportunity implements
      *  }
      * )
      */
+    protected $budgetAmountValue;
+
+    /**
+     * Changes to this value object wont affect entity change set
+     * To change persisted price value you should create and set new Multicurrency
+     *
+     * @var Multicurrency
+     */
     protected $closeRevenue;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="close_revenue_currency", type="currency", length=3, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true, "immutable"=true},
+     *      "importexport"={
+     *          "order"=65
+     *      }
+     *  }
+     * )
+     */
+    protected $closeRevenueCurrency;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="close_revenue_value", type="money", nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *  defaultValues={
+     *      "form"={
+     *          "form_type"="oro_money",
+     *          "form_options"={
+     *              "constraints"={{"Range":{"min":0}}},
+     *          }
+     *      },
+     *      "dataaudit"={
+     *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=60
+     *      }
+     *  }
+     * )
+     */
+    protected $closeRevenueValue;
 
     /**
      * @var string
@@ -430,22 +483,148 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @param  float       $budgetAmount
+     * @return MultiCurrency|null
+     */
+    public function getBudgetAmount()
+    {
+        return $this->budgetAmount;
+    }
+
+    /**
+     * @param MultiCurrency $budgetAmount|null
      * @return Opportunity
      */
-    public function setBudgetAmount($budgetAmount)
+    public function setBudgetAmount(MultiCurrency $budgetAmount = null)
     {
         $this->budgetAmount = $budgetAmount;
+        $this->updateMultiCurrencyFields();
 
         return $this;
     }
 
     /**
+     * @ORM\PostLoad
+     */
+    public function loadMultiCurrencyFields()
+    {
+        $this->budgetAmount = MultiCurrency::create($this->budgetAmountValue, $this->budgetAmountCurrency);
+        $this->closeRevenue = MultiCurrency::create($this->closeRevenueValue, $this->closeRevenueCurrency);
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     *
+     * @return void
+     */
+    public function updateMultiCurrencyFields()
+    {
+        if ($this->budgetAmount) {
+            $this->budgetAmountValue = $this->budgetAmount->getValue();
+            $currency = $this->budgetAmount->getValue() !== null ?
+                $this->budgetAmount->getCurrency() :
+                null;
+            $this->budgetAmountCurrency = $currency;
+        }
+        if ($this->closeRevenue) {
+            $this->closeRevenueValue = $this->closeRevenue->getValue();
+            $currency = $this->closeRevenue->getValue() !== null ?
+                $this->closeRevenue->getCurrency() :
+                null;
+            $this->closeRevenueCurrency = $currency;
+        }
+    }
+
+    /**
+     * @param string $currency
+     * @return Opportunity
+     */
+    public function setBudgetAmountCurrency($currency)
+    {
+        $this->budgetAmountCurrency = $currency;
+
+        if ($this->budgetAmount instanceof MultiCurrency) {
+            $this->budgetAmount->setCurrency($currency);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $budgetAmountValue
+     * @return Opportunity
+     */
+    public function setBudgetAmountValue($budgetAmountValue)
+    {
+        $this->budgetAmountValue = $budgetAmountValue;
+
+        if ($this->budgetAmount instanceof MultiCurrency) {
+            $this->budgetAmount->setValue($budgetAmountValue);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBudgetAmountCurrency()
+    {
+        return $this->budgetAmountCurrency;
+    }
+
+    /**
      * @return float
      */
-    public function getBudgetAmount()
+    public function getBudgetAmountValue()
     {
-        return $this->budgetAmount;
+        return $this->budgetAmountValue;
+    }
+
+    /**
+     * @param string $currency
+     * @return Opportunity
+     */
+    public function setCloseRevenueCurrency($currency)
+    {
+        $this->closeRevenueCurrency = $currency;
+
+        if ($this->closeRevenue instanceof MultiCurrency) {
+            $this->closeRevenue->setCurrency($currency);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param float $closeRevenueValue
+     * @return Opportunity
+     */
+    public function setCloseRevenueValue($closeRevenueValue)
+    {
+        $this->closeRevenueValue = $closeRevenueValue;
+
+        if ($this->closeRevenue instanceof MultiCurrency) {
+            $this->closeRevenue->setValue($closeRevenueValue);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCloseRevenueCurrency()
+    {
+        return $this->closeRevenueCurrency;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCloseRevenueValue()
+    {
+        return $this->closeRevenueValue;
     }
 
     /**
@@ -582,15 +761,21 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @param float $revenue
+     * @param MultiCurrency $closeRevenue|null
+     * @return Opportunity
      */
-    public function setCloseRevenue($revenue)
+    public function setCloseRevenue(MultiCurrency $closeRevenue = null)
     {
-        $this->closeRevenue = $revenue;
+        if ($closeRevenue) {
+            $this->closeRevenue = $closeRevenue;
+            $this->updateMultiCurrencyFields();
+        }
+
+        return $this;
     }
 
     /**
-     * @return float
+     * @return MultiCurrency|null
      */
     public function getCloseRevenue()
     {

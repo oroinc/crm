@@ -59,7 +59,8 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $form['orocrm_sales_opportunity_form[name]']         = $name;
         $form['orocrm_sales_opportunity_form[customer]']     = self::$customer->getId();
         $form['orocrm_sales_opportunity_form[probability]']  = 50;
-        $form['orocrm_sales_opportunity_form[budgetAmount]'] = 10000;
+        $form['orocrm_sales_opportunity_form[budgetAmount][value]'] = 10000;
+        $form['orocrm_sales_opportunity_form[budgetAmount][currency]'] = 'USD';
         $form['orocrm_sales_opportunity_form[customerNeed]'] = 10001;
         $form['orocrm_sales_opportunity_form[closeReason]']  = 'cancelled';
         $form['orocrm_sales_opportunity_form[owner]']        = 1;
@@ -191,7 +192,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'assert'              => [
                         'name'         => 'opname',
                         'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'budgetAmount' => 50.00,
+                        'budgetAmount' => 'USD50',
                         'probability'  => 10,
                     ],
                     'expectedResultCount' => 1
@@ -203,13 +204,14 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-opportunity-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-opportunity-grid[_filter][budgetAmount][value]' => 50.00,
+                        'sales-opportunity-grid[_filter][budgetAmountValue][value]' => '50.00',
+                        'sales-opportunity-grid[_filter][budgetAmountValue][type]' => '3',
                     ],
                     'assert'              => [
-                        'name'         => 'opname',
-                        'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'budgetAmount' => 50.00,
-                        'probability'  => 10,
+                        'name'              => 'opname',
+                        'channelName'       => LoadSalesBundleFixtures::CHANNEL_NAME,
+                        'budgetAmount'      => 'USD50',
+                        'probability'       => 10,
                     ],
                     'expectedResultCount' => 1
                 ]
@@ -220,7 +222,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-opportunity-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-opportunity-grid[_filter][budgetAmount][value]' => 150.00,
+                        'sales-opportunity-grid[_filter][budgetAmount][value]' => '150.00',
                     ],
                     'assert'              => [],
                     'expectedResultCount' => 0

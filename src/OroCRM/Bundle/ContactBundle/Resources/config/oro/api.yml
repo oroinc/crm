@@ -1,6 +1,7 @@
 api:
     entities:
         OroCRM\Bundle\ContactBundle\Entity\Contact:
+            documentation_resource: '@OroCRMContactBundle/Resources/doc/api/contact.md'
             fields:
                 email:
                     exclude: true
