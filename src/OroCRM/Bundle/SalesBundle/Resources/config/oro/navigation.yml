@@ -19,7 +19,6 @@ navigation:
             opportunity_list:
                 label: 'orocrm.sales.opportunity.entity_plural_label'
                 route: 'orocrm_sales_opportunity_index'
-                display: false
                 extras:
                     position:    30
                     routes:      ['/^orocrm_sales_opportunity/']

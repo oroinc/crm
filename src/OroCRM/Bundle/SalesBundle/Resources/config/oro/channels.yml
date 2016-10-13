@@ -1,24 +1,7 @@
 channels:
    entity_data:
        -
-          name: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-          dependent:
-              - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
-          navigation_items:
-              - application_menu.sales_tab.opportunity_list
-              - shortcuts.shortcut_list_opportunities
-              - shortcuts.shortcut_new_opportunity
-              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
-              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
-              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
-              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
-              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
-
-       -
           name: OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-          dependencies:
-              - OroCRM\Bundle\SalesBundle\Entity\Opportunity
-          dependencies_condition: OR
           navigation_items:
               - application_menu.sales_tab.sales_salesfunnel_list
 
@@ -30,8 +13,6 @@ channels:
    channel_types:
         b2b:
             label: orocrm.sales.channel_type.b2b.label
-            entities:
-                - OroCRM\Bundle\SalesBundle\Entity\Opportunity
             customer_identity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
             lifetime_value: lifetime
             priority: -20
