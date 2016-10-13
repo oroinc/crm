@@ -6,70 +6,64 @@
 
 Get one Opportunity record.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ### get_list
 
 Get the list of Opportunity records.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ### create
 
 Create a new Opportunity record.
 The created record is returned in the response.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ### update
 
 Update existing Opportunity record.
 The updated record is returned in the response.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ### delete
 
 Delete existing Opportunity record.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ### delete_list
 
 Delete existing Opportunity records.
 The list of records that will be deleted, could be limited by filters.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ## FIELDS
 
 ### name
 
-The name used to refer to the opportunity in the system.
+#### create
 
-#### create, update
-
-The name used to refer to the opportunity in the system.
+{@inheritdoc}
 
 **The required field**
 
 ### customer
 
-A B2B customer the opportunity is created for.
+#### create
 
-#### create, update
-
-A B2B customer the opportunity is created for.
+{@inheritdoc}
 
 **The required field**
 
 ### dataChannel
 
-One of active channels, from which OroCRM will get information on this opportunity.
- 
-#### create, update
+#### create
 
-One of active channels, from which OroCRM will get information on this opportunity.
+{@inheritdoc}
 
 **The required field**
 
@@ -121,15 +115,15 @@ Update a B2B customer the opportunity is created for.
 
 #### get_subresource
 
-Get full information about a channel from which OroCRM will get information on this opportunity.
+Get full information about a channel from which the application will get information on this opportunity.
 
 #### get_relationship
 
-Get a channel from which OroCRM will get information on this opportunity.
+Get a channel from which the application will get information on this opportunity.
 
 #### update_relationship
 
-Update a channel from which OroCRM will get information on this opportunity.
+Update a channel from which the application will get information on this opportunity.
 
 ### lead
 
