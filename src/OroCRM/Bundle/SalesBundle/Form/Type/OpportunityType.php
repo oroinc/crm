@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
@@ -53,6 +54,7 @@ class OpportunityType extends AbstractType
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -116,13 +118,24 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'budgetAmount',
-                'oro_money',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.budget_amount.label']
+                MultiCurrencyType::NAME,
+                [
+                    'required' => false,
+                    'label' => 'orocrm.sales.opportunity.budget_amount.label',
+                    'currency_empty_value' => false,
+                    'full_currency_list' => false,
+                    'attr' => ['class' => 'currency-price']
+                ]
             )
             ->add(
                 'closeRevenue',
-                'oro_money',
-                ['required' => false, 'label' => 'orocrm.sales.opportunity.close_revenue.label']
+                MultiCurrencyType::NAME,
+                [
+                    'required' => false,
+                    'label' => 'orocrm.sales.opportunity.close_revenue.label',
+                    'currency_empty_value' => false,
+                    'full_currency_list' => false,
+                ]
             )
             ->add(
                 'customerNeed',

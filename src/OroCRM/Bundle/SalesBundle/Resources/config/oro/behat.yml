@@ -1,0 +1,4 @@
+elements:
+  CustomerOpportunitiesGrid:
+    selector: "div[id^='grid-sales-b2bcustomer-opportunities-grid-customer'] div.grid-container"
+    class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
