@@ -4,7 +4,6 @@ navigation:
             sales_tab:
                 label: 'orocrm.sales.menu.sales_tab.label'
                 uri:   '#'
-                display: false
                 extras:
                     icon: icon-shopping-cart
                     position: 20
@@ -12,7 +11,6 @@ navigation:
             lead_list:
                 label: 'orocrm.sales.lead.entity_plural_label'
                 route: 'orocrm_sales_lead_index'
-                display: false
                 extras:
                     position:    20
                     routes:      ['/^orocrm_sales_lead/']
