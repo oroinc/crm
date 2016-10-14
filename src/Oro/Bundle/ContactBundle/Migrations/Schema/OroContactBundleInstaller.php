@@ -72,7 +72,7 @@ class OroContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_14';
+        return 'v2_0';
     }
 
     /**
