@@ -11,8 +11,6 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         customer:
             - Valid: ~
             - NotBlank: ~
-        dataChannel:
-            - NotBlank: ~
         organization:
             - NotBlank: ~
         status:
