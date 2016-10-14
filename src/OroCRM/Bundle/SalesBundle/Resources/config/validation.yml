@@ -30,8 +30,6 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
         lastName:
             - Length:
                 max: 255
-        dataChannel:
-            - NotBlank: ~
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of emails must be set as primary.
