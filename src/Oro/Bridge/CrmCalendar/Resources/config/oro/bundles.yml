@@ -1,2 +1,4 @@
 bundles:
-    - name: Oro\Bridge\CrmCalendar\OroCRMCalendarBridgeBundle
+    # needs to be loaded after OroCRM ContactBundle's priority: 10
+    # needs to be loaded after OroCRM CaseBundle's priority: 100
+    - { name: Oro\Bridge\CrmCalendar\OroCRMCalendarBridgeBundle, priority: 101 }
