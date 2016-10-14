@@ -119,7 +119,11 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
 
         $trackingVisitEventTable->removeForeignKey('FK_B39EEE8F6463B7EE');
         $extension->renameColumn(
-            $schema, $queries, $trackingVisitEventTable, 'customer_bb9e15ff_id', 'customer_2bc6a2ee_id'
+            $schema,
+            $queries,
+            $trackingVisitEventTable,
+            'customer_bb9e15ff_id',
+            'customer_2bc6a2ee_id'
         );
         $extension->addForeignKeyConstraint(
             $schema,
