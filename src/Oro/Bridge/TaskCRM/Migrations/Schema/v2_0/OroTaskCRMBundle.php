@@ -6,6 +6,7 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\InstallerBundle\Migration\UpdateExtendRelationQuery;
+use Oro\Bundle\InstallerBundle\Migration\UpdateTableFieldQuery;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -23,6 +24,7 @@ class OroTaskCRMBundle implements Migration, RenameExtensionAwareInterface
     {
         $this->renameActivityTables($schema, $queries);
         $this->updateComment($schema, $queries);
+        $this->updateTableField($queries);
     }
 
     /**
@@ -146,6 +148,33 @@ class OroTaskCRMBundle implements Migration, RenameExtensionAwareInterface
             'task_f06ab819',
             'task_c50a6a28',
             RelationType::MANY_TO_ONE
+        ));
+    }
+
+    /**
+     * @param QueryBag $queries
+     */
+    protected function updateTableField(QueryBag $queries)
+    {
+        $queries->addQuery(new UpdateTableFieldQuery(
+            'oro_activity_list',
+            'related_activity_class',
+            'OroCRM',
+            'Oro'
+        ));
+
+        $queries->addQuery(new UpdateTableFieldQuery(
+            'oro_email_template',
+            'entityName',
+            'OroCRM',
+            'Oro'
+        ));
+
+        $queries->addQuery(new UpdateTableFieldQuery(
+            'oro_email_template',
+            'content',
+            'OroCRM',
+            'Oro'
         ));
     }
 
