@@ -6,12 +6,12 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Doctrine\Common\Inflector\Inflector;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
-use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
-use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
+use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
+use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 
-class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
+class FeatureContext extends OroFeatureContext implements OroPageObjectAware
 {
-    use ElementFactoryDictionary;
+    use PageObjectDictionary;
 
     /**
      * Assert that value of given field is a primary.

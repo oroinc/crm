@@ -15,10 +15,10 @@ use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
-use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
+use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
-use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
+use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -26,10 +26,10 @@ use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
-    OroElementFactoryAware,
+    OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, ElementFactoryDictionary, KernelDictionary;
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
      * @var string Path to saved template
