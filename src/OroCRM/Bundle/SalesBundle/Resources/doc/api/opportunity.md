@@ -2,91 +2,182 @@
 
 ## ACTIONS
 
-### Get
+### get
 
 Get one Opportunity record.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
-### Get_list
+### get_list
 
 Get the list of Opportunity records.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
-### Create
+### create
 
 Create a new Opportunity record.
 The created record is returned in the response.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
-### Update
+### update
 
 Update existing Opportunity record.
 The updated record is returned in the response.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
-### Delete
+### delete
 
 Delete existing Opportunity record.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
-### Delete_list
+### delete_list
 
 Delete existing Opportunity records.
 The list of records that will be deleted, could be limited by filters.
 
-The Opportunity represent highly probable potential or actual sales to a new or established customer.
+{@inheritdoc}
 
 ## FIELDS
 
 ### name
 
-The name used to refer to the opportunity in the system.
+#### create
 
-#### Create
-
-The name used to refer to the opportunity in the system.
+{@inheritdoc}
 
 **The required field**
-
-#### Update
-
-The name used to refer to the opportunity in the system.
-
-**Field cannot be null**
 
 ### customer
 
-A B2B customer the opportunity is created for.
+#### create
 
-#### Create
-
-A B2B customer the opportunity is created for.
+{@inheritdoc}
 
 **The required field**
-
-#### Update
-
-A B2B customer the opportunity is created for.
-
-**Field cannot be null**
 
 ### dataChannel
 
-One of active channels, from which OroCRM will get information on this opportunity.
- 
-#### Create
+#### create
 
-One of active channels, from which OroCRM will get information on this opportunity.
+{@inheritdoc}
 
 **The required field**
 
-#### Update
+## SUBRESOURCES
 
-One of active channels, from which OroCRM will get information on this opportunity.
+### closeReason
 
-**Field cannot be null**
+#### get_subresource
+
+Get full information about the reason for opportunity closure.
+
+#### get_relationship
+
+Get the reason for opportunity closure.
+
+#### update_relationship
+
+Update the reason for opportunity closure.
+
+### contact
+
+#### get_subresource
+
+Get full information about the person on the customer side who is directly related to the opportunity.
+
+#### get_relationship
+
+Get the person on the customer side who is directly related to the opportunity.
+
+#### update_relationship
+
+Update the person on the customer side who is directly related to the opportunity.
+
+### customer
+
+#### get_subresource
+
+Get full information about a B2B customer the opportunity is created for.
+
+#### get_relationship
+
+Get a B2B customer the opportunity is created for.
+
+#### update_relationship
+
+Update a B2B customer the opportunity is created for.
+
+### dataChannel
+
+#### get_subresource
+
+Get full information about a channel from which the application will get information on this opportunity.
+
+#### get_relationship
+
+Get a channel from which the application will get information on this opportunity.
+
+#### update_relationship
+
+Update a channel from which the application will get information on this opportunity.
+
+### lead
+
+#### get_subresource
+
+Get full information about the sale prospect that has been successfully qualified into this opportunity.
+
+#### get_relationship
+
+Get the sale prospect that has been successfully qualified into this opportunity.
+
+#### update_relationship
+
+Update the sale prospect that has been successfully qualified into this opportunity.
+
+### organization
+
+#### get_subresource
+
+Get full information about an organization to which the opportunity belongs.
+
+#### get_relationship
+
+Get an organization to which the opportunity belongs.
+
+#### update_relationship
+
+Update an organization to which the opportunity belongs.
+
+### owner
+
+#### get_subresource
+
+Get full information about an user who owns the opportunity.
+
+#### get_relationship
+
+Get an user who owns the opportunity
+
+#### update_relationship
+
+Update an user who owns the opportunity.
+
+### status
+
+#### get_subresource
+
+Get full information about a stage in the process of a sale.
+
+#### get_relationship
+
+Get a stage in the process of a sale.
+
+#### update_relationship
+
+Update a stage in the process of a sale.
+
