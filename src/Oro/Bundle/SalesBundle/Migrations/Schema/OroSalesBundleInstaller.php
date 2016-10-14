@@ -115,7 +115,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_27';
+        return 'v2_0';
     }
 
     /**

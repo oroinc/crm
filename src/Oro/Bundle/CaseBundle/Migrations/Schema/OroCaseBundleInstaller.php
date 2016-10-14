@@ -41,7 +41,7 @@ class OroCaseBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v2_0';
     }
 
     /**

@@ -30,7 +30,7 @@ class OroTaskCRMBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_0';
+        return 'v2_0';
     }
 
     /**
