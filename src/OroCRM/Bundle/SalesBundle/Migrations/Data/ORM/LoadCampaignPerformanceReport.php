@@ -101,7 +101,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenue',
+                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenueValue',
                     'label'   => 'Close revenue',
                     'func'    => [
                         'name'       => 'WonRevenueSumFunction',

@@ -70,9 +70,9 @@ class OpportunityRepository extends EntityRepository
                     "SUM(
                         CASE WHEN s.id = 'won'
                             THEN
-                                (CASE WHEN %s.closeRevenue IS NOT NULL THEN %s.closeRevenue ELSE 0 END)
+                                (CASE WHEN %s.closeRevenueValue IS NOT NULL THEN %s.closeRevenueValue ELSE 0 END)
                             ELSE
-                                (CASE WHEN %s.budgetAmount IS NOT NULL THEN %s.budgetAmount ELSE 0 END)
+                                (CASE WHEN %s.budgetAmountValue IS NOT NULL THEN %s.budgetAmountValue ELSE 0 END)
                         END
                     ) as budget",
                     $alias,
@@ -114,7 +114,7 @@ class OpportunityRepository extends EntityRepository
 
         // select opportunity data
         $qb = $this->createQueryBuilder('opportunity');
-        $qb->select('IDENTITY(opportunity.status) as name, SUM(opportunity.budgetAmount) as budget')
+        $qb->select('IDENTITY(opportunity.status) as name, SUM(opportunity.budgetAmountValue) as budget')
             ->groupBy('opportunity.status');
 
         if ($dateStart && $dateEnd) {
