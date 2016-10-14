@@ -80,7 +80,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             'campaign_a14160a8',
             RelationType::MANY_TO_ONE
         ));
-
     }
 
     /**
