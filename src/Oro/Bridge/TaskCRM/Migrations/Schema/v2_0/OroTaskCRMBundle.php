@@ -165,7 +165,7 @@ class OroTaskCRMBundle implements Migration, RenameExtensionAwareInterface
 
         $queries->addQuery(new UpdateTableFieldQuery(
             'oro_email_template',
-            'entityName',
+            'entityname',
             'OroCRM',
             'Oro'
         ));
