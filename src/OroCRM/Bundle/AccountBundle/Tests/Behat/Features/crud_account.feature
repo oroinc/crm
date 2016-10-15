@@ -16,7 +16,7 @@ Scenario: Create new Account
     | Wanda      | Ford      | <email()> |
   And I go to Customers/Accounts
   And I press "Create Account"
-  And I fill "Account" form with:
+  And I fill "Account Form" with:
     | Account Name | Good Company    |
     | Description  | Our new partner |
     | Owner        | Harry           |
@@ -38,7 +38,7 @@ Scenario: Edit Account
   Given I'm edit entity
   And press select entity button on Owner field
   Then click on Todd Greene in grid
-  And I fill "Account" form with:
+  And I fill "Account Form" with:
     | Account Name | Oro Inc         |
     | Description  | Our old partner |
   And select Joan contact as default

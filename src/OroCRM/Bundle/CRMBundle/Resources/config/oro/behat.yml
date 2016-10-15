@@ -1,6 +1,6 @@
 elements:
-  Account:
-    selector: 'div#container'
+  Account Form:
+    selector: 'form[id^="orocrm_account_form"]'
     class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
     options:
       mapping:
