@@ -11,6 +11,7 @@ class NamespaceMigrationProvider implements NamespaceMigrationProviderInterface
         = [
             'OroCRMTaskBridgeBundle' => 'OroTaskCRMBridgeBundle',
             'OroCRMCallBridgeBundle' => 'OroCallCRMBridgeBundle',
+            'orocrm_report_'         => 'oro_reportcrm_',
             'OroCRM'                 => 'Oro',
             'orocrm'                 => 'oro'
         ];
