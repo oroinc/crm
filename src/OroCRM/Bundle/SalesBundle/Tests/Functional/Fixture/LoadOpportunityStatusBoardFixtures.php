@@ -5,9 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -39,7 +37,8 @@ class LoadOpportunityStatusBoardFixtures extends AbstractFixture
         for ($i = 0; $i < self::OPPORTUNITY_COUNT; $i++) {
             $opportunity = new Opportunity();
             $opportunity->setName('opname_' . $i);
-            $opportunity->setBudgetAmount(50.00);
+            $budgetAmount = MultiCurrency::create(50.00, 'USD');
+            $opportunity->setBudgetAmount($budgetAmount);
             $opportunity->setProbability(10);
             $opportunity->setOrganization($this->organization);
             $statusName = $opportunityStatuses[$i % self::STATUSES_COUNT];
