@@ -56,6 +56,10 @@ oro:
                     label: orocrm.sales.opportunity.close_reason.label
                 close_date:
                     label: orocrm.sales.opportunity.workflow.close_date.label
+                budget_amount:
+                    label: 'Budget Amount'
+                close_revenue:
+                    label: 'Close Revenue'
             transition:
                 start_from_lead:
                     label: 'Start from Lead'
@@ -94,6 +98,10 @@ oro:
                     label: orocrm.sales.opportunity.close_date.label
                 status:
                     label: orocrm.sales.opportunity.status.label
+                budget_amount:
+                    label: 'Budget Amount'
+                close_revenue:
+                    label: 'Close Revenue'
             transition:
                 __start__:
                     label: 'Start Opportunity Management Flow'

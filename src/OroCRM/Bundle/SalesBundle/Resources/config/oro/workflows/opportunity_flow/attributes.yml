@@ -10,7 +10,6 @@ workflows:
             probability:
                 property_path: opportunity.probability
             budget_amount:
-                label: Budget Amount
                 property_path: opportunity.budgetAmount
                 type: entity
                 options:
@@ -24,7 +23,6 @@ workflows:
             close_reason:
                 property_path: opportunity.closeReason
             close_revenue:
-                label: Close Revenue
                 property_path: opportunity.closeRevenue
                 type: entity
                 options:

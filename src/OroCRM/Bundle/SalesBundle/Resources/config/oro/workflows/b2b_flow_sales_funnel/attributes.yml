@@ -38,7 +38,6 @@ workflows:
             probability:
                 property_path: sales_funnel.opportunity.probability
             budget_amount:
-                label: Budget Amount
                 property_path: sales_funnel.opportunity.budgetAmount
                 type: entity
                 options:
@@ -52,7 +51,6 @@ workflows:
             close_reason:
                 property_path: sales_funnel.opportunity.closeReason
             close_revenue:
-                label: Close Revenue
                 property_path: sales_funnel.opportunity.closeRevenue
                 type: entity
                 options:
