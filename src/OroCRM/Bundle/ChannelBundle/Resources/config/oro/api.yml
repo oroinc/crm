@@ -15,5 +15,18 @@ api:
                     exclude: true
                 customerIdentity:
                     exclude: true
+                # for `entities` field the `customize_loaded_data` processor is used
+                # '@oro_channel.api.customize_loaded_data.transform_entity_name_to_type'
+                # for transformation EntityClass values to EntityType values
+                # see the definition in `services_api.yml`
+                entities:
+                    data_type: array
+                    exclusion_policy: all
+                    collapse: true
+                    fields:
+                        name: ~
                 data:
                     exclude: true
+        OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+            # this entity does not have own Data API resource
+            actions: false
