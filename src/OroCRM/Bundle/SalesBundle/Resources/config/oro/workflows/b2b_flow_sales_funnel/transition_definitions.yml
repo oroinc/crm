@@ -53,7 +53,9 @@ workflows:
                             parameters:
                                 - '@not_equal': [$lead.status.id, 'qualified']
                                 - '@not_equal': [$lead.status.id, 'canceled']
-                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@feature_enabled':
+                            feature: sales_opportunity
                 conditions:
                     '@or':
                         parameters:
