@@ -47,7 +47,7 @@ class LoadOwnerUser extends AbstractFixture implements ContainerAwareInterface
         $user->setEmail('owner@example.com');
         $user->setOwner($unit);
         $user->addGroup($group);
-        $user->setPlainPassword('test password');
+        $user->setPlainPassword('test password1Q');
         $user->setSalt(md5(mt_rand(1, 222)));
         $user->setOrganization($organization);
 

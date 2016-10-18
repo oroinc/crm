@@ -49,7 +49,7 @@ class LoadNotAssociatedEntities extends AbstractFixture implements ContainerAwar
         $user->setEmail('test@example.com');
         $user->setOwner($unit);
         $user->addGroup($group);
-        $user->setPlainPassword('test password');
+        $user->setPlainPassword('test password1Q');
         $user->setSalt(md5(mt_rand(1, 222)));
         $user->setOrganization($organization);
 
