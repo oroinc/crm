@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
+use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
@@ -47,6 +48,11 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
     private $jobRunner;
 
     /**
+     * @var IndexerInterface
+     */
+    private $indexer;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
      * @param InitialSyncProcessor $initialSyncProcessor
      * @param OptionalListenerManager $optionalListenerManager
@@ -58,13 +64,15 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         InitialSyncProcessor $initialSyncProcessor,
         OptionalListenerManager $optionalListenerManager,
         ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
-        JobRunner $jobRunner
+        JobRunner $jobRunner,
+        IndexerInterface $indexer
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->initialSyncProcessor = $initialSyncProcessor;
         $this->optionalListenerManager = $optionalListenerManager;
         $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
         $this->jobRunner = $jobRunner;
+        $this->indexer = $indexer;
     }
 
     /**
@@ -168,8 +176,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      */
     private function scheduleSearchReindex()
     {
-        // TODO CRM-5838 implement this method when search PR is merged
+        $entities = [Order::class, Cart::class, Customer::class];
 
-        $indexedEntities = [Order::class, Cart::class, Customer::class];
+        $this->indexer->reindex($entities);
     }
 }

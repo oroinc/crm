@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
@@ -50,7 +52,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createIndexerInterfaceMock()
         );
     }
 
@@ -65,7 +68,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -85,7 +89,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -103,7 +108,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -126,7 +132,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -164,7 +171,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            $jobRunner
+            $jobRunner,
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -207,7 +215,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            $jobRunner
+            $jobRunner,
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -238,7 +247,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
             $this->createScheduleCalculateAnalyticsServiceMock(),
-            $jobRunner
+            $jobRunner,
+            $this->createIndexerInterfaceMock()
         );
 
         $message = new NullMessage();
@@ -343,5 +353,13 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $helperMock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Indexer
+     */
+    private function createIndexerInterfaceMock()
+    {
+        return $this->getMock(IndexerInterface::class, [], [], '', false);
     }
 }
