@@ -76,7 +76,6 @@ workflows:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $cart.id
             abandon:
-                message: 'You are going to abandon this shopping cart.'
                 step_to: abandoned
                 is_start: true
                 is_unavailable_hidden: true

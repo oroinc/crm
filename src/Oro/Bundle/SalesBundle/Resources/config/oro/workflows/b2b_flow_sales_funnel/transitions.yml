@@ -248,10 +248,6 @@ workflows:
                             parameters:
                                 attribute: $close_date
             reopen:
-                message: |+
-                    This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.
-
-                    Do you want to proceed?
                 step_to: new_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
