@@ -1,5 +1,5 @@
 elements:
-  Account:
+  Account Form:
     selector: 'div#container'
     class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
     options:
