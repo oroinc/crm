@@ -1,0 +1,24 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set gridName = 'orocrm-sales-b2bcustomers-grid' %}
+{% set pageTitle = 'oro.sales.b2bcustomer.entity_plural_label'|trans %}
+
+{% block navButtons %}
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        entity_class: entity_class,
+        exportProcessor: 'oro_sales_b2bcustomer',
+        exportTemplateProcessor: 'oro_sales_b2bcustomer',
+        importProcessor: 'oro_sales_b2bcustomer',
+        datagridName: gridName
+    } %}
+
+    {% if resource_granted('oro_sales_b2bcustomer_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path' : path('oro_sales_b2bcustomer_create'),
+                'entity_label': 'oro.sales.b2bcustomer.entity_label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}

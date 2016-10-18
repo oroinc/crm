@@ -1,0 +1,21 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+    constraints:
+        - Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint: ~
+        - Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraint: ~
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 250
+        channelType:
+            - NotBlank: ~
+Oro\Bundle\ChannelBundle\Entity\CustomerIdentity:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 250
+        account:
+            - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~

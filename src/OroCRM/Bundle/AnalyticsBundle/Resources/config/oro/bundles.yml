@@ -1,2 +1,0 @@
-bundles:
-    - { name: OroCRM\Bundle\AnalyticsBundle\OroCRMAnalyticsBundle, priority: 40 }

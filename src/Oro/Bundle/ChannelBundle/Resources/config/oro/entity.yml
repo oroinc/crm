@@ -1,0 +1,8 @@
+oro_entity:
+    entity_aliases:
+        Oro\Bundle\ChannelBundle\Entity\CustomerIdentity:
+            alias:        channelcustomeridentity
+            plural_alias: channelcustomeridentities
+        Oro\Bundle\ChannelBundle\Entity\EntityName:
+            alias:        channelentityname
+            plural_alias: channelentitynames

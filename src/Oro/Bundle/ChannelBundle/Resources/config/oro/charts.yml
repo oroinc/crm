@@ -1,0 +1,22 @@
+charts:
+    average_lifetime_sales:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.channel.dashboard.average_lifetime_sales_chart.month
+                required: true
+                default_type: string
+                type: month
+                field_name: month_year
+            value:
+                name: value
+                label: oro.channel.dashboard.average_lifetime_sales_chart.axis_label
+                required: true
+                default_type: decimal
+                type: currency
+                field_name: amount
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig

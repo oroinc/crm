@@ -1,0 +1,22 @@
+#simple report by user
+request:
+        input_action: ~
+        oro_reportcrm_form[column][func]: ""
+        oro_reportcrm_form[column][label]: ""
+        oro_reportcrm_form[column][name]: ""
+        oro_reportcrm_form[column][sorting]: ""
+        oro_reportcrm_form[definition]: >
+                {"columns":[{"name":"username","label":"Username","func":null,"sorting":"DESC"},
+                {"name":"roles+Oro\\Bundle\\UserBundle\\Entity\\Role::label","label":"Label","func":null,"sorting":""},
+                {"name":"owner+Oro\\Bundle\\OrganizationBundle\\Entity\\BusinessUnit::name","label":"Name","func":null,"sorting":""},
+                {"name":"roles+Oro\\Bundle\\UserBundle\\Entity\\Role::role","label":"Role","func":null,"sorting":""},
+                {"name":"email","label":"Email","func":null,"sorting":"DESC"}],"grouping_columns":[],
+                "filters":[{"columnName":"username","criterion":{"filter":"string","data":{"value":"admin","type":"1"}}}]}
+        oro_reportcrm_form[description]: ""
+        oro_reportcrm_form[entity]: Oro\Bundle\UserBundle\Entity\User
+        oro_reportcrm_form[filter][columnName]: ""
+        oro_reportcrm_form[filter][criterion]: ""
+        oro_reportcrm_form[name]: Admin
+        oro_reportcrm_form[type]: TABLE
+response:
+        - [admin, Administrator, Main, ROLE_ADMINISTRATOR, admin@example.com]

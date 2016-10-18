@@ -1,0 +1,45 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderHtmlProperty('oro.magento.cart.email.label'|trans, email.renderEmailWithActions(entity.email, entity.customer ? entity.customer.contact : null)) }}
+
+            {{ channel.renderChannelProperty(entity, 'oro.magento.cart.data_channel.label') }}
+
+            {{ ui.renderProperty('oro.magento.cart.items_qty.label'|trans, entity.itemsQty) }}
+            {{ ui.renderProperty('oro.magento.cart.status.label'|trans, entity.status|trans) }}
+            {{ ui.renderProperty('oro.magento.customer.website.label'|trans, entity.store.website.name) }}
+            {{ ui.renderHtmlProperty('oro.magento.cart.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {{ ui.renderProperty('oro.magento.cart.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('oro.magento.cart.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
+
+            {% if entity.opportunity %}
+                {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
+                    {% set opportunityView = ui.renderUrl(path('oro_sales_opportunity_view', {'id': entity.opportunity.id}), ui.renderEntityViewLabel(entity.opportunity, 'name', 'oro.sales.oportunity.entity_label')) %}
+                {%- else -%}
+                    {% set opportunityView = ui.renderEntityViewLabel(entity.opportunity, 'name') %}
+                {%- endif -%}
+
+                {{ ui.renderHtmlProperty('oro.magento.cart.opportunity.label'|trans, opportunityView) }}
+            {% endif %}
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {% if entity.billingAddress is not empty %}
+                {{ ui.renderHtmlProperty('oro.magento.cart.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}
+            {% endif %}
+            {% if entity.shippingAddress is not empty %}
+                {{ ui.renderHtmlProperty('oro.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
+            {% endif %}
+            {% if entity.notes is not empty %}
+                {{ ui.renderHtmlProperty('oro.magento.cart.notes.label'|trans, entity.notes) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

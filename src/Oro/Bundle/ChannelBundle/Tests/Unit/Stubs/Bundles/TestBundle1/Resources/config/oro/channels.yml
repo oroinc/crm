@@ -1,0 +1,26 @@
+channels:
+   entity_data:
+       -
+           name: Oro\Bundle\TestBundle1\Entity\Entity1
+           dependent:
+               - Oro\Bundle\TestBundle1\Entity\Entity1Status
+               - Oro\Bundle\TestBundle1\Entity\Entity1Reason
+           dependencies:
+               - Oro\Bundle\TestBundle1\Entity\Entity2
+               - Oro\Bundle\TestBundle1\Entity\Entity3
+           dependencies_condition: OR
+           navigation_items:
+               - application_menu.menu1.list
+           belongs_to:
+              integration: testIntegrationType
+
+   channel_types:
+        test1:
+            label: test1 type
+            entities:
+                - Oro\Bundle\TestBundle1\Entity\Entity1
+                - Oro\Bundle\TestBundle1\Entity\Entity2
+                - Oro\Bundle\TestBundle1\Entity\Entity3
+            integration_type: test
+            customer_identity: Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer
+            lifetime_value: some_field

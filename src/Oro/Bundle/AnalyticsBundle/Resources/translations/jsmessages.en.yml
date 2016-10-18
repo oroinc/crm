@@ -1,0 +1,10 @@
+oro:
+    analytics:
+        less: Less than
+        more: More than
+        from: From
+        to: To
+        na: N/A
+        best: best
+        worst: worst
+        delete_row: Delete segment

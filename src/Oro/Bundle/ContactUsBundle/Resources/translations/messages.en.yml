@@ -1,0 +1,53 @@
+oro:
+    contactus:
+        contactrequest:
+            entity_label:                   Contact Request
+            entity_plural_label:            Contact Requests
+            id.label:                       ID
+            first_name.label:               First name
+            last_name.label:                Last name
+            email_address.label:            Email
+            phone.label:                    Phone
+            comment.label:                  Comment
+            feedback.label:                 Feedback
+            contact_reason.label:           Contact reason
+            choose_contact_reason.label:    Choose contact reason...
+            status.label:                   Status
+            opportunity.label:              Opportunity
+            lead.label:                     Lead
+            calls.label:                    Calls
+            emails.label:                   Emails
+            organization_name.label:        Organization name
+            preferred_contact_method.label: Preferred contact method
+            owner.label:                    Organization
+            data_channel.label:             Channel
+
+            datagrid:
+                update: Update
+                delete: Delete
+                view:   View
+
+            method:
+                email: Email
+                phone: Phone
+                both:  Both phone & email
+
+            widget:
+                info:
+                    title: Contact Request Details
+            entity:
+                saved: Contact request has been saved successfully
+
+        contactreason:
+            entity_label: Contact Reason
+            entity_plural_label: Contact Reasons
+            entity_description: Represents contact reason
+            id:
+                label: ID
+            label:
+                label: Label
+
+        block:
+            general:                General
+            additional:             Additional
+            request_information:    Request Information

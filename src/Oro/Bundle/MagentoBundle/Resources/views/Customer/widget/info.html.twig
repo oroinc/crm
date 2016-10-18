@@ -1,0 +1,73 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderHtmlProperty('oro.magento.customer.email.label'|trans, email.renderEmailWithActions(entity.email, entity.contact)) }}
+            {% if entity.group %}
+                {{ ui.renderProperty('oro.magento.customer.group.label'|trans, entity.group.name) }}
+            {% endif %}
+
+            {% if entity.channel %}
+                {{ channel.renderChannelProperty(entity, 'oro.magento.customer.data_channel.label') }}
+                {{ ui.renderProperty('oro.magento.customer.channel.label'|trans, entity.channel.name) }}
+            {% endif %}
+
+            {% if entity.website %}
+                {{ ui.renderProperty('oro.magento.customer.website.label'|trans, entity.website.name) }}
+            {% endif %}
+            {% if entity.store %}
+                {{ ui.renderHtmlProperty('oro.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {% endif %}
+
+            {%- if entity.guest -%}
+                {{ ui.renderProperty('oro.magento.customer.guest.label'|trans, 'oro.magento.customer.guest.yes'|trans) }}
+            {%- endif -%}
+            {{ ui.renderProperty('oro.magento.customer.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('oro.magento.customer.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+        <div class="responsive-block">
+            {% if entity.account %}
+                {%- set accountData -%}
+                    {% if entity.account %}
+                        {% set accountViewGranted = resource_granted('oro_account_view') %}
+                        {%- if accountViewGranted -%}
+                            <a href="{{ path('oro_account_view', {'id': entity.account.id}) }}">{{ ui.renderEntityViewLabel(entity.account, 'name', 'oro.account.entity_label') }}</a>
+                        {%- else -%}
+                            {{ ui.renderEntityViewLabel(entity.account, 'name') }}
+                        {%- endif -%}
+                    {% endif %}
+                {%- endset -%}
+                {{ ui.renderHtmlProperty('oro.magento.customer.account.label'|trans, accountData) }}
+            {% endif %}
+
+            {% if entity.contact %}
+                {%- set contactData -%}
+                    {% if entity.contact %}
+                        {% set contactViewGranted = resource_granted('oro_contact_view') %}
+                        {%- if contactViewGranted -%}
+                            <a href="{{ path('oro_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact|oro_format_name|escape }}</a>
+                        {%- else -%}
+                            {{ entity.contact|oro_format_name|escape }}
+                        {%- endif -%}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ ui.renderHtmlProperty('oro.magento.customer.contact.label'|trans, contactData) }}
+            {% endif %}
+
+            {%- set birthdayData -%}
+                {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
+                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
+            {%- endset -%}
+
+            {{ ui.renderProperty('oro.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
+            {{ ui.renderProperty('oro.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
+            {{ ui.renderProperty('oro.magento.customer.vat.label'|trans, entity.vat ) }}
+        </div>
+    </div>
+</div>

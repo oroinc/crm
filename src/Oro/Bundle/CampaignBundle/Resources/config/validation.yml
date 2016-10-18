@@ -1,0 +1,61 @@
+Oro\Bundle\CampaignBundle\Entity\Campaign:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: code
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100
+        code:
+            - NotBlank: ~
+            - Regex:
+                pattern: '/^[a-zA-Z0-9_\-]*$/'
+                message: "This value should contain only alphabetic symbols, underscore, hyphen and numbers."
+            - Length:
+                max: 20
+        startDate:
+            - Date: ~
+            - Oro\Bundle\CalendarBundle\Validator\Constraints\DateEarlierThan:
+                field: endDate
+                message: This date should be earlier than End date
+                groups: [Campaign]
+        endDate:
+            - Date: ~
+        budget:
+            - Range:
+                min: 0
+        owner:
+            - NotBlank: ~
+        reportPeriod:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\CampaignBundle\Entity\EmailCampaign:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100
+        senderEmail:
+            - Email: ~
+            - Length:
+                max: 100
+        senderName:
+            - Length:
+                max: 100
+        scheduledFor:
+            - DateTime: ~
+        marketingList:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+        transport:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings:
+    properties:
+        template:
+            - NotBlank: ~
