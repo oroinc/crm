@@ -19,7 +19,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
     const USERS_NUMBER  = 200;
-    const USER_PASSWORD = '123123q';
+    const USER_PASSWORD = '123123Q';
     /**
      * @var UserManager
      */

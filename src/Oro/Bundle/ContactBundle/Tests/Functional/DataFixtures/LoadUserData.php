@@ -15,7 +15,7 @@ use Oro\Bundle\UserBundle\Entity\Role;
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface
 {
     const USER_NAME         = 'user';
-    const USER_PASSWORD     = 'password';
+    const USER_PASSWORD     = 'password1Q';
     const USER_ORGANIZATION = 1;
 
     /**
