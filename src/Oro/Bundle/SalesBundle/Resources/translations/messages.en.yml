@@ -298,7 +298,7 @@ oro:
                     open:            Open Leads
 
         #
-        # Entity oroCRM\Bundle\SalesBundle\Entity\LeadAddress
+        # Entity Oro\Bundle\SalesBundle\Entity\LeadAddress
         #
         leadaddress:
             city.label:          City
@@ -435,7 +435,7 @@ oro:
             primary.label:       Primary
 
         #
-        # Entity oroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
+        # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
         #
         b2bcustomeremail:
             email.label:         Email

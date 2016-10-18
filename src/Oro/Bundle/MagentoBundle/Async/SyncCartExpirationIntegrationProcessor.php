@@ -1,15 +1,15 @@
 <?php
-namespace OroCRM\Bundle\MagentoBundle\Async;
+namespace Oro\Bundle\MagentoBundle\Async;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -67,7 +67,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
         }
 
         $ownerId = $message->getMessageId();
-        $jobName = 'orocrm_magento:sync_cart_expiration_integration:'.$body['integrationId'];
+        $jobName = 'oro_magento:sync_cart_expiration_integration:'.$body['integrationId'];
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
             /** @var ChannelRepository $repository */

@@ -473,6 +473,7 @@ services:
         parent: oro_magento.provider.initial_processor
         calls:
             - [setDoctrineHelper, ["@oro_entity.doctrine_helper"]]
+            - [setMessageProducer, ["@oro_message_queue.message_producer"]]
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 

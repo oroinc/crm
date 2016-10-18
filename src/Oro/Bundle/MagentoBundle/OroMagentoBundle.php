@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle;
 
+use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MessageQueueBundle\DependencyInjection\Compiler\AddTopicMetaPass;
-use OroCRM\Bundle\MagentoBundle\Async\Topics;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

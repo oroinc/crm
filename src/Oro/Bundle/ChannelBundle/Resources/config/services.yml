@@ -313,9 +313,9 @@ services:
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
     oro_channel.event_listener.timezone_change:
-      class: %oro_channel.event_listener.timezone_change.class%
+      class: 'Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener'
       arguments:
-          - "@doctrine"
+          - "@oro_message_queue.message_producer"
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -397,3 +397,24 @@ services:
             - '@oro_action.context_accessor'
         tags:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }
+
+    oro_channel.async.change_integration_status_processor:
+        class: 'Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor'
+        arguments: ['@doctrine']
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_channel.async.process_channel_state_processor:
+        class: 'Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor'
+        arguments: ["@oro_channel.provider.state_provider"]
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_channel.async.aggregate_lifetime_average_processor:
+        class: 'Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor'
+        arguments:
+            - '@doctrine'
+            - '@oro_locale.settings'
+            - '@oro_message_queue.job.runner'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }

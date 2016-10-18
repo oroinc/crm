@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Command;
+namespace Oro\Bundle\MagentoBundle\Command;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Component\Log\OutputLogger;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use OroCRM\Bundle\MagentoBundle\Async\Topics;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
