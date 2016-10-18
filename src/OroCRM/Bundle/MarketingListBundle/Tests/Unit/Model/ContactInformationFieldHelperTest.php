@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+
 use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
 
 class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
@@ -31,11 +33,26 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
      */
     protected $helper;
 
-    protected $fields = array(
-        'one' => 'col1',
-        'two' => 'col2',
-        'three' => 'col3',
-        'four' => 'col4'
+    /**
+     * @var array
+     */
+    protected $fieldMappings = array(
+        'one' => [
+            'fieldName'  => 'one',
+            'columnName' => 'col1',
+        ],
+        'two' => [
+            'fieldName'  => 'two',
+            'columnName' => 'col2',
+        ],
+        'three' => [
+            'fieldName'  => 'three',
+            'columnName' => 'col3',
+        ],
+        'four' => [
+            'fieldName'  => 'four',
+            'columnName' => 'col4',
+        ],
     );
 
     protected function setUp()
@@ -62,20 +79,20 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetContactInformationColumnsNoDefinition()
+    public function testGetContactInformationFieldsNoDefinition()
     {
-        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationFields($this->queryDesigner));
     }
 
-    public function testGetContactInformationColumnsNoColumns()
+    public function testGetContactInformationFieldsNoColumns()
     {
         $this->queryDesigner->expects($this->once())
             ->method('getDefinition')
             ->will($this->returnValue(json_encode(array('columns' => array()))));
-        $this->assertEmpty($this->helper->getQueryContactInformationColumns($this->queryDesigner));
+        $this->assertEmpty($this->helper->getQueryContactInformationFields($this->queryDesigner));
     }
 
-    public function testGetContactInformationColumns()
+    public function testGetContactInformationFields()
     {
         $entity = 'Entity';
 
@@ -86,10 +103,10 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
                     json_encode(
                         array(
                             'columns' => array(
-                                array('name' => $this->fields['one']),
-                                array('name' => $this->fields['two']),
-                                array('name' => $this->fields['three']),
-                                array('name' => $this->fields['four'])
+                                array('name' => 'one'),
+                                array('name' => 'two'),
+                                array('name' => 'three'),
+                                array('name' => 'four')
                             )
                         )
                     )
@@ -104,10 +121,10 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(
-                'email' => array(array('name' => $this->fields['one'])),
-                'phone' => array(array('name' => $this->fields['two']))
+                'email' => array(array('name' => 'one')),
+                'phone' => array(array('name' => 'two'))
             ),
-            $this->helper->getQueryContactInformationColumns($this->queryDesigner)
+            $this->helper->getQueryContactInformationFields($this->queryDesigner)
         );
     }
 
@@ -119,17 +136,17 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     array(
                         array($entity, null, true),
-                        array($entity, $this->fields['one'], true),
-                        array($entity, $this->fields['two'], true),
-                        array($entity, $this->fields['three'], true),
-                        array($entity, $this->fields['four'], false)
+                        array($entity, 'one', true),
+                        array($entity, 'two', true),
+                        array($entity, 'three', true),
+                        array($entity, 'four', false)
                     )
                 )
             );
 
         $entityConfig = $this->getConfig(
             'contact_information',
-            array('email' => array(array('fieldName' => $this->fields['one'])))
+            array('email' => array(array('fieldName' => 'one')))
         );
         $fieldWithInfoConfig = $this->getConfig(
             'contact_information',
@@ -145,9 +162,9 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     array(
                         array($entity, null, $entityConfig),
-                        array($entity, $this->fields['one'], $fieldNoInfoConfig),
-                        array($entity, $this->fields['two'], $fieldWithInfoConfig),
-                        array($entity, $this->fields['three'], $fieldNoInfoConfig)
+                        array($entity, 'one', $fieldNoInfoConfig),
+                        array($entity, 'two', $fieldWithInfoConfig),
+                        array($entity, 'three', $fieldNoInfoConfig)
                     )
                 )
             );
@@ -168,49 +185,61 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
     public function fieldTypesDataProvider()
     {
         return array(
-            array($this->fields['one'], 'email'),
-            array($this->fields['two'], 'phone'),
-            array($this->fields['three'], null),
-            array($this->fields['four'], null),
+            array('one', 'email'),
+            array('two', 'phone'),
+            array('three', null),
+            array('four', null),
         );
     }
 
-    public function testGetEntityContactInformationColumns()
+    public function testgetEntityContactInformationFields()
     {
         $entity = '\stdClass';
-        $columns = array($this->fields['one'], $this->fields['two'], $this->fields['three'], $this->fields['four']);
 
-        $this->assertEntityMetadataCall($entity, $columns);
+        $metadata = new ClassMetadataInfo($entity);
+        $metadata->fieldMappings = $this->fieldMappings;
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityMetadata')
+            ->with($entity)
+            ->will($this->returnValue($metadata));
+
         $this->assertContactInformationConfig($entity);
         $this->assertEquals(
-            array($this->fields['one'] => 'email', $this->fields['two'] => 'phone'),
-            $this->helper->getEntityContactInformationColumns($entity)
+            array('one' => 'email', 'two' => 'phone'),
+            $this->helper->getEntityContactInformationFields($entity)
         );
     }
 
-    public function testGetEntityContactInformationColumnsInfo()
+    public function testGetEntityContactInformationFieldsInfo()
     {
         $entity = '\stdClass';
-        $columns = array($this->fields['one'], $this->fields['two'], $this->fields['three'], $this->fields['four']);
 
-        $this->assertEntityMetadataCall($entity, $columns);
+        $metadata = new ClassMetadataInfo($entity);
+        $metadata->fieldMappings = $this->fieldMappings;
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityMetadata')
+            ->with($entity)
+            ->will($this->returnValue($metadata));
+
         $this->assertContactInformationConfig($entity);
 
         $fields = array(
             array(
-                'name' => $this->fields['one'],
+                'name' => 'one',
                 'label' => 'One label'
             ),
             array(
-                'name' => $this->fields['two'],
+                'name' => 'two',
                 'label' => 'Two label'
             ),
             array(
-                'name' => $this->fields['three'],
+                'name' => 'three',
                 'label' => 'Three label'
             ),
             array(
-                'name' => $this->fields['four'],
+                'name' => 'four',
                 'label' => 'Four label'
             ),
         );
@@ -221,32 +250,18 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             array(
                 array(
-                    'name' => $this->fields['one'],
+                    'name' => 'one',
                     'label' => 'One label',
                     'contact_information_type' => 'email'
                 ),
                 array(
-                    'name' => $this->fields['two'],
+                    'name' => 'two',
                     'label' => 'Two label',
                     'contact_information_type' => 'phone'
                 )
             ),
-            $this->helper->getEntityContactInformationColumnsInfo($entity)
+            $this->helper->getEntityContactInformationFieldsInfo($entity)
         );
-    }
-
-    protected function assertEntityMetadataCall($entity, $columns)
-    {
-        $metadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadata->expects($this->once())
-            ->method('getColumnNames')
-            ->will($this->returnValue($columns));
-        $this->doctrineHelper->expects($this->once())
-            ->method('getEntityMetadata')
-            ->with($entity)
-            ->will($this->returnValue($metadata));
     }
 
     /**

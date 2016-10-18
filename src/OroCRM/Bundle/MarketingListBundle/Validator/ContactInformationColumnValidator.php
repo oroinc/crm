@@ -72,7 +72,7 @@ class ContactInformationColumnValidator extends ConstraintValidator
      */
     protected function assertContactInformationFields(AbstractQueryDesigner $value, $type)
     {
-        $contactInformationFields = $this->contactInformationFieldHelper->getQueryContactInformationColumns($value);
+        $contactInformationFields = $this->contactInformationFieldHelper->getQueryContactInformationFields($value);
         if ($type) {
             return array_key_exists($type, $contactInformationFields) && (bool)count($contactInformationFields[$type]);
         }
