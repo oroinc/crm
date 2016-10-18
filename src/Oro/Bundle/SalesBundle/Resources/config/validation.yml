@@ -1,0 +1,76 @@
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        probability:
+            - Range:
+                min: 0
+                max: 100
+        customer:
+            - Valid: ~
+            - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+        status:
+            - NotBlank: ~
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        firstName:
+            - Length:
+                max: 255
+        lastName:
+            - Length:
+                max: 255
+        dataChannel:
+            - NotBlank: ~
+        emails:
+            - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
+                message: One of emails must be set as primary.
+        organization:
+            - NotBlank: ~
+        status:
+            - NotBlank: ~
+
+Oro\Bundle\SalesBundle\Entity\LeadAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+    properties:
+        street:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        postalCode:
+            - NotBlank: ~
+
+Oro\Bundle\SalesBundle\Entity\SalesFunnel:
+    properties:
+        startDate:
+            - NotBlank: ~
+            - Date: ~
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        account:
+            - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+

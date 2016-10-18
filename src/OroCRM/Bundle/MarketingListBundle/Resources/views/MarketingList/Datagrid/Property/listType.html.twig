@@ -1,1 +1,0 @@
-{{ value|trans }} {% if record.getValue('segmentLastRun') %}({{ 'orocrm.marketinglist.datagrid.refreshedOn'|trans }} {{ record.getValue('segmentLastRun')|oro_format_datetime }}){% endif %}

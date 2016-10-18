@@ -1,4 +1,0 @@
-OroCRMCaseBundle
-================
-
-Case entity management.

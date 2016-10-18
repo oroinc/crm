@@ -1,0 +1,8 @@
+parameters:
+    oro_channel.importexport.template_fixture.channel.class: Oro\Bundle\ChannelBundle\ImportExport\TemplateFixture\ChannelFixture
+
+services:
+    oro_channel.importexport.template_fixture.channel:
+        class: %oro_channel.importexport.template_fixture.channel.class%
+        tags:
+            - { name: oro_importexport.template_fixture }

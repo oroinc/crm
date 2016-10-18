@@ -1,0 +1,20 @@
+oro:
+    marketing:
+        list:
+            change_entity_confirmation: The template data can contain variables related to the previous selected entity. Do you want to clear all template data?
+    marketinglist:
+        refresh_dialog:
+            content: Please confirm that you want to refresh this list
+            success: Marketing list successfully refreshed
+        remove_dialog:
+            confirm_title: Remove Confirmation
+            confirm_ok: Yes
+            confirm_cancel: Cancel
+            content: Are you sure you want to remove this item?
+            success: Removed.
+        unremove_dialog:
+            confirm_title: Undo Remove Confirmation
+            confirm_ok: Yes
+            confirm_cancel: Cancel
+            content: Are you sure you want to undo remove for this item?
+            success: Removed.

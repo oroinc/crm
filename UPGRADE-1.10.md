@@ -14,8 +14,8 @@ UPGRADE FROM 1.9 to 1.10
 - B2bCustomer entity extended with 2 collection fields (emails, phones)
 - Constructor for `OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType` changed. New argument: `OpportunityRelationsBuilder $relationsBuilder`.
 
-#### OroCRMCallBundle:
-- The `duration` field in `OroCRM\Bundle\CallBundle\Entity\Call` is changed to `duration` DB type 
+#### OroCallBundle:
+- The `duration` field in `Oro\Bundle\CallBundle\Entity\Call` is changed to `duration` DB type 
 from `DateTime` which accepts a (int) duration in seconds.
 Updating Call `duration` field (API POST/PUT, Forms) now accepts strings with formats '*HH*:*MM*:*SS*', '*HH*h *MM*m *SS*s' or `(int)` seconds
 Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead of 'HH:MM:SS' formatted string

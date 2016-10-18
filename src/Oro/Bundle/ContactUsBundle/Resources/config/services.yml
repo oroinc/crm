@@ -1,0 +1,42 @@
+parameters:
+    oro_contact_us.contactrequest.entity.class:           Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+    oro_contact_us.embedded_form.class:                   Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
+    oro_contact_us.contact_request.form.handler.class:    Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
+    oro_contact_us.provider.phone.abstract_contact_request.class: Oro\Bundle\ContactUsBundle\Provider\AbstractContactRequestPhoneProvider
+
+services:
+    oro_contact_us.embedded_form:
+        class: %oro_contact_us.embedded_form.class%
+        tags:
+            - { name: oro_embedded_form, label: oro.contactus.contactrequest.entity_label }
+            - { name: form.type, alias: oro_contactus_contact_request }
+
+    oro_contact_us.contact_request.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "oro_contactus_contact_request"
+            - "oro_contactus_contact_request"
+            - null
+            - { dataChannelField : true }
+
+    oro_contact_us.contact_request.form.handler:
+        class: %oro_contact_us.contact_request.form.handler.class%
+        scope: request
+        arguments:
+            - "@oro_contact_us.contact_request.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact_us.provider.phone.abstract_contact_request:
+        class: %oro_contact_us.provider.phone.abstract_contact_request.class%
+        tags:
+            - { name: oro_address.phone_provider, class: Oro\Bundle\ContactUsBundle\Entity\AbstractContactRequest }
+
+    oro_contact_us.contact_request.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact_us.contactrequest.entity.class%
+            - "@doctrine.orm.entity_manager"

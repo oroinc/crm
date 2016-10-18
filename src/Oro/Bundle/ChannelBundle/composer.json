@@ -1,0 +1,25 @@
+{
+    "name": "orocrm/channel-bundle",
+    "type": "symfony-bundle",
+    "description": "Oro CRM Channel Bundle",
+    "keywords": ["CRM", "Channel"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "2.8.*, !=2.8.10",
+        "doctrine/orm": ">=2.3,<2.4-dev",
+        "oro/ui-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    },
+    "target-dir": "Oro/Bundle/ChannelBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
