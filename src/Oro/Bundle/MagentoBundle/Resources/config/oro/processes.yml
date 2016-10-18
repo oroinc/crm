@@ -283,7 +283,7 @@ processes:
                             - '@equal': ["$dataChannel.data[rfm_enabled]", true]
                     actions:
                         - '@call_service_method':
-                            service: 'orocrm_analytics.schedule_calculate_analytics'
+                            service: 'oro_analytics.schedule_calculate_analytics'
                             method: 'scheduleForChannel'
                             method_parameters: [$dataChannel.id, [$customer.id]]
 
@@ -319,7 +319,7 @@ processes:
                             - '@equal': ["$.dataChannel.data[rfm_enabled]", true]
                     actions:
                         - '@call_service_method':
-                            service: 'orocrm_analytics.schedule_calculate_analytics'
+                            service: 'oro_analytics.schedule_calculate_analytics'
                             method: 'scheduleForChannel'
                             method_parameters: [$.dataChannel.id]
 

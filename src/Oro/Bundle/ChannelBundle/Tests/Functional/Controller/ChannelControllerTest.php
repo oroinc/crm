@@ -49,7 +49,7 @@ class ChannelControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('orocrm_channel_change_status', ['id' => $channel->getId()])
+            $this->getUrl('oro_channel_change_status', ['id' => $channel->getId()])
         );
 
         $this->assertLastResponseStatus(302);

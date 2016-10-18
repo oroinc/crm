@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Command;
 
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -70,6 +70,6 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
      */
     private function getScheduleCalculateAnalyticsService()
     {
-        return $this->container->get('orocrm_analytics.schedule_calculate_analytics');
+        return $this->container->get('oro_analytics.schedule_calculate_analytics');
     }
 }

@@ -14,7 +14,7 @@ processes:
                             - '@equal': ["$data[rfm_enabled]", true]
                     actions:
                         - '@call_service_method':
-                            service: 'orocrm_analytics.schedule_calculate_analytics'
+                            service: 'oro_analytics.schedule_calculate_analytics'
                             method: 'scheduleForChannel'
                             method_parameters: [$id]
 
