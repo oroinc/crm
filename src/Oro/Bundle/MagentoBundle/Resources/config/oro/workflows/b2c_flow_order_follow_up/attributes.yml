@@ -3,20 +3,16 @@ workflows:
         attributes:
             # Other workflow attributes
             notes:
-                label: 'Notes'
                 type: string
                 property_path: order.notes
             feedback:
-                label: 'Feedback'
                 type: string
                 property_path: order.feedback
             account:
-                label: 'Account'
                 type: entity
                 options:
                     class: Oro\Bundle\AccountBundle\Entity\Account
             contact:
-                label: 'Contact'
                 type: entity
                 options:
                     class: Oro\Bundle\ContactBundle\Entity\Contact

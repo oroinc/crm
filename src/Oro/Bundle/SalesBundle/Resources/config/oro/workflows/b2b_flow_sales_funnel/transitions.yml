@@ -2,7 +2,6 @@ workflows:
     b2b_flow_sales_funnel:
         transitions:
             start_from_lead:
-                label: 'Start from Lead'
                 step_to: new_lead
                 is_start: true
                 is_unavailable_hidden: true
@@ -57,7 +56,6 @@ workflows:
                             attribute: $sales_funnel_owner
                 transition_definition: start_from_lead
             start_from_opportunity:
-                label: 'Start from Opportunity'
                 step_to: new_opportunity
                 is_start: true
                 is_unavailable_hidden: true
@@ -112,14 +110,12 @@ workflows:
                             attribute: $sales_funnel_owner
                 transition_definition: start_from_opportunity
             disqualify:
-                label: 'Disqualify'
                 step_to: disqualified_lead
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-remove'
                 transition_definition: disqualify_definition
             follow_up:
-                label: 'Follow up'
                 step_to: disqualified_lead
                 is_unavailable_hidden: true
                 frontend_options:
@@ -129,14 +125,12 @@ workflows:
                         lead_notes: ~
                 transition_definition: follow_up_definition
             reactivate:
-                label: 'Reactivate'
                 step_to: new_lead
                 is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-repeat'
                 transition_definition: reactivate_definition
             qualify:
-                label: 'Qualify'
                 step_to: new_opportunity
                 is_unavailable_hidden: true
                 acl_resource: oro_sales_opportunity_create
@@ -175,7 +169,6 @@ workflows:
                                 case_insensitive: true
                 transition_definition: qualify_definition
             develop:
-                label: 'Develop'
                 step_to: developed_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
@@ -196,7 +189,6 @@ workflows:
                         customer_need: ~
                         proposed_solution: ~
             close_as_won:
-                label: 'Close as Won'
                 step_to: won_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
@@ -222,7 +214,6 @@ workflows:
                             parameters:
                                 attribute: $close_date
             close_as_lost:
-                label: 'Close as Lost'
                 step_to: lost_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
@@ -257,7 +248,6 @@ workflows:
                             parameters:
                                 attribute: $close_date
             reopen:
-                label: 'Reopen'
                 message: |+
                     This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.
 
