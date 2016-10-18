@@ -1,0 +1,21 @@
+{% extends 'OroDashboardBundle:Dashboard:launchpad.html.twig' %}
+
+{% set widgetName = 'accounts_launchpad' %}
+{% set widgetLabel = 'oro.account.entity_plural_label'|trans %}
+{% set widgetIcon = 'suitcase' %}
+{% set widgetAcl = 'oro_account_view' %}
+
+{% set items = {
+    index: {
+        label: 'oro.dashboard.list'|trans,
+        route: 'oro_account_index',
+        acl: 'oro_account_view'
+    },
+    create: {
+        label: 'oro.ui.create_entity'|trans({'%entityName%': 'oro.account.entity_label'|trans}),
+        route: 'oro_account_create',
+        acl: 'oro_account_create'
+    }
+} %}
+
+

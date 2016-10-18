@@ -1,0 +1,25 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('oro.magento.product.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('oro.magento.product.sku.label'|trans, entity.sku) }}
+            {{ ui.renderProperty('oro.magento.product.type.label'|trans, entity.type) }}
+            {{ ui.renderProperty('oro.magento.product.price.label'|trans, entity.price) }}
+            {{ ui.renderProperty('oro.magento.product.special_price.label'|trans, entity.specialPrice) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ ui.renderProperty('oro.magento.product.channel.label'|trans, entity.channel.name) }}
+
+            {% set websites = [] %}
+            {% for website in entity.websites %}
+                {% set websites = websites|merge([website.name]) %}
+            {% endfor %}
+            {{ ui.renderProperty('oro.magento.product.websites.label'|trans, websites|join(', ')) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+    </div>
+</div>

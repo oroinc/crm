@@ -1,0 +1,294 @@
+Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
+    properties:
+        email:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    constraints:
+        - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
+              fields:     [ websiteId, wsdlUrl ]
+    properties:
+        wsdlUrl:
+          - NotBlank: ~
+        apiUser:
+          - NotBlank: ~
+        syncStartDate:
+          - NotBlank: ~
+          - Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
+        websiteId:
+          - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\Website:
+    properties:
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+
+Oro\Bundle\MagentoBundle\Entity\Store:
+    properties:
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        website:
+            - NotBlank: ~
+            - Valid: ~
+
+Oro\Bundle\MagentoBundle\Entity\Region:
+    properties:
+        combinedCode:
+            - NotBlank: ~
+            - Length: { max: 60 }
+        code:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        countryCode:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        regionId:
+            - NotBlank: ~
+        name:
+            - Length: { max: 255 }
+
+Oro\Bundle\MagentoBundle\Entity\Customer:
+    constraints:
+        - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint: { groups: ['form'] }
+    properties:
+        namePrefix:
+            - Length: { max: 255 }
+        firstName:
+            - NotBlank: { groups: ['form'] }
+            - Length: { max: 255 }
+        lastName:
+            - NotBlank: { groups: ['form'] }
+            - Length: { max: 255 }
+        middleName:
+            - Length: { max: 255 }
+        nameSuffix:
+            - Length: { max: 255 }
+        vat:
+            - Length: { max: 255 }
+        email:
+            - NotBlank: { groups: ['form'] }
+            - Email: { groups: ['form'] }
+            - Length: { max: 255 }
+        gender:
+            - Length: { max: 8 }
+        birthday:
+            - Date: ~
+        createdAt:
+            - DateTime: ~
+        updatedAt:
+            - DateTime: ~
+        website:
+            - Valid: ~
+        store:
+            - NotBlank: { groups: ['form'] }
+            - Valid: ~
+        group:
+            - NotBlank: { groups: ['form'] }
+            - Valid: ~
+        contact:
+            - Valid: ~
+        account:
+            - Valid: ~
+        addresses:
+            - Valid: ~
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\CustomerGroup:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+
+Oro\Bundle\MagentoBundle\Entity\Address:
+    properties:
+        types:
+            - Valid: ~
+        country:
+            - Valid: ~
+            - NotBlank: { groups: ['form'] }
+        region:
+            - Valid: ~
+        street:
+            - NotBlank: { groups: ['form'] }
+        city:
+            - NotBlank: { groups: ['form'] }
+        postalCode:
+            - NotBlank: { groups: ['form'] }
+        firstName:
+            - NotBlank: { groups: ['form'] }
+        lastName:
+            - NotBlank: { groups: ['form'] }
+        phone:
+            - NotBlank: { groups: ['form'] }
+
+Oro\Bundle\MagentoBundle\Entity\Cart:
+    properties:
+        cartItems:
+            - Valid: ~
+        store:
+            - Valid: ~
+        status:
+            - Valid: ~
+        itemsQty:
+            - GreaterThanOrEqual: { value: 0 }
+        itemsCount:
+            - GreaterThanOrEqual: { value: 0 }
+        baseCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        storeCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        quoteCurrencyCode:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        storeToBaseRate:
+            - NotBlank: ~
+        storeToQuoteRate:
+            - NotBlank: ~
+        email:
+            - Length: { max: 255 }
+        giftMessage:
+            - Length: { max: 255 }
+        isGuest:
+            - NotNull: ~
+        shippingAddress:
+            - Valid: ~
+        billingAddress:
+            - Valid: ~
+        paymentDetails:
+            - Length: { max: 255 }
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\CartAddress:
+    properties:
+        country:
+            - Valid: ~
+        region:
+            - Valid: ~
+
+Oro\Bundle\MagentoBundle\Entity\CartStatus:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length: { max: 32 }
+        label:
+            - NotBlank: ~
+            - Length: { max: 255 }
+
+Oro\Bundle\MagentoBundle\Entity\CartItem:
+    properties:
+        productId:
+            - NotBlank: ~
+        freeShipping:
+            - NotNull: ~
+            - Length: { max: 255 }
+        giftMessage:
+            - Length: { max: 255 }
+        taxClassId:
+           - Length: { max: 255 }
+        isVirtual:
+            - NotNull: ~
+        rowTotal:
+            - NotBlank: ~
+        taxAmount:
+            - NotBlank: ~
+        productType:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        sku:
+            - Length: { max: 255 }
+        name:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        qty:
+            - NotBlank: ~
+        price:
+            - NotBlank: ~
+        discountAmount:
+            - NotNull: ~
+        taxPercent:
+            - NotNull: ~
+        taxPercent:
+            - NotNull: ~
+        createdAt:
+            - DateTime: ~
+            - NotBlank: ~
+        updatedAt:
+            - DateTime: ~
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\Order:
+    properties:
+        incrementId:
+            - Length: { max: 500 }
+            - NotBlank: ~
+        addresses:
+            - Valid: ~
+        store:
+            - Valid: ~
+        giftMessage:
+            - Length: { max: 255 }
+        remoteIp:
+            - Length: { max: 255 }
+        storeName:
+            - Length: { max: 255 }
+        paymentDetails:
+            - Length: { max: 255 }
+        paymentMethod:
+            - Length: { max: 255 }
+        shippingMethod:
+            - Length: { max: 255 }
+        status:
+            - NotBlank: ~
+            - Length: { max: 255 }
+        couponCode:
+            - Length: { max: 255 }
+        cart:
+            - Valid: ~
+        items:
+            - Valid: ~
+        createdAt:
+            - DateTime: ~
+            - NotBlank: ~
+        updatedAt:
+            - DateTime: ~
+            - NotBlank: ~
+        dataChannel:
+            - NotBlank: ~
+        organization:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\OrderItem:
+    properties:
+        productType:
+            - Length: { max: 255 }
+        name:
+            - Length: { max: 255 }
+        sku:
+            - Length: { max: 255 }
+        qty:
+            - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\OrderAddress:
+    properties:
+        types:
+            - Valid: ~
+        country:
+            - Valid: ~
+        region:
+            - Valid: ~

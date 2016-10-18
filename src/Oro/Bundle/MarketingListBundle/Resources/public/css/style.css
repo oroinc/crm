@@ -1,0 +1,18 @@
+#oro_marketing_list-column-list .name-cell {
+    padding-left: 28px;
+}
+
+#oro_marketing_list-column-list .name-cell.has-icon {
+    padding-left: 10px;
+}
+
+#oro_marketing_list-column-list .name-cell .entity-field-path {
+    padding-left: 2px
+}
+
+#column-information-notice:not(.has-fields) .column-information-fields-notice {
+    display: none;
+}
+#column-information-notice ul {
+    margin-bottom: 0;
+}

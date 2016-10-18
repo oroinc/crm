@@ -1,0 +1,4 @@
+OroCaseBundle
+================
+
+Case entity management.

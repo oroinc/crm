@@ -1,0 +1,19 @@
+{% extends 'OroDashboardBundle:Dashboard:launchpad.html.twig' %}
+
+{% set widgetName = 'leads_launchpad' %}
+{% set widgetLabel = 'oro.sales.lead.entity_plural_label'|trans %}
+{% set widgetIcon = 'phone' %}
+{% set widgetAcl = 'oro_sales_lead_view' %}
+
+{% set items = {
+    index: {
+        label: 'oro.dashboard.list'|trans,
+        route: 'oro_sales_lead_index',
+        acl: 'oro_sales_lead_view'
+    },
+    create: {
+        label: 'oro.ui.create_entity'|trans({'%entityName%': 'oro.sales.lead.entity_label'|trans}),
+        route: 'oro_sales_lead_create',
+        acl: 'oro_sales_lead_create'
+    }
+} %}

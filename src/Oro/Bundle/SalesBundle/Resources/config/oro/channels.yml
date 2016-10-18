@@ -1,0 +1,47 @@
+channels:
+   entity_data:
+       -
+          name: Oro\Bundle\SalesBundle\Entity\Opportunity
+          dependent:
+              - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+          navigation_items:
+              - application_menu.sales_tab.opportunity_list
+              - shortcuts.shortcut_list_opportunities
+              - shortcuts.shortcut_new_opportunity
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
+              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
+              - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
+
+       -
+          name: Oro\Bundle\SalesBundle\Entity\Lead
+          navigation_items:
+              - application_menu.sales_tab.lead_list
+              - shortcuts.shortcut_list_leads
+              - shortcuts.shortcut_new_lead
+              - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
+
+       -
+          name: Oro\Bundle\SalesBundle\Entity\SalesFunnel
+          dependencies:
+              - Oro\Bundle\SalesBundle\Entity\Opportunity
+              - Oro\Bundle\SalesBundle\Entity\Lead
+          dependencies_condition: OR
+          navigation_items:
+              - application_menu.sales_tab.sales_salesfunnel_list
+
+       -
+          name: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+          navigation_items:
+              - application_menu.customers_tab.b2bcustomer_list
+
+   channel_types:
+        b2b:
+            label: oro.sales.channel_type.b2b.label
+            entities:
+                - Oro\Bundle\SalesBundle\Entity\Lead
+                - Oro\Bundle\SalesBundle\Entity\Opportunity
+            customer_identity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            lifetime_value: lifetime
+            priority: -20

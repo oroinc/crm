@@ -1,0 +1,18 @@
+oro_campaign_bundle:
+    resource:     "@OroCampaignBundle/Controller"
+    type:         annotation
+    prefix:       /
+
+oro_campaign_dashboard:
+    resource:     "@OroCampaignBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
+
+oro_campaign_bundle_api:
+    resource:     "@OroCampaignBundle/Resources/config/oro/routing_api.yml"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

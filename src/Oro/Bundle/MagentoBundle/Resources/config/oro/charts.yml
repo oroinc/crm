@@ -1,0 +1,123 @@
+charts:
+    average_order_amount:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.dashboard.average_order_amount_chart.month
+                required: true
+                default_type: string
+                type: month
+                field_name: date
+            value:
+                name: value
+                label: oro.magento.dashboard.average_order_amount_chart.order_amount
+                required: true
+                default_type: decimal
+                type: currency
+                field_name: amount
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+
+    new_web_customers:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.dashboard.new_magento_customers_chart.month
+                required: true
+                default_type: string
+                type: month
+                field_name: date
+            value:
+                name: value
+                label: oro.magento.dashboard.new_magento_customers_chart.customer_count
+                required: true
+                default_type: integer
+                field_name: cnt
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+    revenue_over_time_chart:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.dashboard.revenue_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: oro.magento.dashboard.revenue_over_time_chart.revenue
+                required: true
+                default_type: decimal
+                field_name: amount
+                type: currency
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+    orders_over_time_chart:
+        label: oro.chart.line_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.dashboard.orders_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: oro.magento.dashboard.orders_over_time_chart.order_count
+                required: true
+                default_type: integer
+                field_name: count
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+    purchase_chart:
+        label: oro.chart.funnel_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.dashboard.purchase_chart.label
+                required: true
+                default_type: string
+                field_name: label
+            value:
+                name: value
+                label: oro.magento.dashboard.purchase_chart.value
+                required: true
+                default_type: integer
+                type: integer
+                field_name: value
+            isNozzle:
+                name: isNozzle
+                label: oro.magento.dashboard.purchase_chart.is_nozzle
+                required: true
+                default_type: boolean
+        template: OroChartBundle:Chart:flow.html.twig
+    website_chart:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: oro.magento.website_activity.chart.day
+                required: true
+                default_type: string
+                type: day
+                field_name: date
+            value:
+                name: value
+                label: oro.magento.website_activity.chart.event_count
+                required: true
+                default_type: integer
+                field_name: count
+        template: OroChartsBundle:Chart:bar.html.twig

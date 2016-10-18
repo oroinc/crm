@@ -1,0 +1,152 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
+
+{% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
+
+{% block navButtons %}
+    {% if resource_granted('oro_case_comment_create') and resource_granted('oro_case_comment_view') %}
+        {{ UI.clientButton({
+            'id': 'add-case-comment-button',
+            'aCss': 'no-hash',
+            'iCss': 'icon-comment-alt hide-text',
+            'label' : 'oro.case.casecomment.action.add'|trans,
+            'dataAttributes': { 'purpose': 'open-dialog-widget'}
+        }) }}
+        <script type="text/javascript">
+            require(['jquery', 'oroui/js/mediator'],
+            function($, mediator){
+                $('#add-case-comment-button').on('click', function(e) {
+                    e.preventDefault();
+                    mediator.trigger('comment:add', this);
+                });
+            });
+        </script>
+    {% endif %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('oro_case_update', { id: entity.id }),
+            'entity_label': 'oro.case.caseentity.entity_label'|trans
+        }) }}
+    {% endif %}
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_case_api_delete_case', {'id': entity.id}),
+            'dataRedirect': path('oro_case_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-user',
+            'dataId': entity.id,
+            'entity_label': 'oro.case.caseentity.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('oro_case_index'),
+        'indexLabel': 'oro.case.caseentity.entity_plural_label'|trans,
+        'entityTitle': entity.subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {%- set caseInformation -%}
+        <div class="row-fluid form-horizontal">
+            <div class="responsive-block">
+                {{ UI.renderProperty('oro.case.caseentity.subject.label'|trans, entity.subject) }}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.description.label'|trans, entity.description) }}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.resolution.label'|trans, entity.resolution) }}
+                {{ UI.renderProperty('oro.case.caseentity.source.label'|trans, entity.source) }}
+                {{ UI.renderProperty('oro.case.caseentity.status.label'|trans, entity.status) }}
+                {{ UI.renderProperty('oro.case.caseentity.priority.label'|trans, entity.priority) }}
+                {{ UI.renderProperty('oro.case.caseentity.reported_at.label'|trans, entity.reportedAt|oro_format_datetime) }}
+                {% if entity.closedAt is not empty %}
+                    {{ UI.renderProperty('oro.case.caseentity.closed_at.label'|trans, entity.closedAt|oro_format_datetime) }}
+                {% endif %}
+
+                {%- set owner -%}
+                    {%- if entity.owner -%}
+                        {{ U.render_user_name(entity.owner) }}
+                        {{ U.user_business_unit_name(entity.owner) }}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.owner.label'|trans, owner) }}
+
+                {%- set assignedTo -%}
+                    {%- if entity.assignedTo -%}
+                        {{ U.render_user_name(entity.assignedTo) }}
+                        {{ U.user_business_unit_name(entity.assignedTo) }}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.assigned_to.label'|trans, assignedTo) }}
+
+                {%- set relatedContact -%}
+                    {%- if entity.relatedContact -%}
+                        {% if resource_granted('oro_contact_view') %}
+                            <a href="{{ path('oro_contact_view', {'id': entity.relatedContact.id}) }}">
+                                {{ entity.relatedContact|oro_format_name|escape }}
+                            </a>
+                        {% else %}
+                            {{ entity.relatedContact|oro_format_name|escape }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.related_contact.label'|trans, relatedContact) }}
+
+                {%- set relatedAccount -%}
+                    {%- if entity.relatedAccount -%}
+                        {% if resource_granted('oro_account_view') %}
+                            <a href="{{ path('oro_account_view', {'id': entity.relatedAccount.id}) }}">
+                                {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'oro.account.entity_label') }}
+                            </a>
+                        {% else %}
+                            {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name') }}
+                        {% endif %}
+                    {%- endif -%}
+                {%- endset -%}
+                {{ UI.renderHtmlProperty('oro.case.caseentity.related_account.label'|trans, relatedAccount) }}
+            </div>
+            <div class="responsive-block">
+                {{ entityConfig.renderDynamicFields(entity) }}
+            </div>
+        </div>
+    {%- endset -%}
+
+    {% set dataBlocks = [
+        {
+            'title': 'oro.case.block.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {'data' : [caseInformation]}
+            ]
+        }
+    ] %}
+
+    {% if resource_granted('oro_case_comment_view') %}
+        {% set caseComments %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_case_widget_comments', { id: entity.id }),
+                'cssClass': 'list-widget comments-widget',
+                'title': '',
+            }) }}
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'oro.case.block.comments'|trans,
+                'subblocks': [
+                    {'data' : [caseComments]}
+                ]
+            }
+        ]) %}
+    {% endif %}
+
+    {% set id = 'caseView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

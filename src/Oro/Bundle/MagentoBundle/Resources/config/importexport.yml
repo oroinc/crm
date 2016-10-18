@@ -1,0 +1,687 @@
+parameters:
+    # entities
+    oro_magento.customer.entity.class:                                       Oro\Bundle\MagentoBundle\Entity\Customer
+    oro_magento.region.entity.class:                                         Oro\Bundle\MagentoBundle\Entity\Region
+    oro_magento.cart.entity.class:                                           Oro\Bundle\MagentoBundle\Entity\Cart
+    oro_magento.order.entity.class:                                          Oro\Bundle\MagentoBundle\Entity\Order
+
+    # converter
+    oro_magento.importexport.data_converter.cart.class:                      Oro\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
+    oro_magento.importexport.data_converter.cartitem.class:                  Oro\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter
+    oro_magento.importexport.data_converter.order.class:                     Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderDataConverter
+    oro_magento.importexport.data_converter.order_address.class:             Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter
+    oro_magento.importexport.data_converter.order_item.class:                Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter
+    oro_magento.importexport.data_converter.cart_address.class:              Oro\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
+    oro_magento.importexport.data_converter.customer_address.class:          Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerAddressDataConverter
+    oro_magento.importexport.data_converter.customer.class:                  Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter
+    oro_magento.importexport.data_converter.guest_customer.class:            Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter
+    oro_magento.importexport.data_converter.website.class:                   Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter
+    oro_magento.importexport.data_converter.store.class:                     Oro\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
+    oro_magento.importexport.data_converter.customer_group.class:            Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerGroupDataConverter
+    oro_magento.importexport.data_converter.newsletter_subscriber.class:     Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter
+
+    # connectors
+    oro_magento.mage.abstract.class:                                         Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector
+    oro_magento.mage.store.class:                                            Oro\Bundle\MagentoBundle\Provider\Connector\StoreConnector
+    oro_magento.mage.website.class:                                          Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector
+    oro_magento.mage.customer_group.class:                                   Oro\Bundle\MagentoBundle\Provider\Connector\CustomerGroupConnector
+
+    oro_magento.mage.region_connector.class:                                 Oro\Bundle\MagentoBundle\Provider\RegionConnector
+    oro_magento.mage.customer_connector.class:                               Oro\Bundle\MagentoBundle\Provider\CustomerConnector
+    oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\CartConnector
+    oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\OrderConnector
+    oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector
+
+    oro_magento.mage.order_connector_initial.class:                          Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
+    oro_magento.mage.cart_connector_initial.class:                           Oro\Bundle\MagentoBundle\Provider\Connector\InitialCartConnector
+    oro_magento.mage.customer_connector_initial.class:                       Oro\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector
+    oro_magento.mage.newsletter_subscriber_connector_initial.class:          Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector
+
+    # normalizers
+    oro_magento.importexport.denormalizer.region.class:                      Oro\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer
+    oro_magento.importexport.normalizer.payment_details.class:               Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer
+    oro_magento.importexport.denormalizer.order_item.class:                  Oro\Bundle\MagentoBundle\ImportExport\Serializer\OrderItemDenormalizer
+
+    oro_magento.importexport.normalizer.datetime.class:                      Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer
+
+    # strategies
+    oro_magento.import.strategy.abstract.class:                              Oro\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy
+    oro_magento.import_strategy.customer.add_or_update.class:                Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy
+    oro_magento.import_strategy.guest_customer.add_or_update.class:          Oro\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy
+    oro_magento.import_strategy.newsletter_subscriber.add_or_update.class:   Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberStrategy
+    oro_magento.import_strategy.region.add_or_update.class:                  Oro\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
+    oro_magento.import_strategy.cart.add_or_update.class:                    Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
+    oro_magento.import_strategy.order.add_or_update.class:                   Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
+    oro_magento.import.strategy.order_with_customer.add_or_update.class:     Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy
+    oro_magento.import.strategy.cart_with_customer.add_or_update.class:      Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy
+    oro_magento.import.strategy.customer_address.add_or_update.class:        Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
+    oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy
+    oro_magento.import_strategy.default_magento_import.class:                Oro\Bundle\MagentoBundle\ImportExport\Strategy\DefaultMagentoImportStrategy
+
+    # processors
+    oro_magento.provider.initial_processor.class:                            Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
+    oro_magento.provider.initial_sync_processor.class:                       Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor
+    oro_magento.provider.initial_schedule_processor.class:                   Oro\Bundle\MagentoBundle\Provider\InitialScheduleProcessor
+    oro_magento.provider.newsletter_subscriber.initial_sync_processor.class: Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor
+
+    # writers
+    oro_magento.writer.proxy_entity_writer.class:                            Oro\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
+    oro_magento.importexport.writer.abstract_export.class:                   Oro\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
+    oro_magento.importexport.writer.customer.class:                          Oro\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
+    oro_magento.importexport.writer.customer_address.class:                  Oro\Bundle\MagentoBundle\ImportExport\Writer\CustomerAddressExportWriter
+    oro_magento.importexport.writer.newsletter_subscriber.class:             Oro\Bundle\MagentoBundle\ImportExport\Writer\NewsletterSubscriberExportWriter
+    oro_magento.importexport.writer.initial_sync.newsletter_subscriber.class: Oro\Bundle\MagentoBundle\ImportExport\Writer\NewsletterSubscriberInitialWriter
+
+    # Readers
+    oro_magento.reader.context_customer.class:                               Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
+    oro_magento.reader.context.class:                                        Oro\Bundle\MagentoBundle\Provider\Reader\ContextReader
+    oro_magento.reader.order_info.class:                                     Oro\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
+    oro_magento.reader.customer_info.class:                                  Oro\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
+    oro_magento.reader.context_cart.order.class:                             Oro\Bundle\MagentoBundle\Provider\Reader\ContextCartReader
+    oro_magento.importexport.reader.entity.class:                            Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader
+
+    # ImportExport Processor
+    oro_magento.importexport.processor.context.class:                        Oro\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
+
+    oro_magento.provider.strategy.two_way_sync.class:                        Oro\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy
+services:
+    # Data converter
+    oro_magento.importexport.data_converter.cartitem:
+        class: %oro_magento.importexport.data_converter.cartitem.class%
+
+    oro_magento.importexport.data_converter.cart_address:
+        class: %oro_magento.importexport.data_converter.cart_address.class%
+
+    oro_magento.importexport.data_converter.cart:
+        class: %oro_magento.importexport.data_converter.cart.class%
+        calls:
+            - [addNodeDataConverter, ['shipping_address', "@oro_magento.importexport.data_converter.cart_address"]]
+            - [addNodeDataConverter, ['billing_address', "@oro_magento.importexport.data_converter.cart_address"]]
+            - [addNodeDataConverter, ['items', "@oro_magento.importexport.data_converter.cartitem", true]]
+
+    oro_magento.importexport.data_converter.order_address:
+        class: %oro_magento.importexport.data_converter.order_address.class%
+
+    oro_magento.importexport.data_converter.order_item:
+        class: %oro_magento.importexport.data_converter.order_item.class%
+
+    oro_magento.importexport.data_converter.order:
+        class: %oro_magento.importexport.data_converter.order.class%
+        calls:
+            - [addNodeDataConverter, ['shipping_address', "@oro_magento.importexport.data_converter.order_address"]]
+            - [addNodeDataConverter, ['billing_address', "@oro_magento.importexport.data_converter.order_address"]]
+            - [addNodeDataConverter, ['items', "@oro_magento.importexport.data_converter.order_item", true]]
+
+    oro_magento.importexport.data_converter.customer_address:
+        class: %oro_magento.importexport.data_converter.customer_address.class%
+
+    oro_magento.importexport.data_converter.website:
+        class: %oro_magento.importexport.data_converter.website.class%
+
+    oro_magento.importexport.data_converter.store:
+        class: %oro_magento.importexport.data_converter.store.class%
+
+    oro_magento.importexport.data_converter.customer_group:
+        class: %oro_magento.importexport.data_converter.customer_group.class%
+
+    oro_magento.importexport.data_converter.customer:
+        class: %oro_magento.importexport.data_converter.customer.class%
+        arguments:
+            - "@oro_importexport.field.field_helper"
+        calls:
+            - [addNodeDataConverter, ['addresses', "@oro_magento.importexport.data_converter.customer_address", true]]
+            - [addNodeDataConverter, ['group', "@oro_magento.importexport.data_converter.customer_group"]]
+
+    oro_magento.importexport.data_converter.newsletter_subscriber:
+        class: %oro_magento.importexport.data_converter.newsletter_subscriber.class%
+        calls:
+            - [addNodeDataConverter, ['store', "@oro_magento.importexport.data_converter.store"]]
+
+    oro_magento.importexport.data_converter.guest_customer:
+        class: %oro_magento.importexport.data_converter.guest_customer.class%
+
+    # Connectors
+    oro_magento.connector.abstract:
+        class: %oro_magento.mage.abstract.class%
+        abstract: true
+        arguments:
+            - "@oro_importexport.context_registry"
+            - "@oro_integration.logger.strategy"
+            - "@oro_integration.provider.connector_context_mediator"
+            - []
+        calls:
+            - [setManagerRegistry, ["@doctrine"]]
+
+    oro_magento.mage.website:
+        class: %oro_magento.mage.website.class%
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.website.class%]]
+        tags:
+            - { name: oro_integration.connector, type: website_dictionary, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.store:
+        class: %oro_magento.mage.store.class%
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.store.class%]]
+        tags:
+            - { name: oro_integration.connector, type: store_dictionary, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.customer_group:
+        class: %oro_magento.mage.customer_group.class%
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.customer_group.class%]]
+        tags:
+            - { name: oro_integration.connector, type: customer_group_dictionary, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.order_connector_initial:
+        class: %oro_magento.mage.order_connector_initial.class%
+        parent: oro_magento.mage.order_connector
+        calls:
+            - [setClassName, [%oro_magento.order.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: order_initial, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.cart_connector_initial:
+        class: %oro_magento.mage.cart_connector_initial.class%
+        parent: oro_magento.mage.cart_connector
+        calls:
+            - [setClassName, [%oro_magento.cart.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: cart_initial, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.customer_connector_initial:
+        class: %oro_magento.mage.customer_connector_initial.class%
+        parent: oro_magento.mage.customer_connector
+        calls:
+            - [setClassName, [%oro_magento.customer.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: customer_initial, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.newsletter_subscriber_connector_initial:
+        class: %oro_magento.mage.newsletter_subscriber_connector_initial.class%
+        parent: oro_magento.mage.newsletter_subscriber_connector
+        tags:
+            - { name: oro_integration.connector, type: newsletter_subscriber_initial, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.customer_connector:
+        class: %oro_magento.mage.customer_connector.class%
+        parent: oro_magento.connector.abstract
+        tags:
+            - { name: oro_integration.connector, type: customer, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.cart_connector:
+        class: %oro_magento.mage.cart_connector.class%
+        parent: oro_magento.connector.abstract
+        tags:
+            - { name: oro_integration.connector, type: cart, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.order_connector:
+        class: %oro_magento.mage.order_connector.class%
+        parent: oro_magento.connector.abstract
+        tags:
+            - { name: oro_integration.connector, type: order, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.region_connector:
+        class: %oro_magento.mage.region_connector.class%
+        parent: oro_magento.connector.abstract
+        tags:
+            - { name: oro_integration.connector, type: region_dictionary, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.newsletter_subscriber_connector:
+        class: %oro_magento.mage.newsletter_subscriber_connector.class%
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.newsletter_subscriber.class%]]
+        tags:
+            - { name: oro_integration.connector, type: newsletter_subscriber, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    # Normalizers / Denormalizers
+    oro_magento.importexport.denormalizer.order:
+        class: %oro_magento.importexport.normalizer.payment_details.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        calls:
+            - [setSupportedClass, [%oro_magento.entity.order.class%]]
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    oro_magento.importexport.denormalizer.region:
+        class: %oro_magento.importexport.denormalizer.region.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    oro_magento.importexport.normalizer.cart:
+        class: %oro_magento.importexport.normalizer.payment_details.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        calls:
+            - [setSupportedClass, [%oro_magento.entity.cart.class%]]
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    oro_magento.importexport.denormalizer.order_item:
+        class: %oro_magento.importexport.denormalizer.order_item.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    oro_magento.importexport.denormalizer.default_configurable_entity:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Serializer\DefaultConfigurableEntityDenormalizer
+        arguments:
+            - "@oro_importexport.field.field_helper"
+            - "@logger"
+        tags:
+            - { name: oro_importexport.normalizer, priority: -200 }
+
+    # Strategies
+    oro_magento.import_strategy.default_magento_import:
+        class: %oro_magento.import_strategy.default_magento_import.class%
+        parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+            - [setPropertyAccessor, ["@property_accessor"]]
+
+    oro_magento.import.strategy.abstract:
+        class: %oro_magento.import.strategy.abstract.class%
+        parent: oro_magento.import_strategy.default_magento_import
+        absract: true
+        calls:
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+            - [setOwnerHelper, ["@oro_integration.helper.default_owner_helper"]]
+            - [setAddressHelper, ["@oro_magento.importexport.address_import_helper"]]
+            - [setChannelHelper, ["@oro_channel.importexport.helper.channel"]]
+
+    oro_magento.import.strategy.customer.add_or_update:
+        parent: oro_magento.import.strategy.abstract
+        class: %oro_magento.import_strategy.customer.add_or_update.class%
+        calls:
+            - [setChannelHelper, ["@oro_channel.importexport.helper.channel"]]
+            - [setAddressHelper, ["@oro_magento.importexport.address_import_helper"]]
+
+    oro_magento.import.strategy.newsletter_subscriber.add_or_update:
+        parent: oro_magento.import.strategy.abstract
+        class: %oro_magento.import_strategy.newsletter_subscriber.add_or_update.class%
+
+    oro_magento.import.strategy.guest_customer.add_or_update:
+        parent: oro_magento.import.strategy.abstract
+        class: %oro_magento.import_strategy.guest_customer.add_or_update.class%
+
+    oro_magento.import.strategy.region.add_or_update:
+        class: %oro_magento.import_strategy.region.add_or_update.class%
+        parent: oro_magento.import.strategy.abstract
+        calls:
+            - [setDoctrineHelper, ["@oro_magento.importexport.doctrine_helper"]]
+
+    oro_magento.import.strategy.store:
+        parent: oro_magento.import_strategy.default_magento_import
+
+    oro_magento.import.strategy.website:
+        parent: oro_magento.import_strategy.default_magento_import
+
+    oro_magento.import.strategy.customer_group:
+        parent: oro_magento.import_strategy.default_magento_import
+
+    oro_magento.import.strategy.cart.add_or_update:
+        class: %oro_magento.import_strategy.cart.add_or_update.class%
+        parent: oro_magento.import.strategy.abstract
+
+    oro_magento.import.strategy.order.add_or_update:
+        class: %oro_magento.import_strategy.order.add_or_update.class%
+        parent: oro_magento.import.strategy.abstract
+
+    oro_magento.import.strategy.order_with_customer.add_or_update:
+        parent: oro_magento.import.strategy.order.add_or_update
+        class: %oro_magento.import.strategy.order_with_customer.add_or_update.class%
+
+    oro_magento.import.strategy.cart_with_customer.add_or_update:
+        parent: oro_magento.import.strategy.cart.add_or_update
+        class: %oro_magento.import.strategy.cart_with_customer.add_or_update.class%
+
+    oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update:
+        parent: oro_magento.import.strategy.newsletter_subscriber.add_or_update
+        class: %oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class%
+
+    oro_magento.import.strategy.customer_address.add_or_update:
+        class: %oro_magento.import.strategy.customer_address.add_or_update.class%
+        parent: oro_magento.import.strategy.abstract
+
+    # Processors
+    oro_magento.importexport.processor.import_newsletter_subscriber:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
+            - [setStrategy, ["@oro_magento.import.strategy.newsletter_subscriber.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.newsletter_subscriber.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.newsletter_subscriber.class%, alias: oro_magento.add_or_update_newsletter_subscriber }
+
+    oro_magento.importexport.processor.import_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.customer"]]
+            - [setStrategy, ["@oro_magento.import.strategy.customer.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.customer.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.customer.entity.class%, alias: oro_magento.add_or_update_customer }
+
+    oro_magento.importexport.processor.import_guest_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.guest_customer"]]
+            - [setStrategy, ["@oro_magento.import.strategy.guest_customer.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.customer.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.customer.entity.class%, alias: oro_magento.import_guest_customer }
+
+    oro_magento.importexport.processor.import_customer_address:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_address"]]
+            - [setStrategy, ["@oro_magento.import.strategy.customer_address.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.address.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.address.class%, alias: oro_magento.add_or_update_customer_address }
+
+    oro_magento.importexport.processor.import_region:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_importexport.data_converter.default"]]
+            - [setStrategy, ["@oro_magento.import.strategy.region.add_or_update"]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.region.entity.class%, alias: oro_magento.add_or_update_region }
+
+    oro_magento.importexport.processor.import_cart:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.cart"]]
+            - [setStrategy, ["@oro_magento.import.strategy.cart.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.cart.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.cart.entity.class%, alias: oro_magento.add_or_update_cart }
+
+    oro_magento.importexport.processor.import_order:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.order"]]
+            - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.order.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.order.entity.class%, alias: oro_magento.add_or_update_order }
+
+    oro_magento.importexport.processor.import_order_with_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.order"]]
+            - [setStrategy, ["@oro_magento.import.strategy.order_with_customer.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.order.class%]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
+
+    oro_magento.importexport.processor.import_cart_with_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.cart"]]
+            - [setStrategy, ["@oro_magento.import.strategy.cart_with_customer.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.cart.class%]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
+
+    oro_magento.importexport.processor.import_newsletter_subscriber_with_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
+            - [setStrategy, ["@oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.newsletter_subscriber.class%]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
+
+    oro_magento.importexport.normalizer.datetime:
+        class: %oro_magento.importexport.normalizer.datetime.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    oro_magento.provider.initial_processor:
+        class: %oro_magento.provider.initial_processor.class%
+        parent: oro_integration.sync.processor
+        abstract: true
+        calls:
+            - [setChannelClassName, [%oro_integration.entity.class%]]
+
+    oro_magento.provider.newsletter_subscriber.initial_sync_processor:
+        class: %oro_magento.provider.newsletter_subscriber.initial_sync_processor.class%
+        parent: oro_magento.provider.initial_processor
+
+    oro_magento.provider.initial_sync_processor:
+        class: %oro_magento.provider.initial_sync_processor.class%
+        parent: oro_magento.provider.initial_processor
+        calls:
+            - [addPostProcessor, ['newsletter_subscriber_initial', "@oro_magento.provider.newsletter_subscriber.initial_sync_processor"]]
+        tags:
+            - { name: oro_magento.bundle_config.aware }
+
+    oro_magento.provider.initial_schedule_processor:
+        class: %oro_magento.provider.initial_schedule_processor.class%
+        parent: oro_magento.provider.initial_processor
+        calls:
+            - [setDoctrineHelper, ["@oro_entity.doctrine_helper"]]
+        tags:
+            - { name: oro_integration.sync_processor, integration: magento }
+
+    oro_magento.importexport.processor.context:
+        class: %oro_magento.importexport.processor.context.class%
+        parent: oro_integration.importexport.processor.import
+
+    oro_magento.importexport.processor.context_order:
+        parent: oro_magento.importexport.processor.context
+        calls:
+            - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
+
+    oro_magento.importexport.processor.context_cart:
+        parent: oro_magento.importexport.processor.context
+        calls:
+            - [setStrategy, ["@oro_magento.import.strategy.cart.add_or_update"]]
+
+    oro_magento.importexport.processor.context_newsletter_subscriber:
+        parent: oro_magento.importexport.processor.context
+        calls:
+            - [setStrategy, ["@oro_magento.import.strategy.newsletter_subscriber.add_or_update"]]
+
+    oro_magento.importexport.processor.store:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.store"]]
+            - [setStrategy, ["@oro_magento.import.strategy.store"]]
+            - [setEntityName, [%oro_magento.entity.store.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.store.class%, alias: oro_magento.store }
+
+    oro_magento.importexport.processor.website:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.website"]]
+            - [setStrategy, ["@oro_magento.import.strategy.website"]]
+            - [setEntityName, [%oro_magento.entity.website.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.website.class%, alias: oro_magento.website }
+
+    oro_magento.importexport.processor.customer_group:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_group"]]
+            - [setStrategy, ["@oro_magento.import.strategy.customer_group"]]
+            - [setEntityName, [%oro_magento.entity.customer_group.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.customer_group.class%, alias: oro_magento.customer_group }
+
+    # Export processor
+    oro_magento.importexport.processor.customer_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.customer"]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %oro_magento.entity.customer.class%, alias: oro_magento.customer_export }
+
+    oro_magento.importexport.processor.customer_address_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_address"]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %oro_magento.entity.address.class%, alias: oro_magento.customer_address_export }
+
+    oro_magento.importexport.processor.newsletter_subscriber_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.newsletter_subscriber"]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %oro_magento.entity.newsletter_subscriber.class%, alias: oro_magento.newsletter_subscriber_export }
+
+    # Writers
+    oro_magento.writer.proxy_entity_writer:
+        class: %oro_magento.writer.proxy_entity_writer.class%
+        arguments:
+            - "@oro_integration.writer.persistent_batch_writer"
+            - "@oro_importexport.field.database_helper"
+        calls:
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+
+    oro_magento.importexport.writer.abstract_export:
+        class: %oro_magento.importexport.writer.abstract_export.class%
+        parent: oro_integration.writer.persistent_batch_writer
+        abstract: true
+        calls:
+            - [setTransport, ["@oro_magento.transport.soap_transport"]]
+            - [setChannelClassName, [%oro_integration.entity.class%]]
+
+    oro_magento.importexport.writer.customer:
+        class: %oro_magento.importexport.writer.customer.class%
+        parent: oro_magento.importexport.writer.abstract_export
+        calls:
+            - [setStrategy, ["@oro_magento.provider.strategy.two_way_sync.customer"]]
+            - [setStateHandler, ["@oro_magento.customer_state_handler"]]
+
+    oro_magento.importexport.writer.customer_address:
+        class: %oro_magento.importexport.writer.customer_address.class%
+        parent: oro_magento.importexport.writer.abstract_export
+        calls:
+            - [setMagentoRegionClass, [%oro_magento.entity.region.class%]]
+            - [setStrategy, ["@oro_magento.provider.strategy.two_way_sync.customer_address"]]
+            - [setStateHandler, ["@oro_magento.customer_state_handler"]]
+
+    oro_magento.importexport.writer.newsletter_subscriber:
+        class: %oro_magento.importexport.writer.newsletter_subscriber.class%
+        parent: oro_magento.importexport.writer.abstract_export
+
+    oro_magento.importexport.writer.initial_sync.newsletter_subscriber:
+        class: %oro_magento.importexport.writer.initial_sync.newsletter_subscriber.class%
+        parent: oro_magento.writer.proxy_entity_writer
+
+    # readers
+    oro_magento.importexport.reader.entity:
+        class: %oro_magento.importexport.reader.entity.class%
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['entity']]
+
+    oro_magento.reader.context_customer:
+        class: %oro_magento.reader.context_customer.class%
+        parent: oro_magento.mage.customer_connector
+        tags:
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.reader.context_customer.order:
+        parent: oro_magento.reader.context_customer
+
+    oro_magento.reader.context_customer.cart:
+        parent: oro_magento.reader.context_customer
+
+    oro_magento.reader.context_customer.newsletter_subscriber:
+        parent: oro_magento.reader.context_customer
+
+    oro_magento.reader.context_cart.order:
+        class: %oro_magento.reader.context_cart.order.class%
+        parent: oro_magento.mage.cart_connector
+        tags:
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.reader.context:
+        class: %oro_magento.reader.context.class%
+        abstract: true
+        arguments:
+            - "@oro_importexport.context_registry"
+
+    oro_magento.reader.context_guest_customer:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessGuestCustomers']]
+
+    oro_magento.reader.context_order:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessOrders']]
+
+    oro_magento.reader.context_customer_export:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCustomer']]
+
+    oro_magento.reader.context_customer_address_export:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCustomerAddress']]
+
+    oro_magento.reader.context_cart:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCarts']]
+
+    oro_magento.reader.context_newsletter_subscriber:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessSubscribers']]
+
+    oro_magento.reader.context_newsletter_subscriber_export:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessNewsletterSubscribers']]
+
+    oro_magento.reader.order_info:
+        class: %oro_magento.reader.order_info.class%
+        arguments:
+            - "@oro_importexport.context_registry"
+            - "@oro_integration.logger.strategy"
+            - "@oro_integration.provider.connector_context_mediator"
+        calls:
+            - [setContextKey, ['postProcessOrderIds']]
+
+    oro_magento.reader.customer_info:
+        class: %oro_magento.reader.customer_info.class%
+        arguments:
+            - "@oro_importexport.context_registry"
+            - "@oro_integration.logger.strategy"
+            - "@oro_integration.provider.connector_context_mediator"
+        calls:
+            - [setContextKey, ['postProcessCustomerIds']]
+
+    # strategy
+    oro_magento.provider.strategy.two_way_sync.customer:
+        class: %oro_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - "@oro_magento.importexport.processor.import_customer"
+            - "@oro_magento.importexport.processor.customer_export"
+            - "@oro_entity.doctrine_helper"
+
+    oro_magento.provider.strategy.two_way_sync.customer_address:
+        class: %oro_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - "@oro_magento.importexport.processor.import_customer_address"
+            - "@oro_magento.importexport.processor.customer_address_export"
+            - "@oro_entity.doctrine_helper"
