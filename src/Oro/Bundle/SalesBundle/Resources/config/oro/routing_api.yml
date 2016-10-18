@@ -1,0 +1,37 @@
+oro_sales_opportunity_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/OpportunityController.php"
+    type:     rest
+
+oro_sales_lead_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/LeadController.php"
+    type:     rest
+
+oro_sales_lead_address_api:
+    resource:     "@OroSalesBundle/Controller/Api/Rest/LeadAddressController.php"
+    type:         rest
+    parent:       oro_sales_lead_api
+
+oro_sales_salesfunnel_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/SalesFunnelController.php"
+    type:     rest
+
+oro_sales_b2bcustomer_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/B2bCustomerController.php"
+    type:     rest
+
+oro_sales_lead_phone_api:
+    resource:     "@OroSalesBundle/Controller/Api/Rest/LeadPhoneController.php"
+    type:         rest
+    parent:       oro_sales_lead_api
+
+oro_sales_lead_email_api:
+    resource:     "@OroSalesBundle/Controller/Api/Rest/LeadEmailController.php"
+    type:         rest
+
+oro_sales_b2bcustomer_email_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/B2bCustomerEmailController.php"
+    type:     rest
+
+oro_sales_b2bcustomer_phone_api:
+    resource: "@OroSalesBundle/Controller/Api/Rest/B2bCustomerPhoneController.php"
+    type:     rest

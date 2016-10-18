@@ -1,0 +1,5 @@
+oro:
+    channel:
+        form:
+            customer_identity_selected_not_correctly.label: Customer identity selected not correctly
+            integration_invalid.label: Integration is required for chosen channel type

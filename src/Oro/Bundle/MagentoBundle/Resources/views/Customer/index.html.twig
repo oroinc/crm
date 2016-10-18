@@ -1,0 +1,17 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set pageTitle = 'oro.magento.customer.entity_plural_label'|trans %}
+{% set gridName = 'magento-customers-grid' %}
+
+{% block navButtons %}
+    {% if resource_granted('oro_magento_customer_create') and resource_granted('oro_integration_assign') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path' : path('oro_magento_customer_create'),
+                'entity_label': 'oro.magento.customer.entity_label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}

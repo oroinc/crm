@@ -1,0 +1,5 @@
+oro_entity:
+    entity_aliases:
+        Oro\Bundle\CaseBundle\Entity\CaseEntity:
+            alias:        case
+            plural_alias: cases

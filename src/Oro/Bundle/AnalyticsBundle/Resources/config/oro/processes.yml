@@ -1,0 +1,27 @@
+processes:
+    definitions:
+        analytics_channel_calculate_rfm:
+            label:   'Calculate RFM analytics for Channel'
+            enabled: true
+            entity:  Oro\Bundle\ChannelBundle\Entity\Channel
+            order:   30
+            actions_configuration:
+                - '@tree':
+                    conditions:
+                        '@and':
+                            - '@equal': [$status, true]
+                            - '@not_empty': $data
+                            - '@equal': ["$data[rfm_enabled]", true]
+                    actions:
+                        - '@call_service_method':
+                            service: 'orocrm_analytics.schedule_calculate_analytics'
+                            method: 'scheduleForChannel'
+                            method_parameters: [$id]
+
+    triggers:
+        analytics_channel_calculate_rfm:
+            -
+                event:    update
+                priority: 10
+                field:    status
+

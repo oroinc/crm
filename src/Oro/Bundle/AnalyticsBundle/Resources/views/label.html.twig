@@ -1,0 +1,20 @@
+{% if entity is defined and entity.dataChannel.data is defined
+    and entity.dataChannel.data.rfm_enabled is defined and entity.dataChannel.data.rfm_enabled
+    and entity.recency is defined and entity.frequency is defined and entity.monetary is defined
+%}
+    {% if vertical is defined %}<div class="rfm-analytics-label-wrapper">{% endif %}
+        <div class="pull-right label label-warning rfm-analytics-label{% if vertical is defined %} rfm-analytics-label-vertical{% endif %}">
+            {% set el = vertical is defined ? 'p' : 'span' %}
+            <{{ el }} title="{{ 'oro.analytics.rfm.recency.title'|trans}}">
+                {{ 'oro.analytics.rfm.recency.label'|trans}} {{ entity.recency|default('-') }}
+            </{{ el }}>
+            <{{ el }} title="{{ 'oro.analytics.rfm.frequency.title'|trans}}">
+                {{ 'oro.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default('-') }}
+            </{{ el }}>
+            <{{ el }} title="{{ 'oro.analytics.rfm.monetary.title'|trans}}">
+                {{ 'oro.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default('-') }}
+            </{{ el }}>
+        </div>
+        <div class="clearfix"></div>
+    {% if vertical is defined %}</div>{% endif %}
+{% endif %}

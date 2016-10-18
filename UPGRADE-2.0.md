@@ -1,20 +1,21 @@
-UPGRADE FROM 1.10 to 2.0
+UPGRADE FROM 1.10 to 2.0 
+========================
 
-####OroCRMSalesBundle:
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Lead`
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\Opportunity`
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\SalesBundle\Entity\SalesFunnel`
-- `OroCRM/Bundle/SalesBundle/Entity/LeadMailboxProcessSettings` extends `OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings`
+####OroSalesBundle:
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Opportunity`
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\SalesFunnel`
+- `OroCRM/Bundle/SalesBundle/Entity/LeadMailboxProcessSettings` extends `Oro\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings`
 
-####OroCRMCaseBundle:
-- `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
+####OroCaseBundle:
+- `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
 
-####OroCRMContactUsBundle:
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest`
+####OroContactUsBundle:
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\ContactUsBundle\Entity\ContactRequest`
 
 ####OroCRMMagentoBundle:
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\MagentoBundle\Entity\Cart`
-- Removed fields `workflowItem` and `workflowStep` from entity `OroCRM\Bundle\MagentoBundle\Entity\Order`
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\MagentoBundle\Entity\Cart`
+- Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\MagentoBundle\Entity\Order`
 - The `CartExpirationProcessor` now implements `SyncProcessorInterface`
 - The command class `CartExpirationSyncCommand` renamed to `SyncCartExpirationCommand`.
 - The `InitialSyncCommand` command arguments were changed to be compatible with SyncCommand ones.

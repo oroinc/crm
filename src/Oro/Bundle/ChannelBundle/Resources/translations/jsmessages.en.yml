@@ -1,0 +1,23 @@
+"Configure integration":         "Configure integration"
+"edit":                          "edit"
+"Actions":                       "Actions"
+"Entity":                        "Entity"
+"Add":                           "Add"
+"Cancel":                        "Cancel"
+"View":                          "View"
+"Edit":                          "Edit"
+"Delete":                        "Delete"
+"There is no entities selected": "There is no entities selected"
+
+oro:
+    channel:
+        form:
+            entity: Please select entity
+        confirmation:
+            delete_confirmation: 'Attention: removing the integration from the channel will completely delete it from the system. Proceed?'
+            text:                Are you sure you want to change channel type?
+            title:               Change Channel Type
+            agree:               Yes
+        entity_owner:
+            System: System
+            Custom: Custom
