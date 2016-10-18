@@ -1,0 +1,10 @@
+<%= highlight(
+    _.escape(
+        _.__(
+            'oro.magento.autocomplete.entity_number', {
+                "entityName": "{{ 'oro.magento.order.entity_label'|trans }}",
+                "entityNumber": incrementId
+            }
+        )
+    )
+) %>

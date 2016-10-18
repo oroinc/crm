@@ -1,0 +1,51 @@
+oro_sales_bundle:
+    resource: "@OroSalesBundle/Controller"
+    type:     annotation
+
+oro_sales_dashboard:
+    resource:     "@OroSalesBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
+
+oro_sales_bundle_api:
+    resource: "@OroSalesBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+
+# deprecated API route
+oro_api_post_salesfunnel_deprecated:
+    path:            /api/rest/{version}/salesfunnel.{_format}
+    methods:         [POST]
+    defaults:
+        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::postAction
+        _format:     json
+        version:     latest
+    requirements:
+        _format:     json|html
+        version:     latest|v1
+
+oro_api_post_lead_deprecated:
+    path:            /api/rest/{version}/lead.{_format}
+    methods:         [POST]
+    defaults:
+        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\LeadController::postAction
+        _format:     json
+        version:     latest
+    requirements:
+        _format:     json|html
+        version:     latest|v1
+
+oro_api_post_opportunity_deprecated:
+    path:            /api/rest/{version}/opportunity.{_format}
+    methods:         [POST]
+    defaults:
+        _controller: Oro\Bundle\SalesBundle\Controller\Api\Rest\OpportunityController::postAction
+        _format:     json
+        version:     latest
+    requirements:
+        _format:     json|html
+        version:     latest|v1

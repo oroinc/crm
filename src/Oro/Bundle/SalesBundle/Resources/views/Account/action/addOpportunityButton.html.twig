@@ -1,0 +1,10 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% if resource_granted('oro_sales_opportunity_create') %}
+    {{ UI.dropdownItem({
+        'path': path('oro_sales_opportunity_create', {'account': entity.id}),
+        'title': 'oro.sales.opportunity.add_entity'|trans,
+        'label': 'oro.sales.opportunity.add_entity'|trans,
+        'iCss': 'icon-dollar'
+    }) }}
+{% endif %}

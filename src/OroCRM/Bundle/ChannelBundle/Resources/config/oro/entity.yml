@@ -1,8 +1,0 @@
-oro_entity:
-    entity_aliases:
-        OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
-            alias:        channelcustomeridentity
-            plural_alias: channelcustomeridentities
-        OroCRM\Bundle\ChannelBundle\Entity\EntityName:
-            alias:        channelentityname
-            plural_alias: channelentitynames

@@ -1,0 +1,19 @@
+api:
+    entities:
+        Oro\Bundle\ChannelBundle\Entity\Channel:
+            actions:
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+            fields:
+                id: ~
+                name: ~
+                active:
+                    property_path: status
+                owner:
+                    exclude: true
+                customerIdentity:
+                    exclude: true
+                data:
+                    exclude: true

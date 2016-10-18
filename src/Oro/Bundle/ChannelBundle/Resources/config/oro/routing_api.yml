@@ -1,0 +1,7 @@
+oro_channel_api:
+    resource: Oro\Bundle\ChannelBundle\Controller\Api\Rest\ChannelController
+    type:     rest
+
+oro_channel_api_customer_search:
+    resource: Oro\Bundle\ChannelBundle\Controller\Api\Rest\CustomerSearchController
+    type:     rest

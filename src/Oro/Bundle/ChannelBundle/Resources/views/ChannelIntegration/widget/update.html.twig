@@ -1,0 +1,35 @@
+{% set isWidgetContext = true %}
+{% set formAction = app.request.uri %}
+{% extends 'OroIntegrationBundle:Integration:update.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block content_data %}
+    {{ parent() }}
+    <div class="widget-actions">
+        <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>
+        <button type="submit" class="btn btn-success">{{ 'Done'|trans }}</button>
+    </div>
+
+    <script type="text/javascript">
+        require(['jquery', 'oroui/js/mediator', 'oroui/js/widget-manager'],
+        function($, mediator, widgetManager) {
+            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function (widget) {
+                mediator.on('integrationFormReload:before', function(event) {
+                    event.reloadManually = false;
+                    widget.loadContent($.param(event.data), event.formEl.attr('method'));
+                });
+
+                widget.on('contentLoad', function(event) {
+                    var dataField = $('[data-ftid=oro_channel_form_dataSource_data]');
+                    var apiKeyField = $('[data-ftid=oro_integration_channel_form_transport_apiKey]');
+                    if (dataField.val() && !apiKeyField.val()) {
+                        data = JSON.parse(dataField.val());
+                        if (data.transport.apiKey) {
+                            apiKeyField.val(data.transport.apiKey);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content_data %}

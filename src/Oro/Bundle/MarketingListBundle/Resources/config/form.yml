@@ -1,0 +1,98 @@
+parameters:
+    oro_marketing_list.form.type.marketing_list.class: Oro\Bundle\MarketingListBundle\Form\Type\MarketingListType
+    oro_marketing_list.form.type.marketing_list_removed_item.class: Oro\Bundle\MarketingListBundle\Form\Type\MarketingListTypeRemovedItemType
+    oro_marketing_list.form.type.marketing_list_unsubscribed_item.class: Oro\Bundle\MarketingListBundle\Form\Type\MarketingListTypeUnsubscribedItemType
+    oro_marketing_list.form.handler.marketing_list.class: Oro\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler
+    oro_marketing_list.form.type.entity_choice.class: Oro\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
+    oro_marketing_list.form.type.marketing_list_select.class: Oro\Bundle\MarketingListBundle\Form\Type\MarketingListSelectType
+
+services:
+    # MarketingList
+    oro_marketing_list.form.type.marketing_list:
+        class: %oro_marketing_list.form.type.marketing_list.class%
+        tags:
+            - { name: form.type, alias: oro_marketing_list }
+
+    oro_marketing_list.form.marketing_list:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - "oro_marketing_list_form"
+            - "oro_marketing_list"
+
+    oro_marketing_list.form.type.marketing_list_removed_item:
+        class: %oro_marketing_list.form.type.marketing_list_removed_item.class%
+        tags:
+            - { name: form.type, alias: oro_marketing_list_removed_item }
+
+    oro_marketing_list.form.type.marketing_list_removed_item_api:
+        parent: oro_form.type.api
+        arguments:
+            - 'oro_marketing_list_removed_item_api'
+            - "@oro_marketing_list.form.type.marketing_list_removed_item"
+        tags:
+            - { name: form.type, alias: oro_marketing_list_removed_item_api }
+
+    oro_marketing_list.form.marketing_list_removed_item:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - ~
+            - 'oro_marketing_list_removed_item_api'
+
+    oro_marketing_list.form.handler.marketing_list_removed_item:
+        parent: oro_form.form_handler.api
+        scope: request
+        calls:
+            - [setForm, ['@oro_marketing_list.form.marketing_list_removed_item']]
+
+    oro_marketing_list.form.type.marketing_list_unsubscribed_item:
+        class: %oro_marketing_list.form.type.marketing_list_unsubscribed_item.class%
+        tags:
+            - { name: form.type, alias: oro_marketing_list_unsubscribed_item }
+
+    oro_marketing_list.form.type.marketing_list_unsubscribed_item_api:
+        parent: oro_form.type.api
+        arguments:
+            - 'oro_marketing_list_unsubscribed_item_api'
+            - "@oro_marketing_list.form.type.marketing_list_unsubscribed_item"
+        tags:
+            - { name: form.type, alias: oro_marketing_list_unsubscribed_item_api }
+
+    oro_marketing_list.form.marketing_list_unsubscribed_item:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - ~
+            - 'oro_marketing_list_unsubscribed_item_api'
+
+    oro_marketing_list.form.handler.marketing_list_unsubscribed_item:
+        parent: oro_form.form_handler.api
+        scope: request
+        calls:
+            - [setForm,  ["@oro_marketing_list.form.marketing_list_unsubscribed_item"]]
+
+    oro_marketing_list.form.handler.marketing_list:
+        class: %oro_marketing_list.form.handler.marketing_list.class%
+        scope: request
+        arguments:
+            - "@oro_marketing_list.form.marketing_list"
+            - "@request"
+            - "@doctrine"
+            - "@validator"
+            - "@translator"
+
+    oro_marketing_list.form.type.entity_choice:
+        class: %oro_marketing_list.form.type.entity_choice.class%
+        arguments:
+            - "@oro_marketing_list.entity_provider.contact_information"
+        tags:
+            - { name: form.type, alias: oro_marketing_list_contact_information_entity_choice }
+
+    oro_marketing_list.form.type.marketing_list_select:
+        class: %oro_marketing_list.form.type.marketing_list_select.class%
+        tags:
+            - { name: form.type, alias: "oro_marketing_list_select" }
