@@ -1,0 +1,16 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        {% if  resource_granted('VIEW', account, 'name') %}
+            <div class="responsive-block">
+                {{ UI.renderProperty('oro.account.name.label'|trans, account.name) }}
+            </div>
+        {% endif %}
+
+        <div class="responsive-block">
+            {{ entityConfig.renderDynamicFields(account) }}
+        </div>
+    </div>
+</div>

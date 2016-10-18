@@ -1,0 +1,144 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
+
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
+    {% set primaryElement = null %}
+    {% set elements = [] %}
+
+    {% for element in collection %}
+        {% if element.primary %}
+            {% set primaryElement = element %}
+        {% else %}
+            {% set elements = elements|merge([element]) %}
+        {% endif %}
+    {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
+
+    <ul class="extra-list">
+        {%- for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor -%}
+    </ul>
+{% endmacro %}
+
+{%- macro getSocialUrl(type, value) -%}
+    {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
+        {{ value }}
+    {% else %}
+        {{ oro_social_url(type, value) }}
+    {% endif %}
+{%- endmacro -%}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal contact-info">
+        <div class="responsive-block">
+            {%- set skypeData -%}
+                {%- if entity.skype -%}
+                    {{ entity.skype }} {{ skype_button(entity.skype) }}
+                {%- endif -%}
+            {%- endset -%}
+
+            {%- set socialData -%}
+                {%- if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn -%}
+                    <ul class="list-inline">
+                        {% if entity.twitter %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.facebook %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank" title="Facebook">
+                                    <i class="icon-facebook"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.googlePlus %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank" title="Google+">
+                                    <i class="icon-google-plus"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.linkedIn %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                    <i class="icon-linkedin"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {%- endif -%}
+            {%- endset -%}
+
+            {{ ui.renderHtmlProperty('oro.contact.description.label'|trans, entity.description) }}
+            {{ ui.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ ui.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
+            {{ ui.renderHtmlProperty('oro.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
+            {{ ui.renderHtmlProperty('oro.contact.skype.label'|trans, skypeData) }}
+            {{ ui.renderProperty('oro.contact.method.label'|trans, entity.method) }}
+            {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {%- set accountsData -%}
+                {%- if entity.accounts.count -%}
+                    {% set accountViewGranted = resource_granted('oro_account_view') %}
+                    {%- for account in entity.accounts -%}
+                        {%- if accountViewGranted -%}
+                            <a href="{{ path('oro_account_view', {'id': account.id}) }}">{{ ui.renderEntityViewLabel(account, 'name', 'oro.account.entity_label') }}</a>
+                        {%- else -%}
+                            {{ ui.renderEntityViewLabel(account, 'name') }}
+                        {%- endif -%}
+                        {% if not loop.last %}, {% endif %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endset -%}
+
+            {%- set birthdayData -%}
+                {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
+                {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
+            {%- endset -%}
+
+            {%- set assignedToData -%}
+                {%- if entity.assignedTo -%}
+                    {{ U.render_user_name(entity.assignedTo) }}
+                    {{ U.user_business_unit_name(entity.assignedTo) }}
+                {%- endif -%}
+            {%- endset -%}
+
+            {%- set reportsToData -%}
+                {%- if entity.reportsTo -%}
+                    <a href="{{ path('oro_contact_view', {'id': entity.reportsTo.id}) }}">
+                        {{ entity.reportsTo }}
+                    </a>
+                {%- endif -%}
+            {%- endset -%}
+
+            {{ ui.renderProperty('oro.contact.job_title.label'|trans, entity.jobTitle) }}
+            {{ ui.renderHtmlProperty('oro.contact.accounts.label'|trans, accountsData) }}
+            {{ ui.renderProperty('oro.contact.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
+            {{ ui.renderProperty('oro.contact.gender.label'|trans, oro_gender(entity.gender)) }}
+            {{ ui.renderProperty('oro.contact.source.label'|trans, entity.source) }}
+            {{ ui.renderHtmlProperty('oro.contact.assigned_to.label'|trans, assignedToData) }}
+            {{ ui.renderHtmlProperty('oro.contact.reports_to.label'|trans, reportsToData) }}
+            {{ ui.renderProperty('oro.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
+        </div>
+    </div>
+</div>

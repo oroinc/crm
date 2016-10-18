@@ -1,0 +1,18 @@
+workflows:
+    b2c_flow_order_follow_up:
+        attributes:
+            # Other workflow attributes
+            notes:
+                type: string
+                property_path: order.notes
+            feedback:
+                type: string
+                property_path: order.feedback
+            account:
+                type: entity
+                options:
+                    class: Oro\Bundle\AccountBundle\Entity\Account
+            contact:
+                type: entity
+                options:
+                    class: Oro\Bundle\ContactBundle\Entity\Contact

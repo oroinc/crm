@@ -1,0 +1,102 @@
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        transitions:
+            convert:
+                step_to: converted
+                is_start: true
+                is_hidden: true
+                transition_definition: convert_definition
+
+            place_order:
+                step_to: converted
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-money'
+                    dialog:
+                        alias: transaction-dialog
+                        dialogOptions:
+                            width:         1000
+                            height:        600
+                            modal:         true
+                            resizable:     true
+                            allowMaximize: true
+                            allowMinimize: false
+                            dialogClass:   place-order-transaction-dialog
+                transition_definition: place_order_definition
+                form_type: oro_magento_order_place_form_type
+                form_options:
+                    attribute_fields:
+                        cart_id:
+                            form_type: hidden
+                    form_init:
+                        - '@assign_value': [$cart_id, $cart.id]
+
+            convert_to_opportunity:
+                step_to: converted_to_opportunity
+                is_start: true
+                is_unavailable_hidden: true
+                acl_resource: oro_sales_opportunity_create
+                frontend_options:
+                    icon: 'icon-usd'
+                transition_definition: convert_to_opportunity_definition
+                form_options:
+                    attribute_fields:
+                        opportunity_name:
+                            form_type: text
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity_owner:
+                            form_type: oro_user_select
+                            options:
+                                required: true
+                                constraints:
+                                    - NotBlank: ~
+                        opportunity_budget:
+                            form_type: oro_money
+                            options:
+                                required: false
+                        notes:
+                            form_type: oro_resizeable_rich_text
+                            options:
+                                required: false
+                    attribute_default_values:
+                        opportunity_budget: $cart.subTotal
+                    form_init:
+                        - '@assign_active_user': $opportunity_owner
+                        - '@format_name':
+                            attribute: $.result.formattedCustomerName
+                            object: $cart.customer
+                        - '@format_string':
+                            attribute: $opportunity_name
+                            string: '%customer_name% - %shopping_cart_id%'
+                            arguments:
+                                customer_name: $.result.formattedCustomerName
+                                shopping_cart_id: $cart.id
+            abandon:
+                step_to: abandoned
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove-circle'
+                transition_definition: abandon_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: oro_resizeable_rich_text
+                            options:
+                                required: false
+            reopen:
+                step_to: open
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-backward'
+                transition_definition: reopen_definition
+                form_options:
+                    attribute_fields:
+                        notes:
+                            form_type: oro_resizeable_rich_text
+                            options:
+                                required: false

@@ -1,0 +1,13 @@
+imports:
+    - { resource: 'b2c_flow_order_follow_up/steps.yml' }
+    - { resource: 'b2c_flow_order_follow_up/attributes.yml' }
+    - { resource: 'b2c_flow_order_follow_up/transitions.yml' }
+    - { resource: 'b2c_flow_order_follow_up/transition_definitions.yml' }
+
+workflows:
+    b2c_flow_order_follow_up:
+        entity: Oro\Bundle\MagentoBundle\Entity\Order
+        defaults: {active: true}
+        priority: 0
+        entity_attribute: order
+        start_step: not_contacted

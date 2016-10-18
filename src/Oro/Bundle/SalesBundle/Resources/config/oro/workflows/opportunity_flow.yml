@@ -1,0 +1,12 @@
+imports:
+    - { resource: 'opportunity_flow/steps.yml' }
+    - { resource: 'opportunity_flow/attributes.yml' }
+    - { resource: 'opportunity_flow/transitions.yml' }
+    - { resource: 'opportunity_flow/transition_definitions.yml' }
+    - { resource: 'opportunity_flow/entity_restrictions.yml' }
+
+workflows:
+    opportunity_flow:
+        entity: Oro\Bundle\SalesBundle\Entity\Opportunity
+        entity_attribute: opportunity
+        start_step: open

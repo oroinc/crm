@@ -1,0 +1,37 @@
+api:
+    entities:
+        Oro\Bundle\MagentoBundle\Entity\Address: ~
+        Oro\Bundle\MagentoBundle\Entity\Cart: ~
+        Oro\Bundle\MagentoBundle\Entity\CartAddress: ~
+        Oro\Bundle\MagentoBundle\Entity\CartItem: ~
+        Oro\Bundle\MagentoBundle\Entity\Customer:
+            fields:
+                orders:
+                    exclude: true
+                carts:
+                    exclude: true
+            subresources:
+                orders:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
+                carts:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
+
+#        Oro\Bundle\MagentoBundle\Entity\CustomerGroup: ~
+#        Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
+#        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
+        Oro\Bundle\MagentoBundle\Entity\Order: ~
+        Oro\Bundle\MagentoBundle\Entity\OrderAddress: ~
+        Oro\Bundle\MagentoBundle\Entity\OrderItem: ~
+        Oro\Bundle\MagentoBundle\Entity\Product: ~
+        Oro\Bundle\MagentoBundle\Entity\Region: ~
+        Oro\Bundle\MagentoBundle\Entity\Store: ~
+        Oro\Bundle\MagentoBundle\Entity\Website: ~
+
+        # remove this exclusion when NewsletterSubscriber entity will be enabled for Data API
+        Extend\Entity\EV_Mage_Subscr_Status: { exclude: true}

@@ -1,0 +1,21 @@
+{#
+    Available variables:
+    * entity       - user entity Oro\Bundle\MagentoBundle\Entity\Customer or null
+    * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
+#}
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+
+{% set recordUrl = indexer_item.recordUrl %}
+{% set title = entity ? entity|oro_format_name : indexer_item.recordTitle %}
+
+{% set entityType = 'oro.magento.customer.entity_label'|trans %}
+
+{% set entityInfo = [
+    {'title': 'oro.magento.customer.channel.label'|trans, 'value': entity.channel ? entity.channel.name : 'N/A'},
+    {'title': 'oro.magento.customer.website.label'|trans, 'value': entity.website ? entity.website.name : 'N/A'},
+    {'title': 'oro.magento.customer.store.label'|trans, 'value': entity.store ? entity.store.name : 'N/A'},
+    {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
+] %}

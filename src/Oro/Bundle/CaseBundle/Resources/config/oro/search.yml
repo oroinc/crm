@@ -1,0 +1,34 @@
+search:
+    Oro\Bundle\CaseBundle\Entity\CaseEntity:
+        alias:                          oro_case
+        title_fields:                   [subject]
+        route:
+            name:                       oro_case_view
+            parameters:
+                id:                     id
+        search_template:                OroCaseBundle:Case:searchResult.html.twig
+        fields:
+            -
+                name:                   subject
+                target_type:            text
+                target_fields:          [subject]
+            -
+                name:                   description
+                target_type:            text
+                target_fields:          [description]
+            -
+                name:                   resolution
+                target_type:            text
+                target_fields:          [resolution]
+            -
+                name:                   comments
+                relation_type:          one-to-many
+                relation_fields:
+                    -
+                        name:           message
+                        target_type:    text
+                        target_fields:  [message]
+
+    Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings:
+        alias:           oro_case_mailbox_process_settings
+        search_template: OroCaseBundle:CaseMailboxProcessSettings:searchResult.html.twig

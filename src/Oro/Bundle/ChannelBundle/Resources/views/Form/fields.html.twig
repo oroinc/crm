@@ -1,0 +1,104 @@
+{% block oro_channel_datasource_form_row %}
+    {{ block('form_row') }}
+{% endblock %}
+
+{% block oro_channel_datasource_form_widget %}
+    {% set attr = attr|merge({'class': (attr.class is defined ? attr.class ~ ' ' : '') ~ 'orocrm-channel-datasource-field' }) %}
+    {{ form_widget(form, { 'attr': attr }) }}
+
+    {% set options = {
+        el:             '#' ~ form.vars.id,
+        idEl:           '#' ~ form.identifier.vars.id,
+        dataEl:         '#' ~ form.data.vars.id,
+        typeEl:         '#' ~ form.type.vars.id,
+        nameEl:         '#' ~ form.name.vars.id,
+        channelNameEl:  '#' ~ form.parent.name.vars.id
+    } %}
+
+    <div data-page-component-module="orochannel/js/app/components/integration-widget"
+         data-page-component-options="{{ options|json_encode }}"></div>
+{% endblock %}
+
+{% block oro_channel_entity_choice_form_row %}
+    {{ form_row(form) }}
+{% endblock %}
+
+{% block _oro_channel_form_channelType_widget %}
+    {% if form.vars.disabled %}
+        {% for choice in choices %}
+            {% if choice is selectedchoice(value) %}
+                <span class="inline-text" id="{{ form.vars.id }}" data-value="{{ form.vars.value }}" data-disabled>{{ choice.label|trans }}</span>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {{ form_widget(form) }}
+    {% endif %}
+{% endblock %}
+
+{% block oro_multiple_entity_js_channel_aware %}
+    var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
+        presetChannelId = {{ channel_id|json_encode|raw }},
+        changeHandler = function($el) {
+            var channelIds = [$el.val()];
+
+            if (presetChannelId) {
+                channelIds.push(presetChannelId);
+            }
+
+            widget.options.selectionRouteParams.channelIds = channelIds.join(',');
+        };
+
+        $channelSelector.change(function() {
+            changeHandler($(this));
+            widget.removeAll();
+        });
+        changeHandler($channelSelector);
+{% endblock %}
+
+{% block oro_entity_create_or_select_inline_js_autocomplete_channel_aware %}
+    {{ block('oro_entity_create_or_select_inline_js_channel_aware') }}
+{% endblock %}
+
+{% block oro_entity_create_or_select_inline_js_grid_channel_aware %}
+    {{ block('oro_entity_create_or_select_inline_js_channel_aware') }}
+{% endblock %}
+
+{% block oro_entity_create_or_select_inline_js_channel_aware %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+    {% if form.vars.configs.async_dialogs|default(false) is sameas(true) %}
+        {% set asyncNameSegment = 'async-' %}
+    {% endif %}
+    {% set urlParts = {
+        grid: {
+            route: 'oro_datagrid_widget',
+            parameters: {
+                gridName     : form.vars.grid_name,
+                params       : form.vars.grid_parameters,
+                renderParams : form.vars.grid_render_parameters
+            }
+        }
+    } %}
+
+    {% if form.vars.create_enabled|default(false) is sameas(true) %}
+        {% set urlParts = urlParts|merge({
+            create: {
+                route:      form.vars.create_form_route,
+                parameters: form.vars.create_form_route_parameters
+            }
+        }) %}
+    {% endif %}
+    <div {{ UI.renderPageComponentAttributes({
+                module: 'orochannel/js/app/components/select-create-inline-type-' ~ asyncNameSegment|default('') ~ 'component',
+                options: {
+                    _sourceElement: '#'~id~'-el',
+                    inputSelector: '#'~id,
+                    entityLabel: label|trans,
+                    urlParts: urlParts,
+                    existingEntityGridId: form.vars.existing_entity_grid_id|default('id'),
+                    createEnabled: form.vars.create_enabled|default(false),
+                    channelFieldSelector: 'select[name="'~channel_field_name~'"]',
+                    channelRequired: form.vars.channel_required|default(false),
+                    presetChannelId: channel_id
+                }
+            }) }} style="display: none"></div>
+{% endblock %}

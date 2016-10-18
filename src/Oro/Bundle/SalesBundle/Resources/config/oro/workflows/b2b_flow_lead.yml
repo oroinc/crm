@@ -1,0 +1,11 @@
+imports:
+    - { resource: 'b2b_flow_lead/steps.yml' }
+    - { resource: 'b2b_flow_lead/attributes.yml' }
+    - { resource: 'b2b_flow_lead/transitions.yml' }
+    - { resource: 'b2b_flow_lead/transition_definitions.yml' }
+
+workflows:
+    b2b_flow_lead:
+        entity: Oro\Bundle\SalesBundle\Entity\Lead
+        entity_attribute: lead
+        start_step: new

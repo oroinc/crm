@@ -1,0 +1,50 @@
+oro_entity:
+    entity_aliases:
+        Oro\Bundle\MagentoBundle\Entity\Address:
+            alias:        magentoaddress
+            plural_alias: magentoaddresses
+        Oro\Bundle\MagentoBundle\Entity\Cart:
+            alias:        magentocart
+            plural_alias: magentocarts
+        Oro\Bundle\MagentoBundle\Entity\CartAddress:
+            alias:        magentocartaddress
+            plural_alias: magentocartaddresses
+        Oro\Bundle\MagentoBundle\Entity\CartItem:
+            alias:        magentocartitem
+            plural_alias: magentocartitems
+        Oro\Bundle\MagentoBundle\Entity\CartStatus:
+            alias:        magentocartstatus
+            plural_alias: magentocartstatuses
+        Oro\Bundle\MagentoBundle\Entity\Customer:
+            alias:        magentocustomer
+            plural_alias: magentocustomers
+        Oro\Bundle\MagentoBundle\Entity\CustomerGroup:
+            alias:        magentocustomergroup
+            plural_alias: magentocustomergroups
+        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
+            alias:        magentonewslettersubscriber
+            plural_alias: magentonewslettersubscribers
+        Oro\Bundle\MagentoBundle\Entity\Order:
+            alias:        magentoorder
+            plural_alias: magentoorders
+        Oro\Bundle\MagentoBundle\Entity\OrderAddress:
+            alias:        magentoorderaddress
+            plural_alias: magentoorderaddresses
+        Oro\Bundle\MagentoBundle\Entity\OrderItem:
+            alias:        magentoorderitem
+            plural_alias: magentoorderitems
+        Oro\Bundle\MagentoBundle\Entity\Product:
+            alias:        magentoproduct
+            plural_alias: magentoproducts
+        Oro\Bundle\MagentoBundle\Entity\Region:
+            alias:        magentoregion
+            plural_alias: magentoregions
+        Oro\Bundle\MagentoBundle\Entity\Store:
+            alias:        magentostore
+            plural_alias: magentostores
+        Oro\Bundle\MagentoBundle\Entity\Website:
+            alias:        magentowebsite
+            plural_alias: magentowebsites
+        Extend\Entity\EV_Mage_Subscr_Status:
+            alias:        magentonewslettersubscriberstatus
+            plural_alias: magentonewslettersubscriberstatuses

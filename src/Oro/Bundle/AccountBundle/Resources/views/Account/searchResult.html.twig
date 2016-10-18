@@ -1,0 +1,25 @@
+{#
+    Available variables:
+    * entity       - user entity Oro\Bundle\AccountBundle\Entity\Account or null
+    * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
+#}
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+
+{% set recordUrl = indexer_item.recordUrl %}
+{% set entityType = 'oro.account.entity_label'|trans %}
+
+{% if  resource_granted('VIEW', entity, 'name') %}
+    {% set title = indexer_item.recordTitle %}
+{% else %}
+    {% set title = 'view %entityName%'|trans({'%entityName%' : entityType}) %}
+{% endif %}
+
+{% set entityInfo = [] %}
+{% if  resource_granted('VIEW', entity, 'createdAt') %}
+    {% set entityInfo = entityInfo|merge([{'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'}]) %}
+{% endif %}
+{% if  resource_granted('VIEW', entity, 'updatedAt') %}
+    {% set entityInfo = entityInfo|merge([{'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'}]) %}
+{% endif %}

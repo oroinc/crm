@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Project Unit Tests">
-            <directory suffix="Test.php">src/OroCRM/Bundle/*Bundle/Tests/Unit</directory>
+            <directory suffix="Test.php">src/Oro/Bundle/*Bundle/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 
@@ -29,10 +29,10 @@
             <directory>src</directory>
             <exclude>
                 <directory>vendor</directory>
-                <directory>src/OroCRM/Bundle/*Bundle/DataFixtures</directory>
-                <directory>src/OroCRM/Bundle/*Bundle/Resources</directory>
-                <directory>src/OroCRM/Bundle/*Bundle/Tests</directory>
-                <directory>src/OroCRM/Bundle/*Bundle/vendor</directory>
+                <directory>src/Oro/Bundle/*Bundle/DataFixtures</directory>
+                <directory>src/Oro/Bundle/*Bundle/Resources</directory>
+                <directory>src/Oro/Bundle/*Bundle/Tests</directory>
+                <directory>src/Oro/Bundle/*Bundle/vendor</directory>
             </exclude>
         </whitelist>
     </filter>

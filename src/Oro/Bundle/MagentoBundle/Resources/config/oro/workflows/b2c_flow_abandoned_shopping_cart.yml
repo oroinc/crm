@@ -1,0 +1,13 @@
+imports:
+    - { resource: 'b2c_flow_abandoned_shopping_cart/steps.yml' }
+    - { resource: 'b2c_flow_abandoned_shopping_cart/attributes.yml' }
+    - { resource: 'b2c_flow_abandoned_shopping_cart/transitions.yml' }
+    - { resource: 'b2c_flow_abandoned_shopping_cart/transition_definitions.yml' }
+
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        entity: Oro\Bundle\MagentoBundle\Entity\Cart
+        defaults: {active: true}
+        priority: 0
+        entity_attribute: cart
+        start_step: open

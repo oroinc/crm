@@ -1,0 +1,26 @@
+workflows:
+    b2c_flow_abandoned_shopping_cart:
+        attributes:
+           # Other workflow attributes
+           cart_id:
+               type: integer
+               property_path: cart.id
+           notes:
+               type: string
+               property_path: cart.notes
+           opportunity_name:
+               type: string
+           opportunity_owner:
+               type: entity
+               options:
+                   class: Oro\Bundle\UserBundle\Entity\User
+           opportunity_budget:
+               type: float
+           account:
+               type: entity
+               options:
+                   class: Oro\Bundle\AccountBundle\Entity\Account
+           contact:
+               type: entity
+               options:
+                   class: Oro\Bundle\ContactBundle\Entity\Contact
