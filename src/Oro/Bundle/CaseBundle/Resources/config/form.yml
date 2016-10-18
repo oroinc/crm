@@ -1,0 +1,115 @@
+parameters:
+    oro_case.form.type.entity.class:                      Oro\Bundle\CaseBundle\Form\Type\CaseEntityType
+    oro_case.form.type.entity.api.class:                  Oro\Bundle\CaseBundle\Form\Type\CaseEntityApiType
+    oro_case.form.type.comment.class:                     Oro\Bundle\CaseBundle\Form\Type\CaseCommentType
+    oro_case.form.type.comment.api.class:                 Oro\Bundle\CaseBundle\Form\Type\CaseCommentApiType
+    oro_case.form.handler.entity.class:                   Oro\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
+    oro_case.form.type.case_mailbox_process.class:        Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType
+    oro_case.form.type.case_mailbox_process_settings_tag.class: Oro\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsTagType
+    oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class: Oro\Bundle\CaseBundle\Form\EventSubscriber\CaseMailboxProcessSettingsTagSubscriber
+
+services:
+    oro_case.form.type.entity:
+        class: %oro_case.form.type.entity.class%
+        tags:
+            - { name: form.type, alias: oro_case_entity }
+
+    oro_case.form.type.entity.api:
+        class: %oro_case.form.type.entity.api.class%
+        tags:
+            - { name: form.type, alias: oro_case_entity_api }
+
+    oro_case.form.type.comment:
+        class: %oro_case.form.type.comment.class%
+        tags:
+            - { name: form.type, alias: oro_case_comment }
+
+    oro_case.form.type.comment.api:
+        class: %oro_case.form.type.comment.api.class%
+        tags:
+            - { name: form.type, alias: oro_case_comment_api }
+
+    oro_case.form.type.case_mailbox_process:
+        class: %oro_case.form.type.case_mailbox_process.class%
+        tags:
+            - { name: form.type, alias: oro_case_mailbox_process_settings }
+
+    oro_case.form.entity:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'oro_case_entity_form'
+            - 'oro_case_entity'
+
+    oro_case.form.entity.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'case'
+            - 'oro_case_entity_api'
+
+    oro_case.form.comment:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'oro_case_comment_form'
+            - 'oro_case_comment'
+
+    oro_case.form.comment.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'comment'
+            - 'oro_case_comment_api'
+
+    oro_case.form.handler.entity:
+        class: %oro_case.form.handler.entity.class%
+        scope: request
+        arguments:
+            - "@oro_case.form.entity"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    oro_case.form.handler.entity.api:
+        class: %oro_case.form.handler.entity.class%
+        scope: request
+        arguments:
+            - "@oro_case.form.entity.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    oro_case.form.handler.comment:
+        class: %oro_case.form.handler.entity.class%
+        scope: request
+        arguments:
+            - "@oro_case.form.comment"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    oro_case.form.handler.comment.api:
+        class: %oro_case.form.handler.entity.class%
+        scope: request
+        arguments:
+            - "@oro_case.form.comment.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
+
+    oro_case.form.type.case_mailbox_process_settings_tag:
+        class: %oro_case.form.type.case_mailbox_process_settings_tag.class%
+        arguments:
+            - "@oro_tag.form.subscriber.tag_select"
+            - "@oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber"
+        tags:
+            - { name: form.type, alias: case_mailbox_process_settings_tag }
+
+    oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber:
+        class: %oro_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class%
+        parent: oro_tag.form.subscriber.tag_select

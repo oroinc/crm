@@ -1,0 +1,14 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set pageTitle = 'oro.campaign.entity_plural_label'|trans %}
+{% set gridName = 'orocrm-campaign-grid' %}
+
+{% block navButtons %}
+    {% if resource_granted('oro_campaign_create') %}
+        {{ UI.addButton({
+            'path': path('oro_campaign_create'),
+            'entity_label': 'oro.campaign.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock %}

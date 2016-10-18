@@ -1,0 +1,16 @@
+oro_magento:
+    account_discovery:
+        fields:
+            firstName: ~
+            lastName: ~
+            email: ~
+# use next configuration to match by address
+#            addresses:
+#                postalCode: ~
+#                phone: ~
+#                country: ~
+#        strategy:
+#            addresses: any_of # any_of/by_type/shipping/billing
+        options:
+            match: first
+            empty: false

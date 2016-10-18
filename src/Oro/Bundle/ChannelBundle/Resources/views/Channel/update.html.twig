@@ -1,0 +1,140 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroChannelBundle::macros.html.twig' as channelMacro %}
+
+{% set entity = form.vars.value %}
+{% set formAction = entity.id ? path('oro_channel_update', { id: entity.id }) : path('oro_channel_create') %}
+
+{% if entity.id %}
+    {% oro_title_set({params : {"%channel.name%": entity.name } }) %}
+{% endif %}
+
+{% block pageHeader %}
+    {% if entity.id %}
+        {% set breadcrumbs = {
+            'entity':      entity,
+            'indexPath':   path('oro_channel_index'),
+            'indexLabel':  'oro.channel.entity_plural_label'|trans,
+            'entityTitle': entity.name|default('N/A')
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.channel.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title }%}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {% if entity.id and resource_granted('EDIT', entity) %}
+        {% if entity.status %}
+            {{ UI.button({
+                'aCss':  'btn-danger',
+                'iCss':  'icon-remove',
+                'label': 'oro.channel.button.deactivate.label'|trans,
+                'path':  path('oro_channel_change_status', {'id' : entity.id}),
+                'title': 'oro.channel.button.deactivate.label'|trans,
+            }) }}
+        {% else %}
+            {{ UI.button({
+                'aCss':  'btn-success',
+                'iCss':  'icon-ok',
+                'label': 'oro.channel.button.activate.label'|trans,
+                'path':  path('oro_channel_change_status', {'id' : entity.id}),
+                'title': 'oro.channel.button.activate.label'|trans,
+            }) }}
+        {% endif %}
+
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {% if entity.id and resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_channel', {'id': entity.id}),
+            'dataRedirect': path('oro_channel_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-channel',
+            'dataId': entity.id,
+            'entity_label': 'oro.channel.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {{ UI.cancelButton(path('oro_channel_index')) }}
+
+    {% set html = UI.saveAndCloseButton({
+        'route': 'oro_channel_view',
+        'params': {'id': '$id', '_enableContentProviders': 'mainMenu'}
+    }) %}
+    {% if resource_granted('oro_channel_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'oro_channel_create'
+        }) %}
+    {% endif %}
+    {% if form.vars.value.id or resource_granted('oro_channel_update') %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'oro_channel_update',
+            'params': {'id': '$id', '_enableContentProviders': 'mainMenu'}
+        }) %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="pull-left">
+        {% if entity.status %}
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ 'oro.channel.active.label'|trans }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ 'oro.channel.inactive.label'|trans }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
+{% block content_data %}
+    {% set id = 'channel-update' %}
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [
+                    form_row(form.name),
+                    form_row(form.channelType),
+                    form_row(form.status),
+                    form.dataSource is defined ? form_row(form.dataSource) : '',
+                ]
+            }]
+        }
+    ] %}
+
+    {% if form.vars.value.entities|length > 0 %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Entities'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [ form_row(form.entities) ]
+            }]
+        }]) %}
+    {% endif %}
+
+    {% set additional %}{% placeholder oro_channel_additional_block with {entity: entity, form: form} %}{% endset %}
+    {% if additional|trim %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [ additional ]
+            }]
+        }]) %}
+    {% endif %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+
+    {{ parent() }}
+
+    {{ channelMacro.initializeChannelForm(form, oro_channel_entities_metadata(), entity.customerIdentity) }}
+{% endblock %}

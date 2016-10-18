@@ -1,0 +1,384 @@
+dashboards:
+    widgets:
+        quick_launchpad:
+            items:
+                leads:
+                    label:      oro.sales.lead.entity_plural_label
+                    icon:       phone-sign
+                    route:      oro_sales_lead_index
+                    acl:        oro_sales_lead_view
+                    position:   20
+                    applicable: "@oro_sales.provider.enitity_state->isEntityLeadEnabled()"
+                opportunities:
+                    label:      oro.sales.opportunity.entity_plural_label
+                    icon:       usd
+                    route:      oro_sales_opportunity_index
+                    acl:        oro_sales_opportunity_view
+                    position:   40
+                    applicable: "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+        opportunities_by_lead_source_chart:
+            label:       oro.sales.dashboard.opportunities_by_lead_source_chart.title
+            route:       oro_sales_dashboard_opportunities_by_lead_source_chart
+            acl:         oro_sales_opportunity_view
+            description: oro.sales.dashboard.opportunities_by_lead_source_chart.description
+            icon:        bundles/orosales/img/opportunities_by_lead_source.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                excludedSources:
+                    type: oro_type_widget_lead_source_select
+                    options:
+                        label:  oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.label
+                        tooltip:  oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.tooltip
+                        required: false
+                        configs:
+                            placeholder: oro.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.placeholder
+                byAmount:
+                    type: oro_type_widget_choice
+                    show_on_widget: true
+                    converter_attributes:
+                        default_selected: 0
+                    options:
+                        label:  oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.label
+                        tooltip: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.tooltip
+                        required: true
+                        choices:
+                            0: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.count
+                            1: oro.sales.dashboard.opportunities_by_lead_source_chart.by_amount.amount
+        opportunities_by_state:
+            label:       oro.sales.dashboard.opportunities_by_state.title
+            route:       oro_sales_dashboard_opportunity_by_state_chart
+            acl:         oro_sales_opportunity_view
+            description: oro.sales.dashboard.opportunities_by_state.description
+            icon:        bundles/orosales/img/opportunity_by_status.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                excluded_statuses:
+                    type: oro_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  oro.sales.dashboard.opportunities_by_state.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  oro.sales.dashboard.opportunities_list.excluded_statuses.placeholder
+                useQuantityAsData:
+                    type: choice
+                    options:
+                        label: oro.sales.dashboard.opportunities_by_state.quantity_as_data.label
+                        tooltip: oro.sales.dashboard.opportunities_by_state.quantity_as_data.tooltip
+                        required: true
+                        choices:
+                            0: oro.sales.dashboard.opportunities_by_state.quantity_as_data.amount
+                            1: oro.sales.dashboard.opportunities_by_state.quantity_as_data.count
+        my_sales_flow_b2b_chart:
+            label:       oro.sales.dashboard.my_sales_flow_b2b_chart.title
+            route:       oro_sales_dashboard_sales_flow_b2b_chart
+            acl:         oro_sales_opportunity_view
+            description: oro.sales.dashboard.my_sales_flow_b2b_chart.description
+            icon:        bundles/orosales/img/my_sales_flow_b2b.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+        campaigns_leads:
+            label:       oro.campaign.dashboard.campaigns_leads.title
+            route:       oro_campaign_dashboard_campaigns_leads_chart
+            acl:         oro_campaign_view
+            description: oro.campaign.dashboard.campaigns_leads.description
+            icon:        bundles/orocampaign/img/Lead-generation-of-most-recently-created-campaigns.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityLeadEnabled()"
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+        campaigns_opportunity:
+            label:       oro.campaign.dashboard.campaigns_opportunity.title
+            route:       oro_campaign_dashboard_campaigns_opportunity_chart
+            acl:         oro_campaign_view
+            description: oro.campaign.dashboard.campaigns_opportunity.description
+            icon:        bundles/orocampaign/img/Top-5-opportunity-generating-campaigns.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+        campaigns_by_close_revenue:
+            label:       oro.campaign.dashboard.campaigns_by_close_revenue.title
+            route:       oro_campaign_dashboard_campaigns_by_close_revenue_chart
+            acl:         oro_campaign_view
+            description: oro.campaign.dashboard.campaigns_by_close_revenue.description
+            icon:        bundles/orocampaign/img/Top-5-revenue-generating-campaigns.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityLeadEnabled()"
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+        forecast_of_opportunities:
+            label:       oro.sales.dashboard.forecast_of_opportunities.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: OroSalesBundle, name: forecastOfOpportunities }
+            acl:         oro_sales_opportunity_view
+            description: oro.sales.dashboard.forecast_of_opportunities.description
+            icon:        bundles/orosales/img/opportunity_by_status.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration_dialog_options:
+                resizable: true
+                minWidth: 780
+            data_items:
+                in_progress:
+                    data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, inProgressCount, integer)"
+                    label:         oro.sales.dashboard.forecast_of_opportunities.in_progress.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                total_forecast:
+                    data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, budgetAmount, currency)"
+                    label:         oro.sales.dashboard.forecast_of_opportunities.total_forecast.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                weighted_forecast:
+                    data_provider: "@oro_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, weightedForecast, currency)"
+                    label:         oro.sales.dashboard.forecast_of_opportunities.weighted_forecast.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
+                total_indeterminate_forecast:
+                    data_provider: "@oro_sales.provider.opportunity.indeterminate_forecast->getForecastOfOpportunitiesValues($widgetOptions$, totalIndeterminate)"
+                    label:         oro.sales.dashboard.forecast_of_opportunities.total_indeterminate_forecast.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
+                weighted_indeterminate_forecast:
+                    data_provider: "@oro_sales.provider.opportunity.indeterminate_forecast->getForecastOfOpportunitiesValues($widgetOptions$, weightedIndeterminate)"
+                    label:         oro.sales.dashboard.forecast_of_opportunities.weighted_indeterminate_forecast.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroSalesBundle:Dashboard:forecastOfOpportunitiesSimpleSubwidget.html.twig
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                    converter_attributes:
+                        save_open_range: true
+                        create_previous_period: true
+                compareToDate:
+                    type: oro_type_widget_date
+                    options:
+                        label: oro.sales.dashboard.forecast_of_opportunities.compareToDate
+                        required: false
+                        enable_date: false
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: forecast_of_opportunities
+                        entity: 'Oro\Bundle\SalesBundle\Entity\Opportunity'
+                        collapsible: true
+                        expand_filled: true
+                subWidgets:
+                    type: oro_type_widget_items
+                    options:
+                        label: oro.sales.dashboard.forecast_of_opportunities.metrics
+                        attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                        item_label: oro.sales.opportunity.datagrid.columns.metric_name
+                        required: false
+                        widget_name: forecast_of_opportunities
+        business_sales_channel_statistics:
+            label:       oro.dashboard.business_sales_channel_statistics.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: OroDashboardBundle, name: bigNumbers }
+            acl:         oro_sales_b2bcustomer_view
+            description: oro.dashboard.business_sales_channel_statistics.description
+            icon:        bundles/orosales/img/icon-big_numbers.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
+            data_items:
+                new_leads_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewLeadsCount, integer)"
+                    label:         oro.dashboard.business_sales_channel_statistics.new_leads_count.label
+                    acl:           oro_sales_lead_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                open_leads_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getOpenLeadsCount, integer, false, false, false)"
+                    label:         oro.dashboard.business_sales_channel_statistics.open_leads_count.label
+                    acl:           oro_sales_lead_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                new_opportunities_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesCount, integer)"
+                    label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_count.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                new_opportunities_amount:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesAmount, currency)"
+                    label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_amount.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                won_opportunities_to_date_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateCount, integer)"
+                    label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_count.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                won_opportunities_to_date_amount:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateAmount, currency)"
+                    label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_amount.label
+                    acl:           oro_sales_opportunity_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                usePreviousInterval:
+                    type: oro_type_widget_previous_date_range
+                    options:
+                       label: oro.dashboard.previous_date_range.label
+                       required: false
+                    converter_attributes:
+                        dateRangeField: dateRange
+                        default_checked: true
+                subWidgets:
+                    type: oro_type_widget_items
+                    options:
+                       label: oro.dashboard.widget.big_number.choose_metrics
+                       item_label: oro.dashboard.widget.big_number.metricName
+                       required: false
+                       widget_name: business_sales_channel_statistics
+        average_lifetime_sales_chart:
+            label:       oro.channel.dashboard.average_lifetime_sales_chart.title
+            route:       oro_channel_dashboard_average_lifetime_sales_chart
+            acl:         oro_channel_view
+            description: oro.channel.dashboard.average_lifetime_sales_chart.description
+            icon:        bundles/orochannel/img/average_lifetime_sales_chart.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                        label: oro.dashboard.date_range.label
+                        value_types: true
+                        all_time_value: false
+                    show_on_widget: true
+        opportunities_list:
+            label:       oro.sales.dashboard.opportunities_list.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroSalesBundle, name: opportunitiesList }
+            acl:         oro_sales_opportunity_view
+            description: oro.sales.dashboard.opportunities_list.description
+            icon:       bundles/orosales/img/opportunity_by_status.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: oro_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  oro.sales.dashboard.opportunities_list.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  oro.sales.dashboard.opportunities_list.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - won
+                            - lost
+                sortBy:
+                    type: oro_type_widget_sort_by
+                    show_on_widget: true
+                    options:
+                        required: false
+                        class_name: Oro\Bundle\SalesBundle\Entity\Opportunity
+                        label: oro.dashboard.widget.sort_by.label
+        leads_list:
+            label:       oro.sales.dashboard.leads_list.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroSalesBundle, name: leadsList }
+            acl:         oro_sales_lead_view
+            description: oro.sales.dashboard.leads_list.description
+            icon:       bundles/orosales/img/opportunities_by_lead_source.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: oro_type_widget_lead_status_select
+                    show_on_widget: true
+                    options:
+                        label:  oro.sales.dashboard.leads_list.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  oro.sales.dashboard.leads_list.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - canceled
+                            - qualified
+                sortBy:
+                    type: oro_type_widget_sort_by
+                    show_on_widget: true
+                    options:
+                        required: false
+                        class_name: Oro\Bundle\SalesBundle\Entity\Lead
+                        label: oro.dashboard.widget.sort_by.label

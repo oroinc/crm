@@ -1,7 +1,0 @@
-services:
-     oro_crm_call_bridge.call_activity_direction.provider:
-            class: Oro\Bridge\CrmCall\Provider\CallDirectionProvider
-            arguments:
-                - '@oro_activity.manager'
-            tags:
-               - {name: orocrm_activity_direction.provider}

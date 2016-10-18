@@ -1,0 +1,3 @@
+api:
+    entities:
+        Oro\Bundle\AccountBundle\Entity\Account: ~

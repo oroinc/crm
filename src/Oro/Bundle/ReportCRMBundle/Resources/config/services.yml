@@ -1,0 +1,37 @@
+parameters:
+    oro_reportcrm.report.filter.period.class:             Oro\Bundle\ReportCRMBundle\Filter\PeriodFilter
+    oro_reportcrm.report.grid.listener.class:             Oro\Bundle\ReportCRMBundle\EventListener\ReportGridListener
+    oro_reportcrm.accounts.opportunities.listener.class:  Oro\Bundle\ReportCRMBundle\EventListener\Datagrid\AccountsByOpportunitiesReportListener
+
+services:
+    oro_reportcrm.report.filter.period:
+        class: %oro_reportcrm.report.filter.period.class%
+        arguments:
+            - '@form.factory'
+            - '@oro_filter.filter_utility'
+        tags:
+            - { name:oro_filter.extension.orm_filter.filter, type: oro_period_filter }
+
+    oro_reportcrm.report.grid.listener:
+        class: %oro_reportcrm.report.grid.listener.class%
+        tags:
+            -
+                name:   kernel.event_listener
+                event:  oro_datagrid.datagrid.build.before.oro_reportcrm-opportunities-won_by_period
+                method: onBuildBefore
+
+    oro_reportcrm.opportunities.status.listener:
+        class: Oro\Bundle\ReportCRMBundle\EventListener\Datagrid\OpportunitiesByStatusReportListener
+        arguments:
+            - '@oro_filter.utils.date_filter_modifier'
+            - '@oro_filter.date_filter_utility'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.oro_reportcrm-opportunities-by_status, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.oro_reportcrm-opportunities-by_status, method: onBuildAfter }
+
+    oro_reportcrm.accounts.opportunities.listener:
+        class: %oro_reportcrm.accounts.opportunities.listener.class%
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.oro_reportcrm-accounts-by_opportunities, method: onBuildBefore }

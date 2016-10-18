@@ -1,0 +1,19 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set channelTypes = oro_channel_type_metadata() %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ UI.renderProperty('oro.channel.name.label'|trans, channel.name) }}
+            {{ UI.renderProperty('oro.channel.channel_type.label'|trans, channelTypes[channel.channelType]|trans) }}
+            {% if(channel.dataSource) %}
+                {% set inegrationLink = UI.link({
+                    'label' : channel.dataSource.name,
+                    'title' : channel.dataSource.name,
+                    'path'  : path('oro_integration_update', {'id' : channel.dataSource.id})
+                }) %}
+                {{ UI.renderHTMLProperty('oro.channel.data_source.label'|trans, inegrationLink) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

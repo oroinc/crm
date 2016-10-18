@@ -1,0 +1,11 @@
+config:
+    paths:
+        'orochannel/js/app/components/integration-widget':            'bundles/orochannel/js/app/components/integration-widget.js'
+        'orochannel/js/app/components/channel':                       'bundles/orochannel/js/app/components/channel.js'
+        'orochannel/js/entity-management/entity-component-view':      'bundles/orochannel/js/entity-management/entity-component-view.js'
+        'orochannel/js/entity-management/model':                      'bundles/orochannel/js/entity-management/model.js'
+        'orochannel/js/app/factory/select2-channel-aware-view-factory': 'bundles/orochannel/js/app/factory/select2-channel-aware-view-factory.js'
+        'orochannel/js/app/components/select-create-inline-type-component': 'bundles/orochannel/js/app/components/select-create-inline-type-component.js'
+        'orochannel/js/app/components/select-create-inline-type-async-component': 'bundles/orochannel/js/app/components/select-create-inline-type-async-component.js'
+        'oro/select2-autocomplete-channel-aware-component':              'bundles/orochannel/js/app/components/select2-autocomplete-channel-aware-component.js'
+        'oro/select2-grid-channel-aware-component':                      'bundles/orochannel/js/app/components/select2-grid-channel-aware-component.js'

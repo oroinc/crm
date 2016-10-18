@@ -1,0 +1,21 @@
+navigation:
+    menu_config:
+        items:
+            channels_list:
+                label: 'oro.channel.entity_plural_label'
+                route: 'oro_channel_index'
+                extras:
+                    routes: ['oro_channel_*']
+                    position: 55
+        tree:
+            application_menu:
+                children:
+                    system_tab:
+                        children:
+                            channels_list: ~
+
+    titles:
+        oro_channel_index:   ~
+        oro_channel_create: 'Create Channel'
+        oro_channel_update: '%%channel.name%% - Edit'
+        oro_channel_view: '%%channel.name%%'

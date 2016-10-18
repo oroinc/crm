@@ -1,3 +1,0 @@
-classes:
-  - OroCRM\Bundle\CaseBundle\Controller\Api\Soap\CaseController
-  - OroCRM\Bundle\CaseBundle\Controller\Api\Soap\CommentController

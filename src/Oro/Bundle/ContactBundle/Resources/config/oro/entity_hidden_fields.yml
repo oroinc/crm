@@ -1,0 +1,4 @@
+# todo hide of 'email' field here is a temporary solution (https://magecore.atlassian.net/browse/BAP-4142)
+oro_entity_hidden_fields:
+    Oro\Bundle\ContactBundle\Entity\Contact:
+        email: true

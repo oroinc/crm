@@ -1,0 +1,50 @@
+parameters:
+    oro_contact.form.type.contact_phone.class: Oro\Bundle\ContactBundle\Form\Type\ContactPhoneType
+    oro_contact.form.type.contact_email.class: Oro\Bundle\ContactBundle\Form\Type\ContactEmailType
+
+    #handler
+    oro_contact.form.handler.contact_phone.class: Oro\Bundle\ContactBundle\Form\Handler\ContactPhoneHandler
+    oro_contact.form.handler.contact_email.class: Oro\Bundle\ContactBundle\Form\Handler\ContactEmailHandler
+
+services:
+    oro_contact.form.type.contact_phone:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["oro_contact_phone", "oro_contact_phone", null]
+
+    oro_contact.form.type.contact_phone.type:
+        class: %oro_contact.form.type.contact_phone.class%
+        tags:
+            - { name: form.type, alias: oro_contact_phone }
+
+    oro_contact.form.type.contact_phone.handler:
+        class: %oro_contact.form.handler.contact_phone.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.type.contact_phone"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_contact.validator.contact_phone_delete"
+            - "@oro_security.security_facade"
+
+    oro_contact.form.type.contact_email:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["oro_contact_email", "oro_contact_email", null]
+
+    oro_contact.form.type.contact_email.type:
+        class: %oro_contact.form.type.contact_email.class%
+        tags:
+            - { name: form.type, alias: oro_contact_email }
+
+    oro_contact.form.type.contact_email.handler:
+        class: %oro_contact.form.handler.contact_email.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.type.contact_email"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_contact.validator.contact_email_delete"
+            - "@oro_security.security_facade"

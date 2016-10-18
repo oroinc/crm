@@ -1,0 +1,20 @@
+layout:
+    actions:
+        - '@setBlockTheme':
+            themes: 'OroContactUsBundle:layouts:embedded_default/oro_embedded_form_submit/form.html.twig'
+        - '@setOption':
+            id:          embedded_form
+            optionName:  preferred_fields
+            optionValue: [firstName, lastName, emailAddress, phone]
+        - '@add':
+            id:          name_group
+            parentId:    embedded_form
+            blockType:   fieldset
+        - '@move':
+            id:       embedded_form_firstName
+            parentId: name_group
+        - '@move':
+            id:       embedded_form_lastName
+            parentId: name_group
+
+    conditions: 'context["embedded_form_type"] == "oro_contact_us.embedded_form"'
