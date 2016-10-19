@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
+use Oro\Bundle\MultiCurrencyBundle\Query\CurrencyQueryBuilderTransformer;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
@@ -159,12 +160,18 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ->method('transEnum')
             ->will($this->returnArgument(0));
 
+        /** @var EnumExtension|\PHPUnit_Framework_MockObject_MockObject $enumTranslator */
+        $qbTransformer = $this->getMockBuilder(CurrencyQueryBuilderTransformer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         return new WidgetOpportunityByLeadSourceProvider(
             $doctrine,
             $aclHelper,
             $processor,
             $translator,
-            $enumTranslator
+            $enumTranslator,
+            $qbTransformer
         );
     }
 
@@ -177,10 +184,6 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
         $repo = $this->getMockBuilder(OpportunityRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $repo->expects($this->any())
-            ->method('getOpportunitiesAmountGroupByLeadSource')
-            ->will($this->returnValue($data));
 
         $repo->expects($this->any())
             ->method('getOpportunitiesCountGroupByLeadSource')

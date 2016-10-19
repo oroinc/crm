@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -245,7 +246,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var double
      *
-     * @ORM\Column(name="budget_amount_value", type="money", nullable=true)
+     * @ORM\Column(name="budget_amount_value", type="money_value", nullable=true)
      * @ConfigField(
      *  defaultValues={
      *      "form"={
@@ -259,6 +260,10 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=50
+     *      },
+     *     "multicurrency"={
+     *          "target" = "budgetAmount",
+     *          "virtual_field" = "budgetAmountBaseCurrency"
      *      }
      *  }
      * )
@@ -291,7 +296,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var double
      *
-     * @ORM\Column(name="close_revenue_value", type="money", nullable=true)
+     * @ORM\Column(name="close_revenue_value", type="money_value", nullable=true)
      * @ConfigField(
      *  defaultValues={
      *      "form"={
@@ -305,6 +310,10 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=60
+     *      },
+     *      "multicurrency"={
+     *          "target" = "closeRevenue",
+     *          "virtual_field" = "closeRevenueBaseCurrency"
      *      }
      *  }
      * )

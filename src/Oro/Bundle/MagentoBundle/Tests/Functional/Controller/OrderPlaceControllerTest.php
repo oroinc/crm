@@ -246,10 +246,10 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $this->assertContains('General Information', $result->getContent());
         $this->assertContains('100000307', $result->getContent());
-        $this->assertContains('$750', $result->getContent());
+        $this->assertContains('USD 750', $result->getContent());
         $this->assertContains('pending', $result->getContent());
-        $this->assertContains('$755', $result->getContent());
-        $this->assertContains('$755', $result->getContent());
+        $this->assertContains('USD 755', $result->getContent());
+        $this->assertContains('USD 755', $result->getContent());
     }
 
     /**
