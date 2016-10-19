@@ -39,14 +39,14 @@ class OroCalendarBridgeBundle implements Migration, ActivityExtensionAwareInterf
     public static function addCalendarActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $associationTables = [
-            'oro_contact',
-            'oro_case',
-            'oro_account',
-            'oro_magento_customer',
-            'oro_magento_order',
-            'oro_sales_lead',
-            'oro_sales_opportunity',
-            'oro_sales_b2bcustomer',
+            'orocrm_contact',
+            'orocrm_case',
+            'orocrm_account',
+            'orocrm_magento_customer',
+            'orocrm_magento_order',
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer',
         ];
 
         foreach ($associationTables as $tableName) {
