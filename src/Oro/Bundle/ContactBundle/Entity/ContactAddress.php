@@ -25,6 +25,9 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
  *          "activity"={
  *              "immutable"=true
  *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
  *          "attachment"={
  *              "immutable"=true
  *          }

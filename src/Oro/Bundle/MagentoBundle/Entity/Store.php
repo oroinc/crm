@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\MagentoBundle\Model\ExtendStore;
@@ -13,7 +12,6 @@ use Oro\Bundle\MagentoBundle\Model\ExtendStore;
  * Class Store
  *
  * @package Oro\Bundle\OroMagentoBundle\Entity
- * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
  *  name="orocrm_magento_store",
@@ -55,7 +53,6 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
      * @var string
      *
      * @ORM\Column(name="store_code", type="string", length=32, nullable=false)
-     * @Oro\Versioned
      */
     protected $code;
 
@@ -63,7 +60,6 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
      * @var string
      *
      * @ORM\Column(name="store_name", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      */
     protected $name;
 

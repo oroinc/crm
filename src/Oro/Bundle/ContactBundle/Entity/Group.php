@@ -6,7 +6,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -16,7 +15,6 @@ use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_group")
- * @Oro\Loggable
  * @Config(
  *      defaultValues={
  *          "ownership"={
@@ -56,7 +54,6 @@ class Group extends ExtendGroup
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
      * @Soap\ComplexType("string")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
