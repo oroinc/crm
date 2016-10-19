@@ -1,2 +1,0 @@
-bundles:
-    - { name: OroCRM\Bundle\MagentoBundle\OroCRMMagentoBundle, priority: 50 }

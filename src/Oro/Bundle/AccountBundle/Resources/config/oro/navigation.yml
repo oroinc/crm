@@ -1,0 +1,48 @@
+navigation:
+    menu_config:
+        items:
+            customers_tab:
+                label: 'oro.account.menu.customers_tab.label'
+                uri: '#'
+                extras:
+                    icon: icon-group
+                    position: 10
+
+            account_list:
+                label: 'oro.account.entity_plural_label'
+                route: 'oro_account_index'
+                extras:
+                    position: 5
+                    routes: ['oro_account_*']
+                    description: 'oro.account.menu.account_list.description'
+
+            shortcut_new_account:
+                label: 'oro.account.menu.shortcut_new_account.label'
+                route: 'oro_account_create'
+                extras:
+                    description: 'oro.account.menu.shortcut_new_account.description'
+                    isCustomAction: true
+
+            shortcut_list_accounts:
+                label: 'oro.account.menu.shortcut_list_accounts.label'
+                route: 'oro_account_index'
+                extras:
+                    description: 'oro.account.menu.shortcut_list_accounts.description'
+
+        tree:
+            application_menu:
+                children:
+                    customers_tab:
+                        children:
+                            account_list: ~
+
+            shortcuts:
+                children:
+                    shortcut_new_account: ~
+                    shortcut_list_accounts: ~
+
+    titles:
+        oro_account_index: ~
+        oro_account_view: '%%account.name%%'
+        oro_account_create: 'Create Account'
+        oro_account_update: '%%account.name%% - Edit'

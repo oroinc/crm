@@ -1,0 +1,59 @@
+parameters:
+    oro_case.entity.class:              Oro\Bundle\CaseBundle\Entity\CaseEntity
+    oro_case.comment.class:             Oro\Bundle\CaseBundle\Entity\CaseComment
+    oro_case.manager.class:             Oro\Bundle\CaseBundle\Model\CaseEntityManager
+    oro_case.manager.api.class:         Oro\Bundle\CaseBundle\Model\CaseApiEntityManager
+    oro_case.manager.comment.api.class: Oro\Bundle\CaseBundle\Model\CommentApiEntityManager
+    oro_case.view_factory.class:        Oro\Bundle\CaseBundle\Model\ViewFactory
+    oro_case.provider.phone.case.class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
+    oro_case.provider.mailbox_process.case.class: Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
+    oro_case.event_listener.mailbox_saved_listener.class: Oro\Bundle\CaseBundle\EventListener\MailboxSavedListener
+
+services:
+    oro_case.manager:
+        class: %oro_case.manager.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_security.acl_helper"
+
+    oro_case.manager.api:
+        class: %oro_case.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_case.entity.class%
+            - "@doctrine.orm.entity_manager"
+            - "@oro_case.manager"
+
+    oro_case.manager.comment.api:
+        class: %oro_case.manager.comment.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_case.comment.class%
+            - "@doctrine.orm.entity_manager"
+            - "@oro_case.manager"
+
+    oro_case.view_factory:
+        class: %oro_case.view_factory.class%
+        arguments:
+            - "@oro_security.security_facade"
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_locale.formatter.date_time"
+            - "@oro_attachment.manager"
+
+    oro_case.provider.phone.case:
+        class: %oro_case.provider.phone.case.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %oro_case.entity.class% }
+
+    oro_case.provider.mailbox_process.case:
+        class: %oro_case.provider.mailbox_process.case.class%
+        tags:
+            - { name: oro_email.mailbox_process, type: case }
+
+    oro_case.event_listener.mailbox_saved_listener.class:
+        class: %oro_case.event_listener.mailbox_saved_listener.class%
+        arguments:
+            - "@oro_tag.tag.manager"
+        tags:
+            - { name: kernel.event_listener, event: oro_email.mailbox_saved, method: onMailboxSave }

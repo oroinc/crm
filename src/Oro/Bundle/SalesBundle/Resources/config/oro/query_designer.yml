@@ -1,0 +1,14 @@
+query_designer:
+    aggregates:
+        opportunity_status:
+            applicable: [{entity: OroSalesBundle:Opportunity, field: status }]
+            functions:
+                - { name: WonCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
+                - { name: LostCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
+                - { name: SolutionDevelopmentCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
+            query_type: [report]
+        opportunity:
+            applicable: [{entity: OroSalesBundle:Opportunity, field: closeRevenueValue}]
+            functions:
+                - { name: WonRevenueSumFunction, return_type: money, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\WonRevenueSumFunction' }
+            query_type: [report]

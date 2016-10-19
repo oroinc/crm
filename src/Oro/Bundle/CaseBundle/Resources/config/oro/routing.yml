@@ -1,0 +1,24 @@
+oro_case_bundle:
+    resource: "@OroCaseBundle/Controller"
+    type:     annotation
+    prefix:   /case
+
+oro_case_bundle_api:
+    resource: "@OroCaseBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+
+oro_case_api_post_case_deprecated:
+    path:            /api/rest/{version}/case.{_format}
+    methods:         [POST]
+    defaults:
+        _controller: Oro\Bundle\CaseBundle\Controller\Api\Rest\CaseController::postAction
+        _format:     json
+        version:     latest
+    requirements:
+        _format:     json|html
+        version:     latest|v1

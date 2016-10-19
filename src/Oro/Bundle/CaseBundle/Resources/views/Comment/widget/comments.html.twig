@@ -1,0 +1,42 @@
+{% extends 'OroNoteBundle:Note/widget:notes.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set containerExtraClass = 'comments' %}
+
+{% block items_container %}
+    {% set options = {
+        widgetId: app.request.get('_wid'),
+        notesOptions: {
+            template: '#template-comment-list',
+            itemTemplate: '#template-comment-item',
+            itemAddEvent: 'comment:add',
+            itemViewIdPrefix: 'comment-',
+            itemView: 'orocase/js/app/views/comment-view',
+            itemModel: 'orocase/js/app/models/comment-model',
+            messages: {
+                addDialogTitle: "oro.case.casecomment.dialog.add"|trans,
+                editDialogTitle: "oro.case.casecomment.dialog.edit"|trans,
+                itemSaved: "oro.case.casecomment.message.saved"|trans,
+                itemRemoved: "oro.case.casecomment.message.removed"|trans,
+                deleteConfirmation: "oro.case.casecomment.message.delete_confirmation"|trans,
+                loadItemsError: "oro.case.casecomment.error.load"|trans,
+                deleteItemError: "oro.case.casecomment.error.delete"|trans
+            },
+            urls: {
+                list: path('oro_case_comment_list', {'id': case.id}),
+                createItem: path('oro_case_comment_create', {'caseId': case.id}),
+            },
+            routes: {
+                update: 'oro_case_comment_update',
+                delete: 'oro_case_api_delete_comment'
+            }
+        },
+        notesData: render(path('oro_case_comment_list', {'id': case.id}))
+    } %}
+    <div class="accordion" id="comment-list"
+         data-page-component-module="oronote/js/app/components/notes-component"
+         data-page-component-options="{{ options|json_encode }}"></div>
+
+    {% include 'OroCaseBundle:Comment:js/list.html.twig' with {'id': 'template-comment-list'} %}
+    {% include 'OroCaseBundle:Comment:js/view.html.twig' with {'id': 'template-comment-item'} %}
+{% endblock %}

@@ -1,0 +1,12 @@
+oro_entity:
+    virtual_fields:
+        Oro\Bundle\AccountBundle\Entity\Account:
+            lifetimeValue:
+                query:
+                    select:
+                        expr:         SUM( CASE WHEN hdc.status = true THEN h.amount ELSE 0 END )
+                        return_type:  money
+                    join:
+                        left:
+                            - { join: 'OroChannelBundle:LifetimeValueHistory', alias: 'h', conditionType: 'WITH', condition: 'h.account = entity AND h.status = true' }
+                            - { join: 'h.dataChannel', alias: 'hdc' }
