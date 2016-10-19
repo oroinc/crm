@@ -7,6 +7,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
@@ -30,25 +31,31 @@ class WidgetOpportunityByLeadSourceProvider
     /** @var EnumExtension */
     private $enumValueTranslator;
 
+    /** @var CurrencyQueryBuilderTransformerInterface  */
+    protected $qbTransformer;
+
     /**
      * @param RegistryInterface $doctrine
      * @param AclHelper $aclHelper
      * @param DateFilterProcessor $dateFilterProcessor
      * @param TranslatorInterface $translator
      * @param EnumExtension $enumValueTranslator
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
         DateFilterProcessor $dateFilterProcessor,
         TranslatorInterface $translator,
-        EnumExtension $enumValueTranslator
+        EnumExtension $enumValueTranslator,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->registry = $doctrine;
         $this->aclHelper = $aclHelper;
         $this->dateFilterProcessor = $dateFilterProcessor;
         $this->translator = $translator;
         $this->enumValueTranslator = $enumValueTranslator;
+        $this->qbTransformer = $qbTransformer;
     }
 
     /**
@@ -91,9 +98,7 @@ class WidgetOpportunityByLeadSourceProvider
     {
         $repo = $this->getOpportunityRepository();
         if ($byAmount) {
-            return $repo->getOpportunitiesAmountGroupByLeadSource(
-                $this->aclHelper,
-                $this->dateFilterProcessor,
+            return $this->getOpportunitiesAmountGroupByLeadSource(
                 $dateRange,
                 $ownerIds
             );
@@ -105,6 +110,33 @@ class WidgetOpportunityByLeadSourceProvider
             $dateRange,
             $ownerIds
         );
+    }
+
+    /**
+     * @param array $dateRange
+     * @param array $ownerIds
+     * @return array
+     */
+    protected function getOpportunitiesAmountGroupByLeadSource($dateRange, $ownerIds)
+    {
+        $repo = $this->getOpportunityRepository();
+        $qb = $repo->getOpportunitiesGroupByLeadSourceQueryBuilder(
+            $this->dateFilterProcessor,
+            $dateRange,
+            $ownerIds
+        );
+
+        $closeRevenueQuery = $this->qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
+        $budgetAmountQuery = $this->qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
+        $qb->addSelect(
+            sprintf(
+                "SUM(CASE WHEN o.status = 'won' THEN (%s) ELSE (%s) END) as value",
+                $closeRevenueQuery,
+                $budgetAmountQuery
+            )
+        );
+
+        return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
     /**

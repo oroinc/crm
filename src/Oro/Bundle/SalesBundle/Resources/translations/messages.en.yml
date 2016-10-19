@@ -167,6 +167,8 @@ oro:
                 label:            Budget Amount Value
             budget_amount_currency:
                 label:            Budget Amount Currency
+            budget_amount_base_currency:
+                label:            Base Budget Amount
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed

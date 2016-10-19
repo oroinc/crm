@@ -194,8 +194,8 @@ class OroSalesBundleInstaller implements
         );
         $table->addColumn(
             'budget_amount_value',
-            'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            'money_value',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money_value)']
         );
         $table->addColumn(
             'budget_amount_currency',
@@ -204,8 +204,8 @@ class OroSalesBundleInstaller implements
         );
         $table->addColumn(
             'close_revenue_value',
-            'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            'money_value',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money_value)']
         );
         $table->addColumn(
             'close_revenue_currency',
