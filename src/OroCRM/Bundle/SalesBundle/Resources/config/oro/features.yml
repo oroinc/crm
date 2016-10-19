@@ -51,3 +51,13 @@ features:
             - OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
         configuration:
             - opportunity_status_probabilities
+        placeholder_items:
+            - opportunities_launchpad
+        dashboards:
+            - quick_launchpad.opportunities
+            - opportunities_by_lead_source_chart
+            - opportunities_by_state
+            - my_sales_flow_b2b_chart
+            - campaigns_opportunity
+            - forecast_of_opportunities
+            - average_lifetime_sales_chart
