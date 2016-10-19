@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -22,7 +21,6 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
  * @ORM\Entity()
  * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name"})})
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="oro_account_index",
  *      routeView="oro_account_view",
@@ -85,7 +83,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      *
      * @ORM\Column(type="string", length=255)
      * @Soap\ComplexType("string")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
@@ -108,7 +105,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "merge"={

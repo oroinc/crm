@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
+use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
@@ -237,7 +237,7 @@ class OpportunityRepository extends EntityRepository
             $auditQb = $auditRepository->getLogEntriesQueryBuilder($opportunity);
             $auditQb->andWhere('a.action = :action')
                 ->andWhere('a.loggedAt > :date')
-                ->setParameter('action', LoggableManager::ACTION_UPDATE)
+                ->setParameter('action', AbstractAudit::ACTION_UPDATE)
                 ->setParameter('date', $newDate);
             $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
