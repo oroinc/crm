@@ -1,0 +1,181 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}
+{% import 'OroSegmentBundle::macros.html.twig' as segmentQD %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%entityName%": entity.name} }) %}
+{% set formAction = form.vars.value.id ? path('oro_marketing_list_update', { 'id': form.vars.value.id }) : path('oro_marketing_list_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_marketinglist', {'id': form.vars.value.id}),
+            'dataRedirect': path('oro_marketing_list_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-marketing-list',
+            'dataId': form.vars.value.id,
+            'entity_label': 'oro.marketinglist.entity_label'|trans
+        }) }}
+
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.cancelButton(path('oro_marketing_list_index')) }}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'oro_marketing_list_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('oro_contactus_request_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'oro_marketing_list_create'
+        }) %}
+    {% endif %}
+    {% if form.vars.value.id or resource_granted('oro_marketing_list_update') %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'oro_marketing_list_update',
+            'params': {'id': '$id'}
+        }) %}
+    {% endif %}
+    {#{% set html = html ~ segmentQD.saveAndRefreshButton(entity) %}#}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('oro_marketing_list_index'),
+            'indexLabel': 'oro.marketinglist.entity_plural_label'|trans,
+            'entityTitle': entity.name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'oro.marketinglist.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'marketing-list-profile' %}
+    {% set ownerDataBlock = {
+        'dataBlocks': [{
+            'subblocks': [{
+                'data': []
+            }]
+        }]
+    } %}
+
+    {% set ownerDataBlock = oro_form_process(ownerDataBlock, form) %}
+    {% set dataBlocks = [{
+            'title': 'General'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.name, {'label': 'oro.marketinglist.name.label'}),
+                        form_row(form.description, {
+                            'label': 'oro.marketinglist.description.label',
+                            'attr': {
+                                'class': 'segment-descr'
+                            }
+                        })
+                    ]
+                },
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.entity, {'label': 'oro.marketinglist.entity.label'}),
+                        form_row(form.type, {'label': 'oro.marketinglist.type.label'})
+                    ] | merge(ownerDataBlock.dataBlocks[0].subblocks[0].data)
+                }
+            ]
+        }]
+    %}
+
+    {# TODO: remove this check after full support of manual marketing lists CRM-1878 #}
+    {% if not form.vars.value.manual %}
+    {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
+    {% set columnsComponentOptions = {
+        'formSelector': '#' ~ form.vars.id,
+        'entityChoiceSelector': '[data-ftid=oro_marketing_list_form_entity]',
+        'fieldsChoiceSelector': '#contact-information-fields-list',
+        'contactInformationFields': hasEntity ? get_contact_information_fields_info(form.vars.value.entity) : []
+    } %}
+
+    {% set type = 'oro_marketing_list' %}
+    {% set columnsDesigner %}
+    <div data-page-component-module="oromarketinglist/js/app/components/columns-component"
+         data-page-component-options="{{ columnsComponentOptions|json_encode }}"
+         class="marketing-list-qd-columns"
+    >
+        <div id="column-information-notice" class="alert alert-info">
+            <strong>{{ 'oro.marketinglist.form.importance'|trans }}</strong>:
+            {{ 'oro.marketinglist.form.columns_notice'|trans }}
+            <div class="column-information-fields-notice">{{ 'oro.marketinglist.form.available_fields_notice'|trans }}:</div>
+            <div id="contact-information-fields-list"></div>
+        </div>
+
+        {{ QD.query_designer_column_form(
+            form.column,
+            {'id': type ~ '-column-form'},
+            {'entity_choice_id': 'oro_marketing_list_form_entity'},
+            ['column', 'label', 'sorting', 'action']
+        ) }}
+
+        {{ QD.query_designer_column_list(
+            {'id': type ~ '-column-list', 'rowId': type ~ '-column-row'},
+            ['column', 'label', 'sorting', 'action']
+        ) }}
+    </div>
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge( [{
+        'title' : 'oro.segment.form.designer'|trans,
+        'content_attr': {'id': type ~ '-designer'},
+        'subblocks': [
+            {
+                'title': 'oro.segment.form.columns'|trans,
+                'spanClass': type ~ '-columns responsive-cell',
+                'data': [
+                    columnsDesigner
+                ]
+            },
+            {
+                'title': 'oro.segment.form.filters'|trans,
+                'spanClass': type ~  '-filters responsive-cell',
+                'data': [
+                    segmentQD.query_designer_condition_builder({
+                        'id': type ~ '-condition-builder',
+                        'criteria_list_id': 'filter-criteria-list',
+                        'entity_choice_id': 'oro_marketing_list_form_entity',
+                        'currentSegmentId': entity.id|default(null),
+                        'page_limit': constant('\\Oro\\Bundle\\SegmentBundle\\Entity\\Manager\\SegmentManager::PER_PAGE')
+                    })
+                ]
+            },
+        ]
+    }] ) %}
+    {% endif %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+        'hiddenData': form_widget(form.definition)
+    } %}
+
+    {{ UI.scrollData(id, data, form) }}
+
+    {# TODO: remove this check after full support of manual marketing lists CRM-1878 #}
+    {% if not form.vars.value.manual %}
+        {{ QD.query_designer_column_chain_template('column-chain-template') }}
+        {{ segmentQD.initJsWidgets(type, form, entities, metadata) }}
+    {% endif %}
+{% endblock content_data %}

@@ -1,0 +1,323 @@
+parameters:
+    oro_contact.entity.class:                      Oro\Bundle\ContactBundle\Entity\Contact
+    oro_contact.entity.phone.class:                Oro\Bundle\ContactBundle\Entity\ContactPhone
+    oro_contact.entity.email.class:                Oro\Bundle\ContactBundle\Entity\ContactEmail
+    oro_contact.type.contact.class:                Oro\Bundle\ContactBundle\Form\Type\ContactType
+    oro_contact.type.group.class:                  Oro\Bundle\ContactBundle\Form\Type\GroupType
+    oro_contact.handler.contact.class:             Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
+    oro_contact.form.type.contact_select.class:    Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
+    oro_contact.handler.group.class:               Oro\Bundle\ContactBundle\Form\Handler\GroupHandler
+
+    #manager
+    oro_contact.contact.manager.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_contact.contact.manager.api.class:         Oro\Bundle\ContactBundle\Entity\Manager\ContactApiEntityManager
+    oro_contact.contact_address.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_contact.contact_phone.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_contact.contact_email.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    #type
+    oro_contact.form.type.contact.api.class:       Oro\Bundle\ContactBundle\Form\Type\ContactApiType
+
+    oro_contact.group.entity.class:                Oro\Bundle\ContactBundle\Entity\Group
+    oro_contact.group.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_contact.form.type.group.api.class:         Oro\Bundle\ContactBundle\Form\Type\GroupApiType
+
+    oro_contact.contact_address.entity.class:      Oro\Bundle\ContactBundle\Entity\ContactAddress
+    oro_contact.subscriber.contact_listener.class: Oro\Bundle\ContactBundle\EventListener\ContactListener
+    oro_contact.listener.prepare_result_item_listener.class: Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener
+
+    oro_contact.email.owner.provider.class:        Oro\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
+
+    oro_contact.social_url_formatter.class:          Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter
+    oro_contact.formatter.contact_entity_name.class: Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter
+
+    oro_contact.contact.datagrid_helper.class:     Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+
+    oro_contact.activity_widget_provider.class:    %oro_activity.widget_provider.activities.menu.class%
+
+    oro_contact.provider.phone.contact.class:      Oro\Bundle\ContactBundle\Provider\ContactPhoneProvider
+    oro_contact.provider.email_recipients.class:   Oro\Bundle\ContactBundle\Provider\EmailRecipientsProvider
+    oro_contact.provider.contact_entity_name.class: Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider
+
+    oro_contact.handler.contact_email_api.class:   Oro\Bundle\ContactBundle\Handler\ContactEmailApiHandler
+    oro_contact.handler.contact_phone_api.class:   Oro\Bundle\ContactBundle\Handler\ContactPhoneApiHandler
+
+    #validator
+    oro_contact.validator.contact_email_delete.class: Oro\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator
+    oro_contact.validator.contact_phone_delete.class: Oro\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator
+    oro_contact.validator.has_contact_information.class: Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator
+
+services:
+    oro_contact.form.contact:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["oro_contact_form", "oro_contact", null]
+
+    oro_contact.form.group:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["oro_contact_group_form", "oro_contact_group"]
+
+    oro_contact.form.type.contact:
+        class: %oro_contact.type.contact.class%
+        arguments:
+            - %oro_contact.entity.class%
+            - %oro_contact.contact_address.entity.class%
+        tags:
+            - { name: form.type, alias: oro_contact }
+
+    oro_contact.form.handler.contact:
+        class: %oro_contact.handler.contact.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.contact"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.contact.manager:
+        class: %oro_contact.contact.manager.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    # Form type
+    oro_contact.form.type.contact_select:
+        class: %oro_contact.form.type.contact_select.class%
+        tags:
+            - { name: form.type, alias: oro_contact_select }
+
+    oro_contact.form.handler.group:
+        class: %oro_contact.handler.group.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.group"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.form.type.group:
+        class: %oro_contact.type.group.class%
+        tags:
+            - { name: form.type, alias: oro_contact_group }
+
+    # Contact API
+    oro_contact.contact.manager.api:
+        class: %oro_contact.contact.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.entity.class%
+            - "@doctrine.orm.entity_manager"
+            - "@oro_attachment.manager"
+
+    oro_contact.contact_address.manager.api:
+        class: %oro_contact.contact_address.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.contact_address.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.form.type.contact.api:
+        class: %oro_contact.form.type.contact.api.class%
+        arguments:
+            - %oro_contact.entity.class%
+            - %oro_contact.contact_address.entity.class%
+        tags:
+            - { name: form.type, alias: contact }
+
+    oro_contact.form.contact.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["contact", "contact", null]
+
+    oro_contact.form.handler.contact.api:
+        class: %oro_contact.handler.contact.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.contact.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    # Group API
+    oro_contact.group.manager.api:
+        class: %oro_contact.group.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.group.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.form.type.group.api:
+        class: %oro_contact.form.type.group.api.class%
+        tags:
+            - { name: form.type, alias: contact_group }
+
+    oro_contact.form.group.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["contact_group", "contact_group", null]
+
+    oro_contact.form.handler.group.api:
+        class: %oro_contact.handler.group.class%
+        scope: request
+        arguments:
+            - "@oro_contact.form.group.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.contact_address.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "oro_contact_address_form"
+            - "oro_typed_address"
+            - ~
+            - { data_class: %oro_contact.contact_address.entity.class% }
+
+    oro_contact.form.handler.contact_address:
+        class: %oro_address.form.handler.address.class%
+        scope: request
+        arguments:
+            - "@oro_contact.contact_address.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.form.autocomplete.contact.search_handler:
+        parent: oro_form.autocomplete.full_name.search_handler
+        arguments:
+            - %oro_contact.entity.class%
+            - ["namePrefix", "firstName", "middleName", "lastName", "nameSuffix"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: oro_contact_view }
+
+    oro_contact.email.owner.provider:
+        class: %oro_contact.email.owner.provider.class%
+        tags:
+            - { name: oro_email.owner.provider, order: 3 }
+
+    oro_contact.subscriber.contact_listener:
+        class: %oro_contact.subscriber.contact_listener.class%
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+
+    oro_contact.social_url_formatter:
+        class: %oro_contact.social_url_formatter.class%
+        arguments:
+            - %oro_contact.social_url_format%
+
+    oro_contact.contact.datagrid_helper:
+        class: %oro_contact.contact.datagrid_helper.class%
+
+    oro_contact.activity_widget_provider:
+        class: %oro_contact.activity_widget_provider.class%
+        arguments:
+           - "@oro_entity.entity_identifier_accessor"
+           - "@oro_ui.twig.tab_extension"
+           - 'contact_activity_tab_panel'
+           - %oro_contact.entity.class%
+        tags:
+           - { name: oro_activity.activity_widget_provider, priority: -10 }
+
+    oro_contact.provider.phone.contact:
+        class: %oro_contact.provider.phone.contact.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %oro_contact.entity.class% }
+
+    oro_contact.provider.email_recipients:
+        class: %oro_contact.provider.email_recipients.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_email.provider.email_recipients.helper"
+        tags:
+            - { name: oro_email.recipients_provider, priority: 20 }
+
+    oro_contact.widget_provider.actions.add_contact:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oro_add_contact_button
+            - oro_add_contact_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }
+
+    oro_contact.handler.contact_email_api:
+        class: %oro_contact.handler.contact_email_api.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    oro_contact.handler.contact_phone_api:
+        class: %oro_contact.handler.contact_phone_api.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    oro_contact.contact_phone.manager.api:
+        class: %oro_contact.contact_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.entity.phone.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.contact_email.manager.api:
+        class: %oro_contact.contact_email.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_contact.entity.email.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_contact.validator.contact_email_delete:
+        class: %oro_contact.validator.contact_email_delete.class%
+
+    oro_contact.validator.contact_phone_delete:
+        class: %oro_contact.validator.contact_phone_delete.class%
+
+    oro_contact.validator.has_contact_information:
+        class:  '%oro_contact.validator.has_contact_information.class%'
+        arguments:
+            - '@translator'
+        tags:
+            - { name: validator.constraint_validator, alias: oro_contact.has_contact_information }
+
+    oro_contact.listener.prepare_result_item_listener:
+        class: '%oro_contact.listener.prepare_result_item_listener.class%'
+        arguments:
+            - '@oro_contact.formatter.contact_entity_name'
+        tags:
+            - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
+
+    oro_contact.formatter.contact_entity_name:
+        class: '%oro_contact.formatter.contact_entity_name.class%'
+        arguments:
+            - '@oro_locale.formatter.name'
+
+    oro_contact.formatter.contact_entity_name.link:
+        tags:
+            - { name: oro_service_link, service: oro_contact.formatter.contact_entity_name }
+
+    oro_contact.provider.contact_entity_name:
+        class: '%oro_contact.provider.contact_entity_name.class%'
+        arguments:
+            - '@oro_contact.formatter.contact_entity_name.link'
+            - '@oro_locale.dql.formatter.name.link'
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: -50 }
+
+    oro_contact.event_listener.datagrid.my_contacts_activity:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-contacts-activity-grid, method: onResultBefore }

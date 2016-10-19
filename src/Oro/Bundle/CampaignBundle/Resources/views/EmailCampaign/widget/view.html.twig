@@ -1,0 +1,42 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('oro.campaign.emailcampaign.name.label'|trans, entity.name) }}
+            {{ ui.renderProperty('oro.campaign.emailcampaign.sender_email.label'|trans, entity.senderEmail) }}
+            {{ ui.renderProperty('oro.campaign.emailcampaign.sender_name.label'|trans, entity.senderName) }}
+            {{ ui.renderProperty('oro.campaign.emailcampaign.schedule.label'|trans, ('oro.campaign.emailcampaign.schedule.' ~ entity.schedule)|trans ) }}
+
+            {% if entity.schedule == constant('Oro\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED') %}
+                {{ ui.renderProperty('oro.campaign.emailcampaign.scheduled_for.label'|trans, entity.scheduledFor ? entity.scheduledFor|oro_format_datetime : '') }}
+            {% endif %}
+
+            {% if entity.sent %}
+                {{ ui.renderProperty('oro.campaign.emailcampaign.sent_at.label'|trans, entity.sentAt ? entity.sentAt|oro_format_datetime : '') }}
+            {% endif %}
+
+            {%- if entity.campaign is not empty -%}
+                {%- if resource_granted('oro_campaign_view') -%}
+                    {% set campaignView = '<a href="' ~ path('oro_campaign_view', {'id': entity.campaign.id}) ~ '">' ~ entity.campaign.name ~ '</a>' %}
+                {%- else -%}
+                    {% set campaignView = entity.campaign.name %}
+                {%- endif -%}
+                {{ ui.renderHtmlProperty('oro.campaign.emailcampaign.campaign.label'|trans, campaignView) }}
+            {%- endif -%}
+
+            {%- if entity.marketingList and resource_granted('oro_marketing_list_view') -%}
+                {% set marketingListView = '<a href="' ~ path('oro_marketing_list_view', {'id': entity.marketingList.id}) ~ '">' ~ entity.marketingList.name ~ '</a>' %}
+            {%- elseif entity.marketingList -%}
+                {% set marketingListView = entity.marketingList.name %}
+            {%- endif -%}
+
+            {%- if marketingListView is defined -%}
+                {{ ui.renderHtmlProperty('oro.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
+            {%- endif -%}
+
+            {{ ui.renderHtmlProperty('oro.campaign.emailcampaign.description.label'|trans, entity.description) }}
+        </div>
+    </div>
+</div>

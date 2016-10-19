@@ -1,0 +1,200 @@
+parameters:
+    oro_marketing_list.entity.class:  Oro\Bundle\MarketingListBundle\Entity\MarketingList
+    oro_marketing_list.removed_item.class:  Oro\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem
+    oro_marketing_list.unsubscribed_item.class:  Oro\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem
+
+    oro_marketing_list.contact_information_field_helper.class: Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper
+    oro_marketing_list.contact_information_column_validator.class: Oro\Bundle\MarketingListBundle\Validator\ContactInformationColumnValidator
+    oro_marketing_list.provider.contact_information_exclusion.class: Oro\Bundle\MarketingListBundle\Provider\ContactInformationExclusionProvider
+
+    oro_marketing_list.marketing_list.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_marketing_list.marketing_list_removed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_marketing_list.marketing_list_unsubscribed_item.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    oro_marketing_list.datagrid.marketing_list_type.provider.class: Oro\Bundle\MarketingListBundle\Datagrid\GridMarketingListTypeProvider
+    oro_marketing_list.datagrid.listener.items.class: Oro\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener
+    oro_marketing_list.datagrid.action_permission_provider.class: Oro\Bundle\MarketingListBundle\Datagrid\ActionPermissionProvider
+
+    oro_marketing_list.security.acl.voter.segment.class: Oro\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter
+    oro_marketing_list.provider.marketing_list.class: Oro\Bundle\MarketingListBundle\Provider\MarketingListProvider
+
+    oro_marketing_list.model.marketing_list_item_connector.class: Oro\Bundle\MarketingListBundle\Model\MarketingListItemConnector
+    oro_marketing_list.datagrid.extension.class: Oro\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension
+    oro_marketing_list.model.helper.class: Oro\Bundle\MarketingListBundle\Model\MarketingListHelper
+
+    oro_marketing_list.twig.extension.contact_information_fields.class: Oro\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension
+    oro_marketing_list.provider.contact_information_fields.class: Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider
+
+    oro_marketing_list.datagrid.configuration.provider.class: Oro\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider
+
+    oro_marketing_list.provider.virtual_relation.marketing_list.class: Oro\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider
+    oro_marketing_list.provider.virtual_field.marketing_list_item.class: Oro\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualFieldProvider
+
+    #event listeners
+    oro_marketing_list.event_listener.before_value_render_listener.class: Oro\Bundle\MarketingListBundle\EventListener\ExtendFieldValueBeforeRenderListener
+
+    # Workflow actions and conditions
+    oro_marketing_list.workflow.condition.has_contact_information.class: Oro\Bundle\MarketingListBundle\Model\Condition\HasContactInformation
+
+services:
+    oro_marketing_list.entity_provider:
+        alias: oro_entity.entity_provider
+
+    oro_marketing_list.datagrid.marketing_list_type.provider:
+        class: %oro_marketing_list.datagrid.marketing_list_type.provider.class%
+        arguments: [ "@doctrine" ]
+
+    oro_marketing_list.marketing_list.manager.api:
+        class: %oro_marketing_list.marketing_list.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_marketing_list.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_marketing_list.marketing_list_removed_item.manager.api:
+        class: %oro_marketing_list.marketing_list_removed_item.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_marketing_list.removed_item.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_marketing_list.marketing_list_unsubscribed_item.manager.api:
+        class: %oro_marketing_list.marketing_list_unsubscribed_item.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %oro_marketing_list.unsubscribed_item.class%
+            - "@doctrine.orm.entity_manager"
+
+    oro_marketing_list.contact_information_field_helper:
+        class: %oro_marketing_list.contact_information_field_helper.class%
+        arguments:
+            - "@oro_entity_config.provider.entity"
+            - "@oro_entity.doctrine_helper"
+            - "@oro_query_designer.entity_field_provider"
+
+    oro_marketing_list.contact_information_column_validator:
+        class: %oro_marketing_list.contact_information_column_validator.class%
+        arguments:
+            - "@oro_marketing_list.contact_information_field_helper"
+        tags:
+            - { name: validator.constraint_validator, alias: oro_marketing_list.contact_information_column_validator }
+
+    oro_marketing_list.provider.contact_information_exclusion:
+        class: %oro_marketing_list.provider.contact_information_exclusion.class%
+        arguments:
+            - "@oro_entity_config.provider.entity"
+            - "@doctrine"
+
+    oro_marketing_list.provider.chain_exclusion:
+        class: %oro_entity.exclusion_provider.chain.class%
+        calls:
+            - [addProvider,  ["@oro_query_designer.exclusion_provider"]]
+            - [addProvider,  ["@oro_marketing_list.provider.contact_information_exclusion"]]
+
+    oro_marketing_list.entity_provider.contact_information:
+        parent: oro_query_designer.entity_provider
+        calls:
+            - [setExclusionProvider,  ["@oro_marketing_list.provider.chain_exclusion"]]
+
+    oro_marketing_list.datagrid.listener.items:
+        class: %oro_marketing_list.datagrid.listener.items.class%
+        arguments:
+            - "@oro_marketing_list.model.helper"
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before, method: onBuildBefore, priority: 10 }
+
+    oro_marketing_list.datagrid.action_permission_provider:
+        class: %oro_marketing_list.datagrid.action_permission_provider.class%
+
+    oro_marketing_list.security.acl.voter.segment:
+        class: %oro_marketing_list.security.acl.voter.segment.class%
+        arguments:
+            - "@oro_entity.doctrine_helper"
+        calls:
+            - [setClassName, [%oro_segment.segment.entity.class%]]
+        tags:
+            - { name: security.voter, priority: 500 }
+
+    oro_marketing_list.provider.marketing_list:
+        class: %oro_marketing_list.provider.marketing_list.class%
+        arguments:
+            - "@oro_datagrid.datagrid.manager"
+
+    oro_marketing_list.model.marketing_list_item_connector:
+        class: %oro_marketing_list.model.marketing_list_item_connector.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_entity.doctrine_helper"
+
+    oro_marketing_list.model.helper:
+        class: %oro_marketing_list.model.helper.class%
+        arguments:
+            - "@doctrine"
+
+    oro_marketing_list.datagrid.extension:
+        class: %oro_marketing_list.datagrid.extension.class%
+        arguments:
+            - "@oro_marketing_list.model.helper"
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_marketing_list.form.autocomplete.marketing_list.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %oro_marketing_list.entity.class%
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: "marketing_lists", acl_resource: "oro_marketing_list_view" }
+
+    oro_marketing_list.twig.extension.contact_information_fields:
+        class: %oro_marketing_list.twig.extension.contact_information_fields.class%
+        arguments:
+            - "@oro_marketing_list.contact_information_field_helper"
+        tags:
+            - { name: twig.extension }
+
+    oro_marketing_list.provider.contact_information_fields:
+        class: %oro_marketing_list.provider.contact_information_fields.class%
+        arguments:
+            - "@oro_marketing_list.contact_information_field_helper"
+
+    oro_marketing_list.datagrid.configuration.provider:
+        class: %oro_marketing_list.datagrid.configuration.provider.class%
+        arguments:
+            - "@oro_datagrid.configuration.provider.chain"
+            - "@oro_entity_config.provider.form"
+            - "@oro_marketing_list.model.helper"
+        tags:
+            - { name: oro_datagrid.configuration.provider, priority: -10 }
+
+    oro_marketing_list.provider.virtual_relation.marketing_list:
+        class: %oro_marketing_list.provider.virtual_relation.marketing_list.class%
+        arguments:
+            - "@oro_entity.doctrine_helper"
+        tags:
+            - { name: oro_entity.virtual_relation_provider, priority: 150 }
+
+    oro_marketing_list.provider.virtual_field.marketing_list_item:
+        class: %oro_marketing_list.provider.virtual_field.marketing_list_item.class%
+        arguments:
+            - "@oro_marketing_list.provider.virtual_relation.marketing_list"
+        tags:
+            - { name: oro_entity.virtual_field_provider, priority: 150 }
+
+    oro_marketing_list.event_listener.user_before_value_render_listener:
+        class: %oro_marketing_list.event_listener.before_value_render_listener.class%
+        arguments:
+            - "@oro_entity_config.provider.entity"
+            - phone: 'OroMarketingListBundle:MarketingList/ExtendField:phone.html.twig'
+              email: 'OroMarketingListBundle:MarketingList/ExtendField:email.html.twig'
+        tags:
+            - { name: kernel.event_listener, event: oro.entity_extend_event.before_value_render, method: beforeValueRender }
+
+    # Workflow actions and conditions
+    oro_marketing_list.workflow.condition.has_contact_information:
+        class: %oro_marketing_list.workflow.condition.has_contact_information.class%
+        arguments:
+            - "@oro_marketing_list.provider.contact_information_fields"
+        tags:
+            - { name: oro_workflow.condition, alias: has_contact_information }

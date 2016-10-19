@@ -1,0 +1,24 @@
+{% extends 'OroDashboardBundle:Dashboard:launchpad.html.twig' %}
+
+{% set widgetName = 'contacts_launchpad' %}
+{% set widgetLabel = 'oro.contact.entity_plural_label'|trans %}
+{% set widgetIcon = 'group' %}
+{% set widgetAcl = 'oro_contact_view' %}
+
+{% set items = {
+    index: {
+        label: 'oro.dashboard.list'|trans,
+        route: 'oro_contact_index',
+        acl: 'oro_contact_view'
+    },
+    create: {
+        label: 'oro.ui.create_entity'|trans({'%entityName%': 'oro.contact.entity_label'|trans}),
+        route: 'oro_contact_create',
+        acl: 'oro_contact_create'
+    },
+    group: {
+        label: 'oro.contact.group.manage'|trans,
+        route: 'oro_contact_group_index',
+        acl: 'oro_contact_group_view'
+    }
+} %}

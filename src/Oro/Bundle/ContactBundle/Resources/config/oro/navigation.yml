@@ -1,0 +1,60 @@
+navigation:
+    menu_config:
+        items:
+            contact_list:
+                label: 'oro.contact.entity_plural_label'
+                route: 'oro_contact_index'
+                extras:
+                    position: 10
+                    routes: ['/^oro_contact_(?!group\w+|group\w+)\w+$/']
+                    description: 'oro.contact.menu.contact_list.description'
+            contact_group_list:
+                label: 'oro.contact.group.entity_plural_label'
+                route: 'oro_contact_group_index'
+                extras:
+                    position:    30
+                    routes:      ['oro_contact_group_*']
+                    description: 'oro.contact.menu.contact_group_list.description'
+
+            shortcut_new_contact:
+                label: 'oro.contact.menu.shortcut_new_contact.label'
+                route: 'oro_contact_create'
+                extras:
+                    description: 'oro.contact.menu.shortcut_new_contact.description'
+                    isCustomAction: true
+            shortcut_list_contacts:
+                label: 'oro.contact.menu.shortcut_list_contacts.label'
+                route: 'oro_contact_index'
+                extras:
+                    description: 'oro.contact.menu.shortcut_list_contacts.description'
+            shortcut_new_contact_group:
+                label: 'oro.contact.menu.shortcut_new_contact_group.label'
+                route: 'oro_contact_group_create'
+                extras:
+                    description: 'oro.contact.menu.shortcut_new_contact_group.description'
+
+        tree:
+            application_menu:
+                children:
+                    customers_tab:
+                        children:
+                            contact_list: ~
+                    system_tab:
+                        children:
+                            contact_group_list: ~
+
+            shortcuts:
+                children:
+                    shortcut_new_contact: ~
+                    shortcut_list_contacts: ~
+                    shortcut_new_contact_group: ~
+
+    titles:
+        oro_contact_index: ~
+        oro_contact_view: '%%contact.name%%'
+        oro_contact_create: 'Create Contact'
+        oro_contact_update: '%%contact.name%% - Edit'
+
+        oro_contact_group_index: ~
+        oro_contact_group_create: 'Create Contact Group'
+        oro_contact_group_update: '%%group.label%% - Edit'

@@ -1,0 +1,4 @@
+api:
+    entities:
+        Oro\Bundle\CaseBundle\Entity\CaseComment: ~
+        Oro\Bundle\CaseBundle\Entity\CaseEntity: ~

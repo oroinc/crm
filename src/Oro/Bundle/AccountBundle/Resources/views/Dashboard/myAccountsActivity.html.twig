@@ -1,0 +1,19 @@
+{% extends 'OroDashboardBundle:Dashboard:grid.html.twig' %}
+{% set gridName = 'dashboard-my-accounts-activity-grid' %}
+
+{% block content %}
+    {{ dataGrid.renderGrid(gridName, params|default({}), {
+        'routerEnabled': false,
+        'enableFilters': false,
+    }|merge(renderParams|default({}))) }}
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+        'url': path('oro_account_index'),
+        'type': 'link',
+        'label': 'oro.dashboard.my_accounts_activity.view_all'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}

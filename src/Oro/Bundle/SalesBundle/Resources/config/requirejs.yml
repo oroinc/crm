@@ -1,0 +1,5 @@
+config:
+    paths:
+        orosales/js/datagrid/inline-editing/save-api-accessor: 'bundles/orosales/js/datagrid/inline-editing/save-api-accessor.js'
+        orosales/js/app/views/board/opportunity-card-view: 'bundles/orosales/js/app/views/board/opportunity-card-view.js'
+        orosales/js/app/views/update-page-view: 'bundles/orosales/js/app/views/update-page-view.js'
