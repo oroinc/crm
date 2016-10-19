@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
@@ -61,23 +60,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
      */
     public function isEnabled(Mailbox $mailbox = null)
     {
-        if (($mailbox === null) || (null === $organization = $mailbox->getOrganization())) {
-            $organization = $this->securityLink->getService()->getOrganization();
-        }
-
-        $qb = $this->getChannelRepository()->createQueryBuilder('c');
-
-        return (bool) $qb
-            ->select('COUNT(c.id)')
-            ->join('c.entities', 'e')
-            ->andWhere('e.name = :name')
-            ->andWhere('c.status = :status')
-            ->andWhere('c.owner = :owner')
-            ->setParameter('name', static::LEAD_CLASS)
-            ->setParameter('status', Channel::STATUS_ACTIVE)
-            ->setParameter('owner', $organization)
-            ->getQuery()
-            ->getSingleScalarResult();
+        return true;
     }
 
     /**

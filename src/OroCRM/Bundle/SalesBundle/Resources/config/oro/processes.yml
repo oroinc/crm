@@ -5,9 +5,6 @@ processes:
             enabled: true
             entity: Oro\Bundle\EmailBundle\Entity\EmailBody
             order: 150
-            preconditions:
-                '@feature_enabled':
-                    feature: sales_lead
             actions_configuration:
                 - '@find_entity':
                     class: Oro\Bundle\EmailBundle\Entity\Email

@@ -24,3 +24,9 @@ features:
             - OroCRM\Bundle\SalesBundle\Entity\LeadEmail
             - OroCRM\Bundle\SalesBundle\Entity\LeadPhone
             - OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+        placeholder_items:
+            - leads_launchpad
+        dashboards:
+            - campaigns_leads
+            - campaigns_by_close_revenue
+            - quick_launchpad.leads
