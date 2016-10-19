@@ -1,7 +1,0 @@
-services:
-    oro_channel.api.customize_loaded_data.transform_entity_name_to_type:
-        class: OroCRM\Bundle\ChannelBundle\Api\Processor\TransformEntityNameToEntityType
-        arguments:
-            - '@oro_api.value_normalizer'
-        tags:
-            - { name: oro.api.processor, action: customize_loaded_data, class: OroCRM\Bundle\ChannelBundle\Entity\Channel }
