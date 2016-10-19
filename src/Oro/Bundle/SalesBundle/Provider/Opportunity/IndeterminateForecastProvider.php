@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
@@ -29,6 +30,9 @@ class IndeterminateForecastProvider
     /** @var NumberFormatter */
     protected $numberFormatter;
 
+    /** @var CurrencyQueryBuilderTransformerInterface  */
+    protected $qbTransformer;
+
     /** @var array */
     protected $data = [];
 
@@ -38,19 +42,22 @@ class IndeterminateForecastProvider
      * @param OwnerHelper $ownerHelper
      * @param FilterProcessor $filterProcessor
      * @param NumberFormatter $numberFormatter
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
         OwnerHelper $ownerHelper,
         FilterProcessor $filterProcessor,
-        NumberFormatter $numberFormatter
+        NumberFormatter $numberFormatter,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->doctrine = $doctrine;
         $this->aclHelper = $aclHelper;
         $this->ownerHelper = $ownerHelper;
         $this->filterProcessor = $filterProcessor;
         $this->numberFormatter = $numberFormatter;
+        $this->qbTransformer = $qbTransformer;
     }
 
     /**
@@ -89,7 +96,7 @@ class IndeterminateForecastProvider
             $qb = $this->filterProcessor
                 ->process(
                     $this->getOpportunityRepository()
-                        ->getForecastQB($alias)
+                        ->getForecastQB($this->qbTransformer, $alias)
                         ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
                     'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     $filters,
