@@ -1,0 +1,4 @@
+assets:
+    css:
+        'oromagento':
+            - 'bundles/oromagento/css/style.css'

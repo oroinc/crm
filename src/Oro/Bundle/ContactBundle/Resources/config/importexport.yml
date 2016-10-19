@@ -1,0 +1,86 @@
+parameters:
+    oro_contact.importexport.normalizer.contact.class:               Oro\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
+    oro_contact.importexport.strategy.contact.add_or_replace.class:  Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactAddOrReplaceStrategy
+    oro_contact.importexport.strategy.contact.add.class:             Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactAddStrategy
+    oro_contact.importexport.helper.contact_import_helper.class:     Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactImportHelper
+    oro_contact.importexport.template_fixture.contact.class:         Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactFixture
+    oro_contact.importexport.template_fixture.contact_address.class: Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture
+
+services:
+    oro_contact.importexport.template_fixture.contact:
+        class: %oro_contact.importexport.template_fixture.contact.class%
+        tags:
+            - { name: oro_importexport.template_fixture }
+
+    oro_contact.importexport.template_fixture.contact_address:
+        class: %oro_contact.importexport.template_fixture.contact_address.class%
+        tags:
+            - { name: oro_importexport.template_fixture }
+
+    # Normalizers
+    oro_contact.importexport.normalizer.contact:
+        class: %oro_contact.importexport.normalizer.contact.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        calls:
+            - [setSocialUrlFormatter, ['@oro_contact.social_url_formatter']]
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    # Converter
+    oro_contact.importexport.data_converter.contact:
+        parent: oro_importexport.data_converter.configurable
+
+    oro_contact.importexport.template_fixture.data_converter.contact:
+        parent: oro_importexport.data_converter.template_fixture.configurable
+
+    # Strategy
+    oro_contact.importexport.strategy.contact.add_or_replace:
+        class: %oro_contact.importexport.strategy.contact.add_or_replace.class%
+        parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+            - [setContactImportHelper, ['@oro_contact.importexport.helper.contact_import_helper']]
+
+    oro_contact.importexport.strategy.contact.add:
+        class: %oro_contact.importexport.strategy.contact.add.class%
+        parent: oro_importexport.strategy.add
+        calls:
+            - [setContactImportHelper, ['@oro_contact.importexport.helper.contact_import_helper']]
+            - [setSecurityContext, ['@security.context']]
+
+    # Import processor
+    oro_contact.importexport.processor.import.add_or_replace:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, ['@oro_contact.importexport.data_converter.contact']]
+            - [setStrategy, ['@oro_contact.importexport.strategy.contact.add_or_replace']]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_contact.entity.class%, alias: oro_contact.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %oro_contact.entity.class%, alias: oro_contact.add_or_replace }
+
+    oro_contact.importexport.processor.import.add:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, ['@oro_contact.importexport.data_converter.contact']]
+            - [setStrategy, ['@oro_contact.importexport.strategy.contact.add']]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_contact.entity.class%, alias: oro_contact.add }
+            - { name: oro_importexport.processor, type: import_validation, entity: %oro_contact.entity.class%, alias: oro_contact.add }
+
+    # Export processor
+    oro_contact.importexport.processor.export:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, ['@oro_contact.importexport.data_converter.contact']]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %oro_contact.entity.class%, alias: oro_contact }
+
+    oro_contact.importexport.processor.export_template:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, ['@oro_contact.importexport.template_fixture.data_converter.contact']]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %oro_contact.entity.class%, alias: oro_contact }
+
+    # Helper
+    oro_contact.importexport.helper.contact_import_helper:
+        class: %oro_contact.importexport.helper.contact_import_helper.class%

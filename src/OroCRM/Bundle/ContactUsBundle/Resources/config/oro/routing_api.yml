@@ -1,3 +1,0 @@
-orocrm_contactus_request_api:
-    resource:     "@OroCRMContactUsBundle/Controller/Api/Rest/ContactRequestController.php"
-    type:         rest

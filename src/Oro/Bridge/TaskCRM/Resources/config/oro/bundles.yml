@@ -1,0 +1,4 @@
+bundles:
+    #Should be loaded after OroAccountBundle, OroSalesBundle, OroMagentoBundle, OroCaseBundle,
+    #OroTaskBundle, OroContactBundle because of migration priority
+    - { name: Oro\Bridge\TaskCRM\OroTaskCRMBridgeBundle, priority: 110 }

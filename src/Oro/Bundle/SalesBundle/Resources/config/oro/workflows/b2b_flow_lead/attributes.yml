@@ -1,0 +1,24 @@
+workflows:
+    b2b_flow_lead:
+        attributes:
+            opportunity_name:
+                label: oro.sales.opportunity.name.label
+                type: string
+            account:
+                label:  oro.account.entity_label
+                type: entity
+                options:
+                    class: Oro\Bundle\AccountBundle\Entity\Account
+            b2bcustomer:
+                label: oro.sales.b2bcustomer.entity_label
+                type:  entity
+                options:
+                    class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            company_name:
+                label: oro.sales.lead.company_name.label
+                type: string
+            notes:
+                label: oro.sales.lead.notes.label
+                type: string
+            dataChannel:
+                property_path: lead.dataChannel

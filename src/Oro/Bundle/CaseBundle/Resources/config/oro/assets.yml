@@ -1,0 +1,4 @@
+assets:
+    css:
+        'orocase':
+          - 'bundles/orocase/css/less/comment.less'
