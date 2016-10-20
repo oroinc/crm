@@ -203,6 +203,7 @@ services:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.provider.big_number.date_helper'
+            - '@oro_currency.query.currency_transformer'
         tags:
             - { name: oro_dashboard.big_number.provider, alias: b2b }
 
@@ -287,6 +288,7 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
+            - '@oro_currency.query.currency_transformer'
 
     oro_sales.handler.opportunity_api:
         class: Oro\Bundle\SalesBundle\Handler\OpportunityApiHandler
@@ -377,6 +379,7 @@ services:
             - '@oro_dashboard.filter.date_filter_processor'
             - '@translator'
             - '@oro_entity_extend.twig.extension.enum'
+            - '@oro_currency.query.currency_transformer'
 
     oro_sales.provider.opportunity.forecast:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider
@@ -385,6 +388,7 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
+            - '@oro_currency.query.currency_transformer'
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
@@ -399,3 +403,4 @@ services:
             - '@oro_user.dashboard.owner_helper'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
+            - '@oro_currency.query.currency_transformer'

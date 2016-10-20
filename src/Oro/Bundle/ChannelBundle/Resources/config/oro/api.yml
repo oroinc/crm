@@ -15,5 +15,15 @@ api:
                     exclude: true
                 customerIdentity:
                     exclude: true
+                entities:
+                    data_type: array
+                    exclusion_policy: all
+                    collapse: true
+                    fields:
+                        name:
+                            data_type: entityType
                 data:
                     exclude: true
+        Oro\Bundle\ChannelBundle\Entity\EntityName:
+            # this entity does not have own Data API resource
+            actions: false
