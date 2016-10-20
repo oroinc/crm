@@ -4,6 +4,8 @@ namespace Oro\Bundle\SalesBundle\Dashboard\Converters;
 
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -17,9 +19,10 @@ class WidgetOpportunityStatusSelectConverter extends WidgetEntitySelectConverter
         EntityNameResolver $entityNameResolver,
         DoctrineHelper $doctrineHelper,
         EntityManager $entityManager,
-        $enumCode
+        $enumCode,
+        TranslatorInterface $translator
     ) {
         $entityClass = ExtendHelper::buildEnumValueClassName($enumCode);
-        parent::__construct($aclHelper, $entityNameResolver, $doctrineHelper, $entityManager, $entityClass);
+        parent::__construct($aclHelper, $entityNameResolver, $doctrineHelper, $entityManager, $entityClass, $translator);
     }
 }

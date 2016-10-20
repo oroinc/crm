@@ -369,6 +369,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@doctrine.orm.entity_manager'
             - 'opportunity_status'
+            - '@translator'
         tags:
             - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_opportunity_status_select' }
 
@@ -380,6 +381,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@doctrine.orm.entity_manager'
             - 'Oro\Bundle\SalesBundle\Entity\LeadStatus'
+            - '@translator'
         tags:
             - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_lead_status_select' }
 
