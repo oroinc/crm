@@ -44,7 +44,7 @@ class ContactInformationFieldsExtension extends \Twig_Extension
             return array();
         }
 
-        return $this->helper->getEntityContactInformationColumnsInfo($entityClass);
+        return $this->helper->getEntityContactInformationFieldsInfo($entityClass);
     }
 
     /**
