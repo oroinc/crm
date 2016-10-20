@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\CaseBundle\Model\ExtendCaseEntity;
@@ -22,7 +22,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
  *      name="orocrm_case"
  * )
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="oro_case_index",
  *      routeView="oro_case_view",
@@ -78,7 +77,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -93,7 +91,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -108,7 +105,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var string
      *
      * @ORM\Column(name="resolution", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -124,7 +120,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      *
      * @ORM\ManyToOne(targetEntity="CaseSource")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -140,7 +135,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      *
      * @ORM\ManyToOne(targetEntity="CaseStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -156,7 +150,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      *
      * @ORM\ManyToOne(targetEntity="CasePriority")
      * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -209,7 +202,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      *          }
      *      }
      * )
-     * @Oro\Versioned
      */
     protected $assignedTo;
 
@@ -218,7 +210,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={

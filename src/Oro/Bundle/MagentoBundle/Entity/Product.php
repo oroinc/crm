@@ -5,7 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\MagentoBundle\Model\ExtendProduct;
@@ -34,7 +33,6 @@ use Oro\Bundle\MagentoBundle\Model\ExtendProduct;
  *          }
  *      }
  * )
- * @Oro\Loggable
  */
 class Product extends ExtendProduct implements IntegrationAwareInterface
 {
@@ -47,7 +45,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      */
     protected $name;
 
@@ -55,7 +52,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var string
      *
      * @ORM\Column(name="sku", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $sku;
 
@@ -63,7 +59,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      */
     protected $type;
 
@@ -71,7 +66,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var double
      *
      * @ORM\Column(name="special_price", type="money", nullable=true)
-     * @Oro\Versioned
      */
     protected $specialPrice;
 
@@ -79,7 +73,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var double
      *
      * @ORM\Column(name="price", type="money", nullable=true)
-     * @Oro\Versioned
      */
     protected $price;
 
@@ -87,7 +80,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var \DateTime $createdAt
      *
      * @ORM\Column(type="datetime", name="created_at")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -102,7 +94,6 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
      * @var \DateTime $updatedAt
      *
      * @ORM\Column(type="datetime", name="updated_at")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "entity"={

@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
 
@@ -30,7 +29,6 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  *          }
  *      }
  * )
- * @Oro\Loggable
  */
 class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface, IntegrationAwareInterface
 {
@@ -40,7 +38,6 @@ class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface,
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      */
     protected $name;
 

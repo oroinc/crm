@@ -7,7 +7,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
 
@@ -31,7 +30,6 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
  *      }
  * )
  * @ORM\Entity
- * @Oro\Loggable
  */
 class CartAddress extends ExtendCartAddress implements OriginAwareInterface
 {
@@ -49,7 +47,6 @@ class CartAddress extends ExtendCartAddress implements OriginAwareInterface
      *
      * @ORM\Column(name="street", type="string", length=500, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $street;
 
@@ -58,7 +55,6 @@ class CartAddress extends ExtendCartAddress implements OriginAwareInterface
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $city;
 
@@ -67,7 +63,6 @@ class CartAddress extends ExtendCartAddress implements OriginAwareInterface
      *
      * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $postalCode;
 
