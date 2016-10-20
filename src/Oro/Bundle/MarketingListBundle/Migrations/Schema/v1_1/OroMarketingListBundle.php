@@ -15,7 +15,7 @@ class OroMarketingListBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_marketing_list');
+        $table = $schema->getTable('oro_marketing_list');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'idx_3acc3ba32c8a3de', []);
         $table->addForeignKeyConstraint(

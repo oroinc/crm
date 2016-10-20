@@ -35,7 +35,7 @@ class OroAccountBundle implements Migration
      */
     public static function addOrganization(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_account');
+        $table = $schema->getTable('oro_account');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE', []);
         $table->addForeignKeyConstraint(

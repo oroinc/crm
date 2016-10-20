@@ -29,7 +29,7 @@ class OroCaseBundle implements Migration, AttachmentExtensionAwareInterface
     {
         $this->attachmentExtension->addFileRelation(
             $schema,
-            'orocrm_case_comment',
+            'oro_case_comment',
             'attachment'
         );
     }

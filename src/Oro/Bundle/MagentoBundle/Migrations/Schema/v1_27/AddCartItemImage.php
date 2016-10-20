@@ -14,7 +14,7 @@ class AddCartItemImage implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_cart_item');
+        $table = $schema->getTable('oro_magento_cart_item');
         $table->addColumn('product_image_url', 'text', ['notnull' => false]);
         $table->addColumn('product_url', 'text', ['notnull' => false]);
     }

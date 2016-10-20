@@ -10,7 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 /**
  * @deprecated since 1.10. Enum type is used instead.
  * @ORM\Entity
- * @ORM\Table(name="orocrm_sales_opport_status")
+ * @ORM\Table(name="oro_sales_opport_status")
  * @Config(
  *      defaultValues={
  *          "grouping"={

@@ -14,7 +14,7 @@ class OroContactBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_contact_phone');
+        $table = $schema->getTable('oro_contact_phone');
         $table->addIndex(['phone'], 'phone_idx');
     }
 }

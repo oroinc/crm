@@ -9,7 +9,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_sales_b2bcustomer_phone", indexes={
+ * @ORM\Table("oro_sales_b2bcustomer_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
  *      @ORM\Index(name="phone_idx", columns={"phone"})
  * })

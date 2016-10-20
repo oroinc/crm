@@ -35,7 +35,7 @@ class OroAnalyticsBundleInstaller implements Installation
      */
     protected function createOrocrmAnalyticsRfmCategoryTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_analytics_rfm_category');
+        $table = $schema->createTable('oro_analytics_rfm_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -55,9 +55,9 @@ class OroAnalyticsBundleInstaller implements Installation
      */
     protected function addOrocrmAnalyticsRfmCategoryForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_analytics_rfm_category');
+        $table = $schema->getTable('oro_analytics_rfm_category');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['channel_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']

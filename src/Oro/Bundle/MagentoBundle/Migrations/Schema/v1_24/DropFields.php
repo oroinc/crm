@@ -23,7 +23,7 @@ class DropFields implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_customer');
+        $table = $schema->getTable('oro_magento_customer');
         $table->dropColumn('vat_temp');
     }
 }

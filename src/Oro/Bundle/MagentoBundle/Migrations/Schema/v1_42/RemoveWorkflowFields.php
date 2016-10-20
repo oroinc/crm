@@ -19,8 +19,8 @@ class RemoveWorkflowFields implements Migration
     {
         //workflow now has no direct relations
         $magentoTables = [
-            'orocrm_magento_order',
-            'orocrm_magento_cart',
+            'oro_magento_order',
+            'oro_magento_cart',
         ];
 
         foreach ($magentoTables as $magentoTable) {

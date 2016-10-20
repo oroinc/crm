@@ -68,7 +68,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit_event',
-            'orocrm_campaign',
+            'oro_campaign',
             ['campaign_a14160a8_id'],
             ['id'],
             ['onDelete' => 'SET NULL']

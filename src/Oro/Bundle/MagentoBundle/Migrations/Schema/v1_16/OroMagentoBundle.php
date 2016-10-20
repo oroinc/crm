@@ -15,10 +15,10 @@ class OroMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_cart');
+        $table = $schema->getTable('oro_magento_cart');
         $table->getColumn('items_qty')->setType(Type::getType('float'));
 
-        $table = $schema->getTable('orocrm_magento_order_items');
+        $table = $schema->getTable('oro_magento_order_items');
         $table->getColumn('qty')->setType(Type::getType('float'));
     }
 }

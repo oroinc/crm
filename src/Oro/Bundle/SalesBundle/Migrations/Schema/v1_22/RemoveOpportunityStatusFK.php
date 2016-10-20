@@ -23,7 +23,7 @@ class RemoveOpportunityStatusFK implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table = $schema->getTable('oro_sales_opportunity');
         if ($table->hasForeignKey('FK_C0FE4AAC6625D392')) {
             $table->removeForeignKey('FK_C0FE4AAC6625D392');
         }

@@ -14,7 +14,7 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_campaign_email_stats');
+        $table = $schema->getTable('oro_campaign_email_stats');
         $table->addColumn('open_count', 'integer', ['notnull' => false]);
         $table->addColumn('click_count', 'integer', ['notnull' => false]);
         $table->addColumn('bounce_count', 'integer', ['notnull' => false]);

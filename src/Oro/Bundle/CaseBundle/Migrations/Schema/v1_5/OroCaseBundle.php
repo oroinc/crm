@@ -53,7 +53,7 @@ class OroCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_status'),
+            $schema->getTable('oro_case_status'),
             ['case_status_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -65,7 +65,7 @@ class OroCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_priority'),
+            $schema->getTable('oro_case_priority'),
             ['case_priority_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]

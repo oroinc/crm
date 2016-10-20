@@ -13,7 +13,7 @@ use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 use Oro\Bundle\SalesBundle\Model\ExtendLeadAddress;
 
 /**
- * @ORM\Table("orocrm_sales_lead_address")
+ * @ORM\Table("oro_sales_lead_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={

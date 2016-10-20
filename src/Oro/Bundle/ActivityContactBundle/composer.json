@@ -1,8 +1,8 @@
 {
     "name": "orocrm/activity-contact-bundle",
     "type": "symfony-bundle",
-    "description": "OroCRM ActivityContactBundle",
-    "keywords": ["OroCRM"],
+    "description": "Oro ActivityContactBundle",
+    "keywords": ["Oro"],
     "license": "MIT",
     "require": {
         "php": ">=5.5.9",

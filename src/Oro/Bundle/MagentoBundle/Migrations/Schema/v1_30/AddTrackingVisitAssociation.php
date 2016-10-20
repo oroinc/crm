@@ -24,9 +24,9 @@ class AddTrackingVisitAssociation implements Migration, VisitEventAssociationExt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_order');
-        $this->extension->addVisitEventAssociation($schema, 'orocrm_magento_product');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_cart');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_customer');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_order');
+        $this->extension->addVisitEventAssociation($schema, 'oro_magento_product');
     }
 }

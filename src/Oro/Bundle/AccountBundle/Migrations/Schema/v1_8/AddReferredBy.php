@@ -14,12 +14,12 @@ class AddReferredBy implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_account');
+        $table = $schema->getTable('oro_account');
 
         $table->addColumn('referred_by_id', 'integer', ['notnull' => false]);
         $table->addIndex(['referred_by_id'], 'IDX_7166D371758C8114', []);
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
+            $schema->getTable('oro_account'),
             ['referred_by_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]

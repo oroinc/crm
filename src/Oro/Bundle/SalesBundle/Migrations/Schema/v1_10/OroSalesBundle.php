@@ -39,7 +39,7 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
      */
     protected function createOrocrmSalesB2bCustomerTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_sales_b2bcustomer');
+        $table = $schema->createTable('oro_sales_b2bcustomer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('billing_address_id', 'integer', ['notnull' => false]);
@@ -122,7 +122,7 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
      */
     protected function addOrocrmSalesB2bCustomerForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table = $schema->getTable('oro_sales_b2bcustomer');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
@@ -136,7 +136,7 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -148,13 +148,13 @@ class OroSalesBundle implements Migration, OrderedMigrationInterface
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
+            $schema->getTable('oro_account'),
             ['account_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]

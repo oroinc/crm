@@ -78,7 +78,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_attachment',
-            'orocrm_account',
+            'oro_account',
             ['account_8d93c122_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -107,7 +107,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_note',
-            'orocrm_account',
+            'oro_account',
             ['account_8d93c122_id'],
             ['id'],
             ['onDelete' => 'SET NULL']

@@ -96,12 +96,12 @@ class OroAccountBundleInstaller implements
         $this->addOrocrmAccountForeignKeys($schema);
         $this->addOrocrmAccountToContactForeignKeys($schema);
 
-        $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
-        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
-        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
+        $this->noteExtension->addNoteAssociation($schema, 'oro_account');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_account');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'oro_account');
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
-            'orocrm_account',
+            'oro_account',
             [
                 'image/*',
                 'application/pdf',
@@ -131,7 +131,7 @@ class OroAccountBundleInstaller implements
      */
     protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->createTable('orocrm_account');
+        $table = $schema->createTable('oro_account');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -169,7 +169,7 @@ class OroAccountBundleInstaller implements
      */
     protected function createOrocrmAccountToContactTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_account_to_contact');
+        $table = $schema->createTable('oro_account_to_contact');
         $table->addColumn('account_id', 'integer', []);
         $table->addColumn('contact_id', 'integer', []);
         $table->setPrimaryKey(['account_id', 'contact_id']);
@@ -184,7 +184,7 @@ class OroAccountBundleInstaller implements
      */
     protected function addOrocrmAccountForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_account');
+        $table = $schema->getTable('oro_account');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['user_owner_id'],
@@ -192,7 +192,7 @@ class OroAccountBundleInstaller implements
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['default_contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -212,15 +212,15 @@ class OroAccountBundleInstaller implements
      */
     protected function addOrocrmAccountToContactForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_account_to_contact');
+        $table = $schema->getTable('oro_account_to_contact');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
+            $schema->getTable('oro_account'),
             ['account_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]

@@ -37,7 +37,7 @@ class UpdateChannelJsonArrayQuery extends ParametrizedMigrationQuery
     {
         $platform = $this->connection->getDatabasePlatform();
         if ($platform instanceof PostgreSQL92Platform) {
-            $updateSql = 'ALTER TABLE orocrm_channel ALTER COLUMN data TYPE JSON USING data::JSON';
+            $updateSql = 'ALTER TABLE oro_channel ALTER COLUMN data TYPE JSON USING data::JSON';
 
             $this->logQuery($logger, $updateSql);
             if (!$dryRun) {

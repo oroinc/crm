@@ -30,7 +30,7 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
     {
         $this->extendExtension->addEnumField(
             $schema,
-            'orocrm_sales_lead',
+            'oro_sales_lead',
             'source',
             'lead_source'
         );

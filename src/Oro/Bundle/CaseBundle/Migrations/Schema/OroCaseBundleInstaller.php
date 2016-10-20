@@ -106,13 +106,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case table
+     * Create oro_case table
      *
      * @param Schema $schema
      */
     protected function createOrocrmCaseTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case');
+        $table = $schema->createTable('oro_case');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
@@ -140,26 +140,26 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_source table
+     * Create oro_case_source table
      *
      * @param Schema $schema
      */
     protected function createOrocrmCaseSourceTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_source');
+        $table = $schema->createTable('oro_case_source');
         $table->addColumn('name', 'string', ['length' => 16]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
     }
 
     /**
-     * Create orocrm_case_source_trans table
+     * Create oro_case_source_trans table
      *
      * @param Schema $schema
      */
     public static function createOrocrmCaseSourceTranslationTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_source_trans');
+        $table = $schema->createTable('oro_case_source_trans');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
@@ -175,13 +175,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_status table
+     * Create oro_case_status table
      *
      * @param Schema $schema
      */
     protected function createOrocrmCaseStatusTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_status');
+        $table = $schema->createTable('oro_case_status');
         $table->addColumn('name', 'string', ['length' => 16]);
         $table->addColumn('`order`', 'integer');
         $table->addColumn('label', 'string', ['length' => 255]);
@@ -189,13 +189,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_status_trans table
+     * Create oro_case_status_trans table
      *
      * @param Schema $schema
      */
     public static function createOrocrmCaseStatusTranslationTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_status_trans');
+        $table = $schema->createTable('oro_case_status_trans');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
@@ -211,13 +211,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_priority table
+     * Create oro_case_priority table
      *
      * @param Schema $schema
      */
     protected function createOrocrmCasePriorityTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_priority');
+        $table = $schema->createTable('oro_case_priority');
         $table->addColumn('name', 'string', ['length' => 16]);
         $table->addColumn('`order`', 'integer');
         $table->addColumn('label', 'string', ['length' => 255]);
@@ -225,13 +225,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_priority_trans table
+     * Create oro_case_priority_trans table
      *
      * @param Schema $schema
      */
     public static function createOrocrmCasePriorityTranslationTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_priority_trans');
+        $table = $schema->createTable('oro_case_priority_trans');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('foreign_key', 'string', ['length' => 16]);
         $table->addColumn('content', 'string', ['length' => 255]);
@@ -247,13 +247,13 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Create orocrm_case_comment table
+     * Create oro_case_comment table
      *
      * @param Schema $schema
      */
     public static function createOrocrmCaseCommentTranslationTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_case_comment');
+        $table = $schema->createTable('oro_case_comment');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('case_id', 'integer', ['notnull' => false]);
         $table->addColumn('updated_by_id', 'integer', ['notnull' => false]);
@@ -273,39 +273,39 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Add orocrm_case foreign keys.
+     * Add oro_case foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmCaseForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_case');
+        $table = $schema->getTable('oro_case');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['related_contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
+            $schema->getTable('oro_account'),
             ['related_account_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_source'),
+            $schema->getTable('oro_case_source'),
             ['source_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_status'),
+            $schema->getTable('oro_case_status'),
             ['status_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_priority'),
+            $schema->getTable('oro_case_priority'),
             ['priority_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -331,15 +331,15 @@ class OroCaseBundleInstaller implements
     }
 
     /**
-     * Add orocrm_case_comment foreign keys.
+     * Add oro_case_comment foreign keys.
      *
      * @param Schema $schema
      */
     protected function addOrocrmCaseCommentForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_case_comment');
+        $table = $schema->getTable('oro_case_comment');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case'),
+            $schema->getTable('oro_case'),
             ['case_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -357,7 +357,7 @@ class OroCaseBundleInstaller implements
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -371,7 +371,7 @@ class OroCaseBundleInstaller implements
 
         $this->attachmentExtension->addFileRelation(
             $schema,
-            'orocrm_case_comment',
+            'oro_case_comment',
             'attachment'
         );
     }
@@ -411,7 +411,7 @@ class OroCaseBundleInstaller implements
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_status'),
+            $schema->getTable('oro_case_status'),
             ['case_status_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -423,7 +423,7 @@ class OroCaseBundleInstaller implements
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_case_priority'),
+            $schema->getTable('oro_case_priority'),
             ['case_priority_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -438,7 +438,7 @@ class OroCaseBundleInstaller implements
      */
     protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_case');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_case');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'oro_case');
     }
 }

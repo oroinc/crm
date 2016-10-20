@@ -33,14 +33,14 @@ class OroContactUsBundle implements Migration, ChangeTypeExtensionAwareInterface
         $this->changeTypeExtension->changePrimaryKeyType(
             $schema,
             $queries,
-            'orocrm_contactus_contact_rsn',
+            'oro_contactus_contact_rsn',
             'id',
             Type::INTEGER
         );
         $this->changeTypeExtension->changePrimaryKeyType(
             $schema,
             $queries,
-            'orocrm_contact_group',
+            'oro_contact_group',
             'id',
             Type::INTEGER
         );

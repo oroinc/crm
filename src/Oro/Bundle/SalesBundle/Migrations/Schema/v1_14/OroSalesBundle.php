@@ -38,10 +38,10 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        if ($schema->hasTable('orocrm_task')) {
-            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_lead');
-            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_opportunity');
-            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_b2bcustomer');
+        if ($schema->hasTable('oro_task')) {
+            $activityExtension->addActivityAssociation($schema, 'oro_task', 'oro_sales_lead');
+            $activityExtension->addActivityAssociation($schema, 'oro_task', 'oro_sales_opportunity');
+            $activityExtension->addActivityAssociation($schema, 'oro_task', 'oro_sales_b2bcustomer');
         }
     }
 }

@@ -14,13 +14,13 @@ class ChangeAddressPostalCodeLength implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_customer_addr');
+        $table = $schema->getTable('oro_magento_customer_addr');
         $table->changeColumn('postal_code', ['length' => 255]);
 
-        $table = $schema->getTable('orocrm_magento_cart_address');
+        $table = $schema->getTable('oro_magento_cart_address');
         $table->changeColumn('postal_code', ['length' => 255]);
 
-        $table = $schema->getTable('orocrm_magento_order_address');
+        $table = $schema->getTable('oro_magento_order_address');
         $table->changeColumn('postal_code', ['length' => 255]);
     }
 }

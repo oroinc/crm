@@ -29,8 +29,8 @@ class CreateLeadEmail implements Migration, OrderedMigrationInterface
         $this->addOrocrmSalesLeadEmailForeignKeys($schema);
 
         $queries->addPostQuery(
-            'INSERT INTO orocrm_sales_lead_email (owner_id, email, is_primary)
-            SELECT orocrm_sales_lead.id, orocrm_sales_lead.email, \'1\' FROM orocrm_sales_lead WHERE email IS NOT NULL'
+            'INSERT INTO oro_sales_lead_email (owner_id, email, is_primary)
+            SELECT oro_sales_lead.id, oro_sales_lead.email, \'1\' FROM oro_sales_lead WHERE email IS NOT NULL'
         );
     }
 
@@ -41,7 +41,7 @@ class CreateLeadEmail implements Migration, OrderedMigrationInterface
      */
     protected function createOrocrmSalesLeadEmailTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_sales_lead_email');
+        $table = $schema->createTable('oro_sales_lead_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('email', 'string', ['length' => 255]);
@@ -58,9 +58,9 @@ class CreateLeadEmail implements Migration, OrderedMigrationInterface
      */
     protected function addOrocrmSalesLeadEmailForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_lead_email');
+        $table = $schema->getTable('oro_sales_lead_email');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead'),
+            $schema->getTable('oro_sales_lead'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]

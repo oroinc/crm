@@ -27,8 +27,8 @@ class RemoveWorkflowFields implements Migration, OrderedMigrationInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         //workflow now has no direct relations
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_lead'));
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_opportunity'));
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_funnel'));
+        $this->removeWorkflowFields($schema->getTable('oro_sales_lead'));
+        $this->removeWorkflowFields($schema->getTable('oro_sales_opportunity'));
+        $this->removeWorkflowFields($schema->getTable('oro_sales_funnel'));
     }
 }

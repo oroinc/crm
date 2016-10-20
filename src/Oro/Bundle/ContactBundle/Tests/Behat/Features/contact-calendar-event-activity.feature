@@ -1,6 +1,6 @@
 Feature: Calendar event activity
   In order to have schedule for every day
-  As OroCRM sales rep
+  As Oro sales rep
   I need to create, edit, view and delete calendar events
 
 Scenario: Add calendar event

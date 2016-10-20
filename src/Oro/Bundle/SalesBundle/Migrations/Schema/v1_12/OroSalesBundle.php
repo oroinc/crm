@@ -14,7 +14,7 @@ class OroSalesBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table = $schema->getTable('oro_sales_b2bcustomer');
         $table->addColumn('lifetime', 'money', ['notnull' => false]);
     }
 }

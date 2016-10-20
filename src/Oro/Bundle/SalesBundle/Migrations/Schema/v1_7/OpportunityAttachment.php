@@ -40,7 +40,7 @@ class OpportunityAttachment implements Migration, AttachmentExtensionAwareInterf
     {
         $attachmentExtension->addAttachmentAssociation(
             $schema,
-            'orocrm_sales_opportunity',
+            'oro_sales_opportunity',
             [
                 'image/*',
                 'application/pdf',

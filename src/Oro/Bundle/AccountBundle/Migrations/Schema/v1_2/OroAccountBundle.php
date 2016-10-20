@@ -38,6 +38,6 @@ class OroAccountBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_account');
     }
 }

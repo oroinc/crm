@@ -15,12 +15,12 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_campaign');
+        $table = $schema->getTable('oro_campaign');
         $table->addColumn('report_period', 'string', ['length' => 25]);
 
         $queries->addPostQuery(
             sprintf(
-                "UPDATE orocrm_campaign SET report_period = '%s'",
+                "UPDATE oro_campaign SET report_period = '%s'",
                 Campaign::PERIOD_DAILY
             )
         );

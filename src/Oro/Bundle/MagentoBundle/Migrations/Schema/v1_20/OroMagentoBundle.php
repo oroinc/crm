@@ -14,20 +14,20 @@ class OroMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_order_addr_type');
+        $table = $schema->getTable('oro_magento_order_addr_type');
         $table->removeForeignKey('FK_E927A18F466D5220');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_order_address'),
+            $schema->getTable('oro_magento_order_address'),
             ['order_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE'],
             'FK_E927A18F466D5220'
         );
 
-        $table = $schema->getTable('orocrm_magento_cust_addr_type');
+        $table = $schema->getTable('oro_magento_cust_addr_type');
         $table->removeForeignKey('FK_308A31F187EABF7');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_customer_addr'),
+            $schema->getTable('oro_magento_customer_addr'),
             ['customer_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE'],

@@ -32,14 +32,14 @@ class OroSalesBundle implements Migration, RenameExtensionAwareInterface
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'orocrm_sales_opportunity_close_reason',
-            'orocrm_sales_opport_close_rsn'
+            'oro_sales_opportunity_close_reason',
+            'oro_sales_opport_close_rsn'
         );
         $this->renameExtension->renameTable(
             $schema,
             $queries,
-            'orocrm_sales_opportunity_status',
-            'orocrm_sales_opport_status'
+            'oro_sales_opportunity_status',
+            'oro_sales_opport_status'
         );
     }
 }

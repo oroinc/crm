@@ -49,7 +49,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function createOrocrmChannelTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_channel');
+        $table = $schema->createTable('oro_channel');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('data_source_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_owner_id', 'integer', ['notnull' => false]);
@@ -71,7 +71,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function createOrocrmChannelEntityNameTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_channel_entity_name');
+        $table = $schema->createTable('oro_channel_entity_name');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -86,7 +86,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function createOrocrmChannelCustIdentityTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_channel_cust_identity');
+        $table = $schema->createTable('oro_channel_cust_identity');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
@@ -109,7 +109,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function addOrocrmChannelForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_channel');
+        $table = $schema->getTable('oro_channel');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['data_source_id'],
@@ -133,9 +133,9 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function addOrocrmChannelEntityNameForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_channel_entity_name');
+        $table = $schema->getTable('oro_channel_entity_name');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['channel_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
@@ -150,15 +150,15 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
      */
     protected function addOrocrmChannelCustIdentityForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_channel_cust_identity');
+        $table = $schema->getTable('oro_channel_cust_identity');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
+            $schema->getTable('oro_account'),
             ['account_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -170,7 +170,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
+            $schema->getTable('oro_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -186,7 +186,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
             $schema,
             'oro_embedded_form',
             'dataChannel',
-            'orocrm_channel',
+            'oro_channel',
             'name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
         );

@@ -47,7 +47,7 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function createOrocrmMarketingListTypeTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_marketing_list_type');
+        $table = $schema->createTable('oro_marketing_list_type');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->addUniqueIndex(['label'], 'uniq_143b81a8ea750e8');
@@ -61,7 +61,7 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function createOrocrmMarketingListTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_marketing_list');
+        $table = $schema->createTable('oro_marketing_list');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('type', 'string', ['length' => 32]);
@@ -88,12 +88,12 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function createOrocrmMlItemUnsTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_ml_item_uns');
+        $table = $schema->createTable('oro_ml_item_uns');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_uns_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_uns_unq');
         $table->addIndex(['marketing_list_id'], 'idx_ceb0306896434d04', []);
         $table->setPrimaryKey(['id']);
     }
@@ -105,7 +105,7 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function createOrocrmMarketingListItemTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_marketing_list_item');
+        $table = $schema->createTable('oro_marketing_list_item');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
@@ -113,7 +113,7 @@ class OroMarketingListBundleInstaller implements Installation
         $table->addColumn('last_contacted_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addIndex(['marketing_list_id'], 'idx_87fef39f96434d04', []);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_unq');
         $table->setPrimaryKey(['id']);
     }
 
@@ -124,14 +124,14 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function createOrocrmMlItemRmTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_ml_item_rm');
+        $table = $schema->createTable('oro_ml_item_rm');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['marketing_list_id'], 'idx_8f6405f96434d04', []);
-        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_rm_unq');
+        $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'oro_ml_list_ent_rm_unq');
     }
 
     /**
@@ -141,7 +141,7 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function addOrocrmMarketingListForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_marketing_list');
+        $table = $schema->getTable('oro_marketing_list');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
@@ -149,7 +149,7 @@ class OroMarketingListBundleInstaller implements Installation
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_marketing_list_type'),
+            $schema->getTable('oro_marketing_list_type'),
             ['type'],
             ['name'],
             ['onUpdate' => null, 'onDelete' => null]
@@ -175,9 +175,9 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function addOrocrmMlItemUnsForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_ml_item_uns');
+        $table = $schema->getTable('oro_ml_item_uns');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_marketing_list'),
+            $schema->getTable('oro_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -191,9 +191,9 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function addOrocrmMarketingListItemForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_marketing_list_item');
+        $table = $schema->getTable('oro_marketing_list_item');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_marketing_list'),
+            $schema->getTable('oro_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
@@ -207,9 +207,9 @@ class OroMarketingListBundleInstaller implements Installation
      */
     protected function addOrocrmMlItemRmForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_ml_item_rm');
+        $table = $schema->getTable('oro_ml_item_rm');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_marketing_list'),
+            $schema->getTable('oro_marketing_list'),
             ['marketing_list_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']

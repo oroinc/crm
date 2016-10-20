@@ -98,7 +98,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $this->connection->executeUpdate($sql, $params, $types);
 
         // Update workflow_step_id for oro_magento_order.
-        $sql = 'UPDATE orocrm_magento_order' .
+        $sql = 'UPDATE oro_magento_order' .
                ' SET workflow_step_id = :not_contacted_id' .
                ' WHERE workflow_step_id IN (' .
                    'SELECT s.id FROM oro_workflow_step s' .
@@ -198,7 +198,7 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
         $this->connection->executeUpdate($sql, $params, $types);
 
         // Update workflow_step_id for oro_magento_cart.
-        $sql = 'UPDATE orocrm_magento_cart ' .
+        $sql = 'UPDATE oro_magento_cart ' .
                ' SET workflow_step_id = :open_id' .
                ' WHERE workflow_step_id IN (' .
                    'SELECT s.id FROM oro_workflow_step s' .

@@ -1,8 +1,8 @@
 {
     "name": "orocrm/case-bundle",
     "type": "symfony-bundle",
-    "description": "OroCRM Case Bundle",
-    "keywords": ["OroCRM"],
+    "description": "Oro Case Bundle",
+    "keywords": ["Oro"],
     "license": "MIT",
     "require": {
         "php": ">=5.5.9",

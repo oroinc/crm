@@ -38,6 +38,6 @@ class OroContactBundle implements Migration, NoteExtensionAwareInterface
      */
     public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
-        $noteExtension->addNoteAssociation($schema, 'orocrm_contact');
+        $noteExtension->addNoteAssociation($schema, 'oro_contact');
     }
 }

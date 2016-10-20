@@ -27,7 +27,7 @@ class OroCampaignBundle implements Migration
      */
     protected function updateOrocrmCampaignTable(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_campaign');
+        $table = $schema->getTable('oro_campaign');
         $table->addColumn('report_refresh_date', 'date', ['notnull' => false]);
     }
 
@@ -38,7 +38,7 @@ class OroCampaignBundle implements Migration
      */
     protected function createOrocrmCampaignTeSummaryTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_campaign_te_summary');
+        $table = $schema->createTable('oro_campaign_te_summary');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('website_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -60,7 +60,7 @@ class OroCampaignBundle implements Migration
      */
     protected function addOrocrmCampaignTeSummaryForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_campaign_te_summary');
+        $table = $schema->getTable('oro_campaign_te_summary');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_tracking_website'),
             ['website_id'],

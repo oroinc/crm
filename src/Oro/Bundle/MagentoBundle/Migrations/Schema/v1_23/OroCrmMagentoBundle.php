@@ -38,6 +38,6 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'oro_magento_customer');
     }
 }

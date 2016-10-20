@@ -14,7 +14,7 @@ class ItemsOrganizationOwner implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_order_items');
+        $table = $schema->getTable('oro_magento_order_items');
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_3135EFF67E3C61F9', []);
         $table->addForeignKeyConstraint(
@@ -25,11 +25,11 @@ class ItemsOrganizationOwner implements Migration
         );
 
         $queries->addPostQuery(
-            'UPDATE orocrm_magento_order_items itm '.
-            'SET owner_id = (SELECT organization_id FROM orocrm_magento_order WHERE itm.order_id = id)'
+            'UPDATE oro_magento_order_items itm '.
+            'SET owner_id = (SELECT organization_id FROM oro_magento_order WHERE itm.order_id = id)'
         );
 
-        $table = $schema->getTable('orocrm_magento_cart_item');
+        $table = $schema->getTable('oro_magento_cart_item');
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_A73DC8627E3C61F9', []);
         $table->addForeignKeyConstraint(
@@ -40,8 +40,8 @@ class ItemsOrganizationOwner implements Migration
         );
 
         $queries->addPostQuery(
-            'UPDATE orocrm_magento_cart_item itm '.
-            'SET owner_id = (SELECT organization_id FROM orocrm_magento_cart WHERE itm.cart_id = id)'
+            'UPDATE oro_magento_cart_item itm '.
+            'SET owner_id = (SELECT organization_id FROM oro_magento_cart WHERE itm.cart_id = id)'
         );
     }
 }

@@ -25,7 +25,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="orocrm_magento_order",
+ * @ORM\Table(name="oro_magento_order",
  *     indexes={
  *          @ORM\Index(name="mageorder_created_idx",columns={"created_at"})
  *     },

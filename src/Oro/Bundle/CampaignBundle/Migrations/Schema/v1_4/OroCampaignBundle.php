@@ -15,8 +15,8 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addOrganization($schema, 'orocrm_campaign');
-        self::addOrganization($schema, 'orocrm_campaign_email');
+        self::addOrganization($schema, 'oro_campaign');
+        self::addOrganization($schema, 'oro_campaign_email');
 
         //Add organization fields to ownership entity config
         $queries->addQuery(

@@ -26,7 +26,7 @@ class AccountAttachment implements Migration, AttachmentExtensionAwareInterface
     {
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
-            'orocrm_account',
+            'oro_account',
             [
                 'image/*',
                 'application/pdf',

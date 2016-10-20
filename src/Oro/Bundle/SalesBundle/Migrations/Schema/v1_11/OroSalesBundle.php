@@ -55,7 +55,7 @@ class OroSalesBundle implements Migration
      */
     public static function addOrganization(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_sales_funnel');
+        $table = $schema->getTable('oro_sales_funnel');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_E20C734432C8A3DE', []);
         $table->addForeignKeyConstraint(
@@ -65,7 +65,7 @@ class OroSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('orocrm_sales_lead');
+        $table = $schema->getTable('oro_sales_lead');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_73DB463332C8A3DE', []);
         $table->addForeignKeyConstraint(
@@ -75,7 +75,7 @@ class OroSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table = $schema->getTable('oro_sales_opportunity');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'IDX_C0FE4AAC32C8A3DE', []);
         $table->addForeignKeyConstraint(
@@ -85,7 +85,7 @@ class OroSalesBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table = $schema->getTable('oro_sales_b2bcustomer');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['organization_id'], 'idx_dac0bd2932c8a3de');
         $table->addForeignKeyConstraint(

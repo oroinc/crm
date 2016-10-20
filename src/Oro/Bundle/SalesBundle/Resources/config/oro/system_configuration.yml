@@ -25,7 +25,7 @@ system_configuration:
             type: oro_config_checkbox
             priority: 20
             options:
-                label: orocrm.sales.system_configuration.fields.sales_lead.feature_enabled.label
+                label: oro.sales.system_configuration.fields.sales_lead.feature_enabled.label
 
         oro_sales.opportunity_feature_enabled:
             data_type: boolean

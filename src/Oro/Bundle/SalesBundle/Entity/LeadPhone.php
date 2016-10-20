@@ -9,7 +9,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_sales_lead_phone", indexes={
+ * @ORM\Table("oro_sales_lead_phone", indexes={
  *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
  *      @ORM\Index(name="phone_idx", columns={"phone"})
  * })

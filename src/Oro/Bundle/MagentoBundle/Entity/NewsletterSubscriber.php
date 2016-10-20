@@ -13,7 +13,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_newsl_subscr")
+ * @ORM\Table(name="oro_magento_newsl_subscr")
  * @Config(
  *      defaultValues={
  *          "entity"={

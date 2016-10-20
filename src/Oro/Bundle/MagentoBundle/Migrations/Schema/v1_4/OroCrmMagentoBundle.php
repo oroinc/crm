@@ -15,7 +15,7 @@ class OroCrmMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_order_items');
+        $table = $schema->getTable('oro_magento_order_items');
         $table->getColumn('product_options')->setType(Type::getType(Type::TEXT))->setLength(null);
     }
 }

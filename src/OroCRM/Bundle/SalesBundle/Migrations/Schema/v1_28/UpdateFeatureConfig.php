@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_28;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_28;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
@@ -14,8 +14,8 @@ class UpdateFeatureConfig extends ParametrizedMigrationQuery
 {
     /** @var array */
     protected $classToFeatureMap = [
-        'OroCRM\Bundle\SalesBundle\Entity\Lead'        => 'oro_crm_sales.lead_feature_enabled',
-        'OroCRM\Bundle\SalesBundle\Entity\Opportunity' => 'oro_crm_sales.opportunity_feature_enabled',
+        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'oro_crm_sales.lead_feature_enabled',
+        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'oro_crm_sales.opportunity_feature_enabled',
     ];
 
     /**
@@ -109,8 +109,8 @@ SQL;
     {
         $query = <<<SQL
 SELECT DISTINCT(e.name)
-FROM orocrm_channel c
-JOIN orocrm_channel_entity_name e ON e.channel_id = c.id
+FROM oro_channel c
+JOIN oro_channel_entity_name e ON e.channel_id = c.id
 WHERE c.status = :status AND e.name IN(:entityClasses);
 SQL;
         $params = [

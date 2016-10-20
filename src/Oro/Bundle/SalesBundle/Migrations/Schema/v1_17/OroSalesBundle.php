@@ -56,7 +56,7 @@ class OroSalesBundle implements Migration, ActivityExtensionAwareInterface, Name
             'Oro\Bundle\SalesBundle\Entity\B2bCustomer'
         );
         if (!$schema->hasTable($relationTableName)) {
-            $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_b2bcustomer');
+            $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_sales_b2bcustomer');
         }
     }
 }

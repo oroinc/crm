@@ -20,7 +20,7 @@ class OroAccountBundle implements Migration
         // @codingStandardsIgnoreStart
 
         /** Generate table oro_account **/
-        $table = $schema->createTable('orocrm_account');
+        $table = $schema->createTable('oro_account');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('default_contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
@@ -110,7 +110,7 @@ class OroAccountBundle implements Migration
         /** End of generate table oro_account **/
 
         /** Generate table oro_account_to_contact **/
-        $table = $schema->createTable('orocrm_account_to_contact');
+        $table = $schema->createTable('oro_account_to_contact');
         $table->addColumn('account_id', 'integer', []);
         $table->addColumn('contact_id', 'integer', []);
         $table->setPrimaryKey(['account_id', 'contact_id']);
@@ -119,17 +119,17 @@ class OroAccountBundle implements Migration
         /** End of generate table oro_account_to_contact **/
 
         /** Generate foreign keys for table oro_account **/
-        $table = $schema->getTable('orocrm_account');
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['default_contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
+        $table = $schema->getTable('oro_account');
+        $table->addForeignKeyConstraint($schema->getTable('oro_contact'), ['default_contact_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_address'), ['shipping_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_address'), ['billing_address_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         $table->addForeignKeyConstraint($schema->getTable('oro_user'), ['user_owner_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null]);
         /** End of generate foreign keys for table oro_account **/
 
         /** Generate foreign keys for table oro_account_to_contact **/
-        $table = $schema->getTable('orocrm_account_to_contact');
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
-        $table->addForeignKeyConstraint($schema->getTable('orocrm_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table = $schema->getTable('oro_account_to_contact');
+        $table->addForeignKeyConstraint($schema->getTable('oro_contact'), ['contact_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
+        $table->addForeignKeyConstraint($schema->getTable('oro_account'), ['account_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null]);
         /** End of generate foreign keys for table oro_account_to_contact **/
         // @codingStandardsIgnoreEnd
     }

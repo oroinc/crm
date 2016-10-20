@@ -14,7 +14,7 @@ class AddRFMMetrics implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_customer');
+        $table = $schema->getTable('oro_magento_customer');
         $table->addColumn('rfm_recency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);

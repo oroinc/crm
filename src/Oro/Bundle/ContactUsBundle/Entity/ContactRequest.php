@@ -16,7 +16,7 @@ use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="orocrm_contactus_request",
+ *      name="oro_contactus_request",
  *      indexes={@ORM\Index(name="request_create_idx",columns={"created_at"})}
  * )
  *

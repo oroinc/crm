@@ -129,7 +129,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit_event',
-            'orocrm_magento_customer',
+            'oro_magento_customer',
             ['customer_2bc6a2ee_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -148,7 +148,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit_event',
-            'orocrm_magento_cart',
+            'oro_magento_cart',
             ['cart_4962cb03_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -167,7 +167,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit_event',
-            'orocrm_magento_order',
+            'oro_magento_order',
             ['order_3967254e_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -192,7 +192,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit_event',
-            'orocrm_magento_product',
+            'oro_magento_product',
             ['product_262abcc3_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -228,7 +228,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_tracking_visit',
-            'orocrm_magento_customer',
+            'oro_magento_customer',
             ['customer_7c2d0d96_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -257,7 +257,7 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_note',
-            'orocrm_magento_order',
+            'oro_magento_order',
             ['order_e1ff24e2_id'],
             ['id'],
             ['onDelete' => 'SET NULL']

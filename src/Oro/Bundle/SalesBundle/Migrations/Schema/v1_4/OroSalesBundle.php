@@ -32,9 +32,9 @@ class OroSalesBundle implements Migration, ExtendExtensionAwareInterface
     {
         $this->extendExtension->addManyToOneRelation(
             $schema,
-            'orocrm_sales_lead',
+            'oro_sales_lead',
             'campaign',
-            'orocrm_campaign',
+            'oro_campaign',
             'combined_name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );

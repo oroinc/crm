@@ -12,7 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
- * @ORM\Table(name="orocrm_channel", indexes={
+ * @ORM\Table(name="oro_channel", indexes={
  *     @ORM\Index(name="crm_channel_name_idx", columns={"name"}),
  *     @ORM\Index(name="crm_channel_status_idx", columns={"status"}),
  *     @ORM\Index(name="crm_channel_channel_type_idx", columns={"channel_type"})

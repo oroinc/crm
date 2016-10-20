@@ -16,7 +16,7 @@ use Oro\Bundle\MarketingListBundle\Model\ExtendMarketingList;
 /**
  * Marketing list
  *
- * @ORM\Table(name="orocrm_marketing_list")
+ * @ORM\Table(name="oro_marketing_list")
  * @ORM\Entity()
  * @ORM\HasLifecycleCallbacks
  * @Config(

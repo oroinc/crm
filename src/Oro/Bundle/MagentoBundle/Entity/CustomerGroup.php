@@ -12,7 +12,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  *
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
- * @ORM\Table(name="orocrm_magento_customer_group")
+ * @ORM\Table(name="oro_magento_customer_group")
  * @Config(
  *      defaultValues={
  *          "entity"={

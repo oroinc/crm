@@ -27,7 +27,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Table(
- *      name="orocrm_sales_lead",
+ *      name="oro_sales_lead",
  *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt"})}
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository")

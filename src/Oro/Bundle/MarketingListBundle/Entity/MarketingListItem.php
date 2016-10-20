@@ -8,8 +8,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 /**
  * Marketing list item.
  *
- * @ORM\Table(name="orocrm_marketing_list_item",  uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="orocrm_ml_list_ent_unq")
+ * @ORM\Table(name="oro_marketing_list_item",  uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="oro_ml_list_ent_unq")
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks

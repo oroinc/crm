@@ -52,14 +52,14 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $associationTableName = $activityExtension->getAssociationTableName('oro_call', 'orocrm_case');
+        $associationTableName = $activityExtension->getAssociationTableName('oro_call', 'oro_case');
         if (!$schema->hasTable($associationTableName)) {
-            $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_case');
+            $activityExtension->addActivityAssociation($schema, 'oro_call', 'oro_case');
         }
 
-        $associationTableName = $activityExtension->getAssociationTableName('oro_calendar_event', 'orocrm_case');
+        $associationTableName = $activityExtension->getAssociationTableName('oro_calendar_event', 'oro_case');
         if (!$schema->hasTable($associationTableName)) {
-            $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_case');
+            $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'oro_case');
         }
     }
 
@@ -72,8 +72,8 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
     public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
         $table = $schema->getTable('oro_note');
-        if (!$table->hasColumn($noteExtension->getAssociationColumnName('orocrm_case'))) {
-            $noteExtension->addNoteAssociation($schema, 'orocrm_case');
+        if (!$table->hasColumn($noteExtension->getAssociationColumnName('oro_case'))) {
+            $noteExtension->addNoteAssociation($schema, 'oro_case');
         }
     }
 }

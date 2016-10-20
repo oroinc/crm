@@ -10,7 +10,7 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")
- * @ORM\Table(name="orocrm_analytics_rfm_category")
+ * @ORM\Table(name="oro_analytics_rfm_category")
  * @Config(
  *  defaultValues={
  *      "ownership"={

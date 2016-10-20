@@ -10,7 +10,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_case_comment")
+ * @ORM\Table(name="oro_case_comment")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={

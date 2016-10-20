@@ -43,7 +43,7 @@ class OroSalesBundle implements Migration
     {
         $table = $schema->getTable('oro_email_mailbox_process');
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
+            $schema->getTable('oro_channel'),
             ['lead_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]

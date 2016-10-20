@@ -14,7 +14,7 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->createTable('orocrm_campaign');
+        $table = $schema->createTable('oro_campaign');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('code', 'string', ['notnull' => true, 'length' => 255]);

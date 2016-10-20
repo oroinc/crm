@@ -20,7 +20,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
- *      name="orocrm_sales_opportunity",
+ *      name="oro_sales_opportunity",
  *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
  * )
  * @ORM\HasLifecycleCallbacks()

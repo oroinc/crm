@@ -14,7 +14,7 @@ class AddCustomerPassword implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $customerTable = $schema->getTable('orocrm_magento_customer');
+        $customerTable = $schema->getTable('oro_magento_customer');
         $customerTable->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
     }
 }

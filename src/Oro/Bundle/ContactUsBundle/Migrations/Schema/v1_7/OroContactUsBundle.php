@@ -26,7 +26,7 @@ class OroContactUsBundle implements Migration
      */
     public static function addOwner(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_contactus_request');
+        $table = $schema->getTable('oro_contactus_request');
 
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_342872E87E3C61F9', []);

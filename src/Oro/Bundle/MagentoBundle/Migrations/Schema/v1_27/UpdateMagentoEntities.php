@@ -14,7 +14,7 @@ class UpdateMagentoEntities implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_magento_customer_addr');
+        $table = $schema->getTable('oro_magento_customer_addr');
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),

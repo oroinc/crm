@@ -14,7 +14,7 @@ use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\CampaignBundle\Entity\Repository\EmailCampaignRepository")
  * @ORM\Table(
- *      name="orocrm_campaign_email",
+ *      name="oro_campaign_email",
  *      indexes={@ORM\Index(name="cmpgn_email_owner_idx", columns={"owner_id"})}
  * )
  * @ORM\HasLifecycleCallbacks()
