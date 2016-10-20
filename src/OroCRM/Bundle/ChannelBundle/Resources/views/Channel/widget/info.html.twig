@@ -5,7 +5,7 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.channel.name.label'|trans, channel.name) }}
-            {{ UI.renderProperty('orocrm.channel.channel_type.label'|trans, channelTypes[channel.channelType]|trans) }}
+            {{ UI.renderProperty('orocrm.channel.channel_type.label'|trans, (channelTypes[channel.channelType]|default('N/A'))|trans) }}
             {% if(channel.dataSource) %}
                 {% set inegrationLink = UI.link({
                     'label' : channel.dataSource.name,
