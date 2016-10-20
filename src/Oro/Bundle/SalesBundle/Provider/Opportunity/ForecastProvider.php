@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -35,6 +36,9 @@ class ForecastProvider
     /** @var FilterProcessor */
     protected $filterProcessor;
 
+    /** @var CurrencyQueryBuilderTransformerInterface  */
+    protected $qbTransformer;
+
     /** @var array */
     protected static $fieldsAuditMap = [
         'status'       => ['old' => 'oldText', 'new' => 'newText'],
@@ -46,20 +50,23 @@ class ForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param AclHelper         $aclHelper
+     * @param AclHelper $aclHelper
      * @param EnumValueProvider $enumProvider
-     * @param FilterProcessor   $filterProcessor
+     * @param FilterProcessor $filterProcessor
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
         EnumValueProvider $enumProvider,
-        FilterProcessor $filterProcessor
+        FilterProcessor $filterProcessor,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->doctrine        = $doctrine;
         $this->aclHelper       = $aclHelper;
         $this->enumProvider    = $enumProvider;
         $this->filterProcessor = $filterProcessor;
+        $this->qbTransformer   = $qbTransformer;
     }
 
     /**
@@ -110,7 +117,7 @@ class ForecastProvider
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
         $alias       = 'o';
-        $qb          = $this->getOpportunityRepository()->getForecastQB($alias);
+        $qb          = $this->getOpportunityRepository()->getForecastQB($this->qbTransformer, $alias);
 
         $qb = $this->filterProcessor
             ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
