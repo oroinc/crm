@@ -10,15 +10,15 @@ oro:
                     label: Cancelled
             attribute:
                 opportunity_name:
-                    label: orocrm.sales.opportunity.name.label
+                    label: 'Opportunity name'
                 account:
-                    label: orocrm.account.entity_label
+                    label: 'Account'
                 b2bcustomer:
-                    label: orocrm.sales.b2bcustomer.entity_label
+                    label: 'Business customer'
                 company_name:
-                    label: orocrm.sales.lead.company_name.label
+                    label: 'Company name'
                 notes:
-                    label: orocrm.sales.lead.notes.label
+                    label: 'Additional comments'
             transition:
                 qualify:
                     label: Qualify
@@ -43,19 +43,19 @@ oro:
                     label: 'Lost Opportunity'
             attribute:
                 new_notes:
-                    label: orocrm.sales.lead.notes.label
+                    label: 'Additional comments'
                 new_opportunity_name:
-                    label: orocrm.sales.opportunity.name.label
+                    label: 'Opportunity name'
                 new_b2bcustomer:
-                    label: orocrm.sales.b2bcustomer.entity_label
+                    label: 'Business customer'
                 new_account:
-                    label: orocrm.account.entity_label
+                    label: 'Account'
                 new_company_name:
-                    label: orocrm.sales.lead.company_name.label
+                    label: 'Company name'
                 close_reason_name:
-                    label: orocrm.sales.opportunity.close_reason.label
+                    label: 'Close reason'
                 close_date:
-                    label: orocrm.sales.opportunity.workflow.close_date.label
+                    label: 'Close date'
                 budget_amount:
                     label: 'Budget Amount'
                 close_revenue:
@@ -65,12 +65,12 @@ oro:
                     label: 'Start from Lead'
                     attribute:
                         data_channel:
-                            label: oro.sales.lead.data_channel.label
+                            label: 'Channel'
                 start_from_opportunity:
                     label: 'Start from Opportunity'
                     attribute:
                         data_channel:
-                            label: oro.sales.lead.data_channel.label
+                            label: 'Channel'
                 disqualify:
                     label: Disqualify
                 follow_up:
@@ -99,11 +99,11 @@ oro:
                     label: Lost
             attribute:
                 close_reason_name:
-                    label: orocrm.sales.opportunity.close_reason.label
+                    label: 'Close reason'
                 close_date:
-                    label: orocrm.sales.opportunity.close_date.label
+                    label: 'Expected close date'
                 status:
-                    label: orocrm.sales.opportunity.status.label
+                    label: 'Status'
                 budget_amount:
                     label: 'Budget Amount'
                 close_revenue:
