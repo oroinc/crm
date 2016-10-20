@@ -68,7 +68,7 @@
 
                 {% if entity.segment is not empty %}
                     {%- set segmentData -%}
-                        {% if resource_granted('oro_segment_view') %}
+                        {% if resource_granted('oro_segment_view') and not entity.segment.internalId or feature_resource_enabled(entity.segment.internalId, 'segments') %}
                             <a href="{{ path('oro_segment_view', {'id': entity.segment.id}) }}">
                                 {{ entity.segment.name }}
                             </a>
