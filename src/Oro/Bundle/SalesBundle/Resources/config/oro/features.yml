@@ -2,7 +2,7 @@ features:
     sales_lead:
         label: oro.sales.lead.feature.label
         description: oro.sales.lead.feature.description
-        toggle: oro_crm_sales.lead_feature_enabled
+        toggle: oro_sales.lead_feature_enabled
         routes:
             - oro_sales_lead_view
             - oro_sales_lead_info
@@ -34,7 +34,7 @@ features:
     sales_opportunity:
         label: oro.sales.opportunity.feature.label
         description: oro.sales.opportunity.feature.description
-        toggle: oro_crm_sales.opportunity_feature_enabled
+        toggle: oro_sales.opportunity_feature_enabled
         routes:
             - oro_sales_opportunity_view
             - oro_sales_opportunity_info

@@ -14,8 +14,8 @@ class UpdateFeatureConfig extends ParametrizedMigrationQuery
 {
     /** @var array */
     protected $classToFeatureMap = [
-        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'oro_crm_sales.lead_feature_enabled',
-        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'oro_crm_sales.opportunity_feature_enabled',
+        'OroCRM\Bundle\SalesBundle\Entity\Lead'        => 'oro_sales.lead_feature_enabled',
+        'OroCRM\Bundle\SalesBundle\Entity\Opportunity' => 'oro_sales.opportunity_feature_enabled',
     ];
 
     /**

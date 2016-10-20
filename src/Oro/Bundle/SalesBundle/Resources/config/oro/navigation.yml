@@ -4,7 +4,6 @@ navigation:
             sales_tab:
                 label: 'oro.sales.menu.sales_tab.label'
                 uri:   '#'
-                display: false
                 extras:
                     icon: icon-shopping-cart
                     position: 20
@@ -12,7 +11,6 @@ navigation:
             lead_list:
                 label: 'oro.sales.lead.entity_plural_label'
                 route: 'oro_sales_lead_index'
-                display: false
                 extras:
                     position:    20
                     routes:      ['/^oro_sales_lead/']
@@ -21,7 +19,6 @@ navigation:
             opportunity_list:
                 label: 'oro.sales.opportunity.entity_plural_label'
                 route: 'oro_sales_opportunity_index'
-                display: false
                 extras:
                     position:    30
                     routes:      ['/^oro_sales_opportunity/']
