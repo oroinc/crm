@@ -1,0 +1,29 @@
+api:
+    entities:
+        Oro\Bundle\ChannelBundle\Entity\Channel:
+            actions:
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+            fields:
+                id: ~
+                name: ~
+                active:
+                    property_path: status
+                owner:
+                    exclude: true
+                customerIdentity:
+                    exclude: true
+                entities:
+                    data_type: array
+                    exclusion_policy: all
+                    collapse: true
+                    fields:
+                        name:
+                            data_type: entityType
+                data:
+                    exclude: true
+        Oro\Bundle\ChannelBundle\Entity\EntityName:
+            # this entity does not have own Data API resource
+            actions: false

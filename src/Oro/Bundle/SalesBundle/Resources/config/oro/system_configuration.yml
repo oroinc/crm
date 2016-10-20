@@ -1,0 +1,75 @@
+system_configuration:
+    groups:
+        crm:
+            icon:  fa-users
+            title: oro.sales.system_configuration.groups.crm.title
+
+        sales_pipeline:
+            title: oro.sales.system_configuration.groups.sales_pipeline.title
+
+        lead:
+            icon:  icon-usd
+            title: oro.sales.system_configuration.groups.lead.title
+
+        opportunity:
+            icon:  icon-usd
+            title: oro.sales.system_configuration.groups.opportunity.title
+
+        opportunity_status_probabilities:
+            title: oro.sales.system_configuration.groups.opportunity_status_probabilities.title
+            priority: 10
+
+    fields:
+        oro_sales.lead_feature_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 20
+            options:
+                label: orocrm.sales.system_configuration.fields.sales_lead.feature_enabled.label
+
+        oro_sales.opportunity_feature_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 20
+            options:
+                label: oro.sales.system_configuration.fields.sales_opportunity.feature_enabled.label
+
+        oro_sales.opportunity_statuses:
+            ui_only: true
+            type: oro_sales_opportunity_status_config
+            options:
+                label: false
+                required: false
+                resettable: false
+                attr:
+                    class: oro-clearfix
+
+        oro_sales.default_opportunity_probabilities:
+            data_type: array
+            type: oro_sales_opportunity_probability
+            options:
+                required: false
+                resettable: true
+                label: false
+                allow_extra_fields: true
+                attr:
+                    class: oro-clearfix
+    tree:
+        system_configuration:
+            crm:
+                children:
+                    sales_pipeline:
+                        children:
+                            lead:
+                                children:
+                                    general_setup:
+                                        children:
+                                            - oro_sales.lead_feature_enabled
+                            opportunity:
+                                children:
+                                    general_setup:
+                                        children:
+                                            - oro_sales.opportunity_feature_enabled
+                                    opportunity_status_probabilities:
+                                        children:
+                                            - oro_sales.opportunity_statuses

@@ -1,0 +1,9 @@
+Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [ categoryIndex, channel, categoryType ]
+    properties:
+        categoryIndex:
+            - NotBlank: ~
+        categoryType:
+            - NotBlank: ~

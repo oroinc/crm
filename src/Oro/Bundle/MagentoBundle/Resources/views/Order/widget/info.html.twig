@@ -1,0 +1,87 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ channel.renderChannelProperty(entity, 'oro.magento.order.data_channel.label') }}
+
+            {{ ui.renderProperty('oro.magento.order.status.label'|trans, entity.status|trans) }}
+            {{ ui.renderProperty('oro.magento.order.currency.label'|trans, entity.currency) }}
+            {{ ui.renderProperty('oro.magento.order.subtotal_amount.label'|trans, entity.subtotalAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.coupon_code.label'|trans, entity.couponCode) }}
+            {{ ui.renderProperty('oro.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.total_invoiced_amount.label'|trans, entity.totalInvoicedAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.total_refunded_amount.label'|trans, entity.totalRefundedAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('oro.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
+            {{ ui.renderProperty('oro.magento.order.payment_details.label'|trans, entity.paymentDetails) }}
+            {{ ui.renderProperty('oro.magento.order.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('oro.magento.order.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
+            {%- if entity.isGuest -%}
+                {{ ui.renderProperty('oro.magento.order.is_guest.label'|trans, 'oro.magento.order.is_guest.yes'|trans) }}
+            {%- endif -%}
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ ui.renderProperty('oro.magento.order.shipping_method.label'|trans, entity.shippingMethod|trans|capitalize) }}
+            {{ ui.renderProperty('oro.magento.order.remote_ip.label'|trans, entity.remoteIp) }}
+            {{ ui.renderProperty('oro.magento.order.gift_message.label'|trans, entity.giftMessage) }}
+            {{ ui.renderProperty('oro.magento.order.store_name.label'|trans, entity.store.website.name) }}
+            {{ ui.renderHtmlProperty('oro.magento.order.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {{ ui.renderProperty('oro.magento.order.customer_email.label'|trans, entity.customerEmail) }}
+
+            {% set customerData %}
+                {% if entity.customer %}
+                    {% set customerViewGranted = resource_granted('orocrm_magento_customer_view') %}
+                    {%- if customerViewGranted -%}
+                        <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}</a>
+                    {%- else -%}
+                        {{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}
+                    {%- endif -%}
+                {% else %}
+                    {% trans %}N/A{% endtrans %}
+                {% endif %}
+            {% endset %}
+            {{ ui.renderHtmlProperty('oro.magento.order.customer.label'|trans, customerData) }}
+
+            {% set cartData %}
+                {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
+                {% if entity.cart and cartViewGranted %}
+                    <a href="{{ path('oro_magento_cart_view', {'id': entity.cart.id}) }}">
+                        {{ 'oro.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId }}
+                    </a>
+                {% else %}
+                    {% trans %}N/A{% endtrans %}
+                {% endif %}
+            {% endset %}
+            {{ ui.renderHtmlProperty('oro.magento.order.cart.label'|trans, cartData) }}
+
+            {% if entity.addresses is not empty %}
+                {% for orderAddress in entity.addresses %}
+                    {% if orderAddress.types is not empty and orderAddress.types.first is not empty and orderAddress.types.first.name == 'billing' %}
+                        {% set title = 'oro.magento.cart.billing_address.label'|trans %}
+                    {% else %}
+                        {% set title = 'oro.magento.cart.shipping_address.label'|trans %}
+                    {% endif %}
+                    {{ ui.renderHtmlProperty(title, address.renderAddress(orderAddress)) }}
+                {% endfor %}
+            {% endif %}
+
+            {% if entity.feedback is not empty %}
+                {{ ui.renderHtmlProperty('oro.magento.order.feedback.label'|trans, entity.feedback|escape|nl2br) }}
+            {% endif %}
+
+            {% if entity.notes is not empty %}
+                {{ ui.renderHtmlProperty('oro.magento.order.notes.label'|trans, entity.notes) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

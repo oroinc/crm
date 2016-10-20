@@ -1,0 +1,7 @@
+channels:
+    entity_data:
+       -
+          name: Oro\Bundle\ChannelBundle\Entity\CustomerIdentity
+    channel_types:
+        custom:
+            label: oro.channel.channel_type.custom.label

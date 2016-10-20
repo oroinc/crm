@@ -1,0 +1,2 @@
+bundles:
+    - { name: Oro\Bundle\CampaignBundle\OroCampaignBundle, priority: 30 }

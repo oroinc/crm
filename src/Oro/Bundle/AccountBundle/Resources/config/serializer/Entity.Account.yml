@@ -1,0 +1,8 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+    exclusion_policy: ALL
+    properties:
+        name:
+            expose: true
+            type: string
+            serialized_name: Name
+            groups: [export, import]

@@ -1,0 +1,46 @@
+{% block fieldset_widget %}
+    <div class="row-group">
+        {{ block_widget(block) }}
+    </div>
+{% endblock %}
+
+{% block form_field_widget %}
+<div class="row-group"{% if form.vars.extra_field is defined and form.vars.extra_field %} id="{{ form.vars.id ~ '_holder' }}" {% endif %} >
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block form_fields_widget %}
+    {% form_theme form with ['OroContactUsBundle::fields.html.twig'] %}
+    {{ form_start(form, {'attr': {'id': form.vars.id, 'name': form.vars.name, 'novalidate': 'novalidate' }}) }}
+    <div class="wrapper">
+        {{ block_widget(block) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _embedded_form_firstName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_lastName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_comment_widget %}
+    <div class="row-group">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_submit_widget %}
+    <div class="row-group">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+oro:
+    activity_contact:
+        ac_last_contact_date:
+            label: Last contact datetime
+            description: Represents last contact attempt datetime
+        ac_last_contact_date_in:
+            label: Last incoming contact datetime
+            description: Represents last incoming contact attempt datetime
+        ac_last_contact_date_out:
+            label: Last outgoing contact datetime
+            description: Represents last outgoing contact attempt datetime
+        ac_contact_count:
+            label: Total times contacted
+            description: Represents total number of all contact attempts
+        ac_contact_count_in:
+            label: Total number of incoming contact attempts
+            description: Represents total number of incoming contact attempts
+        ac_contact_count_out:
+            label: Total number of outgoing contact attempts
+            description: Represents total number of outgoing contact attempts
+
+        days_since_last_contact:
+            label: Days since the last contact
+
+        info_title_times: 'Times Contacted: {{ total_contacted }}'
+        info_title_last:  'Last Contacted: {{ direction }} {{ last_datetime }}'
+        info_title_no_data: Not contacted yet

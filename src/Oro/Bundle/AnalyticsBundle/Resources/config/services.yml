@@ -1,0 +1,92 @@
+parameters:
+    oro_analytics.entity.rfm_category.class: Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory
+
+    oro_analytics.builder.class: Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
+    oro_analytics.builder.rfm.class: Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder
+
+    oro_analytics.form.type.category.class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategoryType
+    oro_analytics.form.type.category_settings.class: Oro\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
+
+    oro_analytics.model.analytics_aware_interface: Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
+    oro_analytics.model.rfm_aware_interface: Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface
+    oro_analytics.form.channel_type_extension.class: Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
+
+    oro_analytics.placeholder.rfm_filter.class: Oro\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter
+
+    oro_analytics.event_listener.timezone_change.class: Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
+    oro_analytics.event_listener.rfm_category.class: Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener
+
+    oro_analytics.validator.categories.class: Oro\Bundle\AnalyticsBundle\Validator\CategoriesValidator
+
+    oro_analytics.model.state_manager.class: Oro\Bundle\AnalyticsBundle\Model\StateManager
+    oro_analytics.model.rfm_state_manager.class: Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
+services:
+    oro_analytics.builder:
+        class: %oro_analytics.builder.class%
+        arguments:
+            - []
+
+    oro_analytics.builder.rfm:
+        class: %oro_analytics.builder.rfm.class%
+        arguments:
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: oro_analytics.builder }
+
+    oro_analytics.form.type.category:
+        class: %oro_analytics.form.type.category.class%
+        tags:
+            - { name: form.type, alias: "oro_analytics_rfm_category" }
+
+    oro_analytics.form.type.category_settings:
+        class: %oro_analytics.form.type.category_settings.class%
+        tags:
+            - { name: form.type, alias: "oro_analytics_rfm_category_settings" }
+
+    oro_analytics.form.channel_type_extension:
+        class: %oro_analytics.form.channel_type_extension.class%
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - %oro_analytics.model.rfm_aware_interface%
+            - %oro_analytics.entity.rfm_category.class%
+        tags:
+            - { name: form.type_extension, alias: oro_channel_form }
+
+    oro_analytics.placeholder.rfm_filter:
+        class: %oro_analytics.placeholder.rfm_filter.class%
+        arguments:
+            - %oro_analytics.model.analytics_aware_interface%
+
+    oro_analytics.event_listener.timezone_change:
+        class: %oro_analytics.event_listener.timezone_change.class%
+        arguments:
+            - '@oro_analytics.model.rfm_state_manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
+
+    oro_analytics.validator.categories:
+        class: %oro_analytics.validator.categories.class%
+        tags:
+            - { name: validator.constraint_validator, alias: oro_analytics.categories_validator }
+
+    oro_analytics.model.state_manager:
+        class: %oro_analytics.model.state_manager.class%
+        arguments:
+            - '@oro_entity.doctrine_helper'
+
+    oro_analytics.model.rfm_state_manager:
+        class: %oro_analytics.model.rfm_state_manager.class%
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - %oro_analytics.model.rfm_aware_interface%
+            - %oro_channel.entity.class%
+
+    oro_analytics.event_listener.rfm_category:
+        class: %oro_analytics.event_listener.rfm_category.class%
+        arguments:
+            - '@oro_analytics.model.rfm_state_manager'
+            - %oro_analytics.entity.rfm_category.class%
+            - %oro_channel.entity.class%
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }

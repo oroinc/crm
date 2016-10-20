@@ -1,0 +1,166 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
+
+{% set fullname = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({params : {"%customer.name%": fullname} }) %}
+
+{% block navButtons %}
+    {% if entity.originId and entity.channel.transport.adminUrl|default(false) %}
+        {{
+            UI.clientButton({
+                'dataUrl': path('oro_magento_customer_orderplace', {'id': entity.id }),
+                'aCss':    'no-hash',
+                'iCss':    'icon-money',
+                'dataId':  entity.id,
+                'label' : 'oro.magento.customer.create_order'|trans,
+                'widget' : {
+                    'type' : 'dialog',
+                    'options' : {
+                        'alias':               'transaction-dialog',
+                        'stateEnabled':        false,
+                        'incrementalPosition': true,
+                        'loadingMaskEnabled':  false,
+                        'dialogOptions' : {
+                            'dialogClass':   'place-order-transaction-dialog',
+                            'title' :        'oro.magento.customer.create_order'|trans,
+                            'allowMaximize': true,
+                            'allowMinimize': false,
+                            'width':         1000,
+                            'height':        600,
+                            'modal':         true,
+                            'autoResize':    true
+                        }
+                    }
+                }
+            })
+        }}
+    {% endif %}
+    {% include 'OroMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { customer: entity } %}
+    {% if resource_granted('EDIT', entity) %}
+        {% if entity.guest %}
+            {{ UI.clientButton({
+                'dataUrl': path('oro_magento_customer_register', { 'id': entity.id }),
+                'aCss': 'no-hash customer-registration customer-register-action',
+                'label': 'oro.magento.customer.register.label'|trans,
+            }) }}
+            <div class="pull-left"
+                 data-page-component-module="oromagento/js/app/components/customer-registration-manager"
+                 data-page-component-options="{{ {entityId: entity.id}|json_encode }}"></div>
+        {% endif %}
+        {{ UI.editButton({
+            'path' : path('oro_magento_customer_update', { 'id': entity.id }),
+            'entity_label': 'oro.magento.customer.entity_label'|trans
+        }) }}
+    {% endif %}
+    {{ parent() }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('oro_magento_customer_index'),
+        'indexLabel': 'oro.magento.customer.entity_plural_label'|trans,
+        'entityTitle': fullname
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set customerInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url':         path('oro_magento_customer_info', {id: entity.id})
+        }) }}
+    {% endset %}
+
+    {% set generalSubBlocks = [{'data' : [customerInformationWidget]}] %}
+
+    {% set salesTabsWidget %}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {% set tabs = [
+                {
+                    'alias': 'oro_magento_customer_orders',
+                    'widgetType': 'block',
+                    'label': "oro.magento.order.entity_plural_label"|trans,
+                    'url': path(
+                            'oro_magento_customer_orders_widget',
+                            {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                },
+                {
+                    'alias': 'oro_magento_customer_carts',
+                    'widgetType': 'block',
+                    'label': "oro.magento.cart.entity_plural_label"|trans,
+                    'url': path(
+                        'oro_magento_customer_carts_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                }
+            ] %}
+            {{ tabPanel(tabs) }}
+        </div>
+    {% endset %}
+
+    {% set customerAddressBookWidget %}
+        <div class="responsive-cell">
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'contentClasses': [],
+                'url': path('oro_magento_customer_address_book', {id: entity.id}),
+                'title': 'oro.magento.customer.address_book.title'|trans
+            }) }}
+        </div>
+    {% endset %}
+    {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
+
+    {% set websiteActivityTabsWidget %}
+        {% placeholder oro_website_activity with {'customers': [entity], byChannel: false} %}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General Information'|trans,
+            'class': 'active',
+            'subblocks': generalSubBlocks
+        },
+        {
+            'title': 'oro.magento.customer.sales.label'|trans,
+            'subblocks': [
+                {'data' : [salesTabsWidget] }
+            ]
+        },
+        {
+            'title': 'oro.magento.website_activity.label'|trans,
+            'priority': 1050,
+            'subblocks': [
+                {'data' : [websiteActivityTabsWidget] }
+            ]
+        }
+    ] %}
+
+    {% if entity.newsletterSubscribers|length > 0 %}
+        {% set newsletterSubscriberBlock %}
+            {% for newsletterSubscriber in entity.newsletterSubscribers %}
+                {{ oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('oro_magento_newsletter_subscriber_info', {id: newsletterSubscriber.id})
+                }) }}
+            {% endfor %}
+        {% endset %}
+        {% if newsletterSubscriberBlock %}
+            {% set dataBlocks = dataBlocks|merge([
+                {
+                    'title': 'oro.magento.newslettersubscriber.label'|trans,
+                    'subblocks': [
+                        {'data' : [newsletterSubscriberBlock] }
+                    ]
+                }
+            ]) %}
+        {% endif %}
+    {% endif %}
+
+    {% set id = 'magentoCustomerView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock content_data %}

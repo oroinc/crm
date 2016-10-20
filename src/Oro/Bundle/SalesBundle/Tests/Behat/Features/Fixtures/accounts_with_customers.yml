@@ -1,0 +1,59 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+  charlieAccount1:
+    name: Charlie Account 1
+    owner: '@charlie'
+    organization: '@organization'
+  samanthaAccount1:
+    name: Samantha Account 1
+    owner: '@samantha'
+    organization: '@organization'
+  charlieAccount2:
+    name: Charlie Account 2
+    owner: '@charlie'
+    organization: '@organization'
+  samanthaAccount2:
+    name: Samantha Account 2
+    owner: '@samantha'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  customer{1..2}:
+    name: <firstName()> <lastName()>
+    owner: '@charlie'
+    organization: '@organization'
+    account: '@charlieAccount1'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer{3..4}:
+    name: <firstName()> <lastName()>
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount1'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer{5..6}:
+    name: <firstName()> <lastName()>
+    owner: '@charlie'
+    organization: '@organization'
+    account: '@charlieAccount2'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer7:
+    name: <firstName()> <lastName()>
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount2'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  customer8:
+    name: Diana Bailey
+    owner: '@samantha'
+    organization: '@organization'
+    account: '@samanthaAccount2'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
