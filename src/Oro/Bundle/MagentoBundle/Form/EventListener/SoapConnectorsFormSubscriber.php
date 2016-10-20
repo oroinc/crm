@@ -67,13 +67,6 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 $config = $connectors->getConfig()->getOptions();
                 unset($config['choice_list']);
                 unset($config['choices']);
-                /**
-                 * @todo: should be removed in scope of BAP-11222
-                 */
-                /* Check if right now we're using Symfony 2.8+ */
-                if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-                    unset($config['choice_label']);
-                }
             } else {
                 $config = [];
             }
@@ -82,12 +75,12 @@ class SoapConnectorsFormSubscriber implements EventSubscriberInterface
                 $config['auto_initialize'] = false;
             }
 
-            $allowedTypesChoices = $this->typeRegistry->getAvailableConnectorsTypesChoiceList(
+            $allowedTypesChoices = array_flip($this->typeRegistry->getAvailableConnectorsTypesChoiceList(
                 'magento',
                 function (ConnectorInterface $connector) use ($data) {
                     return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }
-            );
+            ));
 
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
