@@ -31,7 +31,6 @@ workflows:
                             form_type: oro_channel_select_type
                             options:
                                 required: true
-                                label: oro.sales.lead.data_channel.label
                                 entities:
                                     - Oro\Bundle\SalesBundle\Entity\Lead
                                     - Oro\Bundle\SalesBundle\Entity\SalesFunnel
@@ -85,7 +84,6 @@ workflows:
                             form_type: oro_channel_select_type
                             options:
                                 required: true
-                                label: oro.sales.lead.data_channel.label
                                 entities:
                                     - Oro\Bundle\SalesBundle\Entity\Opportunity
                                     - Oro\Bundle\SalesBundle\Entity\SalesFunnel
