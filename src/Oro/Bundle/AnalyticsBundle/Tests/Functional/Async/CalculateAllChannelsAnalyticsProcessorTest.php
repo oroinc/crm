@@ -2,15 +2,14 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @dbIsolationPerTest

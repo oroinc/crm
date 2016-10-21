@@ -1,14 +1,17 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Service;
 
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
 
 class CalculateAnalyticsSchedulerTest extends \PHPUnit_Framework_TestCase
 {
+    use MessageQueueExtension;
+
     public function testCouldBeConstructedWithMessageProducerAsFirstArgument()
     {
         new CalculateAnalyticsScheduler($this->getMock(MessageProducerInterface::class));
@@ -16,62 +19,49 @@ class CalculateAnalyticsSchedulerTest extends \PHPUnit_Framework_TestCase
 
     public function testShouldSendCalculateAnalyticsForSingleChannel()
     {
-        $producer = $this->createMessageProducer();
+        $scheduler = new CalculateAnalyticsScheduler(self::getMessageProducer());
 
-        $service = new CalculateAnalyticsScheduler($producer);
+        $scheduler->scheduleForChannel('theChannelId');
 
-        $service->scheduleForChannel('theChannelId');
-
-        $traces = $producer->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(1, $traces);
-        self::assertEquals([
-            'channel_id' => 'theChannelId',
-            'customer_ids' => [],
-        ], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => 'theChannelId',
+                    'customer_ids' => [],
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
     public function testShouldSendCalculateAnalyticsForSingleChannelAndCustomCustomers()
     {
-        $producer = $this->createMessageProducer();
+        $scheduler = new CalculateAnalyticsScheduler(self::getMessageProducer());
 
-        $service = new CalculateAnalyticsScheduler($producer);
+        $scheduler->scheduleForChannel('theChannelId', ['theCustomerFooId', 'theCustomerBarId']);
 
-        $service->scheduleForChannel('theChannelId', ['theCustomerFooId', 'theCustomerBarId']);
-
-        $traces = $producer->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(1, $traces);
-        self::assertEquals([
-            'channel_id' => 'theChannelId',
-            'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
-        ], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => 'theChannelId',
+                    'customer_ids' => ['theCustomerFooId', 'theCustomerBarId'],
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
     public function testShouldSendCalculateAllChannelsAnalytics()
     {
-        $producer = $this->createMessageProducer();
+        $scheduler = new CalculateAnalyticsScheduler(self::getMessageProducer());
 
-        $service = new CalculateAnalyticsScheduler($producer);
+        $scheduler->scheduleForAllChannels();
 
-        $service->scheduleForAllChannels();
-
-        $traces = $producer->getTopicSentMessages(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS);
-
-        self::assertCount(1, $traces);
-        self::assertEquals([], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
-    }
-
-    /**
-     * @return MessageCollector
-     */
-    private function createMessageProducer()
-    {
-        $collector = new MessageCollector($this->getMock(MessageProducerInterface::class));
-
-        return $collector;
+        self::assertMessageSent(
+            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
+            new Message([], MessagePriority::VERY_LOW)
+        );
     }
 }
