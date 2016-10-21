@@ -1,18 +1,28 @@
 oro:
     channel:
-        entity_plural_label:                         Channels
-        entity_label:                                Channel
-        id.label:                                    Id
-        name.label:                                  Name
-        owner.label:                                 Owner
-        entities.label:                              Entities
-        data_source.label:                           Integration
-        channel_type.label:                          Channel type
-        customer_identity.label:                     Customer identity
-        status.label:                                Status
-        active.label:                                Active
-        inactive.label:                              Inactive
-        data.label:                                  Additional Data
+        entity_plural_label:     Channels
+        entity_label:            Channel
+        id.label:                Id
+        name:
+            label:               Name
+            description:         The name used to refer to the channel in the system. It is recommended to keep the name meaningful.
+        owner.label:             Owner
+        entities:
+            label:               Entities
+            description:         Determines which fields will be defined in entities field after channel type has been selected
+        data_source.label:       Integration
+        channel_type:
+            label:               Channel type
+            description:         Defines a set of default rules and settings used for the channel
+        customer_identity:
+            label:               Customer identity
+            description:         Determines entity that will be used as customer identifier for channels that are based on the current type
+        status:
+            label:               Status
+            description:         Determines the record status. Possible values: True(Activated) or False(Inactivated).
+        active.label:            Active
+        inactive.label:          Inactive
+        data.label:              Additional Data
         tracking_website_channel_select.tooltip:     Please select channel for which this tracking website belongs to. Depending on channel type different rules can be applied for customer identification.
         button:
             activate.label:       Activate
@@ -44,8 +54,7 @@ oro:
             select_customer_identity.label: Please select customer identity
             select_channel_type.label:      Choose channel type...
             select_channel_status.label:    Choose channel status...
-        channel_type:
-            custom.label: Custom
+        channel_type.custom.label: Custom
 
         dashboard:
             average_lifetime_sales_chart:
