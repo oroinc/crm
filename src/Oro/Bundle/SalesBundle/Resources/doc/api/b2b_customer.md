@@ -1,4 +1,4 @@
-# OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+# Oro\Bundle\SalesBundle\Entity\B2bCustomer
 
 ## FIELDS
 

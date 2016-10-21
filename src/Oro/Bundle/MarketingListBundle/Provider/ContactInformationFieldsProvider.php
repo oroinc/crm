@@ -70,7 +70,7 @@ class ContactInformationFieldsProvider
 
         $contactInformationFields = $this
             ->contactInformationFieldHelper
-            ->getEntityContactInformationColumns($entityOrClass);
+            ->getEntityContactInformationFields($entityOrClass);
 
         if (empty($contactInformationFields)) {
             return [];

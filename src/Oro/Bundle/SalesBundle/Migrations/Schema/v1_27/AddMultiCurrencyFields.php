@@ -2,24 +2,34 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_27;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
 
 class AddMultiCurrencyFields implements
     Migration,
     OrderedMigrationInterface,
-    RenameExtensionAwareInterface
+    RenameExtensionAwareInterface,
+    DatabasePlatformAwareInterface
 {
+    /** @var AbstractPlatform */
+    protected $platform;
+
+    public function setDatabasePlatform(AbstractPlatform $platform)
+    {
+        $this->platform = $platform;
+    }
+
     /**
      * @var RenameExtension
      */
@@ -38,7 +48,7 @@ class AddMultiCurrencyFields implements
      */
     public function setRenameExtension(RenameExtension $renameExtension)
     {
-        $this->renameExtension =$renameExtension;
+        $this->renameExtension = $renameExtension;
     }
 
     /**
@@ -46,23 +56,25 @@ class AddMultiCurrencyFields implements
      */
     public function up(Schema $schema, QueryBag $queryBag)
     {
-        self::addColumnsForMultiCurrency($schema, $queryBag, $this->renameExtension);
+        self::addColumnsForMultiCurrency($schema, $queryBag, $this->renameExtension, $this->platform);
     }
 
     /**
      * @param Schema $schema
      * @param QueryBag $queryBag
      * @param RenameExtension $renameExtension
+     * @param AbstractPlatform $platform
      */
     public static function addColumnsForMultiCurrency(
         Schema $schema,
         QueryBag $queryBag,
-        RenameExtension $renameExtension
+        RenameExtension $renameExtension,
+        AbstractPlatform $platform
     ) {
         $table = $schema->getTable('orocrm_sales_opportunity');
 
         //Rename columns for new type
-        self::renameOpportunityFields($schema, $queryBag, $renameExtension);
+        self::renameOpportunityFields($schema, $queryBag, $renameExtension, $platform);
 
         //Add columns for new type
         $table->addColumn(
@@ -83,13 +95,29 @@ class AddMultiCurrencyFields implements
      * @param Schema $schema
      * @param QueryBag $queries
      * @param RenameExtension $renameExtension
+     * @param AbstractPlatform $platform
      */
     public static function renameOpportunityFields(
         Schema $schema,
         QueryBag $queries,
-        RenameExtension $renameExtension
+        RenameExtension $renameExtension,
+        AbstractPlatform $platform
     ) {
         $table = $schema->getTable('orocrm_sales_opportunity');
+
+        /**
+         * Fix issue with incorrect field type instead DECIMAL instead of NUMERIC
+         */
+        $type = Type::getType('money_value');
+        $table->changeColumn(
+            'budget_amount',
+            ['type' => $type, 'notnull' => false, 'comment' => '(DC2Type:money_value)']
+        );
+
+        $table->changeColumn(
+            'close_revenue',
+            ['type' => $type, 'notnull' => false, 'comment' => '(DC2Type:money_value)']
+        );
 
         $renameExtension->renameColumn(
             $schema,
@@ -121,7 +149,7 @@ class AddMultiCurrencyFields implements
                      'currency_code' => CurrencyConfiguration::DEFAULT_CURRENCY
                  ],
                  [
-                     'currency_code'     => Type::STRING,
+                     'currency_code' => Type::STRING,
                  ]
              )
          );

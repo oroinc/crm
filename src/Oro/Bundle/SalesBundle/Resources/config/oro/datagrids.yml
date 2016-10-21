@@ -76,16 +76,15 @@ datagrids:
                 label:         oro.sales.opportunity.close_revenue.label
                 frontend_type: multi-currency
                 type:          callback
-                callable:      Oro\Bundle\CurrencyBundle\Converter\CurrencyToString::getConverterCallback
-                params:
-                    value:    closeRevenue
-                    currency: closeRevenueCurrency
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
+                    original_field: closeRevenue
+                    value_field: closeRevenueValue
+                    currency_field: closeRevenueCurrency
                 renderable: false
                 inline_editing:
                     enable: true
-                    save_api_accessor:
-                        currency_field: closeRevenueCurrency
-                        value_field: closeRevenueValue
             closeReasonLabel:
                 label:         oro.sales.opportunity.close_reason.label
                 renderable: false
@@ -96,15 +95,14 @@ datagrids:
                 label:         oro.sales.opportunity.budget_amount.label
                 frontend_type: multi-currency
                 type:          callback
-                callable:      Oro\Bundle\CurrencyBundle\Converter\CurrencyToString::getConverterCallback
-                params:
-                    value:    budgetAmount
-                    currency: budgetAmountCurrency
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
                 inline_editing:
                     enable: true
-                    save_api_accessor:
-                        currency_field: budgetAmountCurrency
-                        value_field: budgetAmountValue
             probability:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -2010,6 +2008,7 @@ datagrids:
                     - o.id
                     - o.name
                     - o.budgetAmountValue as budgetAmount
+                    - o.budgetAmountCurrency as budgetAmountCurrency
                     - s.id as status
                     - o.probability
                     - o.closeDate
@@ -2027,7 +2026,15 @@ datagrids:
                 params: {id: id}
             budgetAmount:
                 label:         oro.sales.opportunity.budget_amount.label
-                frontend_type: currency
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
+                    sortable: false
             status:
                 frontend_type: select
                 label:         oro.sales.opportunity.status.label
