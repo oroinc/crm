@@ -20,7 +20,7 @@ UPGRADE FROM 1.10 to 2.0
 - The class `Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand` renamed to `Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand`.
 - The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command arguments were changed to be compatible with SyncCommand ones.
 - The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command option `--integration-id` renamed to `--integration`.
-- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command option `--skip-dictionary` removed. Use argument skip-dictionary=foo instead.
+- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command option `--skip-dictionary` removed. Use  `skip-dictionary=true` for `connector_parameters` argument instead.
 
 ####OroChannelBundle:
 - The event `orocrm_channel.channel.status_change` was removed. Use the message queue topic `orocrm_channel.channel.status_change` instead.

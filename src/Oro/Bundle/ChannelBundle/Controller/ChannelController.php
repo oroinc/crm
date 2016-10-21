@@ -113,11 +113,10 @@ class ChannelController extends Controller
             ->getManager()
             ->flush();
 
-        $message = new Message();
-        $message->setPriority(MessagePriority::HIGH);
-        $message->setBody(['channelId' => $channel->getId()]);
-
-        $this->getMessageProducer()->send(Topics::CHANNEL_STATUS_CHANGED, $message);
+        $this->getMessageProducer()->send(
+            Topics::CHANNEL_STATUS_CHANGED,
+            new Message(['channelId' => $channel->getId()], MessagePriority::HIGH)
+        );
 
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($flashMessage));
 

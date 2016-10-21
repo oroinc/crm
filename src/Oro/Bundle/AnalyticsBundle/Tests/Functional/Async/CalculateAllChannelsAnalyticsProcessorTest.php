@@ -42,9 +42,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(4, $traces);
+        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 4);
     }
 
     public function testShouldSendCalculateAnalyticsMessageOnlyForActiveChannels()
@@ -61,17 +59,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(3, $traces);
-    }
-
-    /**
-     * @return MessageCollector
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
+        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 3);
     }
 
     /**

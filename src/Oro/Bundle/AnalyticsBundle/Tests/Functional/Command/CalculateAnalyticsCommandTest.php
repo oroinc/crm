@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
@@ -43,14 +43,16 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(1, $traces);
-        self::assertEquals([
-            'channel_id' => $channel->getId(),
-            'customer_ids' => []
-        ], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => $channel->getId(),
+                    'customer_ids' => []
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
     public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
@@ -60,9 +62,10 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for all channels.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS);
-
-        self::assertCount(1, $traces);
+        self::assertMessageSent(
+            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
+            new Message([], MessagePriority::VERY_LOW)
+        );
     }
 
     public function testThrowIfCustomerIdsSetWithoutChannelId()
@@ -93,21 +96,15 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
         self::assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CALCULATE_CHANNEL_ANALYTICS);
-
-        self::assertCount(1, $traces);
-        self::assertEquals([
-            'channel_id' => $channel->getId(),
-            'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
-        ], $traces[0]['message']->getBody());
-        self::assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
-    }
-
-    /**
-     * @return MessageCollector
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => $channel->getId(),
+                    'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 }

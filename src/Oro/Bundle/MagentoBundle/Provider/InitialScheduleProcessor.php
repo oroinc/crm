@@ -153,14 +153,16 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         )) {
             $this->logger->info('Scheduling initial synchronization');
 
-            $message = new Message();
-            $message->setPriority(MessagePriority::VERY_LOW);
-            $message->setBody([
-                'integration_id' => $integration->getId(),
-                'connector_parameters' => ['skip-dictionary' => true]
-            ]);
-
-            $this->messageProducer->send(Topics::SYNC_INITIAL_INTEGRATION, $message);
+            $this->messageProducer->send(
+                Topics::SYNC_INITIAL_INTEGRATION,
+                new Message(
+                    [
+                        'integration_id'       => $integration->getId(),
+                        'connector_parameters' => ['skip-dictionary' => true]
+                    ],
+                    MessagePriority::VERY_LOW
+                )
+            );
         }
     }
 

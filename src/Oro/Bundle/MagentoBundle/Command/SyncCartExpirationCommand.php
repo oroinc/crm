@@ -73,13 +73,13 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
         foreach ($channels as $channel) {
             $logger->info(sprintf('Run sync for "%s" channel.', $channel->getName()));
 
-            $message = new Message();
-            $message->setPriority(MessagePriority::VERY_LOW);
-            $message->setBody([
-                'integrationId' => $channel->getId(),
-            ]);
-
-            $this->getMessageProducer()->send(Topics::SYNC_CART_EXPIRATION_INTEGRATION, $message);
+            $this->getMessageProducer()->send(
+                Topics::SYNC_CART_EXPIRATION_INTEGRATION,
+                new Message(
+                    ['integrationId' => $channel->getId()],
+                    MessagePriority::VERY_LOW
+                )
+            );
         }
 
         $logger->info('Completed');

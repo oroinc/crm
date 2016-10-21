@@ -32,12 +32,9 @@ class TimezoneChangeListener
             return;
         }
 
-        $message = new Message();
-        $message->setPriority(MessagePriority::VERY_LOW);
-        $message->setBody([
-            'force' => true,
-        ]);
-
-        $this->messageProducer->send(Topics::AGGREGATE_LIFETIME_AVERAGE, $message);
+        $this->messageProducer->send(
+            Topics::AGGREGATE_LIFETIME_AVERAGE,
+            new Message(['force' => true], MessagePriority::VERY_LOW)
+        );
     }
 }

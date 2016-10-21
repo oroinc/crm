@@ -53,14 +53,16 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $message = new Message();
-        $message->setBody([
-            'force' => (bool) $input->getOption('force'),
-            'clear_table_use_delete' => (bool) $input->getOption('use-delete'),
-        ]);
-        $message->setPriority(MessagePriority::VERY_LOW);
-
-        $this->getMessageProducer()->send(Topics::AGGREGATE_LIFETIME_AVERAGE, $message);
+        $this->getMessageProducer()->send(
+            Topics::AGGREGATE_LIFETIME_AVERAGE,
+            new Message(
+                [
+                    'force'                  => (bool) $input->getOption('force'),
+                    'clear_table_use_delete' => (bool) $input->getOption('use-delete'),
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
 
         $output->writeln('<info>Completed!</info>');
     }

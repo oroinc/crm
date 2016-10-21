@@ -8,8 +8,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use Oro\Component\Testing\ResponseExtension;
 use Symfony\Component\Form\Form;
 
@@ -36,7 +36,6 @@ class ChannelControllerTest extends WebTestCase
     {
         $this->client->disableReboot();
         $em = $this->getEntityManager();
-        $this->getMessageProducer()->clear();
 
         $channel = new Channel();
         $channel->setName('aName');
@@ -54,13 +53,14 @@ class ChannelControllerTest extends WebTestCase
 
         $this->assertLastResponseStatus(302);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::CHANNEL_STATUS_CHANGED);
-
-        $this->assertCount(1, $traces);
-        $this->assertEquals(['channelId' => $channel->getId()], $traces[0]['message']->getBody());
-        $this->assertEquals(MessagePriority::HIGH, $traces[0]['message']->getPriority());
+        self::assertMessageSent(
+            Topics::CHANNEL_STATUS_CHANGED,
+            new Message(
+                ['channelId' => $channel->getId()],
+                MessagePriority::HIGH
+            )
+        );
     }
-
 
     public function testCreateChannel()
     {
@@ -269,13 +269,5 @@ class ChannelControllerTest extends WebTestCase
     protected function getEntityManager()
     {
         return $this->getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * @return TraceableMessageProducer
-     */
-    protected function getMessageProducer()
-    {
-        return $this->getContainer()->get('oro_message_queue.message_producer');
     }
 }

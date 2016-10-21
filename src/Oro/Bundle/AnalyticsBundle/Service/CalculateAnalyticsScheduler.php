@@ -27,22 +27,23 @@ class CalculateAnalyticsScheduler
      */
     public function scheduleForChannel($channelId, array $customerIds = [])
     {
-        $message = new Message();
-        $message->setPriority(MessagePriority::VERY_LOW);
-        $message->setBody([
-            'channel_id' => $channelId,
-            'customer_ids' => $customerIds,
-        ]);
-
-        $this->messageProducer->send(Topics::CALCULATE_CHANNEL_ANALYTICS, $message);
+        $this->messageProducer->send(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => $channelId,
+                    'customer_ids' => $customerIds,
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
     public function scheduleForAllChannels()
     {
-        $message = new Message();
-        $message->setPriority(MessagePriority::VERY_LOW);
-        $message->setBody([]);
-
-        $this->messageProducer->send(Topics::CALCULATE_ALL_CHANNELS_ANALYTICS, $message);
+        $this->messageProducer->send(
+            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
+            new Message([], MessagePriority::VERY_LOW)
+        );
     }
 }

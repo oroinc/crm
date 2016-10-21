@@ -32,15 +32,17 @@ class ScheduleNewsletterSubscribersResync implements FixtureInterface, Container
         $applicableChannels = $channelRepository->getConfiguredChannelsForSync(ChannelType::TYPE);
         if ($applicableChannels) {
             foreach ($applicableChannels as $channel) {
-                $message = new Message();
-                $message->setPriority(MessagePriority::VERY_LOW);
-                $message->setBody([
-                    'integration_id' => $channel->getId(),
-                    'connector' => InitialNewsletterSubscriberConnector::TYPE,
-                    'connector_parameters' => ['skip-dictionary' => true],
-                ]);
-
-                $this->getMessageProducer()->send(Topics::SYNC_INITIAL_INTEGRATION, $message);
+                $this->getMessageProducer()->send(
+                    Topics::SYNC_INITIAL_INTEGRATION,
+                    new Message(
+                        [
+                            'integration_id'       => $channel->getId(),
+                            'connector'            => InitialNewsletterSubscriberConnector::TYPE,
+                            'connector_parameters' => ['skip-dictionary' => true],
+                        ],
+                        MessagePriority::VERY_LOW
+                    )
+                );
             }
         }
     }

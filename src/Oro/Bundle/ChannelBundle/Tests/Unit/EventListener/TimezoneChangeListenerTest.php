@@ -26,16 +26,14 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testSuccessChange()
     {
-        $message = new Message();
-        $message->setBody(['force' => true]);
-        $message->setPriority(MessagePriority::VERY_LOW);
-
         $messageProducerMock = $this->createMessageProducerMock();
         $messageProducerMock
             ->expects($this->once())
             ->method('send')
-            ->with(Topics::AGGREGATE_LIFETIME_AVERAGE, $message)
-        ;
+            ->with(
+                Topics::AGGREGATE_LIFETIME_AVERAGE,
+                new Message(['force' => true], MessagePriority::VERY_LOW)
+            );
 
         $listener = new TimezoneChangeListener($messageProducerMock);
 

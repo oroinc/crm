@@ -17,7 +17,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 
 class InitialSyncCommand extends Command implements ContainerAwareInterface
@@ -71,15 +70,17 @@ class InitialSyncCommand extends Command implements ContainerAwareInterface
 
         $output->writeln(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
-        $message = new Message();
-        $message->setPriority(MessagePriority::VERY_LOW);
-        $message->setBody([
-            'integration_id' => $integration->getId(),
-            'connector' => $connector,
-            'connector_parameters' => $connectorParameters,
-        ]);
-
-        $this->getMessageProducer()->send(Topics::SYNC_INITIAL_INTEGRATION, $message);
+        $this->getMessageProducer()->send(
+            Topics::SYNC_INITIAL_INTEGRATION,
+            new Message(
+                [
+                    'integration_id'       => $integration->getId(),
+                    'connector'            => $connector,
+                    'connector_parameters' => $connectorParameters,
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
 
         $output->writeln('Completed');
     }

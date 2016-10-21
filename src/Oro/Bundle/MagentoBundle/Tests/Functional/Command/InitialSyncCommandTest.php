@@ -3,8 +3,8 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Command;
 
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
@@ -20,7 +20,6 @@ class InitialSyncCommandTest extends WebTestCase
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
-        $this->getMessageProducer()->clear();
     }
 
     public function testShouldOutputHelpForTheCommand()
@@ -41,16 +40,17 @@ class InitialSyncCommandTest extends WebTestCase
         $this->assertContains('Run initial sync for "Demo Web store" integration.', $result);
         $this->assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
-
-        $this->assertCount(1, $traces);
-
-        $this->assertEquals([
-            'integration_id' => $integration->getId(),
-            'connector_parameters' => [],
-            'connector' => null,
-        ], $traces[0]['message']->getBody());
-        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
+        self::assertMessageSent(
+            Topics::SYNC_INITIAL_INTEGRATION,
+            new Message(
+                [
+                    'integration_id' => $integration->getId(),
+                    'connector_parameters' => [],
+                    'connector' => null,
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
     public function testShouldSendSyncIntegrationWithCustomConnectorAndOptions()
@@ -69,26 +69,19 @@ class InitialSyncCommandTest extends WebTestCase
         $this->assertContains('Run initial sync for "Demo Web store" integration.', $result);
         $this->assertContains('Completed', $result);
 
-        $traces = $this->getMessageProducer()->getTopicSentMessages(Topics::SYNC_INITIAL_INTEGRATION);
-
-        $this->assertCount(1, $traces);
-
-        $this->assertEquals([
-            'integration_id' => $integration->getId(),
-            'connector_parameters' => [
-                'fooConnectorOption' => 'fooValue',
-                'barConnectorOption' => 'barValue',
-            ],
-            'connector' => 'theConnector',
-        ], $traces[0]['message']->getBody());
-        $this->assertEquals(MessagePriority::VERY_LOW, $traces[0]['message']->getPriority());
-    }
-
-    /**
-     * @return TraceableMessageProducer
-     */
-    private function getMessageProducer()
-    {
-        return self::getContainer()->get('oro_message_queue.message_producer');
+        self::assertMessageSent(
+            Topics::SYNC_INITIAL_INTEGRATION,
+            new Message(
+                [
+                    'integration_id' => $integration->getId(),
+                    'connector_parameters' => [
+                        'fooConnectorOption' => 'fooValue',
+                        'barConnectorOption' => 'barValue',
+                    ],
+                    'connector' => 'theConnector',
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 }
