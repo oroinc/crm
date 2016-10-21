@@ -103,7 +103,8 @@ class SoapTransportSettingFormType extends AbstractType
             'oro_magento_website_select',
             [
                 'label'    => 'oro.magento.magentosoaptransport.website_id.label',
-                'required' => true
+                'required' => true,
+                'choices_as_values' => true
             ]
         );
         $builder->add(
