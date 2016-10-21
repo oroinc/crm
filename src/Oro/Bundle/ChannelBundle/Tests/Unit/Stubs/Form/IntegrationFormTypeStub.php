@@ -26,7 +26,8 @@ class IntegrationFormTypeStub extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('type', 'choice', [
-            'choices' => IntegrationTypeExtensionTest::$allChoices
+            'choices' => IntegrationTypeExtensionTest::$allChoices,
+            'choices_as_values' => true
         ]);
     }
 
