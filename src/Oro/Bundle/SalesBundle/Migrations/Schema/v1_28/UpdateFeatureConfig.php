@@ -13,9 +13,14 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 class UpdateFeatureConfig extends ParametrizedMigrationQuery
 {
     /** @var array */
-    protected $classToFeatureMap = [
-        'OroCRM\Bundle\SalesBundle\Entity\Lead'        => 'oro_sales.lead_feature_enabled',
-        'OroCRM\Bundle\SalesBundle\Entity\Opportunity' => 'oro_sales.opportunity_feature_enabled',
+    protected $enabledClassToFeatureMap = [
+        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'oro_sales.lead_feature_enabled',
+        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'oro_sales.opportunity_feature_enabled',
+    ];
+
+    /** @var array */
+    protected $disabledClassToFeatureMap = [
+        'Oro\Bundle\SalesBundle\Entity\SalesFunnel' => 'oro_sales.salesfunnel_feature_enabled',
     ];
 
     /**
@@ -43,9 +48,12 @@ class UpdateFeatureConfig extends ParametrizedMigrationQuery
      */
     protected function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $disabledClasses = $this->getDisabledClasses($logger);
-        foreach ($disabledClasses as $className) {
-            $this->disableFeature($logger, $this->classToFeatureMap[$className], $dryRun);
+        $classToFeature = array_merge($this->enabledClassToFeatureMap, $this->disabledClassToFeatureMap);
+        $disabledClasses = $this->getNewValues($logger);
+        foreach ($disabledClasses as $newValue => $classNames) {
+            foreach ($classNames as $className) {
+                $this->setFeature($logger, $classToFeature[$className], $newValue, $dryRun);
+            }
         }
     }
 
@@ -54,7 +62,7 @@ class UpdateFeatureConfig extends ParametrizedMigrationQuery
      * @param string $featureToggle
      * @param bool $dryRun
      */
-    protected function disableFeature(LoggerInterface $logger, $featureToggle, $dryRun = false)
+    protected function setFeature(LoggerInterface $logger, $featureToggle, $value, $dryRun = false)
     {
         list($section, $name) = explode('.', $featureToggle);
 
@@ -76,7 +84,7 @@ SQL;
         $params = [
             'name'         => $name,
             'section'      => $section,
-            'text_value'   => '0',
+            'text_value'   => $value,
             'object_value' => null,
             'array_value'  => null,
             'type'         => 'scalar',
@@ -103,18 +111,21 @@ SQL;
     /**
      * @param LoggerInterface $logger
      *
-     * @return string[]
+     * @return array
      */
-    protected function getDisabledClasses(LoggerInterface $logger)
+    protected function getNewValues(LoggerInterface $logger)
     {
         $query = <<<SQL
 SELECT DISTINCT(e.name)
-FROM oro_channel c
-JOIN oro_channel_entity_name e ON e.channel_id = c.id
+FROM orocrm_channel c
+JOIN orocrm_channel_entity_name e ON e.channel_id = c.id
 WHERE c.status = :status AND e.name IN(:entityClasses);
 SQL;
         $params = [
-            'entityClasses' => array_keys($this->classToFeatureMap),
+            'entityClasses' => array_keys(array_merge(
+                $this->enabledClassToFeatureMap,
+                $this->disabledClassToFeatureMap
+            )),
             'status'        => true,
         ];
         $types = [
@@ -126,9 +137,17 @@ SQL;
         $entities = $this->connection->executeQuery($query, $params, $types)
             ->fetchAll(\PDO::FETCH_NUM);
 
-        return array_diff(
-            array_keys($this->classToFeatureMap),
-            array_map('current', $entities)
-        );
+        $activeEntities = array_map('current', $entities);
+
+        return [
+            '0' => array_diff(
+                array_keys($this->enabledClassToFeatureMap),
+                $activeEntities
+            ),
+            '1' => array_intersect(
+                array_keys($this->disabledClassToFeatureMap),
+                $activeEntities
+            )
+        ];
     }
 }

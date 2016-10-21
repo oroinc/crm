@@ -15,6 +15,10 @@ system_configuration:
             icon:  icon-usd
             title: oro.sales.system_configuration.groups.opportunity.title
 
+        salesfunnel:
+            icon:  icon-usd
+            title: oro.sales.system_configuration.groups.salesfunnel.title
+
         opportunity_status_probabilities:
             title: oro.sales.system_configuration.groups.opportunity_status_probabilities.title
             priority: 10
@@ -33,6 +37,13 @@ system_configuration:
             priority: 20
             options:
                 label: oro.sales.system_configuration.fields.sales_opportunity.feature_enabled.label
+
+        oro_sales.salesfunnel_feature_enabled:
+            data_type: boolean
+            type: oro_config_checkbox
+            priority: 20
+            options:
+                label: oro.sales.system_configuration.fields.sales_salesfunnel.feature_enabled.label
 
         oro_sales.opportunity_statuses:
             ui_only: true
@@ -73,3 +84,8 @@ system_configuration:
                                     opportunity_status_probabilities:
                                         children:
                                             - oro_sales.opportunity_statuses
+                            salesfunnel:
+                                children:
+                                    general_setup:
+                                        children:
+                                            - oro_sales.salesfunnel_feature_enabled

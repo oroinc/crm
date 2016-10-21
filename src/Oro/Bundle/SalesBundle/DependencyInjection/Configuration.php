@@ -42,6 +42,10 @@ class Configuration implements ConfigurationInterface
                     'value' => true,
                     'type'  => 'boolean',
                 ],
+                'salesfunnel_feature_enabled' => [
+                    'value' => false,
+                    'type'  => 'boolean',
+                ],
                 'default_opportunity_probabilities' => [
                     'value' => $defaults,
                     'type' => 'array',

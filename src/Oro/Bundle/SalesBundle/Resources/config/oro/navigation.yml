@@ -27,7 +27,6 @@ navigation:
             sales_salesfunnel_list:
                 label: 'oro.sales.salesfunnel.entity_plural_label'
                 route: 'oro_sales_salesfunnel_index'
-                display: false
                 extras:
                     position:    10
                     routes:      ['/^oro_sales_salesfunnel/']

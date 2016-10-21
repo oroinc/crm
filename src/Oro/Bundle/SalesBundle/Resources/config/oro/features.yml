@@ -69,3 +69,27 @@ features:
             - business_sales_channel_statistics.new_opportunities_amount
             - business_sales_channel_statistics.won_opportunities_to_date_count
             - business_sales_channel_statistics.won_opportunities_to_date_amount
+
+    salesfunnel:
+        label: oro.sales.salesfunnel.feature.label
+        description: oro.sales.salesfunnel.feature.description
+        toggle: oro_sales.salesfunnel_feature_enabled
+        routes:
+            - oro_sales_salesfunnel_index
+            - oro_sales_salesfunnel_view
+            - oro_sales_salesfunnel_info
+            - oro_sales_salesfunnel_create
+            - oro_sales_salesfunnel_update
+            - oro_api_get_salesfunnels
+            - oro_api_get_salesfunnel
+            - oro_api_put_salesfunnel
+            - oro_api_post_salesfunnel
+            - oro_api_delete_salesfunnel
+            - oro_api_options_salesfunnels
+            - oro_api_post_salesfunnel_deprecated
+        workflows:
+            - b2b_flow_sales_funnel
+        api_resources:
+            - Oro\Bundle\SalesBundle\Entity\SalesFunnel
+        dashboards:
+            - my_sales_flow_b2b_chart

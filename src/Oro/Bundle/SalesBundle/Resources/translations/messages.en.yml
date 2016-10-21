@@ -368,6 +368,8 @@ oro:
             owner.label:          Owner
             data_channel.label:   Channel
             organization.label:   Organization
+            feature.label:        Sales Process (deprecated)
+            feature.description:  Enables Sales Processes. Beware that this feature is deprecated and will be removed in a future.
 
             hint: 'Sales Process #%id%'
 
@@ -473,6 +475,7 @@ oro:
             groups:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
+                salesfunnel.title: Sales Process (deprecated)
                 lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
@@ -488,6 +491,8 @@ oro:
                     feature_enabled.label:                     Enable Opportunity
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
+                sales_salesfunnel:
+                    feature_enabled.label:                     Enable Sales Process (deprecated)
 
         privilege:
             category.sales_data.label: Sales Data
