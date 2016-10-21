@@ -25,7 +25,7 @@ class OroChannelBundle implements Migration
      */
     protected function createOrocrmChannelLtimeAvgAggrTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_channel_ltime_avg_aggr');
+        $table = $schema->createTable('orocrm_channel_ltime_avg_aggr');
         $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('amount', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
@@ -44,9 +44,9 @@ class OroChannelBundle implements Migration
      */
     protected function addOrocrmChannelLtimeAvgAggrForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_channel_ltime_avg_aggr');
+        $table = $schema->getTable('orocrm_channel_ltime_avg_aggr');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],

@@ -23,7 +23,7 @@ class RemoveLeadEmail implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_lead');
+        $table = $schema->getTable('orocrm_sales_lead');
         if ($table->hasColumn('email')) {
             $table->dropColumn('email');
         }

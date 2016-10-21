@@ -23,7 +23,7 @@ class RemoveOpportunityOldStatus implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
         if ($table->hasIndex('idx_c0fe4aac6625d392')) {
             $table->dropIndex('idx_c0fe4aac6625d392');
         }

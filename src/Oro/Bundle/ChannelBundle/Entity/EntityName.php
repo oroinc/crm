@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="oro_channel_entity_name")
+ * @ORM\Table(name="orocrm_channel_entity_name")
  */
 class EntityName
 {

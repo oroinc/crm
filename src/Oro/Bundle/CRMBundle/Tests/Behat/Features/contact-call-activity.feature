@@ -1,6 +1,6 @@
 Feature: Contact call activity
   In order to have view all phone collaboration with contact
-  As Oro sales rep
+  As OroCRM sales rep
   I need to log calls, edit, create and delete it
 
 Scenario: Log Call from contact view page

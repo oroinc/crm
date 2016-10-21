@@ -8,6 +8,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
@@ -69,8 +70,8 @@ class CreateActivityAssociation implements
         $options = new OroOptions();
         $options->set('activity', 'immutable', false);
 
-        $schema->getTable('oro_magento_cart')->addOption(OroOptions::KEY, $options);
-        $schema->getTable('oro_magento_order')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_magento_cart')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_magento_order')->addOption(OroOptions::KEY, $options);
     }
 
     /**
@@ -79,8 +80,8 @@ class CreateActivityAssociation implements
      */
     public static function addEmailAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_magento_cart');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_order');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_cart');
     }
 
     /**
@@ -89,8 +90,8 @@ class CreateActivityAssociation implements
      */
     public static function addCallAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_call', 'oro_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'oro_call', 'oro_magento_cart');
+        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_magento_order');
+        $activityExtension->addActivityAssociation($schema, 'oro_call', 'orocrm_magento_cart');
     }
 
     /**
@@ -103,7 +104,7 @@ class CreateActivityAssociation implements
         Schema $schema,
         ActivityListExtension $activityListExtension
     ) {
-        $activityListExtension->addActivityListAssociation($schema, 'oro_magento_cart');
-        $activityListExtension->addActivityListAssociation($schema, 'oro_magento_order');
+        $activityListExtension->addActivityListAssociation($schema, 'orocrm_magento_cart');
+        $activityListExtension->addActivityListAssociation($schema, 'orocrm_magento_order');
     }
 }

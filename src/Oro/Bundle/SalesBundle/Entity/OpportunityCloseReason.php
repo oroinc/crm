@@ -9,7 +9,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_sales_opport_close_rsn")
+ * @ORM\Table(name="orocrm_sales_opport_close_rsn")
  * @Config(
  *      defaultValues={
  *          "grouping"={

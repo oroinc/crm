@@ -14,7 +14,7 @@ class OroMagentoBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_magento_order_items');
+        $table = $schema->getTable('orocrm_magento_order_items');
         $table->getColumn('original_price')->setType(Type::getType('money'));
         $table->getColumn('discount_percent')->setType(Type::getType('percent'));
         $table->getColumn('price')->setType(Type::getType('money'));
@@ -23,17 +23,17 @@ class OroMagentoBundle implements Migration
         $table->getColumn('discount_amount')->setType(Type::getType('money'));
         $table->getColumn('row_total')->setType(Type::getType('money'));
 
-        $table = $schema->getTable('oro_magento_product');
+        $table = $schema->getTable('orocrm_magento_product');
         $table->getColumn('special_price')->setType(Type::getType('money'));
         $table->getColumn('price')->setType(Type::getType('money'));
         $table->getColumn('cost')->setType(Type::getType('money'));
 
-        $table = $schema->getTable('oro_magento_cart');
+        $table = $schema->getTable('orocrm_magento_cart');
         $table->getColumn('sub_total')->setType(Type::getType('money'));
         $table->getColumn('grand_total')->setType(Type::getType('money'));
         $table->getColumn('tax_amount')->setType(Type::getType('money'));
 
-        $table = $schema->getTable('oro_magento_order');
+        $table = $schema->getTable('orocrm_magento_order');
         $table->getColumn('total_invoiced_amount')->setType(Type::getType('money'));
         $table->getColumn('total_refunded_amount')->setType(Type::getType('money'));
         $table->getColumn('total_canceled_amount')->setType(Type::getType('money'));
@@ -44,7 +44,7 @@ class OroMagentoBundle implements Migration
         $table->getColumn('total_amount')->setType(Type::getType('money'));
         $table->getColumn('discount_percent')->setType(Type::getType('percent'));
 
-        $table = $schema->getTable('oro_magento_cart_item');
+        $table = $schema->getTable('orocrm_magento_cart_item');
         $table->getColumn('custom_price')->setType(Type::getType('money'));
         $table->getColumn('price_incl_tax')->setType(Type::getType('money'));
         $table->getColumn('row_total')->setType(Type::getType('money'));

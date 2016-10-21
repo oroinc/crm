@@ -36,7 +36,7 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
             $schema,
             $table,
             'channel',
-            'oro_channel',
+            'orocrm_channel',
             'name',
             [
                 ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,

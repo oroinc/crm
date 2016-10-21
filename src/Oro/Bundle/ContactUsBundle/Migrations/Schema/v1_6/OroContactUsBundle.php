@@ -22,13 +22,13 @@ class OroContactUsBundle implements Migration
      */
     protected function modifycOrocrmContactusRequestTable(Schema $schema)
     {
-        $table = $schema->getTable('oro_contactus_request');
+        $table = $schema->getTable('orocrm_contactus_request');
 
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['data_channel_id'], 'IDX_342872E8BDC09B73', []);
 
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],

@@ -111,7 +111,7 @@ SQL;
 
         if ($platform instanceof PostgreSqlPlatform) {
             $updateSql = <<<SQL
-UPDATE oro_sales_opportunity o
+UPDATE orocrm_sales_opportunity o
 SET closed_at = afm.logged_at
 FROM 
 oro_audit a
@@ -132,7 +132,7 @@ a.object_id = o.id AND a.object_class = :objectClass
 SQL;
         } elseif ($platform instanceof MySqlPlatform) {
             $updateSql = <<<SQL
-UPDATE oro_sales_opportunity o
+UPDATE orocrm_sales_opportunity o
 INNER JOIN oro_audit a ON a.object_id = o.id AND a.object_class = :objectClass
 INNER JOIN
 (

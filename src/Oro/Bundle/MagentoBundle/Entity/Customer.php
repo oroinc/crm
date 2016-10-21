@@ -29,7 +29,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
  * @ORM\Table(
- *      name="oro_magento_customer",
+ *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
  *      indexes={
  *          @ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"}),

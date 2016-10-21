@@ -137,7 +137,7 @@ class OroCallCRMBridgeBundle implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_comment',
-            'oro_call',
+            'orocrm_call',
             ['call_41b3ba7d_id'],
             ['id'],
             ['onDelete' => 'SET NULL']

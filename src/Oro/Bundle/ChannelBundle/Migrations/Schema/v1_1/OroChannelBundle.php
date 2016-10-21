@@ -26,7 +26,7 @@ class OroChannelBundle implements Migration
      */
     protected function createOrocrmChannelLifetimeHistTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_channel_lifetime_hist');
+        $table = $schema->createTable('orocrm_channel_lifetime_hist');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
@@ -40,8 +40,8 @@ class OroChannelBundle implements Migration
         $table->setPrimaryKey(['id']);
         $table->addIndex(['data_channel_id'], 'IDX_2B156554BDC09B73', []);
         $table->addIndex(['account_id'], 'IDX_2B1565549B6B5FBA', []);
-        $table->addIndex(['account_id', 'data_channel_id', 'status'], 'oro_chl_ltv_hist_idx');
-        $table->addIndex(['status'], 'oro_chl_ltv_hist_status_idx');
+        $table->addIndex(['account_id', 'data_channel_id', 'status'], 'orocrm_chl_ltv_hist_idx');
+        $table->addIndex(['status'], 'orocrm_chl_ltv_hist_status_idx');
     }
 
     /**
@@ -51,16 +51,16 @@ class OroChannelBundle implements Migration
      */
     protected function addOrocrmChannelLifetimeHistForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_channel_lifetime_hist');
+        $table = $schema->getTable('orocrm_channel_lifetime_hist');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_account'),
+            $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
             'FK_2B1565549B6B5FBA'
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['data_channel_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
@@ -73,7 +73,7 @@ class OroChannelBundle implements Migration
      */
     protected function addChannelIndexes(Schema $schema)
     {
-        $table = $schema->getTable('oro_channel');
+        $table = $schema->getTable('orocrm_channel');
         $table->addIndex(['name'], 'crm_channel_name_idx', []);
         $table->addIndex(['status'], 'crm_channel_status_idx', []);
         $table->addIndex(['channel_type'], 'crm_channel_channel_type_idx', []);

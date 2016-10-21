@@ -14,7 +14,7 @@ class OroMarketingListBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_marketing_list_item');
+        $table = $schema->getTable('orocrm_marketing_list_item');
         $table->getColumn('last_contacted_at')->setNotnull(false);
         $table->getColumn('contacted_times')->setNotnull(false);
     }

@@ -1,7 +1,7 @@
 @fixture-activities.yml
 Feature: Activity list feature
   In order to have ability manage contact activity
-  As Oro sales rep
+  As OroCRM sales rep
   I need to view, filter, paginate activities in activity list
 
   Scenario: Filter activities by type

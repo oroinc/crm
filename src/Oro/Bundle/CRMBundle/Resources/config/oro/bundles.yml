@@ -1,2 +1,2 @@
 bundles:
-    - Oro\Bundle\CRMBundle\OroBundle
+    - Oro\Bundle\CRMBundle\OroCRMBundle

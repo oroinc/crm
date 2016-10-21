@@ -21,7 +21,7 @@ class FixNewsletterSubscribers implements Migration
         $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
 
         // Remove unique constraint on customer_id
-        $table = $schema->getTable('oro_magento_newsl_subscr');
+        $table = $schema->getTable('orocrm_magento_newsl_subscr');
         $table->dropIndex('uniq_7c8eaa9395c3f3');
         $table->addIndex(['customer_id']);
 

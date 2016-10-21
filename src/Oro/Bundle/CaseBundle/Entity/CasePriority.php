@@ -12,7 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_case_priority")
+ * @ORM\Table(name="orocrm_case_priority")
  * @Gedmo\TranslationEntity(class="Oro\Bundle\CaseBundle\Entity\CasePriorityTranslation")
  * @Config(
  *      defaultValues={

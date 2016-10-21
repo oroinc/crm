@@ -13,6 +13,7 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration;
 
 class UpdateOpportunityCurrency implements
@@ -87,7 +88,7 @@ class UpdateOpportunityCurrency implements
     protected function updateOpportunityTable(QueryBag $queries, array $currencies, $defaultCurrency)
     {
 
-        $query = 'UPDATE oro_sales_opportunity 
+        $query = 'UPDATE orocrm_sales_opportunity 
                   SET budget_amount_currency = :currency, close_revenue_currency = :currency';
 
         if (!empty($currencies)) {
@@ -105,7 +106,7 @@ class UpdateOpportunityCurrency implements
         $queries->addPostQuery($migrationQuery);
 
         foreach ($currencies as $id => $currency) {
-            $query = 'UPDATE oro_sales_opportunity 
+            $query = 'UPDATE orocrm_sales_opportunity 
                         SET budget_amount_currency = :currency, close_revenue_currency = :currency 
                         WHERE organization_id = :organization_id';
 

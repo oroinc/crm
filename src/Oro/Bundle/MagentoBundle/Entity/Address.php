@@ -16,7 +16,7 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\MagentoBundle\Model\ExtendAddress;
 
 /**
- * @ORM\Table("oro_magento_customer_addr")
+ * @ORM\Table("orocrm_magento_customer_addr")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
@@ -189,7 +189,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(
-     *     name="oro_magento_cust_addr_type",
+     *     name="orocrm_magento_cust_addr_type",
      *     joinColumns={@ORM\JoinColumn(name="customer_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

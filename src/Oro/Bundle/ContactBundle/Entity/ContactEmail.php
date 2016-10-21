@@ -12,7 +12,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactEmail;
 
 /**
  * @ORM\Entity
- * @ORM\Table("oro_contact_email", indexes={
+ * @ORM\Table("orocrm_contact_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  * @Config(

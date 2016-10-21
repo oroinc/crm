@@ -14,7 +14,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendStore;
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity
  * @ORM\Table(
- *  name="oro_magento_store",
+ *  name="orocrm_magento_store",
  *  indexes={
  *      @ORM\Index(name="idx_website", columns={"website_id"})
  *  },

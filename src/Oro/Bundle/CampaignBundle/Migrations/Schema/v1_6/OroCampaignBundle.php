@@ -14,7 +14,7 @@ class OroCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_campaign_email_stats');
-        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'oro_ec_litem_unq');
+        $table = $schema->getTable('orocrm_campaign_email_stats');
+        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'orocrm_ec_litem_unq');
     }
 }

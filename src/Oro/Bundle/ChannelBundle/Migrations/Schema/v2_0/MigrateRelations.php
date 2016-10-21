@@ -16,16 +16,16 @@ class MigrateRelations implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery(new UpdateTableFieldQuery(
-            'oro_channel',
+            'orocrm_channel',
             'customer_identity',
-            'Oro',
+            'OroCRM',
             'Oro'
         ));
 
         $queries->addQuery(new UpdateTableFieldQuery(
-            'oro_channel_entity_name',
+            'orocrm_channel_entity_name',
             'name',
-            'Oro',
+            'OroCRM',
             'Oro'
         ));
     }

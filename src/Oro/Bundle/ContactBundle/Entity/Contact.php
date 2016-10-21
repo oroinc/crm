@@ -28,7 +28,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContact;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository")
  * @ORM\Table(
- *      name="oro_contact",
+ *      name="orocrm_contact",
  *      indexes={
  *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"}),
  *          @ORM\Index(name="contact_updated_at_idx",columns={"updatedAt"}),
@@ -623,7 +623,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Group")
-     * @ORM\JoinTable(name="oro_contact_to_contact_grp",
+     * @ORM\JoinTable(name="orocrm_contact_to_contact_grp",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -645,7 +645,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
-     * @ORM\JoinTable(name="oro_account_to_contact")
+     * @ORM\JoinTable(name="orocrm_account_to_contact")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

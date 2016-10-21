@@ -14,7 +14,7 @@ class AddCustomerIndices implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_magento_customer');
+        $table = $schema->getTable('orocrm_magento_customer');
         $table->addIndex(['email'], 'magecustomer_email_guest_idx', []);
     }
 }

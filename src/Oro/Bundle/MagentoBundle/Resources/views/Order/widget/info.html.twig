@@ -40,7 +40,7 @@
 
             {% set customerData %}
                 {% if entity.customer %}
-                    {% set customerViewGranted = resource_granted('oro_magento_customer_view') %}
+                    {% set customerViewGranted = resource_granted('orocrm_magento_customer_view') %}
                     {%- if customerViewGranted -%}
                         <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}</a>
                     {%- else -%}
@@ -53,7 +53,7 @@
             {{ ui.renderHtmlProperty('oro.magento.order.customer.label'|trans, customerData) }}
 
             {% set cartData %}
-                {% set cartViewGranted = resource_granted('oro_magento_cart_view') %}
+                {% set cartViewGranted = resource_granted('orocrm_magento_cart_view') %}
                 {% if entity.cart and cartViewGranted %}
                     <a href="{{ path('oro_magento_cart_view', {'id': entity.cart.id}) }}">
                         {{ 'oro.magento.cart.entity_label'|trans ~ ' ' ~  entity.cart.originId }}

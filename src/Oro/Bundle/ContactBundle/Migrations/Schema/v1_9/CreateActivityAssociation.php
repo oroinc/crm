@@ -32,6 +32,6 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
 
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'oro_contact');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_contact');
     }
 }

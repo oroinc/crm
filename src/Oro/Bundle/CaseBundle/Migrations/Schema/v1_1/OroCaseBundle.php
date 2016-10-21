@@ -15,7 +15,7 @@ class OroCaseBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Generate table oro_case_comment **/
-        $table = $schema->createTable('oro_case_comment');
+        $table = $schema->createTable('orocrm_case_comment');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('case_id', 'integer', ['notnull' => false]);
         $table->addColumn('updated_by_id', 'integer', ['notnull' => false]);
@@ -33,9 +33,9 @@ class OroCaseBundle implements Migration
         /** End of generate table oro_case_comment **/
 
         /** Generate foreign keys for table oro_case_comment **/
-        $table = $schema->getTable('oro_case_comment');
+        $table = $schema->getTable('orocrm_case_comment');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_case'),
+            $schema->getTable('orocrm_case'),
             ['case_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -53,7 +53,7 @@ class OroCaseBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_contact'),
+            $schema->getTable('orocrm_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]

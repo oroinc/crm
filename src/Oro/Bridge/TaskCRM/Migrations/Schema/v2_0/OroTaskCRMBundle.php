@@ -137,7 +137,7 @@ class OroTaskCRMBundle implements Migration, RenameExtensionAwareInterface
             $schema,
             $queries,
             'oro_comment',
-            'oro_task',
+            'orocrm_task',
             ['task_c50a6a28_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -159,21 +159,21 @@ class OroTaskCRMBundle implements Migration, RenameExtensionAwareInterface
         $queries->addQuery(new UpdateTableFieldQuery(
             'oro_activity_list',
             'related_activity_class',
-            'Oro',
+            'OroCRM',
             'Oro'
         ));
 
         $queries->addQuery(new UpdateTableFieldQuery(
             'oro_email_template',
             'entityname',
-            'Oro',
+            'OroCRM',
             'Oro'
         ));
 
         $queries->addQuery(new UpdateTableFieldQuery(
             'oro_email_template',
             'content',
-            'Oro',
+            'OroCRM',
             'Oro'
         ));
     }

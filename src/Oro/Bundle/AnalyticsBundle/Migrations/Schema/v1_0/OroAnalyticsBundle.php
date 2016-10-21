@@ -25,7 +25,7 @@ class OroAnalyticsBundle implements Migration
      */
     protected function createRFMMetricsCategoryTable(Schema $schema)
     {
-        $table = $schema->createTable('oro_analytics_rfm_category');
+        $table = $schema->createTable('orocrm_analytics_rfm_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_type', 'string', ['length' => 16]);
@@ -44,7 +44,7 @@ class OroAnalyticsBundle implements Migration
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_channel'),
+            $schema->getTable('orocrm_channel'),
             ['channel_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']

@@ -27,15 +27,15 @@ class UpdateIntegrationEntitiesData extends AbstractFixture
     protected function updateOrderAddress(ObjectManager $manager)
     {
         $mySqlQuery = <<<QUERY
-UPDATE oro_magento_order AS magento_order, oro_magento_order_address AS magento_order_address
+UPDATE orocrm_magento_order AS magento_order, orocrm_magento_order_address AS magento_order_address
 SET magento_order_address.channel_id = magento_order.channel_id
 WHERE magento_order_address.owner_id = magento_order.id;
 QUERY;
 
         $postgreSqlQuery = <<<QUERY
-UPDATE oro_magento_order_address channel_id
+UPDATE orocrm_magento_order_address channel_id
 SET channel_id = magento_order.channel_id
-FROM oro_magento_order magento_order;
+FROM orocrm_magento_order magento_order;
 QUERY;
 
         $this->runQuery($mySqlQuery, $postgreSqlQuery, $manager);
@@ -47,15 +47,15 @@ QUERY;
     protected function updateOrderItems(ObjectManager $manager)
     {
         $mySqlQuery = <<<QUERY
-UPDATE oro_magento_order AS magento_order, oro_magento_order_items AS magento_order_items
+UPDATE orocrm_magento_order AS magento_order, orocrm_magento_order_items AS magento_order_items
 SET magento_order_items.channel_id = magento_order.channel_id
 WHERE magento_order_items.order_id = magento_order.id;
 QUERY;
 
         $postgreSqlQuery = <<<QUERY
-UPDATE oro_magento_order_items channel_id
+UPDATE orocrm_magento_order_items channel_id
 SET channel_id = magento_order.channel_id
-FROM oro_magento_order magento_order;
+FROM orocrm_magento_order magento_order;
 QUERY;
 
         $this->runQuery($mySqlQuery, $postgreSqlQuery, $manager);
@@ -67,15 +67,15 @@ QUERY;
     protected function updateCartItems(ObjectManager $manager)
     {
         $mySqlQuery = <<<QUERY
-UPDATE oro_magento_cart AS magento_cart, oro_magento_cart_item AS magento_cart_item
+UPDATE orocrm_magento_cart AS magento_cart, orocrm_magento_cart_item AS magento_cart_item
 SET magento_cart_item.channel_id = magento_cart.channel_id
 WHERE magento_cart_item.cart_id = magento_cart.id;
 QUERY;
 
         $postgreSqlQuery = <<<QUERY
-UPDATE oro_magento_cart_item channel_id
+UPDATE orocrm_magento_cart_item channel_id
 SET channel_id = magento_cart.channel_id
-FROM oro_magento_cart magento_cart;
+FROM orocrm_magento_cart magento_cart;
 QUERY;
 
         $this->runQuery($mySqlQuery, $postgreSqlQuery, $manager);

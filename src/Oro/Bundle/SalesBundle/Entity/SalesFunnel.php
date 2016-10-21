@@ -16,7 +16,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
 
 /**
  * @ORM\Table(
- *      name="oro_sales_funnel",
+ *      name="orocrm_sales_funnel",
  *      indexes={@ORM\Index(name="sales_start_idx",columns={"startDate"})}
  *
  * )

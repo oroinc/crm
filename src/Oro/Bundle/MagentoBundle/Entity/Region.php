@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Oro\Bundle\OroMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\RegionRepository")
  * @ORM\Table(
- *  name="oro_magento_region",
+ *  name="orocrm_magento_region",
  *  indexes={
  *      @ORM\Index(name="idx_region", columns={"region_id"})
  *  },

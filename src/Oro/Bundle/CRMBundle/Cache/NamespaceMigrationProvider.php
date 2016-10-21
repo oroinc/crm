@@ -9,10 +9,10 @@ class NamespaceMigrationProvider implements NamespaceMigrationProviderInterface
     /** @var string[] */
     protected $additionConfig
         = [
-            'OroTaskBridgeBundle' => 'OroTaskCRMBridgeBundle',
-            'OroCallBridgeBundle' => 'OroCallCRMBridgeBundle',
-            'oro_report_'         => 'oro_reportcrm_',
-            'Oro'                 => 'Oro',
+            'OroCRMTaskBridgeBundle' => 'OroTaskCRMBridgeBundle',
+            'OroCRMCallBridgeBundle' => 'OroCallCRMBridgeBundle',
+            'orocrm_report_'         => 'oro_reportcrm_',
+            'OroCRM'                 => 'Oro',
             'orocrm'                 => 'oro'
         ];
 

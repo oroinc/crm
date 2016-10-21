@@ -14,7 +14,7 @@ use Oro\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @package Oro\Bundle\OroCampaignBundle\Entity
  * @ORM\Entity(repositoryClass="Oro\Bundle\CampaignBundle\Entity\Repository\CampaignRepository")
  * @ORM\Table(
- *      name="oro_campaign",
+ *      name="orocrm_campaign",
  *      indexes={@ORM\Index(name="cmpgn_owner_idx", columns={"owner_id"})}
  * )
  * @ORM\HasLifecycleCallbacks()

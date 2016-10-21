@@ -30,6 +30,6 @@ class OroContactUsBundle implements Migration
         $options = new OroOptions();
         $options->set('activity', 'immutable', true);
 
-        $schema->getTable('oro_contactus_request')->addOption(OroOptions::KEY, $options);
+        $schema->getTable('orocrm_contactus_request')->addOption(OroOptions::KEY, $options);
     }
 }

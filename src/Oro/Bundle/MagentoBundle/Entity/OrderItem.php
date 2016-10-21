@@ -9,7 +9,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Model\ExtendOrderItem;
 
 /**
- * @ORM\Table("oro_magento_order_items")
+ * @ORM\Table("orocrm_magento_order_items")
  * @ORM\Entity
  * @Config(
  *      defaultValues={

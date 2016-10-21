@@ -11,6 +11,7 @@ use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
+
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
@@ -66,7 +67,7 @@ class OroContactBundle implements
     {
         self::addActivityAssociations($schema, $this->activityExtension);
 
-        $this->assignActivities('oro_email', 'oro_contact', 'owner_contact_id', $queries);
+        $this->assignActivities('oro_email', 'orocrm_contact', 'owner_contact_id', $queries);
     }
 
     /**
@@ -77,7 +78,7 @@ class OroContactBundle implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'oro_contact');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contact');
     }
 
     /**

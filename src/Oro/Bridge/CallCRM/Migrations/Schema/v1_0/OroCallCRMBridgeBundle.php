@@ -33,22 +33,22 @@ class OroCallCRMBridgeBundle implements Migration, ActivityExtensionAwareInterfa
     public static function addCallActivityRelations(Schema $schema, ActivityExtension $activityExtension)
     {
         $associationTables = [
-            'oro_account',
-            'oro_contact',
-            'oro_case',
-            'oro_contactus_request',
-            'oro_magento_customer',
-            'oro_magento_order',
-            'oro_magento_cart',
-            'oro_sales_lead',
-            'oro_sales_opportunity',
-            'oro_sales_b2bcustomer'
+            'orocrm_account',
+            'orocrm_contact',
+            'orocrm_case',
+            'orocrm_contactus_request',
+            'orocrm_magento_customer',
+            'orocrm_magento_order',
+            'orocrm_magento_cart',
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer'
         ];
 
         foreach ($associationTables as $tableName) {
-            $associationTableName = $activityExtension->getAssociationTableName('oro_call', $tableName);
+            $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tableName);
             if (!$schema->hasTable($associationTableName)) {
-                $activityExtension->addActivityAssociation($schema, 'oro_call', $tableName);
+                $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tableName);
             }
         }
     }

@@ -83,7 +83,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartTable(Schema $schema)
     {
         /** Generate table oro_magento_cart **/
-        $table = $schema->createTable('oro_magento_cart');
+        $table = $schema->createTable('orocrm_magento_cart');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
@@ -135,7 +135,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartAddressTable(Schema $schema)
     {
         /** Generate table oro_magento_cart_address **/
-        $table = $schema->createTable('oro_magento_cart_address');
+        $table = $schema->createTable('orocrm_magento_cart_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
         $table->addColumn('country_code', 'string', ['notnull' => false, 'length' => 2]);
@@ -168,7 +168,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartCallsTable(Schema $schema)
     {
         /** Generate table oro_magento_cart_calls **/
-        $table = $schema->createTable('oro_magento_cart_calls');
+        $table = $schema->createTable('orocrm_magento_cart_calls');
         $table->addColumn('cart_id', 'integer', []);
         $table->addColumn('call_id', 'integer', []);
         $table->setPrimaryKey(['cart_id', 'call_id']);
@@ -185,7 +185,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartEmailsTable(Schema $schema)
     {
         /** Generate table oro_magento_cart_emails **/
-        $table = $schema->createTable('oro_magento_cart_emails');
+        $table = $schema->createTable('orocrm_magento_cart_emails');
         $table->addColumn('cart_id', 'integer', []);
         $table->addColumn('email_id', 'integer', []);
         $table->setPrimaryKey(['cart_id', 'email_id']);
@@ -202,7 +202,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartItemTable(Schema $schema)
     {
         /** Generate table oro_magento_cart_item **/
-        $table = $schema->createTable('oro_magento_cart_item');
+        $table = $schema->createTable('orocrm_magento_cart_item');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
         $table->addColumn('product_id', 'integer', ['unsigned' => true]);
@@ -242,7 +242,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartStatusTable(Schema $schema)
     {
         /** Generate table oro_magento_cart_status **/
-        $table = $schema->createTable('oro_magento_cart_status');
+        $table = $schema->createTable('orocrm_magento_cart_status');
         $table->addColumn('name', 'string', ['length' => 32]);
         $table->addColumn('label', 'string', ['length' => 255]);
         $table->setPrimaryKey(['name']);
@@ -258,7 +258,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerTable(Schema $schema)
     {
         /** Generate table oro_magento_customer **/
-        $table = $schema->createTable('oro_magento_customer');
+        $table = $schema->createTable('orocrm_magento_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', ['notnull' => false]);
@@ -299,7 +299,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressTable(Schema $schema, $tableName = null)
     {
         /** Generate table oro_magento_customer_address **/
-        $table = $schema->createTable($tableName ?: 'oro_magento_customer_address');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -336,7 +336,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerAddressToAddressTypeTable(Schema $schema, $tableName = null)
     {
         /** Generate table oro_magento_customer_address_to_address_type **/
-        $table = $schema->createTable($tableName ?: 'oro_magento_customer_address_to_address_type');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addColumn('customer_address_id', 'integer', []);
         $table->addColumn('type_name', 'string', ['length' => 16]);
         $table->setPrimaryKey(['customer_address_id', 'type_name']);
@@ -353,7 +353,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerGroupTable(Schema $schema)
     {
         /** Generate table oro_magento_customer_group **/
-        $table = $schema->createTable('oro_magento_customer_group');
+        $table = $schema->createTable('orocrm_magento_customer_group');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -371,7 +371,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderTable(Schema $schema)
     {
         /** Generate table oro_magento_order **/
-        $table = $schema->createTable('oro_magento_order');
+        $table = $schema->createTable('orocrm_magento_order');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
@@ -423,7 +423,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderAddressTable(Schema $schema)
     {
         /** Generate table oro_magento_order_address **/
-        $table = $schema->createTable('oro_magento_order_address');
+        $table = $schema->createTable('orocrm_magento_order_address');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -452,7 +452,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderAddrTypeTable(Schema $schema)
     {
         /** Generate table oro_magento_order_addr_type **/
-        $table = $schema->createTable('oro_magento_order_addr_type');
+        $table = $schema->createTable('orocrm_magento_order_addr_type');
         $table->addColumn('order_address_id', 'integer', []);
         $table->addColumn('type_name', 'string', ['length' => 16]);
         $table->setPrimaryKey(['order_address_id', 'type_name']);
@@ -469,7 +469,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderCallsTable(Schema $schema)
     {
         /** Generate table oro_magento_order_calls **/
-        $table = $schema->createTable('oro_magento_order_calls');
+        $table = $schema->createTable('orocrm_magento_order_calls');
         $table->addColumn('order_id', 'integer', []);
         $table->addColumn('call_id', 'integer', []);
         $table->setPrimaryKey(['order_id', 'call_id']);
@@ -486,7 +486,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderEmailsTable(Schema $schema)
     {
         /** Generate table oro_magento_order_emails **/
-        $table = $schema->createTable('oro_magento_order_emails');
+        $table = $schema->createTable('orocrm_magento_order_emails');
         $table->addColumn('order_id', 'integer', []);
         $table->addColumn('email_id', 'integer', []);
         $table->setPrimaryKey(['order_id', 'email_id']);
@@ -503,7 +503,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderItemsTable(Schema $schema)
     {
         /** Generate table oro_magento_order_items **/
-        $table = $schema->createTable('oro_magento_order_items');
+        $table = $schema->createTable('orocrm_magento_order_items');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('order_id', 'integer', ['notnull' => false]);
         $table->addColumn('product_type', 'string', ['notnull' => false, 'length' => 255]);
@@ -534,7 +534,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoProductTable(Schema $schema)
     {
         /** Generate table oro_magento_product **/
-        $table = $schema->createTable('oro_magento_product');
+        $table = $schema->createTable('orocrm_magento_product');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -561,7 +561,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteTable(Schema $schema, $tableName = null)
     {
         /** Generate table oro_magento_product_to_website **/
-        $table = $schema->createTable($tableName ?: 'oro_magento_product_to_website');
+        $table = $schema->createTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addColumn('product_id', 'integer', []);
         $table->addColumn('website_id', 'integer', []);
         $table->setPrimaryKey(['product_id', 'website_id']);
@@ -578,7 +578,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoRegionTable(Schema $schema)
     {
         /** Generate table oro_magento_region **/
-        $table = $schema->createTable('oro_magento_region');
+        $table = $schema->createTable('orocrm_magento_region');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('combined_code', 'string', ['length' => 60]);
         $table->addColumn('code', 'string', ['length' => 32]);
@@ -599,7 +599,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoStoreTable(Schema $schema)
     {
         /** Generate table oro_magento_store **/
-        $table = $schema->createTable('oro_magento_store');
+        $table = $schema->createTable('orocrm_magento_store');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_id', 'integer', []);
@@ -621,7 +621,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoWebsiteTable(Schema $schema)
     {
         /** Generate table oro_magento_website **/
-        $table = $schema->createTable('oro_magento_website');
+        $table = $schema->createTable('orocrm_magento_website');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
         $table->addColumn('website_code', 'string', ['length' => 32]);
@@ -641,7 +641,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_cart **/
-        $table = $schema->getTable('oro_magento_cart');
+        $table = $schema->getTable('orocrm_magento_cart');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -655,13 +655,13 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart_address'),
+            $schema->getTable('orocrm_magento_cart_address'),
             ['shipping_address_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart_status'),
+            $schema->getTable('orocrm_magento_cart_status'),
             ['status_name'],
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -673,25 +673,25 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart_address'),
+            $schema->getTable('orocrm_magento_cart_address'),
             ['billing_address_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_customer'),
+            $schema->getTable('orocrm_magento_customer'),
             ['customer_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_sales_opportunity'),
+            $schema->getTable('orocrm_sales_opportunity'),
             ['opportunity_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_store'),
+            $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -707,7 +707,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartAddressForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_cart_address **/
-        $table = $schema->getTable('oro_magento_cart_address');
+        $table = $schema->getTable('orocrm_magento_cart_address');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_region'),
             ['region_code'],
@@ -731,7 +731,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartCallsForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_cart_calls **/
-        $table = $schema->getTable('oro_magento_cart_calls');
+        $table = $schema->getTable('orocrm_magento_cart_calls');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_call'),
             ['call_id'],
@@ -739,7 +739,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart'),
+            $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -755,7 +755,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartEmailsForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_cart_emails **/
-        $table = $schema->getTable('oro_magento_cart_emails');
+        $table = $schema->getTable('orocrm_magento_cart_emails');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
@@ -763,7 +763,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart'),
+            $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -779,9 +779,9 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCartItemForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_cart_item **/
-        $table = $schema->getTable('oro_magento_cart_item');
+        $table = $schema->getTable('orocrm_magento_cart_item');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart'),
+            $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -797,7 +797,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_customer **/
-        $table = $schema->getTable('oro_magento_customer');
+        $table = $schema->getTable('orocrm_magento_customer');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -805,31 +805,31 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_website'),
+            $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_account'),
+            $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_store'),
+            $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_customer_group'),
+            $schema->getTable('orocrm_magento_customer_group'),
             ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_contact'),
+            $schema->getTable('orocrm_contact'),
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -846,7 +846,7 @@ class OroMagentoBundle implements Migration
     public static function orocrMagentoCustomerAddressForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table oro_magento_customer_address **/
-        $table = $schema->getTable($tableName ?: 'oro_magento_customer_address');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_region'),
             ['region_code'],
@@ -854,7 +854,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_customer'),
+            $schema->getTable('orocrm_magento_customer'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -881,7 +881,7 @@ class OroMagentoBundle implements Migration
         $customerAddressTableName = null
     ) {
         /** Generate foreign keys for table oro_magento_customer_address_to_address_type **/
-        $table = $schema->getTable($tableName ?: 'oro_magento_customer_address_to_address_type');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_customer_address_to_address_type');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
             ['type_name'],
@@ -889,7 +889,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable($customerAddressTableName ?: 'oro_magento_customer_address'),
+            $schema->getTable($customerAddressTableName ?: 'orocrm_magento_customer_address'),
             ['customer_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -905,7 +905,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoCustomerGroupForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_customer_group **/
-        $table = $schema->getTable('oro_magento_customer_group');
+        $table = $schema->getTable('orocrm_magento_customer_group');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -923,7 +923,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order **/
-        $table = $schema->getTable('oro_magento_order');
+        $table = $schema->getTable('orocrm_magento_order');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -937,7 +937,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_cart'),
+            $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -949,13 +949,13 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_customer'),
+            $schema->getTable('orocrm_magento_customer'),
             ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_store'),
+            $schema->getTable('orocrm_magento_store'),
             ['store_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
@@ -971,7 +971,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderAddressForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order_address **/
-        $table = $schema->getTable('oro_magento_order_address');
+        $table = $schema->getTable('orocrm_magento_order_address');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_region'),
             ['region_code'],
@@ -979,7 +979,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_order'),
+            $schema->getTable('orocrm_magento_order'),
             ['owner_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1001,7 +1001,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderAddrTypeForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order_addr_type **/
-        $table = $schema->getTable('oro_magento_order_addr_type');
+        $table = $schema->getTable('orocrm_magento_order_addr_type');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
             ['type_name'],
@@ -1009,7 +1009,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_order_address'),
+            $schema->getTable('orocrm_magento_order_address'),
             ['order_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1025,7 +1025,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderCallsForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order_calls **/
-        $table = $schema->getTable('oro_magento_order_calls');
+        $table = $schema->getTable('orocrm_magento_order_calls');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_call'),
             ['call_id'],
@@ -1033,7 +1033,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_order'),
+            $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -1049,7 +1049,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderEmailsForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order_emails **/
-        $table = $schema->getTable('oro_magento_order_emails');
+        $table = $schema->getTable('orocrm_magento_order_emails');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_email'),
             ['email_id'],
@@ -1057,7 +1057,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_order'),
+            $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -1073,9 +1073,9 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoOrderItemsForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_order_items **/
-        $table = $schema->getTable('oro_magento_order_items');
+        $table = $schema->getTable('orocrm_magento_order_items');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_order'),
+            $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1091,7 +1091,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoProductForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_product **/
-        $table = $schema->getTable('oro_magento_product');
+        $table = $schema->getTable('orocrm_magento_product');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -1110,15 +1110,15 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoProductToWebsiteForeignKeys(Schema $schema, $tableName = null)
     {
         /** Generate foreign keys for table oro_magento_product_to_website **/
-        $table = $schema->getTable($tableName ?: 'oro_magento_product_to_website');
+        $table = $schema->getTable($tableName ?: 'orocrm_magento_product_to_website');
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_website'),
+            $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_product'),
+            $schema->getTable('orocrm_magento_product'),
             ['product_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1134,7 +1134,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoStoreForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_store **/
-        $table = $schema->getTable('oro_magento_store');
+        $table = $schema->getTable('orocrm_magento_store');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -1142,7 +1142,7 @@ class OroMagentoBundle implements Migration
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('oro_magento_website'),
+            $schema->getTable('orocrm_magento_website'),
             ['website_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
@@ -1158,7 +1158,7 @@ class OroMagentoBundle implements Migration
     public static function orocrmMagentoWebsiteForeignKeys(Schema $schema)
     {
         /** Generate foreign keys for table oro_magento_website **/
-        $table = $schema->getTable('oro_magento_website');
+        $table = $schema->getTable('orocrm_magento_website');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],

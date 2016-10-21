@@ -17,6 +17,6 @@ class RemoveWorkflowFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->removeWorkflowFields($schema->getTable('oro_contactus_request'));
+        $this->removeWorkflowFields($schema->getTable('orocrm_contactus_request'));
     }
 }

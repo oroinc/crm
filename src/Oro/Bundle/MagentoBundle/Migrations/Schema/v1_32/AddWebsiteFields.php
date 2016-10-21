@@ -14,7 +14,7 @@ class AddWebsiteFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_magento_website');
+        $table = $schema->getTable('orocrm_magento_website');
         $table->addColumn('sort_order', 'integer', ['notnull' => false]);
         $table->addColumn('is_default', 'boolean', ['notnull' => false]);
         $table->addColumn('default_group_id', 'integer', ['notnull' => false]);

@@ -14,7 +14,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_contact_group")
+ * @ORM\Table(name="orocrm_contact_group")
  * @Config(
  *      defaultValues={
  *          "ownership"={

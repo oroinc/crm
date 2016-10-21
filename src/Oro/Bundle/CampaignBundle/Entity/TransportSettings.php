@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * Class Transport Settings
  *
- * @ORM\Table(name="oro_cmpgn_transport_stngs")
+ * @ORM\Table(name="orocrm_cmpgn_transport_stngs")
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string", length=50)

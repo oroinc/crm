@@ -38,23 +38,23 @@ class OroTaskCRMBundle implements
      */
     public static function addTaskActivityRelations(Schema $schema, ActivityExtension $activityExtension)
     {
-        if (!$schema->hasTable('oro_task')) {
+        if (!$schema->hasTable('orocrm_task')) {
             return;
         }
         $targetTables = [
-            'oro_account',
-            'oro_contact',
-            'oro_sales_lead',
-            'oro_sales_opportunity',
-            'oro_sales_b2bcustomer',
-            'oro_case',
-            'oro_magento_customer',
-            'oro_magento_order'
+            'orocrm_account',
+            'orocrm_contact',
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer',
+            'orocrm_case',
+            'orocrm_magento_customer',
+            'orocrm_magento_order'
         ];
         foreach ($targetTables as $targetTable) {
-            $associationTableName = $activityExtension->getAssociationTableName('oro_task', $targetTable);
+            $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', $targetTable);
             if (!$schema->hasTable($associationTableName)) {
-                $activityExtension->addActivityAssociation($schema, 'oro_task', $targetTable);
+                $activityExtension->addActivityAssociation($schema, 'orocrm_task', $targetTable);
             }
         }
     }

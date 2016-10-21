@@ -12,6 +12,7 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\CurrencyBundle\DependencyInjection\Configuration as CurrencyConfiguration;
 
@@ -70,7 +71,7 @@ class AddMultiCurrencyFields implements
         RenameExtension $renameExtension,
         AbstractPlatform $platform
     ) {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
 
         //Rename columns for new type
         self::renameOpportunityFields($schema, $queryBag, $renameExtension, $platform);
@@ -102,7 +103,7 @@ class AddMultiCurrencyFields implements
         RenameExtension $renameExtension,
         AbstractPlatform $platform
     ) {
-        $table = $schema->getTable('oro_sales_opportunity');
+        $table = $schema->getTable('orocrm_sales_opportunity');
 
         /**
          * Fix issue with incorrect field type instead DECIMAL instead of NUMERIC
@@ -142,7 +143,7 @@ class AddMultiCurrencyFields implements
     {
          $queries->addPostQuery(
              new ParametrizedSqlMigrationQuery(
-                 'UPDATE oro_sales_opportunity SET budget_amount_currency = :currency_code, 
+                 'UPDATE orocrm_sales_opportunity SET budget_amount_currency = :currency_code, 
                                  close_revenue_currency = :currency_code',
                  [
                      'currency_code' => CurrencyConfiguration::DEFAULT_CURRENCY

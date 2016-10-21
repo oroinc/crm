@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Marketing list removed items.
  *
- * @ORM\Table(name="oro_ml_item_rm",  uniqueConstraints={
- *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="oro_ml_list_ent_rm_unq")
+ * @ORM\Table(name="orocrm_ml_item_rm",  uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"entity_id", "marketing_list_id"}, name="orocrm_ml_list_ent_rm_unq")
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks

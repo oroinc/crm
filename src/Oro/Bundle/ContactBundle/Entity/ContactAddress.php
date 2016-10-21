@@ -12,7 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
 
 /**
- * @ORM\Table("oro_contact_address")
+ * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *       defaultValues={
@@ -55,7 +55,7 @@ class ContactAddress extends ExtendContactAddress
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType", cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="oro_contact_adr_to_adr_type",
+     *     name="orocrm_contact_adr_to_adr_type",
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )

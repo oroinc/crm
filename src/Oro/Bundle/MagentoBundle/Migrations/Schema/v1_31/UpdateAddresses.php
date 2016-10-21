@@ -14,7 +14,7 @@ class UpdateAddresses implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('oro_magento_cart_address');
+        $table = $schema->getTable('orocrm_magento_cart_address');
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
