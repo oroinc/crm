@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Test\Unit\ImportExport\Serializer\Normalizer;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
+use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\PaymentDetailsNormalizer;
@@ -23,7 +23,7 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fieldHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\FieldHelper')
+        $this->fieldHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Helper\FieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
