@@ -128,7 +128,6 @@ parameters:
     oro_magento.service.automatic_discovery.class:                       Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery
     oro_magento.strategy.automatic_discovery.default.class:              Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
     oro_magento.strategy.automatic_discovery.addresses.class:            Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
-    oro_magento.action.automatic_discovery.class:                        Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction
 
     oro_magento.wsdl_manager.class:                                      Oro\Bundle\MagentoBundle\Service\WsdlManager
     oro_magento.wsdl.cache_clearer.class:                                Oro\Bundle\MagentoBundle\Cache\WsdlCacheClearer
@@ -804,12 +803,12 @@ services:
             - { name: oro_magento.bundle_config.aware, argument_number: 4 }
 
     oro_magento.action.automatic_discovery:
-        class: %oro_magento.action.automatic_discovery.class%
+        class: 'Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction'
         arguments:
             - "@oro_workflow.context_accessor"
             - "@oro_magento.service.automatic_discovery"
         tags:
-            - { name: oro_workflow.action, alias: automatic_discovery }
+            - { name: oro_action.action, alias: automatic_discovery }
 
     oro_magento.wsdl.guzzle_client:
         class: %oro_magento.wsdl.guzzle_client.class%

@@ -67,9 +67,6 @@ parameters:
     # import/export
     oro_channel.importexport.helper.channel.class:                  Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper
 
-    # conditions
-    oro_workflow.condition.channel_entity_availiable.class:            Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability
-
 services:
     oro_channel.builder.factory:
         class: %oro_channel.builder.factory.class%
@@ -371,11 +368,11 @@ services:
 
     # conditions
     oro_workflow.condition.custom:
-        class: %oro_workflow.condition.channel_entity_availiable.class%
+        class: 'Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability'
         arguments:
             - "@oro_channel.provider.state_provider"
         tags:
-            - { name: oro_workflow.condition, alias: channel_entity_availiable }
+            - { name: oro_action.condition, alias: channel_entity_availiable }
 
     oro_channel.provider.channels_by_entities:
         class: Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider
