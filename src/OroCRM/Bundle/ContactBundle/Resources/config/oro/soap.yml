@@ -1,3 +1,0 @@
-classes:
-  - OroCRM\Bundle\ContactBundle\Controller\Api\Soap\ContactController
-  - OroCRM\Bundle\ContactBundle\Controller\Api\Soap\ContactGroupController

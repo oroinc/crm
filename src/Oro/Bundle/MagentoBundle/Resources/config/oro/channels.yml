@@ -1,0 +1,65 @@
+channels:
+   entity_data:
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\Cart
+          dependent:
+              - Oro\Bundle\MagentoBundle\Entity\CartAddress
+              - Oro\Bundle\MagentoBundle\Entity\CartItem
+              - Oro\Bundle\MagentoBundle\Entity\CartStatus
+              - Oro\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\Region
+          navigation_items:
+              - application_menu.sales_tab.magento_cart
+          belongs_to:
+              integration: magento
+              connector: cart
+
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\Customer
+          dependent:
+              - Oro\Bundle\MagentoBundle\Entity\CustomerGroup
+              - Oro\Bundle\MagentoBundle\Entity\Address
+              - Oro\Bundle\MagentoBundle\Entity\Region
+              - Oro\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\Store
+          navigation_items:
+              - application_menu.customers_tab.magento_customer
+          belongs_to:
+              integration: magento
+              connector: customer
+
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\Order
+          dependent:
+              - Oro\Bundle\MagentoBundle\Entity\OrderAddress
+              - Oro\Bundle\MagentoBundle\Entity\OrderItem
+              - Oro\Bundle\MagentoBundle\Entity\Region
+              - Oro\Bundle\MagentoBundle\Entity\Store
+              - Oro\Bundle\MagentoBundle\Entity\Website
+          navigation_items:
+              - application_menu.sales_tab.magento_order
+          belongs_to:
+              integration: magento
+              connector: order
+
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+          dependent:
+              - Oro\Bundle\MagentoBundle\Entity\Store
+          navigation_items:
+              - application_menu.marketing_tab.magento_newsletter_subscriber
+          belongs_to:
+              integration: magento
+              connector: newsletter_subscriber
+
+   channel_types:
+        magento:
+            label: oro.magento.channel_type.label
+            entities:
+                - Oro\Bundle\MagentoBundle\Entity\Cart
+                - Oro\Bundle\MagentoBundle\Entity\Order
+                - Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+            integration_type: magento
+            customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
+            lifetime_value: lifetime

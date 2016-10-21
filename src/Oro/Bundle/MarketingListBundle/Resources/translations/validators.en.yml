@@ -1,0 +1,4 @@
+oro:
+    marketinglist:
+        contact_information_required: "At least one column must contain contact information"
+        contact_information_type: "At least one column must contain contact information of type %type%"

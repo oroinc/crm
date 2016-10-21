@@ -1,0 +1,18 @@
+channels:
+   entity_data:
+       -
+          name: Oro\Bundle\SalesBundle\Entity\SalesFunnel
+          navigation_items:
+              - application_menu.sales_tab.sales_salesfunnel_list
+
+       -
+          name: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+          navigation_items:
+              - application_menu.customers_tab.b2bcustomer_list
+
+   channel_types:
+        b2b:
+            label: oro.sales.channel_type.b2b.label
+            customer_identity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            lifetime_value: lifetime
+            priority: -20

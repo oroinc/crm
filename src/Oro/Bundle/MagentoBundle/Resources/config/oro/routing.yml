@@ -1,0 +1,18 @@
+oro_magento_bundle:
+    resource:     "@OroMagentoBundle/Controller"
+    type:         annotation
+    prefix:       /magento
+
+oro_magento_dashboard:
+    resource:     "@OroMagentoBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard
+
+oro_magento_bundle_api:
+    resource: "@OroMagentoBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

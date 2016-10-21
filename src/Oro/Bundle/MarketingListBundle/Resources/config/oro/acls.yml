@@ -1,0 +1,35 @@
+acls:
+    oro_marketing_list_delete:
+        type: entity
+        class: OroMarketingListBundle:MarketingList
+        permission: DELETE
+        group_name: ""
+        bindings: ~
+
+    oro_marketing_list_removed_item_create:
+        type: entity
+        class: OroMarketingListBundle:MarketingListRemovedItem
+        permission: CREATE
+        group_name: ""
+        bindings: ~
+
+    oro_marketing_list_removed_item_delete:
+        type: entity
+        class: OroMarketingListBundle:MarketingListRemovedItem
+        permission: DELETE
+        group_name: ""
+        bindings: ~
+
+    oro_marketinglist_unsubscribed_item_create:
+        type: entity
+        class: OroMarketingListBundle:MarketingListUnsubscribedItem
+        permission: CREATE
+        group_name: ""
+        bindings: ~
+
+    oro_marketinglist_unsubscribed_item_delete:
+        type: entity
+        class: OroMarketingListBundle:MarketingListUnsubscribedItem
+        permission: DELETE
+        group_name: ""
+        bindings: ~

@@ -1,0 +1,321 @@
+workflows:
+    b2b_flow_sales_funnel:
+        transition_definitions:
+            start_from_lead:
+                preconditions:
+                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Lead']]
+                actions:
+                    - '@create_related_entity': # create Sales Funnel if it not exist yet
+                        conditions:
+                            '@empty': [$sales_funnel.id]
+                        parameters: ~
+                    - '@redirect': # redirect to Sales funnel view page
+                        route: 'oro_sales_salesfunnel_view'
+                        route_parameters:
+                            id: $sales_funnel.id
+            start_from_opportunity:
+                preconditions:
+                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Opportunity']]
+                actions:
+                    - '@create_related_entity': # create Sales Funnel if it not exist yet
+                        conditions:
+                            '@empty': [$sales_funnel.id]
+                        parameters: ~
+                    - '@redirect': # redirect to Sales funnel view page
+                        route: 'oro_sales_salesfunnel_view'
+                        route_parameters:
+                            id: $sales_funnel.id
+            disqualify_definition:
+                conditions: # if lead.status = "new"
+                    '@and':
+                        - '@not_equal': [$lead.status.id, 'qualified']
+                        - '@not_equal': [$lead.status.id, 'canceled']
+                actions: # set lead.status = "canceled"
+                    - '@request_enum_entity':
+                        enum_code: lead_status
+                        identifier: 'canceled'
+                        attribute: $lead.status
+            follow_up_definition:
+                conditions: # if lead.status = "canceled"
+                    '@equal': [$lead.status.id, 'canceled']
+            reactivate_definition:
+                conditions: # if lead.status = "canceled"
+                    '@equal': [$lead.status.id, 'canceled']
+                actions: # set lead.status = "new"
+                    - '@request_enum_entity':
+                        enum_code: lead_status
+                        identifier: 'new'
+                        attribute: $lead.status
+            qualify_definition:
+                preconditions:  # if lead.status is not qualified/disqualified
+                    '@and':
+                        - '@and':
+                            parameters:
+                                - '@not_equal': [$lead.status.id, 'qualified']
+                                - '@not_equal': [$lead.status.id, 'canceled']
+                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@feature_enabled':
+                            feature: sales_opportunity
+                conditions:
+                    '@or':
+                        parameters:
+                            - '@not_empty': $new_company_name
+                            - '@not_empty': $new_b2bcustomer
+                        message: "Company name or customer must be selected."
+                actions: # set lead.status = "qualified"
+                    - '@request_enum_entity':
+                        enum_code: lead_status
+                        identifier: 'qualified'
+                        attribute: $lead.status
+                    - '@tree': # create Contact entity
+                        conditions: # if contact not specified
+                            '@empty': $lead.contact
+                        actions:
+                            - '@create_entity': # create Contact based on Lead
+                                class: Oro\Bundle\ContactBundle\Entity\Contact
+                                attribute: $lead.contact
+                                data:
+                                    namePrefix: $lead.namePrefix
+                                    firstName: $lead.firstName
+                                    middleName: $lead.middleName
+                                    lastName: $lead.lastName
+                                    nameSuffix: $lead.nameSuffix
+                                    jobTitle: $lead.jobTitle
+                                    description: $lead.name
+                            - '@tree': # set Contact Address
+                                conditions: # if lead has address
+                                    '@not_empty': $lead.addresses
+                                actions:
+                                    - '@foreach':
+                                        array: $lead.addresses
+                                        value: $.result.leadAddress
+                                        actions:
+                                            - '@create_entity': # create Contact Address based on Lead address
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactAddress
+                                                attribute: $.result.address
+                                                data:
+                                                    label: $.result.leadAddress.label
+                                                    street: $.result.leadAddress.street
+                                                    street2: $.result.leadAddress.street2
+                                                    city: $.result.leadAddress.city
+                                                    postalCode: $.result.leadAddress.postalCode
+                                                    country: $.result.leadAddress.country
+                                                    region: $.result.leadAddress.region
+                                                    regionText: $.result.leadAddress.regionText
+                                                    namePrefix: $.result.leadAddress.namePrefix
+                                                    firstName: $.result.leadAddress.firstName
+                                                    middleName: $.result.leadAddress.middleName
+                                                    lastName: $.result.leadAddress.lastName
+                                                    nameSuffix: $.result.leadAddress.nameSuffix
+                                                    primary: $.result.leadAddress.primary
+                                            - '@call_method': # add Address to Contact
+                                                object: $lead.contact
+                                                method: addAddress
+                                                method_parameters: [$.result.address]
+                                            - '@unset_value': # unset temporary property
+                                                [$.result.address, $.result.leadAddress]
+                            - '@tree': # set Contact Email
+                                conditions: # if lead has email
+                                    '@not_empty': $lead.emails
+                                actions:
+                                    - '@foreach':
+                                        array: $lead.emails
+                                        value: $.result.leadEmail
+                                        actions:
+                                            - '@create_entity': # create Contact Address based on Lead address
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactEmail
+                                                attribute: $.result.email
+                                                data:
+                                                    email: $.result.leadEmail.email
+                                                    owner: $lead.contact
+                                                    primary: $.result.leadEmail.primary
+                                            - '@call_method': # add Email to Contact
+                                                object: $lead.contact
+                                                method: addEmail
+                                                method_parameters: [$.result.email]
+                                            - '@unset_value': # unset temporary property
+                                                [$.result.email, $.result.leadEmail]
+                            - '@tree': # set Contact Phone
+                                conditions: # if lead has phone
+                                    '@not_empty': $lead.phones
+                                actions:
+                                    - '@foreach':
+                                        array: $lead.phones
+                                        value: $.result.leadPhone
+                                        actions:
+                                            - '@create_entity': # create Contact Phone based on Lead Phone
+                                                class: Oro\Bundle\ContactBundle\Entity\ContactPhone
+                                                attribute: $.result.phone
+                                                data:
+                                                    phone: $.result.leadPhone.phone
+                                                    owner: $lead.contact
+                                                    primary: $.result.leadPhone.primary
+                                            - '@call_method': # add Phone to Contact
+                                                object: $lead.contact
+                                                method: addPhone
+                                                method_parameters: [$.result.phone]
+                                            - '@unset_value': # unset temporary property
+                                                [$.result.phone, $.result.leadPhone]
+                    - '@tree':
+                        conditions:
+                            '@and': # if customer not selected and company name is selected
+                                - '@empty':     $new_b2bcustomer
+                                - '@not_empty': $new_company_name
+                        actions:
+                            - '@find_entity': # try to find b2bcustomer by company name
+                                class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+                                attribute: $new_b2bcustomer
+                                where:
+                                    name: $new_company_name
+                                case_insensitive: true
+                            - '@find_entity': # try to find account by company name
+                                conditions:
+                                    '@empty': $new_b2bcustomer
+                                parameters:
+                                    class: Oro\Bundle\AccountBundle\Entity\Account
+                                    attribute: $new_account
+                                    where:
+                                        name: $new_company_name
+                                case_insensitive: true
+                            - '@create_entity': # if b2bcustomer not found - create new one
+                                conditions:
+                                    '@and':
+                                        - '@empty': $new_account
+                                        - '@empty': $new_b2bcustomer
+                                parameters:
+                                    class:     Oro\Bundle\AccountBundle\Entity\Account
+                                    attribute: $new_account
+                                    data:
+                                        name: $new_company_name
+                            - '@create_entity': # if b2bcustomer not found - create new one
+                                conditions:
+                                    '@empty': $new_b2bcustomer
+                                parameters:
+                                    class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
+                                    attribute: $new_b2bcustomer
+                                    data:
+                                        name:      $new_company_name
+                                        account:   $new_account
+                                        website:   $lead.website
+                                        employees: $lead.numberOfEmployees
+                                        dataChannel: $dataChannel
+                    - '@call_method': # connect customer with Contact
+                        conditions:
+                            '@empty': $new_b2bcustomer.contact
+                        parameters:
+                            object: $new_b2bcustomer
+                            method: setContact
+                            method_parameters: [$lead.contact]
+                    - '@create_entity': # create an opportunity
+                        class:     Oro\Bundle\SalesBundle\Entity\Opportunity
+                        attribute: $opportunity
+                        flush:     true
+                        data:
+                            name:        $new_opportunity_name
+                            contact:     $lead.contact
+                            customer:    $new_b2bcustomer
+                            dataChannel: $dataChannel
+                            lead:        $lead
+                            notes:       $new_notes
+                    - '@request_enum_entity': # set status "In Progress" to opportunity
+                        enum_code: opportunity_status
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+                    - '@unset_value':
+                        [$new_account, $new_customer]
+            develop_definition:
+                preconditions: # if opportunity.status NOT IN ("won", "lost")
+                    '@and':
+                        - '@and':
+                            message: 'Opportunity must not be closed.'
+                            parameters:
+                                - '@not_equal': [$opportunity.status.id, 'won']
+                                - '@not_equal': [$opportunity.status.id, 'lost']
+                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
+                conditions: # if opportunity.status NOT IN ("won", "lost")
+                    '@and':
+                        - '@greater_or_equal':
+                            message: 'Budget amout must be greater or equal to 0'
+                            parameters: [$budget_amount, 0]
+                        - '@and':
+                            message: 'Probality must be between 0 and 100 percents'
+                            parameters:
+                                - '@greater_or_equal': [$probability, 0]
+                                - '@less_or_equal': [$probability, 1]
+            close_as_won_definition:
+                preconditions:
+                    '@and':
+                        message: 'Opportunity must not be closed.'
+                        parameters:
+                            - '@not_equal': [$opportunity.status.id, 'won']
+                            - '@not_equal': [$opportunity.status.id, 'lost']
+                conditions: # if opportunity.status NOT IN ("won", "lost") and required data is entered
+                    '@and':
+                        - '@not_empty':
+                            message: 'Close date must be set'
+                            parameters: $close_date
+                        - '@not_empty':
+                            message: 'Close revenue must be set'
+                            parameters: $close_revenue
+                        - '@greater_or_equal':
+                            message: 'Close revenue must be greater or equal to 0'
+                            parameters: [$close_revenue, 0]
+                actions: # update opportunity properties, set opportunity.status = "won"
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'won'
+                        attribute: $opportunity.status
+                    - '@find_entity':
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: 'won'
+                        attribute: $close_reason
+                    - '@assign_value':
+                        - [$probability, 1]
+                        - [$close_reason_name, 'won']
+            close_as_lost_definition:
+                preconditions: # opportunity.status NOT IN ("won", "lost") and required data is entered
+                    '@and':
+                        message: 'Opportunity must not be closed.'
+                        parameters:
+                            - '@not_equal': [$opportunity.status.id, 'won']
+                            - '@not_equal': [$opportunity.status.id, 'lost']
+                conditions:
+                    '@and':
+                        - '@not_empty':
+                            message: 'Close date must be set'
+                            parameters: $close_date
+                        - '@not_empty':
+                            message: 'Close reason must be set'
+                            parameters: $close_reason_name
+                actions: # update opportunity properties, set opportunity.status = "lost"
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+                    - '@find_entity':
+                        class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: $close_reason_name
+                        attribute: $close_reason
+                    - '@assign_value':
+                        - [$probability, 0]
+                        - [$close_revenue, 0]
+            reopen_definition:
+                conditions:
+                    '@or':
+                        message: 'Opportunity must be in status "Won" or "Lost"'
+                        parameters:
+                            - '@equal': [$opportunity.status.id, 'won']
+                            - '@equal': [$opportunity.status.id, 'lost']
+                actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+                    - '@assign_value':
+                        - [$budget_amount, ~]
+                        - [$customer_need, ~]
+                        - [$proposed_solution, ~]
+                        - [$probability, ~]
+                        - [$close_revenue, ~]
+                        - [$close_reason, ~]
+                        - [$close_date, ~]

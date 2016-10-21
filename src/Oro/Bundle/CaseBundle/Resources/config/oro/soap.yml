@@ -1,0 +1,3 @@
+classes:
+  - Oro\Bundle\CaseBundle\Controller\Api\Soap\CaseController
+  - Oro\Bundle\CaseBundle\Controller\Api\Soap\CommentController

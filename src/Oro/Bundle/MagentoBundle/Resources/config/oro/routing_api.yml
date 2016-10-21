@@ -1,0 +1,35 @@
+oro_magento_bundle_customer_address_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/CustomerAddressController.php"
+    type:         rest
+
+oro_magento_bundle_customer_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/CustomerController.php"
+    type:         rest
+
+oro_magento_bundle_magento_customer_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/MagentoCustomerController.php"
+    type:         rest
+
+oro_magento_bundle_order_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/OrderController.php"
+    type:         rest
+
+oro_magento_bundle_order_address_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/OrderAddressController.php"
+    type:         rest
+
+oro_magento_bundle_order_item_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/OrderItemController.php"
+    type:         rest
+
+oro_magento_bundle_cart_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/CartController.php"
+    type:         rest
+
+oro_magento_bundle_cart_item_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/CartItemController.php"
+    type:         rest
+
+oro_magento_bundle_cart_address_api:
+    resource:     "@OroMagentoBundle/Controller/Api/Rest/CartAddressController.php"
+    type:         rest

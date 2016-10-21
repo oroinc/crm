@@ -1,0 +1,24 @@
+#simple report by user
+request:
+        input_action: ~
+        oro_reportcrm_form[column][func]: ""
+        oro_reportcrm_form[column][label]: ""
+        oro_reportcrm_form[column][name]: ""
+        oro_reportcrm_form[column][sorting]: ""
+        oro_reportcrm_form[definition]: >
+                {"columns":[{"name":"email","label":"Email","func":null,"sorting":""},
+                {"name":"companyName","label":"Company name","func":null,"sorting":"ASC"},
+                {"name":"addresses+Oro\\Bundle\\SalesBundle\\Entity\\LeadAddress::city","label":"City","func":null,"sorting":""},
+                {"name":"opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::name","label":"Opportunity name","func":null,"sorting":""},
+                {"name":"status+Oro\\Bundle\\SalesBundle\\Entity\\LeadStatus::label","label":"Label","func":null,"sorting":""},
+                {"name":"contact+Oro\\Bundle\\ContactBundle\\Entity\\Contact::emails+Oro\\Bundle\\ContactBundle\\Entity\\ContactEmail::email",
+                "label":"Email","func":null,"sorting":""}],"grouping_columns":[],"filters":[]}
+        oro_reportcrm_form[description]: ""
+        oro_reportcrm_form[entity]: Oro\Bundle\SalesBundle\Entity\Lead
+        oro_reportcrm_form[filter][columnName]: ""
+        oro_reportcrm_form[filter][criterion]: ""
+        oro_reportcrm_form[name]: "leads by account"
+        oro_reportcrm_form[type]: TABLE
+response:
+        - [ClarenceNGolden@armyspy.com, "H.C. Bohack", "North Greenbush", "H.C. Bohack", Qualified, ClarenceNGolden@armyspy.com]
+        - [RamonaCVenters@gustr.com, "Sure Save", Jackson, "Sure Save", Qualified, RamonaCVenters@gustr.com]
