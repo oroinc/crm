@@ -42,18 +42,6 @@ class FeatureContext extends OroFeatureContext implements
     protected $importFile;
 
     /**
-     * @Given /^(?:|I )open (Opportunity) creation page$/
-     */
-    public function openOpportunityCreationPage()
-    {
-        /** @var MainMenu $menu */
-        $menu = $this->createElement('MainMenu');
-        $menu->openAndClick('Sales/ Opportunities');
-        $this->waitForAjax();
-        $this->getPage()->clickLink('Create Opportunity');
-    }
-
-    /**
      * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
@@ -330,16 +318,6 @@ class FeatureContext extends OroFeatureContext implements
         }
 
         return $customers;
-    }
-
-    /**
-     * @Given /^(?:|I )go to Opportunity Index page$/
-     */
-    public function iGoToOpportunityIndexPage()
-    {
-        /** @var MainMenu $mainMenu */
-        $mainMenu = $this->createElement('MainMenu');
-        $mainMenu->openAndClick("Sales/Opportunities");
     }
 
     /**

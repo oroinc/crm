@@ -6,3 +6,12 @@ elements:
   OpportunityProbabilitiesConfigForm:
     selector: 'form[name="opportunity"]'
     class: Oro\Bundle\SalesBundle\Tests\Behat\Element\OpportunityProbabilitiesConfigForm
+
+pages:
+  Opportunity Index:
+    route: 'oro_sales_opportunity_index'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityIndex
+
+  Opportunity Create:
+    route: 'oro_sales_opportunity_create'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityCreate
