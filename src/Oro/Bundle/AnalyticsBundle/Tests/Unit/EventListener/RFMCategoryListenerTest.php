@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
@@ -25,7 +25,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     protected $listener;
 
     /**
-     * @var ScheduleCalculateAnalyticsService
+     * @var CalculateAnalyticsScheduler
      */
     protected $scheduler;
 
@@ -35,7 +35,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scheduler = $this->createScheduleCalculateAnalyticsServiceMock();
+        $this->scheduler = $this->createCalculateAnalyticsSchedulerMock();
 
         $this->listener = new RFMCategoryListener(
             $this->manager,
@@ -176,10 +176,10 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
      */
-    private function createScheduleCalculateAnalyticsServiceMock()
+    private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
+        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
     }
 }

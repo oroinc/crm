@@ -8,7 +8,7 @@ use Oro\Component\MessageQueue\Test\JobRunner;
 use Oro\Component\Testing\ClassExtensionTrait;
 use Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 
 class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,17 +36,17 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_Test
     {
         new CalculateAllChannelsAnalyticsProcessor(
             $this->createDoctrineHelperMock(),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner()
         );
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
      */
-    private function createScheduleCalculateAnalyticsServiceMock()
+    private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
+        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
     }
 
     /**

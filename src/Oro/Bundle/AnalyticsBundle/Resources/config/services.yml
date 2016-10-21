@@ -94,7 +94,7 @@ services:
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }
 
     oro_analytics.schedule_calculate_analytics:
-        class: 'Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService'
+        class: 'Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler'
         arguments:
             - '@oro_message_queue.message_producer'
 

@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -38,9 +38,9 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
     private $optionalListenerManager;
 
     /**
-     * @var ScheduleCalculateAnalyticsService
+     * @var CalculateAnalyticsScheduler
      */
-    private $scheduleCalculateAnalyticsService;
+    private $calculateAnalyticsScheduler;
 
     /**
      * @var JobRunner
@@ -56,21 +56,21 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      * @param DoctrineHelper $doctrineHelper
      * @param InitialSyncProcessor $initialSyncProcessor
      * @param OptionalListenerManager $optionalListenerManager
-     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      * @param JobRunner $jobRunner
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         InitialSyncProcessor $initialSyncProcessor,
         OptionalListenerManager $optionalListenerManager,
-        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
+        CalculateAnalyticsScheduler $calculateAnalyticsScheduler,
         JobRunner $jobRunner,
         IndexerInterface $indexer
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->initialSyncProcessor = $initialSyncProcessor;
         $this->optionalListenerManager = $optionalListenerManager;
-        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
+        $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
         $this->jobRunner = $jobRunner;
         $this->indexer = $indexer;
     }
@@ -168,7 +168,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
             ));
         }
 
-        $this->scheduleCalculateAnalyticsService->scheduleForChannel($channel->getId());
+        $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
     }
 
     /**

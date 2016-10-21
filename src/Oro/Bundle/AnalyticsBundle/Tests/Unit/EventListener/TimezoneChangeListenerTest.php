@@ -5,7 +5,7 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +15,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     * @var \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
      */
     protected $scheduler;
 
@@ -30,7 +30,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scheduler = $this->createScheduleCalculateAnalyticsServiceMock();
+        $this->scheduler = $this->createCalculateAnalyticsSchedulerMock();
 
         $this->listener = new TimezoneChangeListener($this->manager, $this->scheduler);
     }
@@ -86,10 +86,10 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
      */
-    private function createScheduleCalculateAnalyticsServiceMock()
+    private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
+        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
     }
 }

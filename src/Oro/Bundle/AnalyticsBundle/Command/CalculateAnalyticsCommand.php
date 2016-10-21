@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Command;
 
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,20 +55,20 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
         if ($channelId) {
             $output->writeln(sprintf('Schedule analytics calculation for "%s" channel.', $channelId));
 
-            $this->getScheduleCalculateAnalyticsService()->scheduleForChannel($channelId, $customerIds);
+            $this->getCalculateAnalyticsScheduler()->scheduleForChannel($channelId, $customerIds);
         } else {
             $output->writeln('Schedule analytics calculation for all channels.');
 
-            $this->getScheduleCalculateAnalyticsService()->scheduleForAllChannels();
+            $this->getCalculateAnalyticsScheduler()->scheduleForAllChannels();
         }
 
         $output->writeln('Completed');
     }
 
     /**
-     * @return ScheduleCalculateAnalyticsService
+     * @return CalculateAnalyticsScheduler
      */
-    private function getScheduleCalculateAnalyticsService()
+    private function getCalculateAnalyticsScheduler()
     {
         return $this->container->get('oro_analytics.schedule_calculate_analytics');
     }

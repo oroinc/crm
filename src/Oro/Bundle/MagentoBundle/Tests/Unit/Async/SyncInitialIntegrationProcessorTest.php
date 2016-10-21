@@ -17,7 +17,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
@@ -51,7 +51,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock()
         );
@@ -67,7 +67,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock()
         );
@@ -88,7 +88,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock()
         );
@@ -107,7 +107,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock()
         );
@@ -131,7 +131,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock()
         );
@@ -170,7 +170,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $registryStub,
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock()
         );
@@ -214,7 +214,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $registryStub,
             $initialSyncProcessorMock,
             $this->createOptionalListenerManagerStub([]),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock()
         );
@@ -246,7 +246,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
-            $this->createScheduleCalculateAnalyticsServiceMock(),
+            $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock()
         );
@@ -287,11 +287,11 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ScheduleCalculateAnalyticsService
+     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
      */
-    private function createScheduleCalculateAnalyticsServiceMock()
+    private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(ScheduleCalculateAnalyticsService::class, [], [], '', false);
+        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
     }
 
     /**

@@ -5,20 +5,20 @@ use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 
-class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
+class CalculateAnalyticsSchedulerTest extends \PHPUnit_Framework_TestCase
 {
     public function testCouldBeConstructedWithMessageProducerAsFirstArgument()
     {
-        new ScheduleCalculateAnalyticsService($this->getMock(MessageProducerInterface::class));
+        new CalculateAnalyticsScheduler($this->getMock(MessageProducerInterface::class));
     }
 
     public function testShouldSendCalculateAnalyticsForSingleChannel()
     {
         $producer = $this->createMessageProducer();
 
-        $service = new ScheduleCalculateAnalyticsService($producer);
+        $service = new CalculateAnalyticsScheduler($producer);
 
         $service->scheduleForChannel('theChannelId');
 
@@ -36,7 +36,7 @@ class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $producer = $this->createMessageProducer();
 
-        $service = new ScheduleCalculateAnalyticsService($producer);
+        $service = new CalculateAnalyticsScheduler($producer);
 
         $service->scheduleForChannel('theChannelId', ['theCustomerFooId', 'theCustomerBarId']);
 
@@ -54,7 +54,7 @@ class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $producer = $this->createMessageProducer();
 
-        $service = new ScheduleCalculateAnalyticsService($producer);
+        $service = new CalculateAnalyticsScheduler($producer);
 
         $service->scheduleForAllChannels();
 

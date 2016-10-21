@@ -7,14 +7,14 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
 
 /**
  * @dbIsolationPerTest
  */
-class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
+class CalculateAnalyticsSchedulerTest extends WebTestCase
 {
     use MessageQueueExtension;
 
@@ -30,7 +30,7 @@ class ScheduleCalculateAnalyticsServiceTest extends WebTestCase
     {
         $service = $this->getContainer()->get('oro_analytics.schedule_calculate_analytics');
 
-        $this->assertInstanceOf(ScheduleCalculateAnalyticsService::class, $service);
+        $this->assertInstanceOf(CalculateAnalyticsScheduler::class, $service);
     }
 
     public function testShouldScheduleAnalyticsCalculateIfStatusTrueAndRFMEnabled()

@@ -6,7 +6,7 @@ use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 
-class ScheduleCalculateAnalyticsService
+class CalculateAnalyticsScheduler
 {
     /**
      * @var MessageProducerInterface

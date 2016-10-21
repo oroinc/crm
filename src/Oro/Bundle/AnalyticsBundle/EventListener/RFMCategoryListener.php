@@ -7,7 +7,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
@@ -19,9 +19,9 @@ class RFMCategoryListener
     protected $metricStateManager;
 
     /**
-     * @var ScheduleCalculateAnalyticsService
+     * @var CalculateAnalyticsScheduler
      */
-    protected $scheduleCalculateAnalyticsService;
+    protected $calculateAnalyticsScheduler;
 
     /**
      * @var string
@@ -45,20 +45,20 @@ class RFMCategoryListener
 
     /**
      * @param RFMMetricStateManager $metricStateManager
-     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      * @param string $categoryClass
      * @param string $channelClass
      */
     public function __construct(
         RFMMetricStateManager $metricStateManager,
-        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService,
+        CalculateAnalyticsScheduler $calculateAnalyticsScheduler,
         $categoryClass,
         $channelClass
     ) {
         $this->metricStateManager = $metricStateManager;
         $this->categoryClass = $categoryClass;
         $this->channelClass = $channelClass;
-        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
+        $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
     /**
@@ -96,7 +96,7 @@ class RFMCategoryListener
             }
 
             $this->metricStateManager->resetMetrics($channel);
-            $this->scheduleCalculateAnalyticsService->scheduleForChannel($channel->getId());
+            $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
         }
 
         $this->channelsToDrop = [];

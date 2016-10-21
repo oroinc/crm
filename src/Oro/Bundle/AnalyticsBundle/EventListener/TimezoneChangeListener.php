@@ -4,7 +4,7 @@ namespace Oro\Bundle\AnalyticsBundle\EventListener;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 
 class TimezoneChangeListener
 {
@@ -12,20 +12,20 @@ class TimezoneChangeListener
     protected $metricStateManager;
 
     /**
-     * @var ScheduleCalculateAnalyticsService
+     * @var CalculateAnalyticsScheduler
      */
-    protected $scheduleCalculateAnalyticsService;
+    protected $calculateAnalyticsScheduler;
 
     /**
      * @param RFMMetricStateManager $metricStateManager
-     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      */
     public function __construct(
         RFMMetricStateManager $metricStateManager,
-        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+        CalculateAnalyticsScheduler $calculateAnalyticsScheduler
     ) {
         $this->metricStateManager = $metricStateManager;
-        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
+        $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
     /**
@@ -37,6 +37,6 @@ class TimezoneChangeListener
             return;
         }
         $this->metricStateManager->resetMetrics();
-        $this->scheduleCalculateAnalyticsService->scheduleForAllChannels();
+        $this->calculateAnalyticsScheduler->scheduleForAllChannels();
     }
 }

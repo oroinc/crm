@@ -7,7 +7,7 @@ use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Bundle\AnalyticsBundle\Service\ScheduleCalculateAnalyticsService;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -18,20 +18,20 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
     private $doctrineHelper;
 
     /**
-     * @var ScheduleCalculateAnalyticsService
+     * @var CalculateAnalyticsScheduler
      */
-    private $scheduleCalculateAnalyticsService;
+    private $calculateAnalyticsScheduler;
 
     /**
      * @param DoctrineHelper $doctrineHelper
-     * @param ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+     * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
-        ScheduleCalculateAnalyticsService $scheduleCalculateAnalyticsService
+        CalculateAnalyticsScheduler $calculateAnalyticsScheduler
     ) {
         $this->doctrineHelper = $doctrineHelper;
-        $this->scheduleCalculateAnalyticsService = $scheduleCalculateAnalyticsService;
+        $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
     }
 
     /**
@@ -49,7 +49,7 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
         $channels = new BufferedQueryResultIterator($qb);
 
         foreach ($channels as $channel) {
-            $this->scheduleCalculateAnalyticsService->scheduleForChannel($channel->getId());
+            $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
         }
     }
 
