@@ -21,6 +21,9 @@ class AutomaticDiscoveryAction extends AbstractAction
 {
     const NAME = 'automatic_discovery';
 
+    /** @var AutomaticDiscovery */
+    protected $automaticDiscovery;
+
     /** @var string */
     protected $entity;
 
