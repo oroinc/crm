@@ -23,38 +23,38 @@ Feature: Tie Opportunity probability to its status
       | Identification & Alignment | 20          |
       | Solution Development       | 60          |
 
-  Scenario: Add new Opportunity with empty probability
-    Given I fill form with:
-      | Opportunity Name | Opportunity with empty Probability |
-      | Account          | Darth Vader                        |
-      | Status           | Negotiation                        |
-      | Probability      |                                    |
-    When I save and close form
-    Then I should see "Opportunity saved" flash message
-    And should see Opportunity with:
-      | Opportunity Name | Opportunity with empty Probability |
-      | Status           | Negotiation                        |
-      | Probability      | N/A                                |
-
   Scenario: Add new Opportunity
-    Given I open Opportunity Create page
-    And I fill form with:
+    Given I fill form with:
       | Opportunity Name | Build new Death Star |
       | Account          | Darth Vader          |
       | Status           | Needs Analysis       |
     When I save and close form
-    And should see Opportunity with:
+    Then should see Opportunity with:
       | Opportunity Name | Build new Death Star |
       | Status           | Needs Analysis       |
       | Probability      | 10%                  |
 
+  Scenario: Inline Status edit
+    Given I open Opportunity Index page
+    When I edit Status as "Open"
+    Then I should see Build new Death Star in grid with following data:
+      | Status      | Open |
+      | Probability | 5%   |
+
+  Scenario: Inline Probability edit
+    Given I edit Probability as "30"
+    And I reload the page
+    Then I should see Build new Death Star in grid with following data:
+      | Status      | Open |
+      | Probability | 30%  |
+
   Scenario: Change probability value
-    Given I edit entity
+    Given I click Edit Build new Death Star in grid
     And I fill in "Probability" with "50"
     When I save and close form
     And should see Opportunity with:
       | Opportunity Name | Build new Death Star |
-      | Status           | Needs Analysis       |
+      | Status           | Open                 |
       | Probability      | 50%                  |
 
   Scenario: Change status not change previously changed probability
@@ -66,9 +66,3 @@ Feature: Tie Opportunity probability to its status
       | Status           | Negotiation          |
       | Probability      | 50%                  |
 
-  Scenario: Inline Status edit
-    Given I open Opportunity Index page
-    When I edit "Build new Death Star" Status as "Open"
-    Then I should see Build new Death Star in grid with following data:
-      | Status      | Open |
-      | Probability | 5%   |
