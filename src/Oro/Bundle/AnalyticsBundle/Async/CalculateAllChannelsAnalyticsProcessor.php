@@ -51,6 +51,8 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
         foreach ($channels as $channel) {
             $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
         }
+
+        return self::ACK;
     }
 
     /**
