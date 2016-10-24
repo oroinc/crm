@@ -49,7 +49,6 @@ parameters:
     oro_channel.event_listener.navigation.class:                    Oro\Bundle\ChannelBundle\EventListener\NavigationListener
     oro_channel.form.subscriber.channel_subscriber.class:           Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     oro_channel.event_listener.update_integration_connectors.class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
-    oro_channel.event_listener.change_integration_status.class:     Oro\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
     oro_channel.event_listener.channel_before_deleted.class:        Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     oro_channel.event_listener.embedded_form.class:                 Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
     oro_channel.event_listener.doctrine.class:                      Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
@@ -273,13 +272,6 @@ services:
         class: %oro_channel.form.subscriber.channel_subscriber.class%
         arguments:
             - "@oro_channel.provider.settings_provider"
-
-    oro_channel.event_listener.change_integration_status:
-        class: %oro_channel.event_listener.change_integration_status.class%
-        arguments:
-            - "@doctrine"
-        tags:
-            - { name: kernel.event_listener, event: oro_channel.channel.status_change, method: onChannelStatusChange }
 
     oro_channel.event_listener.update_integration_connectors:
         class: %oro_channel.event_listener.update_integration_connectors.class%
