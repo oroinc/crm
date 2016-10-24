@@ -4,6 +4,9 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
+/**
+ * @deprecated
+ */
 class SalesFunnelEntityNameProvider implements EntityNameProviderInterface
 {
     const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\SalesFunnel';

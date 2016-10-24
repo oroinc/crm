@@ -10,6 +10,9 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 
+/**
+ * @deprecated
+ */
 class SalesFunnelRepository extends EntityRepository
 {
     use WorkflowQueryTrait;

@@ -6,6 +6,9 @@ use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * @deprecated
+ */
 class SalesFunnelApiType extends SalesFunnelType
 {
     /**
