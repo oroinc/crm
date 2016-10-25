@@ -77,13 +77,24 @@ class CartControllerTest extends AbstractController
         );
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @dataProvider gridProvider
+     */
+    public function testGrid($requestData)
+    {
+        parent::testGrid($requestData);
+    }
+
     public function gridProvider()
     {
         return [
             'Magento cart grid' => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-cart-grid'
+                        'gridName' => 'magento-cart-grid',
+                        'magento-cart-grid[_sort_by][originId]' => 'ASC',
                     ],
                     'gridFilters' => [],
                     'asserts' => [
