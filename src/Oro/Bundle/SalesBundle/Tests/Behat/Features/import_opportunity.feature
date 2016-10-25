@@ -6,6 +6,15 @@ Feature: Import opportunity feature
   Scenario: Data Template for Opportunity
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
+    And CRM has next Opportunity Probabilities:
+      | Status                     | Probability | Default |
+      | Open                       | 5           |         |
+      | Identification & Alignment | 20          |         |
+      | Needs Analysis             | 10          | yes     |
+      | Solution Development       | 60          |         |
+      | Negotiation                | 75          |         |
+      | Closed Won                 | 100         |         |
+      | Closed Lost                | 0           |         |
     And I open Opportunity Index page
     And there is no records in grid
     When I download Data Template file
@@ -24,9 +33,23 @@ Feature: Import opportunity feature
     And open Opportunity Index page
     And number of records should be 2
     And I should see Opportunity one in grid with following data:
-      | Channel    | First Sales Channel |
-      | Status     | Open                |
-      | Owner      | John Doe            |
+      | Channel     | First Sales Channel |
+      | Status      | Open                |
+      | Owner       | John Doe            |
+#    @todo Uncomment when CRM-6490 will resolved
+#      | Probability | 5%                  |
+
+  Scenario: Import Opportunity with status and probability values
+    Given I fill template with data:
+      | Account Customer name | Channel Name        | Opportunity name            | Status Id   | Probability |
+      | Charlie               | First Sales Channel | Propose Dex Dogtective role | in_progress | 32          |
+    When I import file
+    Then I should see Propose Dex Dogtective role in grid with following data:
+      | Channel     | First Sales Channel |
+      | Status      | Open                |
+      | Owner       | John Doe            |
+      | Probability | 32%                 |
+
 
   Scenario: Import Opportunity with new Account
     Given I fill template with data:
