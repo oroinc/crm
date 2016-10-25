@@ -167,6 +167,8 @@ oro:
                 label:            Budget Amount Value
             budget_amount_currency:
                 label:            Budget Amount Currency
+            budget_amount_base_currency:
+                label:            Base Budget Amount
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed
@@ -298,7 +300,7 @@ oro:
                     open:            Open Leads
 
         #
-        # Entity oroCRM\Bundle\SalesBundle\Entity\LeadAddress
+        # Entity Oro\Bundle\SalesBundle\Entity\LeadAddress
         #
         leadaddress:
             city.label:          City
@@ -435,7 +437,7 @@ oro:
             primary.label:       Primary
 
         #
-        # Entity oroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
+        # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
         #
         b2bcustomeremail:
             email.label:         Email

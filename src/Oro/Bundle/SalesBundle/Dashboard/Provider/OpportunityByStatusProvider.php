@@ -7,6 +7,7 @@ use Doctrine\ORM\Query\Expr as Expr;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
@@ -27,22 +28,28 @@ class OpportunityByStatusProvider
     /** @var OwnerHelper */
     protected $ownerHelper;
 
+    /** @var  CurrencyQueryBuilderTransformerInterface */
+    protected $qbTransformer;
+
     /**
-     * @param RegistryInterface   $doctrine
-     * @param AclHelper           $aclHelper
+     * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
      * @param DateFilterProcessor $processor
-     * @param OwnerHelper         $ownerHelper
+     * @param OwnerHelper $ownerHelper
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
         DateFilterProcessor $processor,
-        OwnerHelper $ownerHelper
+        OwnerHelper $ownerHelper,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->registry            = $doctrine;
         $this->aclHelper           = $aclHelper;
         $this->dateFilterProcessor = $processor;
         $this->ownerHelper         = $ownerHelper;
+        $this->qbTransformer       = $qbTransformer;
     }
 
     /**
@@ -57,7 +64,7 @@ class OpportunityByStatusProvider
         $excludedStatuses = $widgetOptions->get('excluded_statuses', []);
         $orderBy          = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
         $qb               = $this->getOpportunityRepository()
-            ->getGroupedOpportunitiesByStatusQB('o', $orderBy);
+            ->getGroupedOpportunitiesByStatusQB('o', $this->qbTransformer, $orderBy);
         $this->dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
 
         if ($owners) {

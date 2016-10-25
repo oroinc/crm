@@ -72,13 +72,18 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
     protected function getExtensions()
     {
+        $transportName = uniqid('transport');
         $assetsHelper    = $this->getMockBuilder('Symfony\Component\Asset\Packages')
             ->disableOriginalConstructor()->getMock();
         $integrationType = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\ChannelInterface');
         $transportType   = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\TransportInterface');
+        $transportType->expects($this->exactly(2))
+            ->method('getLabel')
+            ->willReturn($transportName);
+
         $registry        = new TypesRegistry();
         $registry->addChannelType(self::TEST_TYPE, $integrationType);
-        $registry->addTransportType(uniqid('transport'), self::TEST_TYPE, $transportType);
+        $registry->addTransportType($transportName, self::TEST_TYPE, $transportType);
 
         $security = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
             ->disableOriginalConstructor()->getMock();

@@ -11,24 +11,16 @@ use Oro\Bundle\QueryDesignerBundle\QueryDesigner\JoinIdentifierHelper;
 
 class ContactInformationFieldHelper
 {
-    /**
-     * @var ConfigProvider
-     */
+    /** @var ConfigProvider */
     protected $configProvider;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $entityContactInfoColumns = array();
 
-    /**
-     * @var DoctrineHelper
-     */
+    /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /**
-     * @var EntityFieldProvider
-     */
+    /** @var EntityFieldProvider */
     protected $fieldProvider;
 
     /**
@@ -51,30 +43,30 @@ class ContactInformationFieldHelper
      *
      * @return array
      */
-    public function getQueryContactInformationColumns(AbstractQueryDesigner $queryDesigner)
+    public function getQueryContactInformationFields(AbstractQueryDesigner $queryDesigner)
     {
-        $columns = array();
+        $fields = [];
 
         // If definition is empty there is no one contact information field
         $definition = $queryDesigner->getDefinition();
         if (!$definition) {
-            return $columns;
+            return $fields;
         }
 
         $definition = json_decode($definition, JSON_OBJECT_AS_ARRAY);
         if (empty($definition['columns'])) {
-            return $columns;
+            return $fields;
         }
 
         $entity = $queryDesigner->getEntity();
         foreach ($definition['columns'] as $column) {
             $contactInformationType = $this->getContactInformationFieldType($entity, $column['name']);
             if (!empty($contactInformationType)) {
-                $columns[$contactInformationType][] = $column;
+                $fields[$contactInformationType][] = $column;
             }
         }
 
-        return $columns;
+        return $fields;
     }
 
     /**
@@ -83,28 +75,28 @@ class ContactInformationFieldHelper
      * @param string|object $entity
      * @return array
      */
-    public function getEntityContactInformationColumns($entity)
+    public function getEntityContactInformationFields($entity)
     {
         $metadata = $this->doctrineHelper->getEntityMetadata($entity);
-        $columns = $metadata->getColumnNames();
-        $contactInformationColumns = array();
-        foreach ($columns as $column) {
-            if ($type = $this->getContactInformationFieldType($entity, $column)) {
-                $contactInformationColumns[$column] = $type;
+        $fields = $metadata->getFieldNames();
+        $contactInformationFields = [];
+        foreach ($fields as $field) {
+            if ($type = $this->getContactInformationFieldType($entity, $field)) {
+                $contactInformationFields[$field] = $type;
             }
         }
 
-        return array_merge($contactInformationColumns, $this->getEntityLevelContactInfoColumns($entity));
+        return array_merge($contactInformationFields, $this->getEntityLevelContactInfoFields($entity));
     }
 
     /**
      * @param string $entity
      * @return array
      */
-    public function getEntityContactInformationColumnsInfo($entity)
+    public function getEntityContactInformationFieldsInfo($entity)
     {
-        $fields = array();
-        $contactInformationFields = $this->getEntityContactInformationColumns($entity);
+        $fields = [];
+        $contactInformationFields = $this->getEntityContactInformationFields($entity);
         $entityFields = $this->fieldProvider->getFields($entity, false, true);
 
         foreach ($entityFields as $entityField) {
@@ -130,7 +122,7 @@ class ContactInformationFieldHelper
         $fieldName = $identifierHelper->getFieldName($fieldName);
 
         if (!array_key_exists($className, $this->entityContactInfoColumns)) {
-            $this->entityContactInfoColumns[$className] = $this->getEntityLevelContactInfoColumns($className);
+            $this->entityContactInfoColumns[$className] = $this->getEntityLevelContactInfoFields($className);
         }
 
         if (!empty($this->entityContactInfoColumns[$className][$fieldName])) {
@@ -147,9 +139,9 @@ class ContactInformationFieldHelper
      * @param string $entity
      * @return array
      */
-    protected function getEntityLevelContactInfoColumns($entity)
+    protected function getEntityLevelContactInfoFields($entity)
     {
-        $contactInfoColumns = array();
+        $result = [];
         if ($this->configProvider->hasConfig($entity)) {
             $entityContactInformation = $this->configProvider
                 ->getConfig($entity)
@@ -159,12 +151,12 @@ class ContactInformationFieldHelper
                 foreach ($entityContactInformation as $contactInfoType => $contactInfoFields) {
                     $entityColumns = ArrayUtil::arrayColumn($contactInfoFields, 'fieldName');
                     foreach ($entityColumns as $entityColumn) {
-                        $contactInfoColumns[$entityColumn] = $contactInfoType;
+                        $result[$entityColumn] = $contactInfoType;
                     }
                 }
             }
         }
 
-        return $contactInfoColumns;
+        return $result;
     }
 }

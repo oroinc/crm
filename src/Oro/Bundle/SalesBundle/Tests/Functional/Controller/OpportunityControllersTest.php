@@ -191,7 +191,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'assert'              => [
                         'name'         => 'opname',
                         'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'budgetAmount' => 'USD50',
+                        'budgetAmount' => 'USD50.0000',
                         'probability'  => 10,
                     ],
                     'expectedResultCount' => 1
@@ -209,7 +209,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'assert'              => [
                         'name'              => 'opname',
                         'channelName'       => LoadSalesBundleFixtures::CHANNEL_NAME,
-                        'budgetAmount'      => 'USD50',
+                        'budgetAmount'      => 'USD50.0000',
                         'probability'       => 10,
                     ],
                     'expectedResultCount' => 1

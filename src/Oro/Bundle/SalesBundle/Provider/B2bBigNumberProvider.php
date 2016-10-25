@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -18,19 +19,25 @@ class B2bBigNumberProvider
     /** @var BigNumberDateHelper */
     protected $dateHelper;
 
+    /** @var CurrencyQueryBuilderTransformerInterface  */
+    protected $qbTransformer;
+
     /**
-     * @param RegistryInterface   $doctrine
-     * @param AclHelper           $aclHelper
+     * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
      * @param BigNumberDateHelper $dateHelper
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
-        BigNumberDateHelper $dateHelper
+        BigNumberDateHelper $dateHelper,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
-        $this->doctrine   = $doctrine;
-        $this->aclHelper  = $aclHelper;
-        $this->dateHelper = $dateHelper;
+        $this->doctrine      = $doctrine;
+        $this->aclHelper     = $aclHelper;
+        $this->dateHelper    = $dateHelper;
+        $this->qbTransformer = $qbTransformer;
     }
 
     /**
@@ -148,7 +155,7 @@ class B2bBigNumberProvider
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getNewOpportunitiesAmount($this->aclHelper, $start, $end, $owners);
+            ->getNewOpportunitiesAmount($this->aclHelper, $this->qbTransformer, $start, $end, $owners);
     }
 
 
@@ -179,6 +186,6 @@ class B2bBigNumberProvider
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getWonOpportunitiesToDateAmount($this->aclHelper, $start, $end, $owners);
+            ->getWonOpportunitiesToDateAmount($this->aclHelper, $this->qbTransformer, $start, $end, $owners);
     }
 }
