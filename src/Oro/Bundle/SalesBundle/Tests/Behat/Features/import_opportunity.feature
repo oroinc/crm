@@ -39,11 +39,13 @@ Feature: Import opportunity feature
 #    @todo Uncomment when CRM-6490 will resolved
 #      | Probability | 5%                  |
 
-  Scenario: Import Opportunity with status and probability values
+  Scenario: Import Opportunity with custom probability value
     Given I fill template with data:
       | Account Customer name | Channel Name        | Opportunity name            | Status Id   | Probability |
-      | Charlie               | First Sales Channel | Propose Dex Dogtective role | in_progress | 32          |
+      | Charlie               | First Sales Channel | Propose Dex Dogtective role | in_progress | 0.32        |
     When I import file
+    # @todo remove "And I reload the page" when CRM-6492 will resolved
+    And I reload the page
     Then I should see Propose Dex Dogtective role in grid with following data:
       | Channel     | First Sales Channel |
       | Status      | Open                |
