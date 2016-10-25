@@ -27,6 +27,7 @@ features:
         placeholder_items:
             - leads_launchpad
         dashboards:
+            - leads_list
             - campaigns_leads
             - campaigns_by_close_revenue
             - quick_launchpad.leads
