@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -69,7 +68,6 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          }
  *      }
  * )
- * @Oro\Loggable
  */
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
@@ -106,7 +104,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $namePrefix;
 
@@ -114,7 +111,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $firstName;
 
@@ -122,7 +118,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $middleName;
 
@@ -130,7 +125,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $lastName;
 
@@ -138,7 +132,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $nameSuffix;
 
@@ -146,7 +139,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="gender", type="string", length=8, nullable=true)
-     * @Oro\Versioned
      */
     protected $gender;
 
@@ -154,7 +146,6 @@ class Customer extends ExtendCustomer implements
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
-     * @Oro\Versioned
      */
     protected $birthday;
 
@@ -162,7 +153,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -177,7 +167,6 @@ class Customer extends ExtendCustomer implements
      * @var \DateTime $createdAt
      *
      * @ORM\Column(type="datetime", name="created_at")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -192,7 +181,6 @@ class Customer extends ExtendCustomer implements
      * @var \DateTime $updatedAt
      *
      * @ORM\Column(type="datetime", name="updated_at")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -207,7 +195,6 @@ class Customer extends ExtendCustomer implements
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", name="imported_at", nullable=true)
-     * @Oro\Versioned
      */
     protected $importedAt;
 
@@ -215,7 +202,6 @@ class Customer extends ExtendCustomer implements
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", name="synced_at", nullable=true)
-     * @Oro\Versioned
      */
     protected $syncedAt;
 
@@ -253,7 +239,6 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="created_in", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $createdIn;
 
@@ -381,7 +366,6 @@ class Customer extends ExtendCustomer implements
      * @var float
      *
      * @ORM\Column(name="vat", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      */
     protected $vat;
 

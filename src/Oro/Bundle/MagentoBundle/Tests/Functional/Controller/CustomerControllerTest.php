@@ -57,7 +57,7 @@ class CustomerControllerTest extends AbstractController
     }
 
     /**
-     * @depend1s testGrid
+     * @depends testGrid
      */
     public function testCreate()
     {
@@ -100,7 +100,7 @@ class CustomerControllerTest extends AbstractController
                         'firstName' => 'John',
                         'lastName' => 'Doe',
                         'email' => 'test@example.com',
-                        'lifetime' => '$0.00',
+                        'lifetime' => 'USD 0.00',
                         'countryName' => 'United States',
                         'regionName' => 'Arizona',
                     ],
@@ -120,7 +120,7 @@ class CustomerControllerTest extends AbstractController
                         'firstName' => 'John',
                         'lastName' => 'Doe',
                         'email' => 'test@example.com',
-                        'lifetime' => '$0.00',
+                        'lifetime' => 'USD 0.00',
                         'countryName' => 'United States',
                         'regionName' => 'Arizona',
                     ],
@@ -148,7 +148,7 @@ class CustomerControllerTest extends AbstractController
                     ],
                     'gridFilters' => [],
                     'assert' => [
-                        'grandTotal' => '$2.54',
+                        'grandTotal' => 'USD 2.54',
                         'statusLabel' => 'Open',
                         'workflowStepLabel' => 'Open',
                     ],
@@ -164,8 +164,8 @@ class CustomerControllerTest extends AbstractController
                     ],
                     'gridFilters' => [],
                     'assert' => [
-                        'totalAmount' => '$0.00',
-                        'totalPaidAmount' => '$17.85',
+                        'totalAmount' => 'USD 0.00',
+                        'totalPaidAmount' => 'USD 17.85',
                         'status' => 'open',
                         'workflowStepLabel' => 'Not contacted',
                     ],

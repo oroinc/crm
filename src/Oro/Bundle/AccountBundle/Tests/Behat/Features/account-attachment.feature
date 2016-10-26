@@ -12,7 +12,7 @@ Feature: Account attachment
     And click on Charlie Sheen in grid
     And follow "More actions"
     And press "Add attachment"
-    When I fill "Attachment" form with:
+    When I fill "Attachment Form" with:
       | File    | cat1.jpg    |
       | Comment | Sweet kitty |
     And press "Save"
@@ -28,7 +28,7 @@ Feature: Account attachment
 
   Scenario: Edit attachment
     Given I click Edit cat1.jpg in grid
-    When I fill "Attachment" form with:
+    When I fill "Attachment Form" with:
       | File    | cat2.jpg |
       | Comment | So cute  |
     And press "Save"

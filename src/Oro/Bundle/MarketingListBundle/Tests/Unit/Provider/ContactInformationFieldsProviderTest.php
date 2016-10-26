@@ -66,7 +66,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->helper
             ->expects($this->once())
-            ->method('getEntityContactInformationColumns')
+            ->method('getEntityContactInformationFields')
             ->will($this->returnValue($contactInfoFields));
     }
 
@@ -143,7 +143,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper
             ->expects($this->once())
-            ->method('getEntityContactInformationColumns')
+            ->method('getEntityContactInformationFields')
             ->with($entity)
             ->will($this->returnValue($contactInfoFields));
     }

@@ -6,7 +6,8 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
+use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
@@ -46,43 +47,45 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param string $alias
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param string $orderBy
      * @param string $direction
      *
      * @return QueryBuilder
-     *
      */
     public function getGroupedOpportunitiesByStatusQB(
         $alias,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer,
         $orderBy = 'budget',
         $direction = 'DESC'
     ) {
         $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
         $repository  = $this->getEntityManager()->getRepository($statusClass);
 
-        $qb = $repository->createQueryBuilder('s')
-            ->select(
-                's.name as label',
-                sprintf('COUNT(%s.id) as quantity', $alias),
-                // Use close revenue for calculating budget for opportunities with won statuses
+        $qb = $repository->createQueryBuilder('s');
+        $closeRevenueQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb, $alias);
+        $budgetAmountQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb, $alias);
+        $qb->select(
+            's.name as label',
+            sprintf('COUNT(%s.id) as quantity', $alias),
+            // Use close revenue for calculating budget for opportunities with won statuses
                 sprintf(
-                    "SUM(
-                        CASE WHEN s.id = 'won'
+                    'SUM(
+                        CASE WHEN s.id = \'won\'
                             THEN
-                                (CASE WHEN %s.closeRevenueValue IS NOT NULL THEN %s.closeRevenueValue ELSE 0 END)
+                                (CASE WHEN %1$s.closeRevenueValue IS NOT NULL THEN (%2$s) ELSE 0 END)
                             ELSE
-                                (CASE WHEN %s.budgetAmountValue IS NOT NULL THEN %s.budgetAmountValue ELSE 0 END)
+                                (CASE WHEN %1$s.budgetAmountValue IS NOT NULL THEN (%3$s) ELSE 0 END)
                         END
-                    ) as budget",
+                    ) as budget',
                     $alias,
-                    $alias,
-                    $alias,
-                    $alias
+                    $closeRevenueQuery,
+                    $budgetAmountQuery
                 )
-            )
-            ->leftJoin('OroSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
-            ->groupBy('s.name')
-            ->orderBy($orderBy, $direction);
+        )
+        ->leftJoin('OroSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
+        ->groupBy('s.name')
+        ->orderBy($orderBy, $direction);
 
         return $qb;
     }
@@ -237,7 +240,7 @@ class OpportunityRepository extends EntityRepository
             $auditQb = $auditRepository->getLogEntriesQueryBuilder($opportunity);
             $auditQb->andWhere('a.action = :action')
                 ->andWhere('a.loggedAt > :date')
-                ->setParameter('action', LoggableManager::ACTION_UPDATE)
+                ->setParameter('action', AbstractAudit::ACTION_UPDATE)
                 ->setParameter('date', $newDate);
             $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
@@ -538,6 +541,7 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
      * @param int[]     $owners
@@ -546,13 +550,14 @@ class OpportunityRepository extends EntityRepository
      */
     public function getNewOpportunitiesAmount(
         AclHelper $aclHelper,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
         $owners = []
     ) {
-        $qb = $this
-            ->createQueryBuilder('o')
-            ->select('SUM(o.budgetAmount)');
+        $qb = $this->createQueryBuilder('o');
+        $baTransformedQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
+        $qb->select(sprintf('SUM(%s)', $baTransformedQuery));
 
         $this->setCreationPeriod($qb, $start, $end);
 
@@ -593,6 +598,7 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
      * @param int[]     $owners
@@ -601,12 +607,14 @@ class OpportunityRepository extends EntityRepository
      */
     public function getWonOpportunitiesToDateAmount(
         AclHelper $aclHelper,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
         $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
-        $qb->select('SUM(o.closeRevenue)')
+        $crTransformedQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
+        $qb->select(sprintf('SUM(%s)', $crTransformedQuery))
             ->andWhere('o.status = :status')
             ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
 
@@ -668,28 +676,6 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * Returns budget amount of opportunities grouped by lead source
-     *
-     * @param AclHelper $aclHelper
-     * @param DateFilterProcessor $dateFilterProcessor
-     * @param array $dateRange
-     * @param array $owners
-     *
-     * @return array [value, source]
-     */
-    public function getOpportunitiesAmountGroupByLeadSource(
-        AclHelper $aclHelper,
-        DateFilterProcessor $dateFilterProcessor,
-        array $dateRange = [],
-        array $owners = []
-    ) {
-        $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateFilterProcessor, $dateRange, $owners);
-        $qb->addSelect("SUM(CASE WHEN o.status = 'won' THEN o.closeRevenue ELSE o.budgetAmount END) as value");
-
-        return $aclHelper->apply($qb)->getArrayResult();
-    }
-
-    /**
      * Returns opportunities QB grouped by lead source filtered by $dateRange and $owners
      *
      * @param DateFilterProcessor $dateFilterProcessor
@@ -698,7 +684,7 @@ class OpportunityRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    protected function getOpportunitiesGroupByLeadSourceQueryBuilder(
+    public function getOpportunitiesGroupByLeadSourceQueryBuilder(
         DateFilterProcessor $dateFilterProcessor,
         array $dateRange = [],
         array $owners = []
@@ -720,17 +706,22 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param string $alias
-     * @param array  $excludedStatuses
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
+     * @param array $excludedStatuses
      *
      * @return QueryBuilder
      */
-    public function getForecastQB($alias = 'o', array $excludedStatuses = ['lost', 'won'])
-    {
+    public function getForecastQB(
+        CurrencyQueryBuilderTransformerInterface $qbTransformer,
+        $alias = 'o',
+        array $excludedStatuses = ['lost', 'won']
+    ) {
         $qb     = $this->createQueryBuilder($alias);
+        $baBaseCurrencyQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb, $alias);
         $qb->select([
             sprintf('COUNT(%s.id) as inProgressCount', $alias),
-            sprintf('SUM(%s.budgetAmount) as budgetAmount', $alias),
-            sprintf('SUM(%s.budgetAmount * %s.probability) as weightedForecast', $alias, $alias)
+            sprintf('SUM(%s) as budgetAmount', $baBaseCurrencyQuery),
+            sprintf('SUM((%s) * %s.probability) as weightedForecast', $baBaseCurrencyQuery, $alias)
         ]);
 
         if ($excludedStatuses) {

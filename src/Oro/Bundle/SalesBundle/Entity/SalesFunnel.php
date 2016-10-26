@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -23,7 +22,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository")
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="oro_sales_salesfunnel_index",
  *      routeView="oro_sales_salesfunnel_view",
@@ -79,7 +77,6 @@ class SalesFunnel extends ExtendSalesFunnel implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      */
     protected $owner;
 
@@ -88,7 +85,6 @@ class SalesFunnel extends ExtendSalesFunnel implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", cascade={"persist"})
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      */
     protected $lead;
 
@@ -97,7 +93,6 @@ class SalesFunnel extends ExtendSalesFunnel implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity", cascade={"persist"})
      * @ORM\JoinColumn(name="opportunity_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      */
     protected $opportunity;
 

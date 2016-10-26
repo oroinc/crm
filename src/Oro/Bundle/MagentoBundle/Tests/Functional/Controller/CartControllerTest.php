@@ -77,13 +77,17 @@ class CartControllerTest extends AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public function gridProvider()
     {
         return [
             'Magento cart grid' => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-cart-grid'
+                        'gridName' => 'magento-cart-grid',
+                        'magento-cart-grid[_sort_by][originId]' => 'ASC',
                     ],
                     'gridFilters' => [],
                     'asserts' => [
@@ -147,9 +151,9 @@ class CartControllerTest extends AbstractController
                     'assert' => [
                         'sku' => 'sku',
                         'qty' => 0,
-                        'rowTotal' => '$100.00',
-                        'taxAmount' => '$10.00',
-                        'discountAmount' => '$0.00'
+                        'rowTotal' => 'USD 100.00',
+                        'taxAmount' => 'USD 10.00',
+                        'discountAmount' => 'USD 0.00'
                     ],
                     'expectedResultCount' => 1
                 ],

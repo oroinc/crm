@@ -108,22 +108,12 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             if (empty($websites)) {
                 return;
             }
-
-            $unsetOptions = ['choice_list'];
-            /**
-             * @todo: should be removed in scope of BAP-11222
-             */
-            /* Check if right now we're using Symfony 2.8+ */
-            if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-                array_push($unsetOptions, 'choice_label');
-            }
-
             $choices = [];
             foreach ($websites as $website) {
-                $choices[$website['id']] = $website['label'];
+                $choices[$website['label']] = $website['id'];
             }
 
-            FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], $unsetOptions);
+            FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], ['choice_list']);
         };
     }
 }

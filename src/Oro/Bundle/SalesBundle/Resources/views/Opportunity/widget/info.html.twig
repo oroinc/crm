@@ -1,6 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
+{% import 'OroCurrencyBundle::macros.html.twig' as currency %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -35,6 +36,7 @@
 
             {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
             {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}
+            {{ currency.convert_to_base_currency(entity.budgetAmount, '', entity, 'budgetAmount') }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
