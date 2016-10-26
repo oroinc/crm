@@ -77,13 +77,17 @@ class CartControllerTest extends AbstractController
         );
     }
 
+    /**
+     * @return array
+     */
     public function gridProvider()
     {
         return [
             'Magento cart grid' => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-cart-grid'
+                        'gridName' => 'magento-cart-grid',
+                        'magento-cart-grid[_sort_by][originId]' => 'ASC',
                     ],
                     'gridFilters' => [],
                     'asserts' => [
