@@ -78,15 +78,8 @@ class CartControllerTest extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @dataProvider gridProvider
+     * @return array
      */
-    public function testGrid($requestData)
-    {
-        parent::testGrid($requestData);
-    }
-
     public function gridProvider()
     {
         return [

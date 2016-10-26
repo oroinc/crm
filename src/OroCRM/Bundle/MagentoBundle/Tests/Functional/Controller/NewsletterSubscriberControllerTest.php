@@ -94,16 +94,6 @@ class NewsletterSubscriberControllerTest extends AbstractController
     }
 
     /**
-     * @param array $requestData
-     *
-     * @dataProvider gridProvider
-     */
-    public function testGrid($requestData)
-    {
-        parent::testGrid($requestData);
-    }
-
-    /**
      * @return array
      */
     public function gridProvider()
@@ -111,7 +101,10 @@ class NewsletterSubscriberControllerTest extends AbstractController
         return [
             'default' => [
                 [
-                    'gridParameters' => ['gridName' => 'magento-newsletter-subscriber-grid'],
+                    'gridParameters' => [
+                        'gridName' => 'magento-newsletter-subscriber-grid',
+                        'magento-newsletter-subscriber-grid[_sort_by][customerName]' => 'DESC',
+                    ],
                     'gridFilters' => [],
                     'assert' => [
                         'channelName' => 'Magento channel',
