@@ -73,9 +73,25 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
     /**
      * {@inheritDoc}
+     *
+     * @todo remove enabling features once it's possible to use workflow in code if features are disabled
      */
     public function load(ObjectManager $manager)
     {
+        $requiredFeatureToggles = [
+            'oro_sales.lead_feature_enabled',
+            'oro_sales.opportunity_feature_enabled',
+            'oro_sales.salesfunnel_feature_enabled',
+        ];
+
+        $originalFeatureTogglesSetting = [];
+
+        $cm = $this->container->get('oro_config.global');
+        foreach ($requiredFeatureToggles as $toggle) {
+            $originalFeatureTogglesSetting[$toggle] = $cm->get($toggle, false, true);
+            $cm->set($toggle, true);
+        }
+
         $this->organization = $this->container->get('doctrine')->getManager()
             ->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
@@ -83,6 +99,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
         $this->initSupportingEntities($manager);
         $this->loadFlows();
+
+        foreach ($originalFeatureTogglesSetting as $toggle => $setting) {
+            if (!isset($setting['use_parent_scope_value']) || $setting['use_parent_scope_value']) {
+                $cm->reset($toggle);
+            } else {
+                $cm->set($toggle, $setting['value']);
+            }
+        }
     }
 
     /**

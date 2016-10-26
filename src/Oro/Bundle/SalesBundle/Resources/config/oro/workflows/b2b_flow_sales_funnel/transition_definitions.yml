@@ -3,7 +3,11 @@ workflows:
         transition_definitions:
             start_from_lead:
                 preconditions:
-                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Lead']]
+                    '@and':
+                        - '@feature_enabled':
+                            feature: 'salesfunnel'
+                        - '@feature_enabled':
+                            feature: 'sales_lead'
                 actions:
                     - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
@@ -15,7 +19,11 @@ workflows:
                             id: $sales_funnel.id
             start_from_opportunity:
                 preconditions:
-                    '@channel_entity_availiable': [['Oro\Bundle\SalesBundle\Entity\SalesFunnel', 'Oro\Bundle\SalesBundle\Entity\Opportunity']]
+                    '@and':
+                        - '@feature_enabled':
+                            feature: 'salesfunnel'
+                        - '@feature_enabled':
+                            feature: 'sales_opportunity'
                 actions:
                     - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
