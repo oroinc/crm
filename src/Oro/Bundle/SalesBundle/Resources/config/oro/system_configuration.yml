@@ -29,6 +29,7 @@ system_configuration:
             type: oro_config_checkbox
             priority: 20
             options:
+                required: false
                 label: oro.sales.system_configuration.fields.sales_lead.feature_enabled.label
 
         oro_sales.opportunity_feature_enabled:
@@ -36,6 +37,7 @@ system_configuration:
             type: oro_config_checkbox
             priority: 20
             options:
+                required: false
                 label: oro.sales.system_configuration.fields.sales_opportunity.feature_enabled.label
 
         oro_sales.salesfunnel_feature_enabled:
@@ -43,6 +45,7 @@ system_configuration:
             type: oro_config_checkbox
             priority: 20
             options:
+                required: false
                 label: oro.sales.system_configuration.fields.sales_salesfunnel.feature_enabled.label
 
         oro_sales.opportunity_statuses:
@@ -79,6 +82,7 @@ system_configuration:
                             opportunity:
                                 children:
                                     general_setup:
+                                        priority: 100
                                         children:
                                             - oro_sales.opportunity_feature_enabled
                                     opportunity_status_probabilities:
