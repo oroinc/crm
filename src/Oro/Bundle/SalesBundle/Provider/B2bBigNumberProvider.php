@@ -155,7 +155,7 @@ class B2bBigNumberProvider
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getNewOpportunitiesAmount($this->aclHelper, $start, $end, $owners);
+            ->getNewOpportunitiesAmount($this->aclHelper, $this->qbTransformer, $start, $end, $owners);
     }
 
 
