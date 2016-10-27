@@ -130,7 +130,7 @@ SQL;
         ];
         $types = [
             'entityClasses' => Connection::PARAM_STR_ARRAY,
-            'status'        => \PDO::PARAM_BOOL,
+            'status'        => Type::BOOLEAN,
         ];
 
         $this->logQuery($logger, $query, $params, $types);
