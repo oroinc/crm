@@ -805,7 +805,7 @@ services:
     oro_magento.action.automatic_discovery:
         class: 'Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction'
         arguments:
-            - "@oro_action.context_accessor"
+            - "@oro_action.expression.context_accessor"
             - "@oro_magento.service.automatic_discovery"
         tags:
             - { name: oro_action.action, alias: automatic_discovery }

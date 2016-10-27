@@ -391,6 +391,6 @@ services:
         class: %oro_channel.event_listener.transitions_attribute.class%
         arguments:
             - '@form.factory'
-            - '@oro_action.context_accessor'
+            - '@oro_action.expression.context_accessor'
         tags:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }

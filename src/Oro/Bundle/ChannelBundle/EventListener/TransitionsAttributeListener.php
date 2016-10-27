@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
-use Oro\Component\Action\Model\ContextAccessor;
+use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
 
 class TransitionsAttributeListener
