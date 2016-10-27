@@ -13,7 +13,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;

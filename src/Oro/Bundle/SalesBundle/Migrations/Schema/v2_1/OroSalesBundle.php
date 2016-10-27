@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_28;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_1;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
@@ -23,8 +23,8 @@ class OroSalesBundle implements Migration
                 'DELETE FROM orocrm_channel_entity_name WHERE name IN (:entities)',
                 [
                     'entities' => [
-                        'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                        'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                        'Oro\Bundle\SalesBundle\Entity\Lead',
+                        'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     ],
                 ],
                 [

@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Provider;
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 
 /**
- * @deprecated
+ * @deprecated since 1.10 will be removed after 2.1
  */
 class SalesFunnelEntityNameProvider implements EntityNameProviderInterface
 {

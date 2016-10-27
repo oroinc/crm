@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_28;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_1;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
@@ -130,7 +130,7 @@ SQL;
         ];
         $types = [
             'entityClasses' => Connection::PARAM_STR_ARRAY,
-            'status'        => \PDO::PARAM_BOOL,
+            'status'        => Type::BOOLEAN,
         ];
 
         $this->logQuery($logger, $query, $params, $types);

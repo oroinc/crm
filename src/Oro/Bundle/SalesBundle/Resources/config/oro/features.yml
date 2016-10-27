@@ -33,6 +33,8 @@ features:
             - quick_launchpad.leads
             - business_sales_channel_statistics.new_leads_count
             - business_sales_channel_statistics.open_leads_count
+        navigation_items:
+            - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
 
     sales_opportunity:
         label: oro.sales.opportunity.feature.label
@@ -70,6 +72,12 @@ features:
             - business_sales_channel_statistics.new_opportunities_amount
             - business_sales_channel_statistics.won_opportunities_to_date_count
             - business_sales_channel_statistics.won_opportunities_to_date_amount
+        navigation_items:
+            - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
+            - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
+            - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
+            - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
+            - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
 
     salesfunnel:
         label: oro.sales.salesfunnel.feature.label

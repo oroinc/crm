@@ -51,7 +51,6 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
 
         $report = new Report();
         $report->setName('Campaign Performance');
-        $report->setInternalId('campaign_performance');
         $report->setEntity('Oro\Bundle\CampaignBundle\Entity\Campaign');
         $type = $em->getReference('OroReportBundle:ReportType', ReportType::TYPE_TABLE);
         $report->setType($type);
