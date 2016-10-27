@@ -368,7 +368,7 @@ oro:
             owner.label:          Owner
             data_channel.label:   Channel
             organization.label:   Organization
-            feature.label:        Sales Process (deprecated)
+            feature.label:        Sales Process (Deprecated)
             feature.description:  Enables Sales Processes. Beware that this feature is deprecated and will be removed in a future.
 
             hint: 'Sales Process #%id%'

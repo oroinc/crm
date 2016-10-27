@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * @deprecated
+ * @deprecated since 1.10 will be removed after 2.1
  */
 class SalesFunnelApiType extends SalesFunnelType
 {
