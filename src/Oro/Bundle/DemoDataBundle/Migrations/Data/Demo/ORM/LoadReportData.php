@@ -21,7 +21,6 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
     protected $reports = [
         [
             'name' => 'Leads by Geography',
-            'internal_id' => 'leads_by_geography',
             'description' => 'Geographical distribution of Leads',
             'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
@@ -68,7 +67,6 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
         foreach ($this->reports as $values) {
             $report = new Report();
             $report->setName($values['name']);
-            $report->setInternalId($values['internal_id']);
             $report->setDescription($values['description']);
             $report->setEntity($values['entity']);
             /** @var ReportType $type */
