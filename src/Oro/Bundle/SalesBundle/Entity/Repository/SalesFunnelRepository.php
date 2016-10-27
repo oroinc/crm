@@ -106,7 +106,7 @@ class SalesFunnelRepository extends EntityRepository
         }
 
         $budgetAmountQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
-            ->addSelect('SUM(opportunity.budgetAmount) as budgetAmount');
+            ->addSelect('SUM(opportunity.budgetAmountValue) as budgetAmount');
         $budgetAmountQueryBuilder
             ->andWhere($budgetAmountQueryBuilder->expr()->in('workflowStep.name', $steps));
         $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);
