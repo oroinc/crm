@@ -41,3 +41,7 @@ UPGRADE FROM 1.10 to 2.0
 ####OroAnalyticsBundle:
 - The class `Oro\Bundle\AnalyticsBundle\Model\StateManager` and its service `orocrm_analytics.model.state_manager` were removed.
 - The method `scheduleRecalculation` of `Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager` was removed. Use appropriate method from `Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler` service.
+
+
+####CalendarCRMBridgeBundle:
+- CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM

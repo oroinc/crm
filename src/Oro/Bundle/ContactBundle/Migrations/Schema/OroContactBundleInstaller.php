@@ -16,7 +16,6 @@ use Oro\Bundle\ContactBundle\Migrations\Schema\v1_4\OroContactBundle as NoteMigr
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_5\OroContactBundle as AttachmentMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_6\OroContactBundle as ActivityMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactOrganizations;
-use Oro\Bundle\ContactBundle\Migrations\Schema\v1_9\CreateActivityAssociation as ActivityCalendarEventMigration;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -104,7 +103,6 @@ class OroContactBundleInstaller implements
         NoteMigration::addNoteAssociations($schema, $this->noteExtension);
         AttachmentMigration::addPhotoToContact($schema, $this->attachmentExtension);
         ActivityMigration::addActivityAssociations($schema, $this->activityExtension);
-        ActivityCalendarEventMigration::addActivityAssociations($schema, $this->activityExtension);
         ContactOrganizations::addOrganization($schema);
     }
 
