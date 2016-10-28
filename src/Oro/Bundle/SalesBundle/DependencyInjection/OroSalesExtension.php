@@ -22,6 +22,7 @@ class OroSalesExtension extends Extension
         $loader->load('services_api.yml');
         $loader->load('form.yml');
         $loader->load('importexport.yml');
+        $loader->load('services_customers.yml');
 
         $container->prependExtensionConfig($this->getAlias(), array_intersect_key($config, array_flip(['settings'])));
     }

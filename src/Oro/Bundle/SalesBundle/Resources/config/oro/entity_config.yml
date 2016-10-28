@@ -1,8 +1,18 @@
 entity_config:
-    sales:
+    sales_opportunity:
         entity:
             items:
-                # array containing opportunity customer fields
-                # [customerClassName => customerFieldName, ...]
-                customers:
-                    options: []
+                enabled: # boolean
+                    options:
+                        require_schema_update: true
+                        priority:           250
+                        default_value:      false
+
+    sales_lead:
+        entity:
+            items:
+                enabled: # boolean
+                    options:
+                        require_schema_update: true
+                        priority:           250
+                        default_value:      false
