@@ -31,7 +31,7 @@ navigation:
             accounts_life_time_value:
                 label: 'oro.reportcrm.menu.accounts_life_time_value.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'accounts'
                     reportName:      'life_time_value'
                 extras:
@@ -41,7 +41,7 @@ navigation:
             accounts_by_opportunities:
                 label: 'oro.reportcrm.menu.accounts_by_opportunities.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'accounts'
                     reportName:      'by_opportunities'
                 extras:
@@ -51,7 +51,7 @@ navigation:
             leads_by_date:
                 label: 'oro.reportcrm.menu.leads_by_date.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'leads'
                     reportName:      'by_date'
                 extras:
@@ -61,7 +61,7 @@ navigation:
             opportunities_by_status:
                 label: 'oro.reportcrm.menu.opportunities_by_status.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'opportunities'
                     reportName:      'by_status'
                 extras:
@@ -71,7 +71,7 @@ navigation:
             won_by_period:
                 label: 'oro.reportcrm.menu.won_by_period.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'opportunities'
                     reportName:      'won_by_period'
                 extras:
@@ -81,7 +81,7 @@ navigation:
             total_forecast:
                 label: 'oro.reportcrm.menu.total_forecast.label'
                 route: 'oro_reportcrm_index'
-                routeParameters:
+                route_parameters:
                     reportGroupName: 'opportunities'
                     reportName:      'total_forecast'
                 extras:
