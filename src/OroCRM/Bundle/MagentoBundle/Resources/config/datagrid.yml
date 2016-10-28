@@ -89,6 +89,7 @@ datagrid:
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
                 countryName: { data_name: country.name }
+                regionName:  { data_name: region.name}
                 lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
             default:
