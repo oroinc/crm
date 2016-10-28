@@ -26,7 +26,7 @@ features:
             - Oro\Bundle\SalesBundle\Entity\LeadStatus
         placeholder_items:
             - leads_launchpad
-        dashboards:
+        dashboard_widgets:
             - leads_list
             - campaigns_leads
             - campaigns_by_close_revenue
@@ -58,7 +58,7 @@ features:
             - opportunity_status_probabilities
         placeholder_items:
             - opportunities_launchpad
-        dashboards:
+        dashboard_widgets:
             - quick_launchpad.opportunities
             - opportunities_by_lead_source_chart
             - opportunities_by_state
@@ -100,5 +100,5 @@ features:
             - b2b_flow_sales_funnel
         api_resources:
             - Oro\Bundle\SalesBundle\Entity\SalesFunnel
-        dashboards:
+        dashboard_widgets:
             - my_sales_flow_b2b_chart
