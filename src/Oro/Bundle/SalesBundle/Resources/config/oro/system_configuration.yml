@@ -28,6 +28,7 @@ system_configuration:
             data_type: boolean
             type: oro_config_checkbox
             priority: 20
+            page_reload: true
             options:
                 required: false
                 label: oro.sales.system_configuration.fields.sales_lead.feature_enabled.label
@@ -36,6 +37,7 @@ system_configuration:
             data_type: boolean
             type: oro_config_checkbox
             priority: 20
+            page_reload: true
             options:
                 required: false
                 label: oro.sales.system_configuration.fields.sales_opportunity.feature_enabled.label
@@ -44,6 +46,7 @@ system_configuration:
             data_type: boolean
             type: oro_config_checkbox
             priority: 20
+            page_reload: true
             options:
                 required: false
                 label: oro.sales.system_configuration.fields.sales_salesfunnel.feature_enabled.label

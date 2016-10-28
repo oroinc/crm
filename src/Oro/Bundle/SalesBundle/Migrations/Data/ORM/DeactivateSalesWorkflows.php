@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAwareInterface
@@ -26,7 +27,7 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @todo remove enabling features once it's possible to use workflow in code if features are disabled
      */
@@ -39,10 +40,10 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
 
         $originalFeatureTogglesSetting = [];
 
-        $cm = $this->container->get('oro_config.global');
+        $configManager = $this->getConfigManager();
         foreach ($requiredFeatureToggles as $toggle) {
-            $originalFeatureTogglesSetting[$toggle] = $cm->get($toggle, false, true);
-            $cm->set($toggle, true);
+            $originalFeatureTogglesSetting[$toggle] = $configManager->get($toggle, false, true);
+            $configManager->set($toggle, true);
         }
 
         /** @var WorkflowManager $workflowManager */
@@ -53,10 +54,18 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
 
         foreach ($originalFeatureTogglesSetting as $toggle => $setting) {
             if (!isset($setting['use_parent_scope_value']) || $setting['use_parent_scope_value']) {
-                $cm->reset($toggle);
+                $configManager->reset($toggle);
             } else {
-                $cm->set($toggle, $setting['value']);
+                $configManager->set($toggle, $setting['value']);
             }
         }
+    }
+
+    /**
+     * @return ConfigManager
+     */
+    protected function getConfigManager()
+    {
+        return $this->container->get('oro_config.global');
     }
 }

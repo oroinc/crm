@@ -12,14 +12,14 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
-
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -71,7 +71,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @todo remove enabling features once it's possible to use workflow in code if features are disabled
      */
@@ -85,10 +85,10 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
         $originalFeatureTogglesSetting = [];
 
-        $cm = $this->container->get('oro_config.global');
+        $configManager = $this->getConfigManager();
         foreach ($requiredFeatureToggles as $toggle) {
-            $originalFeatureTogglesSetting[$toggle] = $cm->get($toggle, false, true);
-            $cm->set($toggle, true);
+            $originalFeatureTogglesSetting[$toggle] = $configManager->get($toggle, false, true);
+            $configManager->set($toggle, true);
         }
 
         $this->organization = $this->container->get('doctrine')->getManager()
@@ -101,9 +101,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
         foreach ($originalFeatureTogglesSetting as $toggle => $setting) {
             if (!isset($setting['use_parent_scope_value']) || $setting['use_parent_scope_value']) {
-                $cm->reset($toggle);
+                $configManager->reset($toggle);
             } else {
-                $cm->set($toggle, $setting['value']);
+                $configManager->set($toggle, $setting['value']);
             }
         }
     }
@@ -267,6 +267,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $this->securityContext->setToken($token);
+    }
+
+    /**
+     * @return ConfigManager
+     */
+    protected function getConfigManager()
+    {
+        return $this->container->get('oro_config.global');
     }
 
     /**

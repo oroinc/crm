@@ -10,7 +10,7 @@ use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
