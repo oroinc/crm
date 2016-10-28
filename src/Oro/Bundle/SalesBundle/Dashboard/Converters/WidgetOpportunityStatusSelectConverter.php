@@ -21,12 +21,6 @@ class WidgetOpportunityStatusSelectConverter extends WidgetEntitySelectConverter
     ) {
         $entityClass = ExtendHelper::buildEnumValueClassName($enumCode);
 
-        parent::__construct(
-            $aclHelper,
-            $entityNameResolver,
-            $doctrineHelper,
-            $entityManager,
-            $entityClass
-        );
+        parent::__construct($aclHelper, $entityNameResolver, $doctrineHelper, $entityManager, $entityClass);
     }
 }
