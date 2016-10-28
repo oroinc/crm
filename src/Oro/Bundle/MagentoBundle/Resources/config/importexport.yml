@@ -127,7 +127,7 @@ services:
     oro_magento.importexport.data_converter.customer:
         class: %oro_magento.importexport.data_converter.customer.class%
         arguments:
-            - "@oro_importexport.field.field_helper"
+            - "@oro_entity.helper.field_helper"
         calls:
             - [addNodeDataConverter, ['addresses', "@oro_magento.importexport.data_converter.customer_address", true]]
             - [addNodeDataConverter, ['group', "@oro_magento.importexport.data_converter.customer_group"]]
@@ -281,7 +281,7 @@ services:
     oro_magento.importexport.denormalizer.default_configurable_entity:
         class: Oro\Bundle\MagentoBundle\ImportExport\Serializer\DefaultConfigurableEntityDenormalizer
         arguments:
-            - "@oro_importexport.field.field_helper"
+            - "@oro_entity.helper.field_helper"
             - "@logger"
         tags:
             - { name: oro_importexport.normalizer, priority: -200 }
