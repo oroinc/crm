@@ -28,7 +28,8 @@
         "php": ">=5.5.9",
         "oro/platform": "1.x-dev",
         "oro/crm-task-bundle": "1.x-dev",
-        "oro/crm-call-bundle": "1.x-dev"
+        "oro/crm-call-bundle": "1.x-dev",
+        "oro/calendar-bundle": "1.x-dev"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.3.*",
