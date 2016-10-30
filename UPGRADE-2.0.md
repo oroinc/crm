@@ -27,3 +27,7 @@ UPGRADE FROM 1.10 to 2.0
     - method `getEntityContactInformationColumns` `was removed. Use method getEntityContactInformationFields` instead.
     - method `getEntityContactInformationColumnsInfo` was removed. Use method `getEntityContactInformationFieldsInfo` instead.
     - method `getEntityLevelContactInfoColumns` was removed. Use method `getEntityLevelContactInfoFields` instead.
+
+
+####CalendarCRMBridgeBundle:
+- CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
