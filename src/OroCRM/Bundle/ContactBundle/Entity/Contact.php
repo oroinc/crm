@@ -19,6 +19,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 
 /**
@@ -1335,6 +1336,10 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      */
     public function addAddress(AbstractAddress $address)
     {
+        if (!$address instanceof ContactAddress) {
+            throw new \InvalidArgumentException("Address must be instance of ContactAddress");
+        }
+
         /** @var ContactAddress $address */
         if (!$this->addresses->contains($address)) {
             //don't allow more than one primary address
