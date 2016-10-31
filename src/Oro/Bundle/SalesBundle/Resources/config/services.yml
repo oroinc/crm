@@ -404,3 +404,10 @@ services:
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
+
+    oro_sales.autocomplete.opportunity_customer_search_handler:
+        class: Oro\Bundle\SalesBundle\Autocomplete\OpportunityCustomerSearchHandler
+        parent: oro_activity.form.handler.autocomplete
+        calls:
+#            - [setSalesConfigProvider, ['@oro_entity_config.provider.sales']]
+            - [setEntityAvatarProvider, ['@oro_entity.avatar_provider']]
