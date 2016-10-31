@@ -104,6 +104,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@oro_analytics.builder'
             - '@oro_message_queue.job.runner'
+            - '@logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 

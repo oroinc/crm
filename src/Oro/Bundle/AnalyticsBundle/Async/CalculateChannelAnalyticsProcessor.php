@@ -1,6 +1,9 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -8,9 +11,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Psr\Log\LoggerInterface;
 
 class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
@@ -30,18 +31,26 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
     private $jobRunner;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
      * @param AnalyticsBuilder $analyticsBuilder
      * @param JobRunner $jobRunner
+     * @param LoggerInterface $logger
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         AnalyticsBuilder $analyticsBuilder,
-        JobRunner $jobRunner
+        JobRunner $jobRunner,
+        LoggerInterface $logger
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->jobRunner = $jobRunner;
         $this->analyticsBuilder = $analyticsBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,29 +65,40 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
         ], $body);
 
         if (false == $body['channel_id']) {
-            throw new \LogicException('The message invalid. It must have channel_id set');
+            $this->logger->critical('The message invalid. It must have channel_id set', ['message' => $message]);
+
+            return self::REJECT;
         }
 
         $jobName = 'oro_analytics:calculate_channel_analytics:'.$body['channel_id'];
         $ownerId = $message->getMessageId();
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
-            $em = $this->doctrineHelper->getEntityManager(Channel::class);
+        $em = $this->doctrineHelper->getEntityManager(Channel::class);
 
-            /** @var Channel $channel */
-            $channel = $em->find(Channel::class, $body['channel_id']);
-            if (false == $channel) {
-                return false;
-            }
-            if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
-                return false;
-            }
-            if (false == is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
-                return false;
-            }
+        /** @var Channel $channel */
+        $channel = $em->find(Channel::class, $body['channel_id']);
+        if (! $channel) {
+            $this->logger->critical(sprintf('Channel not found: %s', $body['channel_id']), ['message' => $message]);
 
-            $em->getConnection()->getConfiguration()->setSQLLogger(null);
+            return self::REJECT;
+        }
+        if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
+            $this->logger->critical(sprintf('Channel not active: %s', $body['channel_id']), ['message' => $message]);
 
+            return self::REJECT;
+        }
+        if (false == is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
+            $this->logger->critical(
+                sprintf('Channel is not supposed to calculate analytics: %s', $body['channel_id']),
+                ['message' => $message]
+            );
+
+            return self::REJECT;
+        }
+
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($channel, $body) {
             $this->analyticsBuilder->build($channel, $body['customer_ids']);
 
             return true;

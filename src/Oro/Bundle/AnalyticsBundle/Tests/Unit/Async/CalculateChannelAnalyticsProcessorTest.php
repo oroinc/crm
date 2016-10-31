@@ -4,6 +4,12 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
+use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\CustomerAwareStub;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -12,12 +18,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
-use Oro\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\CustomerAwareStub;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Psr\Log\LoggerInterface;
 
 class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,25 +47,29 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         new CalculateChannelAnalyticsProcessor(
             $this->createDoctrineHelperStub(),
             $this->createAnalyticsBuilder(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The message invalid. It must have channel_id set
-     */
-    public function testThrowIfMessageBodyMissChannelId()
+    public function testShouldLogAndRejectIfMessageBodyMissChannelId()
     {
-        $processor = new CalculateChannelAnalyticsProcessor(
-            $this->createDoctrineHelperStub(),
-            $this->createAnalyticsBuilder(),
-            new JobRunner()
-        );
-
         $message = new NullMessage();
         $message->setBody('[]');
 
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The message invalid. It must have channel_id set', ['message' => $message])
+        ;
+
+        $processor = new CalculateChannelAnalyticsProcessor(
+            $this->createDoctrineHelperStub(),
+            $this->createAnalyticsBuilder(),
+            new JobRunner(),
+            $logger
+        );
         $processor->process($message, new NullSession());
     }
 
@@ -77,7 +82,8 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $processor = new CalculateChannelAnalyticsProcessor(
             $this->createDoctrineHelperStub(),
             $this->createAnalyticsBuilder(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -104,14 +110,23 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('build')
         ;
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Channel not found: theChannelId', ['message' => $message])
+        ;
+
+
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $analyticsBuilderMock,
-            new JobRunner()
+            new JobRunner(),
+            $logger
         );
-
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -139,14 +154,25 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('build')
         ;
 
-        $processor = new CalculateChannelAnalyticsProcessor(
-            $doctrineHelperStub,
-            $analyticsBuilderMock,
-            new JobRunner()
-        );
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Channel not active: theChannelId', ['message' => $message])
+        ;
+
+
+        $processor = new CalculateChannelAnalyticsProcessor(
+            $doctrineHelperStub,
+            $analyticsBuilderMock,
+            new JobRunner(),
+            $logger
+        );
+
 
         $status = $processor->process($message, new NullSession());
 
@@ -175,14 +201,23 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('build')
         ;
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Channel is not supposed to calculate analytics: theChannelId', ['message' => $message])
+        ;
+
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $analyticsBuilderMock,
-            new JobRunner()
+            new JobRunner(),
+            $logger
         );
 
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['channel_id' => 'theChannelId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -218,7 +253,8 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $analyticsBuilderMock,
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -258,7 +294,8 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $analyticsBuilderMock,
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -296,7 +333,8 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $processor = new CalculateChannelAnalyticsProcessor(
             $doctrineHelperStub,
             $this->createAnalyticsBuilder(),
-            $jobRunner
+            $jobRunner,
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -359,5 +397,13 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $helperMock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     */
+    private function createLoggerMock()
+    {
+        return $this->getMock(LoggerInterface::class);
     }
 }
