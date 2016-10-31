@@ -3,6 +3,11 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
+
+use Psr\Log\LoggerInterface;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
 use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -13,8 +18,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 {
