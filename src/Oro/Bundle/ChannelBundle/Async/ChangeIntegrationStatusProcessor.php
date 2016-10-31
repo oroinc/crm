@@ -2,14 +2,15 @@
 
 namespace Oro\Bundle\ChannelBundle\Async;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -20,11 +21,18 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
     private $registry;
 
     /**
-     * @param RegistryInterface $registry
+     * @var LoggerInterface
      */
-    public function __construct(RegistryInterface $registry)
+    private $logger;
+
+    /**
+     * @param RegistryInterface $registry
+     * @param LoggerInterface $logger
+     */
+    public function __construct(RegistryInterface $registry, LoggerInterface $logger)
     {
         $this->registry = $registry;
+        $this->logger = $logger;
     }
 
     /**
@@ -33,15 +41,19 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
     public function process(MessageInterface $message, SessionInterface $session)
     {
         $body = array_replace(['channelId' => null], JSON::decode($message->getBody()));
-        if (false == $body['channelId']) {
-            throw new \LogicException('The message invalid. It must have channelId set');
+        if (! $body['channelId']) {
+            $this->logger->critical('The message invalid. It must have channelId set', ['message' => $message]);
+
+            return self::REJECT;
         }
 
         $em = $this->registry->getManager();
 
         /** @var Channel $channel */
         $channel = $em->find(Channel::class, $body['channelId']);
-        if (false == $channel) {
+        if (! $channel) {
+            $this->logger->critical(sprintf('Channel not found: %s', $body['channelId']), ['message' => $message]);
+
             return self::REJECT;
         }
 

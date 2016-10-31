@@ -4,9 +4,6 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Async;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
@@ -21,6 +18,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
+use Psr\Log\LoggerInterface;
 
 class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,7 +70,9 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
             new JobRunner(),
             $logger
         );
-        $processor->process($message, new NullSession());
+        $status = $processor->process($message, new NullSession());
+
+        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
     /**

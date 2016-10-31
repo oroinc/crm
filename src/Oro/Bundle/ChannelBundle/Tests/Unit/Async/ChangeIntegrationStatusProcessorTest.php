@@ -3,16 +3,17 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
@@ -36,21 +37,27 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testCouldBeConstructedWithStateProviderAsFirstArgument()
     {
-        new ChangeIntegrationStatusProcessor($this->createRegistryStub());
+        new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $this->createLoggerMock());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The message invalid. It must have channelId set
-     */
-    public function testThrowIfMessageBodyMissChangeId()
+    public function testShouldLogAndRejectIfMessageBodyMissChangeId()
     {
-        $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub());
-
         $message = new NullMessage();
         $message->setBody('[]');
 
-        $processor->process($message, new NullSession());
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The message invalid. It must have channelId set', ['message' => $message])
+        ;
+
+        $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $logger);
+
+
+        $status = $processor->process($message, new NullSession());
+
+        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
     /**
@@ -59,7 +66,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowIfMessageBodyInvalidJson()
     {
-        $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub());
+        $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody('[}');
@@ -77,12 +84,20 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(null);
         ;
 
-        $registryStub = $this->createRegistryStub($entityManagerMock);
-
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'theChannelId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Channel not found: theChannelId', ['message' => $message])
+        ;
+
+        $registryStub = $this->createRegistryStub($entityManagerMock);
+
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $logger);
 
         $status = $processor->process($message, new NullSession());
 
@@ -104,7 +119,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'theChannelId']));
@@ -139,7 +154,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -149,7 +164,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(MessageProcessorInterface::ACK, $status);
     }
 
-    public function testActivateIntegrationWhenChannelActivatedAndPreviousEnableNotDefined()
+    public function testShouldActivateIntegrationWhenChannelActivatedAndPreviousEnableNotDefined()
     {
         $integration = new Integration();
         $integration->setEnabled(false);
@@ -169,7 +184,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -182,7 +197,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Integration::EDIT_MODE_RESTRICTED, $integration->getEditMode());
     }
 
-    public function testSetPreviousEnableIntegrationWhenChannelActivatedAndPreviousEnableDefined()
+    public function testShouldSetPreviousEnableIntegrationWhenChannelActivatedAndPreviousEnableDefined()
     {
         $integration = new Integration();
         $integration->setEnabled(false);
@@ -202,7 +217,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -216,7 +231,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Integration::EDIT_MODE_RESTRICTED, $integration->getEditMode());
     }
 
-    public function testDeactivateIntegrationWhenChannelDeactivated()
+    public function testShouldDeactivateIntegrationWhenChannelDeactivated()
     {
         $integration = new Integration();
         $integration->setEnabled(true);
@@ -235,7 +250,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -248,7 +263,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Integration::EDIT_MODE_DISALLOW, $integration->getEditMode());
     }
 
-    public function testUpdatePreviouslyEnabledWhenChannelDeactivated()
+    public function testShouldUpdatePreviouslyEnabledWhenChannelDeactivated()
     {
         $integration = new Integration();
         $integration->setEnabled(true);
@@ -268,7 +283,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -300,7 +315,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createRegistryStub($entityManagerMock);
 
-        $processor = new ChangeIntegrationStatusProcessor($registryStub);
+        $processor = new ChangeIntegrationStatusProcessor($registryStub, $this->createLoggerMock());
 
         $message = new NullMessage();
         $message->setBody(JSON::encode(['channelId' => 'aChannelId']));
@@ -333,5 +348,13 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         ;
 
         return $registryMock;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     */
+    private function createLoggerMock()
+    {
+        return $this->getMock(LoggerInterface::class);
     }
 }

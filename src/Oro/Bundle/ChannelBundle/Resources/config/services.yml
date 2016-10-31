@@ -392,7 +392,9 @@ services:
 
     oro_channel.async.change_integration_status_processor:
         class: 'Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor'
-        arguments: ['@doctrine']
+        arguments:
+            - '@doctrine'
+            - '@logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
