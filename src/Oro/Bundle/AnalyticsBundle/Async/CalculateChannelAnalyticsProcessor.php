@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Psr\Log\LoggerInterface;
+
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -11,7 +13,6 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Psr\Log\LoggerInterface;
 
 class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
