@@ -10,6 +10,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -30,18 +31,26 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
     private $jobRunner;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param RegistryInterface $doctrine
      * @param CartExpirationProcessor $cartExpirationProcessor
      * @param JobRunner $jobRunner
+     * @param LoggerInterface $logger
      */
     public function __construct(
         RegistryInterface $doctrine,
         CartExpirationProcessor $cartExpirationProcessor,
-        JobRunner $jobRunner
+        JobRunner $jobRunner,
+        LoggerInterface $logger
     ) {
         $this->doctrine = $doctrine;
         $this->cartExpirationProcessor = $cartExpirationProcessor;
         $this->jobRunner = $jobRunner;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,25 +72,40 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
         ], $body);
 
         if (! $body['integrationId']) {
-            throw new \LogicException('The message invalid. It must have integrationId set');
+            $this->logger->critical('The message invalid. It must have integrationId set', ['message' => $message]);
+
+            return self::REJECT;
         }
 
         $ownerId = $message->getMessageId();
         $jobName = 'oro_magento:sync_cart_expiration_integration:'.$body['integrationId'];
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
-            /** @var ChannelRepository $repository */
-            $repository = $this->doctrine->getRepository(Channel::class);
-            $channel = $repository->getOrLoadById($body['integrationId']);
+        /** @var ChannelRepository $repository */
+        $repository = $this->doctrine->getRepository(Channel::class);
+        $channel = $repository->getOrLoadById($body['integrationId']);
 
-            if (! $channel ||
-                ! $channel->isEnabled() ||
-                ! is_array($channel->getConnectors()) ||
-                ! in_array('cart', $channel->getConnectors())
-            ) {
-                return false;
-            }
+        if (! $channel || ! $channel->isEnabled()) {
+            $this->logger->critical(
+                sprintf('The channel should exist and be enabled: %s', $body['integrationId']),
+                ['message' => $message]
+            );
 
+            return self::REJECT;
+        }
+
+        if (! is_array($channel->getConnectors()) || ! in_array('cart', $channel->getConnectors())) {
+            $this->logger->critical(
+                sprintf('The channel should have cart in connectors: %s', $body['integrationId']),
+                [
+                    'message' => $message,
+                    'channel' => $channel
+                ]
+            );
+
+            return self::REJECT;
+        }
+
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($channel) {
             $this->cartExpirationProcessor->process($channel);
 
             return true;

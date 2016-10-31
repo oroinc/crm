@@ -19,6 +19,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
+use Psr\Log\LoggerInterface;
 
 class SyncInitialIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
@@ -53,11 +54,17 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
     private $indexer;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
      * @param InitialSyncProcessor $initialSyncProcessor
      * @param OptionalListenerManager $optionalListenerManager
      * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      * @param JobRunner $jobRunner
+     * @param LoggerInterface $logger
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
@@ -65,7 +72,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         OptionalListenerManager $optionalListenerManager,
         CalculateAnalyticsScheduler $calculateAnalyticsScheduler,
         JobRunner $jobRunner,
-        IndexerInterface $indexer
+        IndexerInterface $indexer,
+        LoggerInterface $logger
     ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->initialSyncProcessor = $initialSyncProcessor;
@@ -73,6 +81,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
         $this->jobRunner = $jobRunner;
         $this->indexer = $indexer;
+        $this->logger = $logger;
     }
 
     /**
@@ -88,28 +97,40 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         ], $body);
 
         if (false == $body['integration_id']) {
-            throw new \LogicException('The message invalid. It must have integration_id set');
+            $this->logger->critical('The message invalid. It must have integrationId set', ['message' => $message]);
+
+            return self::REJECT;
         }
 
         $jobName = 'orocrm_magento:sync_initial_integration:'.$body['integration_id'];
         $ownerId = $message->getMessageId();
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body) {
+        /** @var EntityManagerInterface $em */
+        $em = $this->doctrineHelper->getEntityManager(Integration::class);
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+
+        /** @var Integration $integration */
+        $integration = $em->find(Integration::class, $body['integration_id']);
+        if (! $integration) {
+            $this->logger->critical(
+                sprintf('Integration not found: %s', $body['integration_id']),
+                ['message' => $message]
+            );
+
+            return self::REJECT;
+        }
+        if (! $integration->isEnabled()) {
+            $this->logger->critical(
+                sprintf('Integration is not enabled: %s', $body['integration_id']),
+                ['message' => $message]
+            );
+
+            return self::REJECT;
+        }
+
+        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
             // Disable search listeners to increase the performance
             $this->disableOptionalListeners();
-
-            /** @var EntityManagerInterface $em */
-            $em = $this->doctrineHelper->getEntityManager(Integration::class);
-            $em->getConnection()->getConfiguration()->setSQLLogger(null);
-
-            /** @var Integration $integration */
-            $integration = $em->find(Integration::class, $body['integration_id']);
-            if (false == $integration) {
-                return false;
-            }
-            if (false == $integration->isEnabled()) {
-                return false;
-            }
 
             $result = $this->initialSyncProcessor->process(
                 $integration,

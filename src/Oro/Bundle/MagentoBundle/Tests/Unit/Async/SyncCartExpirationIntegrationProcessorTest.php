@@ -3,6 +3,9 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Async;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
+use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
@@ -10,9 +13,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
-use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
@@ -42,26 +43,33 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The message invalid. It must have integrationId set
-     */
-    public function testThrowIfMessageBodyMissIntegrationId()
+    public function testShouldLogAndRejectIfMessageBodyMissIntegrationId()
     {
-        $processor = new SyncCartExpirationIntegrationProcessor(
-            $this->createRegistryStub(),
-            $this->createSyncProcessorMock(),
-            new JobRunner()
-        );
-
         $message = new NullMessage();
         $message->setBody('[]');
 
-        $processor->process($message, new NullSession());
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The message invalid. It must have integrationId set', ['message' => $message])
+        ;
+
+        $processor = new SyncCartExpirationIntegrationProcessor(
+            $this->createRegistryStub(),
+            $this->createSyncProcessorMock(),
+            new JobRunner(),
+            $logger
+        );
+
+        $status = $processor->process($message, new NullSession());
+
+        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
     /**
@@ -73,7 +81,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $processor = new SyncCartExpirationIntegrationProcessor(
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -87,14 +96,23 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $repositoryStub = $this->createChannelRepositoryStub(null);
         $registryStub = $this->createRegistryStub($repositoryStub);
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The channel should exist and be enabled: theIntegrationId', ['message' => $message])
+        ;
+
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
             $this->createSyncProcessorMock(),
-            new JobRunner()
+            new JobRunner(),
+            $logger
         );
 
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -109,14 +127,22 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $repositoryMock = $this->createChannelRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The channel should exist and be enabled: theIntegrationId', ['message' => $message])
+        ;
+
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
             $this->createSyncProcessorMock(),
-            new JobRunner()
+            new JobRunner(),
+            $logger
         );
-
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -132,14 +158,28 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $repositoryMock = $this->createChannelRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with(
+                'The channel should have cart in connectors: theIntegrationId',
+                [
+                    'message' => $message,
+                    'channel' => $integration
+                ]
+            )
+        ;
+
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
             $this->createSyncProcessorMock(),
-            new JobRunner()
+            new JobRunner(),
+            $logger
         );
-
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -165,7 +205,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $processor = new SyncCartExpirationIntegrationProcessor(
             $registryStub,
             $syncProcessorMock,
-            new JobRunner()
+            new JobRunner(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -213,5 +254,13 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     private function createSyncProcessorMock()
     {
         return $this->getMock(CartExpirationProcessor::class, [], [], '', false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     */
+    private function createLoggerMock()
+    {
+        return $this->getMock(LoggerInterface::class);
     }
 }

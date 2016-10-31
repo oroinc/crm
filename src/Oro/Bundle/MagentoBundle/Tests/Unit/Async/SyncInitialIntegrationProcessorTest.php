@@ -5,10 +5,14 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
+use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
-use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -17,11 +21,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
-use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Psr\Log\LoggerInterface;
 
 /**
  * @dbIsolationPerTest
@@ -53,29 +53,36 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createOptionalListenerManagerStub(),
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $this->createLoggerMock()
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage The message invalid. It must have integration_id set
-     */
-    public function testThrowIfMessageBodyMissIntegrationId()
+    public function testShouldLogAndRejectIfMessageBodyMissIntegrationId()
     {
+        $message = new NullMessage();
+        $message->setBody('[]');
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('The message invalid. It must have integrationId set', ['message' => $message])
+        ;
+
         $processor = new SyncInitialIntegrationProcessor(
             $this->createDoctrineHelperStub(),
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub(),
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $logger
         );
 
-        $message = new NullMessage();
-        $message->setBody('[]');
+        $status = $processor->process($message, new NullSession());
 
-        $processor->process($message, new NullSession());
+        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
     }
 
     /**
@@ -90,7 +97,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createOptionalListenerManagerStub(),
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -103,17 +111,25 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $registryStub = $this->createDoctrineHelperStub(null);
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Integration not found: theIntegrationId', ['message' => $message])
+        ;
+
         $processor = new SyncInitialIntegrationProcessor(
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $logger
         );
-
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -127,17 +143,25 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
 
         $registryStub = $this->createDoctrineHelperStub($integration);
 
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('critical')
+            ->with('Integration is not enabled: theIntegrationId', ['message' => $message])
+        ;
+
         $processor = new SyncInitialIntegrationProcessor(
             $registryStub,
             $this->createInitialSyncProcessorMock(),
             $this->createOptionalListenerManagerStub([]),
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $logger
         );
-
-        $message = new NullMessage();
-        $message->setBody(JSON::encode(['integration_id' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
@@ -172,7 +196,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createOptionalListenerManagerStub([]),
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -216,7 +241,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createOptionalListenerManagerStub([]),
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -248,7 +274,8 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createOptionalListenerManagerStub([]),
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
-            $this->createIndexerInterfaceMock()
+            $this->createIndexerInterfaceMock(),
+            $this->createLoggerMock()
         );
 
         $message = new NullMessage();
@@ -356,10 +383,18 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Indexer
+     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
     private function createIndexerInterfaceMock()
     {
         return $this->getMock(IndexerInterface::class, [], [], '', false);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | LoggerInterface
+     */
+    private function createLoggerMock()
+    {
+        return $this->getMock(LoggerInterface::class);
     }
 }
