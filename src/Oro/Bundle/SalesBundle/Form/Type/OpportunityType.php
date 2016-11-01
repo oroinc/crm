@@ -88,11 +88,10 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customer',
-                'oro_sales_b2bcustomer_with_channel_create_or_select',
+                'oro_sales_customer',
                 [
-                    'required'               => true,
-                    'label'                  => 'oro.sales.opportunity.customer.label',
-                    'new_item_property_name' => 'name'
+                    'required' => true,
+                    'label'    => 'oro.sales.opportunity.customer.label',
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])

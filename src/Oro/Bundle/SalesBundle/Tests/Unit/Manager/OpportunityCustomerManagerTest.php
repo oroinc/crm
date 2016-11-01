@@ -157,4 +157,44 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->opportunityCustomerManager->hasCustomer(new Opportunity(), new Lead());
     }
+
+    /**
+     * @dataProvider hasMoreCustomersProvider
+     */
+    public function testHasMoreCustomers(Opportunity $opportunity, $expectedValue)
+    {
+        $this->assertSame(
+            $expectedValue,
+            $this->opportunityCustomerManager->hasMoreCustomers($opportunity)
+        );
+    }
+
+    public function hasMoreCustomersProvider()
+    {
+        $customer1 = new Customer1();
+        $customer2 = new Customer2();
+
+        return [
+            [
+                new Opportunity(),
+                false,
+            ],
+            [
+                (new Opportunity())
+                    ->setCustomer1($customer1),
+                false,
+            ],
+            [
+                (new Opportunity())
+                    ->setCustomer2($customer2),
+                false,
+            ],
+            [
+                (new Opportunity())
+                    ->setCustomer1($customer1)
+                    ->setCustomer2($customer2),
+                true,
+            ],
+        ];
+    }
 }

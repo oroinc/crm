@@ -8,14 +8,18 @@ use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 use Oro\Bundle\EntityBundle\Provider\EntityAvatarProviderInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
-class OpportunityCustomerSearchHandler extends ContextSearchHandler
+class CustomerSearchHandler extends ContextSearchHandler
 {
     /** @var ConfigProvider */
     protected $salesConfigProvider;
 
     /** @var EntityAvatarProviderInterface */
     protected $entityAvatarProvider;
+
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
 
     /**
      * @param ConfigProvider $salesConfigProvider
@@ -31,6 +35,14 @@ class OpportunityCustomerSearchHandler extends ContextSearchHandler
     public function setEntityAvatarProvider(EntityAvatarProviderInterface $entityAvatarProvider)
     {
         $this->entityAvatarProvider = $entityAvatarProvider;
+    }
+
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
+    {
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -52,7 +64,8 @@ class OpportunityCustomerSearchHandler extends ContextSearchHandler
 
         $result = [];
         foreach ($customers as $customer) {
-            $item = $this->convertItem($grouppedItems[ClassUtils::getClass($customer)][$customer->getId()]);
+            $customerId = $this->doctrineHelper->getSingleEntityIdentifier($customer);
+            $item = $this->convertItem($grouppedItems[ClassUtils::getClass($customer)][$customerId]);
             $item['avatar'] = $this->entityAvatarProvider->getAvatarImage('avatar_xsmall', $customer);
             $result[] = $item;
         }

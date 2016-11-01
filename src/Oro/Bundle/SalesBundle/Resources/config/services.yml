@@ -405,9 +405,23 @@ services:
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
 
-    oro_sales.autocomplete.opportunity_customer_search_handler:
-        class: Oro\Bundle\SalesBundle\Autocomplete\OpportunityCustomerSearchHandler
+    oro_sales.opportunity_customer_manager:
+        class: Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager
+        arguments:
+            - '@property_accessor'
+            # todo: change to correct provider
+            - '@oro_entity_config.provider.entity'
+
+    oro_sales.autocomplete.customer_search_handler:
+        class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
         parent: oro_activity.form.handler.autocomplete
         calls:
 #            - [setSalesConfigProvider, ['@oro_entity_config.provider.sales']]
             - [setEntityAvatarProvider, ['@oro_entity.avatar_provider']]
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+
+#todo: uncomment once 'customers' option exists in config provider
+#    oro_sales.validator.customer:
+#        class: Oro\Bundle\SalesBundle\Validator\Constraints\CustomerValidator
+#        arguments:
+#            - 'OpportunityCustomerManager'

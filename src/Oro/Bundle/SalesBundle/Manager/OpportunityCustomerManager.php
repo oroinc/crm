@@ -28,6 +28,27 @@ class OpportunityCustomerManager
     }
 
     /**
+     * This method should always return false as only one customer is allowed for $opportunity
+     *
+     * @param Opportunity $opportunity
+     *
+     * @return bool
+     */
+    public function hasMoreCustomers(Opportunity $opportunity)
+    {
+        $customerProperties = $this->getCustomerProperties();
+        $customers = 0;
+        foreach ($customerProperties as $customerProperty) {
+            $customer = $this->propertyAccessor->getValue($opportunity, $customerProperty);
+            if ($customer) {
+                $customers++;
+            }
+        }
+
+        return $customers > 1;
+    }
+
+    /**
      * @param Opportunity $opportunity
      * @param object $customer
      *
@@ -114,6 +135,14 @@ class OpportunityCustomerManager
      */
     protected function getCustomerProperties()
     {
-        return $this->salesConfigProvider->getConfig(Opportunity::class)->get('customers');
+        $customers = $this->salesConfigProvider->getConfig(Opportunity::class)->get('customers');
+        if ($customers) {
+            return $customers;
+        }
+
+        // todo: read $customers value from config provider
+        return $customers = [
+            'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05',
+        ];
     }
 }

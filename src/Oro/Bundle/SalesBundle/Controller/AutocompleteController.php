@@ -54,7 +54,7 @@ class AutocompleteController extends Controller
         }
 
         /** @var OpportunityCustomerSearchHandler $searchHandler */
-        $searchHandler = $this->get('oro_sales.autocomplete.opportunity_customer_search_handler');
+        $searchHandler = $this->get('oro_sales.autocomplete.customer_search_handler');
 
         return new JsonResponse($searchHandler->search(
             $autocompleteRequest->getQuery(),
