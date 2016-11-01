@@ -482,3 +482,6 @@ oro:
 
         privilege:
             category.sales_data.label: Sales Data
+        customers:
+            opportunities:
+                grid.label: Opportunities

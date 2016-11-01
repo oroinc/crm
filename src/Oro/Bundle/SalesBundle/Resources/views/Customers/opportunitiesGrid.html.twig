@@ -1,0 +1,9 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+<div class="widget-content">
+    {{
+        dataGrid.renderGrid(
+            'sales-customers-opportunities-grid',
+            {customer_id: customer.id, customer_class: customerClass}
+        )
+    }}
+</div>

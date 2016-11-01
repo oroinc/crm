@@ -1,0 +1,9 @@
+{#todo remove file id not needed #}
+{% set tabs = [] %}
+{%- set salesItemsDataTabs -%}
+    {% placeholder customer_sales_items_tabs with {customerId: customer.id, customerClass: customerClass} %}
+{%- endset -%}
+{% if salesItemsDataTabs is not empty %}
+    {{ salesItemsDataTabs }}
+{% endif %}
+

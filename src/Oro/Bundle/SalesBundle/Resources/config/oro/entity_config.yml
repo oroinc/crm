@@ -1,4 +1,11 @@
 entity_config:
+    sales:
+        entity:
+            items:
+                # array containing opportunity customer fields
+                # [customerClassName => customerFieldName, ...]
+                customers:
+                    options: []
     sales_opportunity:
         entity:
             items:

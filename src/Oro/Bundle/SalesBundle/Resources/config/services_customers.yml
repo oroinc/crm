@@ -30,3 +30,37 @@ services:
         class: Oro\Bundle\SalesBundle\Extend\Customers\Lead\EntityGeneratorExtension
         tags:
             - { name: oro_entity_extend.entity_generator_extension }
+
+    oro_sales.customers.sales_items_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@oro_sales.customers.opportunities_provider'
+            - '@translator'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addSalesItems }
+
+    oro_sales.opportunity.association_helper:
+        class: Oro\Bundle\SalesBundle\Extend\Customers\Opportunity\AssociationHelper
+        public: false
+        arguments:
+            - '@oro_entity_config.config_manager'
+
+    oro_sales.customers.sales_items_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customers\SalesItemsProvider
+        arguments:
+            - '@oro_entity_config.config_manager'
+
+    oro_sales.customers.opportunities_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customers\OpportunitiesProvider
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_sales.customers.sales_items_provider, priority: 0 }
+
+    oro_sales.datagrid.extension.customers:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\OpportunitiesExtension
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_datagrid.extension }

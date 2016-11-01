@@ -50,7 +50,7 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
         $targetTableName,
         $targetColumnName = null
     ) {
-        $noteTable   = $schema->getTable(self::LEAD_TABLE_NAME);
+        $leadTable   = $schema->getTable(self::LEAD_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
 
         if (empty($targetColumnName)) {
@@ -61,14 +61,16 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
         $options = new OroOptions();
         $options->set('sales_lead', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
+        $targetClassName = $this->extendExtension->getEntityClassByTableName($targetTableName);
+        $associationName        = ExtendHelper::buildAssociationName($targetClassName);
 
-        $associationName = ExtendHelper::buildAssociationName(
-            $this->extendExtension->getEntityClassByTableName($targetTableName)
-        );
+        $leadOptions = new OroOptions();
+        $leadOptions->append('sales', 'customers', [$targetClassName => ['association_name' => $associationName]]);
+        $leadTable->addOption(OroOptions::KEY, $leadOptions);
 
         $this->extendExtension->addManyToOneRelation(
             $schema,
-            $noteTable,
+            $leadTable,
             $associationName,
             $targetTable,
             $targetColumnName

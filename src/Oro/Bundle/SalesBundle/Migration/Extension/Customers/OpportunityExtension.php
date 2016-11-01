@@ -50,7 +50,7 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
         $targetTableName,
         $targetColumnName = null
     ) {
-        $noteTable   = $schema->getTable(self::OPPORTUNITY_TABLE_NAME);
+        $opportunityTable   = $schema->getTable(self::OPPORTUNITY_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
 
         if (empty($targetColumnName)) {
@@ -61,14 +61,15 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
         $options = new OroOptions();
         $options->set('sales_opportunity', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
-
-        $associationName = ExtendHelper::buildAssociationName(
-            $this->extendExtension->getEntityClassByTableName($targetTableName)
-        );
-
+        $targetClassName = $this->extendExtension->getEntityClassByTableName($targetTableName);
+        $associationName        = ExtendHelper::buildAssociationName($targetClassName);
+        
+        $opportunityOptions = new OroOptions();
+        $opportunityOptions->append('sales', 'customers', [$targetClassName => ['association_name' => $associationName]]);
+        $opportunityTable->addOption(OroOptions::KEY, $opportunityOptions);
         $this->extendExtension->addManyToOneRelation(
             $schema,
-            $noteTable,
+            $opportunityTable,
             $associationName,
             $targetTable,
             $targetColumnName

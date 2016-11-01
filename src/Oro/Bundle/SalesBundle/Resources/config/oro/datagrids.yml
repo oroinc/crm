@@ -2100,3 +2100,51 @@ datagrids:
                 pageSize:
                     items: [10]
                     default_per_page: 10
+    sales-customers-opportunities-grid:
+        extends: sales-opportunity-for-context-grid
+        options:
+            entityHint: opportunities
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+            routerEnabled: true
+        columns:
+            name:
+                label:         oro.sales.opportunity.name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            closeDate:
+                label:         oro.sales.opportunity.close_date.label
+                frontend_type: date
+            budgetAmount:
+                label:         oro.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            probability:
+                label:         oro.sales.opportunity.probability.label
+                frontend_type: percent
+            status:
+                frontend_type: select
+                label:         oro.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+            primaryEmail:
+                label:         oro.contact.email.label
+        sorters:
+            columns:
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmountValue
+                probability:
+                    data_name: o.probability
+                status:
+                    data_name: status
+                primaryEmail:
+                    data_name: email.email
+            default:
+                createdAt: DESC
