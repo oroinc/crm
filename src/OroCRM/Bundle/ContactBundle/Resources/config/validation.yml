@@ -42,10 +42,3 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
     constraints:
         - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
-    properties:
-        street:
-            - NotBlank: ~
-        city:
-            - NotBlank: ~
-        postalCode:
-            - NotBlank: ~
