@@ -83,6 +83,9 @@ features:
         label: oro.sales.salesfunnel.feature.label
         description: oro.sales.salesfunnel.feature.description
         toggle: oro_sales.salesfunnel_feature_enabled
+        dependencies:
+            - sales_lead
+            - sales_opportunity
         routes:
             - oro_sales_salesfunnel_index
             - oro_sales_salesfunnel_view
