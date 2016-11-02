@@ -244,7 +244,7 @@ workflows:
                     '@and':
                         - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
-                            parameters: [$budget_amount, 0]
+                            parameters: [$budget_amount.value, 0]
                         - '@and':
                             message: 'Probality must be between 0 and 100 percents'
                             parameters:
@@ -267,7 +267,7 @@ workflows:
                             parameters: $close_revenue
                         - '@greater_or_equal':
                             message: 'Close revenue must be greater or equal to 0'
-                            parameters: [$close_revenue, 0]
+                            parameters: [$close_revenue.value, 0]
                 actions: # update opportunity properties, set opportunity.status = "won"
                     - '@request_enum_entity':
                         enum_code: opportunity_status
@@ -304,9 +304,19 @@ workflows:
                         class: Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
                         attribute: $close_reason
+                    - '@call_service_method':
+                        service: oro_currency.config.currency
+                        method: getDefaultCurrency
+                        attribute: $.result.currency
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $.result.close_revenue
+                    - '@assign_value': [$.result.close_revenue.value, 0]
+                    - '@assign_value': [$.result.close_revenue.currency, $.result.currency]
+                    - '@assign_value':
+                        - [$close_revenue, $.result.close_revenue]
                     - '@assign_value':
                         - [$probability, 0]
-                        - [$close_revenue, 0]
             reopen_definition:
                 conditions:
                     '@or':

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -229,15 +230,17 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         }
 
         if (rand(1, 100) > 10) {
+            $budgetAMountVal = mt_rand(10, 10000);
             $salesFunnelItem->getData()
-                ->set('budget_amount', mt_rand(10, 10000))
+                ->set('budget_amount', MultiCurrency::create($budgetAMountVal, 'USD'))
                 ->set('customer_need', mt_rand(10, 10000))
                 ->set('proposed_solution', mt_rand(10, 10000))
                 ->set('probability', $this->probabilities[array_rand($this->probabilities)]);
 
             if ($this->workflowManager->transitIfAllowed($salesFunnelItem, 'develop') && $this->getRandomBoolean()) {
+                $closeRevenueVal = mt_rand(10, 1000);
                 $salesFunnelItem->getData()
-                    ->set('close_revenue', mt_rand(10, 1000))
+                    ->set('close_revenue', MultiCurrency::create($closeRevenueVal, 'USD'))
                     ->set('close_date', new \DateTime());
 
                 if ($this->getRandomBoolean()) {
