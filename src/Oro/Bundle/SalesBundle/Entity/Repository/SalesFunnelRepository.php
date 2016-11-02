@@ -11,7 +11,7 @@ use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 
 /**
- * @deprecated since 1.10 will be removed after 2.1
+ * @deprecated since 2.0 will be removed after 2.2
  */
 class SalesFunnelRepository extends EntityRepository
 {

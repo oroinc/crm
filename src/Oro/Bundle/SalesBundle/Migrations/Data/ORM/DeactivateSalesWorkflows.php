@@ -28,11 +28,10 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
 
     /**
      * {@inheritdoc}
-     *
-     * @todo remove enabling features once it's possible to use workflow in code if features are disabled
      */
     public function load(ObjectManager $manager)
     {
+        //@todo remove enabling features after BAP-12440
         $requiredFeatureToggles = [
             'oro_sales.lead_feature_enabled',
             'oro_sales.opportunity_feature_enabled',

@@ -49,7 +49,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *          }
  *      }
  * )
- * @deprecated since 1.10 will be removed after 2.1
+ * @deprecated since 2.0 will be removed after 2.2
  */
 class SalesFunnel extends ExtendSalesFunnel implements
     ChannelAwareInterface,

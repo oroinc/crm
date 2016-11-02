@@ -492,7 +492,7 @@ oro:
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
                 sales_salesfunnel:
-                    feature_enabled.label:                     Enable Sales Process (Deprecated)
+                    feature_enabled.label:                     Enable Sales Process
 
         privilege:
             category.sales_data.label: Sales Data
