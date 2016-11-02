@@ -52,13 +52,17 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('Shopping Cart', $result->getContent());
     }
 
+    /**
+     * @return array
+     */
     public function gridProvider()
     {
         return [
             'Magento order grid'                             => [
                 [
                     'gridParameters'      => [
-                        'gridName' => 'magento-order-grid'
+                        'gridName' => 'magento-order-grid',
+                        'magento-order-grid[_sort_by][incrementId]' => 'ASC',
                     ],
                     'gridFilters'         => [],
                     'asserts' => [

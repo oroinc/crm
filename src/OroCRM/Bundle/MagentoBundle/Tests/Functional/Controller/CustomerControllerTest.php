@@ -57,7 +57,7 @@ class CustomerControllerTest extends AbstractController
     }
 
     /**
-     * @depend1s testGrid
+     * @depends testGrid
      */
     public function testCreate()
     {
