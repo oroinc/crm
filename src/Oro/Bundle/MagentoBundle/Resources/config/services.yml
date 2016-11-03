@@ -997,7 +997,7 @@ services:
     oro_magento.provider.customer.customer_icon:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
         arguments:
-            - '@oro_integration.manager.types_registry'
+            - '@oro_magento.provider.channel_type'
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 

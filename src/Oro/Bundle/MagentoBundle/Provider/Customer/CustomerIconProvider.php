@@ -2,23 +2,22 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Customer;
 
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
-use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 use Oro\Bundle\UIBundle\Model\Image;
 
 class CustomerIconProvider implements CustomerIconProviderInterface
 {
-    /** @var TypesRegistry */
-    protected $typesRegistry;
+    /** @var ChannelType */
+    protected $channelType;
 
     /**
-     * @param TypesRegistry $typesRegistry
+     * @param ChannelType $channelType
      */
-    public function __construct(TypesRegistry $typesRegistry)
+    public function __construct(ChannelType $channelType)
     {
-        $this->typesRegistry = $typesRegistry;
+        $this->channelType = $channelType;
     }
 
     /**
@@ -26,18 +25,10 @@ class CustomerIconProvider implements CustomerIconProviderInterface
      */
     public function getIcon($entity)
     {
-        if (!$entity instanceof IntegrationAwareInterface || !$entity->getChannel()) {
+        if (!$entity instanceof Customer) {
             return null;
         }
 
-        $channelType = $entity->getChannel()->getType();
-        $channelTypes = $this->typesRegistry->getRegisteredChannelTypes();
-
-        $entityChannel = $channelTypes->get($channelType);
-        if (!$entityChannel instanceof IconAwareIntegrationInterface) {
-            return null;
-        }
-
-        return new Image(Image::TYPE_FILE_PATH, ['path' => $entityChannel->getIcon()]);
+        return new Image(Image::TYPE_FILE_PATH, ['path' => $this->channelType->getIcon()]);
     }
 }
