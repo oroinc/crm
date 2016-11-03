@@ -43,13 +43,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
         - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
-    properties:
-        street:
-            - NotBlank: ~
-        city:
-            - NotBlank: ~
-        postalCode:
-            - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
