@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
-class LeadActionsAccessProviderTest  extends \PHPUnit_Framework_TestCase
+class LeadActionsAccessProviderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var LeadActionsAccessProvider */
     protected $provider;
