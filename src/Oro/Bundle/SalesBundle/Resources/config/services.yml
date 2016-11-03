@@ -436,3 +436,13 @@ services:
         class: Oro\Bundle\SalesBundle\Tools\Customers\LeadGeneratorExtension
         tags:
             - { name: oro_entity_extend.entity_generator_extension }
+
+    oro_sales.provider.customer.chain_customer_icon:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\ChainCustomerIconProvider
+
+    oro_sales.provider.customer.customer_icon:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider
+        arguments:
+            - '@oro_entity_config.provider.extend'
+        tags:
+            - { name: oro_sales.customer_icon }
