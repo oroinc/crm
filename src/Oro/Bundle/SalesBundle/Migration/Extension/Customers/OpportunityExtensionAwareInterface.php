@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Migration\Extension\Customers;
 
 /**
  * OpportunityExtensionAwareInterface should be implemented by migrations that depends
- * on a Customers/OpportunityExtension.
+ * on OpportunityExtension.
  */
 interface OpportunityExtensionAwareInterface
 {

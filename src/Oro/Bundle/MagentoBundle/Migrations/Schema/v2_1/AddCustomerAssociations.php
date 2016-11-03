@@ -12,19 +12,16 @@ use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
 
-
-class OroMagentoBundle implements Migration, OpportunityExtensionAwareInterface, LeadExtensionAwareInterface
+class AddCustomerAssociations implements Migration, OpportunityExtensionAwareInterface, LeadExtensionAwareInterface
 {
-    use OpportunityExtensionTrait;
-    use LeadExtensionTrait;
+    use LeadExtensionTrait, OpportunityExtensionTrait;
 
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->leadExtension->addLeadCustomerAssociation($schema, 'orocrm_magento_customer', 'id');
-        $this->opportunityExtension->addOpportunityCustomerAssociation($schema, 'orocrm_magento_customer', 'id');
+        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
+        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
     }
 }
-

@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Migration\Extension\Customers;
 
 /**
  * LeadExtensionAwareInterface should be implemented by migrations that depends
- * on a Customers/LeadExtension.
+ * on LeadExtension.
  */
 interface LeadExtensionAwareInterface
 {

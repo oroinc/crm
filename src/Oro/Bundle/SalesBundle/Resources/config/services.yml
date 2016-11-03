@@ -404,3 +404,35 @@ services:
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
+
+    oro_sales.migration.extension.opportunity_customers:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtension
+        tags:
+            - { name: oro_migration.extension, extension_name: opportunity }
+
+    oro_sales.entity_config_dumper.opportunity.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityConfigDumperExtension
+        parent: oro_entity_extend.entity_config_dumper.extension.association
+        tags:
+            - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    oro_sales.entity_generator.opportunity.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityGeneratorExtension
+        tags:
+            - { name: oro_entity_extend.entity_generator_extension }
+
+    oro_sales.migration.extension.lead_customers:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtension
+        tags:
+            - { name: oro_migration.extension, extension_name: lead }
+
+    oro_sales.entity_config_dumper.lead.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadConfigDumperExtension
+        parent: oro_entity_extend.entity_config_dumper.extension.association
+        tags:
+            - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    oro_sales.entity_generator.lead.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadGeneratorExtension
+        tags:
+            - { name: oro_entity_extend.entity_generator_extension }
