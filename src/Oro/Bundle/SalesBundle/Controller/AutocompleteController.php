@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolation;
 
-use Oro\Bundle\SalesBundle\Autocomplete\OpportunityCustomerSearchHandler;
+use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
 use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 
 /**
@@ -53,7 +53,7 @@ class AutocompleteController extends Controller
             throw new HttpException($code, implode(', ', $result['errors']));
         }
 
-        /** @var OpportunityCustomerSearchHandler $searchHandler */
+        /** @var CustomerSearchHandler $searchHandler */
         $searchHandler = $this->get('oro_sales.autocomplete.customer_search_handler');
 
         return new JsonResponse($searchHandler->search(
