@@ -11,7 +11,7 @@ class ContactEntityNameProvider extends EntityNameProvider
     /**
      * @var array Map of entity collection property and field name
      */
-    public static $contactCollectionsMap = ['phones' => 'phone', 'emails' => 'email'];
+    public static $contactCollectionsMap = ['emails' => 'email', 'phones' => 'phone'];
 
     /**
      * {@inheritdoc}
