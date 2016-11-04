@@ -102,7 +102,6 @@ class OpportunityType extends AbstractType
                 [
                     'required' => false,
                     'label'    => 'oro.sales.opportunity.data_channel.label',
-                    'entities' => ['Oro\\Bundle\\SalesBundle\\Entity\\Opportunity'],
                 ]
             )
             ->add(

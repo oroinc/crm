@@ -34,7 +34,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->fieldHelper = $this
-            ->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\FieldHelper')
+            ->getMockBuilder('Oro\Bundle\EntityBundle\Helper\FieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
 

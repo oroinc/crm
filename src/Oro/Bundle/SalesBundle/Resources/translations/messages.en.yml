@@ -215,6 +215,8 @@ oro:
 
             workflow:
                 close_date.label: Close date
+            feature.label:        Opportunity
+            feature.description:  Enables Opportunity entity
             datagrid:
                 view:     View
                 update:   Update
@@ -286,6 +288,8 @@ oro:
                 change_error_message:  Unable to change lead status.
             convert:
                  error:           Unable to convert lead to opportunity
+            feature.label:        Lead
+            feature.description:  Enables Lead entity
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -365,6 +369,8 @@ oro:
             owner.label:          Owner
             data_channel.label:   Channel
             organization.label:   Organization
+            feature.label:        Sales Process (Deprecated)
+            feature.description:  Enables Sales Processes. Beware that this feature is deprecated and will be removed in a future.
 
             hint: 'Sales Process #%id%'
 
@@ -470,6 +476,8 @@ oro:
             groups:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
+                salesfunnel.title: Sales Process (Deprecated)
+                lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
                     title:          Probabilities
@@ -478,8 +486,14 @@ oro:
                         Manage opportunity statuses and assign default probabilities to them,
                         except for system statuses Closed Won and Closed Lost.
             fields:
+                sales_lead:
+                    feature_enabled.label:                     Enable Lead
+                sales_opportunity:
+                    feature_enabled.label:                     Enable Opportunity
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
+                sales_salesfunnel:
+                    feature_enabled.label:                     Enable Sales Process
 
         privilege:
             category.sales_data.label: Sales Data

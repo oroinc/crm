@@ -15,7 +15,7 @@ Oro\Bundle\CampaignBundle\Entity\Campaign:
                 max: 20
         startDate:
             - Date: ~
-            - Oro\Bundle\CalendarBundle\Validator\Constraints\DateEarlierThan:
+            - Oro\Bundle\PlatformBundle\Validator\Constraints\DateEarlierThan:
                 field: endDate
                 message: This date should be earlier than End date
                 groups: [Campaign]

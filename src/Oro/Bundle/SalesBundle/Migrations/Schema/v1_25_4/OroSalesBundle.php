@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration
+class OroSalesBundle implements Migration
 {
     /**
      * {@inheritdoc}
