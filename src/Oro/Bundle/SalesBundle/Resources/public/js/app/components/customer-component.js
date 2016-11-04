@@ -50,7 +50,7 @@ define(function(require) {
 
             mediator.off('sales:customer:select', this.onCustomerSelect, this);
 
-            CustomerComponent.__super__.apply(this, arguments);
+            CustomerComponent.__super__.dispose.apply(this, arguments);
         }
     });
 

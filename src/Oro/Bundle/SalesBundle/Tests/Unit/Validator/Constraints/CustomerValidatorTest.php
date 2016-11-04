@@ -29,6 +29,11 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function (Opportunity $opportunity) {
                 return $opportunity->getCustomer1() && $opportunity->getCustomer2();
             }));
+        $customerManager->expects($this->any())
+            ->method('getCustomer')
+            ->will($this->returnCallback(function (Opportunity $opportunity) {
+                return $opportunity->getCustomer1() ?: $opportunity->getCustomer2();
+            }));
 
         $this->context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
 
@@ -36,10 +41,11 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
         $this->validator->initialize($this->context);
     }
 
-    public function testValid(Opportunity $opportunity = null)
+    /**
+     * @dataProvider validProvider
+     */
+    public function testValid(Customer $constraint, Opportunity $opportunity = null)
     {
-        $constraint = new Customer();
-
         $this->context->expects($this->never())
             ->method('addViolation');
 
@@ -50,35 +56,69 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
+                new Customer(),
                 null,
             ],
             [
+                new Customer(),
                 new Opportunity(),
             ],
             [
+                new Customer(),
                 (new Opportunity())
                     ->setCustomer1(new Customer1()),
             ],
             [
+                new Customer(['required' => true]),
+                (new Opportunity())
+                    ->setCustomer1(new Customer1()),
+            ],
+            [
+                new Customer(),
+                (new Opportunity())
+                    ->setCustomer2(new Customer2()),
+            ],
+            [
+                new Customer(['required' => true]),
                 (new Opportunity())
                     ->setCustomer2(new Customer2()),
             ],
         ];
     }
 
-    public function testInvalid()
+    /**
+     * @dataProvider invalidProvider
+     */
+    public function testInvalid(Customer $constraint, $message, Opportunity $opportunity = null)
     {
-        $constraint = new Customer();
-
         $this->context->expects($this->once())
             ->method('addViolation')
-            ->with($constraint->message);
+            ->with($message);
 
         $this->validator->validate(
-            (new Opportunity)
-                ->setCustomer1(new Customer1())
-                ->setCustomer2(new Customer2()),
+            $opportunity,
             $constraint
         );
+    }
+
+    public function invalidProvider()
+    {
+        $customer = new Customer();
+        $requiredCustomer = new Customer(['required' => true]);
+
+        return [
+            [
+                $requiredCustomer,
+                $customer->requiredMessage,
+                new Opportunity(),
+            ],
+            [
+                $customer,
+                $customer->message,
+                (new Opportunity)
+                    ->setCustomer1(new Customer1())
+                    ->setCustomer2(new Customer2()),
+            ],
+        ];
     }
 }

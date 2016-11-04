@@ -110,6 +110,7 @@ class CustomerType extends AbstractType
         $resolver->setDefaults([
             'mapped'  => false,
             'configs' => [
+                'allowClear'         => true,
                 'placeholder'        => 'oro.sales.form.choose_customer',
                 'separator'          => ';',
                 'minimumInputLength' => 0,

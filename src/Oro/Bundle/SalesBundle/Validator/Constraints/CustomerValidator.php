@@ -25,10 +25,14 @@ class CustomerValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value || !$this->customerManager->hasMoreCustomers($value)) {
+        if (!$value) {
             return;
         }
 
-        $this->context->addViolation($constraint->message);
+        if ($this->customerManager->hasMoreCustomers($value)) {
+            $this->context->addViolation($constraint->message);
+        } elseif ($constraint->required && !$this->customerManager->getCustomer($value)) {
+            $this->context->addViolation($constraint->requiredMessage);
+        }
     }
 }

@@ -405,7 +405,7 @@ services:
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
 
-    oro_sales.opportunity_customer_manager:
+    oro_sales.customer_manager:
         class: Oro\Bundle\SalesBundle\Manager\CustomerManager
         arguments:
             - '@property_accessor'
@@ -427,8 +427,9 @@ services:
             - '@oro_entity_config.provider.entity'
             - '@oro_entity_config.provider.grid'
 
-#todo: uncomment once 'customers' option exists in config provider
-#    oro_sales.validator.customer:
-#        class: Oro\Bundle\SalesBundle\Validator\Constraints\CustomerValidator
-#        arguments:
-#            - 'OpportunityCustomerManager'
+    oro_sales.validator.customer:
+        class: Oro\Bundle\SalesBundle\Validator\Constraints\CustomerValidator
+        arguments:
+            - '@oro_sales.customer_manager'
+        tags:
+            - { name: validator.constraint_validator }

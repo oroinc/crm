@@ -1,7 +1,7 @@
 Oro\Bundle\SalesBundle\Entity\Opportunity:
-# todo: uncomment once entity config has 'customers' option
-#    constraints:
-#        - Oro\Bundle\SalesBundle\Validator\Constraints\Customer: ~
+    constraints:
+        - Oro\Bundle\SalesBundle\Validator\Constraints\Customer:
+            required: true
     properties:
         name:
             - NotBlank: ~
@@ -19,6 +19,8 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\Lead:
+    constraints:
+        - Oro\Bundle\SalesBundle\Validator\Constraints\Customer: ~
     properties:
         name:
             - NotBlank: ~
