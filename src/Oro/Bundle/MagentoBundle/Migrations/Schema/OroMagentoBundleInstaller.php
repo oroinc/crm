@@ -45,8 +45,7 @@ class OroMagentoBundleInstaller implements
     OpportunityExtensionAwareInterface,
     LeadExtensionAwareInterface
 {
-    use OpportunityExtensionTrait;
-    use LeadExtensionTrait;
+    use LeadExtensionTrait, OpportunityExtensionTrait;
 
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -178,8 +177,8 @@ class OroMagentoBundleInstaller implements
         OrderActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
         $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
-        $this->leadExtension->addLeadCustomerAssociation($schema, 'orocrm_magento_customer', 'id');
-        $this->opportunityExtension->addOpportunityCustomerAssociation($schema, 'orocrm_magento_customer', 'id');
+        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
+        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
     }
 
     /**
@@ -1454,10 +1453,8 @@ class OroMagentoBundleInstaller implements
     protected function addActivityAssociations(Schema $schema)
     {
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
-        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
 
         CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
-        OrderActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**

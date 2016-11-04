@@ -1,11 +1,12 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Extend\Customers\Opportunity;
+namespace Oro\Bundle\SalesBundle\Tools\Customers;
 
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AssociationEntityConfigDumperExtension;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class EntityConfigDumperExtension extends AssociationEntityConfigDumperExtension
+class OpportunityConfigDumperExtension extends AssociationEntityConfigDumperExtension
 {
     /**
      * {@inheritdoc}
@@ -20,6 +21,14 @@ class EntityConfigDumperExtension extends AssociationEntityConfigDumperExtension
      */
     protected function getAssociationScope()
     {
-        return 'sales_opportunity';
+        return 'opportunity';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAssociationKind()
+    {
+        return CustomerScope::ASSOCIATION_KIND;
     }
 }

@@ -8,9 +8,6 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
                 max: 100
-        customer:
-            - Valid: ~
-            - NotBlank: ~
         dataChannel:
             - NotBlank: ~
         organization:
@@ -43,13 +40,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
         - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
-    properties:
-        street:
-            - NotBlank: ~
-        city:
-            - NotBlank: ~
-        postalCode:
-            - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:

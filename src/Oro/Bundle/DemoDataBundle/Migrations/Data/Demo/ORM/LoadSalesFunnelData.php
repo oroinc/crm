@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -12,15 +13,13 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
-
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -72,7 +71,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -206,15 +205,17 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         }
 
         if (rand(1, 100) > 10) {
+            $budgetAMountVal = mt_rand(10, 10000);
             $salesFunnelItem->getData()
-                ->set('budget_amount', mt_rand(10, 10000))
+                ->set('budget_amount', MultiCurrency::create($budgetAMountVal, 'USD'))
                 ->set('customer_need', mt_rand(10, 10000))
                 ->set('proposed_solution', mt_rand(10, 10000))
                 ->set('probability', $this->probabilities[array_rand($this->probabilities)]);
 
             if ($this->workflowManager->transitIfAllowed($salesFunnelItem, 'develop') && $this->getRandomBoolean()) {
+                $closeRevenueVal = mt_rand(10, 1000);
                 $salesFunnelItem->getData()
-                    ->set('close_revenue', mt_rand(10, 1000))
+                    ->set('close_revenue', MultiCurrency::create($closeRevenueVal, 'USD'))
                     ->set('close_date', new \DateTime());
 
                 if ($this->getRandomBoolean()) {

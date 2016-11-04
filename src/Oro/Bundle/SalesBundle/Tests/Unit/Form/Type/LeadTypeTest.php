@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
 
 class LeadTypeTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +32,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             'jobTitle' => 'text',
             'phones' => 'oro_phone_collection',
             'emails' => 'oro_email_collection',
-            'customer' => 'oro_sales_b2bcustomer_select',
+            'customer' => 'oro_sales_customer',
             'companyName' => 'text',
             'website' => 'url',
             'numberOfEmployees' => 'number',
@@ -56,7 +57,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             $counter++;
         }
 
-        $this->type->buildForm($builder, []);
+        $this->type->buildForm($builder, ['data_class' => Lead::class]);
     }
 
     public function testName()

@@ -2,9 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle;
 
-use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\SalesItemsProviderPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\CustomerIconProviderPass;
 
 class OroSalesBundle extends Bundle
 {
@@ -14,6 +15,6 @@ class OroSalesBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new SalesItemsProviderPass());
+        $container->addCompilerPass(new CustomerIconProviderPass());
     }
 }
