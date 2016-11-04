@@ -33,14 +33,13 @@ class LeadController extends Controller
      */
     public function viewAction(Lead $lead)
     {
-        $isDisqualifyAndConvertAllowed = $this
-            ->get('oro_sales.provider.lead_to_opportunity')
-            ->isDisqualifyAndConvertAllowed($lead);
-        
-        return array(
-            'entity' => $lead,
-            'isDisqualifyAndConvertAllowed' => $isDisqualifyAndConvertAllowed
-        );
+        $leadActionsAccessProvider = $this->get('oro_sales.provider.lead_actions_access');
+
+        return [
+            'entity'                        => $lead,
+            'isDisqualifyAllowed'           => $leadActionsAccessProvider->isDisqualifyAllowed($lead),
+            'isConvertToOpportunityAllowed' => $leadActionsAccessProvider->isConvertToOpportunityAllowed($lead)
+        ];
     }
 
     /**
@@ -171,7 +170,7 @@ class LeadController extends Controller
      */
     public function disqualifyAction(Lead $lead)
     {
-        if (!$this->get('oro_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
+        if (!$this->get('oro_sales.provider.lead_actions_access')->isDisqualifyAllowed($lead)) {
             throw new AccessDeniedException();
         }
         
@@ -202,8 +201,8 @@ class LeadController extends Controller
      */
     public function convertToOpportunityAction(Lead $lead)
     {
-        if (!$this->get('oro_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
-            throw new AccessDeniedException('Only one conversion per lead is allowed !');
+        if (!$this->get('oro_sales.provider.lead_actions_access')->isConvertToOpportunityAllowed($lead)) {
+            throw new AccessDeniedException('Lead couldn\'t be converted to opportunity!');
         }
 
         $session = $this->get('session');
