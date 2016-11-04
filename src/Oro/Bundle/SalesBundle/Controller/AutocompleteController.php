@@ -24,9 +24,9 @@ class AutocompleteController extends Controller
      * @return JsonResponse
      * @throws HttpException
      *
-     * @Route("/opportunitycustomers", name="oro_sales_autocomplete_opportunity_customers")
+     * @Route("/customers", name="oro_sales_autocomplete_customers")
      */
-    public function autocompleteOpportunityCustomersAction(Request $request)
+    public function autocompleteCustomersAction(Request $request)
     {
         $autocompleteRequest = new AutocompleteRequest($request);
         $validator           = $this->get('validator');

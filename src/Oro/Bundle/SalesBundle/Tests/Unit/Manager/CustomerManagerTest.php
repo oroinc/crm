@@ -6,16 +6,15 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Entity\Opportunity as EntityOpportunity;
-use Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager;
+use Oro\Bundle\SalesBundle\Manager\CustomerManager;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Customer1;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Customer2;
 use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 
-class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
+class CustomerManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var OpportunityCustomerManager */
-    protected $opportunityCustomerManager;
+    /** @var CustomerManager */
+    protected $customerManager;
 
     public function setUp()
     {
@@ -26,7 +25,8 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValueMap([
                 [
-                    EntityOpportunity::class, null,
+                    Opportunity::class,
+                    null,
                     new Config(
                         $this->getMock('Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface'),
                         [
@@ -39,7 +39,7 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ]));
 
-        $this->opportunityCustomerManager = new OpportunityCustomerManager(
+        $this->customerManager = new CustomerManager(
             PropertyAccess::createPropertyAccessor(),
             $salesConfigProvider
         );
@@ -50,10 +50,10 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetterAndSetter(Opportunity $opportunity, $customer)
     {
-        $this->opportunityCustomerManager->setCustomer($opportunity, $customer);
+        $this->customerManager->setCustomer($opportunity, $customer);
         $this->assertSame(
             $customer,
-            $this->opportunityCustomerManager->getCustomer($opportunity, $customer)
+            $this->customerManager->getCustomer($opportunity, $customer)
         );
     }
 
@@ -102,7 +102,7 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $expectedValue,
-            $this->opportunityCustomerManager->hasCustomer($opportunity, $customer)
+            $this->customerManager->hasCustomer($opportunity, $customer)
         );
     }
 
@@ -155,7 +155,7 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasCustomerThrowsExceptionOnInvalidCustomer()
     {
-        $this->opportunityCustomerManager->hasCustomer(new Opportunity(), new Lead());
+        $this->customerManager->hasCustomer(new Opportunity(), new Lead());
     }
 
     /**
@@ -165,7 +165,7 @@ class OpportunityCustomerManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $expectedValue,
-            $this->opportunityCustomerManager->hasMoreCustomers($opportunity)
+            $this->customerManager->hasMoreCustomers($opportunity)
         );
     }
 

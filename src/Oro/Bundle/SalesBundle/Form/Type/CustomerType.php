@@ -11,13 +11,13 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager;
+use Oro\Bundle\SalesBundle\Manager\CustomerManager;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
 class CustomerType extends AbstractType
 {
-    /** @var OpportunityCustomerManager */
-    protected $opportunityCustomerManager;
+    /** @var CustomerManager */
+    protected $customerManager;
 
     /** @var DataTransformerInterface */
     protected $customerToStringTransformer;
@@ -26,16 +26,16 @@ class CustomerType extends AbstractType
     protected $customerConfigProvider;
 
     /**
-     * @param OpportunityCustomerManager $opportunityCustomerManager
-     * @param DataTransformerInterface   $customerToStringTransformer
-     * @param CustomerConfigProvider     $customerConfigProvider
+     * @param CustomerManager          $customerManager
+     * @param DataTransformerInterface $customerToStringTransformer
+     * @param CustomerConfigProvider   $customerConfigProvider
      */
     public function __construct(
-        OpportunityCustomerManager $opportunityCustomerManager,
+        CustomerManager $customerManager,
         DataTransformerInterface $customerToStringTransformer,
         CustomerConfigProvider $customerConfigProvider
     ) {
-        $this->opportunityCustomerManager  = $opportunityCustomerManager;
+        $this->customerManager  = $customerManager;
         $this->customerToStringTransformer = $customerToStringTransformer;
         $this->customerConfigProvider      = $customerConfigProvider;
     }
@@ -77,7 +77,7 @@ class CustomerType extends AbstractType
         }
 
         $customer = $event->getForm()->getData();
-        $this->opportunityCustomerManager->setCustomer($parentData, $customer);
+        $this->customerManager->setCustomer($parentData, $customer);
     }
 
     /**
@@ -96,7 +96,7 @@ class CustomerType extends AbstractType
             return;
         }
 
-        $event->setData($this->opportunityCustomerManager->getCustomer($parentData));
+        $event->setData($this->customerManager->getCustomer($parentData));
     }
 
     /**
@@ -113,7 +113,7 @@ class CustomerType extends AbstractType
                 'placeholder'        => 'oro.sales.form.choose_customer',
                 'separator'          => ';',
                 'minimumInputLength' => 0,
-                'route_name'         => 'oro_sales_autocomplete_opportunity_customers',
+                'route_name'         => 'oro_sales_autocomplete_customers',
                 'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                 'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                 'route_parameters'   => [

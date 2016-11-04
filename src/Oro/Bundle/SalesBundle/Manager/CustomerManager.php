@@ -7,9 +7,8 @@ use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
-class OpportunityCustomerManager
+class CustomerManager
 {
     /** @var PropertyAccessor */
     protected $propertyAccessor;
@@ -28,18 +27,18 @@ class OpportunityCustomerManager
     }
 
     /**
-     * This method should always return false as only one customer is allowed for $opportunity
+     * This method should always return false as only one customer is allowed for $ownerEntity
      *
-     * @param Opportunity $opportunity
+     * @param object $ownerEntity
      *
      * @return bool
      */
-    public function hasMoreCustomers(Opportunity $opportunity)
+    public function hasMoreCustomers($ownerEntity)
     {
-        $customerProperties = $this->getCustomerProperties();
+        $customerProperties = $this->getCustomerProperties(ClassUtils::getClass($ownerEntity));
         $customers = 0;
         foreach ($customerProperties as $customerProperty) {
-            $customer = $this->propertyAccessor->getValue($opportunity, $customerProperty);
+            $customer = $this->propertyAccessor->getValue($ownerEntity, $customerProperty);
             if ($customer) {
                 $customers++;
             }
@@ -49,46 +48,46 @@ class OpportunityCustomerManager
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param object $ownerEntity
      * @param object $customer
      *
      * @return bool
      */
-    public function hasCustomer(Opportunity $opportunity, $customer)
+    public function hasCustomer($ownerEntity, $customer)
     {
         return $customer === $this->propertyAccessor->getValue(
-            $opportunity,
-            $this->getCustomerProperty($customer)
+            $ownerEntity,
+            $this->getCustomerProperty(ClassUtils::getClass($ownerEntity), $customer)
         );
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param object $ownerEntity
      * @param object|null $customer
      */
-    public function setCustomer(Opportunity $opportunity, $customer)
+    public function setCustomer($ownerEntity, $customer)
     {
-        $this->unsetCustomer($opportunity);
+        $this->unsetCustomer($ownerEntity);
 
         if ($customer !== null) {
             $this->propertyAccessor->setValue(
-                $opportunity,
-                $this->getCustomerProperty($customer),
+                $ownerEntity,
+                $this->getCustomerProperty(ClassUtils::getClass($ownerEntity), $customer),
                 $customer
             );
         }
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param object $ownerEntity
      *
      * @return object|null
      */
-    public function getCustomer(Opportunity $opportunity)
+    public function getCustomer($ownerEntity)
     {
-        $customerProperties = $this->getCustomerProperties();
+        $customerProperties = $this->getCustomerProperties(ClassUtils::getClass($ownerEntity));
         foreach ($customerProperties as $customerProperty) {
-            $customer = $this->propertyAccessor->getValue($opportunity, $customerProperty);
+            $customer = $this->propertyAccessor->getValue($ownerEntity, $customerProperty);
             if ($customer) {
                 return $customer;
             }
@@ -98,25 +97,26 @@ class OpportunityCustomerManager
     }
 
     /**
-     * @param Opportunity $opportunity
+     * @param object $ownerEntity
      */
-    protected function unsetCustomer(Opportunity $opportunity)
+    protected function unsetCustomer($ownerEntity)
     {
-        $customerProperties = $this->getCustomerProperties();
+        $customerProperties = $this->getCustomerProperties(ClassUtils::getClass($ownerEntity));
         foreach ($customerProperties as $customerProperty) {
-            $this->propertyAccessor->setValue($opportunity, $customerProperty, null);
+            $this->propertyAccessor->setValue($ownerEntity, $customerProperty, null);
         }
     }
 
     /**
+     * @param string $ownerEntityClass
      * @param object $customer
      *
      * @return string
      * @throws \InvalidArgumentException
      */
-    protected function getCustomerProperty($customer)
+    protected function getCustomerProperty($ownerEntityClass, $customer)
     {
-        $customerProperties = $this->getCustomerProperties();
+        $customerProperties = $this->getCustomerProperties($ownerEntityClass);
         $customerClass = ClassUtils::getClass($customer);
 
         if (!isset($customerProperties[$customerClass])) {
@@ -133,16 +133,23 @@ class OpportunityCustomerManager
     /**
      * @return array
      */
-    protected function getCustomerProperties()
+    protected function getCustomerProperties($entityClass)
     {
-        $customers = $this->salesConfigProvider->getConfig(Opportunity::class)->get('customers');
+        // this is because of tests
+        $customers = $this->salesConfigProvider->getConfig($entityClass)->get('customers');
         if ($customers) {
             return $customers;
         }
 
-        // todo: read $customers value from config provider
-        return $customers = [
-            'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05',
+        // todo: do not hardcode
+        $config = [
+            'Oro\Bundle\SalesBundle\Entity\Opportunity' => [
+                'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05',
+            ],
+            'Oro\Bundle\SalesBundle\Entity\Lead' => [
+                'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05',
+            ],
         ];
+        return $config[$entityClass];
     }
 }

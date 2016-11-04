@@ -5,19 +5,19 @@ namespace Oro\Bundle\SalesBundle\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager;
+use Oro\Bundle\SalesBundle\Manager\CustomerManager;
 
 class CustomerValidator extends ConstraintValidator
 {
-    /** @var OpportunityCustomerManager */
-    protected $opportunityCustomerManager;
+    /** @var CustomerManager */
+    protected $customerManager;
 
     /**
-     * @param OpportunityCustomerManager $opportunityCustomerManager
+     * @param CustomerManager $customerManager
      */
-    public function __construct(OpportunityCustomerManager $opportunityCustomerManager)
+    public function __construct(CustomerManager $customerManager)
     {
-        $this->opportunityCustomerManager = $opportunityCustomerManager;
+        $this->customerManager = $customerManager;
     }
 
     /**
@@ -25,7 +25,7 @@ class CustomerValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (!$value || !$this->opportunityCustomerManager->hasMoreCustomers($value)) {
+        if (!$value || !$this->customerManager->hasMoreCustomers($value)) {
             return;
         }
 

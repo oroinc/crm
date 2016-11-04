@@ -20,11 +20,11 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $opportunityCustomerManager = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager')
+        $customerManager = $this
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Manager\CustomerManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $opportunityCustomerManager->expects($this->any())
+        $customerManager->expects($this->any())
             ->method('hasMoreCustomers')
             ->will($this->returnCallback(function (Opportunity $opportunity) {
                 return $opportunity->getCustomer1() && $opportunity->getCustomer2();
@@ -32,7 +32,7 @@ class CustomerValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
 
-        $this->validator = new CustomerValidator($opportunityCustomerManager);
+        $this->validator = new CustomerValidator($customerManager);
         $this->validator->initialize($this->context);
     }
 

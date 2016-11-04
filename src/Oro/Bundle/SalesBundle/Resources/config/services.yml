@@ -406,7 +406,7 @@ services:
             - '@oro_currency.query.currency_transformer'
 
     oro_sales.opportunity_customer_manager:
-        class: Oro\Bundle\SalesBundle\Manager\OpportunityCustomerManager
+        class: Oro\Bundle\SalesBundle\Manager\CustomerManager
         arguments:
             - '@property_accessor'
             # todo: change to correct provider
