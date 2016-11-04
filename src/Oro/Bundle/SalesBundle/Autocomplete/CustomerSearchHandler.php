@@ -5,36 +5,25 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
-use Oro\Bundle\EntityBundle\Provider\EntityAvatarProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 
 class CustomerSearchHandler extends ContextSearchHandler
 {
-    /** @var ConfigProvider */
-    protected $salesConfigProvider;
-
-    /** @var EntityAvatarProviderInterface */
-    protected $entityAvatarProvider;
+    /** @var CustomerIconProviderInterface */
+    protected $customerIconProvider;
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
     /**
-     * @param ConfigProvider $salesConfigProvider
+     * @param CustomerIconProviderInterface $customerIconProvider
      */
-    public function setSalesConfigProvider(ConfigProvider $salesConfigProvider)
+    public function setCustomerIconProvider(CustomerIconProviderInterface $customerIconProvider)
     {
-        $this->salesConfigProvider = $salesConfigProvider;
-    }
-
-    /**
-     * @param EntityAvatarProviderInterface $entityAvatarProvider
-     */
-    public function setEntityAvatarProvider(EntityAvatarProviderInterface $entityAvatarProvider)
-    {
-        $this->entityAvatarProvider = $entityAvatarProvider;
+        $this->customerIconProvider = $customerIconProvider;
     }
 
     /**
@@ -50,23 +39,23 @@ class CustomerSearchHandler extends ContextSearchHandler
      */
     protected function convertItems(array $items)
     {
-        $grouppedItems = $this->groupItemsByEntityName($items);
+        $groupedItems = $this->groupItemsByEntityName($items);
 
         $customers = [];
-        foreach ($grouppedItems as $entityName => $items) {
+        foreach ($groupedItems as $entityName => $items) {
             $customers = array_merge(
                 $customers,
                 $this->objectManager
                     ->getRepository($entityName)
-                    ->findById(array_keys($items))
+                    ->findBy(['id' => array_keys($items)])
             );
         }
 
         $result = [];
         foreach ($customers as $customer) {
-            $customerId = $this->doctrineHelper->getSingleEntityIdentifier($customer);
-            $item = $this->convertItem($grouppedItems[ClassUtils::getClass($customer)][$customerId]);
-            $item['avatar'] = $this->entityAvatarProvider->getAvatarImage('avatar_xsmall', $customer);
+            $identifier = $this->doctrineHelper->getSingleEntityIdentifier($customer);
+            $item = $this->convertItem($groupedItems[ClassUtils::getClass($customer)][$identifier]);
+            $item['icon'] = $this->customerIconProvider->getIcon($customer);
             $result[] = $item;
         }
 
@@ -76,16 +65,16 @@ class CustomerSearchHandler extends ContextSearchHandler
     /**
      * @param Item[] $items
      *
-     * @return Item[]
+     * @return array
      */
     protected function groupItemsByEntityName(array $items)
     {
-        $groupped = [];
+        $grouped = [];
         foreach ($items as $item) {
-            $groupped[$item->getEntityName()][$item->getRecordId()] = $item;
+            $grouped[$item->getEntityName()][$item->getRecordId()] = $item;
         }
 
-        return $groupped;
+        return $grouped;
     }
 
     /**
@@ -95,9 +84,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     {
         // todo: read $customers value from config provider
         $customers = [
-            'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05',
+            'Oro\Bundle\MagentoBundle\Entity\Customer',
         ];
 
-        return array_values($this->indexer->getEntityAliases(array_keys($customers)));
+        return array_values($this->indexer->getEntityAliases($customers));
     }
 }

@@ -1,7 +1,7 @@
-<% if (avatar.type === 'file-path') { %>
-    <img src="<%= avatar.data.path %>">
-<% } else if (avatar.type === 'icon') { %>
-    <i class="<%= avatar.data.class %> hide-text"></i>
+<% if (icon.type === 'file-path') { %>
+    <img src="<%= icon.data.path %>">
+<% } else if (icon.type === 'icon') { %>
+    <i class="<%= icon.data.class %> hide-text"></i>
 <% } %>
 <%= highlight(_.escape(text)) %>
 <% if (id === null) { %>

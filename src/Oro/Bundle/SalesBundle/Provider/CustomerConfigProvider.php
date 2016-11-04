@@ -3,49 +3,32 @@
 namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
+// @todo: Recheck and probably rename it.
 class CustomerConfigProvider
 {
     /** @var ConfigManager */
     protected $configManager;
 
-    /** @var ConfigProvider */
-    protected $entityConfigProvider;
-
-    /** @var ConfigProvider */
-    protected $gridConfigProvider;
-
     /**
-     * @param ConfigManager  $configManager
-     * @param ConfigProvider $entityConfigProvider
-     * @param ConfigProvider $gridConfigProvider
+     * @param ConfigManager $configManager
      */
-    public function __construct(
-        ConfigManager $configManager,
-        ConfigProvider $entityConfigProvider,
-        ConfigProvider $gridConfigProvider
-    ) {
+    public function __construct(ConfigManager $configManager)
+    {
         $this->configManager = $configManager;
-        $this->entityConfigProvider = $entityConfigProvider;
-        $this->gridConfigProvider = $gridConfigProvider;
     }
 
     /**
-     * @param string $ownerClass
+     * @param string $ownerClass - e.g Lead or Opportunity
      *
      * @return array
-     * [
-     *     entityClass => propertyName,
-     *     ...
-     * ]
      */
-    public function getCustomerProperties($ownerClass)
+    public function getAssociatedCustomerClasses($ownerClass)
     {
-        // todo: retrieve from config
+        // @todo: Add functionality and fetch this data from config manager
         return [
-            'Oro\Bundle\MagentoBundle\Entity\Customer' => 'customer1c6b2c05'
+            'Oro\Bundle\MagentoBundle\Entity\Customer',
         ];
     }
 
@@ -61,17 +44,18 @@ class CustomerConfigProvider
      *     first => should be shown by default?
      * ]
      */
-    public function getCustomersData($ownerClass)
+    public function getData($ownerClass)
     {
-        $customerClasses = array_keys($this->getCustomerProperties($ownerClass));
         $result = [];
-        foreach ($customerClasses as $customerClass) {
+
+        $customerClasses = $this->getAssociatedCustomerClasses($ownerClass);
+        foreach ($customerClasses as $class) {
             $result[] = [
-                'label'       => $this->entityConfigProvider->getConfig($customerClass)->get('label'),
-                'icon'        => $this->entityConfigProvider->getConfig($customerClass)->get('icon'),
-                'className'   => $customerClass,
-                'gridName'    => $this->getCustomerGridByEntity($customerClass),
-                'routeCreate' => $this->getRouteCreate($customerClass),
+                'className'   => $class,
+                'label'       => $this->getLabel($class),
+                'icon'        => $this->getIcon($class),
+                'gridName'    => $this->getDefaultGrid($class),
+                'routeCreate' => $this->getRouteCreate($class),
                 'first'       => !$result,
             ];
         }
@@ -84,13 +68,33 @@ class CustomerConfigProvider
      *
      * @return string|null
      */
-    public function getCustomerGridByEntity($entityClass)
+    protected function getLabel($entityClass)
+    {
+        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('label');
+    }
+
+    /**
+     * @param string $entityClass
+     *
+     * @return string|null
+     */
+    protected function getIcon($entityClass)
+    {
+        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('icon');
+    }
+
+    /**
+     * @param string $entityClass
+     *
+     * @return string|null
+     */
+    public function getDefaultGrid($entityClass)
     {
         if (ExtendHelper::isCustomEntity($entityClass)) {
             return 'custom-entity-grid';
         }
 
-        $config = $this->gridConfigProvider->getConfig($entityClass);
+        $config = $this->configManager->getProvider('grid')->getConfig($entityClass);
 
         return $config->get('default');
     }
@@ -98,20 +102,15 @@ class CustomerConfigProvider
     /**
      * @param string $entityClass
      *
-     * @return string
-     * @throws \RuntimeException
+     * @return string|null
      */
     protected function getRouteCreate($entityClass)
     {
         $metadata = $this->configManager->getEntityMetadata($entityClass);
-        if (!$metadata) {
-            throw new \RuntimeException(sprintf('Cannot find EntityMetadata for class %s', $entityClass));
+        if ($metadata && $metadata->routeCreate) {
+            return $metadata->routeCreate;
         }
 
-        if (!$metadata->routeCreate) {
-            throw new \RuntimeException(sprintf('routeCreate is not configured for class %s', $entityClass));
-        }
-
-        return $metadata->routeCreate;
+        return null;
     }
 }

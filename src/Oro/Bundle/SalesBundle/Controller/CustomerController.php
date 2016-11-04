@@ -25,7 +25,7 @@ class CustomerController extends Controller
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
         $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->getCustomerConfigProvider()->getCustomersData($resolvedClass);
+        $entityTargets = $this->getCustomerConfigProvider()->getData($resolvedClass);
 
         return [
             'sourceEntityClassAlias' => $entityClassAlias,
@@ -34,7 +34,7 @@ class CustomerController extends Controller
                 'grid_path' => $this->generateUrl(
                     'oro_sales_customer_grid',
                     [
-                        'entityClass' => $entityTargets[0]['className'],
+                        'entityClass' => reset($entityTargets)['className'],
                     ],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 )
@@ -51,12 +51,12 @@ class CustomerController extends Controller
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
 
         return [
-            'gridName'     => $this->getCustomerConfigProvider()->getCustomerGridByEntity($resolvedClass),
+            'gridName'     => $this->getCustomerConfigProvider()->getDefaultGrid($resolvedClass),
             'multiselect'  => false,
             'params'       => [
                 'class_name' => $resolvedClass,
             ],
-            'renderParams' => []
+            'renderParams' => [],
         ];
     }
 

@@ -90,7 +90,7 @@ class OpportunityType extends AbstractType
                 'customer',
                 'oro_sales_customer',
                 [
-                    'required' => true,
+                    'required' => false,
                     'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
                 ]

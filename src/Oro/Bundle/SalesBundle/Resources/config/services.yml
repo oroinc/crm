@@ -447,31 +447,14 @@ services:
         tags:
             - { name: oro_sales.customer_icon }
 
-    oro_sales.customer_manager:
-        class: Oro\Bundle\SalesBundle\Manager\CustomerManager
+    oro_sales.customer_config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
         arguments:
-            - '@property_accessor'
-            # todo: change to correct provider
-            - '@oro_entity_config.provider.entity'
+            - '@oro_entity_config.config_manager'
 
     oro_sales.autocomplete.customer_search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
         parent: oro_activity.form.handler.autocomplete
         calls:
-#            - [setSalesConfigProvider, ['@oro_entity_config.provider.sales']]
-            - [setEntityAvatarProvider, ['@oro_entity.avatar_provider']]
+            - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
-
-    oro_sales.customer_config_provider:
-        class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
-        arguments:
-            - '@oro_entity_config.config_manager'
-            - '@oro_entity_config.provider.entity'
-            - '@oro_entity_config.provider.grid'
-
-    oro_sales.validator.customer:
-        class: Oro\Bundle\SalesBundle\Validator\Constraints\CustomerValidator
-        arguments:
-            - '@oro_sales.customer_manager'
-        tags:
-            - { name: validator.constraint_validator }

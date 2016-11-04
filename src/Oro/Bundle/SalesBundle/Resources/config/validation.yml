@@ -1,7 +1,4 @@
 Oro\Bundle\SalesBundle\Entity\Opportunity:
-    constraints:
-        - Oro\Bundle\SalesBundle\Validator\Constraints\Customer:
-            required: true
     properties:
         name:
             - NotBlank: ~
@@ -19,8 +16,6 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\Lead:
-    constraints:
-        - Oro\Bundle\SalesBundle\Validator\Constraints\Customer: ~
     properties:
         name:
             - NotBlank: ~

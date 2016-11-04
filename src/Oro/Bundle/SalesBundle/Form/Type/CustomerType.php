@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,33 +12,26 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\SalesBundle\Manager\CustomerManager;
+use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityToStringTransformer;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
+// @todo: Probably rename to MultiCustomerSelectType or something like that
 class CustomerType extends AbstractType
 {
-    /** @var CustomerManager */
-    protected $customerManager;
-
-    /** @var DataTransformerInterface */
+    /** @var EntityToStringTransformer|DataTransformerInterface */
     protected $customerToStringTransformer;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
 
     /**
-     * @param CustomerManager          $customerManager
-     * @param DataTransformerInterface $customerToStringTransformer
+     * @param DataTransformerInterface $transformer
      * @param CustomerConfigProvider   $customerConfigProvider
      */
-    public function __construct(
-        CustomerManager $customerManager,
-        DataTransformerInterface $customerToStringTransformer,
-        CustomerConfigProvider $customerConfigProvider
-    ) {
-        $this->customerManager  = $customerManager;
-        $this->customerToStringTransformer = $customerToStringTransformer;
-        $this->customerConfigProvider      = $customerConfigProvider;
+    public function __construct(DataTransformerInterface $transformer, CustomerConfigProvider $customerConfigProvider)
+    {
+        $this->customerToStringTransformer = $transformer;
+        $this->customerConfigProvider = $customerConfigProvider;
     }
 
     /**
@@ -46,7 +40,7 @@ class CustomerType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['parentClass'] = $options['parent_class'];
-        $view->vars['customersData'] = $this->customerConfigProvider->getCustomersData($options['parent_class']);
+        $view->vars['customersData'] = $this->customerConfigProvider->getData($options['parent_class']);
     }
 
     /**
@@ -77,7 +71,9 @@ class CustomerType extends AbstractType
         }
 
         $customer = $event->getForm()->getData();
-        $this->customerManager->setCustomer($parentData, $customer);
+        if ($parentData instanceof CustomerAssociationInterface) {
+            $parentData->setCustomerTarget($customer);
+        }
     }
 
     /**
@@ -96,7 +92,10 @@ class CustomerType extends AbstractType
             return;
         }
 
-        $event->setData($this->customerManager->getCustomer($parentData));
+        if ($parentData instanceof CustomerAssociationInterface) {
+            $event->setData($parentData->getCustomerTarget());
+        }
+
     }
 
     /**
@@ -107,21 +106,24 @@ class CustomerType extends AbstractType
         $resolver->setRequired('parent_class');
         $resolver->addAllowedTypes('parent_class', 'string');
 
-        $resolver->setDefaults([
-            'mapped'  => false,
-            'configs' => [
-                'allowClear'         => true,
-                'placeholder'        => 'oro.sales.form.choose_customer',
-                'separator'          => ';',
-                'minimumInputLength' => 0,
-                'route_name'         => 'oro_sales_autocomplete_customers',
-                'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
-                'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
-                'route_parameters'   => [
-                    'name' => 'name',
+        $resolver->setDefaults(
+            [
+                'mapped'  => false,
+                'configs' => [
+                    'allowClear'              => true,
+                    'placeholder'             => 'oro.sales.form.choose_customer',
+                    'separator'               => ';',
+                    'minimumInputLength'      => 0,
+                    // @todo: should be replaced with search handler alias
+                    'route_name'              => 'oro_sales_autocomplete_customers',
+                    'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
+                    'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
+                    'route_parameters'        => [
+                        'name' => 'name',
+                    ],
                 ],
-            ],
-        ]);
+            ]
+        );
     }
 
     /**
