@@ -191,7 +191,8 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 channel_id: $dataChannel.id
-                        budget_amount: ~
+                        budget_amount:
+                            form_type: oro_multicurrency
                         probability: ~
                         customer_need: ~
                         proposed_solution: ~
@@ -206,6 +207,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         close_revenue:
+                            form_type: oro_multicurrency
                             options:
                                 required: true
                                 constraints:
