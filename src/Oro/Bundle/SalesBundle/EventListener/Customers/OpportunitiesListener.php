@@ -9,42 +9,36 @@ use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
-use Oro\Bundle\SalesBundle\Provider\Customers\OpportunitiesProvider;
 
 class OpportunitiesListener
 {
     /** @var ConfigProvider */
-    protected $extendProvider;
-
-    /** @var OpportunitiesProvider */
-    protected $provider;
+    protected $salesProvider;
 
     /** @var TranslatorInterface */
     protected $translator;
 
     /**
      * @param ConfigManager         $configManager
-     * @param OpportunitiesProvider $provider
      * @param TranslatorInterface   $translator
      */
-    public function __construct(
-        ConfigManager $configManager,
-        OpportunitiesProvider $provider,
-        TranslatorInterface $translator
-    ) {
-        $this->extendProvider = $configManager->getProvider('extend');
-        $this->provider       = $provider;
+    public function __construct(ConfigManager $configManager, TranslatorInterface $translator )
+    {
+        $this->extendProvider = $configManager->getProvider('sales');
         $this->translator     = $translator;
     }
 
     /**
      * @param BeforeViewRenderEvent $event
      */
-    public function addSalesItems(BeforeViewRenderEvent $event)
+    public function addOpportunities(BeforeViewRenderEvent $event)
     {
         $entity      = $event->getEntity();
+        $class2      = ClassUtils::getClass(null);
+        $class1      = ClassUtils::getClass(false);
+        $class       = ClassUtils::getClass('');
         $entityClass = ClassUtils::getClass($entity);
-        if ($entity && $this->provider->supportCustomer($entityClass)) {
+        if ($entity && !empty($this->salesProvider->getConfig($entityClass)['opportunity'])) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(

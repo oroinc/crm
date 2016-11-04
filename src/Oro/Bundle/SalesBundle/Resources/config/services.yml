@@ -462,3 +462,18 @@ services:
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+
+    oro_sales.customers.opportunities_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@translator'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
+
+    oro_sales.datagrid.extension.customers:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\OpportunitiesExtension
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_datagrid.extension }

@@ -12,10 +12,6 @@ placeholders:
         oro_account_channel_info_b2b:
             items:
                 oro_sales_account_channel_info: ~
-        customer_sales_items_tabs:
-            items:
-                #oro_sales_customers_lead_items: ~
-                oro_sales_customers_opportunity_items: ~
 
     items:
         leads_launchpad:
@@ -26,7 +22,3 @@ placeholders:
 
         oro_sales_account_channel_info:
             action: OroSalesBundle:B2bCustomer:accountCustomersInfo
-
-        oro_sales_customers_opportunity_items:
-            template:   OroSalesBundle:Customers:opportunitiesGrid.html.twig
-            applicable: "@oro_sales.customers.sales_items_provider->supportCustomerSalesItems($customerClass$, %oro_sales.opportunity.class%)"
