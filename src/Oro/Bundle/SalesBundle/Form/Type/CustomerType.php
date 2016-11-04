@@ -12,14 +12,14 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityToStringTransformer;
+use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityReferenceToStringTransformer;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
 // @todo: Probably rename to MultiCustomerSelectType or something like that
 class CustomerType extends AbstractType
 {
-    /** @var EntityToStringTransformer|DataTransformerInterface */
-    protected $customerToStringTransformer;
+    /** @var EntityReferenceToStringTransformer */
+    protected $transformer;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
@@ -30,7 +30,7 @@ class CustomerType extends AbstractType
      */
     public function __construct(DataTransformerInterface $transformer, CustomerConfigProvider $customerConfigProvider)
     {
-        $this->customerToStringTransformer = $transformer;
+        $this->transformer = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
     }
 
@@ -48,7 +48,7 @@ class CustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer($this->customerToStringTransformer);
+        $builder->addModelTransformer($this->transformer);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'updateData']);
         // needs to be called before validation
@@ -114,7 +114,7 @@ class CustomerType extends AbstractType
                     'placeholder'             => 'oro.sales.form.choose_customer',
                     'separator'               => ';',
                     'minimumInputLength'      => 0,
-                    // @todo: should be replaced with search handler alias
+                    // @todo: Need to add and additional param for Owner entity Class
                     'route_name'              => 'oro_sales_autocomplete_customers',
                     'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                     'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',

@@ -454,7 +454,7 @@ services:
     oro_sales.form.type.customer:
         class: Oro\Bundle\SalesBundle\Form\Type\CustomerType
         arguments:
-            - '@oro_entity.entity_to_string_transformer'
+            - '@oro_entity.entity_reference_to_string_transformer'
             - '@oro_sales.customer_config_provider'
         tags:
             - { name: form.type, alias: oro_sales_customer }

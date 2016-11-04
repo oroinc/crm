@@ -25,6 +25,9 @@ class AutocompleteController extends Controller
      * @throws HttpException
      *
      * @Route("/customers", name="oro_sales_autocomplete_customers")
+     *
+     *
+     * @todo: should be done in the next way: /activities/{activity}/search/autocomplete
      */
     public function autocompleteCustomersAction(Request $request)
     {
@@ -55,6 +58,7 @@ class AutocompleteController extends Controller
 
         /** @var CustomerSearchHandler $searchHandler */
         $searchHandler = $this->get('oro_sales.autocomplete.customer_search_handler');
+        // @todo: Set entity for relation, e.g Lead and Opportunity
 
         return new JsonResponse($searchHandler->search(
             $autocompleteRequest->getQuery(),
