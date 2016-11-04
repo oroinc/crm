@@ -1,5 +1,5 @@
 entity_config:
-    sales_opportunity:
+    opportunity:
         entity:
             items:
                 enabled: # boolean
@@ -8,7 +8,7 @@ entity_config:
                         priority:           250
                         default_value:      false
 
-    sales_lead:
+    lead:
         entity:
             items:
                 enabled: # boolean

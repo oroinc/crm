@@ -11,6 +11,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
 use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
+use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
 class OpportunityExtension implements ExtendExtensionAwareInterface, NameGeneratorAwareInterface
 {
@@ -45,12 +46,12 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
      * @param string $targetTableName  Target entity table name
      * @param string $targetColumnName A column name is used to show related entity
      */
-    public function addOpportunityCustomerAssociation(
+    public function addCustomerAssociation(
         Schema $schema,
         $targetTableName,
         $targetColumnName = null
     ) {
-        $noteTable   = $schema->getTable(self::OPPORTUNITY_TABLE_NAME);
+        $table   = $schema->getTable(self::OPPORTUNITY_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
 
         if (empty($targetColumnName)) {
@@ -59,35 +60,20 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
         }
 
         $options = new OroOptions();
-        $options->set('sales_opportunity', 'enabled', true);
+        $options->set('opportunity', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
 
         $associationName = ExtendHelper::buildAssociationName(
-            $this->extendExtension->getEntityClassByTableName($targetTableName)
+            $this->extendExtension->getEntityClassByTableName($targetTableName),
+            CustomerScope::ASSOCIATION_KIND
         );
 
         $this->extendExtension->addManyToOneRelation(
             $schema,
-            $noteTable,
+            $table,
             $associationName,
             $targetTable,
             $targetColumnName
         );
-    }
-
-    /**
-     * Gets an association column name for opportunity relation
-     *
-     * @param string $targetTableName Target entity table name.
-     *
-     * @return string
-     */
-    public function getAssociationColumnName($targetTableName)
-    {
-        $associationName = ExtendHelper::buildAssociationName(
-            $this->extendExtension->getEntityClassByTableName($targetTableName)
-        );
-
-        return $this->nameGenerator->generateRelationColumnName($associationName);
     }
 }
