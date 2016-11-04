@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @outputBuffering enabled
@@ -11,9 +10,6 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
  */
 class RestLeadTest extends WebTestCase
 {
-    /** @var  Channel */
-    protected static $dataChannel;
-
     protected function setUp()
     {
         $this->initClient(
@@ -21,11 +17,6 @@ class RestLeadTest extends WebTestCase
             $this->generateWsseAuthHeader()
         );
         $this->loadFixtures(['Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
-    }
-
-    protected function postFixtureLoad()
-    {
-        self::$dataChannel = $this->getReference('default_channel');
     }
 
     /**
@@ -39,7 +30,6 @@ class RestLeadTest extends WebTestCase
                 'firstName'     => 'first_name_' . mt_rand(1, 500),
                 'lastName'      => 'last_name_' . mt_rand(1, 500),
                 'owner'         => '1',
-                'dataChannel'   => self::$dataChannel->getId()
             ]
         ];
 

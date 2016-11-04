@@ -34,9 +34,6 @@ class LeadType extends AbstractType
                 array(
                     'required' => true,
                     'label' => 'oro.sales.lead.data_channel.label',
-                    'entities' => [
-                        'Oro\\Bundle\\SalesBundle\\Entity\\Lead'
-                    ],
                 )
             )
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'oro.sales.lead.name_prefix.label'))
