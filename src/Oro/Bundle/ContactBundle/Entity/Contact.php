@@ -8,16 +8,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Model\ExtendContact;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ContactBundle\Model\ExtendContact;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -1312,6 +1313,10 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      */
     public function addAddress(AbstractAddress $address)
     {
+        if (!$address instanceof ContactAddress) {
+            throw new \InvalidArgumentException("Address must be instance of ContactAddress");
+        }
+
         /** @var ContactAddress $address */
         if (!$this->addresses->contains($address)) {
             //don't allow more than one primary address
