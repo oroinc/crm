@@ -21,7 +21,8 @@ workflows:
                 preconditions:
                     '@and':
                         - '@equal': [$cart.status.name, 'open']
-                        - '@channel_entity_availiable': [$cart.dataChannel, ['Oro\Bundle\SalesBundle\Entity\Opportunity']]
+                        - '@feature_enabled':
+                            feature: 'sales_opportunity'
                 conditions:
                     '@and':
                         - '@not_empty':

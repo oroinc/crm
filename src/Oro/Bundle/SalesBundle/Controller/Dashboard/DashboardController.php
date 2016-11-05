@@ -124,7 +124,7 @@ class DashboardController extends Controller
         $workflowRegistry = $this->get('oro_workflow.registry');
         $workflows = $workflowRegistry->getActiveWorkflowsByEntityClass(SalesFunnel::class);
 
-        $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenue'];
+        $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenueValue'];
 
         /** @var SalesFunnelRepository $salesFunnerRepository */
         $salesFunnerRepository = $this->getDoctrine()->getRepository('OroSalesBundle:SalesFunnel');
