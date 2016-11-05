@@ -30,7 +30,7 @@ define(function(require) {
             mediator.on('sales:customer:select', this.onCustomerSelect, this);
 
             var $customers = this.$el.find(options.customerSelector);
-            _.each($customers, function (customer) {
+            _.each($customers, function(customer) {
                 this.views.push(new CreateCustomerView({
                     el: customer
                 }));
