@@ -74,9 +74,16 @@ class LeadType extends AbstractType
                 'customer',
                 'oro_sales_customer',
                 [
-                    'required' => false,
-                    'label'    => 'oro.sales.lead.customer.label',
+                    'required'     => false,
+                    'label'        => 'oro.sales.lead.customer.label',
                     'parent_class' => $options['data_class'],
+                    'configs'      => [
+                        'route_name'       => 'oro_sales_customers_form_autocomplete_search',
+                        'route_parameters' => [
+                            'ownerClass' => $options['data_class'],
+                            'name'       => 'name'
+                        ],
+                    ]
                 ]
             )
             ->add('companyName', 'text', array('required' => false, 'label' => 'oro.sales.lead.company_name.label'))

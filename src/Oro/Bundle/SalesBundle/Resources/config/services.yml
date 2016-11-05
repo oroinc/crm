@@ -461,4 +461,5 @@ services:
         parent: oro_activity.form.handler.autocomplete
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
+            - [setCustomerConfigProvider, ['@oro_sales.customer_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]

@@ -112,12 +112,11 @@ class CustomerType extends AbstractType
                     'placeholder'             => 'oro.sales.form.choose_customer',
                     'separator'               => ';',
                     'minimumInputLength'      => 0,
-                    // @todo: Need to add and additional param for Owner entity Class
-                    'route_name'              => 'oro_sales_autocomplete_customers',
+                    'route_name'              => 'oro_sales_customers_form_autocomplete_search',
                     'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                     'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                     'route_parameters'        => [
-                        'name' => 'name',
+                        'name' => 'name'
                     ],
                 ],
             ]

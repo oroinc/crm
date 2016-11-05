@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
+use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
@@ -15,6 +16,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     /** @var CustomerIconProviderInterface */
     protected $customerIconProvider;
 
+    /** @var CustomerConfigProvider */
+    protected $customerConfigProvider;
+
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
@@ -24,6 +28,14 @@ class CustomerSearchHandler extends ContextSearchHandler
     public function setCustomerIconProvider(CustomerIconProviderInterface $customerIconProvider)
     {
         $this->customerIconProvider = $customerIconProvider;
+    }
+
+    /**
+     * @param CustomerConfigProvider $customerConfigProvider
+     */
+    public function setCustomerConfigProvider(CustomerConfigProvider $customerConfigProvider)
+    {
+        $this->customerConfigProvider = $customerConfigProvider;
     }
 
     /**
@@ -82,10 +94,7 @@ class CustomerSearchHandler extends ContextSearchHandler
      */
     protected function getSearchAliases()
     {
-        // todo: read $customers value from config provider
-        $customers = [
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-        ];
+        $customers = $this->customerConfigProvider->getAssociatedCustomerClasses($this->class);
 
         return array_values($this->indexer->getEntityAliases($customers));
     }

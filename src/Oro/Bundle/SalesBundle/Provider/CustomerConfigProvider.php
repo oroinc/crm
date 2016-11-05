@@ -4,12 +4,17 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityConfigBundle\Config\Config;
 
-// @todo: Recheck and probably rename it.
 class CustomerConfigProvider
 {
     /** @var ConfigManager */
     protected $configManager;
+
+    protected $configs = [
+        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'lead',
+        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'opportunity',
+    ];
 
     /**
      * @param ConfigManager $configManager
@@ -20,16 +25,24 @@ class CustomerConfigProvider
     }
 
     /**
-     * @param string $ownerClass - e.g Lead or Opportunity
+     * @param string $ownerClass
      *
      * @return array
      */
     public function getAssociatedCustomerClasses($ownerClass)
     {
-        // @todo: Add functionality and fetch this data from config manager
-        return [
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-        ];
+        $scope = $this->configs[$ownerClass];
+
+        $classes = [];
+        /** @var Config[] $configs */
+        $configs = $this->configManager->getProvider($scope)->getConfigs();
+        foreach ($configs as $config) {
+            if ($config->is('enabled')) {
+                $classes[] = $config->getId()->getClassName();
+            }
+        }
+
+        return $classes;
     }
 
     /**

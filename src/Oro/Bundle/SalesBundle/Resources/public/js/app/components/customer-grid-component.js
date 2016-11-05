@@ -1,8 +1,6 @@
 define(function(require) {
     'use strict';
 
-    var $ = require('jquery');
-    var _ = require('underscore');
     var mediator = require('oroui/js/mediator');
     var widgetManager = require('oroui/js/widget-manager');
     var ActivityContextComponent = require('oroactivity/js/app/components/activity-context-component');
