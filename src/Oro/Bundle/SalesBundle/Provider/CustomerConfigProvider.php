@@ -6,8 +6,13 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 class CustomerConfigProvider
 {
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
     /** @var ConfigManager */
     protected $configManager;
 
@@ -17,11 +22,13 @@ class CustomerConfigProvider
     ];
 
     /**
-     * @param ConfigManager $configManager
+     * @param SecurityFacade $securityFacade
+     * @param ConfigManager  $configManager
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(SecurityFacade $securityFacade, ConfigManager $configManager)
     {
-        $this->configManager = $configManager;
+        $this->securityFacade = $securityFacade;
+        $this->configManager  = $configManager;
     }
 
     /**
@@ -63,12 +70,16 @@ class CustomerConfigProvider
 
         $customerClasses = $this->getAssociatedCustomerClasses($ownerClass);
         foreach ($customerClasses as $class) {
+            $routeCreate = $this->getRouteCreate($class);
+            if (!$this->securityFacade->isGranted($routeCreate)) {
+                continue;
+            }
             $result[] = [
                 'className'   => $class,
                 'label'       => $this->getLabel($class),
                 'icon'        => $this->getIcon($class),
                 'gridName'    => $this->getDefaultGrid($class),
-                'routeCreate' => $this->getRouteCreate($class),
+                'routeCreate' => $routeCreate,
                 'first'       => !$result,
             ];
         }

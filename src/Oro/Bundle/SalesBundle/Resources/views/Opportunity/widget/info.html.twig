@@ -27,12 +27,11 @@
             {%- endif -%}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.lead.label'|trans, leadView, entity, 'lead') }}
 
-            {%- if resource_granted('oro_sales_b2bcustomer_view') and entity.customer -%}
-                {% set customerView = '<a href="' ~ path('oro_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
-            {%- else -%}
-                {% set customerView = entity.customer ? entity.customer|escape : '' %}
+            {% set customer = entity.getCustomerTarget() %}
+            {%- if (customer and resource_granted('VIEW', customer)) -%}
+                {% set customerView = customer ? customer.name|escape : '' %}
+                {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
             {%- endif -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
 
             {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
             {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}

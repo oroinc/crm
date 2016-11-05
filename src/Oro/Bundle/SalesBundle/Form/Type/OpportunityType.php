@@ -91,7 +91,7 @@ class OpportunityType extends AbstractType
                 'oro_sales_customer',
                 [
                     'required' => false,
-                    'label'    => 'oro.sales.opportunity.customer.lasbel',
+                    'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
                     'configs'      => [
                         'route_name'       => 'oro_sales_customers_form_autocomplete_search',
