@@ -447,7 +447,7 @@ services:
     oro_sales.provider.customer.customer_icon:
         class: Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider
         arguments:
-            - '@oro_entity_config.provider.extend'
+            - '@oro_entity_config.provider.entity'
         tags:
             - { name: oro_sales.customer_icon }
 

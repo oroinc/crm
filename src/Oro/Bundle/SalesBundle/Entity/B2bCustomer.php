@@ -25,6 +25,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_sales_b2bcustomer_index",
+ *      routeCreate="oro_sales_b2bcustomer_create",
  *      routeView="oro_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={

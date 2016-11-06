@@ -10,6 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
@@ -33,22 +34,28 @@ class OpportunityType extends AbstractType
     /** @var OpportunityRelationsBuilder */
     protected $relationsBuilder;
 
+    /** @var EntityAliasResolver */
+    protected $entityAliasResolver;
+
     /**
      * @param ProbabilityProvider         $probabilityProvider
      * @param EnumValueProvider           $enumValueProvider
      * @param EnumTypeHelper              $typeHelper
      * @param OpportunityRelationsBuilder $relationsBuilder
+     * @param EntityAliasResolver         $entityAliasResolver
      */
     public function __construct(
         ProbabilityProvider $probabilityProvider,
         EnumValueProvider $enumValueProvider,
         EnumTypeHelper $typeHelper,
-        OpportunityRelationsBuilder $relationsBuilder
+        OpportunityRelationsBuilder $relationsBuilder,
+        EntityAliasResolver $entityAliasResolver
     ) {
         $this->probabilityProvider = $probabilityProvider;
         $this->enumValueProvider   = $enumValueProvider;
         $this->typeHelper          = $typeHelper;
         $this->relationsBuilder    = $relationsBuilder;
+        $this->entityAliasResolver = $entityAliasResolver;
     }
 
     /**
@@ -94,9 +101,11 @@ class OpportunityType extends AbstractType
                     'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
                     'configs'      => [
+                        'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
+                        'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                         'route_name'       => 'oro_sales_customers_form_autocomplete_search',
                         'route_parameters' => [
-                            'ownerClass' => $options['data_class'],
+                            'ownerClassAlias' => $this->entityAliasResolver->getPluralAlias($options['data_class']),
                             'name'       => 'name'
                         ],
                     ]

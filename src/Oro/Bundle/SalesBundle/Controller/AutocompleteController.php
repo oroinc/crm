@@ -16,21 +16,21 @@ use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
 use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 
 /**
- * @Route("/sales/customers")
+ * @Route("/sales")
  */
 class AutocompleteController extends Controller
 {
     /**
      * @param Request $request
-     * @param string $ownerClass The owner class for customers associations
+     * @param string $ownerClassAlias The owner class alias  for customers associations
      *
      * @return JsonResponse
      * @throws HttpException|AccessDeniedHttpException
      *
-     * @Route("/{ownerClass}/search/autocomplete", name="oro_sales_customers_form_autocomplete_search")
+     * @Route("/customers/{ownerClassAlias}/search/autocomplete", name="oro_sales_customers_form_autocomplete_search")
      * @AclAncestor("oro_search")
      */
-    public function autocompleteCustomersAction(Request $request, $ownerClass)
+    public function autocompleteCustomersAction(Request $request, $ownerClassAlias)
     {
         $autocompleteRequest = new AutocompleteRequest($request);
         $validator           = $this->get('validator');
@@ -59,7 +59,7 @@ class AutocompleteController extends Controller
 
         /** @var CustomerSearchHandler $searchHandler */
         $searchHandler = $this->get('oro_sales.autocomplete.customer_search_handler');
-        $searchHandler->setClass($ownerClass);
+        $searchHandler->setClass($this->get('oro_entity.routing_helper')->resolveEntityClass($ownerClassAlias));
 
         return new JsonResponse($searchHandler->search(
             $autocompleteRequest->getQuery(),
