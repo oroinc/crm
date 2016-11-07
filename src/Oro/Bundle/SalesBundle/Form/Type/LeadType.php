@@ -6,10 +6,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+
 use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadType extends AbstractType
 {
+    /** @var EntityAliasResolver  */
+    protected $entityAliasResolver;
+
+    /**
+     * @param EntityAliasResolver $entityAliasResolver
+     */
+    public function __construct(EntityAliasResolver $entityAliasResolver)
+    {
+        $this->entityAliasResolver = $entityAliasResolver;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -74,9 +87,18 @@ class LeadType extends AbstractType
                 'customer',
                 'oro_sales_customer',
                 [
-                    'required' => false,
-                    'label'    => 'oro.sales.lead.customer.label',
+                    'required'     => false,
+                    'label'        => 'oro.sales.lead.customer.label',
                     'parent_class' => $options['data_class'],
+                    'configs'      => [
+                        'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
+                        'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
+                        'route_name'       => 'oro_sales_customers_form_autocomplete_search',
+                        'route_parameters' => [
+                            'ownerClassAlias' => $this->entityAliasResolver->getPluralAlias($options['data_class']),
+                            'name'       => 'name'
+                        ],
+                    ]
                 ]
             )
             ->add('companyName', 'text', array('required' => false, 'label' => 'oro.sales.lead.company_name.label'))

@@ -4,32 +4,52 @@ namespace Oro\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityConfigBundle\Config\Config;
 
-// @todo: Recheck and probably rename it.
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 class CustomerConfigProvider
 {
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
     /** @var ConfigManager */
     protected $configManager;
 
+    protected $configs = [
+        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'lead',
+        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'opportunity',
+    ];
+
     /**
-     * @param ConfigManager $configManager
+     * @param SecurityFacade $securityFacade
+     * @param ConfigManager  $configManager
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(SecurityFacade $securityFacade, ConfigManager $configManager)
     {
-        $this->configManager = $configManager;
+        $this->securityFacade = $securityFacade;
+        $this->configManager  = $configManager;
     }
 
     /**
-     * @param string $ownerClass - e.g Lead or Opportunity
+     * @param string $ownerClass
      *
      * @return array
      */
     public function getAssociatedCustomerClasses($ownerClass)
     {
-        // @todo: Add functionality and fetch this data from config manager
-        return [
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-        ];
+        $scope = $this->configs[$ownerClass];
+
+        $classes = [];
+        /** @var Config[] $configs */
+        $configs = $this->configManager->getProvider($scope)->getConfigs();
+        foreach ($configs as $config) {
+            if ($config->is('enabled')) {
+                $classes[] = $config->getId()->getClassName();
+            }
+        }
+
+        return $classes;
     }
 
     /**
@@ -50,12 +70,16 @@ class CustomerConfigProvider
 
         $customerClasses = $this->getAssociatedCustomerClasses($ownerClass);
         foreach ($customerClasses as $class) {
+            $routeCreate = $this->getRouteCreate($class);
+            if (!$this->securityFacade->isGranted($routeCreate)) {
+                continue;
+            }
             $result[] = [
                 'className'   => $class,
                 'label'       => $this->getLabel($class),
                 'icon'        => $this->getIcon($class),
                 'gridName'    => $this->getDefaultGrid($class),
-                'routeCreate' => $this->getRouteCreate($class),
+                'routeCreate' => $routeCreate,
                 'first'       => !$result,
             ];
         }

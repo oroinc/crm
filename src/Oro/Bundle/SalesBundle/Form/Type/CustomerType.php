@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,14 +11,14 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityToStringTransformer;
+use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
+use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityReferenceToStringTransformer;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
-// @todo: Probably rename to MultiCustomerSelectType or something like that
 class CustomerType extends AbstractType
 {
-    /** @var EntityToStringTransformer|DataTransformerInterface */
-    protected $customerToStringTransformer;
+    /** @var EntityReferenceToStringTransformer */
+    protected $transformer;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
@@ -30,7 +29,7 @@ class CustomerType extends AbstractType
      */
     public function __construct(DataTransformerInterface $transformer, CustomerConfigProvider $customerConfigProvider)
     {
-        $this->customerToStringTransformer = $transformer;
+        $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
     }
 
@@ -39,7 +38,7 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['parentClass'] = $options['parent_class'];
+        $view->vars['parentClass']   = $options['parent_class'];
         $view->vars['customersData'] = $this->customerConfigProvider->getData($options['parent_class']);
     }
 
@@ -48,7 +47,7 @@ class CustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer($this->customerToStringTransformer);
+        $builder->addModelTransformer($this->transformer);
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'updateData']);
         // needs to be called before validation
@@ -81,7 +80,7 @@ class CustomerType extends AbstractType
      */
     public function updateData(FormEvent $event)
     {
-        $form = $event->getForm();
+        $form   = $event->getForm();
         $parent = $form->getParent();
         if (!$parent) {
             return;
@@ -95,7 +94,6 @@ class CustomerType extends AbstractType
         if ($parentData instanceof CustomerAssociationInterface) {
             $event->setData($parentData->getCustomerTarget());
         }
-
     }
 
     /**
@@ -114,12 +112,11 @@ class CustomerType extends AbstractType
                     'placeholder'             => 'oro.sales.form.choose_customer',
                     'separator'               => ';',
                     'minimumInputLength'      => 0,
-                    // @todo: should be replaced with search handler alias
-                    'route_name'              => 'oro_sales_autocomplete_customers',
+                    'route_name'              => 'oro_sales_customers_form_autocomplete_search',
                     'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                     'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                     'route_parameters'        => [
-                        'name' => 'name',
+                        'name' => 'name'
                     ],
                 ],
             ]
