@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Provider;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\LocaleBundle\Provider\EntityNameProvider;
 
 class ContactEntityNameProvider extends EntityNameProvider
 {
-    const CLASS_NAME = 'Oro\Bundle\ContactBundle\Entity\Contact';
-
     /**
      * @var array Map of entity collection property and field name
      */
@@ -18,7 +17,7 @@ class ContactEntityNameProvider extends EntityNameProvider
      */
     public function getName($format, $locale, $entity)
     {
-        return is_a($entity, static::CLASS_NAME) ? parent::getName($format, $locale, $entity) : false;
+        return is_a($entity, Contact::class, true) ? parent::getName($format, $locale, $entity) : false;
     }
 
     /**
@@ -26,7 +25,7 @@ class ContactEntityNameProvider extends EntityNameProvider
      */
     public function getNameDQL($format, $locale, $className, $alias)
     {
-        if ($className !== self::CLASS_NAME) {
+        if (!is_a($className, Contact::class, true)) {
             return false;
         }
 
