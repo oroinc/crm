@@ -98,7 +98,6 @@ class OroAccountBundleInstaller implements
 
         $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
-        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
             'orocrm_account',
