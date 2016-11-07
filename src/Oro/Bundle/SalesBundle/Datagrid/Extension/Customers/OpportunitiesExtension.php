@@ -1,31 +1,34 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Datagrid\Extension;
+namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
 use Doctrine\ORM\Query\Expr;
-
 use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
 class OpportunitiesExtension extends AbstractExtension
 {
-    /**
-     * @var ConfigProvider
-     */
-    protected $salesProvider;
+    /** @var ConfigProvider */
+    protected $opportunityProvider;
 
     /**
      * @param ConfigManager $configManager
      */
     public function __construct(ConfigManager $configManager)
     {
-        $this->salesProvider = $configManager->getProvider('sales');
+        $this->opportunityProvider = $configManager->getProvider('opportunity');
     }
 
     /**
@@ -34,9 +37,11 @@ class OpportunitiesExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
+            $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->has('customer_class') &&
-            $this->parameters->get('customer_id') &&
-            $config->getDatasourceType() === OrmDatasource::TYPE;
+            $this->parameters->has('customer_id') &&
+            $this->parameters->get('customer_class') &&
+            $this->parameters->get('customer_id');
     }
 
     /**
@@ -45,15 +50,19 @@ class OpportunitiesExtension extends AbstractExtension
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var $datasource OrmDataSource */
-        $customerClass   = $this->parameters->get('customer_class');
-        $customersConfig = $this->salesProvider->getConfig(Opportunity::class)->get('customers');
-        $customerField   = $customersConfig[$customerClass]['association_name'];
-        $queryBuilder    = $datasource->getQueryBuilder();
-        $customerIdParam = sprintf(':customerIdParam_%s', $customerField);
+        $customerClass = $this->parameters->get('customer_class');
+
+        $customerField    = ExtendHelper::buildAssociationName(
+            $customerClass,
+            CustomerScope::ASSOCIATION_KIND
+        );
+        $queryBuilder     = $datasource->getQueryBuilder();
+        $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
+        $opportunityAlias = $this->getOpportunityAlias($queryBuilder);
         $queryBuilder->andWhere(
             sprintf(
                 '%s.%s = %s',
-                $this->getOpportunityAlias($queryBuilder),
+                $opportunityAlias,
                 $customerField,
                 $customerIdParam
             )

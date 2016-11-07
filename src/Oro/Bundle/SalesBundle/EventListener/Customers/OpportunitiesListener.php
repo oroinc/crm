@@ -13,19 +13,19 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 class OpportunitiesListener
 {
     /** @var ConfigProvider */
-    protected $salesProvider;
+    protected $opportunityProvider;
 
     /** @var TranslatorInterface */
     protected $translator;
 
     /**
-     * @param ConfigManager         $configManager
-     * @param TranslatorInterface   $translator
+     * @param ConfigManager       $configManager
+     * @param TranslatorInterface $translator
      */
-    public function __construct(ConfigManager $configManager, TranslatorInterface $translator )
+    public function __construct(ConfigManager $configManager, TranslatorInterface $translator)
     {
-        $this->extendProvider = $configManager->getProvider('sales');
-        $this->translator     = $translator;
+        $this->opportunityProvider = $configManager->getProvider('opportunity');
+        $this->translator          = $translator;
     }
 
     /**
@@ -33,12 +33,12 @@ class OpportunitiesListener
      */
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
-        $entity      = $event->getEntity();
-        $class2      = ClassUtils::getClass(null);
-        $class1      = ClassUtils::getClass(false);
-        $class       = ClassUtils::getClass('');
-        $entityClass = ClassUtils::getClass($entity);
-        if ($entity && !empty($this->salesProvider->getConfig($entityClass)['opportunity'])) {
+        $entity       = $event->getEntity();
+        $entityClass  = ClassUtils::getClass($entity);
+        $entityConfig = $this->opportunityProvider->hasConfig($entityClass)
+            ? $this->opportunityProvider->getConfig($entityClass)
+            : null;
+        if ($entity && $entityConfig && $entityConfig->is('enabled')) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(
@@ -47,8 +47,7 @@ class OpportunitiesListener
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),
-                'subblocks' => [['data' => [$opportunitiesData]]],
-                'priority'  => 10000
+                'subblocks' => [['data' => [$opportunitiesData]]]
             ];
             $event->setData($data);
         }

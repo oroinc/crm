@@ -471,8 +471,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
 
-    oro_sales.datagrid.extension.customers:
-        class: Oro\Bundle\SalesBundle\Datagrid\Extension\OpportunitiesExtension
+    oro_sales.datagrid.extension.customers.opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
         arguments:
             - '@oro_entity_config.config_manager'
         tags:
