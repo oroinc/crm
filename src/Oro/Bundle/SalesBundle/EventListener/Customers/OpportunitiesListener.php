@@ -34,16 +34,15 @@ class OpportunitiesListener
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
         $entity       = $event->getEntity();
-        $entityClass  = ClassUtils::getClass($entity);
-        $entityConfig = $this->opportunityProvider->hasConfig($entityClass)
-            ? $this->opportunityProvider->getConfig($entityClass)
+        $entityConfig = $entity && $this->opportunityProvider->hasConfig($entity)
+            ? $this->opportunityProvider->getConfig($entity)
             : null;
-        if ($entity && $entityConfig && $entityConfig->is('enabled')) {
+        if ($entityConfig && $entityConfig->is('enabled')) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customers:opportunitiesGrid.html.twig',
-                ['customer' => $entity, 'customerClass' => $entityClass]
+                ['customer' => $entity, 'customerClass' => $entityConfig->getId()->getClassName()]
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),

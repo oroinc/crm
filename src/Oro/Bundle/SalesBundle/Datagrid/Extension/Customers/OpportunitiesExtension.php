@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -41,7 +42,9 @@ class OpportunitiesExtension extends AbstractExtension
             $this->parameters->has('customer_class') &&
             $this->parameters->has('customer_id') &&
             $this->parameters->get('customer_class') &&
-            $this->parameters->get('customer_id');
+            $this->parameters->get('customer_id') &&
+            $this->opportunityProvider->hasConfig($this->parameters->get('customer_class')) &&
+            $this->opportunityProvider->getConfig($this->parameters->get('customer_class'))->is('enabled');
     }
 
     /**
@@ -51,7 +54,6 @@ class OpportunitiesExtension extends AbstractExtension
     {
         /** @var $datasource OrmDataSource */
         $customerClass = $this->parameters->get('customer_class');
-
         $customerField    = ExtendHelper::buildAssociationName(
             $customerClass,
             CustomerScope::ASSOCIATION_KIND
@@ -85,6 +87,6 @@ class OpportunitiesExtension extends AbstractExtension
             }
         }
 
-        throw new \LogicException('Couldn\'t find Opportunities alias in QueryBuilder.');
+        throw new DatasourceException('Couldn\'t find Opportunities alias in QueryBuilder.');
     }
 }
