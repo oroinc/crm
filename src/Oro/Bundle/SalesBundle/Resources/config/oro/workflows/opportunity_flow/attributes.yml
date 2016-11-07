@@ -10,7 +10,6 @@ workflows:
             probability:
                 property_path: opportunity.probability
             budget_amount:
-                label: Budget Amount
                 property_path: opportunity.budgetAmount
                 type: entity
                 options:
@@ -20,19 +19,15 @@ workflows:
             proposed_solution:
                 property_path: opportunity.proposedSolution
             close_reason_name:
-                label: oro.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 property_path: opportunity.closeReason
             close_revenue:
-                label: Close Revenue
                 property_path: opportunity.closeRevenue
                 type: entity
                 options:
                     class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
             close_date:
-                label: oro.sales.opportunity.close_date.label
                 property_path: opportunity.closeDate
             status:
-                label: oro.sales.opportunity.status.label
                 property_path: opportunity.status
