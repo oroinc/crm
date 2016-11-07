@@ -26,7 +26,7 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
