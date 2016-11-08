@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Model\Action;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-use Oro\Component\Action\Model\ContextAccessor;
+use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 

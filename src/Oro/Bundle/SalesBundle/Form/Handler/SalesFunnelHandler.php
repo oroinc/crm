@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * @deprecated since 2.0 will be removed after 2.2
+ */
 class SalesFunnelHandler
 {
     /**

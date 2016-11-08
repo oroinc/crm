@@ -10,7 +10,7 @@ use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getConfigTreeBuilder()
     {
@@ -34,6 +34,18 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
+                'lead_feature_enabled' => [
+                    'value' => true,
+                    'type'  => 'boolean',
+                ],
+                'opportunity_feature_enabled' => [
+                    'value' => true,
+                    'type'  => 'boolean',
+                ],
+                'salesfunnel_feature_enabled' => [
+                    'value' => false,
+                    'type'  => 'boolean',
+                ],
                 'default_opportunity_probabilities' => [
                     'value' => $defaults,
                     'type' => 'array',

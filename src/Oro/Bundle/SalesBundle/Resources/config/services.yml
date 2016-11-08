@@ -33,7 +33,6 @@ parameters:
     oro_sales.provider.phone.lead.class:                  Oro\Bundle\SalesBundle\Provider\LeadPhoneProvider
     oro_sales.provider.phone.opportunity.class:           Oro\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
     oro_sales.provider.phone.b2bcustomer.class:           Oro\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
-    oro_sales.provider.lead_to_opportunity.class:          Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
 
     oro_sales.provider.mailbox_process.lead.class:        Oro\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
@@ -364,12 +363,11 @@ services:
             - '@oro_entity.entity_field_provider'
 
     oro_sales.provider.lead_to_opportunity:
-        class: %oro_sales.provider.lead_to_opportunity.class%
+        class: Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
         arguments:
             - '@oro_sales.model.b2b_guesser'
             - '@oro_entity.entity_field_provider'
-            - "@oro_sales.model.change_lead_status"
-            - "@oro_workflow.registry"
+            - '@oro_sales.model.change_lead_status'
 
     oro_sales.provider.opportunity_by_lead_source:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider
@@ -404,3 +402,9 @@ services:
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
+
+    oro_sales.provider.lead_actions_access:
+        class: Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider
+        arguments:
+            - '@oro_workflow.registry'
+            - '@oro_featuretoggle.checker.feature_checker'
