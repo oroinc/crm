@@ -9,10 +9,12 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
 use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityReferenceToStringTransformer;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
 class CustomerType extends AbstractType
@@ -23,14 +25,22 @@ class CustomerType extends AbstractType
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
 
+    /** @var EntityAliasResolver  */
+    protected $entityAliasResolver;
+
     /**
      * @param DataTransformerInterface $transformer
      * @param CustomerConfigProvider   $customerConfigProvider
+     * @param EntityAliasResolver      $entityAliasResolver
      */
-    public function __construct(DataTransformerInterface $transformer, CustomerConfigProvider $customerConfigProvider)
-    {
+    public function __construct(
+        DataTransformerInterface $transformer,
+        CustomerConfigProvider $customerConfigProvider,
+        EntityAliasResolver $entityAliasResolver
+    ) {
         $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
+        $this->entityAliasResolver    = $entityAliasResolver;
     }
 
     /**
@@ -107,18 +117,21 @@ class CustomerType extends AbstractType
         $resolver->setDefaults(
             [
                 'mapped'  => false,
-                'configs' => [
-                    'allowClear'              => true,
-                    'placeholder'             => 'oro.sales.form.choose_customer',
-                    'separator'               => ';',
-                    'minimumInputLength'      => 0,
-                    'route_name'              => 'oro_sales_customers_form_autocomplete_search',
-                    'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
-                    'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
-                    'route_parameters'        => [
-                        'name' => 'name'
-                    ],
-                ],
+                'configs' => function (Options $options, $value) {
+                    return [
+                        'allowClear'              => true,
+                        'placeholder'             => 'oro.sales.form.choose_customer',
+                        'separator'               => ';',
+                        'minimumInputLength'      => 0,
+                        'route_name'              => 'oro_sales_customers_form_autocomplete_search',
+                        'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
+                        'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
+                        'route_parameters'        => [
+                            'name'            => 'name',
+                            'ownerClassAlias' => $this->entityAliasResolver->getPluralAlias($options['parent_class']),
+                        ],
+                    ];
+                },
             ]
         );
     }

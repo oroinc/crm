@@ -47,7 +47,6 @@ services:
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_entity_extend.enum_type_helper'
             - '@oro_sales.builder.opportunity_relations'
-            - '@oro_entity.entity_alias_resolver'
         tags:
             - { name: form.type, alias: oro_sales_opportunity }
 
@@ -140,8 +139,6 @@ services:
 
     oro_sales.lead.form.type:
         class: %oro_sales.lead.form.type.class%
-        arguments:
-            - "@oro_entity.entity_alias_resolver"
         tags:
             - { name: form.type, alias: oro_sales_lead }
 
@@ -459,5 +456,6 @@ services:
         arguments:
             - '@oro_entity.entity_reference_to_string_transformer'
             - '@oro_sales.customer_config_provider'
+            - '@oro_entity.entity_alias_resolver'
         tags:
             - { name: form.type, alias: oro_sales_customer }
