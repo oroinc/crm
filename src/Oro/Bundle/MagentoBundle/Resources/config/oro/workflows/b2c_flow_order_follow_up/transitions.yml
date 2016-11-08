@@ -2,7 +2,6 @@ workflows:
     b2c_flow_order_follow_up:
         transitions:
             record_feedback:
-                label: 'Record feedback'
                 step_to: contacted
                 is_start: true
                 is_unavailable_hidden: true

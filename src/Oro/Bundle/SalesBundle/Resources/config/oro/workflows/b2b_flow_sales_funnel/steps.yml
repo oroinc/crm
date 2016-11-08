@@ -2,7 +2,6 @@ workflows:
     b2b_flow_sales_funnel:
         steps:
             new_lead:
-                label: 'New Lead'
                 order: 10
                 entity_acl:
                     lead:
@@ -11,7 +10,6 @@ workflows:
                     - qualify
                     - disqualify
             disqualified_lead:
-                label: 'Disqualified Lead'
                 order: 20
                 entity_acl:
                     lead:
@@ -22,7 +20,6 @@ workflows:
                     - reactivate
                 is_final: true
             new_opportunity:
-                label: 'New Opportunity'
                 order: 20
                 entity_acl:
                     opportunity:
@@ -32,7 +29,6 @@ workflows:
                     - close_as_won
                     - close_as_lost
             developed_opportunity:
-                label: 'Developed Opportunity'
                 order: 30
                 entity_acl:
                     opportunity:
@@ -41,7 +37,6 @@ workflows:
                     - close_as_won
                     - close_as_lost
             won_opportunity:
-                label: 'Won Opportunity'
                 order: 40
                 entity_acl:
                     opportunity:
@@ -51,7 +46,6 @@ workflows:
                     - reopen
                 is_final: true
             lost_opportunity:
-                label: 'Lost Opportunity'
                 order: 40
                 entity_acl:
                     opportunity:
