@@ -137,14 +137,14 @@ class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
             'test unsupported format' => [
                 'format' => '',
                 'locale' => null,
-                'className' => ContactEntityNameProvider::CLASS_NAME,
+                'className' => Contact::class,
                 'alias' => '',
                 'expected' => false
             ],
             'correct data' => [
                 'format' => EntityNameProviderInterface::FULL,
                 'locale' => null,
-                'className' => ContactEntityNameProvider::CLASS_NAME,
+                'className' => Contact::class,
                 'alias' => 'test',
                 'expected' => 'COALESCE(' .
                               'NULLIF(Contact, \'\'), ' .
