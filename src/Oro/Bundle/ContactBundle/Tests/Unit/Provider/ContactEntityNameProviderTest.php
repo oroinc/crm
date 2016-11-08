@@ -148,15 +148,15 @@ class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
                 'alias' => 'test',
                 'expected' => 'COALESCE(' .
                               'NULLIF(Contact, \'\'), ' .
-                              'CAST((SELECT test_phones.phone' .
-                              ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_phones_base' .
-                              ' LEFT JOIN test_phones_base.phones test_phones' .
-                              ' WHERE test_phones.primary = true AND test_phones_base = test) ' .
-                              'AS string), ' .
                               'CAST((SELECT test_emails.email' .
                               ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_emails_base' .
                               ' LEFT JOIN test_emails_base.emails test_emails' .
                               ' WHERE test_emails.primary = true AND test_emails_base = test) ' .
+                              'AS string), ' .
+                              'CAST((SELECT test_phones.phone' .
+                              ' FROM Oro\Bundle\ContactBundle\Entity\Contact test_phones_base' .
+                              ' LEFT JOIN test_phones_base.phones test_phones' .
+                              ' WHERE test_phones.primary = true AND test_phones_base = test) ' .
                               'AS string))'
             ]
         ];
