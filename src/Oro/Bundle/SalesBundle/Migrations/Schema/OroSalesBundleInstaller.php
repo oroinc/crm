@@ -31,6 +31,10 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_27\AddMultiCurrencyFields;
 
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -42,8 +46,12 @@ class OroSalesBundleInstaller implements
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    RenameExtensionAwareInterface
+    RenameExtensionAwareInterface,
+    OpportunityExtensionAwareInterface,
+    LeadExtensionAwareInterface
 {
+    use LeadExtensionTrait, OpportunityExtensionTrait;
+
     /** @var ExtendExtension */
     protected $extendExtension;
 
@@ -115,7 +123,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -165,6 +173,8 @@ class OroSalesBundleInstaller implements
         $this->addOpportunityStatusField($schema, $queries);
         AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
         AddLeadAddressTable::createLeadAddressTable($schema);
+        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_account');
+        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_account');
     }
 
     /**
