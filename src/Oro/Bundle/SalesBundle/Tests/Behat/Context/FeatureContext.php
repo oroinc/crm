@@ -23,6 +23,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
@@ -103,7 +104,7 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Given they has their own Accounts and Business Customers
+     * @Given they has their own Accounts and Customers
      */
     public function accountHasBusinessCustomers()
     {
@@ -125,7 +126,7 @@ class FeatureContext extends OroFeatureContext implements
     {
         $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
         $owner = $doctrine->getEntityRepositoryForClass(User::class)->findOneBy(['username' => $username]);
-        $ownAccounts = $doctrine->getEntityRepositoryForClass(B2bCustomer::class)->findBy(['owner' => $owner]);
+        $ownAccounts = $doctrine->getEntityRepositoryForClass(Customer::class)->findBy(['owner' => $owner]);
 
         /** @var Select2Entity $accountField */
         $accountField = $this->createElement('OroForm')->findField('Account');
@@ -133,15 +134,15 @@ class FeatureContext extends OroFeatureContext implements
 
         self::assertCount(count($ownAccounts), $visibleAccounts);
 
-        /** @var B2bCustomer $account */
+        /** @var Customer $account */
         foreach ($ownAccounts as $account) {
-            $value = sprintf('%s (%s)', $account->getName(), $account->getAccount()->getName());
+            $value = sprintf('%s %s (Magento Customer)', $account->getFirstName(), $account->getLastName());
             self::assertContains($value, $visibleAccounts);
         }
     }
 
     /**
-     * @Given CRM has second sales channel with Accounts and Business Customers
+     * @Given CRM has second sales channel with Accounts and Magento Customers
      */
     public function crmHasSecondSalesChannel()
     {

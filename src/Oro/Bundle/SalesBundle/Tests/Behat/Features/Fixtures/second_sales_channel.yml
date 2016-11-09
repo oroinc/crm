@@ -35,9 +35,10 @@ Oro\Bundle\AccountBundle\Entity\Account:
     owner: '@samantha'
     organization: '@organization'
 
-Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\MagentoBundle\Entity\Customer:
   customer{11..12}:
-    name (unique): <firstName()> <lastName()>
+    firstName (unique): <firstName()>
+    lastName (unique): <lastName()>
     owner: '@charlie'
     organization: '@organization'
     account: '@charlieAccount3'
@@ -45,7 +46,8 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer{13..14}:
-    name (unique): <firstName()> <lastName()>
+    firstName (unique): <firstName()>
+    lastName (unique): <lastName()>
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount3'
@@ -53,7 +55,8 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer{15..16}:
-    name (unique): <firstName()> <lastName()>
+    firstName (unique): <firstName()>
+    lastName (unique): <lastName()>
     owner: '@charlie'
     organization: '@organization'
     account: '@charlieAccount4'
@@ -61,7 +64,8 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   customer{17..18}:
-    name (unique): <firstName()> <lastName()>
+    firstName (unique): <firstName()>
+    lastName (unique): <lastName()>
     owner: '@samantha'
     organization: '@organization'
     account: '@samanthaAccount4'
