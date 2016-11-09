@@ -20,6 +20,7 @@ before_script:
   - phpenv config-rm xdebug.ini
   - phpenv config-add travis.php.ini
   - composer self-update
+  - composer global show fxp/composer-asset-plugin 1.2.2 || composer global require fxp/composer-asset-plugin:1.2.2
   - composer install
 
 script: 
