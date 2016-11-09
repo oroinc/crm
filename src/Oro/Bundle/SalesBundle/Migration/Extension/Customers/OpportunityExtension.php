@@ -73,7 +73,12 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
             $table,
             $associationName,
             $targetTable,
-            $targetColumnName
+            $targetColumnName,
+            [
+                'importexport' => [
+                    'excluded' => true,
+                ],
+            ]
         );
     }
 }

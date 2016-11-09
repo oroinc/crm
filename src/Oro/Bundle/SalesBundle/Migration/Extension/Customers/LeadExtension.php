@@ -73,7 +73,12 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
             $table,
             $associationName,
             $targetTable,
-            $targetColumnName
+            $targetColumnName,
+            [
+                'importexport' => [
+                    'excluded' => true,
+                ],
+            ]
         );
     }
 }
