@@ -31,7 +31,7 @@
 
             {% set customer = entity.getCustomerTarget() %}
             {%- if (customer and resource_granted('VIEW', customer)) -%}
-                {% set customerView = customer ? customer.name|escape : '' %}
+                {% set customerView = customer ? customer|oro_format_name|escape : '' %}
             {%- endif -%}
 
             {%- set opportunitiesData -%}
