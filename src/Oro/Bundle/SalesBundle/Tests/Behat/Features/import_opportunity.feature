@@ -5,17 +5,8 @@ Feature: Import opportunity feature
 
   Scenario: Data Template for Opportunity
     Given I login as administrator
-    And "First Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
-    And CRM has next Opportunity Probabilities:
-      | Status                     | Probability | Default |
-      | Open                       | 5           |         |
-      | Identification & Alignment | 20          |         |
-      | Needs Analysis             | 10          | yes     |
-      | Solution Development       | 60          |         |
-      | Negotiation                | 75          |         |
-      | Closed Won                 | 100         |         |
-      | Closed Lost                | 0           |         |
-    And I open Opportunity Index page
+    And "First Sales Channel" is a channel with enabled Business Customer entities
+    And I go to Opportunity Index page
     And there is no records in grid
     When I download Data Template file
     Then I don't see Business Customer Name column

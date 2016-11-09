@@ -15,7 +15,7 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if resource_granted('EDIT', entity) and oro_channel_type_metadata()[entity.channelType] is defined %}
         {% if entity.status %}
             {{ UI.button({
                 'aCss':  'btn-danger',

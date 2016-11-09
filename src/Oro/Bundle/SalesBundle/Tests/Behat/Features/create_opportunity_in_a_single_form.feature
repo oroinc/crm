@@ -5,7 +5,7 @@ Feature: Create opportunity in a single form
 
   Scenario: Reaquired fields
     Given I login as administrator
-    And "First Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
+    And "First Sales Channel" is a channel with enabled Business Customer entities
     And two users charlie and samantha exists in the system
     And user have "User" permissions for "View" "Business Customer" entity
     And they has their own Accounts and Business Customers
