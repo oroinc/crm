@@ -2,14 +2,12 @@ workflows:
     b2c_flow_abandoned_shopping_cart:
         transitions:
             convert:
-                label:    'Convert'
-                step_to:   converted
+                step_to: converted
                 is_start: true
                 is_hidden: true
                 transition_definition: convert_definition
 
             place_order:
-                label:   'Place an order'
                 step_to: converted
                 is_start: true
                 is_unavailable_hidden: true
@@ -35,7 +33,6 @@ workflows:
                         - '@assign_value': [$cart_id, $cart.id]
 
             convert_to_opportunity:
-                label: 'Convert to opportunity'
                 step_to: converted_to_opportunity
                 is_start: true
                 is_unavailable_hidden: true
@@ -79,8 +76,6 @@ workflows:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $cart.id
             abandon:
-                label: 'Abandon'
-                message: 'You are going to abandon this shopping cart.'
                 step_to: abandoned
                 is_start: true
                 is_unavailable_hidden: true
@@ -94,7 +89,6 @@ workflows:
                             options:
                                 required: false
             reopen:
-                label: 'Reopen'
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:

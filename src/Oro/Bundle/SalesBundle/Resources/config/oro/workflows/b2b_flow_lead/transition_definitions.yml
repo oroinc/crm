@@ -8,7 +8,9 @@ workflows:
                 preconditions:  # if lead.status = "new"
                     '@and':
                         - '@equal': [$lead.status.id, 'new']
-                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\Opportunity', 'Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@feature_enabled':
+                            feature: sales_opportunity
                 conditions:
                     '@or':
                         parameters:

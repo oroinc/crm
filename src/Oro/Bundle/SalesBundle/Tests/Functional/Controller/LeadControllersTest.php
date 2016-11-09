@@ -50,7 +50,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $form['oro_sales_lead_form[companyName]']         = 'Company';
         $form['oro_sales_lead_form[emails][0][email]']    = 'test@example.test';
         $form['oro_sales_lead_form[owner]']               = 1;
-        $form['oro_sales_lead_form[dataChannel]']         = $this->getReference('default_channel')->getId();
         //Add address fields to form as they are rendered with javascript
         $doc = new \DOMDocument("1.0");
         $addressInputs = ['city', 'label', 'postalCode', 'street', 'street2'];
@@ -212,7 +211,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
                     ],
                     'assert'              => [
                         'name'        => 'Lead name',
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'firstName'   => 'fname',
                         'lastName'    => 'lname',
                         'email'       => 'email@email.com'
@@ -230,7 +228,6 @@ class LeadControllersTest extends AbstractDatagridTestCase
                     ],
                     'assert'              => [
                         'name'        => 'Lead name',
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'firstName'   => 'fname',
                         'lastName'    => 'lname',
                         'email'       => 'email@email.com'
