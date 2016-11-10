@@ -409,37 +409,21 @@ services:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
 
-    oro_sales.migration.extension.opportunity_customers:
-        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtension
-        tags:
-            - { name: oro_migration.extension, extension_name: opportunity }
-
-    oro_sales.entity_config_dumper.opportunity.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityConfigDumperExtension
+    oro_sales.entity_config_dumper.customer_extension:
+        class: Oro\Bundle\SalesBundle\Tools\CustomerConfigDumperExtension
         parent: oro_entity_extend.entity_config_dumper.extension.association
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
 
-    oro_sales.entity_generator.opportunity.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityGeneratorExtension
+    oro_sales.entity_generator.customer_extension:
+        class: Oro\Bundle\SalesBundle\Tools\CustomerGeneratorExtension
         tags:
             - { name: oro_entity_extend.entity_generator_extension }
 
-    oro_sales.migration.extension.lead_customers:
-        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtension
+    oro_sales.migration.extension.customer:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtension
         tags:
-            - { name: oro_migration.extension, extension_name: lead }
-
-    oro_sales.entity_config_dumper.lead.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadConfigDumperExtension
-        parent: oro_entity_extend.entity_config_dumper.extension.association
-        tags:
-            - { name: oro_entity_extend.entity_config_dumper_extension }
-
-    oro_sales.entity_generator.lead.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadGeneratorExtension
-        tags:
-            - { name: oro_entity_extend.entity_generator_extension }
+            - { name: oro_migration.extension, extension_name: customer }
 
     oro_sales.provider.customer.chain_customer_icon:
         class: Oro\Bundle\SalesBundle\Provider\Customer\ChainCustomerIconProvider

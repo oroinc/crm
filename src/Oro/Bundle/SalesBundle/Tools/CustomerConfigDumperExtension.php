@@ -1,19 +1,20 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tools\Customers;
+namespace Oro\Bundle\SalesBundle\Tools;
 
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AssociationEntityConfigDumperExtension;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class LeadConfigDumperExtension extends AssociationEntityConfigDumperExtension
+class CustomerConfigDumperExtension extends AssociationEntityConfigDumperExtension
 {
     /**
      * {@inheritdoc}
      */
     protected function getAssociationEntityClass()
     {
-        return Lead::class;
+        return Customer::class;
     }
 
     /**
@@ -21,7 +22,7 @@ class LeadConfigDumperExtension extends AssociationEntityConfigDumperExtension
      */
     protected function getAssociationScope()
     {
-        return 'lead';
+        return 'customer';
     }
 
     /**

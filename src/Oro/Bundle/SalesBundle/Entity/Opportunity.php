@@ -447,6 +447,14 @@ class Opportunity extends ExtendOpportunity implements
     protected $closedAt;
 
     /**
+     * @var Customer
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Customer")
+     * @ORM\JoinColumn(name="sales_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField()
+     */
+    protected $salesCustomer;
+
+    /**
      * @return int
      */
     public function getId()
@@ -949,5 +957,21 @@ class Opportunity extends ExtendOpportunity implements
     public function getClosedAt()
     {
         return $this->closedAt;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getSalesCustomer()
+    {
+        return $this->salesCustomer;
+    }
+
+    /**
+     * @param Customer $salesCustomer
+     */
+    public function setSalesCustomer($salesCustomer)
+    {
+        $this->salesCustomer = $salesCustomer;
     }
 }

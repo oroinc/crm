@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migration\Extension\Customers;
+namespace Oro\Bundle\SalesBundle\Migration\Extension;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -13,9 +13,9 @@ use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
 use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAwareInterface
+class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorAwareInterface
 {
-    const LEAD_TABLE_NAME = 'orocrm_sales_lead';
+    const CUSTOMER_TABLE_NAME = 'orocrm_sales_customer';
 
     /** @var ExtendExtension */
     protected $extendExtension;
@@ -40,7 +40,7 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
     }
 
     /**
-     * Adds the association between the target customer table and the opportunity table
+     * Adds the association between the target customer table and the crm customer table
      *
      * @param Schema $schema
      * @param string $targetTableName  Target entity table name
@@ -51,7 +51,7 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
         $targetTableName,
         $targetColumnName = null
     ) {
-        $table   = $schema->getTable(self::LEAD_TABLE_NAME);
+        $table   = $schema->getTable(self::CUSTOMER_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
 
         if (empty($targetColumnName)) {
@@ -60,7 +60,7 @@ class LeadExtension implements ExtendExtensionAwareInterface, NameGeneratorAware
         }
 
         $options = new OroOptions();
-        $options->set('lead', 'enabled', true);
+        $options->set('customer', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
 
         $associationName = ExtendHelper::buildAssociationName(

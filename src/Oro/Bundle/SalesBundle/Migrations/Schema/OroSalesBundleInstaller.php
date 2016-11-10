@@ -30,11 +30,8 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_27\AddMultiCurrencyFields;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v2_1\AddCustomersTable;
 
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -46,12 +43,8 @@ class OroSalesBundleInstaller implements
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    RenameExtensionAwareInterface,
-    OpportunityExtensionAwareInterface,
-    LeadExtensionAwareInterface
+    RenameExtensionAwareInterface
 {
-    use LeadExtensionTrait, OpportunityExtensionTrait;
-
     /** @var ExtendExtension */
     protected $extendExtension;
 
@@ -143,6 +136,7 @@ class OroSalesBundleInstaller implements
         $this->createOrocrmSalesLeadEmailTable($schema);
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
+        AddCustomersTable::addCustomersTable($schema);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);
@@ -157,7 +151,7 @@ class OroSalesBundleInstaller implements
         $this->addOrocrmB2bCustomerEmailForeignKeys($schema);
         $this->addOrocrmLeadPhoneForeignKeys($schema);
         $this->addOrocrmSalesLeadEmailForeignKeys($schema);
-
+        AddCustomersTable::addCustomersTableForeignKeys($schema);
 
         /** Apply extensions */
         SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
@@ -173,8 +167,6 @@ class OroSalesBundleInstaller implements
         $this->addOpportunityStatusField($schema, $queries);
         AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
         AddLeadAddressTable::createLeadAddressTable($schema);
-        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_account');
-        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_account');
     }
 
     /**
@@ -219,6 +211,8 @@ class OroSalesBundleInstaller implements
             'currency',
             ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
         );
+        $table->addColumn('sales_customer_id', 'integer', ['notnull' => false]);
+
         $table->addColumn('customer_need', 'text', ['notnull' => false]);
         $table->addColumn('proposed_solution', 'text', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
@@ -555,6 +549,12 @@ class OroSalesBundleInstaller implements
             ['lead_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['sales_customer_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 

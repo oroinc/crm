@@ -1,14 +1,15 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tools\Customers;
+namespace Oro\Bundle\SalesBundle\Tools;
 
 use CG\Generator\PhpClass;
 
 use Oro\Bundle\EntityExtendBundle\Tools\GeneratorExtensions\AbstractAssociationEntityGeneratorExtension;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class OpportunityGeneratorExtension extends AbstractAssociationEntityGeneratorExtension
+class CustomerGeneratorExtension extends AbstractAssociationEntityGeneratorExtension
 {
     /**
      * {@inheritdoc}
@@ -16,10 +17,10 @@ class OpportunityGeneratorExtension extends AbstractAssociationEntityGeneratorEx
     public function supports(array $schema)
     {
         return
-            $schema['class'] === Opportunity::class
+            $schema['class'] === Customer::class
             && parent::supports($schema);
     }
-
+    
     /**
      * {@inheritdoc}
      */
