@@ -27,7 +27,7 @@ class OroSalesBundle implements Migration, NoteExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addNoteAssociations($schema, $this->noteExtension);
+        $this->addNoteAssociations($schema, $this->noteExtension);
     }
 
     /**
@@ -36,7 +36,7 @@ class OroSalesBundle implements Migration, NoteExtensionAwareInterface
      * @param Schema        $schema
      * @param NoteExtension $noteExtension
      */
-    public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
+    protected function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
         $noteExtension->addNoteAssociation($schema, 'orocrm_sales_lead');
         $noteExtension->addNoteAssociation($schema, 'orocrm_sales_opportunity');

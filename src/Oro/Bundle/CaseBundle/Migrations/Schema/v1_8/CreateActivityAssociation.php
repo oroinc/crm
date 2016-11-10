@@ -40,8 +40,8 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
-        self::addNoteAssociations($schema, $this->noteExtension);
+        $this->addActivityAssociations($schema, $this->activityExtension);
+        $this->addNoteAssociations($schema, $this->noteExtension);
     }
 
     /**
@@ -50,7 +50,7 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension
      */
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $associationTableName = $activityExtension->getAssociationTableName('oro_call', 'orocrm_case');
         if (!$schema->hasTable($associationTableName)) {
@@ -64,7 +64,7 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      * @param Schema        $schema
      * @param NoteExtension $noteExtension
      */
-    public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
+    protected function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
         $table = $schema->getTable('oro_note');
         if (!$table->hasColumn($noteExtension->getAssociationColumnName('orocrm_case'))) {
