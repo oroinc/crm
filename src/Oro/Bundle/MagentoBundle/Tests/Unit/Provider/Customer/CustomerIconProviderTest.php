@@ -25,7 +25,7 @@ class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
     {
         $icon = $this->customerIconProvider->getIcon(new Customer());
         $this->assertEquals(
-            new Image(Image::TYPE_FILE_PATH, ['path' => 'bundles/acmedemo/img/logo.png']),
+            new Image(Image::TYPE_FILE_PATH, ['path' => '/bundles/acmedemo/img/logo.png']),
             $icon
         );
     }
