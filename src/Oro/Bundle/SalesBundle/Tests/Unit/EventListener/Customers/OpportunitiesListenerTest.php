@@ -4,12 +4,16 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
+
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
+
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+
+use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 
 class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,6 +26,9 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
     /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $translator;
 
+    /** @var DoctrineHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $doctrineHelper;
+
     public function setUp()
     {
         $configManager             = $this
@@ -33,31 +40,46 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['hasConfig', 'getConfig'])
             ->getMock();
+        $this->doctrineHelper = $this
+            ->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->setMethods(['getSingleEntityIdentifier'])
+            ->getMock();
         $configManager
             ->expects($this->any())
             ->method('getProvider')
             ->with('opportunity')
             ->willReturn($this->opportunityProvider);
         $this->translator = $this->getMock(TranslatorInterface::class);
-        $this->listener = new OpportunitiesListener($configManager, $this->translator);
+        $this->listener = new OpportunitiesListener($configManager, $this->translator, $this->doctrineHelper);
     }
 
     public function testAddOpportunities()
     {
-        $entity = new TestEntity();
+        $id = 5;
+        $entity = new TestEntity($id);
         $customerClass = TestEntity::class;
         $opportunitiesData = 'Opportunities List';
         $opportunitiesTitle = 'Opportunities Title';
+
         $env = $this->getMockBuilder('Twig_Environment')
             ->disableOriginalConstructor()
             ->getMock();
+
         $env->expects($this->once())
             ->method('render')
             ->with(
                 'OroSalesBundle:Customers:opportunitiesGrid.html.twig',
-                ['customer' => $entity, 'customerClass' => $customerClass]
+                ['gridParams' => ['customer_id' => $id, 'customer_class' => $customerClass]]
             )
-        ->willReturn($opportunitiesData);
+            ->willReturn($opportunitiesData);
+
+        $this->doctrineHelper
+            ->expects($this->once())
+            ->method('getSingleEntityIdentifier')
+            ->with($entity)
+            ->willReturn($id);
+
         $this->translator->expects($this->once())
             ->method('trans')
             ->with('oro.sales.customers.opportunities.grid.label')

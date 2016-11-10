@@ -39,8 +39,6 @@ class OpportunitiesExtension extends AbstractExtension
     {
         return
             $config->getDatasourceType() === OrmDatasource::TYPE &&
-            $this->parameters->has('customer_class') &&
-            $this->parameters->has('customer_id') &&
             $this->parameters->get('customer_class') &&
             $this->parameters->get('customer_id') &&
             $this->opportunityProvider->hasConfig($this->parameters->get('customer_class')) &&
