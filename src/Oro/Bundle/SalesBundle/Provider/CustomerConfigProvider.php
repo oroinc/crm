@@ -57,10 +57,10 @@ class CustomerConfigProvider
      *
      * @return array
      * [
-     *     label => entity label,
+     *     className => customer class with _ instead of \
      *     icon  => entity icon,
-     *     className => customer class
      *     gridName  => customer grid name
+     *     routeCreate => route to create entity
      *     first => should be shown by default?
      * ]
      */
@@ -92,7 +92,7 @@ class CustomerConfigProvider
      *
      * @return string|null
      */
-    protected function getLabel($entityClass)
+    public function getLabel($entityClass)
     {
         return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('label');
     }

@@ -454,8 +454,15 @@ services:
     oro_sales.form.type.customer:
         class: Oro\Bundle\SalesBundle\Form\Type\CustomerType
         arguments:
-            - '@oro_entity.entity_reference_to_string_transformer'
+            - '@oro_sales.customer_to_string_transformer'
             - '@oro_sales.customer_config_provider'
             - '@oro_entity.entity_alias_resolver'
+            - '@oro_sales.provider.customer.chain_customer_icon'
         tags:
             - { name: form.type, alias: oro_sales_customer }
+
+    oro_sales.customer_to_string_transformer:
+        class: Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer
+        arguments:
+            - '@oro_entity.entity_reference_to_string_transformer'
+            - '@oro_entity.doctrine_helper'

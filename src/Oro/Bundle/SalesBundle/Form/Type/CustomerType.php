@@ -2,6 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -12,14 +18,9 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\EntityBundle\Form\DataTransformer\EntityReferenceToStringTransformer;
-use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
-
 class CustomerType extends AbstractType
 {
-    /** @var EntityReferenceToStringTransformer */
+    /** @var DataTransformerInterface */
     protected $transformer;
 
     /** @var CustomerConfigProvider */
@@ -28,19 +29,25 @@ class CustomerType extends AbstractType
     /** @var EntityAliasResolver  */
     protected $entityAliasResolver;
 
+    /** @var CustomerIconProviderInterface */
+    protected $customerIconProvider;
+
     /**
      * @param DataTransformerInterface $transformer
      * @param CustomerConfigProvider   $customerConfigProvider
      * @param EntityAliasResolver      $entityAliasResolver
+     * @param CustomerIconProviderInterface $customerIconProvider
      */
     public function __construct(
         DataTransformerInterface $transformer,
         CustomerConfigProvider $customerConfigProvider,
-        EntityAliasResolver $entityAliasResolver
+        EntityAliasResolver $entityAliasResolver,
+        CustomerIconProviderInterface $customerIconProvider
     ) {
         $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
         $this->entityAliasResolver    = $entityAliasResolver;
+        $this->customerIconProvider = $customerIconProvider;
     }
 
     /**
@@ -48,8 +55,15 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['parentClass']   = $options['parent_class'];
-        $view->vars['customersData'] = $this->customerConfigProvider->getData($options['parent_class']);
+        $customersData = $this->customerConfigProvider->getData($options['parent_class']);
+        $view->vars['parentClass'] = $options['parent_class'];
+        $view->vars['customersData'] = $customersData;
+        $view->vars['configs']['allowCreateNew'] = ArrayUtil::some(
+            function (array $customer) {
+                return $customer['className'] === Account::class;
+            },
+            $customersData
+        );
     }
 
     /**
@@ -119,6 +133,10 @@ class CustomerType extends AbstractType
                 'mapped'  => false,
                 'configs' => function (Options $options, $value) {
                     return [
+                        'component'               => 'sales-customer',
+                        'renderedPropertyName'    => 'text',
+                        'newAccountIcon'          => $this->customerIconProvider->getIcon(new Account()),
+                        'accountLabel'            => $this->customerConfigProvider->getLabel(Account::class),
                         'allowClear'              => true,
                         'placeholder'             => 'oro.sales.form.choose_customer',
                         'separator'               => ';',
