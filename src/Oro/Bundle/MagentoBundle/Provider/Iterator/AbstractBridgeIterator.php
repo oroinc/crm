@@ -52,7 +52,8 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
             $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
         } else {
             $dateField = 'updated_at';
-            $this->filter->addDateFilter($dateField, 'gt', $this->lastSyncDate);
+            $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
+            $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate->add($this->syncRange));
         }
 
         $this->fixServerTime($dateField);

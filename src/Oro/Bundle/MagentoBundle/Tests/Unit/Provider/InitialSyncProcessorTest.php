@@ -24,7 +24,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             $this->typesRegistry,
             $this->eventDispatcher,
             $this->logger,
-            ['sync_settings' => ['initial_import_step_interval' => '2 days']]
+            ['sync_settings' => ['import_step_interval' => '2 days']]
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
@@ -52,7 +52,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        InitialSyncProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        InitialSyncProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -82,7 +82,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'channelType' => 'testChannelType',
                 'start_sync_date' => $syncStartDate,
                 AbstractInitialProcessor::INTERVAL => $interval,
-                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
+                AbstractInitialProcessor::SYNCED_TO => $syncedTo
             ]
         );
 
@@ -112,7 +112,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        InitialSyncProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        InitialSyncProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -154,7 +154,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'channelType' => 'testChannelType',
                 'start_sync_date' => $syncStartDate,
                 AbstractInitialProcessor::INTERVAL => $interval,
-                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
+                AbstractInitialProcessor::SYNCED_TO => $syncedTo
             ]
         );
 

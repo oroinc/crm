@@ -247,7 +247,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $this->filter->addDateFilter('created_at', 'from', $this->getToDate($date), $format);
             $this->filter->addDateFilter('created_at', 'to', $date, $format);
         } else {
-            $this->filter->addDateFilter('updated_at', 'from', $date, $format);
+            $this->filter->addDateFilter('updated_at', 'from', $date);
+            $this->filter->addDateFilter('updated_at', 'to', $date->add($this->syncRange));
         }
 
         $this->modifyFilters();
