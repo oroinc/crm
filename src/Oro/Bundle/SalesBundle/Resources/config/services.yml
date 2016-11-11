@@ -408,3 +408,10 @@ services:
         arguments:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
+
+    oro_sales.provider.opportunity_currency_list:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyListProvider
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: oro_multi_currency.currency_list_provider }

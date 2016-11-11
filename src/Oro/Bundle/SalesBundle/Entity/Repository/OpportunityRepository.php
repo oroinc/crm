@@ -46,6 +46,34 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @return array
+     */
+    public function getCurrencyListFromMulticurrencyFields()
+    {
+        $opportunityCurrencyFields = [
+            'budgetAmountCurrency',
+            'closeRevenueCurrency'
+        ];
+        $qb = $this->createQueryBuilder('opportunity');
+        $query = $qb
+            ->select(
+                sprintf('opportunity.%s, opportunity.%s', $opportunityCurrencyFields)
+            )
+            ->getQuery();
+
+        $queryResult = $query->getArrayResult();
+        $currencyCodes = [];
+        foreach ($queryResult as $resultItem) {
+            foreach ($opportunityCurrencyFields as $field) {
+                if (!empty($resultItem[$field]) && !in_array($resultItem[$field], $currencyCodes)) {
+                    $currencyCodes[] = $resultItem[$field];
+                }
+            }
+        }
+        return $currencyCodes;
+    }
+
+    /**
      * @param string $alias
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param string $orderBy
