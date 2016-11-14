@@ -2,60 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
-use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
-use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
-use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
     const INITIAL_CONNECTOR_SUFFIX = '_initial';
 
-    /** @var array|null */
-    protected $bundleConfiguration;
-
     /** @var SyncProcessor[] */
     protected $postProcessors = [];
 
     /** @var bool */
     protected $dictionaryDataLoaded = false;
-
-    /**
-     * @param ManagerRegistry $doctrineRegistry
-     * @param ProcessorRegistry $processorRegistry
-     * @param Executor $jobExecutor
-     * @param TypesRegistry $registry
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param LoggerStrategy $logger
-     * @param array $bundleConfiguration
-     */
-    public function __construct(
-        ManagerRegistry $doctrineRegistry,
-        ProcessorRegistry $processorRegistry,
-        Executor $jobExecutor,
-        TypesRegistry $registry,
-        EventDispatcherInterface $eventDispatcher,
-        LoggerStrategy $logger = null,
-        array $bundleConfiguration = null
-    ) {
-        parent::__construct(
-            $doctrineRegistry,
-            $processorRegistry,
-            $jobExecutor,
-            $registry,
-            $eventDispatcher,
-            $logger
-        );
-
-        $this->bundleConfiguration = $bundleConfiguration;
-    }
 
     /**
      * @param string $connectorType
@@ -91,7 +50,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         }
 
         // Set start date for initial connectors
-        $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
+        $startSyncDate = $integration->getTransport()->getSettingsBag()->get(self::START_SYNC_DATE);
         $parameters[self::START_SYNC_DATE] = $startSyncDate;
 
         // Pass interval to connectors for further filters creation
@@ -107,7 +66,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         /** @var \DateTime[] $connectorsSyncedTo */
         $connectorsSyncedTo = [];
         foreach ($connectors as $connector) {
-            $connectorsSyncedTo[$connector] = $this->getInitialConnectorSyncedTo($integration, $connector);
+            $connectorsSyncedTo[$connector] = $this->getConnectorSyncedTo($integration, $connector);
         }
 
         // Process all initial connectors by date interval while there are connectors to process
@@ -131,7 +90,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                         // Pass synced to for further filters creation
                         $parameters = array_merge(
                             $parameters,
-                            [self::INITIAL_SYNCED_TO => clone $connectorsSyncedTo[$connector]]
+                            [self::SYNCED_TO => clone $connectorsSyncedTo[$connector]]
                         );
 
                         $realConnector = $this->getRealConnector($integration, $connector);
@@ -190,53 +149,6 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
             return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
         };
-    }
-
-    /**
-     * @param Integration $integration
-     * @param string $connector
-     * @param \DateTime $syncedTo
-     */
-    protected function updateSyncedTo(Integration $integration, $connector, \DateTime $syncedTo)
-    {
-        $formattedSyncedTo = $syncedTo->format(\DateTime::ISO8601);
-
-        $lastStatus = $this->getLastStatusForConnector($integration, $connector, Status::STATUS_COMPLETED);
-        $statusData = $lastStatus->getData();
-        $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
-        $lastStatus->setData($statusData);
-
-        $this->addConnectorStatusAndFlush($integration, $lastStatus);
-    }
-
-    /**
-     * @param Integration $integration
-     * @param string $connector
-     * @return \DateTime
-     */
-    protected function getInitialConnectorSyncedTo(Integration $integration, $connector)
-    {
-        $latestSyncedTo = $this->getSyncedTo($integration, $connector);
-        if ($latestSyncedTo === false) {
-            return clone $this->getInitialSyncStartDate($integration);
-        }
-
-        return clone $latestSyncedTo;
-    }
-
-    /**
-     * @return \DateInterval
-     */
-    protected function getSyncInterval()
-    {
-        if (empty($this->bundleConfiguration['sync_settings']['initial_import_step_interval'])) {
-            throw new \InvalidArgumentException('Option "initial_import_step_interval" is missing');
-        }
-
-        $syncInterval = $this->bundleConfiguration['sync_settings']['initial_import_step_interval'];
-        $interval = \DateInterval::createFromDateString($syncInterval);
-
-        return $interval;
     }
 
     /**

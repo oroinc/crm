@@ -1,8 +1,7 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -15,6 +14,8 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class MagentoSyncProcessor extends SyncProcessor
 {
