@@ -33,9 +33,6 @@ parameters:
     #event listeners
     oro_marketing_list.event_listener.before_value_render_listener.class: Oro\Bundle\MarketingListBundle\EventListener\ExtendFieldValueBeforeRenderListener
 
-    # Workflow actions and conditions
-    oro_marketing_list.workflow.condition.has_contact_information.class: Oro\Bundle\MarketingListBundle\Model\Condition\HasContactInformation
-
 services:
     oro_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -193,8 +190,8 @@ services:
 
     # Workflow actions and conditions
     oro_marketing_list.workflow.condition.has_contact_information:
-        class: %oro_marketing_list.workflow.condition.has_contact_information.class%
+        class: 'Oro\Bundle\MarketingListBundle\Model\Condition\HasContactInformation'
         arguments:
             - "@oro_marketing_list.provider.contact_information_fields"
         tags:
-            - { name: oro_workflow.condition, alias: has_contact_information }
+            - { name: oro_action.condition, alias: has_contact_information }
