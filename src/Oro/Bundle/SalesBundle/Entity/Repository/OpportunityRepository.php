@@ -5,9 +5,11 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
@@ -48,29 +50,34 @@ class OpportunityRepository extends EntityRepository
     /**
      * @return array
      */
-    public function getCurrencyListFromMulticurrencyFields()
+    public function getCurrencyListFromMultiCurrencyFields(Organization $organization = null)
     {
+        $subQueries = [];
+        $selectStmt = null;
         $opportunityCurrencyFields = [
             'budgetAmountCurrency',
             'closeRevenueCurrency'
         ];
-        $qb = $this->createQueryBuilder('opportunity');
-        $query = $qb
-            ->select(
-                sprintf('opportunity.%s, opportunity.%s', $opportunityCurrencyFields)
-            )
-            ->getQuery();
 
-        $queryResult = $query->getArrayResult();
-        $currencyCodes = [];
-        foreach ($queryResult as $resultItem) {
-            foreach ($opportunityCurrencyFields as $field) {
-                if (!empty($resultItem[$field]) && !in_array($resultItem[$field], $currencyCodes)) {
-                    $currencyCodes[] = $resultItem[$field];
-                }
+        foreach ($opportunityCurrencyFields as $fieldName) {
+            $subQb = $this->createQueryBuilder('opportunity');
+            $subQb->select(sprintf('opportunity.%s as currency', $fieldName));
+            if ($organization instanceof Organization) {
+                $subQb->where('organization', $organization);
             }
+            $subQueries[] = $subQb;
         }
-        return $currencyCodes;
+
+        $rsm = QueryUtils::createResultSetMapping($this->_em->getConnection()->getDatabasePlatform());
+        $rsm->addScalarResult('currency', 'currency', 'string');
+        $qb = new SqlQueryBuilder($this->_em, $rsm);
+        $qb
+            ->select('currency')
+            ->from('(' . implode(' UNION ', $subQueries) . ')', 'c')
+            ->where($qb->expr()->isNotNull('currency'));
+
+        $currencyResult = $qb->getQuery()->getArrayResult();
+        return array_column($currencyResult, 'currency');
     }
 
     /**

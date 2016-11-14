@@ -2,11 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Bundle\CurrencyBundle\Provider\CurrencyProviderInterface;
+use Oro\Bundle\CurrencyBundle\Provider\RepositoryCurrencyProviderInterface;
 
-class CurrencyListProvider implements CurrencyProviderInterface
+class CurrencyListProvider implements RepositoryCurrencyProviderInterface
 {
     /**
      * @var RegistryInterface
@@ -21,9 +22,9 @@ class CurrencyListProvider implements CurrencyProviderInterface
     /**
      * @inheritdoc
      */
-    public function getCurrencyList()
+    public function getCurrencyList(Organization $organization = null)
     {
         $opportunityRepository = $this->doctrine->getRepository('OroSalesBundle:Opportunity');
-        return $opportunityRepository->getCurrencyListFromMulticurrencyFields();
+        return $opportunityRepository->getCurrencyListFromMulticurrencyFields($organization);
     }
 }
