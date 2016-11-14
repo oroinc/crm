@@ -47,7 +47,7 @@
             {%- set customerView -%}
                 {% set customerName = customer ? customer|oro_format_name|escape : '' %}
                 {%- if (customer and resource_granted('VIEW', customer)) -%}
-                    <a href="{{ oro_entity_view_link(customer) }}">{{ customerName }}</a>
+                    <a href="{{ oro_entity_object_view_link(customer) }}">{{ customerName }}</a>
                 {%- else -%}
                     {{ customerName }}
                 {%- endif -%}
