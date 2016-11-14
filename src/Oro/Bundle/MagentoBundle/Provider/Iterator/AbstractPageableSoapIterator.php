@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
+use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
@@ -244,7 +245,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->applyWebsiteFilters($websiteIds, $storeIds);
 
         if ($this->isInitialSync()) {
-            $this->filter->addDateFilter('created_at', 'from', $this->getToDate($date), $format);
+            $this->filter->addDateFilter('created_at', 'from', $this->getToDateInitial($date), $format);
             $this->filter->addDateFilter('created_at', 'to', $date, $format);
         } else {
             $this->filter->addDateFilter('updated_at', 'from', $date);
@@ -274,11 +275,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
-
-        if (!$this->isInitialSync()) {
-            //increment date for further filtering
-            $this->lastSyncDate->add($this->syncRange);
-        }
 
         $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
 
@@ -395,7 +391,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      * @param \DateTime $date
      * @return \DateTime
      */
-    protected function getToDate(\DateTime $date)
+    protected function getToDateInitial(\DateTime $date)
     {
         $toDate = clone $date;
         $toDate->sub($this->syncRange);
@@ -404,6 +400,23 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         }
 
         return $toDate;
+    }
+
+    protected function getToDate($dateToSync)
+    {
+        $dateTo = clone $dateToSync;
+        $dateTo->add($this->syncRange);
+        if ($this->transport instanceof ServerTimeAwareInterface) {
+            $time = $this->transport->getServerTime();
+            if (false !== $time) {
+                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+                if ($frameLimit < $dateTo) {
+                    return $frameLimit;
+                }
+            }
+        }
+
+        return $dateTo;
     }
 
     /**
