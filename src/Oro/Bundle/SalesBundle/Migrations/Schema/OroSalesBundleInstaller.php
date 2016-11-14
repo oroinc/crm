@@ -35,6 +35,7 @@ use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInter
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)

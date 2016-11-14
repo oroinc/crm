@@ -1,4 +1,5 @@
 define(function(require) {
+    'use strict';
 
     var _ = require('underscore');
     var Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
