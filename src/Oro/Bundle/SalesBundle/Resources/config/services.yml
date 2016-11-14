@@ -413,5 +413,6 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyListProvider
         arguments:
             - '@doctrine'
+            - '@translator'
         tags:
             - { name: oro_multi_currency.currency_list_provider }

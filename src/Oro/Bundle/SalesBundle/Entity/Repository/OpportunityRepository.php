@@ -48,36 +48,25 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @return array
+     * @param array             $availableCurrencies
+     * @param Organization|null $organization
+     *
+     * @return bool
      */
-    public function getCurrencyListFromMultiCurrencyFields(Organization $organization = null)
-    {
-        $subQueries = [];
-        $selectStmt = null;
-        $opportunityCurrencyFields = [
-            'budgetAmountCurrency',
-            'closeRevenueCurrency'
-        ];
-
-        foreach ($opportunityCurrencyFields as $fieldName) {
-            $subQb = $this->createQueryBuilder('opportunity');
-            $subQb->select(sprintf('opportunity.%s as currency', $fieldName));
-            if ($organization instanceof Organization) {
-                $subQb->where('organization', $organization);
-            }
-            $subQueries[] = $subQb;
+    public function hasRecordsInUnavailableCurrencies(
+        array $availableCurrencies,
+        Organization $organization = null
+    ) {
+        $qb = $this->createQueryBuilder('opportunity');
+        $qb
+            ->select('count(opportunity.id)')
+            ->where($qb->expr()->notIn('opportunity.budgetAmountCurrency', $availableCurrencies))
+            ->orWhere($qb->expr()->notIn('opportunity.closeRevenueCurrency', $availableCurrencies));
+        if ($organization instanceof Organization) {
+            $qb->where('organization', $organization);
         }
 
-        $rsm = QueryUtils::createResultSetMapping($this->_em->getConnection()->getDatabasePlatform());
-        $rsm->addScalarResult('currency', 'currency', 'string');
-        $qb = new SqlQueryBuilder($this->_em, $rsm);
-        $qb
-            ->select('currency')
-            ->from('(' . implode(' UNION ', $subQueries) . ')', 'c')
-            ->where($qb->expr()->isNotNull('currency'));
-
-        $currencyResult = $qb->getQuery()->getArrayResult();
-        return array_column($currencyResult, 'currency');
+        return (bool) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
