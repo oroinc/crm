@@ -43,7 +43,7 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {% set customer = entity.getCustomerTarget() %}
+            {% set customer = entity.customerAssociation and entity.customerAssociation.customerTarget ? entity.customerAssociation.customerTarget : null %}
             {%- set customerView -%}
                 {% set customerName = customer ? customer|oro_format_name|escape : '' %}
                 {%- if (customer and resource_granted('VIEW', customer)) -%}

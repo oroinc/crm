@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -14,22 +13,22 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_5\OroSalesBundle as SalesNoteMigration;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroSalesBundle as SalesOrganizations;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_27\AddMultiCurrencyFields;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_5\OroSalesBundle as SalesNoteMigration;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v2_1\AddCustomersTable;
 
 /**
@@ -43,8 +42,11 @@ class OroSalesBundleInstaller implements
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    RenameExtensionAwareInterface
+    RenameExtensionAwareInterface,
+    CustomerExtensionAwareInterface
 {
+    use CustomerExtensionTrait;
+
     /** @var ExtendExtension */
     protected $extendExtension;
 
@@ -136,7 +138,7 @@ class OroSalesBundleInstaller implements
         $this->createOrocrmSalesLeadEmailTable($schema);
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
-        AddCustomersTable::addCustomersTable($schema);
+        AddCustomersTable::addCustomersTable($schema, $this->customerExtension);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);

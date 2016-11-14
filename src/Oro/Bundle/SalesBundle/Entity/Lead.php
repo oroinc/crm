@@ -81,9 +81,11 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    ChannelAwareInterface
+    ChannelAwareInterface,
+    CustomerAwareInterface
 {
     use ChannelEntityTrait;
+    use CustomerAwareTrait;
 
     const INTERNAL_STATUS_CODE = 'lead_status';
 

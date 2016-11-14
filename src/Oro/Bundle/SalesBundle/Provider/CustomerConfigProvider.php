@@ -16,11 +16,6 @@ class CustomerConfigProvider
     /** @var ConfigManager */
     protected $configManager;
 
-    protected $configs = [
-        'Oro\Bundle\SalesBundle\Entity\Lead'        => 'lead',
-        'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'opportunity',
-    ];
-
     /**
      * @param SecurityFacade $securityFacade
      * @param ConfigManager  $configManager
@@ -38,11 +33,9 @@ class CustomerConfigProvider
      */
     public function getAssociatedCustomerClasses($ownerClass)
     {
-        $scope = $this->configs[$ownerClass];
-
         $classes = [];
         /** @var Config[] $configs */
-        $configs = $this->configManager->getProvider($scope)->getConfigs();
+        $configs = $this->configManager->getProvider('customer')->getConfigs();
         foreach ($configs as $config) {
             if ($config->is('enabled')) {
                 $classes[] = $config->getId()->getClassName();

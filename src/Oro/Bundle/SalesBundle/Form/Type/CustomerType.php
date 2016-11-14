@@ -4,19 +4,17 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\SalesBundle\Model\CustomerAssociationInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CustomerType extends AbstractType
 {
@@ -32,22 +30,28 @@ class CustomerType extends AbstractType
     /** @var CustomerIconProviderInterface */
     protected $customerIconProvider;
 
+    /** @var TranslatorInterface */
+    protected $translator;
+
     /**
      * @param DataTransformerInterface $transformer
      * @param CustomerConfigProvider   $customerConfigProvider
      * @param EntityAliasResolver      $entityAliasResolver
      * @param CustomerIconProviderInterface $customerIconProvider
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         DataTransformerInterface $transformer,
         CustomerConfigProvider $customerConfigProvider,
         EntityAliasResolver $entityAliasResolver,
-        CustomerIconProviderInterface $customerIconProvider
+        CustomerIconProviderInterface $customerIconProvider,
+        TranslatorInterface $translator
     ) {
         $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
         $this->entityAliasResolver    = $entityAliasResolver;
         $this->customerIconProvider = $customerIconProvider;
+        $this->translator = $translator;
     }
 
     /**
@@ -72,52 +76,6 @@ class CustomerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addModelTransformer($this->transformer);
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'updateData']);
-        // needs to be called before validation
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'updateCustomer'], 10);
-    }
-
-    /**
-     * @param FormEvent $event
-     */
-    public function updateCustomer(FormEvent $event)
-    {
-        $form = $event->getForm();
-        if (!$form->getParent()) {
-            return;
-        }
-
-        $parentData = $form->getParent()->getData();
-        if (!$parentData) {
-            return;
-        }
-
-        $customer = $event->getForm()->getData();
-        if ($parentData instanceof CustomerAssociationInterface) {
-            $parentData->setCustomerTarget($customer);
-        }
-    }
-
-    /**
-     * @param FormEvent $event
-     */
-    public function updateData(FormEvent $event)
-    {
-        $form   = $event->getForm();
-        $parent = $form->getParent();
-        if (!$parent) {
-            return;
-        }
-
-        $parentData = $parent->getData();
-        if (!$parentData) {
-            return;
-        }
-
-        if ($parentData instanceof CustomerAssociationInterface) {
-            $event->setData($parentData->getCustomerTarget());
-        }
     }
 
     /**
@@ -130,13 +88,14 @@ class CustomerType extends AbstractType
 
         $resolver->setDefaults(
             [
-                'mapped'  => false,
                 'configs' => function (Options $options, $value) {
                     return [
                         'component'               => 'sales-customer',
                         'renderedPropertyName'    => 'text',
                         'newAccountIcon'          => $this->customerIconProvider->getIcon(new Account()),
-                        'accountLabel'            => $this->customerConfigProvider->getLabel(Account::class),
+                        'accountLabel'            => $this->translator->trans(
+                            $this->customerConfigProvider->getLabel(Account::class)
+                        ),
                         'allowClear'              => true,
                         'placeholder'             => 'oro.sales.form.choose_customer',
                         'separator'               => ';',

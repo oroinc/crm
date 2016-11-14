@@ -68,9 +68,11 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
     ChannelAwareInterface,
-    MultiCurrencyHolderInterface
+    MultiCurrencyHolderInterface,
+    CustomerAwareInterface
 {
     use ChannelEntityTrait;
+    use CustomerAwareTrait;
 
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
@@ -445,14 +447,6 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $closedAt;
-
-    /**
-     * @var Customer
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\Customer")
-     * @ORM\JoinColumn(name="sales_customer_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField()
-     */
-    protected $salesCustomer;
 
     /**
      * @return int
@@ -957,21 +951,5 @@ class Opportunity extends ExtendOpportunity implements
     public function getClosedAt()
     {
         return $this->closedAt;
-    }
-
-    /**
-     * @return Customer
-     */
-    public function getSalesCustomer()
-    {
-        return $this->salesCustomer;
-    }
-
-    /**
-     * @param Customer $salesCustomer
-     */
-    public function setSalesCustomer($salesCustomer)
-    {
-        $this->salesCustomer = $salesCustomer;
     }
 }

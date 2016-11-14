@@ -40,7 +40,7 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
     }
 
     /**
-     * Adds the association between the target customer table and the crm customer table
+     * Adds the association between the target customer table and the customer table
      *
      * @param Schema $schema
      * @param string $targetTableName  Target entity table name
