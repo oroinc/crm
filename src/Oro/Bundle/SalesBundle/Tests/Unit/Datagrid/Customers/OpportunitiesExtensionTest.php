@@ -105,9 +105,9 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
             $customerClass,
             CustomerScope::ASSOCIATION_KIND
         );
-        $customerId      = 1;
+        $customerId = 1;
         $customerIdParam = sprintf(':customerIdParam_%s', $customerField);
-        $qb              = $this->prepareQueryBuilder(Opportunity::class, $customerField, $customerId, $customerIdParam, 'o');
+        $qb = $this->prepareQueryBuilder(Opportunity::class, $customerField, $customerId, $customerIdParam, 'o');
         $datasource      = $this->getDatasource($qb);
         $config          = DatagridConfiguration::create([]);
 
