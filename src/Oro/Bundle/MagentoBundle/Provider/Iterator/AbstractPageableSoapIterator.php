@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
+use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
