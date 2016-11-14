@@ -6,6 +6,6 @@
 <%= _.escape(text) %>
 <% if (id === null) { %>
     <span class="select2__result-entry-info">
-        (<%= _.__('oro.form.add_new') %>)
+        (<%= _.__('oro.sales.form.add_new_customer', {'account': context.account}) %>)
     </span>
 <% } %>
