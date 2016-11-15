@@ -35,16 +35,33 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
     /**
      * @param Schema $schema
      * @param QueryBag $queries
+     * @param RenameExtension $extension
      */
     public static function renameActivityTables(Schema $schema, QueryBag $queries, RenameExtension $extension)
     {
-        if ($schema->hasTable('oro_rel_46a29d19b28b6f386b70ee')) {
+        self::renameAccountRelated($schema, $queries, $extension);
+        self::renameCaseRelated($schema, $queries, $extension);
+        self::renameContactRelated($schema, $queries, $extension);
+        self::renameMagentoRelated($schema, $queries, $extension);
+        self::renameSalesRelated($schema, $queries, $extension);
+    }
+
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @param RenameExtension $extension
+     */
+    private static function renameAccountRelated(Schema $schema, QueryBag $queries, RenameExtension $extension)
+    {
+        if ($schema->hasTable('oro_rel_46a29d19b28b6f386b70ee')
+            && !$schema->hasTable('oro_rel_46a29d19b28b6f3865ba50')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d19b28b6f386b70ee',
                 'oro_rel_46a29d19b28b6f3865ba50'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\AccountBundle\Entity\Account',
@@ -53,14 +70,24 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 RelationType::MANY_TO_MANY
             ));
         }
+    }
 
-        if ($schema->hasTable('oro_rel_46a29d199e0854fe307b0c')) {
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @param RenameExtension $extension
+     */
+    private static function renameCaseRelated(Schema $schema, QueryBag $queries, RenameExtension $extension)
+    {
+        if ($schema->hasTable('oro_rel_46a29d199e0854fe307b0c')
+            && !$schema->hasTable('oro_rel_46a29d199e0854fe254c12')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d199e0854fe307b0c',
                 'oro_rel_46a29d199e0854fe254c12'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\CaseBundle\Entity\CaseEntity',
@@ -69,14 +96,24 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 RelationType::MANY_TO_MANY
             ));
         }
+    }
 
-        if ($schema->hasTable('oro_rel_46a29d1983dfdfa4e84e2b')) {
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @param RenameExtension $extension
+     */
+    private static function renameContactRelated(Schema $schema, QueryBag $queries, RenameExtension $extension)
+    {
+        if ($schema->hasTable('oro_rel_46a29d1983dfdfa4e84e2b')
+            && !$schema->hasTable('oro_rel_46a29d1983dfdfa436b4e2')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d1983dfdfa4e84e2b',
                 'oro_rel_46a29d1983dfdfa436b4e2'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\ContactBundle\Entity\Contact',
@@ -85,14 +122,24 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 RelationType::MANY_TO_MANY
             ));
         }
+    }
 
-        if ($schema->hasTable('oro_rel_46a29d19784fec5f827dff')) {
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @param RenameExtension $extension
+     */
+    private static function renameMagentoRelated(Schema $schema, QueryBag $queries, RenameExtension $extension)
+    {
+        if ($schema->hasTable('oro_rel_46a29d19784fec5f827dff')
+            && !$schema->hasTable('oro_rel_46a29d19784fec5f1a3d8f')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d19784fec5f827dff',
                 'oro_rel_46a29d19784fec5f1a3d8f'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\MagentoBundle\Entity\Customer',
@@ -102,13 +149,15 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
             ));
         }
 
-        if ($schema->hasTable('oro_rel_46a29d1934e8bc9c7c8165')) {
+        if ($schema->hasTable('oro_rel_46a29d1934e8bc9c7c8165')
+            && !$schema->hasTable('oro_rel_46a29d1934e8bc9c32a2d0')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d1934e8bc9c7c8165',
                 'oro_rel_46a29d1934e8bc9c32a2d0'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\MagentoBundle\Entity\Order',
@@ -117,14 +166,24 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 RelationType::MANY_TO_MANY
             ));
         }
+    }
 
-        if ($schema->hasTable('oro_rel_46a29d195154c0055a16fb')) {
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     * @param RenameExtension $extension
+     */
+    private static function renameSalesRelated(Schema $schema, QueryBag $queries, RenameExtension $extension)
+    {
+        if ($schema->hasTable('oro_rel_46a29d195154c0055a16fb')
+            && !$schema->hasTable('oro_rel_46a29d195154c0033bfb48')) {
             $extension->renameTable(
                 $schema,
                 $queries,
                 'oro_rel_46a29d195154c0055a16fb',
                 'oro_rel_46a29d195154c0033bfb48'
             );
+
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\SalesBundle\Entity\Opportunity',
