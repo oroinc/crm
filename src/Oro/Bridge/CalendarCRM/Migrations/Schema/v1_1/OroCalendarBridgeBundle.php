@@ -38,7 +38,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
      */
     public static function renameActivityTables(Schema $schema, QueryBag $queries, RenameExtension $extension)
     {
-        // AccountBundle
         if ($schema->hasTable('oro_rel_46a29d19b28b6f386b70ee')) {
             $extension->renameTable(
                 $schema,
@@ -55,7 +54,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
             ));
         }
 
-        // CaseBundle
         if ($schema->hasTable('oro_rel_46a29d199e0854fe307b0c')) {
             $extension->renameTable(
                 $schema,
@@ -72,7 +70,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
             ));
         }
 
-        // ContactBundle
         if ($schema->hasTable('oro_rel_46a29d1983dfdfa4e84e2b')) {
             $extension->renameTable(
                 $schema,
@@ -89,7 +86,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
             ));
         }
 
-        // MagentoBundle
         if ($schema->hasTable('oro_rel_46a29d19784fec5f827dff')) {
             $extension->renameTable(
                 $schema,
@@ -124,7 +120,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
             );
         }
 
-        // SalesBundle
         if ($schema->hasTable('oro_rel_46a29d195154c0055a16fb')) {
             $extension->renameTable(
                 $schema,
