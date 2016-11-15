@@ -38,8 +38,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
      */
     public static function renameActivityTables(Schema $schema, QueryBag $queries, RenameExtension $extension)
     {
-        // Execute only if tables were now renamed already
-
         // AccountBundle
         if ($schema->hasTable('oro_rel_46a29d19b28b6f386b70ee')) {
             $extension->renameTable(
@@ -48,7 +46,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d19b28b6f386b70ee',
                 'oro_rel_46a29d19b28b6f3865ba50'
             );
-
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\AccountBundle\Entity\Account',
@@ -66,7 +63,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d199e0854fe307b0c',
                 'oro_rel_46a29d199e0854fe254c12'
             );
-
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\CaseBundle\Entity\CaseEntity',
@@ -84,7 +80,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d1983dfdfa4e84e2b',
                 'oro_rel_46a29d1983dfdfa436b4e2'
             );
-
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\ContactBundle\Entity\Contact',
@@ -102,7 +97,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d19784fec5f827dff',
                 'oro_rel_46a29d19784fec5f1a3d8f'
             );
-
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\MagentoBundle\Entity\Customer',
@@ -138,7 +132,6 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d195154c0055a16fb',
                 'oro_rel_46a29d195154c0033bfb48'
             );
-
             $queries->addQuery(new UpdateExtendRelationQuery(
                 'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
                 'Oro\Bundle\SalesBundle\Entity\Opportunity',
