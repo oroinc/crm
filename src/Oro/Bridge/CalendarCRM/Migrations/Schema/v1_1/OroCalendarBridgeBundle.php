@@ -109,15 +109,13 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 'oro_rel_46a29d1934e8bc9c7c8165',
                 'oro_rel_46a29d1934e8bc9c32a2d0'
             );
-            $queries->addQuery(
-                new UpdateExtendRelationQuery(
-                    'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
-                    'Oro\Bundle\MagentoBundle\Entity\Order',
-                    'order_19a88871',
-                    'order_5f6f5774',
-                    RelationType::MANY_TO_MANY
-                )
-            );
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
+                'Oro\Bundle\MagentoBundle\Entity\Order',
+                'order_19a88871',
+                'order_5f6f5774',
+                RelationType::MANY_TO_MANY
+            ));
         }
 
         if ($schema->hasTable('oro_rel_46a29d195154c0055a16fb')) {
