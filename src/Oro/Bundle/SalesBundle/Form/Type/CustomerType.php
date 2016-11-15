@@ -48,8 +48,16 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['parentClass']   = $options['parent_class'];
-        $view->vars['customersData'] = $this->customerConfigProvider->getData($options['parent_class']);
+        $customersData = $this->customerConfigProvider->getData($options['parent_class']);
+
+        $view->vars['parentClass'] = $options['parent_class'];
+        $view->vars['hasGridData'] = (bool) $customersData;
+        $view->vars['createCustomersData'] = array_filter(
+            $customersData,
+            function (array $customer) {
+                return isset($customer['routeCreate']);
+            }
+        );
     }
 
     /**
