@@ -17,6 +17,11 @@ class LeadStub extends Lead
     protected $status;
 
     /**
+     * @var object|null
+     */
+    protected $customerTarget;
+
+    /**
      * @return object
      */
     public function getStatus()
@@ -46,5 +51,21 @@ class LeadStub extends Lead
     public function setSource($source)
     {
         $this->source = $source;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getCustomerTarget()
+    {
+        return $this->customerTarget;
+    }
+
+    /**
+     * @param object|null $customerTarget
+     */
+    public function setCustomerTarget($customerTarget)
+    {
+        $this->customerTarget = $customerTarget;
     }
 }
