@@ -6,7 +6,7 @@ Feature: Import opportunity feature
   Scenario: Data Template for Opportunity
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Business Customer entities
-    And I go to Opportunity Index page
+    And I open Opportunity Index page
     And there is no records in grid
     When I download Data Template file
     Then I don't see Business Customer Name column
