@@ -2,29 +2,21 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-
-use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Model\B2bGuesser;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class LeadToOpportunityProvider
 {
     /** @var PropertyAccessor */
     protected $accessor;
-
-    /** @var B2bGuesser */
-    protected $b2bGuesser;
 
     /** @var ChangeLeadStatus */
     protected $changeLeadStatus;
@@ -77,16 +69,11 @@ class LeadToOpportunityProvider
     ];
 
     /**
-     * @param B2bGuesser $b2bGuesser
      * @param EntityFieldProvider $entityFieldProvider
      * @param ChangeLeadStatus $changeLeadStatus
      */
-    public function __construct(
-        B2bGuesser $b2bGuesser,
-        EntityFieldProvider $entityFieldProvider,
-        ChangeLeadStatus $changeLeadStatus
-    ) {
-        $this->b2bGuesser = $b2bGuesser;
+    public function __construct(EntityFieldProvider $entityFieldProvider, ChangeLeadStatus $changeLeadStatus)
+    {
         $this->accessor = PropertyAccess::createPropertyAccessor();
         $this->entityFieldProvider = $entityFieldProvider;
         $this->changeLeadStatus = $changeLeadStatus;
@@ -201,7 +188,7 @@ class LeadToOpportunityProvider
      */
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
-        $opportunity = new Opportunity();
+        $opportunity = $this->createOpportunity();
         $opportunity->setLead($lead);
 
         if ($isGetRequest) {
@@ -210,7 +197,6 @@ class LeadToOpportunityProvider
                 ->setContact($contact)
                 ->setName($lead->getName());
 
-            $this->b2bGuesser->setCustomer($opportunity, $lead);
             $opportunity->setCustomerTarget($lead->getCustomerTarget());
         } else {
             $opportunity
@@ -233,11 +219,6 @@ class LeadToOpportunityProvider
         $lead = $opportunity->getLead();
         $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
 
-        $customer = $opportunity->getCustomer();
-        if ($customer) {
-            $this->prepareCustomerToSave($customer, $opportunity);
-        }
-
         $saveResult = $this->changeLeadStatus->qualify($lead);
 
         if (!$saveResult && is_callable($errorMessageCallback)) {
@@ -248,22 +229,6 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param B2bCustomer $customer
-     * @param Opportunity $opportunity
-     */
-    protected function prepareCustomerToSave(B2bCustomer $customer, Opportunity $opportunity)
-    {
-        $contact = $opportunity->getContact();
-        if (!$customer->getContact() instanceof Contact) {
-            $customer->setContact($contact);
-        }
-
-        if ($customer->getAccount() instanceof Account) {
-            $customer->getAccount()->addContact($contact);
-        }
-    }
-
-    /**
      * @param Lead        $lead
      * @param Opportunity $opportunity
      */
@@ -271,5 +236,13 @@ class LeadToOpportunityProvider
     {
         $lead->setContact($opportunity->getContact());
         $lead->setCustomer($opportunity->getCustomer());
+    }
+
+    /**
+     * @return Opportunity
+     */
+    protected function createOpportunity()
+    {
+        return new Opportunity();
     }
 }
