@@ -211,6 +211,7 @@ class LeadToOpportunityProvider
                 ->setName($lead->getName());
 
             $this->b2bGuesser->setCustomer($opportunity, $lead);
+            $opportunity->setCustomerTarget($lead->getCustomerTarget());
         } else {
             $opportunity
                 // Set predefined contact entity to have proper validation
@@ -230,10 +231,12 @@ class LeadToOpportunityProvider
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
         $lead = $opportunity->getLead();
-        $customer = $opportunity->getCustomer();
-
         $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
-        $this->prepareCustomerToSave($customer, $opportunity);
+
+        $customer = $opportunity->getCustomer();
+        if ($customer) {
+            $this->prepareCustomerToSave($customer, $opportunity);
+        }
 
         $saveResult = $this->changeLeadStatus->qualify($lead);
 
