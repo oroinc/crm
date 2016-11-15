@@ -409,9 +409,9 @@ services:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
 
-    oro_sales.provider.opportunity_currency_list:
-        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyListProvider
+    oro_sales.provider.opportunity_currency_checker:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
         arguments:
             - '@doctrine'
         tags:
-            - { name: oro_multi_currency.currency_list_provider }
+            - { name: oro_multi_currency.currency_checker_provider }

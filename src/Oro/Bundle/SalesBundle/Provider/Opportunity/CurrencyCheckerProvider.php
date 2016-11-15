@@ -3,12 +3,11 @@
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\CurrencyBundle\Provider\RepositoryCurrencyProviderInterface;
+use Oro\Bundle\CurrencyBundle\Provider\RepositoryCurrencyCheckerProviderInterface;
 
-class CurrencyListProvider implements RepositoryCurrencyProviderInterface
+class CurrencyCheckerProvider implements RepositoryCurrencyCheckerProviderInterface
 {
     const ENTITY_LABEL = 'oro.sales.opportunity.entity_label';
 
