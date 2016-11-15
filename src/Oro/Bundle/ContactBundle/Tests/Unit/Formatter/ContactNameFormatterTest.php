@@ -50,7 +50,7 @@ class ContactNameFormatterTest extends \PHPUnit_Framework_TestCase
                 (new Contact())
                     ->addEmail((new ContactEmail('em@example.com'))->setPrimary(true))
                     ->addPhone((new ContactPhone('542435'))->setPrimary(true)),
-                '542435',
+                'em@example.com',
             ],
             'contact with only phone' => [
                 (new Contact())
