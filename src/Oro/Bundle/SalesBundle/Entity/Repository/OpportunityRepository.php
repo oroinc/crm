@@ -48,22 +48,23 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array             $availableCurrencies
+     * @param array             $currenciesOnRemove
      * @param Organization|null $organization
      *
      * @return bool
      */
-    public function hasRecordsInUnavailableCurrencies(
-        array $availableCurrencies,
+    public function hasRecordsInCurrenciesOnRemove(
+        array $currenciesOnRemove,
         Organization $organization = null
     ) {
         $qb = $this->createQueryBuilder('opportunity');
         $qb
             ->select('count(opportunity.id)')
-            ->where($qb->expr()->notIn('opportunity.budgetAmountCurrency', $availableCurrencies))
-            ->orWhere($qb->expr()->notIn('opportunity.closeRevenueCurrency', $availableCurrencies));
+            ->where($qb->expr()->in('opportunity.budgetAmountCurrency', $currenciesOnRemove))
+            ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', $currenciesOnRemove));
         if ($organization instanceof Organization) {
-            $qb->where('organization', $organization);
+            $qb->andWhere('opportunity.organization = :organization');
+            $qb->setParameter(':organization', $organization);
         }
 
         return (bool) $qb->getQuery()->getSingleScalarResult();

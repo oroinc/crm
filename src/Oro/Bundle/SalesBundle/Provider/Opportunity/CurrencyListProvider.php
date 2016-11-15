@@ -17,15 +17,9 @@ class CurrencyListProvider implements RepositoryCurrencyProviderInterface
      */
     protected $doctrine;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    public function __construct(RegistryInterface $doctrine, TranslatorInterface $translator)
+    public function __construct(RegistryInterface $doctrine)
     {
         $this->doctrine = $doctrine;
-        $this->translator = $translator;
     }
 
     /**
@@ -33,17 +27,17 @@ class CurrencyListProvider implements RepositoryCurrencyProviderInterface
      */
     public function getEntityLabel()
     {
-        return $this->translator->trans(self::ENTITY_LABEL);
+        return self::ENTITY_LABEL;
     }
 
     /**
      * @inheritdoc
      */
-    public function hasRecordsInUnavailableCurrencies(
-        array $availableCurrencies,
+    public function hasRecordsInCurrenciesOnRemove(
+        array $currenciesOnRemove,
         Organization $organization = null
     ) {
         $opportunityRepository = $this->doctrine->getRepository('OroSalesBundle:Opportunity');
-        return $opportunityRepository->hasRecordsInUnavailableCurrencies($availableCurrencies, $organization);
+        return $opportunityRepository->hasRecordsInCurrenciesOnRemove($currenciesOnRemove, $organization);
     }
 }
