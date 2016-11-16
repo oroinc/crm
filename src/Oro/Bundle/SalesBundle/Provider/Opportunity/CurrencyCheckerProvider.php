@@ -32,11 +32,11 @@ class CurrencyCheckerProvider implements RepositoryCurrencyCheckerProviderInterf
     /**
      * @inheritdoc
      */
-    public function hasRecordsInCurrenciesOnRemove(
-        array $currenciesOnRemove,
+    public function hasRecordsWithRemovingCurrencies(
+        array $removingCurrencies,
         Organization $organization = null
     ) {
         $opportunityRepository = $this->doctrine->getRepository('OroSalesBundle:Opportunity');
-        return $opportunityRepository->hasRecordsInCurrenciesOnRemove($currenciesOnRemove, $organization);
+        return $opportunityRepository->hasRecordsWithRemovingCurrencies($removingCurrencies, $organization);
     }
 }
