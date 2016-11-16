@@ -1,0 +1,2 @@
+bundles:
+    - { name: Oro\Bridge\MarketingCRM\OroMarketingCRMBridgeBundle }
