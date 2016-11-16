@@ -6,7 +6,7 @@ use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Component\Action\Action\AbstractAction;
 use Oro\Component\Action\Exception\InvalidParameterException;
-use Oro\Component\Action\Model\ContextAccessor;
+use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 /**
@@ -20,6 +20,9 @@ use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 class AutomaticDiscoveryAction extends AbstractAction
 {
     const NAME = 'automatic_discovery';
+
+    /** @var AutomaticDiscovery */
+    protected $automaticDiscovery;
 
     /** @var string */
     protected $entity;
