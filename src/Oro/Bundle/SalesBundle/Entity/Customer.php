@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
@@ -27,12 +28,13 @@ class Customer extends ExtendCustomer
     protected $id;
 
     /**
-     * @var Account
+     * @var Account|null
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
      */
     protected $account;
+
     /**
      * @return int
      */
@@ -42,15 +44,7 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return Account
+     * @return Account|null
      */
     public function getAccount()
     {
@@ -58,10 +52,25 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @param Account $account
+     * @return object|null
      */
-    public function setAccount($account)
+    public function getTarget()
     {
-        $this->account = $account;
+        return $this->getCustomerTarget() ?: $this->account;
+    }
+
+    /**
+     * @param object|null $target
+     */
+    public function setTarget($target)
+    {
+        if ($target instanceof Account) {
+            $this->account = $target;
+        } else {
+            $this->setCustomerTarget($target);
+            if ($target instanceof AccountAwareInterface) {
+                $this->account = $target->getAccount();
+            }
+        }
     }
 }

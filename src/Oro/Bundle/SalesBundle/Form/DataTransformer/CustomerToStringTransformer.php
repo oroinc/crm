@@ -54,25 +54,27 @@ class CustomerToStringTransformer implements DataTransformerInterface
             $account = (new Account())
                 ->setName($data['value']);
             $customer = (new Customer())
-                ->setCustomerTarget($account);
+                ->setTarget($account);
 
             $this->doctrineHelper->getEntityManager($account)->persist($account);
 
             return $customer;
         }
 
-        $customerTarget = $this->entityToStringTransformer->reverseTransform($value);
-        $customerTargetField = ExtendHelper::buildAssociationName(
-            ClassUtils::getClass($customerTarget),
-            CustomerScope::ASSOCIATION_KIND
-        );
+        $target = $this->entityToStringTransformer->reverseTransform($value);
+        $targetField = $target instanceof Account
+                ? 'account'
+                : ExtendHelper::buildAssociationName(
+                    ClassUtils::getClass($target),
+                    CustomerScope::ASSOCIATION_KIND
+                );
         $customer = $this->doctrineHelper->getEntityRepository(Customer::class)
             ->findOneBy([
-                $customerTargetField => $this->doctrineHelper->getEntityIdentifier($customerTarget),
+                $targetField => $this->doctrineHelper->getEntityIdentifier($target),
             ]);
         if (!$customer) {
             $customer = (new Customer())
-                ->setCustomerTarget($customerTarget);
+                ->setTarget($target);
         }
 
         return $customer;
@@ -84,15 +86,13 @@ class CustomerToStringTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value instanceof Customer) {
-            $customerTarget = $value->getCustomerTarget();
-            if (!$customerTarget->getId()) {
-                if ($customerTarget instanceof Account) {
-                    return json_encode([
-                        'value' => $customerTarget->getName(),
-                    ]);
-                }
+            $target = $value->getTarget();
+            if ($target instanceof Account && !$target->getId()) {
+                return json_encode([
+                    'value' => $target->getName(),
+                ]);
             } else {
-                $value = $customerTarget;
+                $value = $target;
             }
         }
 

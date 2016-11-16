@@ -45,7 +45,7 @@ class AddCustomersTable implements Migration, CustomerExtensionAwareInterface
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 }

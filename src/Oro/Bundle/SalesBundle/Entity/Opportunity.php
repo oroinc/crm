@@ -68,8 +68,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
     ChannelAwareInterface,
-    MultiCurrencyHolderInterface,
-    CustomerAwareInterface
+    MultiCurrencyHolderInterface
 {
     use ChannelEntityTrait;
     use CustomerAwareTrait;

@@ -81,8 +81,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    ChannelAwareInterface,
-    CustomerAwareInterface
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
     use CustomerAwareTrait;
