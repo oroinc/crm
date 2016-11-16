@@ -128,7 +128,7 @@ class CustomerType extends AbstractType
                 'configs' => function (Options $options, $value) {
                     return [
                         'allowClear'              => true,
-                        'placeholder'             => 'oro.sales.form.choose_customer',
+                        'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
                         'minimumInputLength'      => 0,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
