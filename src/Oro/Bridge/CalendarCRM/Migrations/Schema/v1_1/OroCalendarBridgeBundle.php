@@ -192,5 +192,41 @@ class OroCalendarBridgeBundle implements Migration, RenameExtensionAwareInterfac
                 RelationType::MANY_TO_MANY
             ));
         }
+
+        if ($schema->hasTable('oro_rel_46a29d1988a3cef5d4431f')
+            && !$schema->hasTable('oro_rel_46a29d1988a3cef53c57d4')) {
+            $extension->renameTable(
+                $schema,
+                $queries,
+                'oro_rel_46a29d1988a3cef5d4431f',
+                'oro_rel_46a29d1988a3cef53c57d4'
+            );
+
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
+                'Oro\Bundle\SalesBundle\Entity\Lead',
+                'lead_e5b9c444',
+                'lead_23c40e3e',
+                RelationType::MANY_TO_MANY
+            ));
+        }
+
+        if ($schema->hasTable('oro_rel_46a29d19e65dd9d3815d62')
+            && !$schema->hasTable('oro_rel_46a29d19e65dd9d390636c')) {
+            $extension->renameTable(
+                $schema,
+                $queries,
+                'oro_rel_46a29d19e65dd9d3815d62',
+                'oro_rel_46a29d19e65dd9d390636c'
+            );
+
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
+                'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
+                'b2b_customer_22d81e5c',
+                'b2b_customer_88d7394f',
+                RelationType::MANY_TO_MANY
+            ));
+        }
     }
 }
