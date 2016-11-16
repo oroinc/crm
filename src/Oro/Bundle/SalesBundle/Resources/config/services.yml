@@ -411,6 +411,7 @@ services:
 
     oro_sales.provider.opportunity_currency_checker:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
+        public: false
         arguments:
             - '@doctrine'
         tags:
