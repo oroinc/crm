@@ -6,33 +6,48 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtension;
-use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 
-class AddCustomersTable implements Migration, CustomerExtensionAwareInterface
+class AddCustomersTable implements Migration
 {
-    use CustomerExtensionTrait;
-
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addCustomersTable($schema, $this->customerExtension);
+        self::addCustomersTable($schema);
         self::addCustomersTableForeignKeys($schema);
+
+        $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
+        $opportunityTable->addColumn('customer_association_id', 'integer', ['notnull' => false]);
+        $opportunityTable->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F', []);
+        $opportunityTable->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['customer_association_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $leadTable = $schema->getTable('orocrm_sales_lead');
+        $leadTable->addColumn('customer_association_id', 'integer', ['notnull' => false]);
+        $leadTable->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
+        $leadTable->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['customer_association_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 
     /**
      * @param Schema $schema
      * @param CustomerExtension $customerExtension
      */
-    public static function addCustomersTable(Schema $schema, CustomerExtension $customerExtension)
+    public static function addCustomersTable(Schema $schema)
     {
         $table = $schema->createTable('orocrm_sales_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $customerExtension->addCustomerAssociation($schema, 'orocrm_account');
     }
 
     /**

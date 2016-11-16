@@ -19,8 +19,6 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroSalesBundle as SalesOrganizations;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
@@ -42,10 +40,8 @@ class OroSalesBundleInstaller implements
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    RenameExtensionAwareInterface,
-    CustomerExtensionAwareInterface
+    RenameExtensionAwareInterface
 {
-    use CustomerExtensionTrait;
 
     /** @var ExtendExtension */
     protected $extendExtension;
@@ -138,7 +134,7 @@ class OroSalesBundleInstaller implements
         $this->createOrocrmSalesLeadEmailTable($schema);
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
-        AddCustomersTable::addCustomersTable($schema, $this->customerExtension);
+        AddCustomersTable::addCustomersTable($schema);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);
@@ -213,7 +209,7 @@ class OroSalesBundleInstaller implements
             'currency',
             ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
         );
-        $table->addColumn('sales_customer_id', 'integer', ['notnull' => false]);
+        $table->addColumn('customer_association_id', 'integer', ['notnull' => false]);
 
         $table->addColumn('customer_need', 'text', ['notnull' => false]);
         $table->addColumn('proposed_solution', 'text', ['notnull' => false]);
@@ -228,6 +224,7 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['customer_id'], 'IDX_C0FE4AAC9395C3F3', []);
         $table->addIndex(['data_channel_id'], 'IDX_C0FE4AACBDC09B73', []);
         $table->addIndex(['close_reason_name'], 'idx_c0fe4aacd81b931c', []);
+        $table->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F', []);
         $table->setPrimaryKey(['id']);
     }
 
@@ -327,6 +324,7 @@ class OroSalesBundleInstaller implements
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('customer_association_id', 'integer', ['notnull' => false]);
 
         $this->extendExtension->addEnumField(
             $schema,
@@ -351,6 +349,7 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['address_id'], 'idx_73db4633f5b7af75', []);
+        $table->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
     }
 
     /**
@@ -554,7 +553,7 @@ class OroSalesBundleInstaller implements
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_customer'),
-            ['sales_customer_id'],
+            ['customer_association_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
@@ -639,6 +638,12 @@ class OroSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_73DB4633BDC09B73'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_sales_customer'),
+            ['customer_association_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 

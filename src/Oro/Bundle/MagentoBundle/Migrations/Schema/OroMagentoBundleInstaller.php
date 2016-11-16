@@ -24,6 +24,9 @@ use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_40\CreateActivityAssociation as OrderActivityAssociation;
 
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -36,8 +39,11 @@ class OroMagentoBundleInstaller implements
     ExtendExtensionAwareInterface,
     VisitEventAssociationExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    NoteExtensionAwareInterface
+    NoteExtensionAwareInterface,
+    CustomerExtensionAwareInterface
 {
+    use CustomerExtensionTrait;
+
     /** @var ActivityExtension */
     protected $activityExtension;
 
@@ -168,6 +174,7 @@ class OroMagentoBundleInstaller implements
         OrderActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
         $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
+        $this->customerExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
     }
 
     /**

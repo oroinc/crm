@@ -10,7 +10,7 @@ trait CustomerAwareTrait
      * @var Customer|null
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
-     * @ORM\JoinColumn(name="sales_customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $customerAssociation;
 

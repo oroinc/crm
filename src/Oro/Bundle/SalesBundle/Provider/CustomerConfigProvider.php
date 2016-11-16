@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\EntityConfigBundle\Config\Config;
-
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class CustomerConfigProvider
@@ -33,7 +33,7 @@ class CustomerConfigProvider
      */
     public function getAssociatedCustomerClasses($ownerClass)
     {
-        $classes = [];
+        $classes = [Account::class];
         /** @var Config[] $configs */
         $configs = $this->configManager->getProvider('customer')->getConfigs();
         foreach ($configs as $config) {

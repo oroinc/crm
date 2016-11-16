@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
 
 /**
@@ -61,6 +60,8 @@ class Customer extends ExtendCustomer
 
     /**
      * @param object|null $target
+     *
+     * @return $this
      */
     public function setTarget($target)
     {
@@ -72,5 +73,7 @@ class Customer extends ExtendCustomer
                 $this->account = $target->getAccount();
             }
         }
+
+        return $this;
     }
 }
