@@ -19,6 +19,10 @@ class CustomerController extends Controller
     /**
      * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
      * @Template("OroSalesBundle:Customer/dialog:grid.html.twig")
+     *
+     * @param string $entityClass
+     *
+     * @return array
      */
     public function gridDialogAction($entityClass)
     {
@@ -33,9 +37,7 @@ class CustomerController extends Controller
             'params'                 => [
                 'grid_path' => $this->generateUrl(
                     'oro_sales_customer_grid',
-                    [
-                        'entityClass' => reset($entityTargets)['className'],
-                    ],
+                    [],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 )
             ]
@@ -45,8 +47,12 @@ class CustomerController extends Controller
     /**
      * @Route("/customer/grid/{entityClass}", name="oro_sales_customer_grid")
      * @Template("OroDataGridBundle:Grid:dialog/widget.html.twig")
+     *
+     * @param string $entityClass
+     *
+     * @return array
      */
-    public function customerGridAction($entityClass)
+    public function customerGridAction($entityClass = null)
     {
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
 

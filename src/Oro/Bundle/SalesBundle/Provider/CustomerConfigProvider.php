@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
@@ -10,6 +11,9 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class CustomerConfigProvider
 {
+    /** @var EntityRoutingHelper */
+    protected $routingHelper;
+
     /** @var SecurityFacade */
     protected $securityFacade;
 
@@ -22,11 +26,16 @@ class CustomerConfigProvider
     ];
 
     /**
-     * @param SecurityFacade $securityFacade
-     * @param ConfigManager  $configManager
+     * @param EntityRoutingHelper $routingHelper
+     * @param SecurityFacade      $securityFacade
+     * @param ConfigManager       $configManager
      */
-    public function __construct(SecurityFacade $securityFacade, ConfigManager $configManager)
-    {
+    public function __construct(
+        EntityRoutingHelper $routingHelper,
+        SecurityFacade $securityFacade,
+        ConfigManager $configManager
+    ) {
+        $this->routingHelper  = $routingHelper;
         $this->securityFacade = $securityFacade;
         $this->configManager  = $configManager;
     }
@@ -72,7 +81,7 @@ class CustomerConfigProvider
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
             $result[] = [
-                'className'   => $class,
+                'className'   => $this->routingHelper->getUrlSafeClassName($class),
                 'label'       => $this->getLabel($class),
                 'icon'        => $this->getIcon($class),
                 'gridName'    => $this->getDefaultGrid($class),

@@ -46,7 +46,7 @@ class OpportunitiesListener
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(
-                'OroSalesBundle:Customers:opportunitiesGrid.html.twig',
+                'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' =>
                      [
                          'customer_id' => $this->doctrineHelper->getSingleEntityIdentifier($entity),

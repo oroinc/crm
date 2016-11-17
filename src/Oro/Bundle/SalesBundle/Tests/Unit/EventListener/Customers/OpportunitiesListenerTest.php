@@ -69,7 +69,7 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
         $env->expects($this->once())
             ->method('render')
             ->with(
-                'OroSalesBundle:Customers:opportunitiesGrid.html.twig',
+                'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' => ['customer_id' => $id, 'customer_class' => $customerClass]]
             )
             ->willReturn($opportunitiesData);
