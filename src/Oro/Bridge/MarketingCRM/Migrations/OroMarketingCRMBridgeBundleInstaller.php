@@ -68,6 +68,7 @@ class OroMarketingCRMBridgeBundleInstaller implements
     public function up(Schema $schema, QueryBag $queries)
     {
         OroMarketingCRMBridgeBundle::updateTrackingVisitEvent($schema, $queries, $this->renameExtension);
+        OroMarketingCRMBridgeBundle::updateTrackingVisit($schema, $queries, $this->renameExtension);
         OroMagentoBundleAssociation::addIdentifierEventAssociations($schema, $this->identifierEventExtension);
         OroMagentoBundleAssociation::addVisitEventAssociation($schema, $this->visitExtension);
     }
