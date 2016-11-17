@@ -60,7 +60,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
         /** Add extended fields */
         $this->addExtendedFields($schema);
-        $this->addChannelForeignKeyToTrackingWebsite($schema);
     }
 
     /**
@@ -299,43 +298,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
             'orocrm_channel',
             'name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
-        );
-    }
-
-    /**
-     * Add 'channel' to oro_tracking_website
-     *
-     * @param Schema $schema
-     */
-    protected function addChannelForeignKeyToTrackingWebsite(Schema $schema)
-    {
-        $this->extendExtension->addManyToOneRelation(
-            $schema,
-            'oro_tracking_website',
-            'channel',
-            'orocrm_channel',
-            'name',
-            [
-                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
-                'entity' => ['label' => 'oro.channel.entity_label'],
-                'extend' => [
-                    'is_extend' => true,
-                    'owner'     => ExtendScope::OWNER_CUSTOM
-                ],
-                'datagrid' => [
-                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE
-                ],
-                'form' => [
-                    'is_enabled' => true,
-                    'form_type'  => 'oro_channel_select_type',
-                    'form_options' => [
-                        'tooltip'  => 'oro.channel.tracking_website_channel_select.tooltip'
-                    ]
-                ],
-                'view'      => ['is_displayable' => true],
-                'merge'     => ['display' => false],
-                'dataaudit' => ['auditable' => false]
-            ]
         );
     }
 }
