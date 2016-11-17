@@ -10,6 +10,9 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 
+/**
+ * @deprecated since 2.0 will be removed after 2.2
+ */
 class SalesFunnelRepository extends EntityRepository
 {
     use WorkflowQueryTrait;
@@ -103,7 +106,7 @@ class SalesFunnelRepository extends EntityRepository
         }
 
         $budgetAmountQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
-            ->addSelect('SUM(opportunity.budgetAmount) as budgetAmount');
+            ->addSelect('SUM(opportunity.budgetAmountValue) as budgetAmount');
         $budgetAmountQueryBuilder
             ->andWhere($budgetAmountQueryBuilder->expr()->in('workflowStep.name', $steps));
         $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);

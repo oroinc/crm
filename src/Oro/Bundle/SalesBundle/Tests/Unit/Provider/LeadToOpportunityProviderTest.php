@@ -41,17 +41,12 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['qualify'])
             ->disableOriginalConstructor()
             ->getMock();
-        $workflowRegistry = $this
-            ->getMockBuilder('Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $entityFieldProvider->method('getFields')->willReturn([]);
         $this->provider = new LeadToOpportunityProvider(
             $b2bGuesser,
             $entityFieldProvider,
-            $changeLeadStatus,
-            $workflowRegistry
+            $changeLeadStatus
         );
     }
 
