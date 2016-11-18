@@ -1001,3 +1001,7 @@ services:
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 
+    oro_magento.customer_account_change_subscriber:
+        class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
+        tags:
+            - { name: doctrine.event_subscriber }

@@ -290,7 +290,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

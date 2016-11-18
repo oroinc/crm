@@ -67,10 +67,13 @@ class Customer extends ExtendCustomer
     {
         if ($target instanceof Account) {
             $this->account = $target;
+            $this->setCustomerTarget(null);
         } else {
             $this->setCustomerTarget($target);
             if ($target instanceof AccountAwareInterface) {
                 $this->account = $target->getAccount();
+            } else {
+                $this->account = null;
             }
         }
 
