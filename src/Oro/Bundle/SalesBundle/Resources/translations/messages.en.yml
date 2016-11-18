@@ -210,6 +210,7 @@ oro:
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
+            customer_association.label : Customer
 
             add_entity:           Add opportunity
 
@@ -280,6 +281,7 @@ oro:
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
             primary_email.label:  Primary Email
+            customer_association.label : Customer
             source:
                 unclassified:     No source
                 others:           Others
@@ -454,6 +456,16 @@ oro:
             id.label:            Id
             owner.label:         Owner
             primary.label:       Primary
+
+        #
+        # Entity Oro\Bundle\SalesBundle\Entity\Customer
+        #
+        customer:
+            entity_label:               Customer
+            entity_plural_label:        Customers
+            id.label:                   Id
+            account.label:              Account
+            customer_association_label: Customer
 
         widgets:
             b2bcustomer_information: Business Customer Information

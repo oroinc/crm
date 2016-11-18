@@ -8,7 +8,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 
-
 class AddCustomerAssociations implements Migration, CustomerExtensionAwareInterface
 {
     use CustomerExtensionTrait;

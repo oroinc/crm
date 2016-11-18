@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 
 class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,11 +19,31 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('parentTransform'));
         $entityToStringTransformer->expects($this->any())
             ->method('reverseTransform')
-            ->will($this->returnValue('parentReverseTransform'));
+            ->will($this->returnCallback(function ($value) {
+                $decoded = json_decode($value, true);
+
+                if (isset($decoded['value'])) {
+                    return (new Account())->setName($decoded['value']);
+                }
+
+                $entity = new $decoded['entityClass'];
+                $accountIdRef = new \ReflectionProperty($decoded['entityClass'], 'id');
+                $accountIdRef->setAccessible(true);
+                $accountIdRef->setValue($entity, 1);
+
+                return $entity;
+            }));
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $customerRepository = $this->getMockBuilder(\Doctrine\ORM\EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerRepository->expects($this->any())
+            ->method('findOneBy')
+            ->will($this->returnValue(null));
 
         $doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
@@ -31,11 +52,23 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityManager')
             ->with($this->isInstanceOf(Account::class))
             ->will($this->returnValue($em));
+        $doctrineHelper->expects($this->any())
+            ->method('getEntityRepository')
+            ->with('Oro\Bundle\SalesBundle\Entity\Customer')
+            ->will($this->returnValue($customerRepository));
 
-        $this->customerToStringTransformer = new CustomerToStringTransformer(
-            $entityToStringTransformer,
-            $doctrineHelper
-        );
+        $this->customerToStringTransformer = $this->getMockBuilder(CustomerToStringTransformer::class)
+            ->setMethods(['createCustomer'])
+            ->setConstructorArgs([
+                $entityToStringTransformer,
+                $doctrineHelper
+            ])
+            ->getMock();
+        $this->customerToStringTransformer->expects($this->any())
+            ->method('createCustomer')
+            ->will($this->returnCallback(function () {
+                return new Customer();
+            }));
     }
 
     /**
@@ -51,15 +84,24 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function reverseTransformProvider()
     {
+        $accountIdRef = new \ReflectionProperty(Account::class, 'id');
+        $accountIdRef->setAccessible(true);
+        $existingAccount = new Account();
+        $accountIdRef->setValue($existingAccount, 1);
+
         return [
             'new account' => [
                 json_encode(['value' => 'new account']),
-                (new Account())
-                    ->setName('new account'),
+                (new Customer())
+                    ->setTarget(
+                        (new Account())
+                             ->setName('new account')
+                    )
             ],
             'existing account' => [
                 json_encode(['entityClass' => Account::class, 'entityId' => 1]),
-                'parentReverseTransform',
+                (new Customer())
+                    ->setTarget($existingAccount),
             ],
         ];
     }
@@ -85,12 +127,15 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 
         return [
             'new account' => [
-                (new Account())
-                    ->setName('new account'),
+                (new Customer())
+                    ->setTarget(
+                        (new Account())
+                            ->setName('new account')
+                    ),
                 json_encode(['value' => 'new account']),
             ],
             'existing account' => [
-                $existingAccount,
+                (new Customer())->setTarget($existingAccount),
                 'parentTransform',
             ],
         ];

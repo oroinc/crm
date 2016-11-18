@@ -53,7 +53,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
         if (!empty($data['value'])) {
             $account = (new Account())
                 ->setName($data['value']);
-            $customer = (new Customer())
+            $customer = $this->createCustomer()
                 ->setTarget($account);
 
             $this->doctrineHelper->getEntityManager($account)->persist($account);
@@ -73,7 +73,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
                 $targetField => $this->doctrineHelper->getEntityIdentifier($target),
             ]);
         if (!$customer) {
-            $customer = (new Customer())
+            $customer = $this->createCustomer()
                 ->setTarget($target);
         }
 
@@ -97,5 +97,13 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         return $this->entityToStringTransformer->transform($value);
+    }
+
+    /**
+     * @return Customer
+     */
+    protected function createCustomer()
+    {
+        return new Customer();
     }
 }
