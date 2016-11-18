@@ -152,6 +152,11 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 $iterator->setSyncRange($interval);
             }
 
+            $incrementalInterval = $executionContext->get(InitialSyncProcessor::INCREMENTAL_INTERVAL);
+            if ($incrementalInterval) {
+                $iterator->setSyncRange($incrementalInterval);
+            }
+
             $minimalSyncDate = $executionContext->get(InitialSyncProcessor::START_SYNC_DATE);
             if ($minimalSyncDate) {
                 $iterator->setMinSyncDate($minimalSyncDate);
@@ -172,7 +177,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     protected function getStartDate(Status $status = null)
     {
         $jobContext = $this->stepExecution->getJobExecution()->getExecutionContext();
-        $initialSyncedTo = $jobContext->get(InitialSyncProcessor::INITIAL_SYNCED_TO);
+        $initialSyncedTo = $jobContext->get(InitialSyncProcessor::SYNCED_TO);
         if ($initialSyncedTo) {
             return $initialSyncedTo;
         }
