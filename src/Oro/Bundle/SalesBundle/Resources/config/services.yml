@@ -475,3 +475,11 @@ services:
             - '@oro_entity_config.config_manager'
         tags:
             - { name: oro_datagrid.extension }
+
+    oro_sales.provider.opportunity_currency_checker:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
+        public: false
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: oro_multi_currency.currency_checker_provider }
