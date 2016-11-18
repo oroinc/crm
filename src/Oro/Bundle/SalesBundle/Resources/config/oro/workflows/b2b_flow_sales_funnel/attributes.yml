@@ -12,23 +12,18 @@ workflows:
             lead_notes:
                 property_path: sales_funnel.lead.notes
             new_notes:
-                label: oro.sales.lead.notes.label
                 type: string
             new_opportunity_name:
-                label: oro.sales.opportunity.name.label
                 type: string
             new_b2bcustomer:
-                label: oro.sales.b2bcustomer.entity_label
                 type:  entity
                 options:
                     class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
             new_account:
-                label:  oro.account.entity_label
                 type: entity
                 options:
                     class: Oro\Bundle\AccountBundle\Entity\Account
             new_company_name:
-                label: oro.sales.lead.company_name.label
                 type: string
             opportunity:
                 property_path: sales_funnel.opportunity
@@ -43,7 +38,6 @@ workflows:
             probability:
                 property_path: sales_funnel.opportunity.probability
             budget_amount:
-                label: Budget Amount
                 property_path: sales_funnel.opportunity.budgetAmount
                 type: entity
                 options:
@@ -53,16 +47,13 @@ workflows:
             proposed_solution:
                 property_path: sales_funnel.opportunity.proposedSolution
             close_reason_name: # temporary attribute to find close reason by its name
-                label: oro.sales.opportunity.close_reason.label
                 type: string
             close_reason:
                 property_path: sales_funnel.opportunity.closeReason
             close_revenue:
-                label: Close Revenue
                 property_path: sales_funnel.opportunity.closeRevenue
                 type: entity
                 options:
                     class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
             close_date:
-                label: oro.sales.opportunity.workflow.close_date.label
                 property_path: sales_funnel.opportunity.closeDate

@@ -33,14 +33,14 @@ Scenario: Create contact
     | Country         | United States |
     | Street          | Selma Ave     |
     | City            | Los Angeles   |
-    | Zip/postal code | 90028         |
+    | Zip/Postal Code | 90028         |
     | State           | California    |
   And add new address with:
     | Primary         | check               |
     | Country         | Ukraine             |
     | Street          | Myronosytska 57     |
     | City            | Kharkiv             |
-    | Zip/postal code | 61000               |
+    | Zip/Postal Code | 61000               |
     | State           | Kharkivs'ka Oblast' |
   When save and close form
   Then I should see "Contact saved" flash message
@@ -89,7 +89,7 @@ Scenario: Add/Delete address from contact view
     | Country         | Germany       |
     | Street          | Mühlendamm 78 |
     | City            | Hamburg       |
-    | Zip/postal code | 22087         |
+    | Zip/Postal Code | 22087         |
     | State           | Hamburg       |
   And press "Save"
   Then contact has 2 addresses

@@ -7,7 +7,6 @@ imports:
 
 workflows:
     opportunity_flow:
-        label: 'Opportunity Management Flow'
         entity: Oro\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
         start_step: open

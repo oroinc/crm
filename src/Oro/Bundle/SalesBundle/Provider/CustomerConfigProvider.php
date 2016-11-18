@@ -50,7 +50,8 @@ class CustomerConfigProvider
      *
      * @return array
      * [
-     *     className => customer class with _ instead of \
+     *     className => customer class with _ instead of \,
+     *     label => entity label,
      *     icon  => entity icon,
      *     gridName  => customer grid name
      *     routeCreate => route to create entity
@@ -64,15 +65,12 @@ class CustomerConfigProvider
         $customerClasses = $this->getAssociatedCustomerClasses($ownerClass);
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
-            if (!$this->securityFacade->isGranted($routeCreate)) {
-                continue;
-            }
             $result[] = [
                 'className'   => $class,
                 'label'       => $this->getLabel($class),
                 'icon'        => $this->getIcon($class),
                 'gridName'    => $this->getDefaultGrid($class),
-                'routeCreate' => $routeCreate,
+                'routeCreate' => $this->securityFacade->isGranted($routeCreate) ? $routeCreate : null,
                 'first'       => !$result,
             ];
         }

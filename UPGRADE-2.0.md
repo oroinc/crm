@@ -19,8 +19,12 @@ UPGRADE FROM 1.10 to 2.0
         `EnumValueProvider $enumValueProvider`,
         `EnumTypeHelper $typeHelper`,
         `OpportunityRelationsBuilder $relationsBuilder`,
-        `EntityAliasResolver $entityAliasResolver`.  
-         
+        `EntityAliasResolver $entityAliasResolver`.
+- Changed signature of constructor of `Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider` - now it takes the following arguments:
+      - `EntityFieldProvider $entityFieldProvider`,
+        `ChangeLeadStatus $changeLeadStatus`
+- Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
+
 ####OroCaseBundle:
 - `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
 

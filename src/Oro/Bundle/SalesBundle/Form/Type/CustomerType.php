@@ -60,8 +60,16 @@ class CustomerType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $customersData = $this->customerConfigProvider->getData($options['parent_class']);
+
         $view->vars['parentClass'] = $options['parent_class'];
-        $view->vars['customersData'] = $customersData;
+        $view->vars['hasGridData'] = (bool) $customersData;
+        $view->vars['createCustomersData'] = array_filter(
+            $customersData,
+            function (array $customer) {
+                return isset($customer['routeCreate']);
+            }
+        );
+
         $view->vars['configs']['allowCreateNew'] = ArrayUtil::some(
             function (array $customer) {
                 return $customer['className'] === Account::class;
@@ -97,9 +105,9 @@ class CustomerType extends AbstractType
                             $this->customerConfigProvider->getLabel(Account::class)
                         ),
                         'allowClear'              => true,
-                        'placeholder'             => 'oro.sales.form.choose_customer',
+                        'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
-                        'minimumInputLength'      => 0,
+                        'minimumInputLength'      => 1,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
                         'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                         'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',

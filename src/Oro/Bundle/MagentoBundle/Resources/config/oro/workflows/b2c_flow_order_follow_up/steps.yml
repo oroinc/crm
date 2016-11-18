@@ -2,11 +2,9 @@ workflows:
     b2c_flow_order_follow_up:
         steps:
             not_contacted:
-                label: 'Not contacted'
                 order: 10
                 allowed_transitions:
                     - record_feedback
             contacted:
-                label: 'Contacted'
                 order: 40
                 is_final: true

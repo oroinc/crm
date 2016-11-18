@@ -28,7 +28,6 @@ class CustomerIconProvider implements CustomerIconProviderInterface
         if (!$entity instanceof Customer) {
             return null;
         }
-
-        return new Image(Image::TYPE_FILE_PATH, ['path' => $this->channelType->getIcon()]);
+        return new Image(Image::TYPE_FILE_PATH, ['path' => '/'.$this->channelType->getIcon()]);
     }
 }

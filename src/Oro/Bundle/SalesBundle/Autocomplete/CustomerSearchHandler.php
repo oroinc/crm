@@ -8,11 +8,15 @@ use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
 use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 
 class CustomerSearchHandler extends ContextSearchHandler
 {
+    /** @var EntityRoutingHelper */
+    protected $routingHelper;
+
     /** @var CustomerIconProviderInterface */
     protected $customerIconProvider;
 
@@ -44,6 +48,14 @@ class CustomerSearchHandler extends ContextSearchHandler
     public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
+    }
+
+    /**
+     * @param EntityRoutingHelper $routingHelper
+     */
+    public function setRoutingHelper(EntityRoutingHelper $routingHelper)
+    {
+        $this->routingHelper  = $routingHelper;
     }
 
     /**
@@ -97,5 +109,20 @@ class CustomerSearchHandler extends ContextSearchHandler
         $customers = $this->customerConfigProvider->getAssociatedCustomerClasses($this->class);
 
         return array_values($this->indexer->getEntityAliases($customers));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function decodeTargets($targetsString)
+    {
+        return array_map(
+            function ($item) {
+                $item['entityClass'] = $this->routingHelper->resolveEntityClass($item['entityClass']);
+
+                return $item;
+            },
+            parent::decodeTargets($targetsString)
+        );
     }
 }

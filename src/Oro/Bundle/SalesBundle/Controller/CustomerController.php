@@ -19,6 +19,10 @@ class CustomerController extends Controller
     /**
      * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
      * @Template("OroSalesBundle:Customer/dialog:grid.html.twig")
+     *
+     * @param string $entityClass
+     *
+     * @return array
      */
     public function gridDialogAction($entityClass)
     {
@@ -43,6 +47,10 @@ class CustomerController extends Controller
     /**
      * @Route("/customer/grid/{entityClass}", name="oro_sales_customer_grid")
      * @Template("OroDataGridBundle:Grid:dialog/widget.html.twig")
+     *
+     * @param string $entityClass
+     *
+     * @return array
      */
     public function customerGridAction($entityClass = null)
     {

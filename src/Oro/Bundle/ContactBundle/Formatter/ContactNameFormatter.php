@@ -30,6 +30,6 @@ class ContactNameFormatter
             return $name;
         }
 
-        return (string) ($contact->getPrimaryPhone() ?: $contact->getPrimaryEmail());
+        return (string) ($contact->getPrimaryEmail() ?: $contact->getPrimaryPhone());
     }
 }

@@ -48,7 +48,6 @@ parameters:
     oro_sales.autocomplete.business_customer.search_handler.class:  Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
 
     oro_sales.model.change_lead_status.class: Oro\Bundle\SalesBundle\Model\ChangeLeadStatus
-    oro_sales.model.b2b_guesser.class: Oro\Bundle\SalesBundle\Model\B2bGuesser
 
 services:
     oro_sales.opportunity.manager.api:
@@ -356,16 +355,9 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@validator'
 
-    oro_sales.model.b2b_guesser:
-        class: %oro_sales.model.b2b_guesser.class%
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_entity.entity_field_provider'
-
     oro_sales.provider.lead_to_opportunity:
         class: Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
         arguments:
-            - '@oro_sales.model.b2b_guesser'
             - '@oro_entity.entity_field_provider'
             - '@oro_sales.model.change_lead_status'
 
@@ -439,6 +431,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
         public: false
         arguments:
+            - '@oro_entity.routing_helper'
             - '@oro_security.security_facade'
             - '@oro_entity_config.config_manager'
 
@@ -449,3 +442,20 @@ services:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
             - [setCustomerConfigProvider, ['@oro_sales.customer_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+            - [setRoutingHelper, ['@oro_entity.routing_helper']]
+
+    oro_sales.customers.opportunities_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
+
+    oro_sales.datagrid.extension.customers.opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_datagrid.extension }

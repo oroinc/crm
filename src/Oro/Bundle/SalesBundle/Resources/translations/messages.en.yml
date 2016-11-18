@@ -121,7 +121,7 @@ oro:
             choose_opportunity: Choose an opportunity....
             choose_lead:        Choose a lead....
             choose_b2bcustomer: Choose a customer....
-            choose_customer:    Choose a customer....
+            choose_account:     Choose an account ....
             choose_close_rsn:   Choose a close reason...
             tooltip:
                 account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
@@ -202,7 +202,7 @@ oro:
             organization.label:   Organization
             customer:
                 label:            Account
-                description:      A B2B customer the opportunity is created for
+                description:      A customer or an account the opportunity is created for
             data_channel:
                 label:            Channel
                 description:      One of active channels, from which the application will get information on this opportunity.
@@ -276,7 +276,7 @@ oro:
             contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
-            customer.label:       Business Customer
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
@@ -509,3 +509,6 @@ oro:
 
         privilege:
             category.sales_data.label: Sales Data
+        customers:
+            opportunities:
+                grid.label: Opportunities

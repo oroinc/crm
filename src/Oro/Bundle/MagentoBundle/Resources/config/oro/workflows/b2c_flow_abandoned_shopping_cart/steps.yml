@@ -2,7 +2,6 @@ workflows:
     b2c_flow_abandoned_shopping_cart:
         steps:
             open:
-                label: 'Open'
                 order: 10
                 allowed_transitions:
                     - place_order
@@ -10,18 +9,15 @@ workflows:
                     - abandon
                     - convert
             abandoned:
-                label: 'Abandoned'
                 order: 30
                 allowed_transitions:
                     - reopen
                 is_final: true
             converted_to_opportunity:
-                label: 'Converted to opportunity'
                 order: 30
                 allowed_transitions:
                     - reopen
                 is_final: true
             converted:
-                label: 'Converted'
                 order: 30
                 is_final: true
