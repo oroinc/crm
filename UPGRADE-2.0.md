@@ -12,6 +12,18 @@ UPGRADE FROM 1.10 to 2.0
         - `EntityFieldProvider` $entityFieldProvider,
         - `ChangeLeadStatus` $changeLeadStatus
     - method `isDisqualifyAndConvertAllowed` was removed. Use methods `Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider::isDisqualifyAllowed` and `Oro\Bundle\SalesBundle\Provider\LeadActionsAccessProvider::isConvertToOpportunityAllowed` instead.
+- Changed signature of constructor of `Oro\Bundle\SalesBundle\Form\Type\LeadType` - now it takes the following argument:
+      - `EntityAliasResolver $entityAliasResolver`.
+- Changed signature of constructor of `Oro\Bundle\SalesBundle\Form\Type\OpportunityType` - now it takes the following arguments:
+      - `ProbabilityProvider $probabilityProvider`,
+        `EnumValueProvider $enumValueProvider`,
+        `EnumTypeHelper $typeHelper`,
+        `OpportunityRelationsBuilder $relationsBuilder`,
+        `EntityAliasResolver $entityAliasResolver`.
+- Changed signature of constructor of `Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider` - now it takes the following arguments:
+      - `EntityFieldProvider $entityFieldProvider`,
+        `ChangeLeadStatus $changeLeadStatus`
+- Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
 
 ####OroCaseBundle:
 - `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`

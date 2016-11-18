@@ -10,26 +10,26 @@ use Guzzle\Http\Client;
 use Guzzle\Plugin\Cookie\Cookie;
 use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
 use Guzzle\Plugin\Cookie\CookiePlugin;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
     OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary, SalesExtension;
 
     /**
      * @var string Path to saved template
@@ -320,6 +320,16 @@ class FeatureContext extends OroFeatureContext implements
         return $customers;
     }
 
+    /*
+     * @Given /^(?:|I )go to Opportunity Index page$/
+     */
+    public function iGoToOpportunityIndexPage()
+    {
+        /** @var MainMenu $mainMenu */
+        $mainMenu = $this->createElement('MainMenu');
+        $mainMenu->openAndClick("Sales/Opportunities");
+    }
+
     /**
      * @When I download Data Template file
      */
@@ -377,14 +387,6 @@ class FeatureContext extends OroFeatureContext implements
     {
         $csv = array_map('str_getcsv', file($this->template));
         self::assertContains($column, $csv[0]);
-    }
-
-    /**
-     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
-     */
-    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
     }
 
     /**
