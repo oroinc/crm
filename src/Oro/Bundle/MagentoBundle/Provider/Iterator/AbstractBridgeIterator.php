@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
@@ -48,14 +47,13 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
     {
         if ($this->isInitialSync()) {
             $dateField = 'created_at';
-            $this->filter->addDateFilter($dateField, 'from', $this->getToDate($this->lastSyncDate));
+            $this->filter->addDateFilter($dateField, 'from', $this->getToDateInitial($this->lastSyncDate));
             $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
         } else {
             $dateField = 'updated_at';
-            $this->filter->addDateFilter($dateField, 'gt', $this->lastSyncDate);
+            $this->filter->addDateFilter($dateField, 'from', $this->lastSyncDate);
+            $this->filter->addDateFilter($dateField, 'to', $this->getToDate($this->lastSyncDate));
         }
-
-        $this->fixServerTime($dateField);
 
         if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
@@ -112,25 +110,5 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
         $result = $this->entityBuffer[$id];
 
         return ConverterUtils::objectToArray($result);
-    }
-
-    /**
-     * Fix time frame if it's possible to retrieve server time.
-     *
-     * @param string $dateField
-     */
-    protected function fixServerTime($dateField)
-    {
-        if (!$this->isInitialSync() && $this->transport instanceof ServerTimeAwareInterface) {
-            $time = $this->transport->getServerTime();
-            if (false !== $time) {
-                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
-                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
-
-                return $frameLimit;
-            }
-        }
-
-        return false;
     }
 }

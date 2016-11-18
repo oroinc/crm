@@ -25,7 +25,7 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
             $this->typesRegistry,
             $this->eventDispatcher,
             $this->logger,
-            ['sync_settings' => ['initial_import_step_interval' => '2 days']]
+            ['sync_settings' => ['import_step_interval' => '2 days']]
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
@@ -38,6 +38,16 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
 
         $realConnector = new InitialConnector();
         $integration = $this->getIntegration($connectors, $syncStartDate, $realConnector);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([]));
+        $this->repository->expects($this->any())
+            ->method('getLastStatusForConnector')
+            ->will($this->returnValue($status));
 
         $transport = new MagentoSoapTransport();
         $transport->setNewsletterSubscriberSyncedToId(42);
