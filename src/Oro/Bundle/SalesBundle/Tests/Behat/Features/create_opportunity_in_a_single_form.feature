@@ -3,7 +3,7 @@ Feature: Create opportunity in a single form
   As a Sales rep
   I want to create Opportunity in a single form with minimum requirements
 
-  Scenario: Reaquired fields
+  Scenario: Required fields
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Business Customer entities
     And two users charlie and samantha exists in the system

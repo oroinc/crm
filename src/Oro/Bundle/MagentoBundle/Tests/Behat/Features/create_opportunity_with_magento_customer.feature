@@ -1,6 +1,6 @@
 Feature: Create opportunity with magento customer
 
-  Scenario: Reaquired fields
+  Scenario: Required fields
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Business Customer, Magento Customer entities
     And two users charlie and samantha exists in the system
