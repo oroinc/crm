@@ -5,12 +5,14 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+
 use Oro\Bundle\SearchBundle\Query\Result\Item;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
 
 class CustomerSearchHandler extends ContextSearchHandler
 {

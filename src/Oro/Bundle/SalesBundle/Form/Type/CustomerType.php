@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
 use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -59,7 +59,7 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $customersData = $this->customerConfigProvider->getData($options['parent_class']);
+        $customersData = $this->customerConfigProvider->getCustomersData($options['parent_class']);
 
         $view->vars['parentClass'] = $options['parent_class'];
         $view->vars['hasGridData'] = (bool) $customersData;

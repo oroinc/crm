@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
 use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -40,7 +40,7 @@ class OpportunitiesListener
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
         $entity = $event->getEntity();
-        if ($this->customerConfigProvider->hasAssociatedCustomerClass($entity)) {
+        if ($this->customerConfigProvider->isCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(

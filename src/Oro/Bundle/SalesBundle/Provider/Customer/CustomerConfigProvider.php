@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Provider;
+namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
-use Oro\Bundle\AccountBundle\Entity\Account;
+
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -32,7 +32,7 @@ class CustomerConfigProvider
      *
      * @return bool
      */
-    public function hasAssociatedCustomerClass($objectOrClass)
+    public function isCustomerClass($objectOrClass)
     {
         if (!$objectOrClass) {
             return false;
@@ -40,31 +40,15 @@ class CustomerConfigProvider
 
         $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
 
-        return in_array($class, $this->getAssociatedCustomerClasses($class));
+        return in_array($class, $this->getAssociatedCustomerClasses());
     }
 
-    /**
-     * @param string $ownerClass
-     *
-     * @return array
-     */
-    public function getAssociatedCustomerClasses($ownerClass)
+    public function getCustomerClasses()
     {
-        $classes = [Account::class];
-        /** @var Config[] $configs */
-        $configs = $this->configManager->getProvider('customer')->getConfigs();
-        foreach ($configs as $config) {
-            if ($config->is('enabled')) {
-                $classes[] = $config->getId()->getClassName();
-            }
-        }
-
-        return $classes;
+        return $this->getAssociatedCustomerClasses();
     }
 
     /**
-     * @param string $ownerClass
-     *
      * @return array
      * [
      *     className => customer class with _ instead of \,
@@ -75,11 +59,11 @@ class CustomerConfigProvider
      *     first => should be shown by default?
      * ]
      */
-    public function getData($ownerClass)
+    public function getCustomersData()
     {
         $result = [];
 
-        $customerClasses = $this->getAssociatedCustomerClasses($ownerClass);
+        $customerClasses = $this->getCustomerClasses();
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
             $result[] = [
@@ -110,16 +94,6 @@ class CustomerConfigProvider
      *
      * @return string|null
      */
-    protected function getIcon($entityClass)
-    {
-        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('icon');
-    }
-
-    /**
-     * @param string $entityClass
-     *
-     * @return string|null
-     */
     public function getDefaultGrid($entityClass)
     {
         if (ExtendHelper::isCustomEntity($entityClass)) {
@@ -136,6 +110,16 @@ class CustomerConfigProvider
      *
      * @return string|null
      */
+    protected function getIcon($entityClass)
+    {
+        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('icon');
+    }
+
+    /**
+     * @param string $entityClass
+     *
+     * @return string|null
+     */
     protected function getRouteCreate($entityClass)
     {
         $metadata = $this->configManager->getEntityMetadata($entityClass);
@@ -144,5 +128,22 @@ class CustomerConfigProvider
         }
 
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAssociatedCustomerClasses()
+    {
+        $classes = [];
+        /** @var Config[] $configs */
+        $configs = $this->configManager->getProvider('customer')->getConfigs();
+        foreach ($configs as $config) {
+            if ($config->is('enabled')) {
+                $classes[] = $config->getId()->getClassName();
+            }
+        }
+
+        return $classes;
     }
 }
