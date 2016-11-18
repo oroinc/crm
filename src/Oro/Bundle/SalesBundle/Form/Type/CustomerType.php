@@ -130,7 +130,7 @@ class CustomerType extends AbstractType
                         'allowClear'              => true,
                         'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
-                        'minimumInputLength'      => 0,
+                        'minimumInputLength'      => 1,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
                         'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                         'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
