@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -24,6 +25,22 @@ class CustomerConfigProvider
     {
         $this->securityFacade = $securityFacade;
         $this->configManager  = $configManager;
+    }
+
+    /**
+     * @param object|string|null $objectOrClass
+     *
+     * @return bool
+     */
+    public function hasAssociatedCustomerClass($objectOrClass)
+    {
+        if (!$objectOrClass) {
+            return false;
+        }
+
+        $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
+
+        return in_array($class, $this->getAssociatedCustomerClasses($class));
     }
 
     /**

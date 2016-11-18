@@ -2,18 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
+use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class OpportunitiesListener
 {
-    /** @var ConfigProvider */
-    protected $opportunityProvider;
+    /** @var CustomerConfigProvider */
+    protected $customerConfigProvider;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -22,13 +20,16 @@ class OpportunitiesListener
     protected $doctrineHelper;
 
     /**
-     * @param ConfigManager       $configManager
+     * @param CustomerConfigProvider $customerConfigProvider
      * @param TranslatorInterface $translator
      * @param DoctrineHelper      $helper
      */
-    public function __construct(ConfigManager $configManager, TranslatorInterface $translator, DoctrineHelper $helper)
-    {
-        $this->opportunityProvider = $configManager->getProvider('opportunity');
+    public function __construct(
+        CustomerConfigProvider $customerConfigProvider,
+        TranslatorInterface $translator,
+        DoctrineHelper $helper
+    ) {
+        $this->customerConfigProvider = $customerConfigProvider;
         $this->translator          = $translator;
         $this->doctrineHelper      = $helper;
     }
@@ -38,11 +39,8 @@ class OpportunitiesListener
      */
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
-        $entity       = $event->getEntity();
-        $entityConfig = $entity && $this->opportunityProvider->hasConfig($entity)
-            ? $this->opportunityProvider->getConfig($entity)
-            : null;
-        if ($entityConfig && $entityConfig->is('enabled')) {
+        $entity = $event->getEntity();
+        if ($this->customerConfigProvider->hasAssociatedCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(
@@ -50,7 +48,7 @@ class OpportunitiesListener
                 ['gridParams' =>
                      [
                          'customer_id' => $this->doctrineHelper->getSingleEntityIdentifier($entity),
-                         'customer_class' => $entityConfig->getId()->getClassName()
+                         'customer_class' => ClassUtils::getClass($entity),
                      ]
                 ]
             );

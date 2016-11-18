@@ -431,7 +431,6 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
         public: false
         arguments:
-            - '@oro_entity.routing_helper'
             - '@oro_security.security_facade'
             - '@oro_entity_config.config_manager'
 
@@ -447,7 +446,7 @@ services:
     oro_sales.customers.opportunities_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
         arguments:
-            - '@oro_entity_config.config_manager'
+            - '@oro_sales.customer_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
         tags:
@@ -456,6 +455,6 @@ services:
     oro_sales.datagrid.extension.customers.opportunities:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
         arguments:
-            - '@oro_entity_config.config_manager'
+            - '@oro_sales.customer_config_provider'
         tags:
             - { name: oro_datagrid.extension }

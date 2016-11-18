@@ -2,34 +2,28 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
-use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
-
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
 
 class OpportunitiesExtension extends AbstractExtension
 {
-    /** @var ConfigProvider */
-    protected $opportunityProvider;
+    /** @var CustomerConfigProvider */
+    protected $customerConfigProvider;
 
     /**
-     * @param ConfigManager $configManager
+     * @param CustomerConfigProvider $customerConfigProvider
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(CustomerConfigProvider $customerConfigProvider)
     {
-        $this->opportunityProvider = $configManager->getProvider('opportunity');
+        $this->customerConfigProvider = $customerConfigProvider;
     }
 
     /**
@@ -38,11 +32,11 @@ class OpportunitiesExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
+            false &&// todo
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') &&
             $this->parameters->get('customer_id') &&
-            $this->opportunityProvider->hasConfig($this->parameters->get('customer_class')) &&
-            $this->opportunityProvider->getConfig($this->parameters->get('customer_class'))->is('enabled');
+            $this->customerConfigProvider->hasAssociatedCustomerClass($this->parameters->get('customer_class'));
     }
 
     /**

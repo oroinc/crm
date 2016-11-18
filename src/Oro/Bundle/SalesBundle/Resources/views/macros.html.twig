@@ -58,7 +58,7 @@
 
     {%- set entityName = entity ? entity|oro_format_name|escape : '' -%}
     {%- if (entity and resource_granted('VIEW', entity)) -%}
-        {{ ui.renderUrl(oro_entity_view_link(entity), entityName) }}
+        {{ ui.renderUrl(oro_entity_object_view_link(entity), entityName) }}
     {%- else -%}
         {{ entityName }}
     {%- endif -%}
