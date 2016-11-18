@@ -42,7 +42,7 @@ class FeatureContext extends OroFeatureContext implements
     protected $importFile;
 
     /**
-     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
+     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
     {

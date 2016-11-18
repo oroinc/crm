@@ -3,9 +3,9 @@ Feature: Tie Opportunity probability to its status
   As a Sales rep
   I want Opportunity probability to rely on its status
 
-  Scenario: Background:
+  Scenario: Feature background
     Given I login as administrator
-    And "Sales Channel" is a channel with enabled Opportunity, Lead, Business Customer entities
+    And "Sales Channel" is a channel with enabled Business Customer entity
     And CRM has next Opportunity Probabilities:
       | Status                     | Probability | Default |
       | Open                       | 5           |         |
