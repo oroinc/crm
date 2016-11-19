@@ -72,8 +72,12 @@ class LeadType extends AbstractType
             )
             ->add(
                 'customer',
-                'oro_sales_b2bcustomer_select',
-                array('required' => false, 'label' => 'oro.sales.lead.customer.label')
+                'oro_sales_customer',
+                [
+                    'required'     => false,
+                    'label'        => 'oro.sales.lead.customer.label',
+                    'parent_class' => $options['data_class'],
+                ]
             )
             ->add('companyName', 'text', array('required' => false, 'label' => 'oro.sales.lead.company_name.label'))
             ->add('website', 'url', array('required' => false, 'label' => 'oro.sales.lead.website.label'))
