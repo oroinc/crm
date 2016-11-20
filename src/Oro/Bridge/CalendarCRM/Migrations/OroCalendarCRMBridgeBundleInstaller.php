@@ -53,7 +53,7 @@ class OroCalendarCRMBridgeBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        OroCalendarBridgeBundle_v1_0::addCalendarActivityAssociations($schema, $this->activityExtension);
-        OroCalendarBridgeBundle_v1_1::renameActivityTables($schema, $queries, $this->renameExtension);
+        OroCalendarBridgeBundle_v1_0::renameActivityTables($schema, $queries, $this->renameExtension);
+        OroCalendarBridgeBundle_v1_1::addCalendarActivityAssociations($schema, $this->activityExtension);
     }
 }
