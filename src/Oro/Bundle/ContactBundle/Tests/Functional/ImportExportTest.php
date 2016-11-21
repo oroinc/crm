@@ -4,6 +4,8 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
+use Oro\Bundle\ImportExportBundle\Async\Topics;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
@@ -17,6 +19,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ImportExportTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     /**
      * @var string
      */
@@ -76,7 +80,34 @@ class ImportExportTest extends WebTestCase
         $this->doImport($strategy, $added, $replaced);
 
         $this->doExport();
-        $this->validateExportResult();
+        // @todo - tests must be implemented after BAP-12589
+//        $this->validateExportResult();
+    }
+
+    public function testShouldSendMessageToExportProcessor()
+    {
+        $options['organization'] = $this->getContainer()
+            ->get('oro_security.security_facade')->getOrganization();
+
+        $this->client->followRedirects(false);
+        $this->client->request(
+            'GET',
+            $this->getUrl(
+                'oro_importexport_export_instant',
+                ['processorAlias' => 'oro_contact', '_format' => 'json']
+            )
+        );
+
+        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
+        $this->assertCount(1, $data);
+        $this->assertTrue($data['success']);
+
+        $this->assertMessageSent(Topics::EXPORT, [
+            'jobName' => JobExecutor::JOB_EXPORT_TO_CSV,
+            'processorAlias' => 'oro_contact',
+            'options' => $options,
+        ]);
     }
 
     /**
@@ -173,18 +204,21 @@ class ImportExportTest extends WebTestCase
 
         $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
+        $this->assertCount(1, $data);
         $this->assertTrue($data['success']);
-        $this->assertEquals(1, $data['readsCount']);
-        $this->assertEquals(0, $data['errorsCount']);
 
-        $this->client->request(
-            'GET',
-            $data['url']
-        );
+        // @todo - tests must be implemented after BAP-12589
+//        $this->assertEquals(1, $data['readsCount']);
+//        $this->assertEquals(0, $data['errorsCount']);
 
-        $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 200);
-        $this->assertResponseContentTypeEquals($result, 'text/csv');
+//        $this->client->request(
+//            'GET',
+//            $data['url']
+//        );
+
+//        $result = $this->client->getResponse();
+//        $this->assertResponseStatusCodeEquals($result, 200);
+//        $this->assertResponseContentTypeEquals($result, 'text/csv');
     }
 
     protected function validateExportResult()
