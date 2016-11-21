@@ -1,0 +1,11 @@
+<% if (icon.type === 'file-path') { %>
+    <img width="16" height="16" src="<%= icon.data.path %>">
+<% } else if (icon.type === 'icon') { %>
+    <i class="<%= icon.data.class %> hide-text"></i>
+<% } %>
+<%= _.escape(text) %>
+<% if (id === null) { %>
+    <span class="select2__result-entry-info">
+        (<%= _.__('oro.form.add_new') %>)
+    </span>
+<% } %>

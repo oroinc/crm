@@ -8,9 +8,6 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
                 max: 100
-        customer:
-            - Valid: ~
-            - NotBlank: ~
         dataChannel:
             - NotBlank: ~
         organization:
