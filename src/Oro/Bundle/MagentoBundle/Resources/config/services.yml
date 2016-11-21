@@ -997,6 +997,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
         arguments:
             - '@oro_magento.provider.channel_type'
+            - '@liip_imagine.cache.manager'
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 
