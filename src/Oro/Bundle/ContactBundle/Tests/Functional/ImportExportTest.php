@@ -151,7 +151,7 @@ class ImportExportTest extends WebTestCase
                 'success'    => true,
                 'message'    => 'File was successfully imported.',
                 'errorsUrl'  => null,
-                'importInfo' => sprintf('%s entities were added, %s entities were updated', $added, $replaced)
+                'importInfo' => sprintf('%s contacts were added, %s contacts were updated', $added, $replaced)
             ],
             $data
         );

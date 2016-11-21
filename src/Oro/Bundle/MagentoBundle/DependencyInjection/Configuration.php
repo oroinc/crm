@@ -43,7 +43,7 @@ class Configuration implements ConfigurationInterface
                             )
                             ->example('10 minutes')
                         ->end()
-                        ->scalarNode('initial_import_step_interval')
+                        ->scalarNode('import_step_interval')
                             ->defaultValue('7 days')
                             ->cannotBeEmpty()
                             ->info(

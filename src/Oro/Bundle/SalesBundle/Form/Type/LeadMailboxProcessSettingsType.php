@@ -38,19 +38,6 @@ class LeadMailboxProcessSettingsType extends AbstractType
                 ]
             ]
         )->add(
-            'channel',
-            'oro_channel_select_type',
-            [
-                'required' => true,
-                'label'    => 'oro.sales.lead.data_channel.label',
-                'entities' => [
-                    'Oro\\Bundle\\SalesBundle\\Entity\\Lead'
-                ],
-                'constraints' => [
-                    new NotNull()
-                ]
-            ]
-        )->add(
             'source',
             'oro_sales_lead_mailbox_process_source',
             [

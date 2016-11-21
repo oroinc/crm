@@ -10,26 +10,26 @@ use Guzzle\Http\Client;
 use Guzzle\Plugin\Cookie\Cookie;
 use Guzzle\Plugin\Cookie\CookieJar\ArrayCookieJar;
 use Guzzle\Plugin\Cookie\CookiePlugin;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class FeatureContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
     OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary, SalesExtension;
 
     /**
      * @var string Path to saved template
@@ -42,19 +42,7 @@ class FeatureContext extends OroFeatureContext implements
     protected $importFile;
 
     /**
-     * @Given /^(?:|I )open (Opportunity) creation page$/
-     */
-    public function openOpportunityCreationPage()
-    {
-        /** @var MainMenu $menu */
-        $menu = $this->createElement('MainMenu');
-        $menu->openAndClick('Sales/ Opportunities');
-        $this->waitForAjax();
-        $this->getPage()->clickLink('Create Opportunity');
-    }
-
-    /**
-     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
+     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
     {
@@ -332,7 +320,7 @@ class FeatureContext extends OroFeatureContext implements
         return $customers;
     }
 
-    /**
+    /*
      * @Given /^(?:|I )go to Opportunity Index page$/
      */
     public function iGoToOpportunityIndexPage()
@@ -399,14 +387,6 @@ class FeatureContext extends OroFeatureContext implements
     {
         $csv = array_map('str_getcsv', file($this->template));
         self::assertContains($column, $csv[0]);
-    }
-
-    /**
-     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
-     */
-    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
     }
 
     /**
@@ -507,5 +487,39 @@ class FeatureContext extends OroFeatureContext implements
         $row = $customerOpportunitiesGrid->getRowByContent($opportunityName);
 
         self::assertTrue($row->isValid());
+    }
+
+    /**
+     * @Given CRM has next (Opportunity Probabilities):
+     */
+    public function crmHasNextOpportunityProbabilities(TableNode $table)
+    {
+        /** @var MainMenu $mainMenu */
+        $mainMenu = $this->createElement('MainMenu');
+        $mainMenu->openAndClick('System/ Configuration');
+        $this->waitForAjax();
+
+        $sidebarMenu = $this->createElement('SidebarConfigMenu');
+        $sidebarMenu->clickLink('Opportunity');
+        $this->waitForAjax();
+
+        /** @var OpportunityProbabilitiesConfigForm $form */
+        $form = $this->createElement('OpportunityProbabilitiesConfigForm');
+        $form->fill($table);
+        $this->getSession()->getPage()->pressButton('Save settings');
+    }
+
+    /**
+     * @Then Opportunity (Probability) must comply to (Status):
+     */
+    public function opportunityProbabilityMustComplyToStatus(TableNode $table)
+    {
+        $page = $this->createElement('OroForm');
+
+        foreach ($table as $item) {
+            $page->fillField('Status', $item['Status']);
+            $this->waitForAjax();
+            self::assertEquals($item['Probability'], $page->findField('Probability')->getValue());
+        }
     }
 }

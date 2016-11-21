@@ -2,20 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
-use Oro\Bundle\SalesBundle\Entity\LeadAddress;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\SalesBundle\Model\B2bGuesser;
 use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
-use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
-
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub as Lead;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
@@ -27,10 +23,6 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $b2bGuesser = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Model\B2bGuesser')
-            ->disableOriginalConstructor()
-            ->getMock();
         $entityFieldProvider = $this
             ->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityFieldProvider')
             ->setMethods(['getFields'])
@@ -41,24 +33,24 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['qualify'])
             ->disableOriginalConstructor()
             ->getMock();
-        $workflowRegistry = $this
-            ->getMockBuilder('Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $entityFieldProvider->method('getFields')->willReturn([]);
-        $this->provider = new LeadToOpportunityProvider(
-            $b2bGuesser,
-            $entityFieldProvider,
-            $changeLeadStatus,
-            $workflowRegistry
-        );
+
+        $this->provider = $this->getMockBuilder('Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider')
+            ->setConstructorArgs([$entityFieldProvider, $changeLeadStatus])
+            ->setMethods(['createOpportunity'])
+            ->getMock();
+        $this->provider->expects($this->any())
+            ->method('createOpportunity')
+            ->will($this->returnCallback(function () {
+                return new Opportunity();
+            }));
     }
 
     public function testPrepareOpportunityForFormWithContact()
     {
         $lead = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Lead')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub')
             ->setMethods(['getContact', 'getName', 'getStatus'])
             ->getMock();
 

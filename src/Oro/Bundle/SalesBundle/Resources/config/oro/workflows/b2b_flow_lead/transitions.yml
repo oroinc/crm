@@ -2,7 +2,6 @@ workflows:
     b2b_flow_lead:
         transitions:
             qualify:
-                label: 'Qualify'
                 step_to: qualified
                 is_start: true
                 is_unavailable_hidden: true
@@ -50,7 +49,6 @@ workflows:
                                 case_insensitive: true
                 transition_definition: qualify_definition
             cancel:
-                label: 'Disqualify'
                 step_to: cancelled
                 is_start: true
                 is_unavailable_hidden: true
@@ -58,7 +56,6 @@ workflows:
                     icon: 'icon-remove'
                 transition_definition: cancel_definition
             reactivate:
-                label: 'Reactivate'
                 step_to: new
                 is_start: true
                 is_unavailable_hidden: true

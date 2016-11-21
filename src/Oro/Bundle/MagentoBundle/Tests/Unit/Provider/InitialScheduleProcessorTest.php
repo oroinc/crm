@@ -40,7 +40,8 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             $this->jobExecutor,
             $this->typesRegistry,
             $this->eventDispatcher,
-            $this->logger
+            $this->logger,
+            ['sync_settings' => ['import_step_interval' => '2 days']]
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
@@ -100,7 +101,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        AbstractInitialProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -131,6 +132,8 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
                 MessagePriority::VERY_LOW
             )
         );
+
+        $this->processor->process($integration);
     }
 
     public function testProcessJobNotRunning()
@@ -154,7 +157,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        AbstractInitialProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -209,7 +212,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        AbstractInitialProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -266,7 +269,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                        AbstractInitialProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
                     ]
                 )
             );
@@ -274,7 +277,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('setData')
             ->with(
                 [
-                    AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601),
+                    AbstractInitialProcessor::SYNCED_TO => $syncedTo->format(\DateTime::ISO8601),
                     AbstractInitialProcessor::SKIP_STATUS => true
                 ]
             );
@@ -315,7 +318,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will(
                 $this->returnValue(
                     [
-                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $initialStartDate->format(\DateTime::ISO8601),
+                        AbstractInitialProcessor::SYNCED_TO => $initialStartDate->format(\DateTime::ISO8601),
                         AbstractInitialProcessor::SKIP_STATUS => true
                     ]
                 )

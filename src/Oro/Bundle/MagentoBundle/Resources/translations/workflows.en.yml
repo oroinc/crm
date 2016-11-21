@@ -1,0 +1,57 @@
+oro:
+    workflow:
+        b2c_flow_abandoned_shopping_cart:
+            step:
+                open:
+                    label: Open
+                abandoned:
+                    label: Abandoned
+                converted_to_opportunity:
+                    label: 'Converted to opportunity'
+                converted:
+                    label: Converted
+            attribute:
+                notes:
+                    label: Notes
+                opportunity_name:
+                    label: 'Opportunity name'
+                opportunity_owner:
+                    label: Owner
+                opportunity_budget:
+                    label: 'Budget amount'
+                account:
+                    label: Account
+                contact:
+                    label: Contact
+            transition:
+                convert:
+                    label: Convert
+                place_order:
+                    label: 'Place an order'
+                convert_to_opportunity:
+                    label: 'Convert to opportunity'
+                abandon:
+                    label: Abandon
+                    warning_message: 'You are going to abandon this shopping cart.'
+                reopen:
+                    label: Reopen
+            label: 'Abandoned Shopping Cart'
+        b2c_flow_order_follow_up:
+            step:
+                not_contacted:
+                    label: 'Not contacted'
+                contacted:
+                    label: Contacted
+            attribute:
+                notes:
+                    label: Notes
+                feedback:
+                    label: Feedback
+                account:
+                    label: Account
+                contact:
+                    label: Contact
+            transition:
+                record_feedback:
+                    label: 'Record feedback'
+            label: 'Order Follow Up'

@@ -35,24 +35,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
     {
         $extension = $this->renameExtension;
 
-        $extension->renameTable($schema, $queries, 'oro_rel_46a29d19784fec5f827dff', 'oro_rel_46a29d19784fec5f1a3d8f');
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-            'customer_14831de6',
-            'customer_11e85188',
-            RelationType::MANY_TO_MANY
-        ));
-
-        $extension->renameTable($schema, $queries, 'oro_rel_46a29d1934e8bc9c7c8165', 'oro_rel_46a29d1934e8bc9c32a2d0');
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Order',
-            'order_19a88871',
-            'order_5f6f5774',
-            RelationType::MANY_TO_MANY
-        ));
-
         $extension->renameTable($schema, $queries, 'oro_rel_c3990ba634e8bc9c8dcd6f', 'oro_rel_c3990ba634e8bc9c5199de');
         $queries->addQuery(new UpdateExtendRelationQuery(
             'Oro\Bundle\ActivityListBundle\Entity\ActivityList',

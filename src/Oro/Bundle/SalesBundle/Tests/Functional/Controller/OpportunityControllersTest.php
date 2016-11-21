@@ -4,10 +4,8 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
@@ -18,9 +16,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
-
-    /** @var  Channel */
-    protected static $dataChannel;
 
     /** @var bool */
     protected $isRealGridRequest = false;
@@ -38,7 +33,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     protected function postFixtureLoad()
     {
         self::$customer = $this->getReference('default_b2bcustomer');
-        self::$dataChannel = $this->getReference('default_channel');
     }
 
     public function testIndex()
@@ -56,14 +50,12 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $form = $crawler->selectButton('Save and Close')->form();
         $name = 'name' . $this->generateRandomString();
         $form['oro_sales_opportunity_form[name]']         = $name;
-        $form['oro_sales_opportunity_form[customer]']     = self::$customer->getId();
         $form['oro_sales_opportunity_form[probability]']  = 50;
         $form['oro_sales_opportunity_form[budgetAmount][value]'] = 10000;
         $form['oro_sales_opportunity_form[budgetAmount][currency]'] = 'USD';
         $form['oro_sales_opportunity_form[customerNeed]'] = 10001;
         $form['oro_sales_opportunity_form[closeReason]']  = 'cancelled';
         $form['oro_sales_opportunity_form[owner]']        = 1;
-        $form['oro_sales_opportunity_form[dataChannel]']  = $this->getReference('default_channel')->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -190,7 +182,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     'gridFilters'         => [],
                     'assert'              => [
                         'name'         => 'opname',
-                        'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'budgetAmount' => 'USD50.0000',
                         'probability'  => 10,
                     ],
@@ -208,7 +199,6 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                     ],
                     'assert'              => [
                         'name'              => 'opname',
-                        'channelName'       => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'budgetAmount'      => 'USD50.0000',
                         'probability'       => 10,
                     ],

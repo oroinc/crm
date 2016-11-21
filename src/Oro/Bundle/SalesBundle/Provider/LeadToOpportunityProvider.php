@@ -2,45 +2,26 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Model\B2bGuesser;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Entity\ContactEmail;
-use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Oro\Bundle\ContactBundle\Entity\ContactAddress;
-use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
-
 class LeadToOpportunityProvider
 {
-    /**
-     * @var PropertyAccessor
-     */
+    /** @var PropertyAccessor */
     protected $accessor;
 
-    /**
-     * @var B2bGuesser
-     */
-    protected $b2bGuesser;
-
-    /**
-     * @var ChangeLeadStatus
-     */
+    /** @var ChangeLeadStatus */
     protected $changeLeadStatus;
 
-    /** @var WorkflowRegistry */
-    protected $workflowRegistry;
-
-    /**
-     * @var EntityFieldProvider
-     */
+    /** @var EntityFieldProvider */
     protected $entityFieldProvider;
 
     /**
@@ -88,23 +69,15 @@ class LeadToOpportunityProvider
     ];
 
     /**
-     * @param B2bGuesser $b2bGuesser
      * @param EntityFieldProvider $entityFieldProvider
      * @param ChangeLeadStatus $changeLeadStatus
-     * @param WorkflowRegistry $workflowRegistry
      */
-    public function __construct(
-        B2bGuesser $b2bGuesser,
-        EntityFieldProvider $entityFieldProvider,
-        ChangeLeadStatus $changeLeadStatus,
-        WorkflowRegistry $workflowRegistry
-    ) {
-        $this->b2bGuesser = $b2bGuesser;
+    public function __construct(EntityFieldProvider $entityFieldProvider, ChangeLeadStatus $changeLeadStatus)
+    {
         $this->accessor = PropertyAccess::createPropertyAccessor();
         $this->entityFieldProvider = $entityFieldProvider;
         $this->changeLeadStatus = $changeLeadStatus;
         $this->validateContactFields();
-        $this->workflowRegistry = $workflowRegistry;
     }
 
     /**
@@ -215,7 +188,7 @@ class LeadToOpportunityProvider
      */
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
-        $opportunity = new Opportunity();
+        $opportunity = $this->createOpportunity();
         $opportunity->setLead($lead);
 
         if ($isGetRequest) {
@@ -224,7 +197,7 @@ class LeadToOpportunityProvider
                 ->setContact($contact)
                 ->setName($lead->getName());
 
-            $this->b2bGuesser->setCustomer($opportunity, $lead);
+            $opportunity->setCustomerTarget($lead->getCustomerTarget());
         } else {
             $opportunity
                 // Set predefined contact entity to have proper validation
@@ -244,10 +217,7 @@ class LeadToOpportunityProvider
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
         $lead = $opportunity->getLead();
-        $customer = $opportunity->getCustomer();
-
         $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
-        $this->prepareCustomerToSave($customer, $opportunity);
 
         $saveResult = $this->changeLeadStatus->qualify($lead);
 
@@ -256,22 +226,6 @@ class LeadToOpportunityProvider
         }
 
         return $saveResult;
-    }
-
-    /**
-     * @param B2bCustomer $customer
-     * @param Opportunity $opportunity
-     */
-    protected function prepareCustomerToSave(B2bCustomer $customer, Opportunity $opportunity)
-    {
-        $contact = $opportunity->getContact();
-        if (!$customer->getContact() instanceof Contact) {
-            $customer->setContact($contact);
-        }
-
-        if ($customer->getAccount() instanceof Account) {
-            $customer->getAccount()->addContact($contact);
-        }
     }
 
     /**
@@ -285,21 +239,10 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param Lead $lead
-     *
-     * @return bool
+     * @return Opportunity
      */
-    public function isDisqualifyAndConvertAllowed(Lead $lead)
+    protected function createOpportunity()
     {
-        $isLeadWorkflowEnabled = !$this->workflowRegistry
-            ->getActiveWorkflowsByEntityClass('Oro\Bundle\SalesBundle\Entity\Lead')->isEmpty();
-
-        $isSalesFunnelWorkflowEnabled = !$this->workflowRegistry
-            ->getActiveWorkflowsByEntityClass('Oro\Bundle\SalesBundle\Entity\SalesFunnel')->isEmpty();
-
-        return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
-               !$isLeadWorkflowEnabled &&
-               !$isSalesFunnelWorkflowEnabled &&
-               $lead->getOpportunities()->count() === 0;
+        return new Opportunity();
     }
 }

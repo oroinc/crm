@@ -450,3 +450,12 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_sales.validator.b2bcustomer_email_delete"
             - "@oro_security.security_facade"
+
+    oro_sales.form.type.customer:
+        class: Oro\Bundle\SalesBundle\Form\Type\CustomerType
+        arguments:
+            - '@oro_entity.entity_reference_to_string_transformer'
+            - '@oro_sales.customer_config_provider'
+            - '@oro_entity.entity_alias_resolver'
+        tags:
+            - { name: form.type, alias: oro_sales_customer }

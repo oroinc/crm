@@ -121,6 +121,7 @@ oro:
             choose_opportunity: Choose an opportunity....
             choose_lead:        Choose a lead....
             choose_b2bcustomer: Choose a customer....
+            choose_account:     Choose an account ....
             choose_close_rsn:   Choose a close reason...
             tooltip:
                 account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
@@ -201,7 +202,7 @@ oro:
             organization.label:   Organization
             customer:
                 label:            Account
-                description:      A B2B customer the opportunity is created for
+                description:      A customer or an account the opportunity is created for
             data_channel:
                 label:            Channel
                 description:      One of active channels, from which the application will get information on this opportunity.
@@ -214,6 +215,8 @@ oro:
 
             workflow:
                 close_date.label: Close date
+            feature.label:        Opportunity
+            feature.description:  Enables Opportunity entity
             datagrid:
                 view:     View
                 update:   Update
@@ -272,7 +275,7 @@ oro:
             contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
-            customer.label:       Business Customer
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
@@ -285,6 +288,8 @@ oro:
                 change_error_message:  Unable to change lead status.
             convert:
                  error:           Unable to convert lead to opportunity
+            feature.label:        Lead
+            feature.description:  Enables Lead entity
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -364,6 +369,8 @@ oro:
             owner.label:          Owner
             data_channel.label:   Channel
             organization.label:   Organization
+            feature.label:        Sales Process (Deprecated)
+            feature.description:  Enables Sales Processes. Beware that this feature is deprecated and will be removed in a future.
 
             hint: 'Sales Process #%id%'
 
@@ -469,6 +476,8 @@ oro:
             groups:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
+                salesfunnel.title: Sales Process (Deprecated)
+                lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
                     title:          Probabilities
@@ -477,8 +486,17 @@ oro:
                         Manage opportunity statuses and assign default probabilities to them,
                         except for system statuses Closed Won and Closed Lost.
             fields:
+                sales_lead:
+                    feature_enabled.label:                     Enable Lead
+                sales_opportunity:
+                    feature_enabled.label:                     Enable Opportunity
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
+                sales_salesfunnel:
+                    feature_enabled.label:                     Enable Sales Process
 
         privilege:
             category.sales_data.label: Sales Data
+        customers:
+            opportunities:
+                grid.label: Opportunities
