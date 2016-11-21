@@ -455,7 +455,7 @@ services:
         class: Oro\Bundle\SalesBundle\Form\Type\CustomerType
         arguments:
             - '@oro_sales.customer_to_string_transformer'
-            - '@oro_sales.customer.customer_config_provider'
+            - '@oro_sales.customer.account_customer_config_provider'
             - '@oro_entity.entity_alias_resolver'
             - '@oro_sales.provider.customer.chain_customer_icon'
             - '@translator'
@@ -467,3 +467,4 @@ services:
         arguments:
             - '@oro_entity.entity_reference_to_string_transformer'
             - '@oro_entity.doctrine_helper'
+            - '@oro_sales.customer.customer_config_provider'

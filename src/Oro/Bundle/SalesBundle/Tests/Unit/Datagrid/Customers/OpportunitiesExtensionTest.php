@@ -19,36 +19,25 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
 
 class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /** @var OpportunitiesExtension */
     protected $extension;
 
-    /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
-    protected $opportunityProvider;
-
-    /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $configManger;
+    /** @var CustomerConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $configProvider;
 
     public function setUp()
     {
-        $configManager             = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
+        $this->configProvider = $this
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider')
             ->disableOriginalConstructor()
+            ->setMethods(['isCustomerClass'])
             ->getMock();
-        $this->opportunityProvider = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigProvider')
-            ->disableOriginalConstructor()
-            ->setMethods(['hasConfig', 'getConfig'])
-            ->getMock();
-        $configManager
-            ->expects($this->any())
-            ->method('getProvider')
-            ->with('opportunity')
-            ->willReturn($this->opportunityProvider);
 
-        $this->extension = new OpportunitiesExtension($configManager);
+        $this->extension = new OpportunitiesExtension($this->configProvider);
     }
 
     /**
@@ -62,7 +51,7 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable(array $config, array $parameters, $result, $enabledConfig = null)
     {
         $this->extension->setParameters(new ParameterBag($parameters));
-        $this->prepareEntityConfigs($parameters, $enabledConfig);
+        $this->prepareConfigProvider($parameters, $enabledConfig);
         $this->assertEquals(
             $result,
             $this->extension->isApplicable(DatagridConfiguration::create($config))
@@ -107,7 +96,7 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
         );
         $customerId = 1;
         $customerIdParam = sprintf(':customerIdParam_%s', $customerField);
-        $qb = $this->prepareQueryBuilder(Opportunity::class, $customerField, $customerId, $customerIdParam, 'o');
+        $qb = $this->prepareQueryBuilder(Opportunity::class, $customerField, $customerId, $customerIdParam, 'customer');
         $datasource      = $this->getDatasource($qb);
         $config          = DatagridConfiguration::create([]);
 
@@ -136,23 +125,14 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
      * @param bool|null $enabledConfig
      * @param array     $parameters
      */
-    protected function prepareEntityConfigs(array $parameters, $enabledConfig = null)
+    protected function prepareConfigProvider(array $parameters, $enabledConfig = null)
     {
-        if (null !== $enabledConfig) {
-            $this->opportunityProvider
+        if ($enabledConfig !== null) {
+            $this->configProvider
                 ->expects($this->once())
-                ->method('hasConfig')
+                ->method('isCustomerClass')
                 ->with($parameters['customer_class'])
                 ->willReturn($enabledConfig);
-            if ($enabledConfig) {
-                $configId = new EntityConfigId('opportunity', $parameters['customer_class']);
-                $config   = new Config($configId, ['enabled' => true]);
-                $this->opportunityProvider
-                    ->expects($this->once())
-                    ->method('getConfig')
-                    ->with($parameters['customer_class'])
-                    ->willReturn($config);
-            }
         }
     }
 
@@ -196,7 +176,7 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($alias));
             $qb->expects($this->once())
                 ->method('andWhere')
-                ->with(sprintf('o.%s = %s', $customerField, $customerIdParam))
+                ->with(sprintf('%s.%s = %s', $alias, $customerField, $customerIdParam))
                 ->will($this->returnSelf());
             $qb->expects($this->once())
                 ->method('setParameter')

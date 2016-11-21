@@ -108,7 +108,7 @@ class CustomerSearchHandler extends ContextSearchHandler
      */
     protected function getSearchAliases()
     {
-        $customers = $this->customerConfigProvider->getAssociatedCustomerClasses($this->class);
+        $customers = $this->customerConfigProvider->getCustomerClasses();
 
         return array_values($this->indexer->getEntityAliases($customers));
     }

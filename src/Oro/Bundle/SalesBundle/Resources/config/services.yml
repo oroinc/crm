@@ -444,7 +444,7 @@ services:
         parent: oro_activity.form.handler.autocomplete
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
-            - [setCustomerConfigProvider, ['@oro_sales.customer.customer_config_provider']]
+            - [setCustomerConfigProvider, ['@oro_sales.customer.account_customer_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setRoutingHelper, ['@oro_entity.routing_helper']]
 
@@ -467,7 +467,5 @@ services:
     oro_sales.datagrid.extension.customers.account_opportunities:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountOpportunitiesExtension
         parent: oro_sales.datagrid.extension.customers.opportunities
-        arguments:
-            - '@oro_sales.customer.account_customer_config_provider'
         tags:
             - { name: oro_datagrid.extension }

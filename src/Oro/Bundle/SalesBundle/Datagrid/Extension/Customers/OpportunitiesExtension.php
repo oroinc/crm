@@ -53,10 +53,12 @@ class OpportunitiesExtension extends AbstractExtension
         $queryBuilder     = $datasource->getQueryBuilder();
         $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
         $opportunityAlias = $this->getOpportunityAlias($queryBuilder);
-        $queryBuilder->join(sprintf('%s.customerAssociation', $opportunityAlias), 'customer');
+        $customerAlias = 'customer';
+        $queryBuilder->join(sprintf('%s.customerAssociation', $opportunityAlias), $customerAlias);
         $queryBuilder->andWhere(
             sprintf(
-                'customer.%s = %s',
+                '%s.%s = %s',
+                $customerAlias,
                 $customerField,
                 $customerIdParam
             )

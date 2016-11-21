@@ -4,12 +4,16 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 
 class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var CustomerToStringTransformer */
     protected $customerToStringTransformer;
+
+    /** @var CustomerConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $configProvider;
 
     public function setUp()
     {
@@ -56,12 +60,22 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityRepository')
             ->with('Oro\Bundle\SalesBundle\Entity\Customer')
             ->will($this->returnValue($customerRepository));
+        $this->configProvider = $this
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->configProvider
+            ->expects($this->any())
+            ->method('getCustomerClasses')
+            ->willReturn([]);
+
 
         $this->customerToStringTransformer = $this->getMockBuilder(CustomerToStringTransformer::class)
             ->setMethods(['createCustomer'])
             ->setConstructorArgs([
                 $entityToStringTransformer,
-                $doctrineHelper
+                $doctrineHelper,
+                $this->configProvider
             ])
             ->getMock();
         $this->customerToStringTransformer->expects($this->any())
