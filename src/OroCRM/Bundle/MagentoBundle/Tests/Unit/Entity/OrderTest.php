@@ -113,7 +113,6 @@ class OrderTest extends AbstractEntityTestCase
         } else {
             $this->assertFalse($this->entity->isCompleted());
         }
-
     }
 
     /**
