@@ -7,7 +7,7 @@
         {% set now = date() %}
         {% set difference = date(eventDate).diff(now) %}
 
-        {{ eventDate|oro_format_datetime }} 
+        {{ eventDate|oro_format_datetime }}
         ({{ 'oro.magento.website_activity.days_ago'|transchoice(difference.days) }})
     {% else %}
         {{ 'oro.ui.empty'|trans }}
@@ -20,7 +20,7 @@
             <span class="widget-title">{{ 'oro.magento.website_activity.metrics.label'|trans }}</span>
         </div>
         <div class="row-fluid">
-           {{ ui.renderProperty(
+            {{ ui.renderProperty(
                 'oro.magento.website_activity.metrics.data.site_visit_count.label'|trans,
                 metrics.visit_count
             ) }}
@@ -39,14 +39,14 @@
             {{ ui.renderHtmlProperty(
                 'oro.magento.website_activity.metrics.data.most_viewed_page.label'|trans,
                 metrics.most_viewed_page
-                ? ui.renderUrl(metrics.most_viewed_page.url, metrics.most_viewed_page.title)
-                : 'oro.ui.empty'|trans
+                    ? ui.renderUrl(metrics.most_viewed_page.url, metrics.most_viewed_page.title)
+                    : 'oro.ui.empty'|trans
             ) }}
             {{ ui.renderHtmlProperty(
                 'oro.magento.website_activity.metrics.data.last_viewed_page.label'|trans,
                 metrics.last_viewed_page
-                ? ui.renderUrl(metrics.last_viewed_page.url, metrics.last_viewed_page.title)
-                : 'oro.ui.empty'|trans
+                    ? ui.renderUrl(metrics.last_viewed_page.url, metrics.last_viewed_page.title)
+                    : 'oro.ui.empty'|trans
             ) }}
             {{ ui.renderProperty(
                 'oro.magento.website_activity.metrics.data.average_visit_views.label'|trans,
