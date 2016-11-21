@@ -5,14 +5,14 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 {
@@ -132,8 +132,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
                 MessagePriority::VERY_LOW
             )
         );
-
-        $this->processor->process($integration);
     }
 
     public function testProcessJobNotRunning()
@@ -335,17 +333,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob();
 
         $this->processor->process($integration);
-
-        self::assertMessageSent(
-            Topics::SYNC_INITIAL_INTEGRATION,
-            new Message(
-                [
-                    'integration_id' => 'testChannel',
-                    'connector_parameters' => ['skip-dictionary' => true],
-                ],
-                MessagePriority::VERY_LOW
-            )
-        );
     }
 
     /**
