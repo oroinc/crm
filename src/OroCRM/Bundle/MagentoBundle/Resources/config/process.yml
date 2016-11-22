@@ -129,6 +129,10 @@ definitions:
                             owner:          $owner
                             organization:   $organization
                     - '@unset_value': [$.accountName]
+            - '@call_method': # add Contact
+                object: $account
+                method: addContact
+                method_parameters: [$contact]
 
     magento_customer_export:
         label:   'Export Magento Customer to Magento'

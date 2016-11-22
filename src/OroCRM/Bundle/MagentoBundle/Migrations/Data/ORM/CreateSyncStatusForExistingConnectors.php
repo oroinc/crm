@@ -65,7 +65,7 @@ class CreateSyncStatusForExistingConnectors extends AbstractFixture
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
         $status = new Status();
-        $status->setData([AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncStartDate->format(\DateTime::ISO8601)]);
+        $status->setData([AbstractInitialProcessor::SYNCED_TO => $syncStartDate->format(\DateTime::ISO8601)]);
         $status->setConnector($connector);
         $status->setDate($now);
         $status->setChannel($integration);

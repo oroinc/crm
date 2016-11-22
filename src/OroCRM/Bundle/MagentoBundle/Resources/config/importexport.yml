@@ -449,12 +449,19 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_magento.provider.initial_processor:
-        class: %orocrm_magento.provider.initial_processor.class%
+    orocrm_magento.provider.sync.processor:
+        class: OroCRM\Bundle\MagentoBundle\Provider\MagentoSyncProcessor
         parent: oro_integration.sync.processor
         abstract: true
+        tags:
+            - { name: orocrm_magento.bundle_config.aware }
         calls:
             - [setChannelClassName, [%oro_integration.entity.class%]]
+
+    orocrm_magento.provider.initial_processor:
+        class: %orocrm_magento.provider.initial_processor.class%
+        parent: orocrm_magento.provider.sync.processor
+        abstract: true
 
     orocrm_magento.provider.newsletter_subscriber.initial_sync_processor:
         class: %orocrm_magento.provider.newsletter_subscriber.initial_sync_processor.class%

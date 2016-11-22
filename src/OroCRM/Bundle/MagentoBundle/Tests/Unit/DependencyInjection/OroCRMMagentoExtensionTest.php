@@ -14,7 +14,7 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
         $config = [
             'sync_settings' => [
                 'mistiming_assumption_interval' => '10 minutes',
-                'initial_import_step_interval' => '1 day',
+                'import_step_interval' => '1 day',
                 'region_sync_interval' => '1 day',
                 'skip_ssl_verification' => false
             ]
