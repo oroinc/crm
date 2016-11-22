@@ -393,7 +393,7 @@ class Opportunity extends ExtendOpportunity implements
      * @var B2bCustomer
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="opportunities")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
