@@ -390,7 +390,7 @@ class Opportunity extends ExtendOpportunity implements
      *     inversedBy="opportunities",
      *     cascade={"persist"}
      * )
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
