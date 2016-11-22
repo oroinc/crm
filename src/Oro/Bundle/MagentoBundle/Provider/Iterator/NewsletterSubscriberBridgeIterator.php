@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
@@ -153,5 +154,26 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         $this->logger->info(sprintf('Loading NewsletterSubscriber by id: %s', $this->key()));
 
         return $this->current;
+    }
+
+    /**
+     * Fix time frame if it's possible to retrieve server time.
+     *
+     * @param string $dateField
+     * @return bool | \DateTime
+     */
+    protected function fixServerTime($dateField)
+    {
+        if (!$this->isInitialSync() && $this->transport instanceof ServerTimeAwareInterface) {
+            $time = $this->transport->getServerTime();
+            if (false !== $time) {
+                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
+
+                return $frameLimit;
+            }
+        }
+
+        return false;
     }
 }

@@ -21,6 +21,11 @@ use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroMagentoBundle as Integrat
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -32,8 +37,12 @@ class OroMagentoBundleInstaller implements
     IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
     VisitEventAssociationExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    OpportunityExtensionAwareInterface,
+    LeadExtensionAwareInterface
 {
+    use LeadExtensionTrait, OpportunityExtensionTrait;
+
     /** @var ActivityExtension */
     protected $activityExtension;
 
@@ -94,7 +103,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -152,6 +161,8 @@ class OroMagentoBundleInstaller implements
         $this->addActivityAssociations($schema);
         $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
+        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
+        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
     }
 
     /**

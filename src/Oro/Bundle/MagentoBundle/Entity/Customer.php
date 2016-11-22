@@ -39,6 +39,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  * @Config(
  *      routeName="oro_magento_customer_index",
+ *      routeCreate="oro_magento_customer_create",
  *      routeView="oro_magento_customer_view",
  *      defaultValues={
  *          "entity"={
