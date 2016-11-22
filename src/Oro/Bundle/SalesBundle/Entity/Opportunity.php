@@ -271,6 +271,23 @@ class Opportunity extends ExtendOpportunity implements
     protected $budgetAmountValue;
 
     /**
+     * @var double
+     *
+     * @ORM\Column(name="base_budget_amount_value", type="money", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={
+     *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=56
+     *      }
+     *  }
+     * )
+     */
+    protected $baseBudgetAmountValue;
+
+    /**
      * Changes to this value object wont affect entity change set
      * To change persisted price value you should create and set new Multicurrency
      *
@@ -319,6 +336,23 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $closeRevenueValue;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="base_close_revenue_value", type="money", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={
+     *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=66
+     *      }
+     *  }
+     * )
+     */
+    protected $baseCloseRevenueValue;
 
     /**
      * @var string
