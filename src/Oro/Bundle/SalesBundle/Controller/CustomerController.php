@@ -79,6 +79,6 @@ class CustomerController extends Controller
      */
     protected function getCustomerConfigProvider()
     {
-        return $this->get('oro_sales.customer.config_provider');
+        return $this->get('oro_sales.customer.account_config_provider');
     }
 }
