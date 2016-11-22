@@ -91,7 +91,8 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
     }
 
     /**
-     * @param object[] $entities
+     * @param UnitOfWork $uow
+     * @param object[]   $entities
      */
     protected function prepareChangedMagentoCustomers(UnitOfWork $uow, array $entities)
     {
