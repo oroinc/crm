@@ -2,13 +2,13 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMOrderData;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
  * @dbIsolationPerTest
@@ -25,11 +25,11 @@ class OrderTest extends WebTestCase
         $this->loadFixtures([LoadRFMOrderData::class]);
     }
 
+    /**
+     * test for magento_analytics_customer_calculate process
+     */
     public function testShouldScheduleAnalyticsCalculateWhenOrderSubtotalAmountIsChanged()
     {
-        // test for code written on modern yaml programming language
-        // magento_analytics_customer_calculate from process.yml
-
         /** @var Order $order */
         $order = $this->getReference('order_1');
         $channel = $order->getDataChannel();

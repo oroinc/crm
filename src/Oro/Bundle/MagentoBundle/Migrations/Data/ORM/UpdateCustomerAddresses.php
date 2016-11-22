@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\IntegrationBundle\Manager\GenuineSyncScheduler;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -28,13 +28,13 @@ class UpdateCustomerAddresses extends AbstractFixture implements ContainerAwareI
         $qb->where($qb->expr()->isNull('a.originId'));
         $qb->andWhere($qb->expr()->isNotNull('cc.id'));
 
-        $invalidEntriesAwareChannelIds = $qb->getQuery()->getArrayResult();
+        $invalidEntriesAwareIntegrationIds = $qb->getQuery()->getArrayResult();
 
         /*
          * Find all invalid addresses and schedule force sync for them
          */
-        foreach ($invalidEntriesAwareChannelIds as $channel) {
-            $this->getSyncScheduler()->schedule($channel['id'], 'customer', [
+        foreach ($invalidEntriesAwareIntegrationIds as $integration) {
+            $this->getSyncScheduler()->schedule($integration['id'], 'customer', [
                 'force' => true
             ]);
         }

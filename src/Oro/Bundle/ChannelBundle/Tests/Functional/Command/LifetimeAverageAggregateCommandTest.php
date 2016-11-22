@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Command;
 
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadLifetimeHistoryData;
 
 /**
  * @outputBuffering false
@@ -23,13 +23,6 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
         $this->loadFixtures([LoadLifetimeHistoryData::class]);
     }
 
-    public function testShouldOutputCommandHelp()
-    {
-        $result = $this->runCommand('oro:cron:lifetime-average:aggregate', ['--help']);
-
-        $this->assertContains("Usage:\n  oro:cron:lifetime-average:aggregate [options]", $result);
-    }
-
     public function testShouldSendAggregateLifetimeAverageMessage()
     {
         $result = $this->runCommand('oro:cron:lifetime-average:aggregate', []);
@@ -39,7 +32,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
         self::assertMessageSent(
             Topics::AGGREGATE_LIFETIME_AVERAGE,
             new Message(
-                ['force' => false, 'clear_table_use_delete' => false],
+                ['force' => false, 'use_truncate' => true],
                 MessagePriority::VERY_LOW
             )
         );

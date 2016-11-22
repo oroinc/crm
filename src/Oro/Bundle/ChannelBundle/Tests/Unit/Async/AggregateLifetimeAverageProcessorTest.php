@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Async;
 
+use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -10,9 +13,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
-use Oro\Bundle\ChannelBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
@@ -172,7 +172,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
         $message = new NullMessage();
         $message->setBody(JSON::encode([
             'force' => true,
-            'clear_table_use_delete' => true,
+            'use_truncate' => false,
         ]));
 
         $status = $processor->process($message, new NullSession());
@@ -215,7 +215,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
         $message->setMessageId('theMessageId');
         $message->setBody(JSON::encode([
             'force' => true,
-            'clear_table_use_delete' => true,
+            'use_truncate' => false,
         ]));
 
         $processor->process($message, new NullSession());

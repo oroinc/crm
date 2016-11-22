@@ -6,9 +6,8 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -24,6 +23,7 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
+use Psr\Log\LoggerInterface;
 
 /**
  * @dbIsolationPerTest
@@ -119,7 +119,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->once())
-            ->method('critical')
+            ->method('error')
             ->with('Integration not found: theIntegrationId', ['message' => $message])
         ;
 
@@ -151,7 +151,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->once())
-            ->method('critical')
+            ->method('error')
             ->with('Integration is not enabled: theIntegrationId', ['message' => $message])
         ;
 
@@ -357,14 +357,14 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             ->expects(self::any())
             ->method('find')
             ->with(Integration::class)
-            ->willReturn($integration);
+            ->willReturn($integration)
         ;
 
         $entityRepositoryMock = $this->getMock(EntityRepository::class, [], [], '', false);
         $entityRepositoryMock
             ->expects(self::any())
             ->method('findOneBy')
-            ->willReturn($channel);
+            ->willReturn($channel)
         ;
 
         $helperMock = $this->getMock(DoctrineHelper::class, [], [], '', false);

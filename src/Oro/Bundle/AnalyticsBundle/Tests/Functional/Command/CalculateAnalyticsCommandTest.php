@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
  * @dbIsolationPerTest
@@ -24,13 +24,6 @@ class CalculateAnalyticsCommandTest extends WebTestCase
 
         $this->initClient();
         $this->loadFixtures([LoadCustomerData::class]);
-    }
-
-    public function testShouldOutputHelpForTheCommand()
-    {
-        $result = $this->runCommand('oro:cron:analytic:calculate', ['--help']);
-
-        self::assertContains("Usage:\n  oro:cron:analytic:calculate [options]", $result);
     }
 
     public function testShouldScheduleCalculateAnalyticsForGivenChannel()

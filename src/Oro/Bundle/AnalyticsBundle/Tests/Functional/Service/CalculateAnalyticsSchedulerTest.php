@@ -2,14 +2,14 @@
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
  * @dbIsolationPerTest
@@ -28,15 +28,16 @@ class CalculateAnalyticsSchedulerTest extends WebTestCase
 
     public function testCouldBeGetFromContainerAsService()
     {
-        $service = $this->getContainer()->get('oro_analytics.schedule_calculate_analytics');
+        $service = $this->getContainer()->get('oro_analytics.calculate_analytics_scheduler');
 
         $this->assertInstanceOf(CalculateAnalyticsScheduler::class, $service);
     }
 
+    /**
+     * Test for analytics_channel_calculate_rfm process
+     */
     public function testShouldScheduleAnalyticsCalculateIfStatusTrueAndRFMEnabled()
     {
-        // test for code written on modern yaml programming language
-
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
         $channel->setStatus(false);

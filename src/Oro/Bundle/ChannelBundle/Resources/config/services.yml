@@ -224,7 +224,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'oro_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'oro_channel.channel.delete_succeed', method: processChannelChange}
-            - { name: kernel.event_listener, event: 'oro_channel.channel.status_change', method: processChannelChange}
 
     oro_channel.provider.utils.entity_state_provider:
         class: %oro_channel.provider.utils.entity_state_provider.class%

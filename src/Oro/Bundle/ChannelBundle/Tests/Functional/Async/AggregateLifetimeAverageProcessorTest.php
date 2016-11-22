@@ -1,14 +1,14 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Async;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\MessageQueue\Transport\Null\NullMessage;
-use Oro\Component\MessageQueue\Transport\Null\NullSession;
-use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Transport\Null\NullMessage;
+use Oro\Component\MessageQueue\Transport\Null\NullSession;
+use Oro\Component\MessageQueue\Util\JSON;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -48,7 +48,7 @@ class AggregateLifetimeAverageProcessorTest extends WebTestCase
         $processor = $this->getContainer()->get('oro_channel.async.aggregate_lifetime_average_processor');
 
         $message = new NullMessage();
-        $message->setBody(JSON::encode(['force' => true, 'clear_table_use_delete' => true]));
+        $message->setBody(JSON::encode(['force' => true, 'use_truncate' => false]));
         $message->setMessageId(uniqid('oro', true));
 
         $processor->process($message, new NullSession());

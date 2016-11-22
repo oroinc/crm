@@ -4,9 +4,8 @@ namespace Oro\Bundle\MagentoBundle\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -22,6 +21,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
+use Psr\Log\LoggerInterface;
 
 class SyncInitialIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
@@ -66,6 +66,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      * @param OptionalListenerManager $optionalListenerManager
      * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      * @param JobRunner $jobRunner
+     * @param IndexerInterface $indexer
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -114,7 +115,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         /** @var Integration $integration */
         $integration = $em->find(Integration::class, $body['integration_id']);
         if (! $integration) {
-            $this->logger->critical(
+            $this->logger->error(
                 sprintf('Integration not found: %s', $body['integration_id']),
                 ['message' => $message]
             );
@@ -122,7 +123,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
             return self::REJECT;
         }
         if (! $integration->isEnabled()) {
-            $this->logger->critical(
+            $this->logger->error(
                 sprintf('Integration is not enabled: %s', $body['integration_id']),
                 ['message' => $message]
             );

@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Async;
 
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -8,8 +10,6 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
-use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, TopicSubscriberInterface
@@ -48,7 +48,7 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
     {
         $body = array_replace([
             'force' => false,
-            'clear_table_use_delete' => false
+            'use_truncate' => true
         ], JSON::decode($message->getBody()));
 
         $ownerId = $message->getMessageId();
@@ -58,7 +58,7 @@ class AggregateLifetimeAverageProcessor implements MessageProcessorInterface, To
             /** @var LifetimeValueAverageAggregationRepository $repository */
             $repository  = $this->registry->getRepository(LifetimeValueAverageAggregation::class);
             if ($body['force']) {
-                $repository->clearTableData($body['clear_table_use_delete']);
+                $repository->clearTableData(! $body['use_truncate']);
             }
 
             $repository->aggregate($this->localeSettings->getTimeZone(), $body['force']);

@@ -1,9 +1,8 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -13,6 +12,7 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
+use Psr\Log\LoggerInterface;
 
 class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
@@ -79,17 +79,17 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
         /** @var Channel $channel */
         $channel = $em->find(Channel::class, $body['channel_id']);
         if (! $channel) {
-            $this->logger->critical(sprintf('Channel not found: %s', $body['channel_id']), ['message' => $message]);
+            $this->logger->error(sprintf('Channel not found: %s', $body['channel_id']), ['message' => $message]);
 
             return self::REJECT;
         }
         if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
-            $this->logger->critical(sprintf('Channel not active: %s', $body['channel_id']), ['message' => $message]);
+            $this->logger->error(sprintf('Channel not active: %s', $body['channel_id']), ['message' => $message]);
 
             return self::REJECT;
         }
         if (false == is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
-            $this->logger->critical(
+            $this->logger->error(
                 sprintf('Channel is not supposed to calculate analytics: %s', $body['channel_id']),
                 ['message' => $message]
             );

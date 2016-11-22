@@ -70,6 +70,6 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
      */
     private function getCalculateAnalyticsScheduler()
     {
-        return $this->container->get('oro_analytics.schedule_calculate_analytics');
+        return $this->container->get('oro_analytics.calculate_analytics_scheduler');
     }
 }

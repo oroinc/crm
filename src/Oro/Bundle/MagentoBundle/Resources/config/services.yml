@@ -1009,7 +1009,7 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@oro_magento.provider.initial_sync_processor'
             - '@oro_platform.optional_listeners.manager'
-            - '@oro_analytics.schedule_calculate_analytics'
+            - '@oro_analytics.calculate_analytics_scheduler'
             - '@oro_message_queue.job.runner'
             - '@oro_search.async.indexer'
             - '@logger'

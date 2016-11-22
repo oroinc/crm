@@ -3,8 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Command;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Component\Log\OutputLogger;
@@ -54,14 +54,14 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     {
         $logger    = new OutputLogger($output);
 
-        /** @var ChannelRepository $repository */
-        $repository = $this->getDoctrine()->getRepository(Channel::class);
+        /** @var IntegrationRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(Integration::class);
 
-        $channelId = $input->getOption('channel-id');
-        if ($channelId) {
-            $channel = $repository->getOrLoadById($channelId);
+        $integrationId = $input->getOption('channel-id');
+        if ($integrationId) {
+            $channel = $repository->getOrLoadById($integrationId);
             if (!$channel) {
-                throw new \InvalidArgumentException('Channel with given ID not found');
+                throw new \InvalidArgumentException('Integration with given ID not found');
             }
 
             $channels = [$channel];
@@ -69,7 +69,7 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
             $channels = $repository->getConfiguredChannelsForSync(ChannelType::TYPE);
         }
 
-        /** @var Channel $channel */
+        /** @var Integration $channel */
         foreach ($channels as $channel) {
             $logger->info(sprintf('Run sync for "%s" channel.', $channel->getName()));
 

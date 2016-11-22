@@ -2,18 +2,18 @@
 
 namespace Oro\Bundle\ChannelBundle\Command;
 
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Component\Console\Command\Command;
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Bundle\ChannelBundle\Async\Topics;
 
 class LifetimeAverageAggregateCommand extends Command implements CronCommandInterface, ContainerAwareInterface
 {
@@ -57,8 +57,8 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
             Topics::AGGREGATE_LIFETIME_AVERAGE,
             new Message(
                 [
-                    'force'                  => (bool) $input->getOption('force'),
-                    'clear_table_use_delete' => (bool) $input->getOption('use-delete'),
+                    'force' => (bool) $input->getOption('force'),
+                    'use_truncate' => ! (bool) $input->getOption('use-delete'),
                 ],
                 MessagePriority::VERY_LOW
             )

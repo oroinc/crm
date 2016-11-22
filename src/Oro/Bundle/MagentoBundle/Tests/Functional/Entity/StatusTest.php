@@ -2,15 +2,15 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Tests\Functional\DataFixtures\LoadChannelData as LoadIntegrationData;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel;
 
 /**
  * @dbIsolationPerTest
@@ -27,11 +27,11 @@ class StatusTest extends WebTestCase
         $this->loadFixtures([LoadChannel::class, LoadIntegrationData::class]);
     }
 
+    /**
+     * test for magento_analytics_customer_calculate_imported process
+     */
     public function testShouldScheduleAnalyticsCalculateWhenCompletedIntegrationStatusIsCreated()
     {
-        // test for code written on modern yaml programming language
-        // magento_analytics_customer_calculate_imported from process.yml
-
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
         /** @var Integration $integration */

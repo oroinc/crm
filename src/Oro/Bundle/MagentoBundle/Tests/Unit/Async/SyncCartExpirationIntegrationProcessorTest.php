@@ -1,12 +1,10 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Async;
 
-use Psr\Log\LoggerInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
@@ -17,6 +15,8 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
+use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,7 +95,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
     public function testShouldRejectMessageIfIntegrationNotExist()
     {
-        $repositoryStub = $this->createChannelRepositoryStub(null);
+        $repositoryStub = $this->createIntegrationRepositoryStub(null);
         $registryStub = $this->createRegistryStub($repositoryStub);
 
         $message = new NullMessage();
@@ -104,8 +104,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->once())
-            ->method('critical')
-            ->with('The channel should exist and be enabled: theIntegrationId', ['message' => $message])
+            ->method('error')
+            ->with('The integration should exist and be enabled: theIntegrationId', ['message' => $message])
         ;
 
         $processor = new SyncCartExpirationIntegrationProcessor(
@@ -123,10 +123,10 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
     public function testShouldRejectMessageIfIntegrationIsNotEnabled()
     {
-        $integration = new Channel();
+        $integration = new Integration();
         $integration->setEnabled(false);
 
-        $repositoryMock = $this->createChannelRepositoryStub($integration);
+        $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
         $message = new NullMessage();
@@ -135,8 +135,8 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->once())
-            ->method('critical')
-            ->with('The channel should exist and be enabled: theIntegrationId', ['message' => $message])
+            ->method('error')
+            ->with('The integration should exist and be enabled: theIntegrationId', ['message' => $message])
         ;
 
         $processor = new SyncCartExpirationIntegrationProcessor(
@@ -153,11 +153,11 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
     public function testShouldRejectIfIntegrationNotHaveCartConnector()
     {
-        $integration = new Channel();
+        $integration = new Integration();
         $integration->setEnabled(true);
         $integration->setConnectors(['foo', 'bar']);
 
-        $repositoryMock = $this->createChannelRepositoryStub($integration);
+        $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
         $message = new NullMessage();
@@ -166,12 +166,12 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger = $this->createLoggerMock();
         $logger
             ->expects($this->once())
-            ->method('critical')
+            ->method('error')
             ->with(
-                'The channel should have cart in connectors: theIntegrationId',
+                'The integration should have cart in connectors: theIntegrationId',
                 [
                     'message' => $message,
-                    'channel' => $integration
+                    'integration' => $integration
                 ]
             )
         ;
@@ -190,11 +190,11 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
 
     public function testShouldCallCartExpirationProcessorAndAckMessage()
     {
-        $integration = new Channel();
+        $integration = new Integration();
         $integration->setEnabled(true);
         $integration->setConnectors(['cart']);
 
-        $repositoryMock = $this->createChannelRepositoryStub($integration);
+        $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
 
         $syncProcessorMock = $this->createSyncProcessorMock();
@@ -220,15 +220,15 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|ChannelRepository
+     * @return \PHPUnit_Framework_MockObject_MockObject|IntegrationRepository
      */
-    private function createChannelRepositoryStub(Channel $channel = null)
+    private function createIntegrationRepositoryStub(Integration $integration = null)
     {
-        $repositoryMock = $this->getMock(ChannelRepository::class, [], [], '', false);
+        $repositoryMock = $this->getMock(IntegrationRepository::class, [], [], '', false);
         $repositoryMock
             ->expects(self::any())
             ->method('getOrLoadById')
-            ->willReturn($channel)
+            ->willReturn($integration)
         ;
         
         return $repositoryMock;
@@ -237,14 +237,14 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|RegistryInterface
      */
-    private function createRegistryStub(ChannelRepository $channelRepository = null)
+    private function createRegistryStub(IntegrationRepository $integrationRepository = null)
     {
         $registryMock = $this->getMock(RegistryInterface::class);
         $registryMock
             ->expects(self::any())
             ->method('getRepository')
-            ->with(Channel::class)
-            ->willReturn($channelRepository)
+            ->with(Integration::class)
+            ->willReturn($integrationRepository)
         ;
 
         return $registryMock;
