@@ -115,7 +115,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -531,7 +531,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_sales_b2bcustomer'),
             ['customer_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
@@ -666,7 +666,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact'),
