@@ -561,6 +561,42 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
+     * @param $value
+     * @return $this
+     */
+    public function setBaseBudgetAmountValue($value)
+    {
+        $this->baseBudgetAmountValue = $value;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseBudgetAmountValue()
+    {
+        return $this->baseBudgetAmountValue;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setBaseCloseRevenueValue($value)
+    {
+        $this->baseCloseRevenueValue = $value;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseCloseRevenueValue()
+    {
+        return $this->baseCloseRevenueValue;
+    }
+
+    /**
      * @param string $currency
      * @return Opportunity
      */
@@ -961,8 +997,6 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * Remove Customer
-     *
-     * @return Lead
      */
     public function removeCustomer()
     {
