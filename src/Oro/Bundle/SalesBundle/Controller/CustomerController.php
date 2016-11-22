@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 /**
  * @Route("/customer")
@@ -75,10 +75,10 @@ class CustomerController extends Controller
     }
 
     /**
-     * @return CustomerConfigProvider
+     * @return ConfigProvider
      */
     protected function getCustomerConfigProvider()
     {
-        return $this->get('oro_sales.customer.customer_config_provider');
+        return $this->get('oro_sales.customer.config_provider');
     }
 }

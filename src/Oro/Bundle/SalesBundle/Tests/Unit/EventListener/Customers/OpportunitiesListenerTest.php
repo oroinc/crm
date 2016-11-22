@@ -10,14 +10,14 @@ use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
 
 class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var OpportunitiesListener */
     protected $listener;
 
-    /** @var AccountCustomerConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AccountConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $provider;
 
     /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -28,8 +28,8 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerConfigProvider')
+        $this->provider       = $this
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')
             ->disableOriginalConstructor()
             ->setMethods(['isCustomerClass'])
             ->getMock();
@@ -38,16 +38,16 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getSingleEntityIdentifier'])
             ->getMock();
-        $this->translator = $this->getMock(TranslatorInterface::class);
-        $this->listener = new OpportunitiesListener($this->provider, $this->translator, $this->doctrineHelper);
+        $this->translator     = $this->getMock(TranslatorInterface::class);
+        $this->listener       = new OpportunitiesListener($this->provider, $this->translator, $this->doctrineHelper);
     }
 
     public function testAddOpportunities()
     {
-        $id = 5;
-        $entity = new TestEntity($id);
-        $customerClass = TestEntity::class;
-        $opportunitiesData = 'Opportunities List';
+        $id                 = 5;
+        $entity             = new TestEntity($id);
+        $customerClass      = TestEntity::class;
+        $opportunitiesData  = 'Opportunities List';
         $opportunitiesTitle = 'Opportunities Title';
 
         $env = $this->getMockBuilder('Twig_Environment')
@@ -73,7 +73,7 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->with('oro.sales.customers.opportunities.grid.label')
             ->willReturn($opportunitiesTitle);
 
-        $data = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
+        $data  = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
         $event = new BeforeViewRenderEvent($env, $data, $entity);
         $this->prepareConfigProvider($entity, true);
         $this->listener->addOpportunities($event);
@@ -88,14 +88,14 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
      * @dataProvider testAddOpportunitiesNotCustomerDataProvider
      *
      * @param object|null $entity
-     * @param string|null        $isCustomerClass
+     * @param string|null $isCustomerClass
      */
     public function testAddOpportunitiesNotCustomer($entity = null, $isCustomerClass = null)
     {
-        $env = $this->getMockBuilder('Twig_Environment')
+        $env   = $this->getMockBuilder('Twig_Environment')
             ->disableOriginalConstructor()
             ->getMock();
-        $data = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
+        $data  = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
         $event = new BeforeViewRenderEvent($env, $data, $entity);
 
         $this->prepareConfigProvider($entity, $isCustomerClass);
@@ -124,7 +124,7 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
     public function testAddOpportunitiesNotCustomerDataProvider()
     {
         return [
-            'no entity' => [],
+            'no entity'          => [],
             'not customer class' => [new TestEntity(), false],
         ];
     }

@@ -15,17 +15,17 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class OpportunitiesExtension extends AbstractExtension
 {
-    /** @var CustomerConfigProvider */
+    /** @var ConfigProvider */
     protected $customerConfigProvider;
 
     /**
-     * @param CustomerConfigProvider $customerConfigProvider
+     * @param ConfigProvider $customerConfigProvider
      */
-    public function __construct(CustomerConfigProvider $customerConfigProvider)
+    public function __construct(ConfigProvider $customerConfigProvider)
     {
         $this->customerConfigProvider = $customerConfigProvider;
     }
@@ -48,12 +48,12 @@ class OpportunitiesExtension extends AbstractExtension
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var $datasource OrmDataSource */
-        $customerClass = $this->parameters->get('customer_class');
-        $customerField = $this->getCustomerField($customerClass);
+        $customerClass    = $this->parameters->get('customer_class');
+        $customerField    = $this->getCustomerField($customerClass);
         $queryBuilder     = $datasource->getQueryBuilder();
         $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
         $opportunityAlias = $this->getOpportunityAlias($queryBuilder);
-        $customerAlias = 'customer';
+        $customerAlias    = 'customer';
         $queryBuilder->join(sprintf('%s.customerAssociation', $opportunityAlias), $customerAlias);
         $queryBuilder->andWhere(
             sprintf(

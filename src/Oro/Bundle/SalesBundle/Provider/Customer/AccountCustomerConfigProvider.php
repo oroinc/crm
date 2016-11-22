@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 
-class AccountCustomerConfigProvider extends CustomerConfigProvider
+class AccountConfigProvider extends ConfigProvider
 {
     /**
      * {@inheritdoc}

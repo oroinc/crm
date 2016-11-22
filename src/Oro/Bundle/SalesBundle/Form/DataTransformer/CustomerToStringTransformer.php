@@ -13,7 +13,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerToStringTransformer implements DataTransformerInterface
 {
@@ -23,18 +23,18 @@ class CustomerToStringTransformer implements DataTransformerInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /** @var CustomerConfigProvider */
+    /** @var ConfigProvider */
     protected $provider;
 
     /**
      * @param DataTransformerInterface $entityToStringTransformer
      * @param DoctrineHelper           $doctrineHelper
-     * @param CustomerConfigProvider   $provider
+     * @param ConfigProvider           $provider
      */
     public function __construct(
         DataTransformerInterface $entityToStringTransformer,
         DoctrineHelper $doctrineHelper,
-        CustomerConfigProvider $provider
+        ConfigProvider $provider
     ) {
         $this->entityToStringTransformer = $entityToStringTransformer;
         $this->doctrineHelper            = $doctrineHelper;

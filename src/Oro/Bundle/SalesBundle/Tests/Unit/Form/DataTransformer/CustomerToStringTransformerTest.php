@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\DataTransformer;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
 
 class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
@@ -12,7 +12,7 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
     /** @var CustomerToStringTransformer */
     protected $customerToStringTransformer;
 
-    /** @var CustomerConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
     public function setUp()
@@ -30,7 +30,7 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
                     return (new Account())->setName($decoded['value']);
                 }
 
-                $entity = new $decoded['entityClass'];
+                $entity       = new $decoded['entityClass'];
                 $accountIdRef = new \ReflectionProperty($decoded['entityClass'], 'id');
                 $accountIdRef->setAccessible(true);
                 $accountIdRef->setValue($entity, 1);
@@ -61,8 +61,9 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
             ->with('Oro\Bundle\SalesBundle\Entity\Customer')
             ->will($this->returnValue($customerRepository));
         $this->configProvider = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')
             ->disableOriginalConstructor()
+            ->setMethods(['getCustomerClasses'])
             ->getMock();
         $this->configProvider
             ->expects($this->any())
@@ -104,12 +105,12 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
         $accountIdRef->setValue($existingAccount, 1);
 
         return [
-            'new account' => [
+            'new account'      => [
                 json_encode(['value' => 'new account']),
                 (new Customer())
                     ->setTarget(
                         (new Account())
-                             ->setName('new account')
+                            ->setName('new account')
                     )
             ],
             'existing account' => [
@@ -140,7 +141,7 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
         $accountIdRef->setValue($existingAccount, 1);
 
         return [
-            'new account' => [
+            'new account'      => [
                 (new Customer())
                     ->setTarget(
                         (new Account())

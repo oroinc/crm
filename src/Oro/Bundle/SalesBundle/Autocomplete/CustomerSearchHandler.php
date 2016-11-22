@@ -12,7 +12,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerSearchHandler extends ContextSearchHandler
 {
@@ -22,7 +22,7 @@ class CustomerSearchHandler extends ContextSearchHandler
     /** @var CustomerIconProviderInterface */
     protected $customerIconProvider;
 
-    /** @var CustomerConfigProvider */
+    /** @var ConfigProvider */
     protected $customerConfigProvider;
 
     /** @var DoctrineHelper */
@@ -37,9 +37,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     }
 
     /**
-     * @param CustomerConfigProvider $customerConfigProvider
+     * @param ConfigProvider $customerConfigProvider
      */
-    public function setCustomerConfigProvider(CustomerConfigProvider $customerConfigProvider)
+    public function setCustomerConfigProvider(ConfigProvider $customerConfigProvider)
     {
         $this->customerConfigProvider = $customerConfigProvider;
     }

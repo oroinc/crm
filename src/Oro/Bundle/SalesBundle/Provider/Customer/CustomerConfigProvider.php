@@ -9,7 +9,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-class CustomerConfigProvider
+class ConfigProvider
 {
     /** @var SecurityFacade */
     protected $securityFacade;
@@ -66,7 +66,7 @@ class CustomerConfigProvider
         $customerClasses = $this->getCustomerClasses();
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
-            $result[] = [
+            $result[]    = [
                 'className'   => $class,
                 'label'       => $this->getLabel($class),
                 'icon'        => $this->getIcon($class),

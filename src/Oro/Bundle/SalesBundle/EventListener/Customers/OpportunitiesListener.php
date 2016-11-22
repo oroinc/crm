@@ -2,15 +2,17 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
-use Doctrine\Common\Util\ClassUtils;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
-use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Symfony\Component\Translation\TranslatorInterface;
+
+use Doctrine\Common\Util\ClassUtils;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class OpportunitiesListener
 {
-    /** @var CustomerConfigProvider */
+    /** @var ConfigProvider */
     protected $customerConfigProvider;
 
     /** @var TranslatorInterface */
@@ -20,18 +22,18 @@ class OpportunitiesListener
     protected $doctrineHelper;
 
     /**
-     * @param CustomerConfigProvider $customerConfigProvider
+     * @param ConfigProvider      $customerConfigProvider
      * @param TranslatorInterface $translator
      * @param DoctrineHelper      $helper
      */
     public function __construct(
-        CustomerConfigProvider $customerConfigProvider,
+        ConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
         DoctrineHelper $helper
     ) {
         $this->customerConfigProvider = $customerConfigProvider;
-        $this->translator          = $translator;
-        $this->doctrineHelper      = $helper;
+        $this->translator             = $translator;
+        $this->doctrineHelper         = $helper;
     }
 
     /**
@@ -47,7 +49,7 @@ class OpportunitiesListener
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' =>
                      [
-                         'customer_id' => $this->doctrineHelper->getSingleEntityIdentifier($entity),
+                         'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
                          'customer_class' => ClassUtils::getClass($entity),
                      ]
                 ]

@@ -9,30 +9,26 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
-use Oro\Bundle\EntityConfigBundle\Config\Config;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /** @var OpportunitiesExtension */
     protected $extension;
 
-    /** @var CustomerConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
     public function setUp()
     {
         $this->configProvider = $this
-            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\CustomerConfigProvider')
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider')
             ->disableOriginalConstructor()
             ->setMethods(['isCustomerClass'])
             ->getMock();
