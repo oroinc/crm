@@ -4,27 +4,20 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
 
-use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
-
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
 class ConfigProvider
 {
-    /** @var ManagerInterface */
-    protected $gridManager;
-
     /** @var ConfigManager */
     protected $configManager;
 
     /**
      * @param ConfigManager    $configManager
-     * @param ManagerInterface $gridManager
      */
-    public function __construct(ConfigManager $configManager, ManagerInterface $gridManager)
+    public function __construct(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
-        $this->gridManager   = $gridManager;
     }
 
     /**
@@ -72,7 +65,6 @@ class ConfigProvider
                 'label'           => $this->getLabel($class),
                 'icon'            => $this->getIcon($class),
                 'gridName'        => $defaultGrid,
-                'gridAclResource' => $this->getGridAclResource($defaultGrid),
                 'routeCreate'     => $routeCreate,
             ];
         }
@@ -142,17 +134,5 @@ class ConfigProvider
         }
 
         return $classes;
-    }
-
-    /**
-     * @param string $gridName
-     *
-     * @return bool
-     */
-    protected function getGridAclResource($gridName)
-    {
-        $gridConfig = $this->gridManager->getConfigurationForGrid($gridName);
-
-        return $gridConfig ? $gridConfig->getAclResource() : null;
     }
 }

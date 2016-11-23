@@ -26,10 +26,10 @@ class CustomerController extends Controller
      */
     public function gridDialogAction($entityClass)
     {
-        $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
+        $resolvedClass    = $this->getRoutingHelper()->resolveEntityClass($entityClass);
         $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->getCustomersData();
+        $entityTargets    = $this->getCustomersData();
 
         return [
             'sourceEntityClassAlias' => $entityClassAlias,
@@ -87,20 +87,21 @@ class CustomerController extends Controller
      */
     public function getCustomersData()
     {
-        $customerData = $this->getCustomerConfigProvider()->getCustomersData();
+        $customerData   = $this->getCustomerConfigProvider()->getCustomersData();
         $securityFacade = $this->get('oro_security.security_facade');
-
-        $allowed = [];
-        $isFirstSet = false;
+        $gridManager    = $this->get('oro_datagrid.datagrid.manager');
+        $allowed        = [];
+        $isFirstSet     = false;
 
         foreach ($customerData as $customer) {
-            $isAllowed = !$customer['gridAclResource'] || $securityFacade->isGranted($customer['gridAclResource']);
+            $gridConfig      = $gridManager->getConfigurationForGrid($customer['gridName']);
+            $gridAclResource = $gridConfig ? $gridConfig->getAclResource() : null;
+            $isAllowed       = $securityFacade->isGranted($gridAclResource);
             if ($isAllowed) {
                 $customer['first'] = !$isFirstSet;
                 if (!$isFirstSet) {
                     $isFirstSet = true;
                 }
-                unset($customer['gridAclResource']);
                 $allowed[] = $customer;
             }
         }

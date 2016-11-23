@@ -78,6 +78,9 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
                 'importexport' => [
                     'excluded' => true,
                 ],
+                'extend' => [
+                    'on_delete' => 'CASCADE'
+                ]
             ]
         );
     }

@@ -40,7 +40,6 @@ class AddCustomersTable implements Migration
 
     /**
      * @param Schema $schema
-     * @param CustomerExtension $customerExtension
      */
     public static function addCustomersTable(Schema $schema)
     {
@@ -60,7 +59,7 @@ class AddCustomersTable implements Migration
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 }

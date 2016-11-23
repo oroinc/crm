@@ -460,6 +460,7 @@ services:
             - '@oro_sales.provider.customer.chain_customer_icon'
             - '@translator'
             - '@oro_security.security_facade'
+            - '@oro_datagrid.datagrid.manager'
         tags:
             - { name: form.type, alias: oro_sales_customer }
 
