@@ -12,19 +12,19 @@ use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
  */
 class WebsiteMetricsProvider
 {
-    /** @var TrackingVisitProvider */
+    /** @var TrackingVisitProviderInterface */
     protected $visitProvider;
 
-    /** @var TrackingVisitEventProvider */
+    /** @var TrackingVisitEventProviderInterface */
     protected $visitEventProvider;
 
     /**
-     * @param TrackingVisitProvider $visitProvider
-     * @param TrackingVisitEventProvider $visitEventProvider
+     * @param TrackingVisitProviderInterface $visitProvider
+     * @param TrackingVisitEventProviderInterface $visitEventProvider
      */
     public function __construct(
-        TrackingVisitProvider $visitProvider,
-        TrackingVisitEventProvider $visitEventProvider
+        TrackingVisitProviderInterface $visitProvider,
+        TrackingVisitEventProviderInterface $visitEventProvider
     ) {
         $this->visitProvider = $visitProvider;
         $this->visitEventProvider = $visitEventProvider;

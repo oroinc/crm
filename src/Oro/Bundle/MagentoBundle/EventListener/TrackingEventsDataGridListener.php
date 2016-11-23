@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
