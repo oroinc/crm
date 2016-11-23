@@ -74,7 +74,7 @@ class CustomerType extends AbstractType
             function (array $customer) {
                 return $customer['className'] === Account::class;
             },
-            $customersData
+            $view->vars['createCustomersData']
         );
     }
 
