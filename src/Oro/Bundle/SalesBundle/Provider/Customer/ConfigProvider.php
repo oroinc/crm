@@ -4,27 +4,27 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
 
+use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
+
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class ConfigProvider
 {
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var ManagerInterface */
+    protected $gridManager;
 
     /** @var ConfigManager */
     protected $configManager;
 
     /**
-     * @param SecurityFacade $securityFacade
-     * @param ConfigManager  $configManager
+     * @param ConfigManager    $configManager
+     * @param ManagerInterface $gridManager
      */
-    public function __construct(SecurityFacade $securityFacade, ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, ManagerInterface $gridManager)
     {
-        $this->securityFacade = $securityFacade;
-        $this->configManager  = $configManager;
+        $this->configManager = $configManager;
+        $this->gridManager   = $gridManager;
     }
 
     /**
@@ -66,13 +66,14 @@ class ConfigProvider
         $customerClasses = $this->getCustomerClasses();
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
+            $defaultGrid = $this->getDefaultGrid($class);
             $result[]    = [
-                'className'   => $class,
-                'label'       => $this->getLabel($class),
-                'icon'        => $this->getIcon($class),
-                'gridName'    => $this->getDefaultGrid($class),
-                'routeCreate' => $this->securityFacade->isGranted($routeCreate) ? $routeCreate : null,
-                'first'       => !$result,
+                'className'       => $class,
+                'label'           => $this->getLabel($class),
+                'icon'            => $this->getIcon($class),
+                'gridName'        => $defaultGrid,
+                'gridAclResource' => $this->getGridAclResource($defaultGrid),
+                'routeCreate'     => $routeCreate,
             ];
         }
 
@@ -96,10 +97,6 @@ class ConfigProvider
      */
     public function getDefaultGrid($entityClass)
     {
-        if (ExtendHelper::isCustomEntity($entityClass)) {
-            return 'custom-entity-grid';
-        }
-
         $config = $this->configManager->getProvider('grid')->getConfig($entityClass);
 
         return $config->get('default');
@@ -145,5 +142,17 @@ class ConfigProvider
         }
 
         return $classes;
+    }
+
+    /**
+     * @param string $gridName
+     *
+     * @return bool
+     */
+    protected function getGridAclResource($gridName)
+    {
+        $gridConfig = $this->gridManager->getConfigurationForGrid($gridName);
+
+        return $gridConfig ? $gridConfig->getAclResource() : null;
     }
 }

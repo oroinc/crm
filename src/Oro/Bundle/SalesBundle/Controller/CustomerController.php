@@ -29,7 +29,7 @@ class CustomerController extends Controller
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
         $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->getCustomerConfigProvider()->getCustomersData();
+        $entityTargets = $this->getCustomersData();
 
         return [
             'sourceEntityClassAlias' => $entityClassAlias,
@@ -80,5 +80,31 @@ class CustomerController extends Controller
     protected function getCustomerConfigProvider()
     {
         return $this->get('oro_sales.customer.account_config_provider');
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomersData()
+    {
+        $customerData = $this->getCustomerConfigProvider()->getCustomersData();
+        $securityFacade = $this->get('oro_security.security_facade');
+
+        $allowed = [];
+        $isFirstSet = false;
+
+        foreach ($customerData as $customer) {
+            $isAllowed = !$customer['gridAclResource'] || $securityFacade->isGranted($customer['gridAclResource']);
+            if ($isAllowed) {
+                $customer['first'] = !$isFirstSet;
+                if (!$isFirstSet) {
+                    $isFirstSet = true;
+                }
+                unset($customer['gridAclResource']);
+                $allowed[] = $customer;
+            }
+        }
+
+        return $allowed;
     }
 }

@@ -459,6 +459,7 @@ services:
             - '@oro_entity.entity_alias_resolver'
             - '@oro_sales.provider.customer.chain_customer_icon'
             - '@translator'
+            - '@oro_security.security_facade'
         tags:
             - { name: form.type, alias: oro_sales_customer }
 

@@ -2,11 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +10,14 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
+
+use Oro\Component\PhpUtils\ArrayUtil;
+
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class CustomerType extends AbstractType
 {
@@ -33,25 +36,31 @@ class CustomerType extends AbstractType
     /** @var TranslatorInterface */
     protected $translator;
 
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
     /**
      * @param DataTransformerInterface      $transformer
      * @param ConfigProvider                $customerConfigProvider
      * @param EntityAliasResolver           $entityAliasResolver
      * @param CustomerIconProviderInterface $customerIconProvider
      * @param TranslatorInterface           $translator
+     * @param SecurityFacade                $securityFacade
      */
     public function __construct(
         DataTransformerInterface $transformer,
         ConfigProvider $customerConfigProvider,
         EntityAliasResolver $entityAliasResolver,
         CustomerIconProviderInterface $customerIconProvider,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        SecurityFacade $securityFacade
     ) {
         $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
         $this->entityAliasResolver    = $entityAliasResolver;
         $this->customerIconProvider   = $customerIconProvider;
         $this->translator             = $translator;
+        $this->securityFacade         = $securityFacade;
     }
 
     /**
@@ -60,15 +69,22 @@ class CustomerType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $customersData = $this->customerConfigProvider->getCustomersData();
+        $hasGridData = false;
+        $createCustomersData = [];
+        foreach ($customersData as $customer) {
+            if ($this->securityFacade->isGranted($customer['gridAclResource'])) {
+                $hasGridData = true;
+                unset($customer['gridAclResource'], $customer['gridName']);
+            }
+            if ($this->securityFacade->isGranted($customer['routeCreate'])) {
+                $createCustomersData[] = $customer;
+            }
+        }
 
         $view->vars['parentClass']         = $options['parent_class'];
-        $view->vars['hasGridData']         = (bool)$customersData;
-        $view->vars['createCustomersData'] = array_filter(
-            $customersData,
-            function (array $customer) {
-                return isset($customer['routeCreate']);
-            }
-        );
+        $view->vars['hasGridData']         = $hasGridData;
+        $view->vars['createCustomersData'] = $createCustomersData;
+
 
         $view->vars['configs']['allowCreateNew'] = ArrayUtil::some(
             function (array $customer) {
