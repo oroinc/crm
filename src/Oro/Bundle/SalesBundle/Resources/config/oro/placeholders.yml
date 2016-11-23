@@ -16,11 +16,9 @@ placeholders:
     items:
         leads_launchpad:
             template:   OroSalesBundle:Dashboard:leadsLaunchpad.html.twig
-            applicable: "@oro_sales.provider.enitity_state->isEntityLeadEnabled()"
 
         opportunities_launchpad:
             template:   OroSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
-            applicable: "@oro_sales.provider.enitity_state->isEntityOpportunityEnabled()"
 
         oro_sales_account_channel_info:
             action: OroSalesBundle:B2bCustomer:accountCustomersInfo

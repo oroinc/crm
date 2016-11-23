@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * @deprecated since 2.0 will be removed after 2.2
+ */
 class SalesFunnelType extends AbstractType
 {
     /**
