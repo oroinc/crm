@@ -50,6 +50,10 @@ class Configuration implements ConfigurationInterface
                     'value' => $defaults,
                     'type' => 'array',
                 ],
+                'display_relevant_opportunities' => [
+                    'value' => true,
+                    'type'  => 'boolean',
+                ],
             ]
         );
 

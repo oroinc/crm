@@ -497,6 +497,8 @@ oro:
                     options.tooltip: >
                         Manage opportunity statuses and assign default probabilities to them,
                         except for system statuses Closed Won and Closed Lost.
+                display_settings:
+                    title: Display settings
             fields:
                 sales_lead:
                     feature_enabled.label:                     Enable Lead
@@ -506,6 +508,8 @@ oro:
                     probability.tooltip:                       Enter default probability (%) for this status
                 sales_salesfunnel:
                     feature_enabled.label:                     Enable Sales Process
+                display_relevant_opportunities:
+                    feature_enabled.label:                     Display relevant opportunities
 
         privilege:
             category.sales_data.label: Sales Data
