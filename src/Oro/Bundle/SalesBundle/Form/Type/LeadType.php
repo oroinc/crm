@@ -32,7 +32,7 @@ class LeadType extends AbstractType
                 'dataChannel',
                 'oro_channel_select_type',
                 array(
-                    'required' => true,
+                    'required' => false,
                     'label' => 'oro.sales.lead.data_channel.label',
                 )
             )
