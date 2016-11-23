@@ -36,9 +36,7 @@ UPGRADE FROM 1.10 to 2.0
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\MagentoBundle\Entity\Order`
 - The `Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor` now implements `Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface`
 - The class `Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand` renamed to `Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand`.
-- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command arguments were changed to be compatible with SyncCommand ones.
-- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command option `--integration-id` renamed to `--integration`.
-- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command option `--skip-dictionary` removed. Use  `skip-dictionary=true` for `connector_parameters` argument instead.
+- The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command was removed.
 
 ####OroChannelBundle:
 - The event `orocrm_channel.channel.status_change` was removed. Use the message queue topic `orocrm_channel.channel.status_change` instead.

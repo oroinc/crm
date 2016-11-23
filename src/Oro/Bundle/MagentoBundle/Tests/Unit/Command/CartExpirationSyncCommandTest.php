@@ -3,13 +3,13 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Command;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-use Oro\Component\Testing\ClassExtensionTrait;
 use Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand;
+use Oro\Component\Testing\ClassExtensionTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class CartExpirationSyncCommandTestTest extends \PHPUnit_Framework_TestCase
+class CartExpirationSyncCommandTest extends \PHPUnit_Framework_TestCase
 {
     use ClassExtensionTrait;
 
