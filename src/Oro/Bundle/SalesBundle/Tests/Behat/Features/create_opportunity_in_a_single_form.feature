@@ -7,7 +7,9 @@ Feature: Create opportunity in a single form
     Given I login as administrator
     And "First Sales Channel" is a channel with enabled Business Customer entities
     And two users charlie and samantha exists in the system
-    And I open Opportunity creation page
+    And user have "User" permissions for "View" "Business Customer" entity
+    And they has their own Accounts and Business Customers
+    And I open Opportunity Create page
     Then Opportunity Name is a required field
     And press "Cancel"
 

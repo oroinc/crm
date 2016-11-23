@@ -427,26 +427,31 @@ services:
         tags:
             - { name: oro_sales.customer_icon }
 
-    oro_sales.customer_config_provider:
-        class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
+    oro_sales.customer.config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider
         public: false
         arguments:
             - '@oro_security.security_facade'
             - '@oro_entity_config.config_manager'
+
+    oro_sales.customer.account_config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider
+        public: false
+        parent: oro_sales.customer.config_provider
 
     oro_sales.autocomplete.customer_search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
         parent: oro_activity.form.handler.autocomplete
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
-            - [setCustomerConfigProvider, ['@oro_sales.customer_config_provider']]
+            - [setCustomerConfigProvider, ['@oro_sales.customer.account_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setRoutingHelper, ['@oro_entity.routing_helper']]
 
     oro_sales.customers.opportunities_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
         arguments:
-            - '@oro_sales.customer_config_provider'
+            - '@oro_sales.customer.account_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
         tags:
@@ -455,6 +460,20 @@ services:
     oro_sales.datagrid.extension.customers.opportunities:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
         arguments:
-            - '@oro_sales.customer_config_provider'
+            - '@oro_sales.customer.config_provider'
         tags:
             - { name: oro_datagrid.extension }
+
+    oro_sales.datagrid.extension.customers.account_opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountOpportunitiesExtension
+        parent: oro_sales.datagrid.extension.customers.opportunities
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.provider.opportunity_currency_checker:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
+        public: false
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: oro_multi_currency.currency_checker_provider }

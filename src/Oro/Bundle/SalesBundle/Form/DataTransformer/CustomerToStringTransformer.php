@@ -2,14 +2,18 @@
 
 namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 
-use Doctrine\Common\Util\ClassUtils;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+
+use Doctrine\Common\Util\ClassUtils;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\AccountBundle\Entity\Account;
+
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerToStringTransformer implements DataTransformerInterface
 {
@@ -19,16 +23,22 @@ class CustomerToStringTransformer implements DataTransformerInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var ConfigProvider */
+    protected $provider;
+
     /**
      * @param DataTransformerInterface $entityToStringTransformer
-     * @param DoctrineHelper $doctrineHelper
+     * @param DoctrineHelper           $doctrineHelper
+     * @param ConfigProvider           $provider
      */
     public function __construct(
         DataTransformerInterface $entityToStringTransformer,
-        DoctrineHelper $doctrineHelper
+        DoctrineHelper $doctrineHelper,
+        ConfigProvider $provider
     ) {
         $this->entityToStringTransformer = $entityToStringTransformer;
-        $this->doctrineHelper = $doctrineHelper;
+        $this->doctrineHelper            = $doctrineHelper;
+        $this->provider                  = $provider;
     }
 
     /**
@@ -51,7 +61,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         if (!empty($data['value'])) {
-            $account = (new Account())
+            $account  = (new Account())
                 ->setName($data['value']);
             $customer = $this->createCustomer()
                 ->setTarget($account);
@@ -61,17 +71,32 @@ class CustomerToStringTransformer implements DataTransformerInterface
             return $customer;
         }
 
-        $target = $this->entityToStringTransformer->reverseTransform($value);
-        $targetField = $target instanceof Account
-                ? 'account'
-                : ExtendHelper::buildAssociationName(
-                    ClassUtils::getClass($target),
+        $target       = $this->entityToStringTransformer->reverseTransform($value);
+        $customerRepo = $this->doctrineHelper->getEntityRepository(Customer::class);
+        if ($target instanceof Account) {
+            $targetField = 'account';
+            $criteria    = [
+                $targetField => $this->doctrineHelper->getEntityIdentifier($target),
+            ];
+            foreach ($this->provider->getCustomerClasses() as $customerClass) {
+                $customerField            = ExtendHelper::buildAssociationName(
+                    $customerClass,
                     CustomerScope::ASSOCIATION_KIND
                 );
-        $customer = $this->doctrineHelper->getEntityRepository(Customer::class)
-            ->findOneBy([
-                $targetField => $this->doctrineHelper->getEntityIdentifier($target),
-            ]);
+                $criteria[$customerField] = null;
+            }
+            $customer = $customerRepo->findOneBy($criteria);
+        } else {
+            $targetField = ExtendHelper::buildAssociationName(
+                ClassUtils::getClass($target),
+                CustomerScope::ASSOCIATION_KIND
+            );
+            $customer    = $customerRepo
+                ->findOneBy([
+                    $targetField => $this->doctrineHelper->getEntityIdentifier($target),
+                ]);
+        }
+
         if (!$customer) {
             $customer = $this->createCustomer()
                 ->setTarget($target);

@@ -4,18 +4,18 @@ namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
 
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider as EntityConfigProvider;
 use Oro\Bundle\UIBundle\Model\Image;
 
 class CustomerIconProvider implements CustomerIconProviderInterface
 {
-    /** @var ConfigProvider */
+    /** @var EntityConfigProvider */
     protected $configProvider;
 
     /**
-     * @param ConfigProvider $configProvider
+     * @param EntityConfigProvider $configProvider
      */
-    public function __construct(ConfigProvider $configProvider)
+    public function __construct(EntityConfigProvider $configProvider)
     {
         $this->configProvider = $configProvider;
     }
