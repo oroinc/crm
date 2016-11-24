@@ -1,0 +1,47 @@
+ROLE_SALES_MANAGER:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_abandoned_shopping_cart: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2b_flow_sales_funnel: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+
+ROLE_SALES_REP:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_abandoned_shopping_cart: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2b_flow_sales_funnel: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+
+ROLE_ONLINE_SALES_REP:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_abandoned_shopping_cart: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2b_flow_sales_funnel: []
+
+ROLE_MARKETING_MANAGER:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_abandoned_shopping_cart: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2b_flow_sales_funnel: []
+
+ROLE_LEADS_DEVELOPMENT_REP:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: []
+        workflow|b2c_flow_abandoned_shopping_cart: []
+        workflow|b2b_flow_sales_funnel: []
+
+ROLE_ADMINISTRATOR:
+    permissions:
+        workflow|b2b_flow_lead: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|opportunity_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_order_follow_up: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2c_flow_abandoned_shopping_cart: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+        workflow|b2b_flow_sales_funnel: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]

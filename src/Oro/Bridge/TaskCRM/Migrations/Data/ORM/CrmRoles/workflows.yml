@@ -1,0 +1,18 @@
+ROLE_SALES_MANAGER:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+ROLE_SALES_REP:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+ROLE_ONLINE_SALES_REP:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+ROLE_MARKETING_MANAGER:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+ROLE_LEADS_DEVELOPMENT_REP:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
+ROLE_ADMINISTRATOR:
+    permissions:
+        workflow|task_flow: [VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM]
