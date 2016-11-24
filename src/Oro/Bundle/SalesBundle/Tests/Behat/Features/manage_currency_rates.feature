@@ -77,15 +77,15 @@ Feature: Managing Currency Rates
     And I go to Sales/ Opportunities
     Then I should see Opportunity "Mister Proper" on grid with the following data:
       | Base Budget Amount  |
-      | 5,500.00 IEP          |
+      | 5,500.00 IEP        |
     When I click on opportunity "Mister Proper"
     Then I should see the following:
       | Base Budget Amount  |
-      | 5,500.00 IEP          |
+      | 5,500.00 IEP        |
     And when I press "Edit"
     Then I should see the following:
       | Base Budget Amount  |
-      | 5,500.00 IEP          |
+      | 5,500.00 IEP        |
 
     # Req ID OEE-996-16
     # (not automated)
