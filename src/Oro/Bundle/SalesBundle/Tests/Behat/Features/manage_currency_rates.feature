@@ -53,7 +53,7 @@ Feature: Managing Currency Rates
     Then I should see the following on Currency grid:
       | BASE      | CURRENCY NAME | CURRENCY CODE | CURRENCY SYMBOL | RATE FROM | RATE TO |
       | Unchecked | Irish Pound   | IEP           | IEP             |     5     |    5.5  |
-==============
+
   # Req ID OEE-996-15, OEE-996-16
   Scenario: Recalculating currency in Opportunity entity by choosing new base currency
     Given I create the Opportunity with the following details:
