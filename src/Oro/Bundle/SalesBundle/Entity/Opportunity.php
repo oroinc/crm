@@ -271,7 +271,7 @@ class Opportunity extends ExtendOpportunity implements
     protected $budgetAmountValue;
 
     /**
-     * @var double
+     * @var float
      *
      * @ORM\Column(name="base_budget_amount_value", type="money", nullable=true)
      * @ConfigField(
@@ -338,7 +338,7 @@ class Opportunity extends ExtendOpportunity implements
     protected $closeRevenueValue;
 
     /**
-     * @var double
+     * @var float
      *
      * @ORM\Column(name="base_close_revenue_value", type="money", nullable=true)
      * @ConfigField(

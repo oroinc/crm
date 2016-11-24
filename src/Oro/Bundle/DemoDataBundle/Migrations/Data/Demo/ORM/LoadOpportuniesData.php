@@ -107,6 +107,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         if ($statusName == Opportunity::STATUS_WON) {
             $closeRevenueVal = mt_rand(10, 10000);
             $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenueVal, 'USD'));
+            $opportunity->setBaseCloseRevenueValue($closeRevenueVal);
         }
 
         return $opportunity;
