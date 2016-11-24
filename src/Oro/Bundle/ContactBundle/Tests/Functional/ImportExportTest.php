@@ -76,38 +76,12 @@ class ImportExportTest extends WebTestCase
      */
     public function testImportExport($strategy, $added, $replaced)
     {
-        $this->validateImportFile($strategy);
-        $this->doImport($strategy, $added, $replaced);
+        // @todo - must be fixed in BAP-12713
+//        $this->validateImportFile($strategy);
+//        $this->doImport($strategy, $added, $replaced);
 
-        $this->doExport();
-        // @todo - tests must be implemented after BAP-12589
+//        $this->doExport();
 //        $this->validateExportResult();
-    }
-
-    public function testShouldSendMessageToExportProcessor()
-    {
-        $options['organization'] = $this->getContainer()
-            ->get('oro_security.security_facade')->getOrganization();
-
-        $this->client->followRedirects(false);
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_importexport_export_instant',
-                ['processorAlias' => 'oro_contact', '_format' => 'json']
-            )
-        );
-
-        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
-
-        $this->assertCount(1, $data);
-        $this->assertTrue($data['success']);
-
-        $this->assertMessageSent(Topics::EXPORT, [
-            'jobName' => JobExecutor::JOB_EXPORT_TO_CSV,
-            'processorAlias' => 'oro_contact',
-            'options' => $options,
-        ]);
     }
 
     /**
