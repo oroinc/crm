@@ -483,3 +483,8 @@ services:
             - '@oro_entity.doctrine_helper'
             - '@oro_sales.customer.config_provider'
             - '@oro_entity.entity_name_resolver'
+
+    oro_sales.provider.opportunity.display_settings_config:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\DisplaySettingsConfigProvider
+        arguments:
+            - '@oro_config.manager'
