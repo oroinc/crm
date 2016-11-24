@@ -21,7 +21,9 @@
             'aCss': 'no-hash remove-button',
             'dataId': entity.id,
             'id': 'btn-remove-account',
-            'entity_label': 'orocrm.account.entity_label'|trans
+            'dataMessage': 'oro.ui.delete_confirm_cascade'|trans({
+                '%entity_label%' : 'orocrm.account.entity_label'|trans
+            }),
         }) }}
     {% endif %}
 {% endblock navButtons %}
