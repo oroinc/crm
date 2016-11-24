@@ -47,7 +47,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->trackingVisitProvider =
-            $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider')
+            $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
