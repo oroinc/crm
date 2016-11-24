@@ -39,7 +39,7 @@ UPGRADE FROM 1.10 to 2.0
 - The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command was removed.
 
 ####OroChannelBundle:
-- The event `orocrm_channel.channel.status_change` was removed. Use the message queue topic `orocrm_channel.channel.status_change` instead.
+- The event `orocrm_channel.channel.status_change` was removed. Use the message queue topic `oro.channel.channel_status_changed` instead.
 - The class `Oro\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener` was removed.
 - The class `Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent` was removed.
 - The parameter `orocrm_channel.event_listener.change_integration_status.class` was removed.
