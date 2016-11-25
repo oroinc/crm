@@ -106,4 +106,5 @@ Example:
  * )
  */
 class Customer extends ExtendCustomer
+...
 ```
