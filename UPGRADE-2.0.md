@@ -26,6 +26,7 @@ UPGRADE FROM 1.10 to 2.0
 ###OroChannelBundle:
 - Channel configuration file now loads from `Resources/config/oro/channels.yml` instead of `Resources/config/channel_configuration.yml`.
 - Root node for channel config in `Resources/config/oro/channels.yml` were changed from `orocrm_channel` to `channels`.
+- Deprecated `getVisitsCountByPeriodForChannelType()` method from `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository`
 
 ###OroMarketingListBundle
 - Class `Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper

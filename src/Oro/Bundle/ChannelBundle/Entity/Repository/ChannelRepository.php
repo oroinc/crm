@@ -41,6 +41,8 @@ class ChannelRepository extends EntityRepository
      * @param string    $type
      *
      * @return integer
+     *
+     * @deprecated Deprecated since version 2.0, to be removed in 3.0.
      */
     public function getVisitsCountByPeriodForChannelType(
         \DateTime $start,
@@ -48,6 +50,11 @@ class ChannelRepository extends EntityRepository
         AclHelper $aclHelper,
         $type
     ) {
+        @trigger_error(
+            'getVisitsCountByPeriodForChannelType() is deprecated since version 2.0, to be removed in 3.0.',
+            E_USER_DEPRECATED
+        );
+
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('COUNT(visit.id)')

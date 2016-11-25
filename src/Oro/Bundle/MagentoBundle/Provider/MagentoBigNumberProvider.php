@@ -2,19 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Doctrine\ORM\QueryBuilder;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
+use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class MagentoBigNumberProvider
 {
+    use DateFilterTrait;
+
     /** @var RegistryInterface */
     protected $doctrine;
 
@@ -24,19 +24,25 @@ class MagentoBigNumberProvider
     /** @var BigNumberDateHelper */
     protected $dateHelper;
 
+    /** @var WebsiteVisitProviderInterface */
+    protected $websiteVisitProvider;
+
     /**
-     * @param RegistryInterface   $doctrine
-     * @param AclHelper           $aclHelper
-     * @param BigNumberDateHelper $dateHelper
+     * @param RegistryInterface             $doctrine
+     * @param AclHelper                     $aclHelper
+     * @param BigNumberDateHelper           $dateHelper
+     * @param WebsiteVisitProviderInterface $websiteVisitProvider
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
-        BigNumberDateHelper $dateHelper
+        BigNumberDateHelper $dateHelper,
+        WebsiteVisitProviderInterface $websiteVisitProvider
     ) {
         $this->doctrine   = $doctrine;
         $this->aclHelper  = $aclHelper;
         $this->dateHelper = $dateHelper;
+        $this->websiteVisitProvider = $websiteVisitProvider;
     }
 
     /**
@@ -197,15 +203,7 @@ class MagentoBigNumberProvider
      */
     public function getSiteVisitsValues($dateRange)
     {
-        list($start, $end) = $this->dateHelper->getPeriod(
-            $dateRange,
-            'OroTrackingBundle:TrackingVisit',
-            'firstActionTime'
-        );
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
-        $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
-
-        return (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
+        return $this->websiteVisitProvider->getSiteVisitsValues($dateRange);
     }
 
     /**
@@ -281,29 +279,5 @@ class MagentoBigNumberProvider
     protected function getChannelRepository()
     {
         return $this->doctrine->getRepository('OroChannelBundle:Channel');
-    }
-
-    /**
-     * @param QueryBuilder   $qb
-     * @param string         $field
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     */
-    protected function applyDateFiltering(
-        QueryBuilder $qb,
-        $field,
-        \DateTime $start = null,
-        \DateTime $end = null
-    ) {
-        if ($start) {
-            $qb
-                ->andWhere(sprintf('%s >= :start', $field))
-                ->setParameter('start', $start);
-        }
-        if ($end) {
-            $qb
-                ->andWhere(sprintf('%s < :end', $field))
-                ->setParameter('end', $end);
-        }
     }
 }
