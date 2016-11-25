@@ -115,7 +115,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -331,11 +331,16 @@ class OroSalesBundleInstaller implements
 
         $this->extendExtension->addManyToOneRelation(
             $schema,
-            $table,
+            'orocrm_sales_lead',
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => [
+                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
+                ],
+            ]
         );
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
@@ -531,7 +536,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_sales_b2bcustomer'),
             ['customer_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
@@ -666,7 +671,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact'),
