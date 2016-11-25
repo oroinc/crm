@@ -85,6 +85,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $this->jobRunner = $jobRunner;
         $this->indexer = $indexer;
         $this->logger = $logger;
+        $this->initialSyncProcessor->getLoggerStrategy()->setLogger($this->logger);
     }
 
     /**
