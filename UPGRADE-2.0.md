@@ -1,6 +1,9 @@
 UPGRADE FROM 1.10 to 2.0 
 ========================
 
+####General
+- Changed minimum required php version to 5.6
+
 ####OroSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Opportunity`
