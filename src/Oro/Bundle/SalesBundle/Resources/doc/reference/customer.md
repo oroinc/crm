@@ -1,6 +1,7 @@
 Sales Customer Relations
 ========================
 
+
 Table of Contents
 -----------------
  - [Sales Entities Account associations](#sales-entities-account-associations)
@@ -15,6 +16,7 @@ Sales Entities Account Associations
 As developer you have possibility to create association to sales lead and opportunity entities with some own customer entity.
 This option allow configure this relation and display special form type to choose or create customer from any allowed types of customer in application.
 You can define customer icon image, choose grid and create form route data.
+Customer info will shown on opportunity, lead view page and on entity edit page.
 
 
 Migration Extension
@@ -40,6 +42,7 @@ class YourMigration implements Migration, OpportunityExtensionAwareInterface, Le
     }
 }
 ```
+
 
 Icon Provider
 --------------
@@ -76,6 +79,7 @@ service.yml file:
         tags:
             - { name: oro_sales.customer_icon }
 ```
+
 
 Entity Configuration
 --------------------
