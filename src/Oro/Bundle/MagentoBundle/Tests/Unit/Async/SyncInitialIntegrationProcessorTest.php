@@ -11,6 +11,7 @@ use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
@@ -297,7 +298,14 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createInitialSyncProcessorMock()
     {
-        return $this->getMock(InitialSyncProcessor::class, [], [], '', false);
+        $initialProcessor = $this->getMock(InitialSyncProcessor::class, [], [], '', false);
+        $initialProcessor
+            ->expects($this->any())
+            ->method('getLoggerStrategy')
+            ->willReturn(new LoggerStrategy())
+        ;
+
+        return $initialProcessor;
     }
 
     /**
