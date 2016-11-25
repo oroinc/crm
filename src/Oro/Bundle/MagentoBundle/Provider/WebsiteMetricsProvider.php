@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
 
 /**
  * Calculates metrics based on tracking events.

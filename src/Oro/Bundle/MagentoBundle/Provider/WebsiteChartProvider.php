@@ -8,7 +8,7 @@ use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
-use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
