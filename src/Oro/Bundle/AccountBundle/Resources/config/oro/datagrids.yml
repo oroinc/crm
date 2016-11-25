@@ -265,7 +265,7 @@ datagrids:
                 addressPostalCode:
                     data_name: address.postalCode
             default:
-                lastName: ASC
+                last_name: ASC
         options:
             entityHint: contact
 

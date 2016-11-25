@@ -992,3 +992,11 @@ services:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:
             - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]
+
+    oro_magento.provider.customer.customer_icon:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
+        arguments:
+            - '@oro_magento.provider.channel_type'
+        tags:
+            - { name: oro_sales.customer_icon, priority: 10 }
+
