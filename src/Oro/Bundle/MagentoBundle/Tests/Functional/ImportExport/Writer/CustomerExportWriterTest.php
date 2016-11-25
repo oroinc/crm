@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
-
+use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -39,7 +39,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ->with($this->isType('array'))
             ->will($this->returnValue($originId));
 
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
+        $jobResult = $this->getJobExecutor()->executeJob(
             'export',
             'magento_customer_export',
             [
@@ -91,7 +91,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
 
         $this->transport->expects($this->never())->method('createCustomer');
 
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
+        $jobResult = $this->getJobExecutor()->executeJob(
             'export',
             'magento_customer_export',
             [
@@ -143,7 +143,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->transport->expects($this->never())->method('updateCustomer');
         $this->transport->expects($this->never())->method('createCustomer');
 
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
+        $jobResult = $this->getJobExecutor()->executeJob(
             'export',
             'magento_customer_export',
             [
@@ -182,7 +182,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->transport->expects($this->never())->method('updateCustomer');
         $this->transport->expects($this->never())->method('createCustomer');
 
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
+        $jobResult = $this->getJobExecutor()->executeJob(
             'export',
             'magento_customer_export',
             [
@@ -200,5 +200,13 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+    }
+
+    /**
+     * @return JobExecutor
+     */
+    private function getJobExecutor()
+    {
+        return $this->getContainer()->get('oro_importexport.job_executor');
     }
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
@@ -23,14 +24,22 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $listener;
 
+    /**
+     * @var CalculateAnalyticsScheduler
+     */
+    protected $scheduler;
+
     protected function setUp()
     {
         $this->manager = $this->getMockBuilder('Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scheduler = $this->createCalculateAnalyticsSchedulerMock();
+
         $this->listener = new RFMCategoryListener(
             $this->manager,
+            $this->scheduler,
             'Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
             'Oro\Bundle\ChannelBundle\Entity\Channel'
         );
@@ -75,8 +84,8 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->exactly($expectedResetMetrics))
             ->method('resetMetrics');
 
-        $this->manager->expects($this->exactly($expectedScheduleRecalculation))
-            ->method('scheduleRecalculation');
+        $this->scheduler->expects($this->exactly($expectedScheduleRecalculation))
+            ->method('scheduleForChannel');
 
         $args = new OnFlushEventArgs($em);
 
@@ -164,5 +173,13 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $category->setChannel($channel);
 
         return $category;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|CalculateAnalyticsScheduler
+     */
+    private function createCalculateAnalyticsSchedulerMock()
+    {
+        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
     }
 }
