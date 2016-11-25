@@ -5,40 +5,25 @@ namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-use Doctrine\Common\Util\ClassUtils;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\AccountBundle\Entity\Account;
-
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerToStringTransformer implements DataTransformerInterface
 {
     /** @var DataTransformerInterface */
     protected $entityToStringTransformer;
 
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
-
-    /** @var ConfigProvider */
-    protected $provider;
+    /** @var AccountCustomerHelper */
+    protected $accountCustomerHelper;
 
     /**
      * @param DataTransformerInterface $entityToStringTransformer
-     * @param DoctrineHelper           $doctrineHelper
-     * @param ConfigProvider           $provider
+     * @param AccountCustomerHelper    $helper
      */
-    public function __construct(
-        DataTransformerInterface $entityToStringTransformer,
-        DoctrineHelper $doctrineHelper,
-        ConfigProvider $provider
-    ) {
+    public function __construct(DataTransformerInterface $entityToStringTransformer, AccountCustomerHelper $helper)
+    {
         $this->entityToStringTransformer = $entityToStringTransformer;
-        $this->doctrineHelper            = $doctrineHelper;
-        $this->provider                  = $provider;
+        $this->accountCustomerHelper     = $helper;
     }
 
     /**
@@ -46,8 +31,8 @@ class CustomerToStringTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        if (empty($value)) {
-            return;
+        if (!$value) {
+            return null;
         }
 
         if (!is_string($value)) {
@@ -61,48 +46,12 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         if (!empty($data['value'])) {
-            $account  = (new Account())
-                ->setName($data['value']);
-            $customer = $this->createCustomer()
-                ->setTarget($account);
-
-            $this->doctrineHelper->getEntityManager($account)->persist($account);
-
-            return $customer;
+            return AccountCustomerHelper::createCustomerFromAccount(null, $data['value']);
         }
 
-        $target       = $this->entityToStringTransformer->reverseTransform($value);
-        $customerRepo = $this->doctrineHelper->getEntityRepository(Customer::class);
-        if ($target instanceof Account) {
-            $targetField = 'account';
-            $criteria    = [
-                $targetField => $this->doctrineHelper->getEntityIdentifier($target),
-            ];
-            foreach ($this->provider->getCustomerClasses() as $customerClass) {
-                $customerField            = ExtendHelper::buildAssociationName(
-                    $customerClass,
-                    CustomerScope::ASSOCIATION_KIND
-                );
-                $criteria[$customerField] = null;
-            }
-            $customer = $customerRepo->findOneBy($criteria);
-        } else {
-            $targetField = ExtendHelper::buildAssociationName(
-                ClassUtils::getClass($target),
-                CustomerScope::ASSOCIATION_KIND
-            );
-            $customer    = $customerRepo
-                ->findOneBy([
-                    $targetField => $this->doctrineHelper->getEntityIdentifier($target),
-                ]);
-        }
+        $target = $this->entityToStringTransformer->reverseTransform($value);
 
-        if (!$customer) {
-            $customer = $this->createCustomer()
-                ->setTarget($target);
-        }
-
-        return $customer;
+        return $this->accountCustomerHelper->getOrCreateAccountCustomerByTarget($target);
     }
 
     /**
@@ -111,24 +60,17 @@ class CustomerToStringTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value instanceof Customer) {
-            $target = $value->getTarget();
-            if ($target instanceof Account && !$target->getId()) {
+            $account = $value->getAccount();
+            // new accounts values transforms directly
+            if (!$account->getId()) {
                 return json_encode([
-                    'value' => $target->getName(),
+                    'value' => $account->getName(),
                 ]);
-            } else {
-                $value = $target;
             }
+
+            $value = $this->accountCustomerHelper->getTargetCustomerOrAccount($value);
         }
 
         return $this->entityToStringTransformer->transform($value);
-    }
-
-    /**
-     * @return Customer
-     */
-    protected function createCustomer()
-    {
-        return new Customer();
     }
 }

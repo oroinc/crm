@@ -79,16 +79,15 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
             $targetTable,
             $targetColumnName,
             [
-                'extend'                          => [
-                    'owner'        => ExtendScope::OWNER_CUSTOM,
-                    'form'         => ['is_enabled' => false],
-                    'importexport' => ['excluded' => true],
-                    'cascade'      => ['all'],
-                    'on_delete'    => 'CASCADE',
-                    'nullable'     => true
+                'importexport' => [
+                    'excluded' => true,
                 ],
-                'datagrid'                        => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
-                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+                'datagrid' => [
+                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
+                ],
+                'extend' => [
+                    'on_delete' => 'SET NULL'
+                ]
             ]
         );
     }

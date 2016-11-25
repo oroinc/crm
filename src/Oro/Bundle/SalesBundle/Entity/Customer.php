@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
  * @ORM\Table("orocrm_sales_customer")
  * @ORM\HasLifecycleCallbacks()
  * @Config()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository")
  */
 class Customer extends ExtendCustomer
 {
@@ -27,10 +27,10 @@ class Customer extends ExtendCustomer
     protected $id;
 
     /**
-     * @var Account|null
+     * @var Account
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $account;
 
@@ -43,11 +43,23 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @return Account|null
+     * @return Account
      */
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+
+        return $this;
     }
 
     /**

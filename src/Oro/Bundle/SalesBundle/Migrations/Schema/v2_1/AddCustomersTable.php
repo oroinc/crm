@@ -17,7 +17,7 @@ class AddCustomersTable implements Migration
         self::addCustomersTableForeignKeys($schema);
 
         $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
-        $opportunityTable->addColumn('customer_association_id', 'integer', ['notnull' => false]);
+        $opportunityTable->addColumn('customer_association_id', 'integer', ['notnull' => true]);
         $opportunityTable->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F', []);
         $opportunityTable->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_customer'),
@@ -44,7 +44,7 @@ class AddCustomersTable implements Migration
     {
         $table = $schema->createTable('orocrm_sales_customer');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('account_id', 'integer', ['notnull' => false]);
+        $table->addColumn('account_id', 'integer', ['notnull' => true]);
         $table->setPrimaryKey(['id']);
     }
 

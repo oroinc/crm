@@ -468,5 +468,4 @@ services:
         class: Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer
         arguments:
             - '@oro_entity.entity_reference_to_string_transformer'
-            - '@oro_entity.doctrine_helper'
-            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.customer.account_customer_helper'

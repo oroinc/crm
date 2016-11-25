@@ -5,7 +5,7 @@ namespace Oro\Bundle\AccountBundle\Entity;
 interface AccountAwareInterface
 {
     /**
-     * @return Account
+     * @return Account|null
      */
     public function getAccount();
 }

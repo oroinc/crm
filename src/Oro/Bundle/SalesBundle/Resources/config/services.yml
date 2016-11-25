@@ -476,3 +476,10 @@ services:
             - '@doctrine'
         tags:
             - { name: oro_multi_currency.currency_checker_provider }
+
+    oro_sales.customer.account_customer_helper:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_entity.entity_name_resolver'
