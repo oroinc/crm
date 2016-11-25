@@ -4,7 +4,9 @@ namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use Doctrine\ORM\QueryBuilder;
+
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
@@ -215,8 +217,12 @@ class MagentoBigNumberProvider
     {
         $result = 0;
 
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        if (!$visitsQb instanceof QueryBuilder) {
+            return $result;
+        }
+
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Order', 'createdAt');
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
         $visits = (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
         if ($visits != 0) {
@@ -236,9 +242,12 @@ class MagentoBigNumberProvider
     {
         $result = 0;
 
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Customer', 'createdAt');
-
         $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        if (!$visitsQb instanceof QueryBuilder) {
+            return $result;
+        }
+
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroMagentoBundle:Customer', 'createdAt');
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
         $visits = (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
         if ($visits !== 0) {
@@ -274,7 +283,7 @@ class MagentoBigNumberProvider
     }
 
     /**
-     * @return ChannelRepository
+     * @return ChannelRepositoryInterface
      */
     protected function getChannelRepository()
     {
