@@ -560,7 +560,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_sales_customer'),
             ['customer_association_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 
@@ -648,7 +648,7 @@ class OroSalesBundleInstaller implements
             $schema->getTable('orocrm_sales_customer'),
             ['customer_association_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 

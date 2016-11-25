@@ -1,7 +1,7 @@
 <% if (icon.type === 'file-path') { %>
-    <img src="<%= icon.data.path %>">
+    <img src="<%= icon.data.path %>" class="separated-img">
 <% } else if (icon.type === 'icon') { %>
-    <i class="<%= icon.data.class %> hide-text"></i>
+    <i class="<%= icon.data.class %> hide-text separated-img"></i>
 <% } %>
 <%= highlight(_.escape(text)) %>
 <% if (id === null) { %>

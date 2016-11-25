@@ -12,6 +12,9 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class OpportunitiesListener
 {
+    // below activity block which have 1000
+    const GRID_BLOCK_PRIORITY = 1010;
+
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
@@ -37,6 +40,9 @@ class OpportunitiesListener
     }
 
     /**
+     * Adds block with associated opportunities grid of viewing entity
+     * if this entity has "customer" association enabled.
+     *
      * @param BeforeViewRenderEvent $event
      */
     public function addOpportunities(BeforeViewRenderEvent $event)
@@ -56,6 +62,7 @@ class OpportunitiesListener
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),
+                'priority' => self::GRID_BLOCK_PRIORITY,
                 'subblocks' => [['data' => [$opportunitiesData]]]
             ];
             $event->setData($data);

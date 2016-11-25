@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Migration\Extension;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
@@ -76,15 +79,16 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
             $targetTable,
             $targetColumnName,
             [
-                'importexport' => [
-                    'excluded' => true,
+                'extend'                          => [
+                    'owner'        => ExtendScope::OWNER_CUSTOM,
+                    'form'         => ['is_enabled' => false],
+                    'importexport' => ['excluded' => true],
+                    'cascade'      => ['all'],
+                    'on_delete'    => 'CASCADE',
+                    'nullable'     => true
                 ],
-                'datagrid' => [
-                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
-                ],
-                'extend' => [
-                    'on_delete' => 'CASCADE'
-                ]
+                'datagrid'                        => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
+                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
             ]
         );
     }
