@@ -61,6 +61,7 @@ services:
         class: %oro_analytics.event_listener.timezone_change.class%
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
+            - '@oro_analytics.calculate_analytics_scheduler'
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -85,8 +86,32 @@ services:
         class: %oro_analytics.event_listener.rfm_category.class%
         arguments:
             - '@oro_analytics.model.rfm_state_manager'
+            - '@oro_analytics.calculate_analytics_scheduler'
             - %oro_analytics.entity.rfm_category.class%
             - %oro_channel.entity.class%
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: kernel.event_listener, event: oro_channel.channel.save_succeed, method: onChannelSucceedSave }
+
+    oro_analytics.calculate_analytics_scheduler:
+        class: 'Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler'
+        arguments:
+            - '@oro_message_queue.message_producer'
+
+    oro_analytics.async.calculate_channel_analytics_processor:
+        class: 'Oro\Bundle\AnalyticsBundle\Async\CalculateChannelAnalyticsProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_analytics.builder'
+            - '@oro_message_queue.job.runner'
+            - '@logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_analytics.async.calculate_all_channels_analytics_processor:
+        class: 'Oro\Bundle\AnalyticsBundle\Async\CalculateAllChannelsAnalyticsProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_analytics.calculate_analytics_scheduler'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
