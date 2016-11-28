@@ -13,10 +13,6 @@ placeholders:
             items:
                 oro_sales_account_channel_info: ~
 
-        view_content_data_additional_information:
-            items:
-                oro_account_opportunity_grid: ~
-
     items:
         leads_launchpad:
             template:   OroSalesBundle:Dashboard:leadsLaunchpad.html.twig
@@ -26,9 +22,3 @@ placeholders:
 
         oro_sales_account_channel_info:
             action: OroSalesBundle:B2bCustomer:accountCustomersInfo
-
-        oro_account_opportunity_grid:
-            applicable:
-                - '@oro_sales.provider.opportunity.display_settings_config->isFeatureEnabled()'
-                - '@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_sales.opportunity.class%)'
-            template: OroSalesBundle:Opportunity:accountOpportunities.html.twig

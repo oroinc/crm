@@ -82,7 +82,8 @@ system_configuration:
             page_reload: true
             options:
                 required: false
-                label: oro.sales.system_configuration.fields.display_relevant_opportunities.feature_enabled.label
+                tooltip: oro.sales.system_configuration.fields.display_relevant_opportunities.tooltip
+                label:   oro.sales.system_configuration.fields.display_relevant_opportunities.feature_enabled.label
     tree:
         system_configuration:
             crm:

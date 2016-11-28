@@ -227,7 +227,7 @@ oro:
                     open:            Open Opportunities
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
-            relevant_opportunities:  Relevant opportunities
+            relevant_opportunities:  Relevant Opportunities
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -511,6 +511,7 @@ oro:
                     feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
                     feature_enabled.label:                     Display relevant opportunities
+                    tooltip:                                   Enable displaying of other opportunities connected to the same account
 
         privilege:
             category.sales_data.label: Sales Data
