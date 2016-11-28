@@ -5,7 +5,6 @@ namespace Oro\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
 

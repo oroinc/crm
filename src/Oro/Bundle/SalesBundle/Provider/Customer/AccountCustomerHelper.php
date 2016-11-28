@@ -84,13 +84,6 @@ class AccountCustomerHelper
             : $customer->setAccount((new Account())->setName($accountName));
     }
 
-    public static function assertAccountAwareClass($className)
-    {
-        if (!is_a($className, AccountAwareInterface::class)) {
-            
-        }
-    }
-
     /**
      * @param $target
      *
