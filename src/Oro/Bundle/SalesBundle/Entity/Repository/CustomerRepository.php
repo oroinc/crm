@@ -85,7 +85,6 @@ class CustomerRepository extends EntityRepository
 
                 $qb->orWhere(call_user_func_array([$qb->expr(), 'andX'], $exprs));
             }
-
         }
 
         return $qb->getQuery()->getResult();
