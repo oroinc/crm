@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6",
         "oro/platform": "1.x-dev",
         "oro/crm-task-bundle": "1.x-dev",
         "oro/crm-call-bundle": "1.x-dev",

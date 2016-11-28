@@ -25,6 +25,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_sales_b2bcustomer_index",
+ *      routeCreate="oro_sales_b2bcustomer_create",
  *      routeView="oro_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
@@ -163,7 +164,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
