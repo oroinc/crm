@@ -2,11 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;
@@ -166,8 +167,6 @@ class LoadRFMOrderData extends AbstractFixture implements DependentFixtureInterf
      */
     public function getDependencies()
     {
-        return [
-            'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
-        ];
+        return [LoadMagentoChannel::class];
     }
 }

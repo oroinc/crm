@@ -5,39 +5,53 @@ namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use JMS\JobQueueBundle\Entity\Job;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\MagentoBundle\Command\InitialSyncCommand;
-use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ScheduleNewsletterSubscribersResync implements FixtureInterface
+class ScheduleNewsletterSubscribersResync implements FixtureInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        /** @var ChannelRepository $channelRepository */
-        $channelRepository = $manager->getRepository('OroIntegrationBundle:Channel');
-        /** @var Channel[] $applicableChannels */
-        $applicableChannels = $channelRepository->getConfiguredChannelsForSync(ChannelType::TYPE);
-        if ($applicableChannels) {
-            foreach ($applicableChannels as $channel) {
-                $job = new Job(
-                    InitialSyncCommand::COMMAND_NAME,
-                    [
-                        sprintf('--integration-id=%s', $channel->getId()),
-                        sprintf('--connector=%s', InitialNewsletterSubscriberConnector::TYPE),
-                        '--skip-dictionary',
-                        '-v'
-                    ]
+        /** @var IntegrationRepository $integrationRepository */
+        $integrationRepository = $manager->getRepository(Integration::class);
+        /** @var Integration[] $applicableIntegrations */
+        $applicableIntegrations = $integrationRepository->getConfiguredChannelsForSync(ChannelType::TYPE);
+        if ($applicableIntegrations) {
+            foreach ($applicableIntegrations as $integration) {
+                $this->getMessageProducer()->send(
+                    Topics::SYNC_INITIAL_INTEGRATION,
+                    new Message(
+                        [
+                            'integration_id'       => $integration->getId(),
+                            'connector'            => InitialNewsletterSubscriberConnector::TYPE,
+                            'connector_parameters' => ['skip-dictionary' => true],
+                        ],
+                        MessagePriority::VERY_LOW
+                    )
                 );
-                $manager->persist($job);
             }
-            $manager->flush();
         }
+    }
+
+    /**
+     * @return MessageProducerInterface
+     */
+    private function getMessageProducer()
+    {
+        return $this->container->get('oro_message_queue.message_producer');
     }
 }
