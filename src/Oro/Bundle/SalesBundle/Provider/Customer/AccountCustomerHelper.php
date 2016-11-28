@@ -9,11 +9,12 @@ use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
-use Oro\Bundle\EntityExtendBundle\Exception\InvalidRelationEntityException;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
+use Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException;
 
 class AccountCustomerHelper
 {
@@ -83,6 +84,13 @@ class AccountCustomerHelper
             : $customer->setAccount((new Account())->setName($accountName));
     }
 
+    public static function assertAccountAwareClass($className)
+    {
+        if (!is_a($className, AccountAwareInterface::class)) {
+            
+        }
+    }
+
     /**
      * @param $target
      *
@@ -110,9 +118,9 @@ class AccountCustomerHelper
                 $customer = self::createCustomerFromAccount($target);
             }
         } else {
-            $targetEntityClassName = ClassUtils::getClass($target);
-            $this->assertValidTarget($targetEntityClassName);
-            $targetField           = self::getCustomerTargetField($targetEntityClassName);
+            $targetClassName = ClassUtils::getClass($target);
+            $this->assertValidTarget($targetClassName);
+            $targetField           = self::getCustomerTargetField($targetClassName);
             $customer              = $customerRepo->getCustomerByTargetCustomer(
                 $this->doctrineHelper->getSingleEntityIdentifier($target),
                 $targetField
@@ -123,6 +131,28 @@ class AccountCustomerHelper
         }
 
         return $customer;
+    }
+
+    /**
+     * Syncs target entity's Account with related Customer entity
+     *
+     * @param Customer $customer
+     */
+    public function syncTargetCustomerAccount(Customer $customer)
+    {
+        $target = $customer->getCustomerTarget();
+        if (!$target) {
+            throw new NotAccessableCustomerTargetException(
+                'Couldn\'t sync Customer\'s target account without target'
+            );
+        }
+
+        if (!($target instanceof AccountAwareInterface) || !$target->getAccount()) {
+            $account = (new Account())->setName($this->nameResolver->getName($target));
+        } else {
+            $account = $target->getAccount();
+        }
+        $customer->setAccount($account);
     }
 
     /**
@@ -143,13 +173,13 @@ class AccountCustomerHelper
     }
 
     /**
-     * @param string $targetEntityClassName
+     * @param string $targetClassName
      */
-    protected function assertValidTarget($targetEntityClassName)
+    protected function assertValidTarget($targetClassName)
     {
-        if (!in_array($targetEntityClassName, $this->provider->getCustomerClasses())) {
-            throw new InvalidRelationEntityException(
-                sprintf('object of class "%s" is not valid customer target', $targetEntityClassName)
+        if (!in_array($targetClassName, $this->provider->getCustomerClasses())) {
+            throw new InvalidCustomerRelationEntityException(
+                sprintf('object of class "%s" is not valid customer target', $targetClassName)
             );
         }
     }

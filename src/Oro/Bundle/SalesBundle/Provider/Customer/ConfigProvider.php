@@ -44,12 +44,11 @@ class ConfigProvider
     /**
      * @return array
      * [
-     *     className => customer class with _ instead of \,
-     *     label => entity label,
-     *     icon  => entity icon,
-     *     gridName  => customer grid name
+     *     className   => customer class with _ instead of \,
+     *     label       => entity label,
+     *     icon        => entity icon,
+     *     gridName    => customer grid name
      *     routeCreate => route to create entity
-     *     first => should be shown by default?
      * ]
      */
     public function getCustomersData()

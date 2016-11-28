@@ -73,11 +73,20 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->with('oro.sales.customers.opportunities.grid.label')
             ->willReturn($opportunitiesTitle);
 
-        $data  = ['dataBlocks' => ['subblocks' => ['title' => 'some title', 'data' => 'some data']]];
+        $data  = [
+            'dataBlocks' => [
+                'subblocks' => ['title' => 'some title', 'data' => 'some data']
+            ]
+        ];
         $event = new BeforeViewRenderEvent($env, $data, $entity);
         $this->prepareConfigProvider($entity, true);
         $this->listener->addOpportunities($event);
-        $data['dataBlocks'][] = ['title' => $opportunitiesTitle, 'subblocks' => [['data' => [$opportunitiesData]]]];
+        $data['dataBlocks'][] =
+            [
+                'title'     => $opportunitiesTitle,
+                'subblocks' => [['data' => [$opportunitiesData]]],
+                'priority' => 1010
+            ];
         $this->assertEquals(
             $data,
             $event->getData()

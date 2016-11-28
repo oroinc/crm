@@ -61,34 +61,4 @@ class Customer extends ExtendCustomer
 
         return $this;
     }
-
-    /**
-     * @return object|null
-     */
-    public function getTarget()
-    {
-        return $this->getCustomerTarget() ?: $this->account;
-    }
-
-    /**
-     * @param object|null $target
-     *
-     * @return $this
-     */
-    public function setTarget($target)
-    {
-        if ($target instanceof Account) {
-            $this->account = $target;
-            $this->setCustomerTarget(null);
-        } else {
-            $this->setCustomerTarget($target);
-            if ($target instanceof AccountAwareInterface) {
-                $this->account = $target->getAccount();
-            } else {
-                $this->account = null;
-            }
-        }
-
-        return $this;
-    }
 }

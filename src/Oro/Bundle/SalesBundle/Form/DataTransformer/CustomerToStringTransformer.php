@@ -68,7 +68,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
                 ]);
             }
 
-            $value = $this->accountCustomerHelper->getTargetCustomerOrAccount($value);
+            $value = AccountCustomerHelper::getTargetCustomerOrAccount($value);
         }
 
         return $this->entityToStringTransformer->transform($value);

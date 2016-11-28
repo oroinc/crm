@@ -6,14 +6,13 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
-use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 
 /**
  * This listener synchronizes account of MagentoCustomer and SalesCustomer
@@ -23,8 +22,19 @@ use Oro\Component\DoctrineUtils\ORM\QueryUtils;
  */
 class CustomerAccountChangeSubscriber implements EventSubscriber
 {
+    /** @var AccountCustomerHelper */
+    protected $accountCustomerHelper;
+
     /** @var MagentoCustomer[] */
     protected $changedMagentoCustomers = [];
+
+    /**
+     * @param AccountCustomerHelper    $helper
+     */
+    public function __construct(AccountCustomerHelper $helper)
+    {
+        $this->accountCustomerHelper     = $helper;
+    }
 
     /**
      * {@inheritdoc}
@@ -66,10 +76,10 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
         }
 
         $em = $args->getEntityManager();
-        $fixedSalesCustomers = $this->fixSalesCustomers($em, $this->changedMagentoCustomers);
+        $syncedSalesCustomers = $this->syncSalesCustomersAccounts($em, $this->changedMagentoCustomers);
         $this->changedMagentoCustomers = [];
 
-        if ($fixedSalesCustomers) {
+        if ($syncedSalesCustomers) {
             $em->flush();
         }
     }
@@ -80,14 +90,14 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
      *
      * @return SalesCustomer[] Fixed SalesCustomers
      */
-    protected function fixSalesCustomers(EntityManager $em, array $changedMagentoCustomers)
+    protected function syncSalesCustomersAccounts(EntityManager $em, array $changedMagentoCustomers)
     {
-        $salesCustomersWithInvalidAccount = $this->findSalesCustomersWithInvalidAccount($em, $changedMagentoCustomers);
-        foreach ($salesCustomersWithInvalidAccount as $customer) {
-            $customer->setTarget($customer->getTarget());
+        $salesCustomersWithChangedAccount = $this->findSalesCustomersWithChangedAccount($em, $changedMagentoCustomers);
+        foreach ($salesCustomersWithChangedAccount as $customer) {
+            $this->accountCustomerHelper->syncTargetCustomerAccount($customer);
         }
 
-        return $salesCustomersWithInvalidAccount;
+        return $salesCustomersWithChangedAccount;
     }
 
     /**
@@ -116,58 +126,34 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
      *
      * @return SalesCustomer[]
      */
-    protected function findSalesCustomersWithInvalidAccount(EntityManager $em, array $customers)
+    protected function findSalesCustomersWithChangedAccount(EntityManager $em, array $customers)
     {
-        if (!$customers) {
-            return [];
-        }
+        $customerRepository = $this->getAccountCustomerRepository($em);
 
-        $qb = $em->getRepository(SalesCustomer::class)->createQueryBuilder('sc');
+        $magentoCustomers = array_map(
+            function (Customer $customer) {
+                $account = $customer->getAccount();
 
-        $magentoCustomerField = ExtendHelper::buildAssociationName(
-            MagentoCustomer::class,
-            CustomerScope::ASSOCIATION_KIND
+                return [
+                    'target_id'  => $customer->getId(),
+                    'account_id' => $account ? $account->getId() : null
+                ];
+            },
+            $customers
         );
 
-        foreach ($customers as $customer) {
-            $exprs = [];
-
-            $customerParam = QueryUtils::generateParameterName('magentoCustomer');
-            $exprs[] = $qb->expr()->eq(
-                sprintf('sc.%s', $magentoCustomerField),
-                sprintf(':%s', $customerParam)
-            );
-            $qb->setParameter($customerParam, $customer->getId());
-
-            $exprs[] = $this->createAccountExpr($qb, 'sc', $customer->getAccount());
-
-            $qb->andWhere(call_user_func_array([$qb->expr(), 'andX'], $exprs));
-        }
-
-        return $qb
-            ->getQuery()
-            ->getResult();
+        return $customerRepository->getSalesCustomersWithChangedAccount(
+            [MagentoCustomer::class => $magentoCustomers]
+        );
     }
 
     /**
-     * @param QueryBuilder $qb
-     * @param string $alias
-     * @param Account $account
+     * @param EntityManager $em
      *
-     * @return mixed
+     * @return CustomerRepository
      */
-    protected function createAccountExpr(QueryBuilder $qb, $alias, Account $account = null)
+    protected function getAccountCustomerRepository(EntityManager $em)
     {
-        if (!$account) {
-            return $qb->expr()->isNotNull(sprintf('%s.account', $alias));
-        }
-
-        $accountParam = QueryUtils::generateParameterName('account');
-        $qb->setParameter($accountParam, $account->getId());
-
-        return $qb->expr()->orX(
-            $qb->expr()->neq(sprintf('%s.account', $alias), sprintf(':%s', $accountParam)),
-            $qb->expr()->isNull(sprintf('%s.account', $alias))
-        );
+        return $em->getRepository(SalesCustomer::class);
     }
 }

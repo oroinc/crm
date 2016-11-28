@@ -11,10 +11,9 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class OpportunitiesExtension extends AbstractExtension
@@ -70,6 +69,8 @@ class OpportunitiesExtension extends AbstractExtension
      * @param QueryBuilder $qb
      *
      * @return string
+     *
+     * @throws DatasourceException
      */
     protected function getOpportunityAlias(QueryBuilder $qb)
     {
@@ -85,15 +86,12 @@ class OpportunitiesExtension extends AbstractExtension
     }
 
     /**
-     * @param string $customerClass
+     * @param $customerClass
      *
      * @return string
      */
     protected function getCustomerField($customerClass)
     {
-        return ExtendHelper::buildAssociationName(
-            $customerClass,
-            CustomerScope::ASSOCIATION_KIND
-        );
+        return AccountCustomerHelper::getCustomerTargetField($customerClass);
     }
 }
