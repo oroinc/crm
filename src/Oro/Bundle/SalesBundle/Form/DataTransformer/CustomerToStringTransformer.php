@@ -5,25 +5,26 @@ namespace Oro\Bundle\SalesBundle\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 class CustomerToStringTransformer implements DataTransformerInterface
 {
     /** @var DataTransformerInterface */
     protected $entityToStringTransformer;
 
-    /** @var AccountCustomerHelper */
-    protected $accountCustomerHelper;
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
 
     /**
      * @param DataTransformerInterface $entityToStringTransformer
-     * @param AccountCustomerHelper    $helper
+     * @param AccountCustomerManager    $manager
      */
-    public function __construct(DataTransformerInterface $entityToStringTransformer, AccountCustomerHelper $helper)
+    public function __construct(DataTransformerInterface $entityToStringTransformer, AccountCustomerManager $manager)
     {
         $this->entityToStringTransformer = $entityToStringTransformer;
-        $this->accountCustomerHelper     = $helper;
+        $this->accountCustomerManager = $manager;
     }
 
     /**
@@ -46,12 +47,12 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         if (!empty($data['value'])) {
-            return AccountCustomerHelper::createCustomerFromAccount(null, $data['value']);
+            return AccountCustomerManager::createCustomerFromAccount((new Account())->setName($data['value']));
         }
 
         $target = $this->entityToStringTransformer->reverseTransform($value);
 
-        return $this->accountCustomerHelper->getOrCreateAccountCustomerByTarget($target);
+        return $this->accountCustomerManager->getOrCreateAccountCustomerByTarget($target);
     }
 
     /**
@@ -68,7 +69,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
                 ]);
             }
 
-            $value = AccountCustomerHelper::getTargetCustomerOrAccount($value);
+            $value = AccountCustomerManager::getTargetCustomerOrAccount($value);
         }
 
         return $this->entityToStringTransformer->transform($value);

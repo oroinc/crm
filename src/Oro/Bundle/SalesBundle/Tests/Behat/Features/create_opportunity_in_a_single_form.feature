@@ -48,12 +48,3 @@ Feature: Create opportunity in a single form
     Then I should see only existing accounts
     But should not see "Non Existent Account (Add new)" account
     And press "Cancel"
-
-  Scenario: No permissions to create Business Customer
-    Given user permissions on Create Account is set to Global
-    And user permissions on Create Business Customer is set to None
-    When I open Opportunity creation page
-    When I fill in "Channel" with "First Sales Channel"
-    And type "Non Existent Account" into Account field
-    Then I should see only existing accounts
-    But should not see "Non Existent Account (Add new)" account

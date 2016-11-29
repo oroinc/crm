@@ -12,8 +12,8 @@ use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
 
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class OpportunitiesExtension extends AbstractExtension
@@ -92,6 +92,6 @@ class OpportunitiesExtension extends AbstractExtension
      */
     protected function getCustomerField($customerClass)
     {
-        return AccountCustomerHelper::getCustomerTargetField($customerClass);
+        return AccountCustomerManager::getCustomerTargetField($customerClass);
     }
 }

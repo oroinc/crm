@@ -33,7 +33,7 @@
     {% import 'OroUIBundle::macros.html.twig' as ui %}
 
     {% set customer = entity.customerAssociation and entity.customerAssociation.customerTarget
-        ? entity.customerAssociation.target
+        ? entity.customerAssociation.customerTarget
         : null %}
     {% set account = entity.customerAssociation and entity.customerAssociation.account
         ? entity.customerAssociation.account
