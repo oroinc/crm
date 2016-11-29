@@ -11,7 +11,6 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
-
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
@@ -47,7 +46,6 @@ class OpportunitiesExtension extends AbstractExtension
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         /** @var $datasource OrmDataSource */
-        $opportunityId    = $this->parameters->get('opportunity_id', false);
         $customerClass    = $this->parameters->get('customer_class');
         $customerField    = $this->getCustomerField($customerClass);
         $queryBuilder     = $datasource->getQueryBuilder();
@@ -64,12 +62,6 @@ class OpportunitiesExtension extends AbstractExtension
             )
         );
         $queryBuilder->setParameter($customerIdParam, $this->parameters->get('customer_id'));
-
-        if ($opportunityId) {
-            $opportunityIdParam = ':opportunity_id';
-            $queryBuilder->andWhere(sprintf('%s.id <> %s', $opportunityAlias, $opportunityIdParam));
-            $queryBuilder->setParameter($opportunityIdParam, $opportunityId);
-        }
     }
 
     /**

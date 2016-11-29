@@ -453,6 +453,7 @@ services:
             - '@oro_sales.customer.account_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
+            - '@request_stack'
             - '@oro_sales.provider.opportunity.display_settings_config'
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
@@ -489,3 +490,9 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\DisplaySettingsConfigProvider
         arguments:
             - '@oro_config.manager'
+
+    oro_sales.datagrid.extension.customers.relevant_opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelevantOpportunitiesExtension
+        parent: oro_sales.datagrid.extension.customers.opportunities
+        tags:
+            - { name: oro_datagrid.extension }
