@@ -22,7 +22,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->renameActivityTables($schema, $queries);
-        $this->updateNotes($schema, $queries);
         $this->updateAttachments($schema, $queries);
     }
 
@@ -76,35 +75,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
         );
         $queries->addQuery(new UpdateExtendRelationQuery(
             'Oro\Bundle\AttachmentBundle\Entity\Attachment',
-            'Oro\Bundle\AccountBundle\Entity\Account',
-            'account_a806e96b',
-            'account_8d93c122',
-            RelationType::MANY_TO_ONE
-        ));
-    }
-
-    /**
-     * @param Schema $schema
-     * @param QueryBag $queries
-     */
-    private function updateNotes(Schema $schema, QueryBag $queries)
-    {
-        $extension = $this->renameExtension;
-        $notes = $schema->getTable('oro_note');
-
-        $notes->removeForeignKey('FK_BA066CE1E1980758');
-        $extension->renameColumn($schema, $queries, $notes, 'account_a806e96b_id', 'account_8d93c122_id');
-        $extension->addForeignKeyConstraint(
-            $schema,
-            $queries,
-            'oro_note',
-            'orocrm_account',
-            ['account_8d93c122_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\NoteBundle\Entity\Note',
             'Oro\Bundle\AccountBundle\Entity\Account',
             'account_a806e96b',
             'account_8d93c122',
