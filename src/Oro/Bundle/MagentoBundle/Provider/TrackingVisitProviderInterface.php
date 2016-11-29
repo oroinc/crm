@@ -18,7 +18,7 @@ interface TrackingVisitProviderInterface
      * @param \DateTime $from
      * @param \DateTime $to
      *
-     * @return int
+     * @return int|null
      */
     public function getVisitedCount(\DateTime $from = null, \DateTime $to = null);
 
