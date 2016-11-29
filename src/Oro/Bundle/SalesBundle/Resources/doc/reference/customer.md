@@ -14,15 +14,15 @@ Sales Entities Account Associations
 -----------------------------------
 
 As developer you have possibility to create association to sales lead and opportunity entities with some own customer entity.
-This option allow configure this relation and display special form type to choose or create customer from any allowed types of customer in application.
-You can define customer icon image, choose grid and create form route data.
-Customer info will shown on opportunity, lead view page and on entity edit page.
+This option allows to configure this relation and to display special form type to choose or create customer from any allowed types of customer in application.
+You can define icon image, choose grid and create form route data.
+Customer info will show on opportunity, lead view page and on entity edit page.
 
 
 Migration Extension
 -------------------
 
-For enable association you should create migration and add relation to opportunity and lead. 
+To enable association you should create migration and add relation to opportunity and lead. 
 For this we have two migration extensions - OpportunityExtension, LeadExtension.
 
 Migration example:
@@ -47,8 +47,9 @@ class YourMigration implements Migration, OpportunityExtensionAwareInterface, Le
 Icon Provider
 --------------
 
-You can define customer icon image for your associated customer entity. This image will appear in list of customers in form type component.
-For define this icon you should implement CustomerIconProviderInterface and register it class as service.
+You can define icon image for your associated customer entity. This image will appear in list of customers in form type component.
+To define this icon you should create class which implements CustomerIconProviderInterface and register the class as service with 
+tag oro_sales.customer_icon.
 
 Example:
 
