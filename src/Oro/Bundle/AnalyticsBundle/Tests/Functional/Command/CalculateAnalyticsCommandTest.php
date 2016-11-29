@@ -2,130 +2,102 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
+use Oro\Bundle\AnalyticsBundle\Async\Topics;
+use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class CalculateAnalyticsCommandTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     protected function setUp()
     {
-        $this->initClient([], [], true);
-        $this->loadFixtures(['Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
+        parent::setUp();
+
+        $this->initClient();
+        $this->loadFixtures([LoadCustomerData::class]);
     }
 
-    /**
-     * @param array $parameters
-     * @param array $expects
-     * @param array $notContains
-     *
-     * @dataProvider dataProvider
-     */
-    public function testCommand(array $parameters, array $expects = [], array $notContains = [])
+    public function testShouldScheduleCalculateAnalyticsForGivenChannel()
     {
-        $options = ['--ids', '--channel'];
-        foreach ($options as $option) {
-            if (!empty($parameters[$option])) {
-                if (is_string($parameters[$option])) {
-                    $parameters[$option] = $this->getReference($parameters[$option])->getId();
-                }
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
 
-                $parameters[] = sprintf('%s=%s', $option, $parameters[$option]);
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel='.$channel->getId()]);
 
-                unset($parameters[$option]);
-            }
-        }
+        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
+        self::assertContains('Completed', $result);
 
-        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME, $parameters);
-        foreach ($expects as $expect) {
-            $this->assertContains($expect, $output);
-        }
-        foreach ($notContains as $notContain) {
-            $this->assertNotContains($notContain, $output);
-        }
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
+                [
+                    'channel_id' => $channel->getId(),
+                    'customer_ids' => []
+                ],
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 
-    /**
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function dataProvider()
+    public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
     {
-        return [
-            'one not supported channel' => [
+        $result = $this->runCommand('oro:cron:analytic:calculate');
+
+        self::assertContains('Schedule analytics calculation for all channels.', $result);
+        self::assertContains('Completed', $result);
+
+        self::assertMessageSent(
+            Topics::CALCULATE_ALL_CHANNELS_ANALYTICS,
+            new Message([], MessagePriority::VERY_LOW)
+        );
+    }
+
+    public function testThrowIfCustomerIdsSetWithoutChannelId()
+    {
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--ids=1', '--ids=2']);
+
+        self::assertContains('[InvalidArgumentException]', $result);
+        self::assertContains('Option "ids" does not work without "channel"', $result);
+    }
+
+    public function testShouldScheduleCalculateAnalyticsForGivenChannelWithCustomerIdsSet()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
+
+        /** @var Customer $customerOne */
+        $customerOne = $this->getReference('Channel.CustomerChannel.Customer');
+
+        /** @var Customer $customerTwo */
+        $customerTwo = $this->getReference('Channel.CustomerChannel.Customer2');
+
+        $result = $this->runCommand('oro:cron:analytic:calculate', [
+            '--channel='.$channel->getId(),
+            '--ids='.$customerOne->getId(),
+            '--ids='.$customerTwo->getId(),
+        ]);
+
+        self::assertContains('Schedule analytics calculation for "'.$channel->getId().'" channel.', $result);
+        self::assertContains('Completed', $result);
+
+        self::assertMessageSent(
+            Topics::CALCULATE_CHANNEL_ANALYTICS,
+            new Message(
                 [
-                    '--channel' => 'Channel.CustomerIdentity',
+                    'channel_id' => $channel->getId(),
+                    'customer_ids' => [$customerOne->getId(), $customerTwo->getId()]
                 ],
-                [],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'supported channel' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'non existing id' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                    '--ids' => 42,
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'existing entity' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                ]
-            ],
-            'ids with wrong channel' => [
-                [
-                    '--channel' => 'Channel.CustomerIdentity',
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'all channels with ids' => [
-                [
-                    '--ids' => 'Channel.CustomerChannel.Customer',
-                ],
-                [
-                    'Option "ids" does not work without "channel"',
-                ],
-                [
-                    '[Process]',
-                    '[Done]',
-                ]
-            ],
-            'all channels' => [
-                [],
-                [
-                    '[Process] Channel: CustomerChannel',
-                    '[Done] Channel: CustomerChannel updated.',
-                    '[Process] Channel: CustomerChannel2',
-                    '[Done] Channel: CustomerChannel2 updated.',
-                ]
-            ]
-        ];
+                MessagePriority::VERY_LOW
+            )
+        );
     }
 }

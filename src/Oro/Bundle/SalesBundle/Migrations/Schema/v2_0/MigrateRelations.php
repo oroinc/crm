@@ -4,6 +4,8 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_0;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
@@ -24,6 +26,25 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
         $this->renameActivityTables($schema, $queries);
         $this->updateAttachments($schema, $queries);
         $this->updateNotes($schema, $queries);
+
+        $queries->addPostQuery(
+            new UpdateEntityConfigFieldValueQuery(
+                'Oro\Bundle\SalesBundle\Entity\Lead',
+                'campaign',
+                'datagrid',
+                'is_visible',
+                DatagridScope::IS_VISIBLE_FALSE
+            )
+        );
+        $queries->addPostQuery(
+            new UpdateEntityConfigFieldValueQuery(
+                'Oro\Bundle\SalesBundle\Entity\Lead',
+                'campaign',
+                'datagrid',
+                'show_filter',
+                false
+            )
+        );
     }
 
     /**
