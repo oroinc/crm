@@ -67,3 +67,9 @@ UPGRADE FROM 1.10 to 2.0
 
 ####CalendarCRMBridgeBundle:
 - CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
+
+####OroCampaignBundle
+- Moved ``CampaignBundle`` to a separate ``marketing`` package, required by default in the CRM application.
+
+####OroMarketingListBundle
+- Moved ``MarketingListBundle`` to a separate ``marketing`` package, required by default in the CRM application.
