@@ -21,6 +21,9 @@ class OpportunitiesListener
     // opportunities grid rendered in template
     const GRID_NAME = 'sales-customers-opportunities-grid';
 
+    // opportunities grid rendered in template
+    const GRID_NAME_ALTERNATE = 'sales-customers-opportunities-alternate-grid';
+
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
@@ -65,14 +68,14 @@ class OpportunitiesListener
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
         $entity = $event->getEntity();
-
+        $gridName = self::GRID_NAME;
         // Opportunity view related data and check
         $opportunityId = null;
         $displayOnOpportunityView = $this->opportunityDisplayConfigProvider->isFeatureEnabled();
 
         if ($entity instanceof Opportunity && $entity->getCustomerAssociation() && $displayOnOpportunityView) {
+            $gridName = $this->getGridName();
             $opportunityId = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-            $this->resetOpportunityIdGridParameter($opportunityId);
             $entity = $entity->getCustomerAssociation()->getAccount();
         }
 
@@ -85,7 +88,9 @@ class OpportunitiesListener
 
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
-                ['gridParams' =>
+                [
+                    'gridName'   => $gridName,
+                    'gridParams' =>
                      [
                          'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
                          'customer_class' => ClassUtils::getClass($entity),
@@ -102,27 +107,20 @@ class OpportunitiesListener
         }
     }
 
-    private function resetOpportunityIdGridParameter($opportunityId)
+    /**
+     * Returns an alternate grid name in case the default is already requested
+     *
+     * @return string
+     */
+    private function getGridName()
     {
-        if (!$this->requestStack->getCurrentRequest()->query->has('grid')) {
-            return;
+        if ($this->requestStack->getCurrentRequest()->query->has('grid')) {
+            $gridParams = $this->requestStack->getCurrentRequest()->query->get('grid');
+
+            return array_key_exists(self::GRID_NAME, $gridParams) ? self::GRID_NAME_ALTERNATE : self::GRID_NAME;
         }
 
-        $gridParams = $this->requestStack->getCurrentRequest()->query->get('grid');
+        return self::GRID_NAME;
 
-        if (array_key_exists(self::GRID_NAME, $gridParams)) {
-            $opportunityGridParams = $gridParams[self::GRID_NAME];
-            if (!is_array($opportunityGridParams)) {
-                $params = [];
-                parse_str($opportunityGridParams, $params);
-                $params['g']['opportunity_id'] = $opportunityId;
-                $opportunityGridParams = http_build_query($params);
-            } else {
-                $opportunityGridParams['g']['opportunity_id'] = $opportunityId;
-            }
-
-            $gridParams[self::GRID_NAME] = $opportunityGridParams;
-            $this->requestStack->getCurrentRequest()->query->set('grid', $gridParams);
-        }
     }
 }

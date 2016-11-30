@@ -14,7 +14,6 @@ class RelevantOpportunitiesExtension extends AccountOpportunitiesExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return $this->parameters->get('opportunity_id') && parent::isApplicable($config);
-
     }
     
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)

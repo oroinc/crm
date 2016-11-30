@@ -2257,3 +2257,6 @@ datagrids:
                 type:       url
                 route:      oro_api_delete_opportunity
                 params:     [ id ]
+
+    sales-customers-opportunities-alternate-grid:
+        extends: sales-customers-opportunities-grid
