@@ -276,8 +276,11 @@ services:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         arguments:
             - '@oro_sales.builder.opportunity_relations'
+            - '@oro_currency.config.currency'
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_before, method: onProcessBefore }
 
     oro_sales.provider.opportunity_by_status:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
@@ -382,6 +385,8 @@ services:
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
+        arguments:
+            - '@oro_currency.converter.rate'
         tags:
             - { name: doctrine.event_listener, event: onFlush, priority: 100 }
 

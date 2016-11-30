@@ -481,6 +481,32 @@ class Opportunity extends ExtendOpportunity implements
     protected $closedAt;
 
     /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->initializeMultiCurrencyFields();
+    }
+
+    /**
+     * @ORM\PostLoad
+     */
+    public function initializeMultiCurrencyFields()
+    {
+        $this->budgetAmount = MultiCurrency::create(
+            $this->budgetAmountValue,
+            $this->budgetAmountCurrency,
+            $this->baseBudgetAmountValue
+        );
+        $this->closeRevenue = MultiCurrency::create(
+            $this->closeRevenueValue,
+            $this->closeRevenueCurrency,
+            $this->baseCloseRevenueValue
+        );
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -527,13 +553,10 @@ class Opportunity extends ExtendOpportunity implements
         return $this;
     }
 
-    /**
-     * @ORM\PostLoad
-     */
-    public function loadMultiCurrencyFields()
+    public function resetBaseAmountInMulticurrencyFields()
     {
-        $this->budgetAmount = MultiCurrency::create($this->budgetAmountValue, $this->budgetAmountCurrency);
-        $this->closeRevenue = MultiCurrency::create($this->closeRevenueValue, $this->closeRevenueCurrency);
+        $this->setBaseBudgetAmountValue(null);
+        $this->setBaseCloseRevenueValue(null);
     }
 
     /**
@@ -567,6 +590,11 @@ class Opportunity extends ExtendOpportunity implements
     public function setBaseBudgetAmountValue($value)
     {
         $this->baseBudgetAmountValue = $value;
+
+        if ($this->budgetAmount instanceof MultiCurrency) {
+            $this->budgetAmount->setBaseCurrencyValue($value);
+        }
+
         return $this;
     }
 
@@ -585,6 +613,11 @@ class Opportunity extends ExtendOpportunity implements
     public function setBaseCloseRevenueValue($value)
     {
         $this->baseCloseRevenueValue = $value;
+
+        if ($this->closeRevenue instanceof MultiCurrency) {
+            $this->closeRevenue->setBaseCurrencyValue($value);
+        }
+
         return $this;
     }
 
@@ -1017,5 +1050,13 @@ class Opportunity extends ExtendOpportunity implements
     public function getClosedAt()
     {
         return $this->closedAt;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getClosedStatuses()
+    {
+        return [self::STATUS_WON, self::STATUS_LOST];
     }
 }
