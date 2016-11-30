@@ -56,6 +56,8 @@ oro:
                 added_to_cart: Added to cart
                 purchased: Purchased
         datagrid:
+            views:
+                non_empty_carts.label: Magento Shopping Carts
             actions:
                 view:
                     label: View
