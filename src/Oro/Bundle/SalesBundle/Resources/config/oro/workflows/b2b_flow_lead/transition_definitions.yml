@@ -8,7 +8,6 @@ workflows:
                 preconditions:  # if lead.status = "new"
                     '@and':
                         - '@equal': [$lead.status.id, 'new']
-                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
                         - '@feature_enabled':
                             feature: sales_opportunity
                 conditions:
@@ -150,7 +149,6 @@ workflows:
                                     attribute: $b2bcustomer
                                     data:
                                         name:        $company_name
-                                        dataChannel: $lead.dataChannel
                                         account:     $account
                                         website:     $lead.website
                                         employees:   $lead.numberOfEmployees
@@ -169,7 +167,6 @@ workflows:
                             name:        $opportunity_name
                             contact:     $lead.contact
                             customer:    $b2bcustomer
-                            dataChannel: $lead.dataChannel
                             lead:        $lead
                             notes:       $notes
                     - '@request_enum_entity': # set status "In Progress" to opportunity

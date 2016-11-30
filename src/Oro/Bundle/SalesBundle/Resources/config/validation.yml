@@ -8,7 +8,7 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
                 max: 100
-        dataChannel:
+        data_channel:
             - NotBlank: ~
         organization:
             - NotBlank: ~
@@ -27,7 +27,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         lastName:
             - Length:
                 max: 255
-        dataChannel:
+        data_channel:
             - NotBlank: ~
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:

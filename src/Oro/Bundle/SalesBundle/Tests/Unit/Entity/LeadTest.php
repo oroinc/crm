@@ -28,9 +28,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
     {
         $now          = new \DateTime('now');
         $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
         $customer     = $this->getMock('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
@@ -50,7 +48,6 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'updatedAt'         => ['updatedAt', $now, $now],
             'notes'             => ['notes', 'test', 'test'],
             'customer'          => ['customer', $customer, $customer],
-            'dataChannel'       => ['dataChannel', $channel, $channel],
             'organization'      => array('organization', $organization, $organization),
             'twitter'           => ['twitter', 'test', 'test'],
             'linkedIn'          => ['linkedIn', 'test', 'test'],

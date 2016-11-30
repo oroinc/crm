@@ -21,7 +21,6 @@ workflows:
                             form_type: oro_sales_b2bcustomer_select
                             options:
                                 required: false
-                                channel_id: $dataChannel.id
                         company_name:
                             form_type: text
                             options:

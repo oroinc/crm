@@ -15,5 +15,3 @@ workflows:
                 type: string
             notes:
                 type: string
-            dataChannel:
-                property_path: lead.dataChannel

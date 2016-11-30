@@ -95,7 +95,6 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setOwner($user);
         $opportunity->setOrganization($this->organization);
         $opportunity->setCustomer($customer);
-        $opportunity->setDataChannel($dataChannel);
 
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];

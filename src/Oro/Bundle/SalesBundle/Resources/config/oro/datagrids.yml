@@ -41,7 +41,7 @@ datagrids:
                         - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
+                        - { join: o.data_channel, alias: channel }
                         - { join: o.owner, alias: own }
                         - { join: o.customer, alias: customer }
         inline_editing:
@@ -126,7 +126,7 @@ datagrids:
         fields_acl:
             columns:
                 channelName:
-                    data_name: o.dataChannel
+                    data_name: o.data_channel
                 name:
                     data_name: o.name
                 createdAt:
@@ -384,7 +384,7 @@ datagrids:
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
-                        - { join: l.dataChannel, alias: channel }
+                        - { join: l.data_channel, alias: channel }
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
                         - { join: l.customer, alias: customer }
@@ -870,30 +870,30 @@ datagrids:
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
         channel_limitation:
-            channel_relation_path: dataChannel
+            channel_relation_path: data_channel
         source:
             query:
                 join:
                     left:
-                        - { join: lead.dataChannel, alias: dataChannel }
+                        - { join: lead.data_channel, alias: data_channel }
                 where:
                     and:
-                        - IDENTITY(lead.dataChannel) in (:channelIds)
+                        - IDENTITY(lead.data_channel) in (:channelIds)
             bind_parameters:
                 - channelIds
 
     sales-funnel-opportunity-with-data-channel-grid:
         extends: sales-funnel-opportunity-grid
         channel_limitation:
-            channel_relation_path: dataChannel
+            channel_relation_path: data_channel
         source:
             query:
                 join:
                     left:
-                        - { join: opportunity.dataChannel, alias: dataChannel }
+                        - { join: opportunity.data_channel, alias: data_channel }
                 where:
                     and:
-                        - IDENTITY(opportunity.dataChannel) in (:channelIds)
+                        - IDENTITY(opportunity.data_channel) in (:channelIds)
             bind_parameters:
                 - channelIds
 
@@ -1776,7 +1776,7 @@ datagrids:
                 join:
                     left:
                         - { join: l.status, alias: s }
-                        - { join: l.dataChannel, alias: channel }
+                        - { join: l.data_channel, alias: channel }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
@@ -1868,7 +1868,7 @@ datagrids:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
+                        - { join: o.data_channel, alias: channel }
                         - { join: o.owner, alias: owner }
         columns:
             id:
@@ -1888,7 +1888,7 @@ datagrids:
         fields_acl:
             columns:
                 channelName:
-                    data_name: o.dataChannel
+                    data_name: o.data_channel
                 name:
                     data_name: o.name
                 statusLabel:

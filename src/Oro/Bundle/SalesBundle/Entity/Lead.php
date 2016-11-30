@@ -18,8 +18,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendLead;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -80,11 +78,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class Lead extends ExtendLead implements
     FullNameInterface,
-    EmailHolderInterface,
-    ChannelAwareInterface
+    EmailHolderInterface
 {
-    use ChannelEntityTrait;
-
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
