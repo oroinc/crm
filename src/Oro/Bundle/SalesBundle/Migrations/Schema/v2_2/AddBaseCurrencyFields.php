@@ -1,26 +1,19 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_1;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_2;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddBaseCurrencyFields implements Migration
+class AddBaseCurrencyFields implements Migration, OrderedMigrationInterface
 {
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queryBag)
-    {
-        self::addBaseCurrencyFields($schema);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    public static function addBaseCurrencyFields(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
 
@@ -35,5 +28,10 @@ class AddBaseCurrencyFields implements Migration
             'money',
             ['notnull' => false, 'comment' => '(DC2Type:money)']
         );
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

@@ -181,6 +181,8 @@ oro:
                 label:            Close revenue Currency
             base_close_revenue_value:
                 label:            Base Close Revenue
+            close_revenue_base_currency:
+                label:            Base Close Revenue
             customer_need:
                 label:            Customer need
                 description:      The detailed description of customers' needs that constitute the business opportunity
