@@ -2,15 +2,18 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducer;
+use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
@@ -99,10 +102,10 @@ class ChannelController extends Controller
     public function changeStatusAction(Channel $channel)
     {
         if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $message = 'oro.channel.controller.message.status.deactivated';
+            $flashMessage = 'oro.channel.controller.message.status.deactivated';
             $channel->setStatus(Channel::STATUS_INACTIVE);
         } else {
-            $message = 'oro.channel.controller.message.status.activated';
+            $flashMessage = 'oro.channel.controller.message.status.activated';
             $channel->setStatus(Channel::STATUS_ACTIVE);
         }
 
@@ -110,10 +113,12 @@ class ChannelController extends Controller
             ->getManager()
             ->flush();
 
-        $event = new ChannelChangeStatusEvent($channel);
+        $this->getMessageProducer()->send(
+            Topics::CHANNEL_STATUS_CHANGED,
+            new Message(['channelId' => $channel->getId()], MessagePriority::HIGH)
+        );
 
-        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
-        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
+        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($flashMessage));
 
         return $this->redirect(
             $this->generateUrl(
@@ -148,5 +153,13 @@ class ChannelController extends Controller
         return [
             'channel' => $channel
         ];
+    }
+
+    /**
+     * @return MessageProducer
+     */
+    protected function getMessageProducer()
+    {
+        return $this->get('oro_message_queue.message_producer');
     }
 }
