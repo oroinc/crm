@@ -61,8 +61,11 @@ abstract class LoadAclRolesData extends AbstractFixture implements DependentFixt
         $rolesData = Yaml::parse(file_get_contents($fileName));
 
         foreach ($rolesData as $roleName => $roleConfigData) {
+            if (!empty($roleConfigData['bap_role'])) {
+                $roleName = $roleConfigData['bap_role'];
+            }
             $role = $manager->getRepository('OroUserBundle:Role')->findOneBy(['role' => $roleName]);
-            if (!$role) {
+            if (null === $role) {
                 continue;
             }
             $sid = $aclManager->getSid($role);
