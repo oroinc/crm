@@ -25,18 +25,18 @@ class OpportunitiesListener
     protected $doctrineHelper;
 
     /**
-     * @param ConfigProvider $customerConfigProvider
+     * @param ConfigProvider      $customerConfigProvider
      * @param TranslatorInterface $translator
-     * @param DoctrineHelper $helper
+     * @param DoctrineHelper      $helper
      */
     public function __construct(
         ConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
         DoctrineHelper $helper
     ) {
-        $this->customerConfigProvider           = $customerConfigProvider;
-        $this->translator                       = $translator;
-        $this->doctrineHelper                   = $helper;
+        $this->customerConfigProvider = $customerConfigProvider;
+        $this->translator             = $translator;
+        $this->doctrineHelper         = $helper;
     }
 
     /**
@@ -48,7 +48,6 @@ class OpportunitiesListener
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
         $entity = $event->getEntity();
-
         if ($this->customerConfigProvider->isCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
@@ -57,7 +56,7 @@ class OpportunitiesListener
                 ['gridParams' =>
                      [
                          'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
-                         'customer_class' => ClassUtils::getClass($entity)
+                         'customer_class' => ClassUtils::getClass($entity),
                      ]
                 ]
             );
