@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
-
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 
@@ -15,7 +14,11 @@ class RelevantOpportunitiesExtension extends AccountOpportunitiesExtension
     {
         return $this->parameters->get('opportunity_id') && parent::isApplicable($config);
     }
-    
+
+    /**
+     * @param  DatagridConfiguration $config
+     * @param  DatasourceInterface   $datasource
+     */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
         $opportunityId = $this->parameters->get('opportunity_id');
