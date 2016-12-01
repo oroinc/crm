@@ -56,7 +56,8 @@ class OpportunitiesListener
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),
-                'subblocks' => [['data' => [$opportunitiesData]]]
+                'subblocks' => [['data' => [$opportunitiesData]]],
+                'priority'  => 100
             ];
             $event->setData($data);
         }
