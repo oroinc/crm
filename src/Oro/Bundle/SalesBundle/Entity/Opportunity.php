@@ -486,13 +486,13 @@ class Opportunity extends ExtendOpportunity implements
     public function __construct()
     {
         parent::__construct();
-        $this->initializeMultiCurrencyFields();
+        $this->loadMultiCurrencyFields();
     }
 
     /**
      * @ORM\PostLoad
      */
-    public function initializeMultiCurrencyFields()
+    public function loadMultiCurrencyFields()
     {
         $this->budgetAmount = MultiCurrency::create(
             $this->budgetAmountValue,
@@ -553,12 +553,6 @@ class Opportunity extends ExtendOpportunity implements
         return $this;
     }
 
-    public function resetBaseAmountInMulticurrencyFields()
-    {
-        $this->setBaseBudgetAmountValue(null);
-        $this->setBaseCloseRevenueValue(null);
-    }
-
     /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
@@ -569,17 +563,25 @@ class Opportunity extends ExtendOpportunity implements
     {
         if ($this->budgetAmount) {
             $this->budgetAmountValue = $this->budgetAmount->getValue();
-            $currency = $this->budgetAmount->getValue() !== null ?
-                $this->budgetAmount->getCurrency() :
-                null;
-            $this->budgetAmountCurrency = $currency;
+
+            if (null !== $this->budgetAmountValue && '' !== $this->closeRevenueValue) {
+                $this->setBudgetAmountCurrency($this->budgetAmount->getCurrency());
+                $this->setBaseBudgetAmountValue($this->budgetAmount->getBaseCurrencyValue());
+            } else {
+                $this->setBudgetAmountCurrency(null);
+                $this->setBaseBudgetAmountValue(null);
+            }
         }
         if ($this->closeRevenue) {
             $this->closeRevenueValue = $this->closeRevenue->getValue();
-            $currency = $this->closeRevenue->getValue() !== null ?
-                $this->closeRevenue->getCurrency() :
-                null;
-            $this->closeRevenueCurrency = $currency;
+
+            if (null !== $this->closeRevenueValue && '' !== $this->closeRevenueValue) {
+                $this->setCloseRevenueCurrency($this->closeRevenue->getCurrency());
+                $this->setBaseCloseRevenueValue($this->closeRevenue->getBaseCurrencyValue());
+            } else {
+                $this->setCloseRevenueCurrency(null);
+                $this->setBaseCloseRevenueValue(null);
+            }
         }
     }
 

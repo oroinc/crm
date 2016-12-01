@@ -83,7 +83,8 @@ class OpportunityListener
 
         if (! in_array($newStatusId, Opportunity::getClosedStatuses(), true)
             && $this->isNotNullBaseAmountFieldsExist($opportunity)) {
-            $opportunity->resetBaseAmountInMulticurrencyFields();
+            $opportunity->getBudgetAmount()->setBaseCurrencyValue(null);
+            $opportunity->getCloseRevenue()->setBaseCurrencyValue(null);
             $isOppportunityChanged = true;
         }
 
