@@ -41,12 +41,6 @@
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
-
-    {% if resource_granted('oro_sales_salesfunnel_create')
-        and resource_granted('oro_workflow')
-        and form.vars.value.id is empty
-    %}
-    {% endif %}
 {% endblock %}
 
 {% block pageHeader %}
