@@ -136,16 +136,16 @@ class OpportunityListener
             && null === $opportunity->getBaseBudgetAmountValue()
             && null !== $opportunity->getBudgetAmountValue()
         ) {
-            $baseBudgetAmount = $this->rateConverter->getBaseCurencyAmount($opportunity->getBudgetAmount());
+            $baseBudgetAmount = $this->rateConverter->getBaseCurrencyAmount($opportunity->getBudgetAmount());
             $opportunity->setBaseBudgetAmountValue($baseBudgetAmount);
             $isOppportunityChanged = true;
         }
 
         if ($opportunity->getCloseRevenue() instanceof MultiCurrency
             && null === $opportunity->getBaseCloseRevenueValue()
-            && null !== $opportunity->getCloseRevenue()
+            && null !== $opportunity->getCloseRevenueValue()
         ) {
-            $closeRevenueAmount = $this->rateConverter->getBaseCurencyAmount($opportunity->getCloseRevenue());
+            $closeRevenueAmount = $this->rateConverter->getBaseCurrencyAmount($opportunity->getCloseRevenue());
             $opportunity->setBaseCloseRevenueValue($closeRevenueAmount);
             $isOppportunityChanged = true;
         }

@@ -139,6 +139,9 @@ services:
 
     oro_sales.event_listener.b2bcustomer_lifetime:
         class: %oro_sales.event_listener.b2bcustomer_lifetime.class%
+        arguments:
+            - '@oro_currency.converter.rate.link'
+            - '@oro_currency.query.currency_transformer'
         tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
