@@ -34,7 +34,8 @@
     {% set customer = entity.customerTarget
         ? entity.customerTarget
         : null %}
-    {% set account = customer.account
+
+    {% set account = customer is not null and customer.account
         ? customer.account
         : null %}
 

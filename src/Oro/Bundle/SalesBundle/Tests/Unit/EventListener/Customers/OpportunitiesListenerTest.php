@@ -89,7 +89,11 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
         $event = new BeforeViewRenderEvent($env, $data, $entity);
         $this->prepareEntityConfigs($entity, true, true);
         $this->listener->addOpportunities($event);
-        $data['dataBlocks'][] = ['title' => $opportunitiesTitle, 'subblocks' => [['data' => [$opportunitiesData]]]];
+        $data['dataBlocks'][] = [
+            'title' => $opportunitiesTitle,
+            'subblocks' => [['data' => [$opportunitiesData]]],
+            'priority' => 100
+        ];
         $this->assertEquals(
             $data,
             $event->getData()
