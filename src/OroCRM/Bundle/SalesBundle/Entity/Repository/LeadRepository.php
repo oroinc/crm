@@ -201,12 +201,12 @@ class LeadRepository extends EntityRepository
 
         if ($start) {
             $qb
-                ->andWhere('l.createdAt > :start')
+                ->andWhere('l.createdAt >= :start')
                 ->setParameter('start', $start);
         }
         if ($end) {
             $qb
-                ->andWhere('l.createdAt < :end')
+                ->andWhere('l.createdAt <= :end')
                 ->setParameter('end', $end);
         }
 
