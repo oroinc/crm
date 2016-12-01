@@ -1023,3 +1023,7 @@ services:
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 
+    oro_magento.datagrid.cart_view_list:
+        class: Oro\Bundle\MagentoBundle\Datagrid\CartViewList
+        arguments:
+            - '@translator'

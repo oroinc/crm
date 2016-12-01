@@ -13,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
@@ -27,7 +26,6 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/cart/{id}", name="oro_magento_orderplace_cart", requirements={"id"="\d+"}))
-     * @AclAncestor("oro_workflow")
      * @Template("OroMagentoBundle:OrderPlace:widget/place.html.twig")
      * @param Cart $cart
      * @return array
@@ -56,7 +54,6 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/sync/{id}", name="oro_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
-     * @AclAncestor("oro_workflow")
      * @param Cart $cart
      * @return JsonResponse
      */
@@ -113,7 +110,6 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/customer/{id}", name="oro_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
-     * @AclAncestor("oro_workflow")
      * @Template("OroMagentoBundle:OrderPlace:widget/place.html.twig")
      * @param Customer $customer
      * @return array
@@ -145,7 +141,6 @@ class OrderPlaceController extends Controller
      *   "/customer_sync/{id}",
      *   name="oro_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
      * )
-     * @AclAncestor("oro_workflow")
      * @param Customer $customer
      * @return JsonResponse
      */
@@ -184,7 +179,6 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/success", name="oro_magento_orderplace_success")
-     * @AclAncestor("oro_workflow")
      * @Template
      */
     public function successAction()
@@ -194,7 +188,6 @@ class OrderPlaceController extends Controller
 
     /**
      * @Route("/error", name="oro_magento_orderplace_error"))
-     * @AclAncestor("oro_workflow")
      * @Template
      */
     public function errorAction()
