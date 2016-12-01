@@ -362,6 +362,9 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                itemsQty:
+                    type: number-range
+                    data_name: c.itemsQty
         actions:
             view:
                 type:         navigate
@@ -374,6 +377,7 @@ datagrid:
             entityHint: cart
             export: true
             entity_pagination: true
+        views_list : '@orocrm_magento.datagrid.cart_view_list'
 
     magento-cartitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem

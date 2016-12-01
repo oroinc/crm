@@ -985,3 +985,8 @@ services:
         public: false
         tags:
             - { name: routing.options_resolver }
+
+    orocrm_magento.datagrid.cart_view_list:
+        class: OroCRM\Bundle\MagentoBundle\Datagrid\CartViewList
+        arguments:
+            - '@translator'
