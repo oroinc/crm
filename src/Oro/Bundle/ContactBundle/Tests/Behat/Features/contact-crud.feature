@@ -33,14 +33,14 @@ Scenario: Create contact
     | Country         | United States |
     | Street          | Selma Ave     |
     | City            | Los Angeles   |
-    | Zip/Postal Code | 90028         |
+    | Zip/postal code | 90028         |
     | State           | California    |
   And add new address with:
     | Primary         | check               |
     | Country         | Ukraine             |
     | Street          | Myronosytska 57     |
     | City            | Kharkiv             |
-    | Zip/Postal Code | 61000               |
+    | Zip/postal code | 61000               |
     | State           | Kharkivs'ka Oblast' |
   When save and close form
   Then I should see "Contact saved" flash message

@@ -43,7 +43,6 @@ Feature: Import opportunity feature
       | Owner       | John Doe            |
       | Probability | 32%                 |
 
-
   Scenario: Import Opportunity with new Account
     Given I fill template with data:
       | Account Customer name | Channel Name        | Opportunity name  | Status Id   |
@@ -65,6 +64,8 @@ Feature: Import opportunity feature
     Then "Account without Customer" Customer was created
     And Account without Customer customer has Opportunity four opportunity
 
+  @skip
+  # todo: CRM-6953
   Scenario: Import Opportunity with no Account
     Given I open Opportunity Index page
     And I fill template with data:

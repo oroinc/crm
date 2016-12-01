@@ -26,7 +26,6 @@ Feature: Tie Opportunity probability to its status
   Scenario: Add new Opportunity
     Given I fill form with:
       | Opportunity Name | Build new Death Star |
-      | Account          | Darth Vader          |
       | Status           | Needs Analysis       |
     When I save and close form
     Then should see Opportunity with:
