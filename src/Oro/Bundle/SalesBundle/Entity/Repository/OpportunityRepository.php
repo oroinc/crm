@@ -659,11 +659,11 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        if ($start instanceof \DateTime) {
+        if ($start) {
             $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start);
         }
 
-        if ($end instanceof \DateTime) {
+        if ($end) {
             $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end);
         }
     }
@@ -675,11 +675,11 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        if ($start instanceof \DateTime) {
+        if ($start) {
             $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start);
         }
 
-        if ($end instanceof \DateTime) {
+        if ($end) {
             $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end);
         }
     }
