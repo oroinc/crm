@@ -60,7 +60,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_D204B9806C01E208');
         }
 
-        if ($table->hasColumn('customer_ff3bb796_id')) {
+        if ($table->hasColumn('customer_ff3bb796_id') && !$table->hasColumn('customer_7c2d0d96_id')) {
             $extension->renameColumn($schema, $queries, $table, 'customer_ff3bb796_id', 'customer_7c2d0d96_id');
             $extension->addForeignKeyConstraint(
                 $schema,
@@ -94,7 +94,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_B39EEE8F218EECB4');
         }
 
-        if ($table->hasColumn('campaign_cb6118ed_id')) {
+        if ($table->hasColumn('campaign_cb6118ed_id') && !$table->hasColumn('campaign_a14160a8_id')) {
             $extension->renameColumn($schema, $queries, $table, 'campaign_cb6118ed_id', 'campaign_a14160a8_id');
             $extension->addForeignKeyConstraint(
                 $schema,
@@ -128,7 +128,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_B39EEE8F6463B7EE');
         }
 
-        if ($table->hasColumn('customer_bb9e15ff_id')) {
+        if ($table->hasColumn('customer_bb9e15ff_id') && !$table->hasColumn('customer_2bc6a2ee_id')) {
             $extension->renameColumn($schema, $queries, $table, 'customer_bb9e15ff_id', 'customer_2bc6a2ee_id');
             $extension->addForeignKeyConstraint(
                 $schema,
@@ -162,7 +162,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_B39EEE8F7A410A1C');
         }
 
-        if ($table->hasColumn('cart_72e8ef17_id')) {
+        if ($table->hasColumn('cart_72e8ef17_id') && !$table->hasColumn('cart_4962cb03_id')) {
             $extension->renameColumn($schema, $queries, $table, 'cart_72e8ef17_id', 'cart_4962cb03_id');
             $extension->addForeignKeyConstraint(
                 $schema,
@@ -196,7 +196,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_B39EEE8F15F9453D');
         }
 
-        if ($table->hasColumn('order_23867b17_id')) {
+        if ($table->hasColumn('order_23867b17_id') && !$table->hasColumn('order_3967254e_id')) {
             $extension->renameColumn($schema, $queries, $table, 'order_23867b17_id', 'order_3967254e_id');
             $extension->addForeignKeyConstraint(
                 $schema,
@@ -230,7 +230,7 @@ class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInte
             $table->removeForeignKey('FK_B39EEE8FE0618C12');
         }
 
-        if ($table->hasColumn('product_c1803ccc_id')) {
+        if ($table->hasColumn('product_c1803ccc_id') && !$table->hasColumn('product_262abcc3_id')) {
             $extension->renameColumn($schema, $queries, $table, 'product_c1803ccc_id', 'product_262abcc3_id');
             $extension->addForeignKeyConstraint(
                 $schema,
