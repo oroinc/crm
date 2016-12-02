@@ -8,8 +8,8 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
                 max: 100
-        data_channel:
-            - NotBlank: ~
+#        data_channel:
+#            - NotBlank: ~
         organization:
             - NotBlank: ~
         status:
@@ -27,8 +27,8 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         lastName:
             - Length:
                 max: 255
-        data_channel:
-            - NotBlank: ~
+#        data_channel:
+#            - NotBlank: ~
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of emails must be set as primary.
