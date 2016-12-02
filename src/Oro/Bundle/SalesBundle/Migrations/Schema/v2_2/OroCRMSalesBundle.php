@@ -34,13 +34,13 @@ class OroCRMSalesBundle implements Migration, ConvertToExtendExtensionAwareInter
     {
         $this->сonvertToExtendExtension->manyToOneRelation(
             $queries,
+            $schema,
             'Oro\Bundle\SalesBundle\Entity\Opportunity',
             'dataChannel',
-            $schema,
             'orocrm_sales_opportunity',
             'data_channel',
             'orocrm_channel',
-            'id',
+            'name',
             [
                 ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
                 'extend' => [
@@ -48,23 +48,23 @@ class OroCRMSalesBundle implements Migration, ConvertToExtendExtensionAwareInter
                     'is_extend' => true,
                 ],
                 'form' => [
-                    'is_enabled' => true,
+                    'is_enabled' => false,
                     'form_type' => 'oro_channel_select_type'
                 ],
-                'view' => ['is_displayable' => false],
+                'view' => ['is_displayable' => true],
                 'merge' => ['display' => false],
                 'dataaudit' => ['auditable' => false]
             ]
         );
         $this->сonvertToExtendExtension->manyToOneRelation(
             $queries,
+            $schema,
             'Oro\Bundle\SalesBundle\Entity\Lead',
             'dataChannel',
-            $schema,
             'orocrm_sales_lead',
             'data_channel',
             'orocrm_channel',
-            'id',
+            'name',
             [
                 ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
                 'extend' => [
@@ -72,10 +72,10 @@ class OroCRMSalesBundle implements Migration, ConvertToExtendExtensionAwareInter
                     'is_extend' => true,
                 ],
                 'form' => [
-                    'is_enabled' => true,
+                    'is_enabled' => false,
                     'form_type' => 'oro_channel_select_type'
                 ],
-                'view' => ['is_displayable' => false],
+                'view' => ['is_displayable' => true],
                 'merge' => ['display' => false],
                 'dataaudit' => ['auditable' => false]
             ]

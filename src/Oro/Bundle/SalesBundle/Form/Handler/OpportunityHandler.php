@@ -49,7 +49,7 @@ class OpportunityHandler
      */
     public function process(Opportunity $entity)
     {
-        $this->requestChannelProvider->setDataChannel($entity);
+//        $this->requestChannelProvider->setDataChannel($entity);
 
         $this->form->setData($entity);
 
