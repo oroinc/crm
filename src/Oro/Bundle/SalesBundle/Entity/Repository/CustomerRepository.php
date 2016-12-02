@@ -3,13 +3,14 @@
 namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class CustomerRepository extends EntityRepository
 {
@@ -19,9 +20,9 @@ class CustomerRepository extends EntityRepository
      * @param Account $account
      * @param array   $customersFields
      *
-     * @return Customer
+     * @return Customer|null
      */
-    public function getAccountCustomer(Account $account, array $customersFields)
+    public function getCustomerWithoutAssociatedTargets(Account $account, array $customersFields)
     {
         $qb = $this->createQueryBuilder('c')
             ->select('c')
@@ -34,17 +35,6 @@ class CustomerRepository extends EntityRepository
             ->getQuery()
             ->setMaxResults(1)
             ->getOneOrNullResult();
-    }
-
-    /**
-     * @param int $targetId
-     * @param string $targetField
-     *
-     * @return Customer|null
-     */
-    public function getCustomerByTargetCustomer($targetId, $targetField)
-    {
-        return $this->findOneBy([$targetField => $targetId]);
     }
 
     /**
@@ -71,7 +61,7 @@ class CustomerRepository extends EntityRepository
             if (!$customers) {
                 continue;
             }
-            $customerField = AccountCustomerHelper::getCustomerTargetField($customerClass);
+            $customerField = AccountCustomerManager::getCustomerTargetField($customerClass);
             foreach ($customers as $customer) {
                 $exprs = [];
                 $customerParam = QueryUtils::generateParameterName('targetCustomer');

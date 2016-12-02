@@ -9,10 +9,10 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
 
 /**
  * This listener synchronizes account of MagentoCustomer and SalesCustomer
@@ -22,18 +22,18 @@ use Oro\Bundle\SalesBundle\Provider\Customer\AccountCustomerHelper;
  */
 class CustomerAccountChangeSubscriber implements EventSubscriber
 {
-    /** @var AccountCustomerHelper */
-    protected $accountCustomerHelper;
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
 
     /** @var MagentoCustomer[] */
     protected $changedMagentoCustomers = [];
 
     /**
-     * @param AccountCustomerHelper    $helper
+     * @param AccountCustomerManager    $manager
      */
-    public function __construct(AccountCustomerHelper $helper)
+    public function __construct(AccountCustomerManager $manager)
     {
-        $this->accountCustomerHelper     = $helper;
+        $this->accountCustomerManager     = $manager;
     }
 
     /**
@@ -94,7 +94,7 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
     {
         $salesCustomersWithChangedAccount = $this->findSalesCustomersWithChangedAccount($em, $changedMagentoCustomers);
         foreach ($salesCustomersWithChangedAccount as $customer) {
-            $this->accountCustomerHelper->syncTargetCustomerAccount($customer);
+            $this->accountCustomerManager->syncTargetCustomerAccount($customer);
         }
 
         return $salesCustomersWithChangedAccount;

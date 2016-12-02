@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Provider\Customer;
+namespace Oro\Bundle\SalesBundle\Entity\Manager;
 
 use Doctrine\Common\Util\ClassUtils;
 
@@ -15,8 +15,9 @@ use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
 use Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
-class AccountCustomerHelper
+class AccountCustomerManager
 {
     /** @var DoctrineHelper */
     protected $doctrineHelper;
@@ -28,28 +29,30 @@ class AccountCustomerHelper
     protected $nameResolver;
 
     /**
-     * @param DoctrineHelper           $doctrineHelper
-     * @param ConfigProvider           $provider
-     * @param EntityNameResolver       $nameResolver
+     * @param DoctrineHelper     $doctrineHelper
+     * @param ConfigProvider     $provider
+     * @param EntityNameResolver $nameResolver
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ConfigProvider $provider,
         EntityNameResolver $nameResolver
     ) {
-        $this->doctrineHelper            = $doctrineHelper;
-        $this->provider                  = $provider;
-        $this->nameResolver              = $nameResolver;
+        $this->doctrineHelper = $doctrineHelper;
+        $this->provider       = $provider;
+        $this->nameResolver   = $nameResolver;
     }
 
     /**
+     * Returns Customer's associated target if it set or Account otherwise
+     *
      * @param Customer $customer
      *
-     * @return Account
+     * @return object|Account
      */
     public static function getTargetCustomerOrAccount(Customer $customer)
     {
-        return $customer->getCustomerTarget() ?: $customer->getAccount();
+        return $customer->getCustomerTarget() ? : $customer->getAccount();
     }
 
     /**
@@ -66,34 +69,17 @@ class AccountCustomerHelper
     }
 
     /**
-     * Creates new Customer with provided Account or with new Account
-     * with provided accountName
+     * Creates new Customer from provided Account
      *
-     * @param Account|null $account
-     *
-     * @param string|null  $accountName
+     * @param Account $account
      *
      * @return Customer
      */
-    public static function createCustomerFromAccount(Account $account = null, $accountName = null)
+    public static function createCustomerFromAccount(Account $account)
     {
         $customer = new Customer();
 
-        return $account
-            ? $customer->setAccount($account)
-            : $customer->setAccount((new Account())->setName($accountName));
-    }
-
-    /**
-     * @param $target
-     *
-     * @return Customer
-     */
-    public function createCustomerFromTarget($target)
-    {
-        $this->assertValidTarget($target);
-
-        return $this->doCreateCustomerFromTarget($target);
+        return $customer->setAccount($account);
     }
 
     /**
@@ -106,18 +92,19 @@ class AccountCustomerHelper
         $customerRepo = $this->getCustomerRepository();
         if ($target instanceof Account) {
             $customerFields = $this->getCustomerTargetFields();
-            $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
+            $customer       = $customerRepo->getCustomerWithoutAssociatedTargets($target, $customerFields);
             if (!$customer) {
                 $customer = self::createCustomerFromAccount($target);
             }
         } else {
             $targetClassName = ClassUtils::getClass($target);
             $this->assertValidTarget($targetClassName);
-            $targetField           = self::getCustomerTargetField($targetClassName);
-            $customer              = $customerRepo->getCustomerByTargetCustomer(
-                $this->doctrineHelper->getSingleEntityIdentifier($target),
-                $targetField
-            );
+            $targetField = self::getCustomerTargetField($targetClassName);
+            $customer    = $customerRepo
+                ->findOneBy(
+                    [$targetField => $this->doctrineHelper->getSingleEntityIdentifier($target)]
+                );
+
             if (!$customer) {
                 return $this->doCreateCustomerFromTarget($target);
             }
@@ -140,11 +127,7 @@ class AccountCustomerHelper
             );
         }
 
-        if (!($target instanceof AccountAwareInterface) || !$target->getAccount()) {
-            $account = (new Account())->setName($this->nameResolver->getName($target));
-        } else {
-            $account = $target->getAccount();
-        }
+        $account = $this->createOrGetAccountFromTarget($target);
         $customer->setAccount($account);
     }
 
@@ -184,13 +167,8 @@ class AccountCustomerHelper
      */
     protected function doCreateCustomerFromTarget($target)
     {
-        $account = null;
-        if ($target instanceof AccountAwareInterface) {
-            $account = $target->getAccount();
-        }
-        $customer = $account
-            ? self::createCustomerFromAccount($account)
-            : self::createCustomerFromAccount(null, $this->nameResolver->getName($target));
+        $account  = $this->createOrGetAccountFromTarget($target);
+        $customer = self::createCustomerFromAccount($account);
 
         return $customer->setCustomerTarget($target);
     }
@@ -201,5 +179,21 @@ class AccountCustomerHelper
     protected function getCustomerRepository()
     {
         return $this->doctrineHelper->getEntityRepository(Customer::class);
+    }
+
+    /**
+     * @param $target
+     *
+     * @return Account
+     */
+    protected function createOrGetAccountFromTarget($target)
+    {
+        if (!($target instanceof AccountAwareInterface) || !$target->getAccount()) {
+            $account = (new Account())->setName($this->nameResolver->getName($target));
+        } else {
+            $account = $target->getAccount();
+        }
+
+        return $account;
     }
 }

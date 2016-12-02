@@ -5,9 +5,9 @@ namespace Oro\Bundle\SalesBundle\Model;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 
 /**
- * @method bool           supportCustomerTarget($targetClass)
+ * @method bool                    supportCustomerTarget($targetClass)
  * @method ExtendCustomer|Customer setCustomerTarget($target)
- * @method object|null    getCustomerTarget()
+ * @method object|null             getCustomerTarget()
  */
 class ExtendCustomer
 {
