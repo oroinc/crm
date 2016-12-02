@@ -2,16 +2,28 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
+use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
+use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
+use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
+use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
 use Oro\Bundle\UserBundle\Entity\User;
 
-trait SalesExtension
+class SalesContext extends OroFeatureContext implements
+    FixtureLoaderAwareInterface,
+    OroPageObjectAware,
+    KernelAwareContext
 {
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
+
     /**
      * @Then Accounts and Customers in the control are filtered by selected sales channel and :username ACL permissions
      */
@@ -38,19 +50,15 @@ trait SalesExtension
     }
 
     /**
-     * @Given /^(?:|I )open (Opportunity) creation page$/
+     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
      */
-    public function openOpportunityCreationPage()
+    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
     {
-        /** @var MainMenu $menu */
-        $menu = $this->createElement('MainMenu');
-        $menu->openAndClick('Sales/ Opportunities');
-        $this->waitForAjax();
-        $this->getPage()->clickLink('Create Opportunity');
+        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
     }
 
     /**
-     * @Given /^two users (?P<user1>(\w+)) and (?P<user2>(\w+)) exists in the system$/
+     * @Given /^two users (charlie) and (samantha) exists in the system$/
      */
     public function twoUsersExistsInTheSystem()
     {
@@ -58,7 +66,7 @@ trait SalesExtension
     }
 
     /**
-     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) entities$/
+     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
     {
@@ -104,6 +112,14 @@ trait SalesExtension
         }
 
         $form->saveAndClose();
+    }
+
+    /**
+     * @Given they has their own Accounts and Customers
+     */
+    public function accountHasBusinessCustomers()
+    {
+        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
     }
 
     /**
