@@ -1,4 +1,5 @@
 @not-automated
+@drafts
   #draft scenarios, will be updated and finalized when the feature is completed and merged to master by developers
 Feature: Freeze currency rates for individual transactions
   In order to avoid data recalculation for locked transactions
@@ -6,7 +7,7 @@ Feature: Freeze currency rates for individual transactions
   I want to check the base currency amount will not be adjusted according to the going rate
 
   Scenario: (GRID) Checking that when workflow is enabled and Opportunity is Closed Won, Base Budget Amount and Base Close
-    Revenue are not recalculated on base currency change and are not editable
+    # Revenue are not recalculated on base currency change and are not editable
     Given I log in as Administrator
     And workflow is enabled
     And I create Opportunity 1
@@ -34,7 +35,7 @@ Feature: Freeze currency rates for individual transactions
 
 
   Scenario: (GRID) Checking that when workflow is enabled and Opportunity is Closed Lost, Base Budget Amount and Base Close
-  Revenue are not recalculated on base currency change and are not editable
+  # Revenue are not recalculated on base currency change and are not editable
     Given I log in as Administrator
     And workflow is enabled
     And I create Opportunity 2
@@ -61,7 +62,7 @@ Feature: Freeze currency rates for individual transactions
     Then I should see that base budget amount and base close revenue were not recalculated
 
   Scenario: (GRID) Checking that when workflow is disabled and Opportunity is Closed Won, Base Budget Amount and Base
-  Close  Revenue are not recalculated on base currency change and are editable
+  # Close  Revenue are not recalculated on base currency change and are editable
     Given I log in as Administrator
     And workflow is disabled
     And I create Opportunity 3
@@ -88,7 +89,7 @@ Feature: Freeze currency rates for individual transactions
     Then I should see that base budget amount and base close revenue were not recalculated
 
   Scenario: (GRID) Checking that when workflow is disabled and Opportunity is Closed Lost, Base Budget Amount and Base
-  Close  Revenue are not recalculated on base currency change and are editable
+  # Close  Revenue are not recalculated on base currency change and are editable
     Given I log in as Administrator
     And workflow is disabled
     And I create Opportunity 4
@@ -124,8 +125,12 @@ Feature: Freeze currency rates for individual transactions
     And I change base currency
     When I go to Sales/ Opportunities
     And I edit base budget amount and base close revenue for Opportunity 5 by inserting some data
-    Then I should see updated values for base budget amount and base close revenue in Opportunity grid, in Opportunity
-      view, when editing opportunity, on widgets, reports and segments
+    Then I should see updated values for base budget amount and base close revenue in:
+    | Opportunity grid        |
+    | Opportunity view page   |
+    | Opportunity edit page   |
+    | Dashboard widgets       |
+    | Reports and segments    |
 
   Scenario: Editing Base Budget Amount and Base Close Revenue for Opportunity Closed Lost when the workflow is disabled
     Given I log in as Administrator
@@ -137,11 +142,15 @@ Feature: Freeze currency rates for individual transactions
     And I change base currency
     When I go to Sales/ Opportunities
     And I edit base budget amount and base close revenue for Opportunity 6 by inserting some data
-    Then I should see updated values for base budget amount and base close revenue in Opportunity grid, in Opportunity
-  view, when editing opportunity, on widgets, reports and segments
+    Then I should see updated values for base budget amount and base close revenue in:
+    | Opportunity grid        |
+    | Opportunity view page   |
+    | Opportunity edit page   |
+    | Dashboard widgets       |
+    | Reports and segments    |
 
   Scenario: (KANBAN) Checking that when workflow is enabled and Opportunity is Closed Won, Base Budget Amount and Base Close
-  Revenue are not recalculated on base currency change and are not editable
+  # Revenue are not recalculated on base currency change and are not editable
     Given I log in as Administrator
     And workflow is enabled
     And I create Opportunity 7
@@ -169,7 +178,7 @@ Feature: Freeze currency rates for individual transactions
 
 
   Scenario: (KANBAN) Checking that when workflow is enabled and Opportunity is Closed Lost, Base Budget Amount and Base Close
-  Revenue are not recalculated on base currency change and are not editable
+  # Revenue are not recalculated on base currency change and are not editable
     Given I log in as Administrator
     And workflow is enabled
     And I create Opportunity 8
@@ -196,7 +205,7 @@ Feature: Freeze currency rates for individual transactions
     Then I should see that base budget amount and base close revenue were not recalculated
 
   Scenario: (KANBAN) Checking that when workflow is disabled and Opportunity is Closed Won, Base Budget Amount and Base
-  Close  Revenue are not recalculated on base currency change and are editable
+  # Close  Revenue are not recalculated on base currency change and are editable
     Given I log in as Administrator
     And workflow is disabled
     And I create Opportunity 9
@@ -223,7 +232,7 @@ Feature: Freeze currency rates for individual transactions
     Then I should see that base budget amount and base close revenue were not recalculated
 
   Scenario: (KANBAN) Checking that when workflow is disabled and Opportunity is Closed Lost, Base Budget Amount and Base
-  Close  Revenue are not recalculated on base currency change and are editable
+  # Close  Revenue are not recalculated on base currency change and are editable
     Given I log in as Administrator
     And workflow is disabled
     And I create Opportunity 10
@@ -258,8 +267,12 @@ Feature: Freeze currency rates for individual transactions
     | Closed Won        |
     | Closed Lost       |
     And I change base currency
-    Then values for Base Budget Amount and Base Close revenue are not recalculated on
-    Opportunity grid, Opportunity view, Opportunity Edit, Dashboard widgets, Reports and Segments
+    Then values for Base Budget Amount and Base Close revenue are not recalculated on:
+    | Opportunity grid        |
+    | Opportunity view page   |
+    | Opportunity edit page   |
+    | Dashboard widgets       |
+    | Reports and segments    |
     When I edit Opportunity by assigning back <Opportunity RT Status>:
     | Opportunity RT Status       |
     | Open                        |
@@ -268,7 +281,10 @@ Feature: Freeze currency rates for individual transactions
     | Solution Development        |
     | Negotiation                 |
     And I change base currency
-    Then values for Base Budget Amount and Base Close revenue are recalculated on
-  Opportunity grid, Opportunity view, Opportunity Edit, Dashboard widgets, Reports and Segments
-
+    Then values for Base Budget Amount and Base Close revenue are recalculated on:
+    | Opportunity grid        |
+    | Opportunity view page   |
+    | Opportunity edit page   |
+    | Dashboard widgets       |
+    | Reports and segments    |
 
