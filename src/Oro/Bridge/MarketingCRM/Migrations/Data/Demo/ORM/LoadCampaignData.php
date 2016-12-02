@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bridge\MarketingCRM\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -9,11 +9,11 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+use Oro\Bundle\CampaignBundle\Entity\Campaign;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\CampaignBundle\Entity\Campaign;
 
 class LoadCampaignData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

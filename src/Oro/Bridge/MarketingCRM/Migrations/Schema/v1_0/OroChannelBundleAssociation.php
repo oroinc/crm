@@ -20,6 +20,7 @@ class OroChannelBundleAssociation implements Migration, ExtendExtensionAwareInte
 {
     const TRACKING_WEBSITE_TABLE_NAME = 'oro_tracking_website';
     const CHANNEL_TABLE_NAME = 'orocrm_channel';
+    const CHANNEL_TABLE_FK_NAME = 'channel_id';
 
     /** @var ExtendExtension */
     protected $extendExtension;
@@ -48,7 +49,7 @@ class OroChannelBundleAssociation implements Migration, ExtendExtensionAwareInte
      */
     public static function addChannelForeignKeyToTrackingWebsite(Schema $schema, ExtendExtension $extension)
     {
-        if (!self::hasChannelAssociation($schema, $extension)) {
+        if (!self::hasChannelAssociation($schema)) {
             $extension->addManyToOneRelation(
                 $schema,
                 self::TRACKING_WEBSITE_TABLE_NAME,
@@ -81,41 +82,13 @@ class OroChannelBundleAssociation implements Migration, ExtendExtensionAwareInte
 
     /**
      * @param Schema $schema
-     * @param ExtendExtension $extension
      *
      * @return bool
-     *
-     * @throws SchemaException if valid primary key does not exist
      */
-    private static function hasChannelAssociation(Schema $schema, ExtendExtension $extension)
+    private static function hasChannelAssociation(Schema $schema)
     {
         $trackingTable = $schema->getTable(self::TRACKING_WEBSITE_TABLE_NAME);
-        $targetTable  = $schema->getTable(self::CHANNEL_TABLE_NAME);
 
-        $associationName = ExtendHelper::buildAssociationName(
-            $extension->getEntityClassByTableName(self::CHANNEL_TABLE_NAME)
-        );
-
-        if (!$targetTable->hasPrimaryKey()) {
-            throw new SchemaException(
-                sprintf('The table "%s" must have a primary key.', $targetTable->getName())
-            );
-        }
-        $primaryKeyColumns = $targetTable->getPrimaryKey()->getColumns();
-        if (count($primaryKeyColumns) !== 1) {
-            throw new SchemaException(
-                sprintf('A primary key of "%s" table must include only one column.', $targetTable->getName())
-            );
-        }
-
-        $primaryKeyColumnName = array_pop($primaryKeyColumns);
-
-        $nameGenerator = $extension->getNameGenerator();
-        $selfColumnName = $nameGenerator->generateRelationColumnName(
-            $associationName,
-            '_' . $primaryKeyColumnName
-        );
-
-        return $trackingTable->hasColumn($selfColumnName);
+        return $trackingTable->hasColumn(self::CHANNEL_TABLE_FK_NAME);
     }
 }

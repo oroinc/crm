@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
+namespace Oro\Bridge\MarketingCRM\Migrations\Migrations\Data\ORM;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
