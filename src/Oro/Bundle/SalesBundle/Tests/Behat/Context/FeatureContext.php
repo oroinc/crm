@@ -29,7 +29,7 @@ class FeatureContext extends OroFeatureContext implements
     OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary, SalesExtension;
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
      * @var string Path to saved template
@@ -41,92 +41,6 @@ class FeatureContext extends OroFeatureContext implements
      */
     protected $importFile;
 
-    /**
-     * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
-     */
-    public function createChannelWithEnabledEntities($channelName, $entities)
-    {
-        /** @var MainMenu $menu */
-        $menu = $this->createElement('MainMenu');
-        $menu->openAndClick('System/ Channels');
-        $this->waitForAjax();
-        $this->getPage()->clickLink('Create Channel');
-        $this->waitForAjax();
-
-        /** @var OroForm $form */
-        $form = $this->createElement('OroForm');
-        $form->fillField('Name', $channelName);
-        $form->fillField('Channel Type', 'Sales');
-        $this->waitForAjax();
-
-        /** @var Grid $grid */
-        $grid = $this->createElement('Grid');
-        $channelEntities = array_map('trim', explode(',', $entities));
-        $rowsForDelete = [];
-
-        foreach ($grid->getRows() as $row) {
-            foreach ($channelEntities as $key => $channelEntity) {
-                if (false !== stripos($row->getText(), $channelEntity)) {
-                    unset($channelEntities[$key]);
-                    continue 2;
-                }
-            }
-
-            $rowsForDelete[] = $row;
-        }
-
-        foreach ($rowsForDelete as $row) {
-            $grid->getActionLink('Delete', $row)->click();
-        }
-
-        $entitySelector = $this->elementFactory->findElementContains('EntitySelector', 'Please select entity');
-
-        foreach ($channelEntities as $channelEntity) {
-            $entitySelector->click();
-            $this->elementFactory->findElementContains('SelectToResultLabel', $channelEntity)->click();
-            $this->getPage()->clickLink('Add');
-        }
-
-        $form->saveAndClose();
-    }
-
-    /**
-     * @Given they has their own Accounts and Business Customers
-     */
-    public function accountHasBusinessCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
-    }
-
-    /**
-     * @Given /^two users (?P<user1>(\w+)) and (?P<user2>(\w+)) exists in the system$/
-     */
-    public function twoUsersExistsInTheSystem()
-    {
-        $this->fixtureLoader->loadFixtureFile('users.yml');
-    }
-
-    /**
-     * @Then /^Accounts and Customers in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
-     */
-    public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)
-    {
-        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
-        $owner = $doctrine->getEntityRepositoryForClass(User::class)->findOneBy(['username' => $username]);
-        $ownAccounts = $doctrine->getEntityRepositoryForClass(B2bCustomer::class)->findBy(['owner' => $owner]);
-
-        /** @var Select2Entity $accountField */
-        $accountField = $this->createElement('OroForm')->findField('Account');
-        $visibleAccounts = $accountField->getSuggestedValues();
-
-        self::assertCount(count($ownAccounts), $visibleAccounts);
-
-        /** @var B2bCustomer $account */
-        foreach ($ownAccounts as $account) {
-            $value = sprintf('%s (%s)', $account->getName(), $account->getAccount()->getName());
-            self::assertContains($value, $visibleAccounts);
-        }
-    }
 
     /**
      * @Given CRM has second sales channel with Accounts and Business Customers
@@ -134,31 +48,6 @@ class FeatureContext extends OroFeatureContext implements
     public function crmHasSecondSalesChannel()
     {
         $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
-    }
-
-    /**
-     * @Then Accounts and Customers in the control are filtered by selected sales channel and :username ACL permissions
-     */
-    public function accountsInTheControlAreFilteredBySelected($username)
-    {
-        /** @var Select2Entity $channelField */
-        $channelField = $this->createElement('OroForm')->findField('Channel');
-        $channels = $channelField->getSuggestedValues();
-
-        foreach ($channels as $channelName) {
-            $channelField->setValue($channelName);
-
-            $expectedCustomers = $this->getCustomers($channelName, $username);
-
-            /** @var Select2Entity $accountField */
-            $accountField = $this->createElement('OroForm')->findField('Account');
-            $actualCustomers = $accountField->getSuggestedValues();
-
-            self::assertEquals(
-                sort($expectedCustomers),
-                sort($actualCustomers)
-            );
-        }
     }
 
     /**

@@ -5,21 +5,19 @@ Feature: Create opportunity in a single form
 
   Scenario: Required fields
     Given I login as administrator
-    And "First Sales Channel" is a channel with enabled Business Customer entities
+    And "First Sales Channel" is a channel with enabled Business Customer entity
     And two users charlie and samantha exists in the system
+    And they has their own Accounts and Customers
     And user have "User" permissions for "View" "Business Customer" entity
-    And they has their own Accounts and Business Customers
     And I open Opportunity Create page
     Then Opportunity Name is a required field
     And press "Cancel"
 
-#  @skip
-#  ToDo: uncomment when BAP-10673 will completed
-#  Scenario: Renamed fields
-#    Given I am on Opportunity index page
-#    When I open Opportunity creation page
-#    Then Close Date is renamed to Expected Close Date
-#    And Customer Need and Proposed Solution have WYSIWYG editor
+  @not-automated
+  Scenario: Renamed fields
+    Given I open Opportunity Create page
+    When Close Date is renamed to Expected Close Date
+    Then Customer Need and Proposed Solution have WYSIWYG editor
 
 #todo: Uncomment, update in ticket "CRM-6333" where it will be possible to create new account using the field
 #  Scenario: New Opportunity
