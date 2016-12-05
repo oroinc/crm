@@ -22,7 +22,6 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
         $expectedFields = array(
             'name' => 'text',
             'status' => 'oro_enum_select',
-//            'dataChannel' => 'oro_channel_select_type',
             'namePrefix' => 'text',
             'firstName' => 'text',
             'middleName' => 'text',

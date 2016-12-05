@@ -49,6 +49,7 @@ parameters:
     oro_channel.event_listener.navigation.class:                    Oro\Bundle\ChannelBundle\EventListener\NavigationListener
     oro_channel.form.subscriber.channel_subscriber.class:           Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     oro_channel.event_listener.update_integration_connectors.class: Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
+    oro_channel.event_listener.change_integration_status.class:     Oro\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
     oro_channel.event_listener.channel_before_deleted.class:        Oro\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     oro_channel.event_listener.embedded_form.class:                 Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
     oro_channel.event_listener.doctrine.class:                      Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
@@ -113,15 +114,9 @@ services:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
     oro_channel.form.channel:
-        class:                        Symfony\Component\Form\Form
-        factory_method:               createNamed
-        factory_service:              form.factory
-        arguments:                    ["oro_channel_form", "oro_channel_form", null]
-
-    oro_channel.form.guesser.channel:
-        class: %oro_channel.form.guesser.channel.class%
-        tags:
-            - { name: form.type_guesser, priority: 20 }
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', 'createNamed']
+        arguments: ["oro_channel_form", "oro_channel_form", null]
 
     # handlers
     oro_channel.channel_form.handler:
@@ -224,6 +219,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'oro_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'oro_channel.channel.delete_succeed', method: processChannelChange}
+            - { name: kernel.event_listener, event: 'oro_channel.channel.status_change', method: processChannelChange}
 
     oro_channel.provider.utils.entity_state_provider:
         class: %oro_channel.provider.utils.entity_state_provider.class%
@@ -269,6 +265,13 @@ services:
         arguments:
             - "@oro_channel.provider.settings_provider"
 
+    oro_channel.event_listener.change_integration_status:
+        class: %oro_channel.event_listener.change_integration_status.class%
+        arguments:
+            - "@doctrine"
+        tags:
+            - { name: kernel.event_listener, event: oro_channel.channel.status_change, method: onChannelStatusChange }
+
     oro_channel.event_listener.update_integration_connectors:
         class: %oro_channel.event_listener.update_integration_connectors.class%
         arguments:
@@ -301,9 +304,9 @@ services:
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
     oro_channel.event_listener.timezone_change:
-      class: 'Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener'
+      class: %oro_channel.event_listener.timezone_change.class%
       arguments:
-          - "@oro_message_queue.message_producer"
+          - "@doctrine"
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -385,26 +388,3 @@ services:
             - '@oro_action.expression.context_accessor'
         tags:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }
-
-    oro_channel.async.change_integration_status_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor'
-        arguments:
-            - '@doctrine'
-            - '@logger'
-        tags:
-            - { name: 'oro_message_queue.client.message_processor' }
-
-    oro_channel.async.process_channel_state_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor'
-        arguments: ["@oro_channel.provider.state_provider"]
-        tags:
-            - { name: 'oro_message_queue.client.message_processor' }
-
-    oro_channel.async.aggregate_lifetime_average_processor:
-        class: 'Oro\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor'
-        arguments:
-            - '@doctrine'
-            - '@oro_locale.settings'
-            - '@oro_message_queue.job.runner'
-        tags:
-            - { name: 'oro_message_queue.client.message_processor' }

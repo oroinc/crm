@@ -44,7 +44,6 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
         $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
         $leadRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
-        $channelRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
@@ -52,7 +51,6 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
             case 'Jerry Coleman':
                 $entity->setName('Oro Inc. Opportunity Name');
                 $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
-//                $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));

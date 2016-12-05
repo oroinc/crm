@@ -51,8 +51,6 @@ class LeadHandler
      */
     public function process(Lead $entity)
     {
-//        $this->requestChannelProvider->setDataChannel($entity);
-
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {

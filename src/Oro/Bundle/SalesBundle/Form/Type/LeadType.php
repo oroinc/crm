@@ -28,14 +28,6 @@ class LeadType extends AbstractType
                     'enum_code'   => Lead::INTERNAL_STATUS_CODE
                 ]
             )
-//            ->add(
-//                'dataChannel',
-//                'oro_channel_select_type',
-//                array(
-//                    'required' => true,
-//                    'label' => 'oro.sales.lead.data_channel.label',
-//                )
-//            )
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'oro.sales.lead.name_prefix.label'))
             ->add('firstName', 'text', array('required' => false, 'label' => 'oro.sales.lead.first_name.label'))
             ->add('middleName', 'text', array('required' => false, 'label' => 'oro.sales.lead.middle_name.label'))
