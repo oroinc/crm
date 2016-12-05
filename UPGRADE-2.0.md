@@ -3,6 +3,7 @@ UPGRADE FROM 1.10 to 2.0
 
 ####General
 - Changed minimum required php version to 5.6
+- Field "dataChannel" for Lead and Opportunity was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name  "data_channel". 
 
 ####OroSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
@@ -27,6 +28,17 @@ UPGRADE FROM 1.10 to 2.0
       - `EntityFieldProvider $entityFieldProvider`,
         `ChangeLeadStatus $changeLeadStatus`
 - Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
+
+- Guesser ('Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser') removed
+- Lead and Opportunity entities do not implement ChannelAwareInterface
+- ChannelEntityTrait was removed from Lead and Opportunity entities  
+- Type ('Oro\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType') is removed
+- Type ('Oro\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType') is removed
+- For the type ('Oro\Bundle\SalesBundle\Form\Type\LeadSelectType') was changed parent from 'oro_entity_create_or_select_inline_channel_aware' to 'oro_entity_create_or_select_inline'
+- For the type ('Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType') was changed parent from 'oro_entity_create_or_select_inline_channel_aware' to 'oro_entity_create_or_select_inline'
+- Data girds sales-funnel-lead-with-data-channel-grid and sales-funnel-opportunity-with-data-channel-grid were removed
+- Validation NotBlank for field dataChannel of entities Oro\Bundle\ContactUsBundle\Entity\ContactRequest, Oro\Bundle\SalesBundle\Entity\Opportunity, Oro\Bundle\SalesBundle\Entity\Lead was removed
+- Configurations of data grids sales-opportunity-for-context-grid, sales-lead-for-context-grid, sales-lead-grid, sales-opportunity-grid were updated. There were deleted configurations channelName in the sections columns, filters, sorters.
 
 ####OroCaseBundle:
 - `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
