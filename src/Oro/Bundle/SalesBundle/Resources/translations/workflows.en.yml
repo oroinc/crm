@@ -63,14 +63,8 @@ oro:
             transition:
                 start_from_lead:
                     label: 'Start from Lead'
-#                    attribute:
-#                        data_channel:
-#                            label: 'Channel'
                 start_from_opportunity:
                     label: 'Start from Opportunity'
-#                    attribute:
-#                        data_channel:
-#                            label: 'Channel'
                 disqualify:
                     label: Disqualify
                 follow_up:
