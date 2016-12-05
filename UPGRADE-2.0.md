@@ -3,7 +3,7 @@ UPGRADE FROM 1.10 to 2.0
 
 ####General
 - Changed minimum required php version to 5.6
-- Field "dataChannel" for Lead and Opportunity was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name  "data_channel". 
+- Field "dataChannel" for Lead and Opportunity was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name "data_channel". 
 
 ####OroSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
@@ -30,7 +30,7 @@ UPGRADE FROM 1.10 to 2.0
 - Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
 - Guesser ('Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser') removed
 - Lead and Opportunity entities do not implement ChannelAwareInterface
-- ChannelEntityTrait was removed from Lead and Opportunity entities  
+- ChannelEntityTrait was removed from Lead and Opportunity entities
 - Type ('Oro\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType') is removed
 - Type ('Oro\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType') is removed
 - For the type ('Oro\Bundle\SalesBundle\Form\Type\LeadSelectType') was changed parent from 'oro_entity_create_or_select_inline_channel_aware' to 'oro_entity_create_or_select_inline'
