@@ -97,7 +97,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $this->dataChannel = $builderFactory
             ->createBuilder()
             ->setStatus(Channel::STATUS_ACTIVE)
-            ->setEntities(['Oro\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'])
             ->setChannelType('custom')
             ->getChannel();
         $om->persist($this->dataChannel);
