@@ -9,24 +9,14 @@ use Oro\Bundle\InstallerBundle\Migration\UpdateExtendRelationQuery;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroMarketingCRMBridgeBundle implements
     Migration,
-    RenameExtensionAwareInterface,
-    OrderedMigrationInterface
+    RenameExtensionAwareInterface
 {
     /** @var RenameExtension */
     private $renameExtension;
-
-    /**
-     * @inheritdoc
-     */
-    public function getOrder()
-    {
-        return 20;
-    }
 
     /**
      * {@inheritdoc}
@@ -83,15 +73,15 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisit',
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-            'customer_ff3bb796',
-            'customer_7c2d0d96',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisit',
+                'Oro\Bundle\MagentoBundle\Entity\Customer',
+                'customer_ff3bb796',
+                'customer_7c2d0d96',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 
     /**
@@ -117,15 +107,15 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
-            'Oro\Bundle\CampaignBundle\Entity\Campaign',
-            'campaign_cb6118ed',
-            'campaign_a14160a8',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
+                'Oro\Bundle\CampaignBundle\Entity\Campaign',
+                'campaign_cb6118ed',
+                'campaign_a14160a8',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 
     /**
@@ -151,15 +141,15 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
-            'customer_bb9e15ff',
-            'customer_2bc6a2ee',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
+                'Oro\Bundle\MagentoBundle\Entity\Customer',
+                'customer_bb9e15ff',
+                'customer_2bc6a2ee',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 
     /**
@@ -185,15 +175,15 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Cart',
-            'cart_72e8ef17',
-            'cart_4962cb03',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
+                'Oro\Bundle\MagentoBundle\Entity\Cart',
+                'cart_72e8ef17',
+                'cart_4962cb03',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 
     /**
@@ -219,15 +209,15 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Order',
-            'order_23867b17',
-            'order_3967254e',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
+                'Oro\Bundle\MagentoBundle\Entity\Order',
+                'order_23867b17',
+                'order_3967254e',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 
     /**
@@ -253,14 +243,14 @@ class OroMarketingCRMBridgeBundle implements
                 ['id'],
                 ['onDelete' => 'SET NULL']
             );
-        }
 
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
-            'Oro\Bundle\MagentoBundle\Entity\Product',
-            'product_c1803ccc',
-            'product_262abcc3',
-            RelationType::MANY_TO_ONE
-        ));
+            $queries->addQuery(new UpdateExtendRelationQuery(
+                'Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent',
+                'Oro\Bundle\MagentoBundle\Entity\Product',
+                'product_c1803ccc',
+                'product_262abcc3',
+                RelationType::MANY_TO_ONE
+            ));
+        }
     }
 }

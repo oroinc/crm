@@ -9,13 +9,11 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroChannelBundleAssociation implements
     Migration,
-    ExtendExtensionAwareInterface,
-    OrderedMigrationInterface
+    ExtendExtensionAwareInterface
 {
     const TRACKING_WEBSITE_TABLE_NAME = 'oro_tracking_website';
     const CHANNEL_TABLE_NAME = 'orocrm_channel';
@@ -23,14 +21,6 @@ class OroChannelBundleAssociation implements
 
     /** @var ExtendExtension */
     protected $extendExtension;
-
-    /**
-     * @inheritdoc
-     */
-    public function getOrder()
-    {
-        return 30;
-    }
 
     /**
      * @inheritdoc

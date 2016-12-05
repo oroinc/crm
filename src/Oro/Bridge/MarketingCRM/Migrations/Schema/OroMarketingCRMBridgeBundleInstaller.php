@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bridge\MarketingCRM\Migrations;
+namespace Oro\Bridge\MarketingCRM\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -16,7 +16,6 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroChannelBundleAssociation;
 use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroMarketingCRMBridgeBundle;
-use Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0\OroMagentoBundleAssociation;
 
 class OroMarketingCRMBridgeBundleInstaller implements
     Installation,
@@ -82,10 +81,29 @@ class OroMarketingCRMBridgeBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        $this->addIdentifierEventAssociations($schema);
+        $this->addVisitEventAssociation($schema);
         OroMarketingCRMBridgeBundle::updateTrackingVisitEvent($schema, $queries, $this->renameExtension);
         OroMarketingCRMBridgeBundle::updateTrackingVisit($schema, $queries, $this->renameExtension);
-        OroMagentoBundleAssociation::addIdentifierEventAssociations($schema, $this->identifierEventExtension);
-        OroMagentoBundleAssociation::addVisitEventAssociation($schema, $this->visitExtension);
         OroChannelBundleAssociation::addChannelForeignKeyToTrackingWebsite($schema, $this->extendExtension);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addIdentifierEventAssociations(Schema $schema)
+    {
+        $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addVisitEventAssociation(Schema $schema)
+    {
+        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
+        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
+        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_order');
+        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_product');
     }
 }
