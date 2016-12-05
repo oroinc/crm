@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v2_2;
+namespace Oro\Bundle\SalesBundle\Migrations\Schema\v2_2;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -12,7 +12,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ConvertToExtendExtensionAw
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMSalesBundle implements Migration, ConvertToExtendExtensionAwareInterface
+class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionAwareInterface
 {
     /** @var ConvertToExtendExtension */
     protected $сonvertToExtendExtension;
