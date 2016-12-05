@@ -28,7 +28,6 @@ Feature: Import opportunity feature
     And number of records should be 2
     And I should see Opportunity one in grid with following data:
 #      | Channel     | First Sales Channel |
-      | Account Customer name | Charlie   |
       | Status                | Open      |
       | Owner                 | John Doe  |
 #    @todo Uncomment when CRM-6490 will resolved
@@ -36,21 +35,25 @@ Feature: Import opportunity feature
 
   Scenario: Import Opportunity with custom probability value
     Given I fill template with data:
-      | Account Customer name | Channel Name        | Opportunity name            | Status Id   | Probability |
-      | Charlie               | First Sales Channel | Propose Dex Dogtective role | in_progress | 0.32        |
+#      | Account Customer name | Channel Name        | Opportunity name            | Status Id   | Probability |
+#      | Charlie               | First Sales Channel | Propose Dex Dogtective role | in_progress | 0.32        |
+      | Account Customer name | Opportunity name            | Status Id   | Probability |
+      | Charlie               | Propose Dex Dogtective role | in_progress | 0.32        |
     When I import file
     # @todo remove "And I reload the page" when CRM-6492 will resolved
     And I reload the page
     Then I should see Propose Dex Dogtective role in grid with following data:
-      | Channel     | First Sales Channel |
+#      | Channel     | First Sales Channel |
       | Status      | Open                |
       | Owner       | John Doe            |
       | Probability | 32%                 |
 
   Scenario: Import Opportunity with new Account
     Given I fill template with data:
-      | Account Customer name | Channel Name        | Opportunity name  | Status Id   |
-      | Absolute new account  | First Sales Channel | Opportunity three | in_progress |
+#      | Account Customer name | Channel Name        | Opportunity name  | Status Id   |
+#      | Absolute new account  | First Sales Channel | Opportunity three | in_progress |
+      | Account Customer name | Opportunity name  | Status Id   |
+      | Absolute new account  | Opportunity three | in_progress |
     When I import file
     Then "Absolute new account" Account was created
     Then "Absolute new account" Customer was created
@@ -61,8 +64,10 @@ Feature: Import opportunity feature
       | Name                     | Owner   | organization  |
       | Account without Customer | @admin  | @organization |
     And I fill template with data:
-      | Account Customer name    | Channel Name        | Opportunity name  | Status Id   |
-      | Account without Customer | First Sales Channel | Opportunity four  | in_progress |
+#      | Account Customer name    | Channel Name        | Opportunity name  | Status Id   |
+#      | Account without Customer | First Sales Channel | Opportunity four  | in_progress |
+      | Account Customer name    | Opportunity name  | Status Id   |
+      | Account without Customer | Opportunity four  | in_progress |
     When I open Opportunity Index page
     And import file
     Then "Account without Customer" Customer was created
