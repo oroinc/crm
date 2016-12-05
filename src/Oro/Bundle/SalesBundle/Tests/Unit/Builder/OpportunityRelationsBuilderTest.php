@@ -23,19 +23,6 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->relationsBuilder = new OpportunityRelationsBuilder();
     }
 
-    public function testShouldSetCustomerDataChannel()
-    {
-        $channel = new Channel();
-        $customer = new B2bCustomer();
-        $opportunity = new Opportunity();
-        $opportunity->setCustomer($customer);
-        $opportunity->setDataChannel($channel);
-
-        $this->relationsBuilder->buildCustomer($opportunity);
-
-        $this->assertSame($channel, $customer->getDataChannel());
-    }
-
     public function testShouldSetCustomerOrganization()
     {
         $organization = new Organization();

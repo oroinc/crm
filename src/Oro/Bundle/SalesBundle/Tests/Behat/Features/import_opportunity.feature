@@ -27,9 +27,10 @@ Feature: Import opportunity feature
     And open Opportunity Index page
     And number of records should be 2
     And I should see Opportunity one in grid with following data:
-      | Channel     | First Sales Channel |
-      | Status      | Open                |
-      | Owner       | John Doe            |
+#      | Channel     | First Sales Channel |
+      | Account Customer name | Charlie   |
+      | Status                | Open      |
+      | Owner                 | John Doe  |
 #    @todo Uncomment when CRM-6490 will resolved
 #      | Probability | 5%                  |
 
