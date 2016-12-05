@@ -3,20 +3,19 @@
 namespace Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Schema\SchemaException;
 
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroChannelBundleAssociation implements Migration, ExtendExtensionAwareInterface
+class OroChannelBundleAssociation implements
+    Migration,
+    ExtendExtensionAwareInterface,
+    OrderedMigrationInterface
 {
     const TRACKING_WEBSITE_TABLE_NAME = 'oro_tracking_website';
     const CHANNEL_TABLE_NAME = 'orocrm_channel';
@@ -24,6 +23,14 @@ class OroChannelBundleAssociation implements Migration, ExtendExtensionAwareInte
 
     /** @var ExtendExtension */
     protected $extendExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function getOrder()
+    {
+        return 30;
+    }
 
     /**
      * @inheritdoc

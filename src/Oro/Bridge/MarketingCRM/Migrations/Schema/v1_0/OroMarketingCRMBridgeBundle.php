@@ -9,12 +9,24 @@ use Oro\Bundle\InstallerBundle\Migration\UpdateExtendRelationQuery;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroMarketingCRMBridgeBundle implements Migration, RenameExtensionAwareInterface
+class OroMarketingCRMBridgeBundle implements
+    Migration,
+    RenameExtensionAwareInterface,
+    OrderedMigrationInterface
 {
     /** @var RenameExtension */
     private $renameExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function getOrder()
+    {
+        return 20;
+    }
 
     /**
      * {@inheritdoc}

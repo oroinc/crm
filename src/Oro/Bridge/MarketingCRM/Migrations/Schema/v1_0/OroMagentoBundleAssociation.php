@@ -5,6 +5,7 @@ namespace Oro\Bridge\MarketingCRM\Migrations\Schema\v1_0;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
@@ -14,13 +15,22 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 class OroMagentoBundleAssociation implements
     Migration,
     IdentifierEventExtensionAwareInterface,
-    VisitEventAssociationExtensionAwareInterface
+    VisitEventAssociationExtensionAwareInterface,
+    OrderedMigrationInterface
 {
     /** @var IdentifierEventExtension */
     protected $identifierEventExtension;
 
     /** @var VisitEventAssociationExtension */
     protected $visitExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function getOrder()
+    {
+        return 10;
+    }
 
     /**
      * {@inheritdoc}
