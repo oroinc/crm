@@ -28,7 +28,6 @@ UPGRADE FROM 1.10 to 2.0
       - `EntityFieldProvider $entityFieldProvider`,
         `ChangeLeadStatus $changeLeadStatus`
 - Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
-
 - Guesser ('Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser') removed
 - Lead and Opportunity entities do not implement ChannelAwareInterface
 - ChannelEntityTrait was removed from Lead and Opportunity entities  
