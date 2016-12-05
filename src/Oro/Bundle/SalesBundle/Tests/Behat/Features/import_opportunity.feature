@@ -15,9 +15,12 @@ Feature: Import opportunity feature
   Scenario: Import Opportunity with Account and Customer
     Given crm has Acme Account with Charlie and Samantha customers
     And I fill template with data:
-      | Account Customer name | Channel Name        | Opportunity name | Status Id   |
-      | Charlie               | First Sales Channel | Opportunity one  | in_progress |
-      | Samantha              | First Sales Channel | Opportunity two  | in_progress |
+#      | Account Customer name | Channel Name        | Opportunity name | Status Id   |
+#      | Charlie               | First Sales Channel | Opportunity one  | in_progress |
+#      | Samantha              | First Sales Channel | Opportunity two  | in_progress |
+      | Account Customer name | Opportunity name | Status Id   |
+      | Charlie               | Opportunity one  | in_progress |
+      | Samantha              | Opportunity two  | in_progress |
     When I import file
     Then Charlie customer has Opportunity one opportunity
     And Samantha customer has Opportunity two opportunity
