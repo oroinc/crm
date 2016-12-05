@@ -5,16 +5,49 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LoadLeadStatisticsWidgetFixture extends AbstractFixture
 {
+    /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $em;
+
+    protected function createLead()
+    {
+        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+        $newStatus = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
+
+        $lead = new Lead();
+        $lead->setName('Lead name');
+        $lead->setFirstName('fname');
+        $lead->setLastName('lname');
+        $lead->setStatus($newStatus);
+        $lead->setOrganization($this->organization);
+
+        $this->em->persist($lead);
+        $this->em->flush();
+    }
+
     /**
      * @inheritDoc
      */
     public function load(ObjectManager $manager)
     {
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->em = $manager;
+        $this->createLead($manager);
+
         $dasboard = new Dashboard();
         $dasboard->setName('dashboard');
 
