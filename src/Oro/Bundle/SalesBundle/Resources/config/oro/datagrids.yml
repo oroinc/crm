@@ -769,6 +769,7 @@ datagrids:
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
+                    entity_alias: opportunity
             closeRevenue:
                 label:         oro.sales.opportunity.close_revenue.label
                 frontend_type: multi-currency
@@ -779,6 +780,7 @@ datagrids:
                     original_field: closeRevenue
                     value_field: closeRevenueValue
                     currency_field: closeRevenueCurrency
+                    entity_alias: opportunity
             opportunityProbability:
                 label: oro.sales.opportunity.probability.label
                 frontend_type: percent
