@@ -93,7 +93,9 @@ class OroMarketingCRMBridgeBundleInstaller implements
      */
     protected function addIdentifierEventAssociations(Schema $schema)
     {
-        $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
+        if (!$this->identifierEventExtension->hasIdentifierAssociation($schema, 'orocrm_magento_customer')) {
+            $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
+        }
     }
 
     /**
@@ -101,9 +103,17 @@ class OroMarketingCRMBridgeBundleInstaller implements
      */
     protected function addVisitEventAssociation(Schema $schema)
     {
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_order');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_product');
+        if (!$this->visitExtension->hasVisitEventAssociation($schema, 'orocrm_magento_cart')) {
+            $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
+        }
+        if (!$this->visitExtension->hasVisitEventAssociation($schema, 'orocrm_magento_customer')) {
+            $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
+        }
+        if (!$this->visitExtension->hasVisitEventAssociation($schema, 'orocrm_magento_order')) {
+            $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_order');
+        }
+        if (!$this->visitExtension->hasVisitEventAssociation($schema, 'orocrm_magento_product')) {
+            $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_product');
+        }
     }
 }
