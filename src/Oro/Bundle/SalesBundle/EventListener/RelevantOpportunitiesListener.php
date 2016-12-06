@@ -47,8 +47,8 @@ class RelevantOpportunitiesListener
      */
     public function addRelevantOpportunities(BeforeViewRenderEvent $event)
     {
-        $data = $event->getData();
-        $entity = $event->getEntity();
+        $data        = $event->getData();
+        $entity      = $event->getEntity();
         $environment = $event->getTwigEnvironment();
 
         if (!$this->opportunityDisplayConfigProvider->isFeatureEnabled()) {
@@ -63,16 +63,16 @@ class RelevantOpportunitiesListener
             return;
         }
 
-        $account = $entity->getCustomerAssociation()->getAccount();
+        $account           = $entity->getCustomerAssociation()->getAccount();
         $opportunitiesData = $environment->render(
             'OroSalesBundle:Opportunity:relevantOpportunities.html.twig',
             [
                 'gridParams' =>
-                 [
-                     'customer_id'    => $account->getId(),
-                     'customer_class' => Account::class,
-                     'opportunity_id' => $entity->getId(),
-                 ]
+                    [
+                        'customer_id'    => $account->getId(),
+                        'customer_class' => Account::class,
+                        'opportunity_id' => $entity->getId(),
+                    ]
             ]
         );
 

@@ -75,6 +75,15 @@ system_configuration:
                 allow_extra_fields: true
                 attr:
                     class: oro-clearfix
+
+        oro_sales.display_relevant_opportunities:
+            data_type: boolean
+            type: oro_config_checkbox
+            page_reload: true
+            options:
+                required: false
+                tooltip: oro.sales.system_configuration.fields.display_relevant_opportunities.tooltip
+                label:   oro.sales.system_configuration.fields.display_relevant_opportunities.label
     tree:
         system_configuration:
             crm:
@@ -93,8 +102,13 @@ system_configuration:
                                         children:
                                             - oro_sales.opportunity_feature_enabled
                                     opportunity_status_probabilities:
+                                        priority: 80
                                         children:
                                             - oro_sales.opportunity_statuses
+                                    display_settings:
+                                        priority: 70
+                                        children:
+                                            - oro_sales.display_relevant_opportunities
                             salesfunnel:
                                 children:
                                     general_setup:

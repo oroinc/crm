@@ -510,7 +510,7 @@ oro:
                 sales_salesfunnel:
                     feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
-                    feature_enabled.label:                     Display relevant opportunities
+                    label:                                     Display relevant opportunities
                     tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
 
         privilege:
