@@ -4,8 +4,6 @@ namespace Oro\Bridge\MarketingCRM\Entity\Repository;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryAbstract;
-use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
-use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 
 class ChannelRepository extends ChannelRepositoryAbstract
 {

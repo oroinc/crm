@@ -20,7 +20,7 @@ class MagentoTrackingVisitEventProviderPass implements CompilerPassInterface
         $magentoProvider = $container->getDefinition(self::PROVIDER_ID);
         $magentoProvider->setClass(TrackingVisitEventProvider::class);
 
-        $magentoProvider->addMethodCall('addFeature', ['marketing']);
+        $magentoProvider->addMethodCall('addFeature', ['tracking']);
         $checkerReference = new Reference('oro_featuretoggle.checker.feature_checker');
         $magentoProvider->addMethodCall('setFeatureChecker', [$checkerReference]);
     }
