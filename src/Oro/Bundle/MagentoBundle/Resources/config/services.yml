@@ -1024,6 +1024,11 @@ services:
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 
+    oro_magento.datagrid.cart_view_list:
+        class: Oro\Bundle\MagentoBundle\Datagrid\CartViewList
+        arguments:
+            - '@translator'
+
     oro_magento.customer_account_change_subscriber:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
         arguments:

@@ -52,7 +52,7 @@ Scenario: Edit Account
   And Todd Greene should be an owner
 
 Scenario: Delete Account
-  And press "Delete Account"
+  And press "Delete"
   When confirm deletion
-  Then I should see "Account deleted" flash message
+  Then I should see "item deleted" flash message
   And there is no records in grid
