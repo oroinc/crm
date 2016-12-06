@@ -19,15 +19,7 @@ class FeatureContext extends OroFeatureContext implements
     OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary, SalesExtension;
-
-    /**
-     * @Given they has their own Accounts and Customers
-     */
-    public function accountHasBusinessCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
-    }
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
      * @Given CRM has second sales channel with Accounts and Magento Customers
@@ -35,14 +27,6 @@ class FeatureContext extends OroFeatureContext implements
     public function crmHasSecondSalesChannel()
     {
         $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
-    }
-
-    /**
-     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
-     */
-    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
     }
 
     /**

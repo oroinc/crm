@@ -1,3 +1,12 @@
+include:
+  - ./users.yml
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  acmeAccount:
+    name: Acme
+    owner: '@charlie'
+    organization: '@organization'
+
 Oro\Bundle\MagentoBundle\Entity\Customer:
   charlieCustomer:
     firstName: Charlie
