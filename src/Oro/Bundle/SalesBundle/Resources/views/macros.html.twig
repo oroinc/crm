@@ -28,3 +28,38 @@
         {% endfor -%}
     </ul>
 {% endmacro %}
+
+{% macro render_customer_info(entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+
+    {% set customer = entity.customerAssociation and entity.customerAssociation.customerTarget
+        ? entity.customerAssociation.customerTarget
+        : null %}
+    {% set account = entity.customerAssociation and entity.customerAssociation.account
+        ? entity.customerAssociation.account
+        : null %}
+
+    {%- set accountView = _self.entity_view(account) -%}
+    {%- set customerView = _self.entity_view(customer) -%}
+
+    {%- set compoundView -%}
+        {%- if accountView and customerView -%}
+            {{ accountView }} ({{ customerView }})
+        {%- else -%}
+            {{ accountView|default(customerView) }}
+        {%- endif -%}
+    {%- endset -%}
+
+    {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, compoundView, entity, 'customer') }}
+{% endmacro %}
+
+{%- macro entity_view(entity) -%}
+    {%- import 'OroUIBundle::macros.html.twig' as ui -%}
+
+    {%- set entityName = entity ? entity|oro_format_name : '' -%}
+    {%- if (entity and resource_granted('VIEW', entity)) -%}
+        {{ ui.renderUrl(oro_entity_object_view_link(entity), entityName) }}
+    {%- else -%}
+        {{ entityName }}
+    {%- endif -%}
+{%- endmacro -%}

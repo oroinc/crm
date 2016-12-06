@@ -4,16 +4,19 @@ namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class OpportunitiesListener
 {
+    // below activity block which have 1000
+    const GRID_BLOCK_PRIORITY = 1010;
+
     /** @var ConfigProvider */
-    protected $opportunityProvider;
+    protected $customerConfigProvider;
 
     /** @var TranslatorInterface */
     protected $translator;
@@ -22,40 +25,44 @@ class OpportunitiesListener
     protected $doctrineHelper;
 
     /**
-     * @param ConfigManager       $configManager
+     * @param ConfigProvider      $customerConfigProvider
      * @param TranslatorInterface $translator
      * @param DoctrineHelper      $helper
      */
-    public function __construct(ConfigManager $configManager, TranslatorInterface $translator, DoctrineHelper $helper)
-    {
-        $this->opportunityProvider = $configManager->getProvider('opportunity');
-        $this->translator          = $translator;
-        $this->doctrineHelper      = $helper;
+    public function __construct(
+        ConfigProvider $customerConfigProvider,
+        TranslatorInterface $translator,
+        DoctrineHelper $helper
+    ) {
+        $this->customerConfigProvider = $customerConfigProvider;
+        $this->translator             = $translator;
+        $this->doctrineHelper         = $helper;
     }
 
     /**
+     * Adds block with associated opportunities grid of viewing entity
+     * if this entity has "customer" association enabled.
+     *
      * @param BeforeViewRenderEvent $event
      */
     public function addOpportunities(BeforeViewRenderEvent $event)
     {
-        $entity       = $event->getEntity();
-        $entityConfig = $entity && $this->opportunityProvider->hasConfig($entity)
-            ? $this->opportunityProvider->getConfig($entity)
-            : null;
-        if ($entityConfig && $entityConfig->is('enabled')) {
+        $entity = $event->getEntity();
+        if ($this->customerConfigProvider->isCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' =>
                      [
-                         'customer_id' => $this->doctrineHelper->getSingleEntityIdentifier($entity),
-                         'customer_class' => $entityConfig->getId()->getClassName()
+                         'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
+                         'customer_class' => ClassUtils::getClass($entity),
                      ]
                 ]
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),
+                'priority' => self::GRID_BLOCK_PRIORITY,
                 'subblocks' => [['data' => [$opportunitiesData]]]
             ];
             $event->setData($data);

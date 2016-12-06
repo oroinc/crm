@@ -210,6 +210,7 @@ oro:
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
+            customer_association.label : Customer
 
             add_entity:           Add opportunity
 
@@ -226,6 +227,7 @@ oro:
                     open:            Open Opportunities
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
+            relevant_opportunities:  Relevant Opportunities
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -280,6 +282,7 @@ oro:
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
             primary_email.label:  Primary Email
+            customer_association.label : Customer
             source:
                 unclassified:     No source
                 others:           Others
@@ -455,6 +458,16 @@ oro:
             owner.label:         Owner
             primary.label:       Primary
 
+        #
+        # Entity Oro\Bundle\SalesBundle\Entity\Customer
+        #
+        customer:
+            entity_label:               Customer
+            entity_plural_label:        Customers
+            id.label:                   Id
+            account.label:              Account
+            customer_association_label: Customer
+
         widgets:
             b2bcustomer_information: Business Customer Information
             leads:                   Leads
@@ -498,6 +511,7 @@ oro:
                     feature_enabled.label:                     Enable Sales Process
                 display_relevant_opportunities:
                     feature_enabled.label:                     Display relevant opportunities
+                    tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
 
         privilege:
             category.sales_data.label: Sales Data

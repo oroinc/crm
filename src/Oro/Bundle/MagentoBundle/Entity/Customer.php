@@ -18,6 +18,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 
 /**
  * Class Customer
@@ -75,7 +76,8 @@ class Customer extends ExtendCustomer implements
     CustomerIdentityInterface,
     RFMAwareInterface,
     OriginAwareInterface,
-    IntegrationAwareInterface
+    IntegrationAwareInterface,
+    AccountAwareInterface
 {
     const SYNC_TO_MAGENTO = 1;
     const MAGENTO_REMOVED = 2;
@@ -288,7 +290,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

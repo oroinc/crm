@@ -417,7 +417,7 @@ class Opportunity extends ExtendOpportunity implements
      *     inversedBy="opportunities",
      *     cascade={"persist"}
      * )
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -445,6 +445,14 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $closedAt;
+
+    /**
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
+     * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     */
+    protected $customerAssociation;
 
     /**
      * @return int
@@ -949,5 +957,25 @@ class Opportunity extends ExtendOpportunity implements
     public function getClosedAt()
     {
         return $this->closedAt;
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return $this
+     */
+    public function setCustomerAssociation(Customer $customer = null)
+    {
+        $this->customerAssociation = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomerAssociation()
+    {
+        return $this->customerAssociation;
     }
 }
