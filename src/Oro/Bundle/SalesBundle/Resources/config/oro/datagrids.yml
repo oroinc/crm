@@ -732,8 +732,8 @@ datagrids:
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
-                    - opportunity.budgetAmountValue as budgetAmountValue
-                    - opportunity.closeRevenueValue as closeRevenueValue
+                    - opportunity.budgetAmountValue as budgetAmount
+                    - opportunity.closeRevenueValue as closeRevenue
                     - opportunity.budgetAmountCurrency as budgetAmountCurrency
                     - opportunity.closeRevenueCurrency as closeRevenueCurrency
                     - opportunity.probability as opportunityProbability
