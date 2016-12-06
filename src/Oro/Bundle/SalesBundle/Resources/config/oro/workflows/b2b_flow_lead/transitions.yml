@@ -7,7 +7,7 @@ workflows:
                 is_unavailable_hidden: true
                 acl_resource: oro_sales_opportunity_create
                 frontend_options:
-                    icon: 'icon-ok'
+                    icon: 'fa-check'
                     class: 'btn-primary'
                 form_options:
                     attribute_fields:
@@ -53,12 +53,12 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-remove'
+                    icon: 'fa-close'
                 transition_definition: cancel_definition
             reactivate:
                 step_to: new
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-repeat'
+                    icon: 'fa-repeat'
                 transition_definition: reactivate_definition

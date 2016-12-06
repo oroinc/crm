@@ -9,7 +9,7 @@
             'path' : path('oro_email_campaign_send', { id: entity.id }),
             'title': 'oro.campaign.emailcampaign.send'|trans,
             'label': 'oro.campaign.emailcampaign.send'|trans,
-            'iCss': 'icon-envelope'
+            'iCss': 'fa-envelope'
         })  }}
     {% endif %}
     {% if resource_granted('EDIT', entity) %}
@@ -43,9 +43,9 @@
     {{ parent() }}
     <div class="status-enabled pull-left">
         {% if entity.sent %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ 'oro.campaign.emailcampaign.status.sent'|trans }}</div>
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled fa-circle"></i>{{ 'oro.campaign.emailcampaign.status.sent'|trans }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ 'oro.campaign.emailcampaign.status.not_sent'|trans }}</div>
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled fa-circle"></i>{{ 'oro.campaign.emailcampaign.status.not_sent'|trans }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}

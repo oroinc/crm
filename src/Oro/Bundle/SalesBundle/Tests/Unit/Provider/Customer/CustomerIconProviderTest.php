@@ -17,7 +17,7 @@ class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
     {
         $entityConfigs = [
             'Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel' => [
-                'icon' => 'icon-class',
+                'icon' => 'fa-class',
             ],
             'Oro\Bundle\EntityConfigBundle\Entity\ConfigModelIndexValue' => [],
         ];
@@ -58,7 +58,7 @@ class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
         return [
             'entity with icon config' => [
                 new EntityConfigModel(),
-                new Image(Image::TYPE_ICON, ['class' => 'icon-class']),
+                new Image(Image::TYPE_ICON, ['class' => 'fa-class']),
             ],
             'entity without icon config' => [
                 new ConfigModelIndexValue(),

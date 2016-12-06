@@ -16,7 +16,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-group"
+ *              "icon"="fa-users"
  *          },
  *          "note"={
  *              "immutable"=true

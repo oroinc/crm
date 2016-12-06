@@ -16,7 +16,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadPhone;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="fa-phone"
  *          },
  *          "note"={
  *              "immutable"=true
