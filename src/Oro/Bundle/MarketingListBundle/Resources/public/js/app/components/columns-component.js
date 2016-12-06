@@ -43,9 +43,9 @@ define(function(require) {
         var icon;
         if (type) {
             if (type === 'phone') {
-                icon = 'icon-phone';
+                icon = 'fa-phone';
             } else if (type === 'email') {
-                icon = 'icon-envelope';
+                icon = 'fa-envelope';
             }
 
             var item = element.find('[data-cid="' + model.cid + '"] .name-cell');

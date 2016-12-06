@@ -29,7 +29,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="oro_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd"
+ *              "icon"="fa-usd"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

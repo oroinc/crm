@@ -5,7 +5,7 @@ navigation:
                 label: 'oro.account.menu.customers_tab.label'
                 uri: '#'
                 extras:
-                    icon: icon-group
+                    icon: fa-users
                     position: 10
 
             account_list:

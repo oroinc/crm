@@ -43,7 +43,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="oro_magento_customer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user"
+ *              "icon"="fa-user"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

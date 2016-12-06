@@ -27,7 +27,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *      routeView="oro_sales_salesfunnel_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-filter"
+ *              "icon"="fa-filter"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
