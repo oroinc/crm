@@ -110,7 +110,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_41_2';
+        return 'v1_41_3';
     }
 
     /**
@@ -715,6 +715,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecart_origin_idx', []);
         $table->addIndex(['updatedAt'], 'magecart_updated_idx', []);
+        $table->addIndex(['payment_details'], 'magecart_payment_details_idx', []);
+        $table->addIndex(['status_name', 'items_qty'], 'status_name_items_qty_idx', []);
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_cart_origin_id_channel_id');
     }
 

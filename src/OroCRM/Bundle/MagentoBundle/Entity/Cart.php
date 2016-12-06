@@ -30,7 +30,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\Table(name="orocrm_magento_cart",
  *  indexes={
  *      @ORM\Index(name="magecart_origin_idx", columns={"origin_id"}),
- *      @ORM\Index(name="magecart_updated_idx",columns={"updatedAt"})
+ *      @ORM\Index(name="magecart_updated_idx", columns={"updatedAt"}),
+ *      @ORM\Index(name="magecart_payment_details_idx", columns={"payment_details"}),
+ *      @ORM\Index(name="status_name_items_qty_idx", columns={"status_name", "items_qty"})
  *  },
  *  uniqueConstraints={
  *      @ORM\UniqueConstraint(name="unq_cart_origin_id_channel_id", columns={"origin_id", "channel_id"})
