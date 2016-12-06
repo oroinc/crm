@@ -116,20 +116,6 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider testGetTargetCustomerOrAccountDataProvider
-     *
-     * @param CustomerStub $value
-     * @param object       $expected
-     */
-    public function testGetTargetCustomerOrAccount(CustomerStub $value, $expected)
-    {
-        $this->assertEquals(
-            $expected,
-            $this->manager->getTargetCustomerOrAccount($value)
-        );
-    }
-
-    /**
      * @expectedException \Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException
      * @expectedExceptionMessage Couldn't sync Customer's target account without target
      */
@@ -165,25 +151,5 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
         $customer->setCustomerTarget($target);
         $this->manager->syncTargetCustomerAccount($customer);
         $this->assertInstanceOf(Account::class, $customer->getAccount());
-    }
-
-    /**
-     * @return array
-     */
-    public function testGetTargetCustomerOrAccountDataProvider()
-    {
-        $customerTarget = new AccountAwareCustomerTarget(1);
-        $account        = new Account();
-
-        return [
-            'target is a customer' => [
-                (new CustomerStub())->setCustomerTarget($customerTarget),
-                $customerTarget
-            ],
-            'target is an account' => [
-                (new CustomerStub())->setAccount($account),
-                $account
-            ],
-        ];
     }
 }

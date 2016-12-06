@@ -52,7 +52,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
 
         $target = $this->entityToStringTransformer->reverseTransform($value);
 
-        return $this->accountCustomerManager->getOrCreateAccountCustomerByTarget($target);
+        return $this->accountCustomerManager->getAccountCustomerByTarget($target);
     }
 
     /**
@@ -61,15 +61,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
     public function transform($value)
     {
         if ($value instanceof Customer) {
-            $account = $value->getAccount();
-            // new accounts values transforms directly
-            if (!$account->getId()) {
-                return json_encode([
-                    'value' => $account->getName(),
-                ]);
-            }
-
-            $value = AccountCustomerManager::getTargetCustomerOrAccount($value);
+            $value = $value->getTarget();
         }
 
         return $this->entityToStringTransformer->transform($value);
