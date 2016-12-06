@@ -16,8 +16,8 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 class LeadStatistics extends WebTestCase
 {
     protected $metrics = [
-        'open_leads_count',
-        'new_leads_count'
+        'open_leads_count' => 'Open Leads',
+        'new_leads_count' => 'New Leads'
     ];
 
     public function setUp()
@@ -26,7 +26,6 @@ class LeadStatistics extends WebTestCase
             ['debug' => false],
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-        $this->client->useHashNavigation(true);
         $this->loadFixtures([
             'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture'
         ]);
@@ -60,7 +59,6 @@ class LeadStatistics extends WebTestCase
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, "Failed in submit widget configuration options !");
 
-        $this->client->useHashNavigation(false);
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
@@ -73,24 +71,55 @@ class LeadStatistics extends WebTestCase
                 ]
             )
         );
-        $this->client->useHashNavigation(true);
 
         $response = $this->client->getResponse();
         $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
         $this->assertNotEmpty($crawler->html());
 
-        $openLeadsMetric = $crawler->filterXPath($this->getMetricValueByLabel('Open Leads'));
+        $openLeadsMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['open_leads_count']
+            )
+        );
         $this->assertEquals(
             $openLeadsMetric->getNode(0)->nodeValue,
             0,
             '"Open Leads" metric doesn\'t much expected value !'
         );
-        $onewLeadsMetric = $crawler->filterXPath($this->getMetricValueByLabel('New Leads'));
+        $onewLeadsMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['new_leads_count']
+            )
+        );
         $this->assertEquals(
             $onewLeadsMetric->getNode(0)->nodeValue,
             0,
             '"New Leads" metric doesn\'t much expected value !'
         );
+    }
+
+    public function wudgetProvider()
+    {
+        return [
+            'Apply owner filter with date range filter on today' => [
+                'owners' => '',
+                'dateRange' => '',
+                'advancedFilters' => '',
+                'widgetItemResult' => [
+                    'open_leads_count' => '',
+                    'new_leads_count' => ''
+                ],
+                'widgetItemPreviousResult' => [
+                    'open_leads_count' => '',
+                    'new_leads_count' => ''
+                ]
+            ],
+            'Apply "All time" date range filter' => [],
+            'Apply "Today" date range filter' => [],
+            'Apply "Custom" date range filter' => [],
+            'Apply advanced filters with owner filter' => [],
+            'Apply advanced filters without owner filter' => [],
+        ];
     }
 
     /**
@@ -101,6 +130,16 @@ class LeadStatistics extends WebTestCase
     protected function getMetricValueByLabel($label)
     {
         return sprintf('//*[text() = "%s"]/following-sibling::h3[@class="value"]', $label);
+    }
+
+    /**
+     * @param string $label
+     *
+     * @return string
+     */
+    protected function getMetricPreviousIntervalValueByLabel($label)
+    {
+        return sprintf('//*[text() = "%s"]/following-sibling::div[@class="deviation"][position()=1]/span', $label);
     }
 
     /**
@@ -133,7 +172,8 @@ class LeadStatistics extends WebTestCase
     protected function createMetricsElements(Form $form)
     {
         $doc = new \DOMDocument("1.0");
-        $metricsCount = count($this->metrics);
+        $metricsKeys = array_keys($this->metrics);
+        $metricsCount = count($metricsKeys);
         $html = '';
         for ($index=0; $index < $metricsCount; $index++) {
             $html .= sprintf(
@@ -141,7 +181,7 @@ class LeadStatistics extends WebTestCase
                 '<input type="text" name="lead_statistics[subWidgets][items][%1$s][order]" value="%1$s" />' .
                 '<input type="text" name="lead_statistics[subWidgets][items][%1$s][show]" value="on" />',
                 $index,
-                $this->metrics[$index]
+                $metricsKeys[$index]
             );
         }
 
