@@ -75,7 +75,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
 
         $sale
             ->setUsername('sale')
-            ->setPlainPassword('salesale1Q')
+            ->setPlainPassword('sale')
             ->setFirstName('Ellen')
             ->setLastName('Rowell')
             ->addRole($saleRole)
@@ -104,7 +104,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, D
 
         $marketing
             ->setUsername('marketing')
-            ->setPlainPassword('marketing1Q')
+            ->setPlainPassword('marketing')
             ->setFirstName('Michael')
             ->setLastName('Buckley')
             ->addRole($marketingRole)
