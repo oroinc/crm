@@ -21,7 +21,7 @@ use Oro\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-volume-up"
+ *              "icon"="fa-volume-up"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

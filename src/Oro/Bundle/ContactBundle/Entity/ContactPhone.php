@@ -19,7 +19,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="fa-phone"
  *          },
  *          "note"={
  *              "immutable"=true
