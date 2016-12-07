@@ -228,6 +228,8 @@ oro:
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
             relevant_opportunities:  Relevant Opportunities
+            create.label: Create Opportunity
+
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #

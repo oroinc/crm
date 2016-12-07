@@ -503,3 +503,11 @@ services:
         parent: oro_sales.datagrid.extension.customers.opportunities
         tags:
             - { name: oro_datagrid.extension }
+
+    oro_sales.create_opportunity.widget_provider.actions:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oro_sales_create_opportunity_button
+            - oro_sales_create_opportunity_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }
