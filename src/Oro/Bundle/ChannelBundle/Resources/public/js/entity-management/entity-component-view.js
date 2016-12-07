@@ -226,17 +226,17 @@ define(function(require) {
                 actions.push({
                     collectionAction: 'delete',
                     title: 'Delete',
-                    icon: 'icon-trash'
+                    icon: 'fa-trash-o'
                 });
             } else if (this.options.mode === modes.VIEW_MODE) {
                 actions.push({
                     title: 'View',
-                    icon:  'icon-eye-open',
+                    icon:  'fa-eye',
                     url:   entityMetadata.view_link
                 });
                 actions.push({
                     title: 'Edit',
-                    icon:  'icon-edit',
+                    icon:  'fa-pencil-square-o',
                     url:   entityMetadata.edit_link
                 });
             }

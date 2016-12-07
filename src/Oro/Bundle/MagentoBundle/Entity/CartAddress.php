@@ -16,7 +16,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
  * @Config(
  *       defaultValues={
  *          "entity"={
- *              "icon"="icon-map-marker"
+ *              "icon"="fa-map-marker"
  *          },
  *          "note"={
  *              "immutable"=true
