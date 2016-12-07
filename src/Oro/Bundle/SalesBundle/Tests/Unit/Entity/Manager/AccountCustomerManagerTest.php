@@ -11,7 +11,6 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\AccountAwareCustomerTarget;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 
 class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
@@ -78,7 +77,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($account, $customer->getAccount());
     }
 
-    public function testGetAccountCustomerByTargetTargetIsAccount()
+    public function testGetAccountCustomerByTargetIfTargetIsAccount()
     {
         $target = (new Account())->setName('test');
         $this->configProvider

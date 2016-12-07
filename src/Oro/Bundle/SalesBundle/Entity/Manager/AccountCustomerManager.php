@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Entity\Manager;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityNotFoundException;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -12,7 +13,6 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
-use Oro\Bundle\SalesBundle\Exception\Customer\CustomerNotFoundException;
 use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
@@ -91,7 +91,7 @@ class AccountCustomerManager
             $customer    = $customerRepo->findOneBy([$targetField => $id]);
 
             if (!$customer) {
-                throw new CustomerNotFoundException(
+                throw new EntityNotFoundException(
                     sprintf(
                         'Sales Customer for target of type "%s" and identifier %s was not found',
                         $targetClassName,
