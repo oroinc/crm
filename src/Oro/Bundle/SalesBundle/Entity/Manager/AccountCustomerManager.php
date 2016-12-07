@@ -72,7 +72,7 @@ class AccountCustomerManager
     /**
      * @param object $target
      *
-     * @return Customer|null
+     * @return Customer
      */
     public function getAccountCustomerByTarget($target)
     {

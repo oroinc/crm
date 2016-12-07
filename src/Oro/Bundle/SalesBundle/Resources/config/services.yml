@@ -503,3 +503,16 @@ services:
         parent: oro_sales.datagrid.extension.customers.opportunities
         tags:
             - { name: oro_datagrid.extension }
+
+    oro_sales.form.extension.customer_association:
+        class: Oro\Bundle\SalesBundle\Form\Extension\CustomerAssociationExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.manager.account_customer'
+        tags:
+            - { name: form.type_extension, alias: form, extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    oro_sales.form.listener.customer_association_account_field:
+        class: Oro\Bundle\SalesBundle\Form\EventListener\CustomerAssociationAccountFieldListener
+        tags:
+            - { name: kernel.event_listener, event: entity_form.render.before, method: addAccountField, priority: 10 }
