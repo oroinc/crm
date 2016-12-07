@@ -13,6 +13,7 @@ class B2bConfigurableAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrate
      */
     protected function afterProcessEntity($entity)
     {
+        $entity = parent::afterProcessEntity($entity);
         $this->guessRegion($entity->getBillingAddress());
         $this->guessRegion($entity->getShippingAddress());
 
