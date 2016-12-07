@@ -29,12 +29,6 @@
             {{ ui.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
             {{ ui.renderProperty('oro.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
-            {%- if resource_granted('oro_sales_b2bcustomer_view') and entity.customer -%}
-                {% set customerView = '<a href="' ~ path('oro_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
-            {%- else -%}
-                {% set customerView = entity.customer ? entity.customer|escape : '' %}
-            {%- endif -%}
-
             {%- set opportunitiesData -%}
                 {%- if entity.opportunities.count -%}
                     {% set opportunityViewGranted = resource_granted('oro_sales_opportunity_view') %}
@@ -49,7 +43,17 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderHtmlProperty('oro.sales.lead.customer.label'|trans, customerView) }}
+            {% set customer = entity.getCustomerTarget() %}
+            {%- set customerView -%}
+                {% set customerName = customer ? customer|oro_format_name|escape : '' %}
+                {%- if (customer and resource_granted('VIEW', customer)) -%}
+                    <a href="{{ oro_entity_object_view_link(customer) }}">{{ customerName }}</a>
+                {%- else -%}
+                    {{ customerName }}
+                {%- endif -%}
+            {%- endset -%}
+            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
+
             {{ ui.renderProperty('oro.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('oro.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('oro.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
@@ -64,14 +68,14 @@
                     {% if entity.twitter %}
                         <li>
                             <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
-                                <i class="icon-twitter"></i>
+                                <i class="fa-twitter"></i>
                             </a>
                         </li>
                     {% endif %}
                     {% if entity.linkedIn %}
                         <li>
                             <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
-                                <i class="icon-linkedin"></i>
+                                <i class="fa-linkedin"></i>
                             </a>
                         </li>
                     {% endif %}

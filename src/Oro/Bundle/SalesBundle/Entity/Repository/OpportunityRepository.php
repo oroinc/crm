@@ -5,9 +5,11 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
@@ -43,6 +45,29 @@ class OpportunityRepository extends EntityRepository
         $dateStart = $dateRange['start'];
 
         return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states, $owners);
+    }
+
+    /**
+     * @param array             $removingCurrencies
+     * @param Organization|null $organization
+     *
+     * @return bool
+     */
+    public function hasRecordsWithRemovingCurrencies(
+        array $removingCurrencies,
+        Organization $organization = null
+    ) {
+        $qb = $this->createQueryBuilder('opportunity');
+        $qb
+            ->select('count(opportunity.id)')
+            ->where($qb->expr()->in('opportunity.budgetAmountCurrency', $removingCurrencies))
+            ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', $removingCurrencies));
+        if ($organization instanceof Organization) {
+            $qb->andWhere('opportunity.organization = :organization');
+            $qb->setParameter(':organization', $organization);
+        }
+
+        return (bool) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -634,10 +659,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**
@@ -647,10 +675,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.closeDate', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**

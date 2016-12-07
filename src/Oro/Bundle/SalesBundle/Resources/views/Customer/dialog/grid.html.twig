@@ -1,0 +1,50 @@
+{% block page_container %}
+    <div class="widget-content">
+
+        {% set itemsArray = [] %}
+        {% for item in entityTargets %}
+            {% set itemArray = {
+                'label': item.label|trans,
+                'first': item.first,
+                'className': item.className,
+                'gridName': item.gridName
+                }
+            %}
+            {% set itemsArray = itemsArray|merge([itemArray]) %}
+        {% endfor %}
+
+        {% set firstItem = itemsArray|first %}
+        {% set gridWidgetName = 'customer-grid' %}
+        {% set options = params|merge({
+                items: itemsArray,
+                params: params,
+                gridWidgetName: gridWidgetName,
+                dialogWidgetName: 'customer-dialog',
+                sourceEntityClassAlias: sourceEntityClassAlias
+            })
+        %}
+
+        <script type="text/template" id="activity-context-item">
+            <li id="<%= entity.get('entityAlias') %>" class="context-item" data-cid="<%= entity.cid %>">
+                <%= entity.get('label') %>
+            </li>
+        </script>
+
+        <div data-page-component-module="orosales/js/app/components/customer-grid-component"
+             data-page-component-options="{{ options|json_encode }}" class="btn-group">
+            <button class="activity-context-current-block dropdown-toggle" data-toggle="dropdown">
+                <span class="activity-context-current-item"></span>
+                <span class="fa-caret-down"></span>
+            </button>
+            <ul class="context-items-dropdown dropdown-menu"></ul>
+        </div>
+
+        {% if firstItem %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_sales_customer_grid', {entityClass: firstItem.className}),
+                'alias': gridWidgetName,
+            }) }}
+        {% endif %}
+    </div>
+{% endblock %}

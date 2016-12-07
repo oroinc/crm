@@ -29,7 +29,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="oro_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd"
+ *              "icon"="fa-usd"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -417,7 +417,7 @@ class Opportunity extends ExtendOpportunity implements
      *     inversedBy="opportunities",
      *     cascade={"persist"}
      * )
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},

@@ -96,7 +96,7 @@ class MarketingListExtension extends AbstractExtension
             if (!is_string($part)) {
                 $part = $qb->expr()->orX(
                     $part,
-                    $this->createItemsFunc($qb)
+                    $this->createItemsExpr($qb)
                 );
 
                 $addParameter = true;
@@ -128,9 +128,9 @@ class MarketingListExtension extends AbstractExtension
     /**
      * @param QueryBuilder $qb
      *
-     * @return Func
+     * @return mixed
      */
-    protected function createItemsFunc(QueryBuilder $qb)
+    protected function createItemsExpr(QueryBuilder $qb)
     {
         $itemsQb = clone $qb;
         $itemsQb->resetDQLParts();
@@ -138,9 +138,8 @@ class MarketingListExtension extends AbstractExtension
         $itemsQb
             ->select('item.entityId')
             ->from('OroMarketingListBundle:MarketingListItem', 'item')
-            ->andWhere('item.marketingList = :marketingListId')
-            ->andWhere('item.entityId = ' . $qb->getRootAliases()[0]);
+            ->andWhere('item.marketingList = :marketingListId');
 
-        return new Func('EXISTS', $itemsQb->getDQL());
+        return $itemsQb->expr()->in($qb->getRootAliases()[0], $itemsQb->getDQL());
     }
 }

@@ -101,7 +101,7 @@
             <span class="add-on ui-sortable-handle{% if disabled %} disabled{% endif %}"
                   data-name="sortable-handle"
                   title="{{ 'oro.entity_extend.enum_options.priority.tooltip'|trans }}">
-                <i class="icon-resize-vertical {% if disabled %} disabled{% endif %}"></i>
+                <i class="fa-arrows-v {% if disabled %} disabled{% endif %}"></i>
                 {{ form_widget(form.priority, {disabled: disabled}) }}
             </span>
             <label class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.default.tooltip'|trans }}">
@@ -174,3 +174,65 @@
         </script>
     {% endif %}
 {% endmacro %}
+
+{% block oro_sales_customer_widget %}
+    {% if not hasGridData %}
+        {{ form_widget(form) }}
+    {% else %}
+        <div id="{{ id }}-el"
+             {% if createCustomersData|length %}class="entity-create-or-select-container entity-create-multi-enabled"{% endif %}
+             data-page-component-module="orosales/js/app/components/customer-component"
+             data-page-component-options="{{ {
+                 inputSelector: '#'~id,
+                 customerSelector: '.dropdown-menu li',
+             }|json_encode }}">
+            <div class="input-append">
+                {{ form_widget(form) }}
+                {% import 'OroUIBundle::macros.html.twig' as UI %}
+                {{ UI.clientLink({
+                    'dataUrl': path(
+                    'oro_sales_customer_grid_dialog', {
+                        entityClass: parentClass,
+                    }),
+                    'aCss': 'add-on btn entity-select-btn',
+                    'iCss': 'fa-bars',
+                    'widget' : {
+                        'type' : 'dialog',
+                        'multiple' : true,
+                        'options' : {
+                            'alias': 'customer-dialog',
+                            'dialogOptions' : {
+                                'title' : label|trans,
+                                'allowMaximize': true,
+                                'allowMinimize': true,
+                                'modal': true,
+                                'dblclick': 'maximize',
+                                'maximizedHeightDecreaseBy': 'minimize-bar',
+                                'width': 1000,
+                                'height': 600
+                            }
+                        }
+                    }
+                }) }}
+                {% if createCustomersData|length %}
+                    <div class="dropdown btn-group entity-create-dropdown">
+                        <button type="button" data-toggle="dropdown" class="dropdown-toggle btn entity-create-btn">
+                            <i class="fa-plus"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for customer in createCustomersData %}
+                                <li>
+                                    <button type="button" data-customer="{{ customer|json_encode }}">
+                                        <i class="{{ customer.icon }}"></i>
+                                        {{ customer.label|trans }}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

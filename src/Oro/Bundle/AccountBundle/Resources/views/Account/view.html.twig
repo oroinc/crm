@@ -21,7 +21,9 @@
             'aCss': 'no-hash remove-button',
             'dataId': entity.id,
             'id': 'btn-remove-account',
-            'entity_label': 'oro.account.entity_label'|trans
+            'dataMessage': 'oro.ui.delete_confirm_cascade'|trans({
+                '%entity_label%' : 'oro.account.entity_label'|trans
+            }),
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -97,7 +99,7 @@
 
     {# Render Website Activity Section if there is at least one applicable customer #}
     {% set websiteActivity %}
-        {%- placeholder orocrm_website_activity with {'customers': customers, 'byChannel': true} -%}
+        {%- placeholder oro_website_activity with {'customers': customers, 'byChannel': true} -%}
     {% endset %}
     {% if websiteActivity is not empty %}
         {% set dataBlocks = dataBlocks|merge([

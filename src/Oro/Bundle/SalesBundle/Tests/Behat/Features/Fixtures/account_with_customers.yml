@@ -1,12 +1,15 @@
+include:
+  - ./users.yml
+
 Oro\Bundle\AccountBundle\Entity\Account:
   acmeAccount:
     name: Acme
-    owner: '@admin'
+    owner: '@charlie'
     organization: '@organization'
 
-Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+Oro\Bundle\MagentoBundle\Entity\Customer:
   charlieCustomer:
-    name: Charlie
+    firstName: Charlie
     owner: '@admin'
     organization: '@organization'
     account: '@acmeAccount'
@@ -14,7 +17,7 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     createdAt: <dateTimeThisMonth('now')>
     updatedAt: <dateTimeThisMonth('now')>
   samanthaCustomer2:
-    name: Samantha
+    firstName: Samantha
     owner: '@admin'
     organization: '@organization'
     account: '@acmeAccount'
