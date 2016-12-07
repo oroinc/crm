@@ -78,7 +78,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($account, $customer->getAccount());
     }
 
-    public function testGetOrCreateAccountCustomerByTargetTargetIsAccount()
+    public function testGetAccountCustomerByTargetTargetIsAccount()
     {
         $target = (new Account())->setName('test');
         $this->configProvider
@@ -86,7 +86,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerClasses')
             ->willReturn(['TestClass']);
 
-        $customer = $this->manager->getOrCreateAccountCustomerByTarget($target);
+        $customer = $this->manager->getAccountCustomerByTarget($target);
         $this->assertEquals($target, $customer->getAccount());
     }
 
@@ -110,46 +110,8 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->with([$targetField => 1])
             ->willReturn($existedCustomer);
 
-        $customer = $this->manager->getOrCreateAccountCustomerByTarget($target);
+        $customer = $this->manager->getAccountCustomerByTarget($target);
 
         $this->assertEquals($existedCustomer, $customer);
-    }
-
-    /**
-     * @expectedException \Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException
-     * @expectedExceptionMessage Couldn't sync Customer's target account without target
-     */
-    public function testSyncTargetCustomerAccountWithoutTarget()
-    {
-        $customer = new CustomerStub();
-        $this->manager->syncTargetCustomerAccount($customer);
-    }
-
-    public function testSyncTargetCustomerAccountTargetWithAccount()
-    {
-        $account = new Account();
-        $customer = new CustomerStub();
-        $target = new AccountAwareCustomerTarget(1, $account);
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertEquals($customer->getAccount(), $target->getAccount());
-    }
-
-    public function testSyncTargetCustomerAccountTargetWithNoAccount()
-    {
-        $customer = new CustomerStub();
-        $target = new AccountAwareCustomerTarget(1);
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertInstanceOf(Account::class, $customer->getAccount());
-    }
-
-    public function testSyncTargetCustomerAccountTargetNotAccountAware()
-    {
-        $customer = new CustomerStub();
-        $target = new \stdClass;
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertInstanceOf(Account::class, $customer->getAccount());
     }
 }

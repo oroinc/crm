@@ -62,9 +62,9 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
         }
         $expectedAccount = $expectedValue->getAccount();
         $this->accountCustomerManager->expects($this->any())
-            ->method('getOrCreateAccountCustomerByTarget')
+            ->method('getAccountCustomerByTarget')
             ->will($this->returnCallback(function () use ($expectedAccount) {
-                return (new Customer())->setAccount($expectedAccount);
+                return (new Customer())->setTarget($expectedAccount);
             }));
         $this->assertEquals(
             $expectedValue,
@@ -88,60 +88,28 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
         return [
             'new account'      => [
                 json_encode(['value' => 'new account']),
-                (new Customer())->setAccount($newAccount)
+                (new Customer())->setTarget($newAccount)
             ],
             'existing account' => [
                 json_encode(['entityClass' => Account::class, 'entityId' => 1]),
-                (new Customer())->setAccount($existingAccount),
+                (new Customer())->setTarget($existingAccount),
             ],
         ];
     }
 
-    /**
-     * @dataProvider transformProvider
-     *
-     * @param Customer $value
-     * @param string   $expectedValue
-     */
-    public function testTransform(Customer $value, $expectedValue)
+    public function testTransform()
     {
-        $account = $value->getAccount();
-        if ($account->getId()) {
-            $this->dataTransformer->expects($this->any())
-                ->method('transform')
-                ->with($account)
-                ->will($this->returnValue('parentTransform'));
-        }
+        $account = new Account();
+        $account->setName('account');
+        $customer = (new CustomerStub())->setTarget($account);
+        $this->dataTransformer->expects($this->any())
+            ->method('transform')
+            ->with($account)
+            ->will($this->returnValue('transformedValue'));
 
         $this->assertEquals(
-            $expectedValue,
-            $this->transformer->transform($value)
+            'transformedValue',
+            $this->transformer->transform($customer)
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function transformProvider()
-    {
-        $accountIdRef = new \ReflectionProperty(Account::class, 'id');
-        $accountIdRef->setAccessible(true);
-        $existingAccount = new Account();
-        $existingAccount->setName('existing account');
-        $accountIdRef->setValue($existingAccount, 1);
-
-        $newAccount = new Account();
-        $newAccount->setName('new account');
-
-        return [
-            'new account'      => [
-                (new Customer())->setAccount($newAccount),
-                json_encode(['value' => 'new account']),
-            ],
-            'existing account' => [
-                (new CustomerStub())->setAccount($existingAccount),
-                'parentTransform',
-            ],
-        ];
     }
 }

@@ -64,6 +64,7 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
             $magentoCustomer = $customer->getTarget();
             $magentoCustomer->setAccount($customer->getAccount());
         }
+        $this->changedCustomers = [];
         $em = $args->getEntityManager();
         $em->flush();
     }
