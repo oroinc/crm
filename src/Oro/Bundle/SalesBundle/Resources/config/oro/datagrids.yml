@@ -764,6 +764,9 @@ datagrids:
                 frontend_type: multi-currency
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: budgetAmount
+                    currency: budgetAmountCurrency
                 multicurrency_config:
                     base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
                     original_field: budgetAmount
@@ -775,6 +778,9 @@ datagrids:
                 frontend_type: multi-currency
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: closeRevenue
+                    currency: closeRevenueCurrency
                 multicurrency_config:
                     base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
                     original_field: closeRevenue
