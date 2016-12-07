@@ -8,7 +8,7 @@ use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
-use Oro\Bundle\CurrencyBundle\Config\CurrencyConfigManager;
+use Oro\Bundle\CurrencyBundle\Provider\CurrencyProviderInterface;
 
 class OpportunityListener
 {
@@ -27,11 +27,11 @@ class OpportunityListener
 
     /**
      * @param OpportunityRelationsBuilder $relationsBuilder
-     * @param CurrencyConfigManager       $currencyConfigManager
+     * @param CurrencyProviderInterface       $currencyConfigManager
      */
     public function __construct(
         OpportunityRelationsBuilder $relationsBuilder,
-        CurrencyConfigManager $currencyConfigManager,
+        CurrencyProviderInterface $currencyConfigManager,
         TranslatorInterface $translator
     ) {
         $this->relationsBuilder = $relationsBuilder;
