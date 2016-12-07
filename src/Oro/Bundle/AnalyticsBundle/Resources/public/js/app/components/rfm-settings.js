@@ -14,7 +14,7 @@ define(function(require) {
                 '<td class="rfm-cell-monetary"></td>' +
                 '<td class="action-cell">' +
                     '<a href="#" class="action-delete" title="<%= _.__("oro.analytics.delete_row") %>">' +
-                        '<i class="icon-remove hide-text"></i>' +
+                        '<i class="fa-close hide-text"></i>' +
                     '</a>' +
                 '</td>' +
             '</tr>'

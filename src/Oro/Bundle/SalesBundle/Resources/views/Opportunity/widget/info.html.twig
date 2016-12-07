@@ -2,6 +2,7 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroCurrencyBundle::macros.html.twig' as currency %}
+{% import 'OroSalesBundle::macros.html.twig' as sales %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -27,17 +28,7 @@
             {%- endif -%}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.lead.label'|trans, leadView, entity, 'lead') }}
 
-            {% set customer = entity.getCustomerTarget() %}
-            {%- set customerView -%}
-                {% set customerName = customer ? customer|oro_format_name|escape : '' %}
-                {%- if (customer and resource_granted('VIEW', customer)) -%}
-                    <a href="{{ oro_entity_object_view_link(customer) }}">{{ customerName }}</a>
-                {%- else -%}
-                    {{ customerName }}
-                {%- endif -%}
-            {%- endset -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
-
+            {{ sales.render_customer_info(entity) }}
             {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
             {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}
             {{ currency.convert_to_base_currency(entity.budgetAmount, '', entity, 'budgetAmount') }}

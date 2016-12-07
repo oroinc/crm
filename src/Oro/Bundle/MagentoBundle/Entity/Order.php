@@ -37,7 +37,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="oro_magento_order_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="fa-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

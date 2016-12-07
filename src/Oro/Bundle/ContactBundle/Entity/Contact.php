@@ -41,7 +41,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      routeView="oro_contact_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-group",
+ *              "icon"="fa-users",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}
