@@ -296,7 +296,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -584,7 +584,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -808,7 +808,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_salesfunnel_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1396,7 +1396,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_b2bcustomer_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1508,7 +1508,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1685,7 +1685,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -2217,7 +2217,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
