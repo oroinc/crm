@@ -8,10 +8,13 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
+use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
+use Oro\Component\DependencyInjection\ServiceLink;
 
 class B2bCustomerLifetimeListener
 {
@@ -26,6 +29,20 @@ class B2bCustomerLifetimeListener
 
     /** @var bool */
     protected $isInProgress = false;
+
+    /** @var RateConverterInterface  */
+    protected $rateConverter;
+
+    /** @var CurrencyQueryBuilderTransformerInterface  */
+    protected $qbTransformer;
+
+    public function __construct(
+        ServiceLink $rateConverterLink,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
+    ) {
+        $this->rateConverter = $rateConverterLink->getService();
+        $this->qbTransformer = $qbTransformer;
+    }
 
     /**
      * @param OnFlushEventArgs $args
@@ -52,7 +69,8 @@ class B2bCustomerLifetimeListener
             if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation, just add to prev lifetime value and recalculate change set
                 $b2bCustomer = $entity->getCustomer();
-                $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $entity->getCloseRevenueValue());
+                $closeRevenueValue = $this->rateConverter->getBaseCurrencyAmount($entity->getCloseRevenue());
+                $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $closeRevenueValue);
                 $this->scheduleUpdate($b2bCustomer);
                 $this->uow->computeChangeSet(
                     $this->em->getClassMetadata(ClassUtils::getClass($b2bCustomer)),
@@ -73,7 +91,7 @@ class B2bCustomerLifetimeListener
                         $this->scheduleUpdate($changeSet['customer'][0]);
                     }
 
-                    if ($this->isValuable($entity, isset($changeSet['closeRevenue']))
+                    if ($this->isValuable($entity, isset($changeSet['closeRevenueValue']))
                         || (
                             B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
                             && $entity->getCustomer()
@@ -105,7 +123,7 @@ class B2bCustomerLifetimeListener
                 continue;
             }
 
-            $newLifetimeValue = $repo->calculateLifetimeValue($b2bCustomer);
+            $newLifetimeValue = $repo->calculateLifetimeValue($b2bCustomer, $this->qbTransformer);
             if ($newLifetimeValue != $b2bCustomer->getLifetime()) {
                 $b2bCustomer->setLifetime($newLifetimeValue);
                 $flushRequired = true;
@@ -157,7 +175,10 @@ class B2bCustomerLifetimeListener
      */
     protected function isChangeSetValuable(array $changeSet)
     {
-        $fieldsUpdated = array_intersect(['customer', 'status', 'closeRevenue'], array_keys($changeSet));
+        $fieldsUpdated = array_intersect(
+            ['customer', 'status', 'closeRevenueValue', 'closeRevenueCurrency', 'baseCloseRevenueValue'],
+            array_keys($changeSet)
+        );
 
         if (!empty($changeSet['status'])) {
             $statusChangeSet = array_map(

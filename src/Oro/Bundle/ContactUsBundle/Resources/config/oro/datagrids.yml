@@ -93,7 +93,7 @@ datagrids:
                 acl_resource: oro_contactus_request_view
                 type:         navigate
                 label:        oro.grid.action.view
-                icon:         eye-open
+                icon:         eye
                 link:         view_link
                 rowAction:    true
             update:

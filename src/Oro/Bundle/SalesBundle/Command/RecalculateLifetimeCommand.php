@@ -40,7 +40,8 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
     {
         /** @var B2bCustomerRepository $customerRepo */
         $customerRepo  = $em->getRepository('OroSalesBundle:B2bCustomer');
-        $lifetimeValue = $customerRepo->calculateLifetimeValue($customer);
+        $qbTransformer = $this->getContainer()->get('oro_currency.query.currency_transformer');
+        $lifetimeValue = $customerRepo->calculateLifetimeValue($customer, $qbTransformer);
 
         return $lifetimeValue;
     }
