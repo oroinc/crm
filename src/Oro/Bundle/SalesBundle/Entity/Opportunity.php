@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -18,6 +17,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ *
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
  *      name="orocrm_sales_opportunity",
