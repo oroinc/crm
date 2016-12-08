@@ -101,7 +101,7 @@
             <span class="add-on ui-sortable-handle{% if disabled %} disabled{% endif %}"
                   data-name="sortable-handle"
                   title="{{ 'oro.entity_extend.enum_options.priority.tooltip'|trans }}">
-                <i class="icon-resize-vertical {% if disabled %} disabled{% endif %}"></i>
+                <i class="fa-arrows-v {% if disabled %} disabled{% endif %}"></i>
                 {{ form_widget(form.priority, {disabled: disabled}) }}
             </span>
             <label class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.default.tooltip'|trans }}">
@@ -196,7 +196,7 @@
                             entityClass: parentClass,
                         }),
                         'aCss': 'add-on btn entity-select-btn',
-                        'iCss': 'icon-bars',
+                        'iCss': 'fa-bars',
                         'widget' : {
                             'type' : 'dialog',
                             'multiple' : true,
@@ -219,7 +219,7 @@
                 {% if createCustomersData|length %}
                     <div class="dropdown btn-group entity-create-dropdown">
                         <button type="button" data-toggle="dropdown" class="dropdown-toggle btn entity-create-btn">
-                            <i class="icon-plus"></i>
+                            <i class="fa-plus"></i>
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">

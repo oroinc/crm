@@ -29,7 +29,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="oro_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
+ *              "icon"="fa-user-md",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}

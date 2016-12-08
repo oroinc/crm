@@ -8,15 +8,15 @@ system_configuration:
             title: oro.sales.system_configuration.groups.sales_pipeline.title
 
         lead:
-            icon:  icon-usd
+            icon:  fa-usd
             title: oro.sales.system_configuration.groups.lead.title
 
         opportunity:
-            icon:  icon-usd
+            icon:  fa-usd
             title: oro.sales.system_configuration.groups.opportunity.title
 
         salesfunnel:
-            icon:  icon-usd
+            icon:  fa-usd
             title: oro.sales.system_configuration.groups.salesfunnel.title
 
         opportunity_status_probabilities:

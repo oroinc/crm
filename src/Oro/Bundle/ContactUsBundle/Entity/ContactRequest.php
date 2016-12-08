@@ -30,7 +30,7 @@ use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *              "owner_column_name"="owner_id"
  *          },
  *          "entity"={
- *              "icon"="icon-envelope"
+ *              "icon"="fa-envelope"
  *          },
  *          "security"={
  *              "type"="ACL",

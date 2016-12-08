@@ -17,7 +17,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-envelope-alt"
+ *              "icon"="fa-envelope-o"
  *          },
  *          "security"={
  *              "type"="ACL",

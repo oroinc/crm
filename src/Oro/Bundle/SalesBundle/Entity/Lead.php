@@ -37,7 +37,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="oro_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone",
+ *              "icon"="fa-phone",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}

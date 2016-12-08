@@ -117,6 +117,7 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
+            - "@logger"
 
     oro_sales.lead_to_opportunity.form.handler:
         class: %oro_sales.lead_to_opportunity.form.handler.class%
@@ -127,6 +128,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
             - "@oro_sales.provider.lead_to_opportunity"
+            - "@logger"
 
     oro_sales.opportunity.form.handler.api:
         class: %oro_sales.opportunity.form.handler.class%
@@ -136,6 +138,7 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
+            - "@logger"
 
     oro_sales.lead.form.type:
         class: %oro_sales.lead.form.type.class%

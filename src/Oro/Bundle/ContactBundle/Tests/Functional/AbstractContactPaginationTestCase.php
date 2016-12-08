@@ -140,11 +140,11 @@ class AbstractContactPaginationTestCase extends WebTestCase
         );
         $this->assertEquals(
             (int)$showPrev,
-            $crawler->filter('#entity-pagination li:not(.disabled) a .icon-chevron-left')->count()
+            $crawler->filter('#entity-pagination li:not(.disabled) a .fa-chevron-left')->count()
         );
         $this->assertEquals(
             (int)$showNext,
-            $crawler->filter('#entity-pagination li:not(.disabled) a .icon-chevron-right')->count()
+            $crawler->filter('#entity-pagination li:not(.disabled) a .fa-chevron-right')->count()
         );
         $this->assertEquals(
             (int)$showLast,
@@ -173,7 +173,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
         $this->assertPositionEntity($crawler, 1, 4);
 
         // click next link
-        $next = $crawler->filter('#entity-pagination a .icon-chevron-right')->parents()->link();
+        $next = $crawler->filter('#entity-pagination a .fa-chevron-right')->parents()->link();
         $this->client->click($next);
         $crawler = $this->redirectViaFrontend();
 
@@ -191,7 +191,7 @@ class AbstractContactPaginationTestCase extends WebTestCase
         $this->assertPositionEntity($crawler, 4, 4);
 
         // click previous link
-        $previous = $crawler->filter('#entity-pagination a .icon-chevron-left')->parents()->link();
+        $previous = $crawler->filter('#entity-pagination a .fa-chevron-left')->parents()->link();
         $this->client->click($previous);
         $crawler = $this->redirectViaFrontend();
 

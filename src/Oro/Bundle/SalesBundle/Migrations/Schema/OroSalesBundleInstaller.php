@@ -42,7 +42,6 @@ class OroSalesBundleInstaller implements
     ActivityListExtensionAwareInterface,
     RenameExtensionAwareInterface
 {
-
     /** @var ExtendExtension */
     protected $extendExtension;
 
@@ -114,7 +113,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_1';
+        return 'v2_2';
     }
 
     /**
@@ -200,6 +199,11 @@ class OroSalesBundleInstaller implements
             ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
         );
         $table->addColumn(
+            'base_budget_amount_value',
+            'money',
+            ['notnull' => false, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
             'close_revenue_value',
             'money_value',
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money_value)']
@@ -211,6 +215,11 @@ class OroSalesBundleInstaller implements
         );
         $table->addColumn('customer_association_id', 'integer', ['notnull' => false]);
 
+        $table->addColumn(
+            'base_close_revenue_value',
+            'money',
+            ['notnull' => false, 'comment' => '(DC2Type:money)']
+        );
         $table->addColumn('customer_need', 'text', ['notnull' => false]);
         $table->addColumn('proposed_solution', 'text', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
