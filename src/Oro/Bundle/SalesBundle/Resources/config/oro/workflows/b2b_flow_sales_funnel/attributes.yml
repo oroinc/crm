@@ -15,10 +15,10 @@ workflows:
                 type: string
             new_opportunity_name:
                 type: string
-            new_b2bcustomer:
+            new_customer_association:
                 type:  entity
                 options:
-                    class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+                    class: Oro\Bundle\SalesBundle\Entity\Customer
             new_account:
                 type: entity
                 options:
@@ -33,8 +33,8 @@ workflows:
                 property_path: sales_funnel.opportunity.notes
             contact:
                 property_path: sales_funnel.opportunity.contact
-            b2bcustomer:
-                property_path: sales_funnel.opportunity.customer
+            new_customer_association:
+                property_path: sales_funnel.opportunity.customerAssociation
             probability:
                 property_path: sales_funnel.opportunity.probability
             budget_amount:
