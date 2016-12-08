@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Psr\Log\LoggerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
@@ -26,10 +27,11 @@ class LeadToOpportunityHandler extends OpportunityHandler
         Request $request,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
-        LeadToOpportunityProvider $leadToOpportunityProvider
+        LeadToOpportunityProvider $leadToOpportunityProvider,
+        LoggerInterface $logger
     ) {
         $this->leadToOpportunityProvider = $leadToOpportunityProvider;
-        parent::__construct($form, $request, $manager, $requestChannelProvider);
+        parent::__construct($form, $request, $manager, $requestChannelProvider, $logger);
     }
 
     /**

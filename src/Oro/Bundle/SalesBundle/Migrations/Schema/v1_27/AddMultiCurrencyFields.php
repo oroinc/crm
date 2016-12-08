@@ -74,7 +74,7 @@ class AddMultiCurrencyFields implements
         $table = $schema->getTable('orocrm_sales_opportunity');
 
         //Rename columns for new type
-        self::renameOpportunityFields($schema, $queryBag, $renameExtension, $platform);
+        self::renameOpportunityFields($schema, $queryBag, $renameExtension);
 
         //Add columns for new type
         $table->addColumn(
@@ -95,13 +95,11 @@ class AddMultiCurrencyFields implements
      * @param Schema $schema
      * @param QueryBag $queries
      * @param RenameExtension $renameExtension
-     * @param AbstractPlatform $platform
      */
     public static function renameOpportunityFields(
         Schema $schema,
         QueryBag $queries,
-        RenameExtension $renameExtension,
-        AbstractPlatform $platform
+        RenameExtension $renameExtension
     ) {
         $table = $schema->getTable('orocrm_sales_opportunity');
 

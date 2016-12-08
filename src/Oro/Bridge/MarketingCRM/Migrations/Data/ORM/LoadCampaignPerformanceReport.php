@@ -101,7 +101,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenueValue',
+                    'name'    => 'Oro\\Bundle\\SalesBundle\\Entity\\Lead::campaign+Oro\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+Oro\\Bundle\\SalesBundle\\Entity\\Opportunity::closeRevenueBaseCurrency',
                     'label'   => 'Close revenue',
                     'func'    => [
                         'name'       => 'WonRevenueSumFunction',
