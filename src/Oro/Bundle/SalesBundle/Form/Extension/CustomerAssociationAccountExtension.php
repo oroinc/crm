@@ -6,13 +6,16 @@ use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
-class CustomerAssociationExtension extends AbstractTypeExtension
+class CustomerAssociationAccountExtension extends AbstractTypeExtension
 {
     /** @var ConfigProvider */
     protected $customerConfigProvider;
@@ -20,14 +23,22 @@ class CustomerAssociationExtension extends AbstractTypeExtension
     /** @var AccountCustomerManager */
     protected $manager;
 
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
     /**
      * @param ConfigProvider         $customerConfigProvider
      * @param AccountCustomerManager $manager
+     * @param DoctrineHelper         $doctrineHelper
      */
-    public function __construct(ConfigProvider $customerConfigProvider, AccountCustomerManager $manager)
-    {
+    public function __construct(
+        ConfigProvider $customerConfigProvider,
+        AccountCustomerManager $manager,
+        DoctrineHelper $doctrineHelper
+    ) {
         $this->customerConfigProvider = $customerConfigProvider;
         $this->manager                = $manager;
+        $this->doctrineHelper         = $doctrineHelper;
     }
 
     /**
@@ -47,8 +58,6 @@ class CustomerAssociationExtension extends AbstractTypeExtension
 
         $dataClassName = $formConfig->getDataClass();
         if (!$dataClassName || !$this->customerConfigProvider->isCustomerClass($dataClassName)) {
-            $options['customer_association_disabled'] = true;
-
             return;
         }
 
@@ -67,7 +76,7 @@ class CustomerAssociationExtension extends AbstractTypeExtension
             FormEvents::POST_SET_DATA,
             function (FormEvent $event) {
                 $target   = $event->getData();
-                if (!$target) {
+                if (!$target || $this->doctrineHelper->isNewEntity($target)) {
                     return;
                 }
                 $customer = $this->manager->getAccountCustomerByTarget($target);

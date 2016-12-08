@@ -18,20 +18,18 @@ class CustomerAssociationAccountFieldListener
         $data = $event->getFormData();
         $form = $event->getForm();
 
-        $ownerField = $environment->render(
+        $accountField = $environment->render(
             "OroSalesBundle:Customer:accountField.html.twig",
             ['form'  => $form]
         );
-
-        /**
-         * Setting owner field as first field in first data block
-         */
+        // set account field as first, in general block, but current listener has higher priority than owner field,
+        // this means that owner field will be set after account field
         if (!empty($data['dataBlocks'])) {
             if (isset($data['dataBlocks'][0]['subblocks'])) {
                 if (!isset($data['dataBlocks'][0]['subblocks'][0])) {
                     $data['dataBlocks'][0]['subblocks'][0] = ['data' => []];
                 }
-                array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $ownerField);
+                array_unshift($data['dataBlocks'][0]['subblocks'][0]['data'], $accountField);
             }
         }
 
