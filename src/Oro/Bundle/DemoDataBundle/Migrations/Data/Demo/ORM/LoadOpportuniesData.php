@@ -5,6 +5,7 @@ namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -95,12 +96,19 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setOwner($user);
         $opportunity->setOrganization($this->organization);
         $opportunity->setCustomer($customer);
+        $budgetAmountVal = mt_rand(10, 10000);
+        $opportunity->setBudgetAmount(MultiCurrency::create($budgetAmountVal, 'USD'));
         $opportunity->setDataChannel($dataChannel);
 
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($this->em->getReference($enumClass, $statusName));
+        if ($statusName == Opportunity::STATUS_WON) {
+            $closeRevenueVal = mt_rand(10, 10000);
+            $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenueVal, 'USD'));
+            $opportunity->setBaseCloseRevenueValue($closeRevenueVal);
+        }
 
         return $opportunity;
     }

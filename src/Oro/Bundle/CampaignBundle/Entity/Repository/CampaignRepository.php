@@ -5,6 +5,7 @@ namespace Oro\Bundle\CampaignBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CampaignRepository extends EntityRepository
@@ -134,19 +135,23 @@ class CampaignRepository extends EntityRepository
 
     /**
      * @param string $opportunitiesAlias
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      *
      * @return QueryBuilder
      */
-    public function getCampaignsByCloseRevenueQB($opportunitiesAlias)
-    {
+    public function getCampaignsByCloseRevenueQB(
+        $opportunitiesAlias,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
+    ) {
         $qb = $this->getEntityManager()->createQueryBuilder();
+        $crSelect = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb, $opportunitiesAlias);
         $qb
             ->select(
                 'campaign.name as label',
                 sprintf(
-                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenueValue ELSE 0 END) as closeRevenue',
+                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s ELSE 0 END) as closeRevenue',
                     $opportunitiesAlias,
-                    $opportunitiesAlias
+                    $crSelect
                 )
             )
             ->from('OroCampaignBundle:Campaign', 'campaign')
