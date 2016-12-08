@@ -5,12 +5,12 @@ namespace Oro\Bundle\ActivityContactBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use JMS\JobQueueBundle\Entity\Job;
+use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
+use Oro\Bundle\CronBundle\Async\Topics;
 
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 
 class ActivityContactRecalculate extends AbstractFixture implements ContainerAwareInterface
 {
@@ -30,9 +30,11 @@ class ActivityContactRecalculate extends AbstractFixture implements ContainerAwa
      */
     public function load(ObjectManager $manager)
     {
-        $job = new Job(ActivityContactRecalculateCommand::COMMAND_NAME, ['-v']);
-        $em  = $this->container->get('doctrine')->getManager();
-        $em->persist($job);
-        $em->flush($job);
+        /** @var MessageProducerInterface $producer */
+        $producer = $this->container->get('oro_message_queue.client.message_producer');
+        $producer->send(Topics::RUN_COMMAND, [
+            'command' => ActivityContactRecalculateCommand::COMMAND_NAME,
+            'arguments' => ['-v']
+        ]);
     }
 }

@@ -135,7 +135,7 @@ datagrids:
                 type:         navigate
                 acl_resource: oro_case_view
                 label:        oro.grid.action.view
-                icon:         eye-open
+                icon:         eye
                 link:         view_link
                 rowAction:    true
             update:
