@@ -10,6 +10,7 @@ Background:
   And the base currency "USD"
 
 Scenario: Create Opportunity and relate existing customer to it by pressing hamburger button
+
   Given I go to Sales/ Opportunities
   And I press “Create Opportunity” button. “Create Opportunity” view page is displayed
   And I start filling out all mandatory fields with the following data:
