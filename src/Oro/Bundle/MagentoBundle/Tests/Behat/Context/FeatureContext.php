@@ -22,6 +22,8 @@ class FeatureContext extends OroFeatureContext implements
     use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
+     * Load "second_sales_channel.yml" alice fixture
+     *
      * @Given CRM has second sales channel with Accounts and Magento Customers
      */
     public function crmHasSecondSalesChannel()
@@ -30,6 +32,9 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
+     * Get accounts and customers from database according to user parmissions and compare its with list of
+     *  accounts from "Account" field in entity edit page
+     *
      * @Then /^Accounts and Customers in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
      */
     public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)
