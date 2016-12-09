@@ -1288,6 +1288,12 @@ datagrid:
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: c.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                    enabled: false
                 accountName:
                     type: string
                     data_name: accountName
