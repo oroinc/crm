@@ -21,7 +21,7 @@ use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-envelope"
+ *              "icon"="fa-envelope"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

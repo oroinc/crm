@@ -18,7 +18,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLeadEmail;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-envelope"
+ *              "icon"="fa-envelope"
  *          },
  *          "note"={
  *              "immutable"=true

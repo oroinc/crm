@@ -26,7 +26,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
  *      routeView="oro_account_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-suitcase"
+ *              "icon"="fa-suitcase"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,22 +26,28 @@ class OpportunityHandler
     /** @var RequestChannelProvider */
     protected $requestChannelProvider;
 
+    /** @var LoggerInterface  */
+    protected $logger;
+
     /**
-     * @param FormInterface          $form
-     * @param Request                $request
-     * @param ObjectManager          $manager
+     * @param FormInterface $form
+     * @param Request $request
+     * @param ObjectManager $manager
      * @param RequestChannelProvider $requestChannelProvider
+     * @param LoggerInterface $logger
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        RequestChannelProvider $requestChannelProvider
+        RequestChannelProvider $requestChannelProvider,
+        LoggerInterface $logger
     ) {
         $this->form                   = $form;
         $this->request                = $request;
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
+        $this->logger                 = $logger;
     }
 
     /**
@@ -54,12 +62,17 @@ class OpportunityHandler
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->submit($this->request);
+            try {
+                $this->form->submit($this->request);
 
-            if ($this->form->isValid()) {
-                $this->onSuccess($entity);
+                if ($this->form->isValid()) {
+                    $this->onSuccess($entity);
 
-                return true;
+                    return true;
+                }
+            } catch (\Exception $e) {
+                $this->logger->error('Email sending failed.', ['exception' => $e]);
+                $this->form->addError(new FormError($e->getMessage()));
             }
         }
 

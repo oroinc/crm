@@ -29,7 +29,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="oro_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd"
+ *              "icon"="fa-usd"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -271,6 +271,23 @@ class Opportunity extends ExtendOpportunity implements
     protected $budgetAmountValue;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="base_budget_amount_value", type="money", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={
+     *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=56
+     *      }
+     *  }
+     * )
+     */
+    protected $baseBudgetAmountValue;
+
+    /**
      * Changes to this value object wont affect entity change set
      * To change persisted price value you should create and set new Multicurrency
      *
@@ -319,6 +336,23 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $closeRevenueValue;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="base_close_revenue_value", type="money", nullable=true)
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={
+     *          "auditable"=true
+     *      },
+     *      "importexport"={
+     *          "order"=66
+     *      }
+     *  }
+     * )
+     */
+    protected $baseCloseRevenueValue;
 
     /**
      * @var string
@@ -447,6 +481,32 @@ class Opportunity extends ExtendOpportunity implements
     protected $closedAt;
 
     /**
+     * @inheritDoc
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->loadMultiCurrencyFields();
+    }
+
+    /**
+     * @ORM\PostLoad
+     */
+    public function loadMultiCurrencyFields()
+    {
+        $this->budgetAmount = MultiCurrency::create(
+            $this->budgetAmountValue,
+            $this->budgetAmountCurrency,
+            $this->baseBudgetAmountValue
+        );
+        $this->closeRevenue = MultiCurrency::create(
+            $this->closeRevenueValue,
+            $this->closeRevenueCurrency,
+            $this->baseCloseRevenueValue
+        );
+    }
+
+    /**
      * @return int
      */
     public function getId()
@@ -494,15 +554,6 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @ORM\PostLoad
-     */
-    public function loadMultiCurrencyFields()
-    {
-        $this->budgetAmount = MultiCurrency::create($this->budgetAmountValue, $this->budgetAmountCurrency);
-        $this->closeRevenue = MultiCurrency::create($this->closeRevenueValue, $this->closeRevenueCurrency);
-    }
-
-    /**
      * @ORM\PrePersist
      * @ORM\PreUpdate
      *
@@ -512,18 +563,72 @@ class Opportunity extends ExtendOpportunity implements
     {
         if ($this->budgetAmount) {
             $this->budgetAmountValue = $this->budgetAmount->getValue();
-            $currency = $this->budgetAmount->getValue() !== null ?
-                $this->budgetAmount->getCurrency() :
-                null;
-            $this->budgetAmountCurrency = $currency;
+
+            if (null !== $this->budgetAmountValue && '' !== $this->closeRevenueValue) {
+                $this->setBudgetAmountCurrency($this->budgetAmount->getCurrency());
+                $this->setBaseBudgetAmountValue($this->budgetAmount->getBaseCurrencyValue());
+            } else {
+                $this->setBudgetAmountCurrency(null);
+                $this->setBaseBudgetAmountValue(null);
+            }
         }
         if ($this->closeRevenue) {
             $this->closeRevenueValue = $this->closeRevenue->getValue();
-            $currency = $this->closeRevenue->getValue() !== null ?
-                $this->closeRevenue->getCurrency() :
-                null;
-            $this->closeRevenueCurrency = $currency;
+
+            if (null !== $this->closeRevenueValue && '' !== $this->closeRevenueValue) {
+                $this->setCloseRevenueCurrency($this->closeRevenue->getCurrency());
+                $this->setBaseCloseRevenueValue($this->closeRevenue->getBaseCurrencyValue());
+            } else {
+                $this->setCloseRevenueCurrency(null);
+                $this->setBaseCloseRevenueValue(null);
+            }
         }
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setBaseBudgetAmountValue($value)
+    {
+        $this->baseBudgetAmountValue = $value;
+
+        if ($this->budgetAmount instanceof MultiCurrency) {
+            $this->budgetAmount->setBaseCurrencyValue($value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseBudgetAmountValue()
+    {
+        return $this->baseBudgetAmountValue;
+    }
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setBaseCloseRevenueValue($value)
+    {
+        $this->baseCloseRevenueValue = $value;
+
+        if ($this->closeRevenue instanceof MultiCurrency) {
+            $this->closeRevenue->setBaseCurrencyValue($value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBaseCloseRevenueValue()
+    {
+        return $this->baseCloseRevenueValue;
     }
 
     /**
@@ -927,8 +1032,6 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * Remove Customer
-     *
-     * @return Lead
      */
     public function removeCustomer()
     {
@@ -949,5 +1052,13 @@ class Opportunity extends ExtendOpportunity implements
     public function getClosedAt()
     {
         return $this->closedAt;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getClosedStatuses()
+    {
+        return [self::STATUS_WON, self::STATUS_LOST];
     }
 }

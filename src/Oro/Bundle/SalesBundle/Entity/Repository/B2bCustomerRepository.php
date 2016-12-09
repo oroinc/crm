@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerRepository extends EntityRepository
@@ -14,14 +15,18 @@ class B2bCustomerRepository extends EntityRepository
      * Calculates the lifetime value for the given customer
      *
      * @param B2bCustomer $customer
+     * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      *
      * @return float
      */
-    public function calculateLifetimeValue(B2bCustomer $customer)
-    {
+    public function calculateLifetimeValue(
+        B2bCustomer $customer,
+        CurrencyQueryBuilderTransformerInterface $qbTransformer
+    ) {
         $qb = $this->getEntityManager()->getRepository('OroSalesBundle:Opportunity')
             ->createQueryBuilder('o');
-        $qb->select('SUM(o.closeRevenueValue)');
+        $closeRevenueQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
+        $qb->select(sprintf('SUM(%s)', $closeRevenueQuery));
         $qb->innerJoin('o.customer', 'c');
         $qb->innerJoin('o.status', 's');
         $qb->andWhere('c = :customer');
