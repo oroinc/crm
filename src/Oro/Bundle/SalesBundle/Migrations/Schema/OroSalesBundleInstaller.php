@@ -199,6 +199,11 @@ class OroSalesBundleInstaller implements
             ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
         );
         $table->addColumn(
+            'base_budget_amount_value',
+            'money',
+            ['notnull' => false, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
             'close_revenue_value',
             'money_value',
             ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money_value)']
@@ -207,6 +212,11 @@ class OroSalesBundleInstaller implements
             'close_revenue_currency',
             'currency',
             ['length' => 3, 'notnull' => false, 'comment' => '(DC2Type:currency)']
+        );
+        $table->addColumn(
+            'base_close_revenue_value',
+            'money',
+            ['notnull' => false, 'comment' => '(DC2Type:money)']
         );
         $table->addColumn('customer_need', 'text', ['notnull' => false]);
         $table->addColumn('proposed_solution', 'text', ['notnull' => false]);

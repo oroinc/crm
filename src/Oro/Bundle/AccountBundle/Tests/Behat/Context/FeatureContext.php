@@ -86,7 +86,7 @@ class FeatureContext extends OroFeatureContext implements OroPageObjectAware
     {
         foreach ($this->getFormContacts() as $contact) {
             if (false !== strpos($contact->getText(), $name)) {
-                $contact->find('css', 'i.icon-remove')->click();
+                $contact->find('css', 'i.fa-close')->click();
 
                 return;
             }

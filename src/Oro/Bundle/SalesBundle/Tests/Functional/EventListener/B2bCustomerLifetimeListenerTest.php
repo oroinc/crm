@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListner;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManager;
 

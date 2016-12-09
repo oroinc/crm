@@ -62,7 +62,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                     ],
                     'assert'              => [
                         'opportunityName'        => 'opname',
-                        'opportunityBudget'      => 50.00,
+                        'budgetAmount'           => 'USD50.0000',
                         'opportunityProbability' => 10
                     ],
                     'expectedResultCount' => 1

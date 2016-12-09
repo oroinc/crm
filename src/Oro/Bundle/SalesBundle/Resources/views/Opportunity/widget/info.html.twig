@@ -42,6 +42,7 @@
             {{ ui.renderHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_reason.label'|trans, entity.closeReason, entity, 'closeReason') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue.value|length ? entity.closeRevenue.value|oro_format_currency({'currency': entity.closeRevenue.currency}) : '', entity, 'closeRevenue') }}
+            {{ currency.convert_to_base_currency(entity.closeRevenue, '', entity, 'closeRevenue') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '', entity, 'closeDate') }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
         </div>

@@ -35,7 +35,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLead;
  *      routeView="oro_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone",
+ *              "icon"="fa-phone",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}

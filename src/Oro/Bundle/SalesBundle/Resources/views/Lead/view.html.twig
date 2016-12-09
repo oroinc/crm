@@ -9,7 +9,7 @@
             {{ UI.button({
                 'path':  path('oro_sales_lead_disqualify', {'id': entity.id}),
                 'aCss':  'btn btn-danger action-button',
-                'iCss':  'icon-ban-circle',
+                'iCss':  'fa-ban',
                 'label': 'Disqualify',
                 'title': 'Disqualify',
             }) }}
@@ -18,7 +18,7 @@
             {{ UI.button({
                 'path':  path('oro_sales_lead_convert_to_opportunity', {'id': entity.id}),
                 'aCss':  'btn action-button',
-                'iCss':  'icon-usd',
+                'iCss':  'fa-usd',
                 'label': 'Convert to Opportunity',
                 'title': 'Convert to Opportunity',
             }) }}
@@ -59,9 +59,9 @@
     {{ parent() }}
     <div class="pull-left">
         {% if entity.status.id != 'canceled' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled fa-circle"></i>{{ entity.status.name }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled fa-circle"></i>{{ entity.status.name  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
