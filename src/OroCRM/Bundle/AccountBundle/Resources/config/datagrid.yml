@@ -211,6 +211,10 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+                defaultMessages:
+                    confirm_content: oro.ui.delete_confirm_cascade
+                    confirm_content_params:
+                        entity_label: '@translator->trans(oro.account.entity_label)'
         mass_actions:
             merge:
                 type: merge
