@@ -525,3 +525,14 @@ services:
         class: Oro\Bundle\SalesBundle\Form\EventListener\CustomerAssociationAccountFieldListener
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addAccountField, priority: 10 }
+
+
+    oro_sales.customers.customer_association_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\CustomerAssociationListener
+        arguments:
+            - '@oro_sales.manager.account_customer'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+            - { name: doctrine.event_listener, event: postFlush, method: postFlush }

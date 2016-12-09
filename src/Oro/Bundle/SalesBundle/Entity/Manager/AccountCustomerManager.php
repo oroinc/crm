@@ -56,17 +56,27 @@ class AccountCustomerManager
     }
 
     /**
-     * Creates new Customer from provided Account
+     * Creates new Customer from provided Account and optionally target
      *
-     * @param Account $account
+     * @param Account     $account
+     *
+     * @param object|null $target
      *
      * @return Customer
      */
-    public static function createCustomerFromAccount(Account $account)
+    public static function createCustomer(Account $account, $target = null)
     {
         $customer = new Customer();
 
-        return $customer->setTarget($account);
+        return $customer->setTarget($account, $target);
+    }
+
+    public function createAccountForTarget($target)
+    {   // @TODO create account with strategy
+        $targetClassName = ClassUtils::getClass($target);
+        $this->assertValidTarget($targetClassName);
+        $account = new Account();
+        return $account->setName('Auto created!');
     }
 
     /**
@@ -81,7 +91,7 @@ class AccountCustomerManager
             $customerFields = $this->getCustomerTargetFields();
             $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
             if (!$customer) {
-                $customer = self::createCustomerFromAccount($target);
+                $customer = self::createCustomer($target);
             }
         } else {
             $targetClassName = ClassUtils::getClass($target);
@@ -126,7 +136,7 @@ class AccountCustomerManager
      */
     protected function assertValidTarget($targetClassName)
     {
-        if (!in_array($targetClassName, $this->provider->getCustomerClasses())) {
+        if (!in_array($targetClassName, $this->provider->getCustomerClasses(), true)) {
             throw new InvalidCustomerRelationEntityException(
                 sprintf('object of class "%s" is not valid customer target', $targetClassName)
             );
