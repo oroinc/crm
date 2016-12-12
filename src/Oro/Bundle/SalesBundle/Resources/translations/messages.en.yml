@@ -234,6 +234,7 @@ oro:
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
             relevant_opportunities:  Relevant Opportunities
+            create.label: Create Opportunity
             importexport.invalid_currency: 'Error in row #%row%. The next currency %currency% not available in current organization.'
             importexport.invalid_currencies: 'Error in row #%row%. The next currencies %currencies% not available in current organization.'
 

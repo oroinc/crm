@@ -526,7 +526,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addAccountField, priority: 10 }
 
-
     oro_sales.customers.customer_association_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\CustomerAssociationListener
         arguments:
@@ -546,3 +545,11 @@ services:
             - '@oro_entity.entity_name_resolver'
         tags:
          - { name: oro_sales.provider.customer.account_creation }
+
+    oro_sales.create_opportunity.widget_provider.actions:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oro_sales_create_opportunity_button
+            - oro_sales_create_opportunity_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }
