@@ -13,6 +13,7 @@ class MigrateNotesRelations extends UpdateNoteAssociationKindForRenamedEntitiesM
         'Cart',
         'CartAddress',
         'CartItem',
+        'CartStatus',
         'Customer',
         'CustomerGroup',
         'NewsletterSubscriber',

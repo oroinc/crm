@@ -14,6 +14,8 @@ class MigrateNotesRelations extends UpdateNoteAssociationKindForRenamedEntitiesM
         'ContactEmail',
         'ContactPhone',
         'Group',
+        'Method',
+        'Source',
     ];
 
     /**
