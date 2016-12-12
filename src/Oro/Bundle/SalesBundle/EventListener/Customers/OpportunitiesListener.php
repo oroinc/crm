@@ -2,18 +2,22 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
-use Oro\Bundle\SalesBundle\Provider\Customer\OpportunitiesGrid\BlockPriorityProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 class OpportunitiesListener
 {
-    /** @var ConfigProvider */
+    // below activity block which have 1000
+    const DEFAULT_GRID_BLOCK_PRIORITY = 1010;
+
+    /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
 
     /** @var TranslatorInterface */
@@ -22,25 +26,25 @@ class OpportunitiesListener
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /** @var BlockPriorityProviderInterface */
-    protected $priorityProvider;
+    /** @var  ConfigProvider */
+    protected $configProvider;
 
     /**
-     * @param ConfigProvider                 $customerConfigProvider
-     * @param TranslatorInterface            $translator
-     * @param DoctrineHelper                 $helper
-     * @param BlockPriorityProviderInterface $priorityProvider
+     * @param CustomerConfigProvider $customerConfigProvider
+     * @param TranslatorInterface    $translator
+     * @param DoctrineHelper         $helper
+     * @param ConfigProvider         $configProvider
      */
     public function __construct(
-        ConfigProvider $customerConfigProvider,
+        CustomerConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
         DoctrineHelper $helper,
-        BlockPriorityProviderInterface $priorityProvider
+        ConfigProvider $configProvider
     ) {
         $this->customerConfigProvider = $customerConfigProvider;
-        $this->translator             = $translator;
-        $this->doctrineHelper         = $helper;
-        $this->priorityProvider       = $priorityProvider;
+        $this->translator = $translator;
+        $this->doctrineHelper = $helper;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -56,7 +60,7 @@ class OpportunitiesListener
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
             $targetClass          = ClassUtils::getClass($entity);
-            $priority             = $this->priorityProvider->getPriority($targetClass);
+            $priority             = $this->getBlockPriority($targetClass);
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' =>
@@ -73,5 +77,21 @@ class OpportunitiesListener
             ];
             $event->setData($data);
         }
+    }
+
+    /**
+     * @param $targetClass
+     *
+     * @return int
+     */
+    protected function getBlockPriority($targetClass)
+    {
+        $config = $this->configProvider->getConfig($targetClass);
+        $priority = $config->get('associated_opportunity_block_priority');
+        if (is_int($priority)) {
+            return $priority;
+        }
+
+        return self::DEFAULT_GRID_BLOCK_PRIORITY;
     }
 }

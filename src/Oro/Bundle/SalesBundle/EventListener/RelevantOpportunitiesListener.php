@@ -40,8 +40,7 @@ class RelevantOpportunitiesListener
     }
 
     /**
-     * Adds block with associated opportunities grid of viewing entity
-     * if this entity has "customer" association enabled.
+     * Adds block with relevant opportunities grid on the Opportunity view
      *
      * @param BeforeViewRenderEvent $event
      */

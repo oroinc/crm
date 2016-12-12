@@ -6,11 +6,12 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
-
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 use Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider;
+
 
 class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +27,9 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
     /** @var DoctrineHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $doctrineHelper;
 
+    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $configProvider;
+
     public function setUp()
     {
         $this->provider       = $this
@@ -38,8 +42,19 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getSingleEntityIdentifier'])
             ->getMock();
+
         $this->translator     = $this->getMock(TranslatorInterface::class);
-        $this->listener       = new OpportunitiesListener($this->provider, $this->translator, $this->doctrineHelper);
+
+        $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->listener = new OpportunitiesListener(
+            $this->provider,
+            $this->translator,
+            $this->doctrineHelper,
+            $this->configProvider
+        );
     }
 
     public function testAddOpportunities()
@@ -72,6 +87,13 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->method('trans')
             ->with('oro.sales.customers.opportunities.grid.label')
             ->willReturn($opportunitiesTitle);
+
+        $config = $this->getMock(ConfigInterface::class);
+
+        $this->configProvider->expects($this->once())
+            ->method('getConfig')
+            ->with($customerClass)
+            ->willReturn($config);
 
         $data  = [
             'dataBlocks' => [

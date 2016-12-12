@@ -6,7 +6,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\CustomerIconProviderPass;
-use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\OpportunitiesGridBlockPriorityProviderPass;
 
 class OroSalesBundle extends Bundle
 {
@@ -17,6 +16,5 @@ class OroSalesBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new CustomerIconProviderPass());
-        $container->addCompilerPass(new OpportunitiesGridBlockPriorityProviderPass());
     }
 }
