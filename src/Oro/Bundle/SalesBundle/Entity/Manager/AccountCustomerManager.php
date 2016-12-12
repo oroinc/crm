@@ -73,6 +73,8 @@ class AccountCustomerManager
      * @param object $target
      *
      * @return Customer
+     *
+     * @throws EntityNotFoundException
      */
     public function getAccountCustomerByTarget($target)
     {
