@@ -5,7 +5,6 @@ namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\UnitOfWork;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -42,22 +41,21 @@ class CustomerAssociationListener
         $this->customerConfigProvider = $customerConfigProvider;
         $this->doctrineHelper         = $helper;
     }
+
     /**
-     * Stores MagentoCustomers with changed Account
+     * Collect created customer targets
      *
      * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
-        $this->prepareCreatedCustomers(
-            $uow,
-            $uow->getScheduledEntityInsertions()
-        );
+        $this->prepareCreatedCustomers($uow->getScheduledEntityInsertions());
     }
 
     /**
-     * Syncs Accounts of MagentoCustomers and SalesCustomers
+     * Check for required existence of related customer associations for collected created targets
+     * and creates missing
      *
      * @param PostFlushEventArgs $args
      */
@@ -66,13 +64,14 @@ class CustomerAssociationListener
         if (!$this->createdTargetCustomers) {
             return;
         }
-        $qb = $this->getCustomerRepository()->createQueryBuilder('ca');
+        $qb             = $this->getCustomerRepository()->createQueryBuilder('ca');
         $invalidTargets = [];
-        $em = $this->getEntityManager();
+        $em             = $this->getEntityManager();
+        // find all target customers which do not have related customer association
         foreach ($this->createdTargetCustomers as $class => $classTargets) {
             $customersIds = array_reduce(
                 $classTargets,
-                function($ids, $target) {
+                function ($ids, $target) {
                     $id       = $this->doctrineHelper->getSingleEntityIdentifier($target);
                     $ids[$id] = $target;
 
@@ -80,32 +79,42 @@ class CustomerAssociationListener
                 },
                 []
             );
-            $targetField = AccountCustomerManager::getCustomerTargetField($class);
+            $targetField  = AccountCustomerManager::getCustomerTargetField($class);
             $qb
                 ->select(sprintf('IDENTITY(ca.%s) AS id', $targetField))
                 ->where(sprintf('IDENTITY(ca.%s) IN (:ids)', $targetField))
                 ->setParameter('ids', array_keys($customersIds));
-            $result                 = $qb->getQuery()->getArrayResult();
-            $mapped = array_map(function(array $item) {return $item['id'];}, $result);
-            $invalidTargets[$class] = array_diff_key($customersIds, $mapped);
+            $existingResult         = $qb->getQuery()->getArrayResult();
+            $existing               = array_map(
+                function (array $item) {
+                    return $item['id'];
+                },
+                $existingResult
+            );
+            $invalidTargets[$class] = array_diff_key($customersIds, array_flip($existing));
         }
-
+        // create related customer associations
+        $needFlush = false;
         foreach ($invalidTargets as $class => $invalidTargetEntities) {
             foreach ($invalidTargetEntities as $item) {
-                $account = $this->manager->createAccountForTarget($item);
+                $account  = $this->manager->createAccountForTarget($item);
                 $customer = AccountCustomerManager::createCustomer($account, $item);
                 $em->persist($customer);
+                $needFlush = true;
             }
+        }
+        $this->createdTargetCustomers = [];
+        if ($needFlush) {
+            $em->flush();
         }
     }
 
     /**
      * Prepare created target customers which have sales customer association
      *
-     * @param UnitOfWork $uow
-     * @param object[]   $entities
+     * @param object[] $entities
      */
-    protected function prepareCreatedCustomers(UnitOfWork $uow, array $entities)
+    protected function prepareCreatedCustomers(array $entities)
     {
         foreach ($entities as $oid => $entity) {
             $class = ClassUtils::getClass($entity);

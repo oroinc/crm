@@ -1033,3 +1033,11 @@ services:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
         tags:
             - { name: doctrine.event_subscriber }
+
+    oro_magento.provider.customer.account:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountProvider
+        public: false
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+         - { name: oro_sales.provider.customer.account_creation, priority: 10 }

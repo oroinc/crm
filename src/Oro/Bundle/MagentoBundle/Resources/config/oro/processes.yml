@@ -35,6 +35,16 @@ processes:
                                 nameSuffix:   $nameSuffix
                                 owner:        $owner
                                 organization: $organization
+                        - '@tree':
+                            conditions:
+                                '@not_empty': $account
+                            actions:
+                                - '@assign_value':
+                                    parameters: [$account.organization, $organization]
+                                - '@assign_value':
+                                    parameters: [$account.owner, $owner]
+                                - '@assign_value':
+                                    parameters: [$account.defaultContact, $contact]
                         - '@tree': # add Contact Email
                             conditions:
                                 '@not_empty': $email
@@ -92,44 +102,6 @@ processes:
                                               object: $contact
                                               method: addPhone
                                               method_parameters: [$.magentoAddress.contactPhone]
-
-                - '@automatic_discovery':
-                    conditions: # if Account not exists
-                        '@empty': $account
-                    parameters:
-                        entity: $.data
-                        attribute: $.matchedEntity
-                - '@assign_value': # check matched entity and its account
-                    conditions:
-                        '@not_empty': $.matchedEntity
-                        '@not_empty': $.matchedEntity.account
-                    parameters: [$account, $.matchedEntity.account]
-
-                - '@tree': # set Account
-                    conditions: # if Account not exists
-                        '@empty': $account
-                    actions:
-                        - '@format_string': # generate Account name
-                            attribute: $.accountName
-                            string:    '%firstName% %lastName%'
-                            arguments:
-                                firstName: $firstName
-                                lastName:  $lastName
-                        - '@assign_value': # check and generate N/A Account name
-                            conditions:
-                                '@and':
-                                    - '@empty': $firstName
-                                    - '@empty': $lastName
-                            parameters: [$.accountName, 'N/A']
-                        - '@create_entity': # create Account
-                            class:     Oro\Bundle\AccountBundle\Entity\Account
-                            attribute: $account
-                            data:
-                                defaultContact: $contact
-                                name:           $.accountName
-                                owner:          $owner
-                                organization:   $organization
-                        - '@unset_value': [$.accountName]
 
         magento_customer_export:
             label:   'Export Magento Customer to Magento'
