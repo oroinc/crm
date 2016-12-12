@@ -116,6 +116,20 @@ datagrids:
                         field_options:
                             class: OroCaseBundle:CaseSource
                             property: label
+                owner:
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: caseEntity.owner
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+                    enabled: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: caseEntity.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                    enabled: false
         properties:
             id: ~
             view_link:
