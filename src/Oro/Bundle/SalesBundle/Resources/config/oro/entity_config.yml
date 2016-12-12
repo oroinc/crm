@@ -3,3 +3,5 @@ entity_config:
         entity:
             items:
                 enabled: # boolean
+                # priority of associated opportunity grid block on the associated customer entity
+                associated_opportunity_block_priority: #integer
