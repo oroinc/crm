@@ -77,11 +77,11 @@ class ImportExportTest extends WebTestCase
     public function testImportExport($strategy, $added, $replaced)
     {
         // @todo - must be fixed in BAP-12713
-//        $this->validateImportFile($strategy);
-//        $this->doImport($strategy, $added, $replaced);
+        $this->validateImportFile($strategy);
+        $this->doImport($strategy, $added, $replaced);
 
-//        $this->doExport();
-//        $this->validateExportResult();
+        $this->doExport();
+        $this->validateExportResult();
     }
 
     /**
@@ -181,18 +181,18 @@ class ImportExportTest extends WebTestCase
         $this->assertCount(1, $data);
         $this->assertTrue($data['success']);
 
-        // @todo - tests must be implemented after BAP-12589
-//        $this->assertEquals(1, $data['readsCount']);
-//        $this->assertEquals(0, $data['errorsCount']);
+        // @todo - tests must be implemented after BAP-12713
+        $this->assertEquals(1, $data['readsCount']);
+        $this->assertEquals(0, $data['errorsCount']);
 
-//        $this->client->request(
-//            'GET',
-//            $data['url']
-//        );
+        $this->client->request(
+            'GET',
+            $data['url']
+        );
 
-//        $result = $this->client->getResponse();
-//        $this->assertResponseStatusCodeEquals($result, 200);
-//        $this->assertResponseContentTypeEquals($result, 'text/csv');
+        $result = $this->client->getResponse();
+        $this->assertResponseStatusCodeEquals($result, 200);
+        $this->assertResponseContentTypeEquals($result, 'text/csv');
     }
 
     protected function validateExportResult()
