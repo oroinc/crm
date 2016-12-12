@@ -92,46 +92,6 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route(
-     *      "/status/change/{id}",
-     *      requirements={"id"="\d+"},
-     *      name="oro_channel_change_status"
-     *  )
-     * @AclAncestor("oro_channel_update")
-     */
-    public function changeStatusAction(Channel $channel)
-    {
-        if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $flashMessage = 'oro.channel.controller.message.status.deactivated';
-            $channel->setStatus(Channel::STATUS_INACTIVE);
-        } else {
-            $flashMessage = 'oro.channel.controller.message.status.activated';
-            $channel->setStatus(Channel::STATUS_ACTIVE);
-        }
-
-        $this->getDoctrine()
-            ->getManager()
-            ->flush();
-
-        $this->getMessageProducer()->send(
-            Topics::CHANNEL_STATUS_CHANGED,
-            new Message(['channelId' => $channel->getId()], MessagePriority::HIGH)
-        );
-
-        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($flashMessage));
-
-        return $this->redirect(
-            $this->generateUrl(
-                'oro_channel_view',
-                [
-                    'id' => $channel->getId(),
-                    '_enableContentProviders' => 'mainMenu'
-                ]
-            )
-        );
-    }
-
-    /**
      * @Route("/view/{id}", requirements={"id"="\d+"}, name="oro_channel_view")
      * @AclAncestor("oro_channel_view")
      * @Template()
