@@ -11,7 +11,6 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\AccountAwareCustomerTarget;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
 
 class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
@@ -78,7 +77,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($account, $customer->getAccount());
     }
 
-    public function testGetOrCreateAccountCustomerByTargetTargetIsAccount()
+    public function testGetAccountCustomerByTargetIfTargetIsAccount()
     {
         $target = (new Account())->setName('test');
         $this->configProvider
@@ -86,7 +85,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerClasses')
             ->willReturn(['TestClass']);
 
-        $customer = $this->manager->getOrCreateAccountCustomerByTarget($target);
+        $customer = $this->manager->getAccountCustomerByTarget($target);
         $this->assertEquals($target, $customer->getAccount());
     }
 
@@ -110,80 +109,8 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->with([$targetField => 1])
             ->willReturn($existedCustomer);
 
-        $customer = $this->manager->getOrCreateAccountCustomerByTarget($target);
+        $customer = $this->manager->getAccountCustomerByTarget($target);
 
         $this->assertEquals($existedCustomer, $customer);
-    }
-
-    /**
-     * @dataProvider testGetTargetCustomerOrAccountDataProvider
-     *
-     * @param CustomerStub $value
-     * @param object       $expected
-     */
-    public function testGetTargetCustomerOrAccount(CustomerStub $value, $expected)
-    {
-        $this->assertEquals(
-            $expected,
-            $this->manager->getTargetCustomerOrAccount($value)
-        );
-    }
-
-    /**
-     * @expectedException \Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException
-     * @expectedExceptionMessage Couldn't sync Customer's target account without target
-     */
-    public function testSyncTargetCustomerAccountWithoutTarget()
-    {
-        $customer = new CustomerStub();
-        $this->manager->syncTargetCustomerAccount($customer);
-    }
-
-    public function testSyncTargetCustomerAccountTargetWithAccount()
-    {
-        $account = new Account();
-        $customer = new CustomerStub();
-        $target = new AccountAwareCustomerTarget(1, $account);
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertEquals($customer->getAccount(), $target->getAccount());
-    }
-
-    public function testSyncTargetCustomerAccountTargetWithNoAccount()
-    {
-        $customer = new CustomerStub();
-        $target = new AccountAwareCustomerTarget(1);
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertInstanceOf(Account::class, $customer->getAccount());
-    }
-
-    public function testSyncTargetCustomerAccountTargetNotAccountAware()
-    {
-        $customer = new CustomerStub();
-        $target = new \stdClass;
-        $customer->setCustomerTarget($target);
-        $this->manager->syncTargetCustomerAccount($customer);
-        $this->assertInstanceOf(Account::class, $customer->getAccount());
-    }
-
-    /**
-     * @return array
-     */
-    public function testGetTargetCustomerOrAccountDataProvider()
-    {
-        $customerTarget = new AccountAwareCustomerTarget(1);
-        $account        = new Account();
-
-        return [
-            'target is a customer' => [
-                (new CustomerStub())->setCustomerTarget($customerTarget),
-                $customerTarget
-            ],
-            'target is an account' => [
-                (new CustomerStub())->setAccount($account),
-                $account
-            ],
-        ];
     }
 }

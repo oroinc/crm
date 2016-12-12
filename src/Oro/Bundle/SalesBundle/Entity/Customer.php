@@ -50,14 +50,28 @@ class Customer extends ExtendCustomer
     }
 
     /**
-     * @param Account $account
+     * @param Account     $account
+     * @param object|null $target
      *
      * @return $this
      */
-    public function setAccount(Account $account)
+    public function setTarget(Account $account, $target = null)
     {
         $this->account = $account;
+        if (null !== $target) {
+            $this->setCustomerTarget($target);
+        }
 
         return $this;
+    }
+
+    /**
+     * Returns Customer's associated target if it set or Account otherwise
+     *
+     * @return Account|object
+     */
+    public function getTarget()
+    {
+        return $this->getCustomerTarget() ?: $this->account;
     }
 }

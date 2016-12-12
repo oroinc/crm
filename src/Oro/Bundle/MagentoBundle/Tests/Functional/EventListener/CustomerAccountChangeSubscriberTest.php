@@ -22,88 +22,52 @@ class CustomerAccountChangeSubscriberTest extends WebTestCase
     /**
      * @return array
      */
-    public function testAssignMagentoCustomerAccount()
+    public function testSyncOnCreateCustomer()
     {
         $account = new Account();
-        $account->setName('test');
+        $account->setName('Account1');
         $magentoCustomer = new MagentoCustomer();
         $magentoCustomer
             ->setCreatedAt(new \DateTime())
-            ->setUpdatedAt(new \DateTime())
-            ->setAccount($account);
+            ->setUpdatedAt(new \DateTime());
 
-        $salesCustomer = new Customer();
-        $salesCustomer
-            ->setCustomerTarget($magentoCustomer)
-            ->setAccount($account);
+        $customer = new Customer();
+        $customer->setTarget($account, $magentoCustomer);
 
-        $this->flushAndRefresh($magentoCustomer, $salesCustomer);
+        $this->flushAndRefresh($magentoCustomer, $customer);
 
-        $this->assertSame($magentoCustomer->getAccount(), $salesCustomer->getAccount());
-
-        $account = new Account();
-        $account->setName('MagentoAccount');
-        $magentoCustomer->setAccount($account);
-
-        $this->flushAndRefresh($magentoCustomer, $salesCustomer);
-
-        $this->assertSame($magentoCustomer->getAccount(), $salesCustomer->getAccount());
-        $this->assertInstanceOf(Account::class, $magentoCustomer->getAccount());
-        $this->assertInstanceOf(Account::class, $salesCustomer->getAccount());
-        $this->assertEquals('MagentoAccount', $magentoCustomer->getAccount()->getName());
-        $this->assertSame($magentoCustomer, $salesCustomer->getCustomerTarget());
-
-        return [$magentoCustomer, $salesCustomer];
+        $this->assertSame($magentoCustomer->getAccount(), $customer->getAccount());
+        $this->assertSame($magentoCustomer, $customer->getTarget());
+        return [$magentoCustomer, $customer];
     }
 
     /**
-     * @depends testAssignMagentoCustomerAccount
+     * @depends testSyncOnCreateCustomer
      *
      * @param array $customers
      *
      * @return array
      */
-    public function testChangeMagentoCustomerAccount(array $customers)
+    public function testChangeCustomerAccount(array $customers)
     {
         /**
          * @var MagentoCustomer $magentoCustomer
-         * @var Customer        $salesCustomer
+         * @var Customer        $customer
          */
-        list($magentoCustomer, $salesCustomer) = $customers;
+        list($magentoCustomer, $customer) = $customers;
 
         $account = new Account();
-        $account->setName('ChangedAccount');
-        $magentoCustomer->setAccount($account);
-        $this->flushAndRefresh($magentoCustomer, $salesCustomer);
+        $account->setName('Account2');
+        $customer->setTarget($account, $magentoCustomer);
 
-        $this->assertInstanceOf(Account::class, $magentoCustomer->getAccount());
-        $this->assertInstanceOf(Account::class, $salesCustomer->getAccount());
-        $this->assertSame($magentoCustomer->getAccount()->getName(), $salesCustomer->getAccount()->getName());
-        $this->assertEquals('ChangedAccount', $magentoCustomer->getAccount()->getName());
-        $this->assertSame($magentoCustomer, $salesCustomer->getCustomerTarget());
+        $this->assertSame($magentoCustomer, $customer->getTarget());
+        $this->assertNotSame($magentoCustomer->getAccount(), $customer->getAccount());
 
-        return [$magentoCustomer, $salesCustomer];
-    }
+        $this->flushAndRefresh($customer);
 
-    /**
-     * @depends testChangeMagentoCustomerAccount
-     *
-     * @param array $customers
-     */
-    public function testUnassignMagentoCustomerAccount(array $customers)
-    {
-        /**
-         * @var MagentoCustomer $magentoCustomer
-         * @var Customer        $salesCustomer
-         */
-        list($magentoCustomer, $salesCustomer) = $customers;
-
-        $magentoCustomer->setAccount(null);
-        $this->flushAndRefresh($magentoCustomer, $salesCustomer);
-
-        $this->assertNull($magentoCustomer->getAccount());
-        $this->assertSame($magentoCustomer, $salesCustomer->getCustomerTarget());
-        $this->assertNotNull($salesCustomer->getAccount());
+        $this->assertSame($magentoCustomer->getAccount(), $customer->getAccount());
+        $this->assertEquals('Account2', $magentoCustomer->getAccount()->getName());
+        $this->assertSame($magentoCustomer, $customer->getTarget());
     }
 
     /**

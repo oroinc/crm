@@ -6,7 +6,7 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-ok'
+                    icon: 'fa-check'
                     class: 'btn-primary'
                 transition_definition: record_feedback_definition
                 form_options:

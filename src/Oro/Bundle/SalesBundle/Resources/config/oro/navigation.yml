@@ -5,7 +5,7 @@ navigation:
                 label: 'oro.sales.menu.sales_tab.label'
                 uri:   '#'
                 extras:
-                    icon: icon-shopping-cart
+                    icon: fa-shopping-cart
                     position: 20
 
             lead_list:

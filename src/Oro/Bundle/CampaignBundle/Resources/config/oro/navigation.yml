@@ -6,7 +6,7 @@ navigation:
                 uri: '#'
                 extras:
                     position: 40
-                    icon: icon-sitemap
+                    icon: fa-sitemap
             campaigns_list:
                 label: 'oro.campaign.entity_plural_label'
                 route: 'oro_campaign_index'

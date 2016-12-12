@@ -20,7 +20,7 @@ use Oro\Bundle\MarketingListBundle\Entity\MarketingListItem;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-bar-chart"
+ *              "icon"="fa-bar-chart-o"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

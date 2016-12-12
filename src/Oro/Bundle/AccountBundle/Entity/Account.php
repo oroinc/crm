@@ -27,7 +27,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
  *      routeCreate="oro_account_create",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-suitcase"
+ *              "icon"="fa-suitcase"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

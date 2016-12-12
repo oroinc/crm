@@ -3,9 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Entity\Manager;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityNotFoundException;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
@@ -14,7 +14,6 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
-use Oro\Bundle\SalesBundle\Exception\Customer\NotAccessableCustomerTargetException;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class AccountCustomerManager
@@ -44,18 +43,6 @@ class AccountCustomerManager
     }
 
     /**
-     * Returns Customer's associated target if it set or Account otherwise
-     *
-     * @param Customer $customer
-     *
-     * @return object|Account
-     */
-    public static function getTargetCustomerOrAccount(Customer $customer)
-    {
-        return $customer->getCustomerTarget() ? : $customer->getAccount();
-    }
-
-    /**
      * @param $targetClassName
      *
      * @return string
@@ -79,20 +66,22 @@ class AccountCustomerManager
     {
         $customer = new Customer();
 
-        return $customer->setAccount($account);
+        return $customer->setTarget($account);
     }
 
     /**
      * @param object $target
      *
-     * @return Customer|null
+     * @return Customer
+     *
+     * @throws EntityNotFoundException
      */
-    public function getOrCreateAccountCustomerByTarget($target)
+    public function getAccountCustomerByTarget($target)
     {
         $customerRepo = $this->getCustomerRepository();
         if ($target instanceof Account) {
             $customerFields = $this->getCustomerTargetFields();
-            $customer       = $customerRepo->getCustomerWithoutAssociatedTargets($target, $customerFields);
+            $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
             if (!$customer) {
                 $customer = self::createCustomerFromAccount($target);
             }
@@ -100,35 +89,21 @@ class AccountCustomerManager
             $targetClassName = ClassUtils::getClass($target);
             $this->assertValidTarget($targetClassName);
             $targetField = self::getCustomerTargetField($targetClassName);
-            $customer    = $customerRepo
-                ->findOneBy(
-                    [$targetField => $this->doctrineHelper->getSingleEntityIdentifier($target)]
-                );
+            $id          = $this->doctrineHelper->getSingleEntityIdentifier($target);
+            $customer    = $customerRepo->findOneBy([$targetField => $id]);
 
             if (!$customer) {
-                return $this->doCreateCustomerFromTarget($target);
+                throw new EntityNotFoundException(
+                    sprintf(
+                        'Sales Customer for target of type "%s" and identifier %s was not found',
+                        $targetClassName,
+                        $id
+                    )
+                );
             }
         }
 
         return $customer;
-    }
-
-    /**
-     * Syncs target entity's Account with related Customer entity
-     *
-     * @param Customer $customer
-     */
-    public function syncTargetCustomerAccount(Customer $customer)
-    {
-        $target = $customer->getCustomerTarget();
-        if (!$target) {
-            throw new NotAccessableCustomerTargetException(
-                'Couldn\'t sync Customer\'s target account without target'
-            );
-        }
-
-        $account = $this->createOrGetAccountFromTarget($target);
-        $customer->setAccount($account);
     }
 
     /**
@@ -161,39 +136,10 @@ class AccountCustomerManager
     }
 
     /**
-     * @param object $target
-     *
-     * @return Customer
-     */
-    protected function doCreateCustomerFromTarget($target)
-    {
-        $account  = $this->createOrGetAccountFromTarget($target);
-        $customer = self::createCustomerFromAccount($account);
-
-        return $customer->setCustomerTarget($target);
-    }
-
-    /**
      * @return CustomerRepository
      */
     protected function getCustomerRepository()
     {
         return $this->doctrineHelper->getEntityRepository(Customer::class);
-    }
-
-    /**
-     * @param $target
-     *
-     * @return Account
-     */
-    protected function createOrGetAccountFromTarget($target)
-    {
-        if (!($target instanceof AccountAwareInterface) || !$target->getAccount()) {
-            $account = (new Account())->setName($this->nameResolver->getName($target));
-        } else {
-            $account = $target->getAccount();
-        }
-
-        return $account;
     }
 }

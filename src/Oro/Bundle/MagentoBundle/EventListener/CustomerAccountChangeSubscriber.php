@@ -3,14 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 
-use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
 
@@ -22,19 +18,8 @@ use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
  */
 class CustomerAccountChangeSubscriber implements EventSubscriber
 {
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
-    /** @var MagentoCustomer[] */
-    protected $changedMagentoCustomers = [];
-
-    /**
-     * @param AccountCustomerManager    $manager
-     */
-    public function __construct(AccountCustomerManager $manager)
-    {
-        $this->accountCustomerManager     = $manager;
-    }
+    /** @var SalesCustomer[] */
+    protected $changedCustomers = [];
 
     /**
      * {@inheritdoc}
@@ -55,7 +40,7 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
     public function onFlush(OnFlushEventArgs $args)
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
-        $this->prepareChangedMagentoCustomers(
+        $this->prepareChangedCustomers(
             $uow,
             array_merge(
                 $uow->getScheduledEntityInsertions(),
@@ -71,89 +56,40 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
      */
     public function postFlush(PostFlushEventArgs $args)
     {
-        if (!$this->changedMagentoCustomers) {
+        if (!$this->changedCustomers) {
             return;
         }
-
+        /** @var MagentoCustomer $magentoCustomer */
+        foreach ($this->changedCustomers as $customer) {
+            $magentoCustomer = $customer->getTarget();
+            $magentoCustomer->setAccount($customer->getAccount());
+        }
+        $this->changedCustomers = [];
         $em = $args->getEntityManager();
-        $syncedSalesCustomers = $this->syncSalesCustomersAccounts($em, $this->changedMagentoCustomers);
-        $this->changedMagentoCustomers = [];
-
-        if ($syncedSalesCustomers) {
-            $em->flush();
-        }
+        $em->flush();
     }
 
     /**
-     * @param EntityManager $em
-     * @param MagentoCustomer[] $changedMagentoCustomers
+     * Prepare Sales Customers which account has been changed and target is Magento Customer
      *
-     * @return SalesCustomer[] Fixed SalesCustomers
-     */
-    protected function syncSalesCustomersAccounts(EntityManager $em, array $changedMagentoCustomers)
-    {
-        $salesCustomersWithChangedAccount = $this->findSalesCustomersWithChangedAccount($em, $changedMagentoCustomers);
-        foreach ($salesCustomersWithChangedAccount as $customer) {
-            $this->accountCustomerManager->syncTargetCustomerAccount($customer);
-        }
-
-        return $salesCustomersWithChangedAccount;
-    }
-
-    /**
      * @param UnitOfWork $uow
      * @param object[]   $entities
      */
-    protected function prepareChangedMagentoCustomers(UnitOfWork $uow, array $entities)
+    protected function prepareChangedCustomers(UnitOfWork $uow, array $entities)
     {
         foreach ($entities as $oid => $entity) {
-            if (!$entity instanceof MagentoCustomer) {
+            if (!($entity instanceof SalesCustomer)) {
                 continue;
             }
-
+            if (!($entity->getTarget() instanceof MagentoCustomer)) {
+                continue;
+            }
             $changeSet = $uow->getEntityChangeSet($entity);
             if (!isset($changeSet['account'])) {
                 continue;
             }
 
-            $this->changedMagentoCustomers[$oid] = $entity;
+            $this->changedCustomers[$oid] = $entity;
         }
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param MagentoCustomer[] $customers
-     *
-     * @return SalesCustomer[]
-     */
-    protected function findSalesCustomersWithChangedAccount(EntityManager $em, array $customers)
-    {
-        $customerRepository = $this->getAccountCustomerRepository($em);
-
-        $magentoCustomers = array_map(
-            function (Customer $customer) {
-                $account = $customer->getAccount();
-
-                return [
-                    'target_id'  => $customer->getId(),
-                    'account_id' => $account ? $account->getId() : null
-                ];
-            },
-            $customers
-        );
-
-        return $customerRepository->getSalesCustomersWithChangedAccount(
-            [MagentoCustomer::class => $magentoCustomers]
-        );
-    }
-
-    /**
-     * @param EntityManager $em
-     *
-     * @return CustomerRepository
-     */
-    protected function getAccountCustomerRepository(EntityManager $em)
-    {
-        return $em->getRepository(SalesCustomer::class);
     }
 }

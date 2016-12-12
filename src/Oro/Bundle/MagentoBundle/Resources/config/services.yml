@@ -1031,7 +1031,5 @@ services:
 
     oro_magento.customer_account_change_subscriber:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
-        arguments:
-            - '@oro_sales.manager.account_customer'
         tags:
             - { name: doctrine.event_subscriber }
