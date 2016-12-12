@@ -129,7 +129,7 @@ class OpportunityController extends Controller
     public function opportunityWithCustomerCreateAction($targetClass, $targetId)
     {
         $target = $this->getEntityRoutingHelper()->getEntity($targetClass, $targetId);
-        $customer = $this->getAccountCustomerManager()->getOrCreateAccountCustomerByTarget($target);
+        $customer = $this->getAccountCustomerManager()->getAccountCustomerByTarget($target);
 
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($customer);
