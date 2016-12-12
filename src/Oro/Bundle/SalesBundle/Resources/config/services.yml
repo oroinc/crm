@@ -461,6 +461,7 @@ services:
             - '@oro_sales.customer.account_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
+            - '@oro_entity_config.provider.customer'
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
 

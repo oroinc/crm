@@ -415,12 +415,12 @@ class OpportunityRepository extends EntityRepository
         $qb->select('COUNT(o.id)');
         if ($start) {
             $qb
-                ->andWhere('o.createdAt > :start')
+                ->andWhere('o.createdAt >= :start')
                 ->setParameter('start', $start);
         }
         if ($end) {
             $qb
-                ->andWhere('o.createdAt < :end')
+                ->andWhere('o.createdAt <= :end')
                 ->setParameter('end', $end);
         }
 

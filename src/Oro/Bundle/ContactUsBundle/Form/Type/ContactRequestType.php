@@ -119,7 +119,8 @@ body {
     margin: 0 0 3px;
 }
 
-.row-group label em {
+.row-group label em,
+.control-group label em {
     color: #f00;
     font-size: 16px;
 }
