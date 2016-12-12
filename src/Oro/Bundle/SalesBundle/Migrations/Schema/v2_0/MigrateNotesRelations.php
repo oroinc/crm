@@ -16,10 +16,7 @@ class MigrateNotesRelations extends UpdateNoteAssociationKindForRenamedEntitiesM
         'LeadAddress',
         'LeadEmail',
         'LeadPhone',
-        'LeadStatus',
         'Opportunity',
-        'OpportunityCloseReason',
-        'OpportunityStatus',
         'SalesFunnel',
     ];
 

@@ -8,24 +8,13 @@ use Oro\Bundle\NoteBundle\Migration\UpdateNoteAssociationKindForRenamedEntitiesM
 
 class MigrateNotesRelations extends UpdateNoteAssociationKindForRenamedEntitiesMigration
 {
-    protected $entitiesNames = [
-        'Channel',
-        'CustomerIdentity',
-    ];
-
     /**
      * {@inheritdoc}
      */
     protected function getRenamedEntitiesNames(Schema $schema)
     {
-        $oldNameSpace = 'OroCRM\Bundle\ChannelBundle\Entity';
-        $newNameSpace = 'Oro\Bundle\ChannelBundle\Entity';
-
-        $renamedEntityNamesMapping = [];
-        foreach ($this->entitiesNames as $entityName) {
-            $renamedEntityNamesMapping["$newNameSpace\\$entityName"] = "$oldNameSpace\\$entityName";
-        }
-
-        return $renamedEntityNamesMapping;
+        return [
+            'Oro\Bundle\ChannelBundle\Entity\CustomerIdentity' => 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity'
+        ];
     }
 }
