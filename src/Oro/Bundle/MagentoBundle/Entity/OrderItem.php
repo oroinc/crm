@@ -14,7 +14,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendOrderItem;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="fa-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",

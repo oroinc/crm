@@ -992,3 +992,38 @@ services:
         parent: oro_workflow.abstract.workflow_aware_manager
         calls:
             - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]
+
+    oro_magento.async.sync_cart_expiration_integration_processor:
+        class: 'Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor'
+        arguments:
+            - '@doctrine'
+            - '@oro_magento.provider.cart_expiration_processor'
+            - '@oro_message_queue.job.runner'
+            - '@logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_magento.async.sync_initial_integration_processor:
+        class: 'Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_magento.provider.initial_sync_processor'
+            - '@oro_platform.optional_listeners.manager'
+            - '@oro_analytics.calculate_analytics_scheduler'
+            - '@oro_message_queue.job.runner'
+            - '@oro_search.async.indexer'
+            - '@logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_magento.provider.customer.customer_icon:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
+        arguments:
+            - '@oro_magento.provider.channel_type'
+        tags:
+            - { name: oro_sales.customer_icon, priority: 10 }
+
+    oro_magento.datagrid.cart_view_list:
+        class: Oro\Bundle\MagentoBundle\Datagrid\CartViewList
+        arguments:
+            - '@translator'

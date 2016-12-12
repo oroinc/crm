@@ -71,7 +71,7 @@ datagrids:
                 type:         navigate
                 link:         view_link
                 acl_resource: oro_channel_view
-                icon:         eye-open
+                icon:         eye
                 label:        oro.grid.action.view
                 rowAction:    true
             update:

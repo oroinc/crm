@@ -8,7 +8,7 @@ workflows:
                 acl_resource: oro_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
-                    icon: 'icon-phone'
+                    icon: 'fa-phone'
                     class: 'btn-success'
                     page:
                         parent_route: 'oro_sales_salesfunnel_index'
@@ -61,7 +61,7 @@ workflows:
                 acl_resource: oro_sales_salesfunnel_create
                 display_type: page
                 frontend_options:
-                    icon: 'icon-dollar'
+                    icon: 'fa-usd'
                     class: 'btn-success'
                     page:
                         parent_route: 'oro_sales_salesfunnel_index'
@@ -111,13 +111,13 @@ workflows:
                 step_to: disqualified_lead
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-remove'
+                    icon: 'fa-close'
                 transition_definition: disqualify_definition
             follow_up:
                 step_to: disqualified_lead
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-comment'
+                    icon: 'fa-comment'
                 form_options:
                     attribute_fields:
                         lead_notes: ~
@@ -126,14 +126,14 @@ workflows:
                 step_to: new_lead
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-repeat'
+                    icon: 'fa-repeat'
                 transition_definition: reactivate_definition
             qualify:
                 step_to: new_opportunity
                 is_unavailable_hidden: true
                 acl_resource: oro_sales_opportunity_create
                 frontend_options:
-                    icon: 'icon-ok'
+                    icon: 'fa-check'
                     class: 'btn-primary'
                 form_options:
                     attribute_fields:
@@ -170,7 +170,7 @@ workflows:
                 step_to: developed_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-play'
+                    icon: 'fa-play'
                     class: 'btn-primary'
                 transition_definition: develop_definition
                 form_options:
@@ -191,7 +191,7 @@ workflows:
                 step_to: won_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-ok-circle'
+                    icon: 'fa-check-circle-o'
                     class: 'btn-success'
                 transition_definition: close_as_won_definition
                 form_options:
@@ -217,7 +217,7 @@ workflows:
                 step_to: lost_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-remove-circle'
+                    icon: 'fa-close-circle'
                     class: 'btn-danger'
                 transition_definition: close_as_lost_definition
                 form_options:
@@ -251,6 +251,6 @@ workflows:
                 step_to: new_opportunity
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-backward'
+                    icon: 'fa-backward'
                     class: 'btn-primary'
                 transition_definition: reopen_definition

@@ -14,6 +14,15 @@ class LeadApiType extends LeadType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
+        $builder->add(
+            'customer',
+            'oro_sales_b2bcustomer_with_channel_create_or_select',
+            [
+                'required'               => true,
+                'label'                  => 'oro.sales.opportunity.customer.label',
+                'new_item_property_name' => 'name',
+            ]
+        );
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 

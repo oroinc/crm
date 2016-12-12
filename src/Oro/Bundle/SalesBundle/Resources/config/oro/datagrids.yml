@@ -296,7 +296,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -584,7 +584,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -732,8 +732,10 @@ datagrids:
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
-                    - opportunity.budgetAmountValue as opportunityBudget
-                    - opportunity.closeRevenueValue as opportunityRevenue
+                    - opportunity.budgetAmountValue as budgetAmount
+                    - opportunity.closeRevenueValue as closeRevenue
+                    - opportunity.budgetAmountCurrency as budgetAmountCurrency
+                    - opportunity.closeRevenueCurrency as closeRevenueCurrency
                     - opportunity.probability as opportunityProbability
                     - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
@@ -757,12 +759,34 @@ datagrids:
                 label: oro.sales.salesfunnel.lead.label
             opportunityName:
                 label: oro.sales.salesfunnel.opportunity.label
-            opportunityBudget:
-                label: oro.sales.opportunity.budget_amount.label
-                frontend_type: currency
-            opportunityRevenue:
-                label: oro.sales.opportunity.close_revenue.label
-                frontend_type: currency
+            budgetAmount:
+                label:         oro.sales.opportunity.budget_amount.label
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: budgetAmount
+                    currency: budgetAmountCurrency
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
+                    entity_alias: opportunity
+            closeRevenue:
+                label:         oro.sales.opportunity.close_revenue.label
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: closeRevenue
+                    currency: closeRevenueCurrency
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
+                    original_field: closeRevenue
+                    value_field: closeRevenueValue
+                    currency_field: closeRevenueCurrency
+                    entity_alias: opportunity
             opportunityProbability:
                 label: oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -793,9 +817,9 @@ datagrids:
                     data_name: lead.name
                 opportunityName:
                     data_name: opportunity.name
-                opportunityBudget:
+                budgetAmount:
                     data_name: opportunity.budgetAmountValue
-                opportunityRevenue:
+                closeRevenue:
                     data_name: opportunity.closeRevenueValue
                 opportunityProbability:
                     data_name: opportunity.probability
@@ -808,7 +832,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_salesfunnel_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -845,12 +869,28 @@ datagrids:
                 opportunityName:
                     type: string
                     data_name: opportunity.name
-                opportunityBudget:
+                closeRevenue:
                     type: currency
-                    data_name: opportunity.budgetAmount
-                opportunityRevenue:
+                    data_name: closeRevenue
+                closeRevenueCurrency:
+                    type: choice
+                    data_name: closeRevenueCurrency
+                    label: oro.sales.opportunity.close_revenue_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
+                budgetAmount:
                     type: currency
-                    data_name: opportunity.closeRevenue
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
@@ -1308,13 +1348,20 @@ datagrids:
                 saPostalCode:         { data_name: saPostalCode }
         filters:
             columns:
-                ownerName:
+                owner:
                     type: choice-tree
                     data_name: c.owner
+                    label: oro.user.owner.label
                     enabled: false
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: c.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                    enabled: false
                 accountName:
                     type: string
                     data_name: accountName
@@ -1396,7 +1443,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_b2bcustomer_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1508,7 +1555,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1616,6 +1663,7 @@ datagrids:
                     - o.closeDate
                     - o.probability
                     - o.budgetAmountValue as budgetAmount
+                    - o.budgetAmountCurrency as budgetAmountCurrency
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
@@ -1639,7 +1687,15 @@ datagrids:
                     data_name: o.closeDate
                 budgetAmount:
                     type: currency
-                    data_name: o.budgetAmountValue
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 probability:
                     type: percent
                     data_name: o.probability
@@ -1685,7 +1741,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1721,7 +1777,14 @@ datagrids:
                 frontend_type: date
             budgetAmount:
                 label:         oro.sales.opportunity.budget_amount.label
-                frontend_type: currency
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
             probability:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -2100,3 +2163,158 @@ datagrids:
                 pageSize:
                     items: [10]
                     default_per_page: 10
+    sales-customers-opportunities-grid:
+        extended_entity_name: %oro_sales.opportunity.class%
+        acl_resource: oro_sales_opportunity_view
+        options:
+            entityHint: opportunities
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+        source:
+            type: orm
+            query:
+                select:
+                    - o.id
+                    - o.name
+                    - o.budgetAmountValue as budgetAmount
+                    - o.budgetAmountCurrency as budgetAmountCurrency
+                    - o.probability
+                    - s.id as status
+                    - o.closeDate
+                    - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
+                from:
+                    - { table: %oro_sales.opportunity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.status, alias: s }
+                        - { join: o.owner, alias: owner }
+        fields_acl:
+            columns:
+                name:
+                    data_name: o.name
+                budgetAmount:
+                    data_name: o.budgetAmountValue
+                probability:
+                    data_name: o.probability
+                statusLabel:
+                    data_name: o.status
+                closeDate:
+                    data_name: o.closeDate
+                ownerName:
+                    data_name: o.owner
+        sorters:
+            columns:
+                name:
+                    data_name: o.name
+                budgetAmount:
+                    data_name: o.budgetAmountValue
+                probability:
+                    data_name: o.probability
+                status:
+                    data_name: status
+                closeDate:
+                    data_name: o.closeDate
+                ownerName:
+                    data_name: ownerName
+            default:
+                closeDate: DESC
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: o.name
+                budgetAmount:
+                    type: currency
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
+                probability:
+                    type: percent
+                    data_name: o.probability
+                status:
+                    type:      enum
+                    data_name: status
+                    enum_code: opportunity_status
+                closeDate:
+                    type: date
+                    data_name: o.closeDate
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: o.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
+
+        columns:
+            name:
+                label:         oro.sales.opportunity.name.label
+            budgetAmount:
+                label:         oro.sales.opportunity.budget_amount.label
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
+                inline_editing:
+                    enable: true
+            probability:
+                label:         oro.sales.opportunity.probability.label
+                frontend_type: percent
+            status:
+                frontend_type: select
+                label:         oro.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+            closeDate:
+                label:         oro.sales.opportunity.close_date.label
+                frontend_type: date
+            ownerName:
+                label:         oro.sales.opportunity.owner.label
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  oro_sales_opportunity_view
+                label:         oro.grid.action.view
+                icon:          eye
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  oro_sales_opportunity_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  oro_sales_opportunity_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      oro_sales_opportunity_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      oro_sales_opportunity_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_opportunity
+                params:     [ id ]

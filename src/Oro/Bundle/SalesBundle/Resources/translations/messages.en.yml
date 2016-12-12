@@ -121,6 +121,7 @@ oro:
             choose_opportunity: Choose an opportunity....
             choose_lead:        Choose a lead....
             choose_b2bcustomer: Choose a customer....
+            choose_account:     Choose an account ....
             choose_close_rsn:   Choose a close reason...
             tooltip:
                 account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
@@ -169,6 +170,8 @@ oro:
                 label:            Budget Amount Currency
             budget_amount_base_currency:
                 label:            Base Budget Amount
+            base_budget_amount_value:
+                label:            Base Budget Amount
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed
@@ -176,6 +179,10 @@ oro:
                 label:            Close revenue Value
             close_revenue_currency:
                 label:            Close revenue Currency
+            base_close_revenue_value:
+                label:            Base Close Revenue
+            close_revenue_base_currency:
+                label:            Base Close Revenue
             customer_need:
                 label:            Customer need
                 description:      The detailed description of customers' needs that constitute the business opportunity
@@ -201,7 +208,7 @@ oro:
             organization.label:   Organization
             customer:
                 label:            Account
-                description:      A B2B customer the opportunity is created for
+                description:      A customer or an account the opportunity is created for
             data_channel:
                 label:            Channel
                 description:      One of active channels, from which the application will get information on this opportunity.
@@ -225,6 +232,9 @@ oro:
                     open:            Open Opportunities
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
+            importexport.invalid_currency: 'Error in row #%row%. The next currency %currency% not available in current organization.'
+            importexport.invalid_currencies: 'Error in row #%row%. The next currencies %currencies% not available in current organization.'
+
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -274,7 +284,7 @@ oro:
             contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
-            customer.label:       Business Customer
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
@@ -496,3 +506,6 @@ oro:
 
         privilege:
             category.sales_data.label: Sales Data
+        customers:
+            opportunities:
+                grid.label: Opportunities

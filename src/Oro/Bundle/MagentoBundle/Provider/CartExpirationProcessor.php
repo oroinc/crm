@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
-class CartExpirationProcessor
+class CartExpirationProcessor implements SyncProcessorInterface
 {
     const DEFAULT_PAGE_SIZE = 200;
 
@@ -51,11 +52,9 @@ class CartExpirationProcessor
     }
 
     /**
-     * Run cart expiration process for given channel
-     *
-     * @param Channel $channel
+     * {@inheritdoc}
      */
-    public function process(Channel $channel)
+    public function process(Channel $channel, $connector = null, array $connectorParameters = [])
     {
         $this->configure($channel);
 

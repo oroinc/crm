@@ -18,7 +18,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  * @Config(
  *       defaultValues={
  *          "entity"={
- *              "icon"="icon-map-marker"
+ *              "icon"="fa-map-marker"
  *          },
  *          "note"={
  *              "immutable"=true

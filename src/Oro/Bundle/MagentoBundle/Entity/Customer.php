@@ -39,10 +39,11 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  * @Config(
  *      routeName="oro_magento_customer_index",
+ *      routeCreate="oro_magento_customer_create",
  *      routeView="oro_magento_customer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user"
+ *              "icon"="fa-user"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -288,7 +289,7 @@ class Customer extends ExtendCustomer implements
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

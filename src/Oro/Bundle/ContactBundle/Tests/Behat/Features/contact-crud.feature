@@ -89,7 +89,7 @@ Scenario: Add/Delete address from contact view
     | Country         | Germany       |
     | Street          | Mühlendamm 78 |
     | City            | Hamburg       |
-    | Zip/postal code | 22087         |
+    | Zip/Postal Code | 22087         |
     | State           | Hamburg       |
   And press "Save"
   Then contact has 2 addresses

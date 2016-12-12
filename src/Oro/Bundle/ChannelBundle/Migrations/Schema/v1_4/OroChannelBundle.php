@@ -5,9 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_4;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -39,7 +37,6 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
             'orocrm_channel',
             'name',
             [
-                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
                 'entity' => ['label' => 'oro.channel.entity_label'],
                 'extend' => [
                     'is_extend' => true,

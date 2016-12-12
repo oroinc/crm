@@ -208,3 +208,4 @@ services:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
+            - '@oro_currency.query.currency_transformer'

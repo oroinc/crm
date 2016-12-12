@@ -1,4 +1,7 @@
 oro_entity:
+    exclusions:
+        - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseBudgetAmountValue }
+        - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseCloseRevenueValue }
     virtual_fields:
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             primaryEmail:

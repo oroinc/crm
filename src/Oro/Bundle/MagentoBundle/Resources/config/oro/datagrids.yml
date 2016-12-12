@@ -170,7 +170,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_customer_view
                 rowAction:    true
             update:
@@ -365,18 +365,22 @@ datagrids:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                itemsQty:
+                    type: number-range
+                    data_name: c.itemsQty
         actions:
             view:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_cart_view
                 rowAction:    true
         options:
             entityHint: cart
             export: true
             entity_pagination: true
+        views_list : '@oro_magento.datagrid.cart_view_list'
 
     magento-cartitem-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CartItem
@@ -643,7 +647,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_product_view
                 rowAction:    true
         options:
@@ -840,7 +844,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_order_view
                 rowAction:    true
         options:
@@ -1009,7 +1013,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_order_view
                 rowAction:    true
 
@@ -1084,7 +1088,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_cart_view
                 rowAction:    true
 
@@ -1215,7 +1219,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_order_view
                 rowAction:    true
 
@@ -1308,7 +1312,7 @@ datagrids:
                 type:         navigate
                 label:        oro.grid.action.view
                 link:         view_link
-                icon:         eye-open
+                icon:         eye
                 acl_resource: oro_magento_cart_view
                 rowAction:    true
 
@@ -1501,7 +1505,7 @@ datagrids:
                 type: navigate
                 acl_resource: oro_magento_newsletter_subscriber_view
                 label: oro.grid.action.view
-                icon: eye-open
+                icon: eye
                 link: view_link
                 rowAction: true
             subscribe:

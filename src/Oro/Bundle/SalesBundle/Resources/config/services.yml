@@ -48,7 +48,6 @@ parameters:
     oro_sales.autocomplete.business_customer.search_handler.class:  Oro\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
 
     oro_sales.model.change_lead_status.class: Oro\Bundle\SalesBundle\Model\ChangeLeadStatus
-    oro_sales.model.b2b_guesser.class: Oro\Bundle\SalesBundle\Model\B2bGuesser
 
 services:
     oro_sales.opportunity.manager.api:
@@ -140,6 +139,9 @@ services:
 
     oro_sales.event_listener.b2bcustomer_lifetime:
         class: %oro_sales.event_listener.b2bcustomer_lifetime.class%
+        arguments:
+            - '@oro_currency.converter.rate.link'
+            - '@oro_currency.query.currency_transformer'
         tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
@@ -277,8 +279,11 @@ services:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         arguments:
             - '@oro_sales.builder.opportunity_relations'
+            - '@oro_currency.config.currency'
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_before, method: onProcessBefore }
 
     oro_sales.provider.opportunity_by_status:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
@@ -356,16 +361,9 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@validator'
 
-    oro_sales.model.b2b_guesser:
-        class: %oro_sales.model.b2b_guesser.class%
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_entity.entity_field_provider'
-
     oro_sales.provider.lead_to_opportunity:
         class: Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
         arguments:
-            - '@oro_sales.model.b2b_guesser'
             - '@oro_entity.entity_field_provider'
             - '@oro_sales.model.change_lead_status'
 
@@ -390,6 +388,8 @@ services:
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
+        arguments:
+            - '@oro_currency.converter.rate'
         tags:
             - { name: doctrine.event_listener, event: onFlush, priority: 100 }
 
@@ -408,3 +408,86 @@ services:
         arguments:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
+
+    oro_sales.migration.extension.opportunity_customers:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtension
+        tags:
+            - { name: oro_migration.extension, extension_name: opportunity }
+
+    oro_sales.entity_config_dumper.opportunity.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityConfigDumperExtension
+        parent: oro_entity_extend.entity_config_dumper.extension.association
+        tags:
+            - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    oro_sales.entity_generator.opportunity.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityGeneratorExtension
+        tags:
+            - { name: oro_entity_extend.entity_generator_extension }
+
+    oro_sales.migration.extension.lead_customers:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtension
+        tags:
+            - { name: oro_migration.extension, extension_name: lead }
+
+    oro_sales.entity_config_dumper.lead.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadConfigDumperExtension
+        parent: oro_entity_extend.entity_config_dumper.extension.association
+        tags:
+            - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    oro_sales.entity_generator.lead.customers_extension:
+        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadGeneratorExtension
+        tags:
+            - { name: oro_entity_extend.entity_generator_extension }
+
+    oro_sales.provider.customer.chain_customer_icon:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\ChainCustomerIconProvider
+
+    oro_sales.provider.customer.customer_icon:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProvider
+        arguments:
+            - '@oro_entity_config.provider.entity'
+        tags:
+            - { name: oro_sales.customer_icon }
+
+    oro_sales.customer_config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
+        public: false
+        arguments:
+            - '@oro_entity.routing_helper'
+            - '@oro_security.security_facade'
+            - '@oro_entity_config.config_manager'
+
+    oro_sales.autocomplete.customer_search_handler:
+        class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
+        parent: oro_activity.form.handler.autocomplete
+        calls:
+            - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
+            - [setCustomerConfigProvider, ['@oro_sales.customer_config_provider']]
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
+            - [setRoutingHelper, ['@oro_entity.routing_helper']]
+
+    oro_sales.customers.opportunities_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
+
+    oro_sales.datagrid.extension.customers.opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.provider.opportunity_currency_checker:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
+        public: false
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: oro_multi_currency.currency_checker_provider }
