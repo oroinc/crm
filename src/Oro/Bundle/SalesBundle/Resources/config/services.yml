@@ -461,6 +461,7 @@ services:
             - '@oro_sales.customer.account_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
+            - '@oro_sales.provider.customer.opportunities_grid.block_priority.chain'
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
 
@@ -533,3 +534,11 @@ services:
             - oro_sales_create_opportunity_link
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
+
+    oro_sales.provider.customer.opportunities_grid.block_priority.chain:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\OpportunitiesGrid\ChainBlockPriorityProvider
+
+    oro_sales.provider.customer.opportunities_grid.block_priority.default:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\OpportunitiesGrid\DefaultBlockPriorityProvider
+        tags:
+            - { name: oro_sales.provider.customer.opportunities_grid.block_priority }

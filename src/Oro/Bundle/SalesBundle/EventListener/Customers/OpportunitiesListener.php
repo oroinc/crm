@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
+use Oro\Bundle\SalesBundle\Provider\Customer\OpportunitiesGrid\BlockPriorityProviderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Doctrine\Common\Util\ClassUtils;
@@ -12,9 +13,6 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class OpportunitiesListener
 {
-    // below activity block which have 1000
-    const GRID_BLOCK_PRIORITY = 1010;
-
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
@@ -24,19 +22,25 @@ class OpportunitiesListener
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var BlockPriorityProviderInterface */
+    protected $priorityProvider;
+
     /**
-     * @param ConfigProvider      $customerConfigProvider
-     * @param TranslatorInterface $translator
-     * @param DoctrineHelper      $helper
+     * @param ConfigProvider                 $customerConfigProvider
+     * @param TranslatorInterface            $translator
+     * @param DoctrineHelper                 $helper
+     * @param BlockPriorityProviderInterface $priorityProvider
      */
     public function __construct(
         ConfigProvider $customerConfigProvider,
         TranslatorInterface $translator,
-        DoctrineHelper $helper
+        DoctrineHelper $helper,
+        BlockPriorityProviderInterface $priorityProvider
     ) {
         $this->customerConfigProvider = $customerConfigProvider;
         $this->translator             = $translator;
         $this->doctrineHelper         = $helper;
+        $this->priorityProvider       = $priorityProvider;
     }
 
     /**
@@ -51,18 +55,20 @@ class OpportunitiesListener
         if ($this->customerConfigProvider->isCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
             $data                 = $event->getData();
+            $targetClass          = ClassUtils::getClass($entity);
+            $priority             = $this->priorityProvider->getPriority($targetClass);
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
                 ['gridParams' =>
                      [
                          'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
-                         'customer_class' => ClassUtils::getClass($entity),
+                         'customer_class' => $targetClass,
                      ]
                 ]
             );
             $data['dataBlocks'][] = [
                 'title'     => $this->translator->trans('oro.sales.customers.opportunities.grid.label'),
-                'priority' => self::GRID_BLOCK_PRIORITY,
+                'priority'  => (int)$priority,
                 'subblocks' => [['data' => [$opportunitiesData]]]
             ];
             $event->setData($data);
