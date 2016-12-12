@@ -33,7 +33,7 @@ class ConfigProvider
 
         $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
 
-        return in_array($class, $this->getAssociatedCustomerClasses());
+        return in_array($class, $this->getAssociatedCustomerClasses(), true);
     }
 
     public function getCustomerClasses()

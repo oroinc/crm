@@ -487,6 +487,14 @@ services:
         tags:
             - { name: oro_datagrid.extension }
 
+    oro_sales.datagrid.extension.customers.account:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '@oro_datagrid.grid_configuration.helper'
+        tags:
+            - { name: oro_datagrid.extension }
+
     oro_sales.provider.opportunity_currency_checker:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\CurrencyCheckerProvider
         public: false
