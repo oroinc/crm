@@ -21,9 +21,9 @@ class DefaultStrategy implements AccountProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideAccount($entity)
+    public function getAccount($targetCustomer)
     {
         return (new Account())
-            ->setName($this->nameResolver->getName($entity));
+            ->setName($this->nameResolver->getName($targetCustomer));
     }
 }

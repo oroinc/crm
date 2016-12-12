@@ -7,11 +7,11 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 interface AccountProviderInterface
 {
     /**
-     * Creates Account from customer target $entity
+     * Creates new Account for customer association based on the $targetCustomer entity
      *
-     * @param $entity
+     * @param object $targetCustomer
      *
      * @return Account|null
      */
-    public function provideAccount($entity);
+    public function getAccount($targetCustomer);
 }

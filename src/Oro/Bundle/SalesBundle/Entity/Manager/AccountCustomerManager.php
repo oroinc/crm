@@ -81,7 +81,7 @@ class AccountCustomerManager
         $targetClassName = ClassUtils::getClass($target);
         $this->assertValidTarget($targetClassName);
 
-        return $this->accountProvider->provideAccount($target);
+        return $this->accountProvider->getAccount($target);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation;
 
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 class ChainAccountProvider implements AccountProviderInterface
 {
@@ -22,15 +22,15 @@ class ChainAccountProvider implements AccountProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideAccount($entity)
+    public function getAccount($targetCustomer)
     {
         foreach ($this->providers as $provider) {
-            if ($account = $provider->provideAccount($entity)) {
+            if ($account = $provider->getAccount($targetCustomer)) {
                 return $account;
             }
         }
 
-        throw new ServiceNotFoundException(
+        throw new RuntimeException(
             'Unable to provide an account. There are no providers registered in the system.'
         );
     }

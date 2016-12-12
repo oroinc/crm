@@ -5,6 +5,8 @@ namespace Oro\Bundle\MagentoBundle\Provider\Customer;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
@@ -17,6 +19,14 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
     /** @var AutomaticDiscovery */
     protected $automaticDiscovery;
 
+    /** @var NewEntitiesHelper */
+    protected $newEntitiesHelper;
+
+    public function __construct(NewEntitiesHelper $newEntitiesHelper)
+    {
+        $this->newEntitiesHelper = $newEntitiesHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,20 +38,38 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
     /**
      * {@inheritdoc}
      */
-    public function provideAccount($entity)
+    public function getAccount($targetCustomer)
     {
-        if (!$entity instanceof Customer) {
+        if (!$targetCustomer instanceof Customer) {
             return null;
         }
         /** @var Customer|null $similar */
-        $similar = $this->getAutomaticDiscovery()->discoverSimilar($entity);
+        $automaticDiscovery = $this->getAutomaticDiscovery();
+        $similar            = $automaticDiscovery->discoverSimilar($targetCustomer);
+        $newAccountKey = 'magentocustomer_%s_account';
 
-        if (null === $similar) {
-            return null;
-            //@TODO Do we need to create account in the same way as was in process?
+        if (null !== $similar) {
+            if ($similar->getAccount()) {
+                //return existing account from similar customer
+                return $similar->getAccount();
+            }
+            //try to get from storage
+            $key             = sprintf($newAccountKey, $similar->getId());
+            $storedAccount   = $this->newEntitiesHelper->getEntity($key);
+            if ($storedAccount) {
+                return $storedAccount;
+            }
         }
-        //@TODO need to find a way to provide accounts created for MC in the one batch
-        return $similar->getAccount();
+
+        // create and store new Account
+        $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
+            ? 'N/A'
+            : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+
+        $account = (new Account())->setName($accountName);
+        $this->newEntitiesHelper->setEntity(sprintf($newAccountKey, $targetCustomer->getId()), $account);
+
+        return $account;
     }
 
     /**
