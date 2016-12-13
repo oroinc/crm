@@ -508,7 +508,7 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_sales.customer.config_provider'
-            - '@oro_entity.entity_name_resolver'
+            - '@oro_sales.provider.customer.account_creation.chain'
 
     oro_sales.provider.opportunity.display_settings_config:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\DisplaySettingsConfigProvider
@@ -534,6 +534,26 @@ services:
         class: Oro\Bundle\SalesBundle\Form\EventListener\CustomerAssociationAccountFieldListener
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addAccountField, priority: 10 }
+
+    oro_sales.customers.customer_association_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\CustomerAssociationListener
+        arguments:
+            - '@oro_sales.manager.account_customer'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+            - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
+    oro_sales.provider.customer.account_creation.chain:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider
+
+    oro_sales.provider.customer.account_creation.default:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\DefaultStrategy
+        arguments:
+            - '@oro_entity.entity_name_resolver'
+        tags:
+         - { name: oro_sales.provider.customer.account_creation }
 
     oro_sales.create_opportunity.widget_provider.actions:
         parent: oro_ui.widget_provider.action_button.abstract

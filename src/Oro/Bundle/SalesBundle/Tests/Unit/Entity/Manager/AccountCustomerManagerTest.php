@@ -73,7 +73,7 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
     public function testCreateCustomerFromAccount()
     {
         $account  = (new Account())->setName('test');
-        $customer = $this->manager->createCustomerFromAccount($account);
+        $customer = $this->manager->createCustomer($account);
         $this->assertEquals($account, $customer->getAccount());
     }
 

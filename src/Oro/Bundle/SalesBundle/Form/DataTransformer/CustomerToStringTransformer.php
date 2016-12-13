@@ -47,7 +47,7 @@ class CustomerToStringTransformer implements DataTransformerInterface
         }
 
         if (!empty($data['value'])) {
-            return AccountCustomerManager::createCustomerFromAccount((new Account())->setName($data['value']));
+            return AccountCustomerManager::createCustomer((new Account())->setName($data['value']));
         }
 
         $target = $this->entityToStringTransformer->reverseTransform($value);

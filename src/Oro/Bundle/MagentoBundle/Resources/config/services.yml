@@ -1044,3 +1044,19 @@ services:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
         tags:
             - { name: doctrine.event_subscriber }
+
+    oro_magento.provider.customer.account:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountProvider
+        arguments:
+            - '@oro_magento.provider.customer.account.new_entities_helper'
+        public: false
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+
+    oro_magento.provider.customer.account.new_entities_helper:
+        class: Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: onClear }

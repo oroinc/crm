@@ -5,15 +5,15 @@ namespace Oro\Bundle\SalesBundle\Entity\Manager;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityNotFoundException;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
-use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\AccountBundle\Entity\Account;
+
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Exception\Customer\InvalidCustomerRelationEntityException;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class AccountCustomerManager
@@ -24,22 +24,22 @@ class AccountCustomerManager
     /** @var ConfigProvider */
     protected $provider;
 
-    /** @var EntityNameResolver */
-    protected $nameResolver;
+    /** @var AccountProviderInterface */
+    protected $accountProvider;
 
     /**
-     * @param DoctrineHelper     $doctrineHelper
-     * @param ConfigProvider     $provider
-     * @param EntityNameResolver $nameResolver
+     * @param DoctrineHelper           $doctrineHelper
+     * @param ConfigProvider           $provider
+     * @param AccountProviderInterface $accountProvider
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ConfigProvider $provider,
-        EntityNameResolver $nameResolver
+        AccountProviderInterface $accountProvider
     ) {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->provider       = $provider;
-        $this->nameResolver   = $nameResolver;
+        $this->doctrineHelper  = $doctrineHelper;
+        $this->provider        = $provider;
+        $this->accountProvider = $accountProvider;
     }
 
     /**
@@ -56,17 +56,32 @@ class AccountCustomerManager
     }
 
     /**
-     * Creates new Customer from provided Account
+     * Creates new Customer from provided Account and optionally target
      *
-     * @param Account $account
+     * @param Account     $account
+     *
+     * @param object|null $target
      *
      * @return Customer
      */
-    public static function createCustomerFromAccount(Account $account)
+    public static function createCustomer(Account $account, $target = null)
     {
         $customer = new Customer();
 
-        return $customer->setTarget($account);
+        return $customer->setTarget($account, $target);
+    }
+
+    /**
+     * @param $target
+     *
+     * @return null|Account
+     */
+    public function createAccountForTarget($target)
+    {
+        $targetClassName = ClassUtils::getClass($target);
+        $this->assertValidTarget($targetClassName);
+
+        return $this->accountProvider->getAccount($target);
     }
 
     /**
@@ -83,7 +98,7 @@ class AccountCustomerManager
             $customerFields = $this->getCustomerTargetFields();
             $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
             if (!$customer) {
-                $customer = self::createCustomerFromAccount($target);
+                $customer = self::createCustomer($target);
             }
         } else {
             $targetClassName = ClassUtils::getClass($target);
@@ -128,7 +143,7 @@ class AccountCustomerManager
      */
     protected function assertValidTarget($targetClassName)
     {
-        if (!in_array($targetClassName, $this->provider->getCustomerClasses())) {
+        if (!in_array($targetClassName, $this->provider->getCustomerClasses(), true)) {
             throw new InvalidCustomerRelationEntityException(
                 sprintf('object of class "%s" is not valid customer target', $targetClassName)
             );
