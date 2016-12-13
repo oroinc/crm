@@ -40,8 +40,6 @@ class ChannelType extends AbstractType
     {
         $builder->addEventSubscriber($this->channelTypeSubscriber);
 
-        $accessType = $options['mode'] === 'create' ? 'selectable' : null;
-
         $builder->add(
             'name',
             'text',
@@ -55,7 +53,7 @@ class ChannelType extends AbstractType
             'channelType',
             'genemu_jqueryselect2_choice',
             [
-                'choices'  => $this->settingsProvider->getChannelTypeChoiceList($accessType),
+                'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,
                 'label'    => 'oro.channel.channel_type.label',
                 'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
@@ -95,8 +93,7 @@ class ChannelType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Oro\\Bundle\\ChannelBundle\\Entity\\Channel',
-                'mode' => null
+                'data_class' => 'Oro\\Bundle\\ChannelBundle\\Entity\\Channel'
             ]
         );
     }

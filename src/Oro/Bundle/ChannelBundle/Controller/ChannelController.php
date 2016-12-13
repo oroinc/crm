@@ -49,7 +49,7 @@ class ChannelController extends Controller
      */
     public function createAction()
     {
-        return $this->update(new Channel(), 'create');
+        return $this->update(new Channel());
     }
 
     /**
@@ -69,16 +69,14 @@ class ChannelController extends Controller
 
     /**
      * @param Channel $channel
-     * @param string $mode
      *
      * @return array
      */
-    protected function update(Channel $channel, $mode = null)
+    protected function update(Channel $channel)
     {
         $handler = $this->get('oro_channel.channel_form.handler');
-        $options = ['mode' => $mode];
 
-        if ($handler->process($channel, $options)) {
+        if ($handler->process($channel)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('oro.channel.controller.message.saved')

@@ -4,7 +4,6 @@ namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -30,9 +29,6 @@ class ChannelHandler
     /** @var EventDispatcherInterface */
     protected $dispatcher;
 
-    /** @var FormFactory */
-    protected $formFactory;
-
     /**
      * @param Request                  $request
      * @param FormInterface            $form
@@ -41,25 +37,23 @@ class ChannelHandler
      */
     public function __construct(
         Request $request,
+        FormInterface $form,
         RegistryInterface $registry,
-        EventDispatcherInterface $dispatcher,
-        FormFactory $formFactory
+        EventDispatcherInterface $dispatcher
     ) {
         $this->request    = $request;
+        $this->form       = $form;
         $this->registry   = $registry;
         $this->dispatcher = $dispatcher;
-        $this->formFactory = $formFactory;
     }
 
     /**
      * @param Channel $entity
-     * @param array $options - form options
      *
      * @return bool
      */
-    public function process(Channel $entity, $options)
+    public function process(Channel $entity)
     {
-        $this->form = $this->formFactory->create('oro_channel_form', null, $options);
         $this->handleRequestChannelType($entity);
         $this->form->setData($entity);
 
@@ -115,10 +109,6 @@ class ChannelHandler
     public function getFormView()
     {
         $isUpdateOnly = $this->request->get(self::UPDATE_MARKER, false);
-
-        if (!$this->form) {
-            $this->form = $this->formFactory->create('oro_channel_form');
-        }
 
         $form = $this->form;
         // take different form due to JS validation should be shown even in case when it was not validated on backend

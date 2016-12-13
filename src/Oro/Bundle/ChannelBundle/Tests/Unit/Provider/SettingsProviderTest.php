@@ -251,7 +251,6 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                     'entity_data' => [],
                     'channel_types' => [],
                 ],
-                '$accessType' => null,
                 '$expectedResults' => []
             ],
             'two channel type' => [
@@ -276,7 +275,6 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
                         ]
                     ],
                 ],
-                '$accessType' => null,
                 '$expectedResults' => ['custom' => 'Custom', 'magento' => 'Magento type']
             ]
         ];
@@ -288,8 +286,8 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $config
      * @param array $expectedResults
      */
-    public function testGetChannelTypeChoiceList(array $config, $accessType, array $expectedResults)
+    public function testGetChannelTypeChoiceList(array $config, array $expectedResults)
     {
-        $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getChannelTypeChoiceList($accessType));
+        $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getChannelTypeChoiceList());
     }
 }

@@ -144,11 +144,9 @@ class SettingsProvider
      * Returns channel types that could be used in channel type selector
      * sorted by priority
      *
-     * @param string $accessType
-     *
      * @return array
      */
-    public function getChannelTypeChoiceList($accessType = null)
+    public function getChannelTypeChoiceList()
     {
         $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $channelTypes = [];
@@ -165,13 +163,7 @@ class SettingsProvider
         );
 
         foreach (array_keys($settings) as $channelTypeName) {
-            if ($accessType === 'selectable') {
-                if ($settings[$channelTypeName]['selectable'] === true) {
-                    $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
-                }
-            } else {
-                $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
-            }
+            $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
         }
 
         return $channelTypes;
