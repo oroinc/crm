@@ -40,7 +40,7 @@ class ChannelType extends AbstractType
     {
         $builder->addEventSubscriber($this->channelTypeSubscriber);
 
-        $accessType = $options['mode'] === 'create' ? 'seletable' : null;
+        $accessType = $options['mode'] === 'create' ? 'selectable' : null;
 
         $builder->add(
             'name',

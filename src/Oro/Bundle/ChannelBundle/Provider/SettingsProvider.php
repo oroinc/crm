@@ -165,8 +165,8 @@ class SettingsProvider
         );
 
         foreach (array_keys($settings) as $channelTypeName) {
-            if ($accessType === 'seletable') {
-                if ($settings[$channelTypeName]['seletable'] === true) {
+            if ($accessType === 'selectable') {
+                if ($settings[$channelTypeName]['selectable'] === true) {
                     $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
                 }
             } else {
