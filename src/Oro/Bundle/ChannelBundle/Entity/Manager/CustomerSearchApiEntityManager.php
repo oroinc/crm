@@ -153,7 +153,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
                 ->select(
                     sprintf(
                         'channel.id AS channelId, e.id AS entityId, \'%s\' AS entityClass, account.name as accountName',
-                        str_replace('\'', '\'\'', $customerClass)
+                        $customerClass
                     )
                 )
                 ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel')
