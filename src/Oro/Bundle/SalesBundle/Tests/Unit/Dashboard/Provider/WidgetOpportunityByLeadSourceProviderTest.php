@@ -4,9 +4,9 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
-use Oro\Bundle\MultiCurrencyBundle\Query\CurrencyQueryBuilderTransformer;
 use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -160,8 +160,8 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ->method('transEnum')
             ->will($this->returnArgument(0));
 
-        /** @var EnumExtension|\PHPUnit_Framework_MockObject_MockObject $enumTranslator */
-        $qbTransformer = $this->getMockBuilder(CurrencyQueryBuilderTransformer::class)
+        /** @var CurrencyQueryBuilderTransformerInterface|\PHPUnit_Framework_MockObject_MockObject $qbTransformer */
+        $qbTransformer = $this->getMockBuilder(CurrencyQueryBuilderTransformerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
