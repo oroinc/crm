@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -29,6 +30,9 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
+    /** @var FeatureChecker|\PHPUnit_Framework_MockObject_MockObject */
+    protected $featureChecker;
+
     public function setUp()
     {
         $this->provider       = $this
@@ -48,11 +52,22 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->featureChecker = $this->getMockBuilder('Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->featureChecker
+            ->expects($this->any())
+            ->method('isFeatureEnabled')
+            ->with('sales_opportunity')
+            ->willReturn(true);
+
         $this->listener = new OpportunitiesListener(
             $this->provider,
             $this->translator,
             $this->doctrineHelper,
-            $this->configProvider
+            $this->configProvider,
+            $this->featureChecker
         );
     }
 

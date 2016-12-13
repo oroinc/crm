@@ -462,6 +462,7 @@ services:
             - '@translator'
             - '@oro_entity.doctrine_helper'
             - '@oro_entity_config.provider.customer'
+            - '@oro_featuretoggle.checker.feature_checker'
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
 
