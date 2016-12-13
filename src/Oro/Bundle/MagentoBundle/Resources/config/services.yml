@@ -551,6 +551,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customer-tracking-events-widget, method: onPreBuild, priority: 255 }
 
+    oro_magento.event_listener.account_view:
+        class: 'Oro\Bundle\SalesBundle\EventListener\AccountViewListener'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@request_stack'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.manager.account_customer'
+            - %oro_magento.entity.customer.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.magentoCustomerView, method: onView }
+
     # Customer API
     oro_magento.customer_address.manager.api:
         class: %oro_magento.customer_address.manager.api.class%
