@@ -983,6 +983,7 @@ services:
             - "@request"
             - "@doctrine"
             - "@security.context"
+            - "@oro_sales.manager.account_customer"
 
     oro_magento.form.api.handler.customer_address:
         class: %oro_magento.form.handler.customer_address.class%
