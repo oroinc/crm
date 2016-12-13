@@ -194,6 +194,7 @@ datagrid:
                 duplicate:
                     type: duplicate
                     data_name: a.name
+                    visible: false
         actions:
             view:
                 type:          navigate

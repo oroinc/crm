@@ -522,6 +522,7 @@ datagrid:
                 duplicate:
                     type: duplicate
                     data_name: email.email
+                    visible: false
         actions:
             view:
                 type: navigate
