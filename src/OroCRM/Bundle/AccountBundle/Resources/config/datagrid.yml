@@ -227,6 +227,7 @@ datagrid:
             entityHint: account
             export: true
             entity_pagination: true
+        views_list: '@orocrm_account.accounts_view_list'
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
