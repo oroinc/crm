@@ -110,20 +110,15 @@ services:
         tags:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
-    oro_channel.form.channel:
-        class: Symfony\Component\Form\Form
-        factory: ['@form.factory', 'createNamed']
-        arguments: ["oro_channel_form", "oro_channel_form", null]
-
     # handlers
     oro_channel.channel_form.handler:
         class: %oro_channel.channel_form.handler.class%
         scope: request
         arguments:
             - "@request"
-            - "@oro_channel.form.channel"
             - "@doctrine"
             - "@event_dispatcher"
+            - "@form.factory"
 
     oro_channel.channel_integration_form.handler:
         class: %oro_channel.channel_integration_form.handler.class%

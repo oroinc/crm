@@ -64,6 +64,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->scalarNode('integration_type')->cannotBeEmpty()->end()
+                            ->scalarNode('selectable')->defaultValue(false)->end()
                             ->scalarNode('customer_identity')
                                 ->cannotBeEmpty()
                                 ->defaultValue(self::DEFAULT_CUSTOMER_IDENTITY)

@@ -58,7 +58,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->type->buildForm($this->builder, []);
+        $this->type->buildForm($this->builder, ['mode' => 'create']);
 
         $this->assertSame(
             [
