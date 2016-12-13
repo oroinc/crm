@@ -30,12 +30,12 @@ class AddCustomerAssociation implements Migration, CustomerExtensionAwareInterfa
     {
         $table = $schema->createTable('test_customer1');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('name', 'text');
+        $table->addColumn('name', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
 
         $table = $schema->createTable('test_customer2');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('name', 'text');
+        $table->addColumn('name', 'string', ['length' => 255]);
         $table->setPrimaryKey(['id']);
     }
 
