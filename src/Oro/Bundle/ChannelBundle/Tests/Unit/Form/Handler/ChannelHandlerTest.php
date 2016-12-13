@@ -68,72 +68,72 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-//    public function testProcessUnsupportedRequest()
-//    {
-//        $this->formFactory->expects($this->once())->method('create')
-//            ->willReturn($this->form);
-//
-//        $this->form->expects($this->once())->method('setData')
-//            ->with($this->entity);
-//
-//        $this->form->expects($this->never())->method('submit');
-//        $this->dispatcher->expects($this->never())->method('dispatch');
-//
-//        $this->assertFalse($this->handler->process($this->entity, ['mode' => 'create']));
-//    }
-//
-//    /**
-//     * @dataProvider supportedMethods
-//     *
-//     * @param string $method
-//     */
-//    public function testProcessSupportedRequest($method)
-//    {
-//        $this->request->setMethod($method);
-//        $this->formFactory->expects($this->once())->method('create')
-//            ->willReturn($this->form);
-//
-//        $this->form->expects($this->once())->method('setData')
-//            ->with($this->entity);
-//        $this->form->expects($this->once())->method('submit')
-//            ->with($this->request);
-//        $this->dispatcher->expects($this->never())->method('dispatch');
-//
-//        $this->assertFalse($this->handler->process($this->entity, ['mode' => 'create']));
-//    }
-//
-//    /**
-//     * @return array
-//     */
-//    public function supportedMethods()
-//    {
-//        return [['POST', 'PUT']];
-//    }
-//
-//    public function testProcessValidData()
-//    {
-//        $this->request->setMethod('POST');
-//
-//        $this->formFactory->expects($this->once())->method('create')
-//            ->willReturn($this->form);
-//
-//        $this->form->expects($this->once())->method('setData')->with($this->entity);
-//        $this->form->expects($this->once())->method('submit')->with($this->request);
-//        $this->form->expects($this->once())->method('isValid')
-//            ->will($this->returnValue(true));
-//
-//        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
-//        $this->em->expects($this->once())->method('persist')->with($this->entity);
-//        $this->em->expects($this->once())->method('flush');
-//
-//        $this->dispatcher->expects($this->once())->method('dispatch')
-//            ->with(
-//                $this->equalTo(ChannelSaveEvent::EVENT_NAME),
-//                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')
-//            );
-//
-//        $this->assertTrue($this->handler->process($this->entity, ['mode' => 'create']));
-//    }
+    public function testProcessUnsupportedRequest()
+    {
+        $this->formFactory->expects($this->once())->method('create')
+            ->willReturn($this->form);
+
+        $this->form->expects($this->once())->method('setData')
+            ->with($this->entity);
+
+        $this->form->expects($this->never())->method('submit');
+        $this->dispatcher->expects($this->never())->method('dispatch');
+
+        $this->assertFalse($this->handler->process($this->entity, ['mode' => 'create']));
+    }
+
+    /**
+     * @dataProvider supportedMethods
+     *
+     * @param string $method
+     */
+    public function testProcessSupportedRequest($method)
+    {
+        $this->request->setMethod($method);
+        $this->formFactory->expects($this->once())->method('create')
+            ->willReturn($this->form);
+
+        $this->form->expects($this->once())->method('setData')
+            ->with($this->entity);
+        $this->form->expects($this->once())->method('submit')
+            ->with($this->request);
+        $this->dispatcher->expects($this->never())->method('dispatch');
+
+        $this->assertFalse($this->handler->process($this->entity, ['mode' => 'create']));
+    }
+
+    /**
+     * @return array
+     */
+    public function supportedMethods()
+    {
+        return [['POST', 'PUT']];
+    }
+
+    public function testProcessValidData()
+    {
+        $this->request->setMethod('POST');
+
+        $this->formFactory->expects($this->once())->method('create')
+            ->willReturn($this->form);
+
+        $this->form->expects($this->once())->method('setData')->with($this->entity);
+        $this->form->expects($this->once())->method('submit')->with($this->request);
+        $this->form->expects($this->once())->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
+        $this->em->expects($this->once())->method('persist')->with($this->entity);
+        $this->em->expects($this->once())->method('flush');
+
+        $this->dispatcher->expects($this->once())->method('dispatch')
+            ->with(
+                $this->equalTo(ChannelSaveEvent::EVENT_NAME),
+                $this->isInstanceOf('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')
+            );
+
+        $this->assertTrue($this->handler->process($this->entity, ['mode' => 'create']));
+    }
 
     /**
      * @dataProvider formViewDataProvider
