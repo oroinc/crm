@@ -519,6 +519,9 @@ datagrids:
                     type: choice-business-unit
                     data_name: c.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                duplicate:
+                    type: duplicate
+                    data_name: email.email
         actions:
             view:
                 type: navigate
