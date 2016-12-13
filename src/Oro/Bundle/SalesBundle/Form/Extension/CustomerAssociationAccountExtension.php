@@ -92,7 +92,6 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                     $customer = $this->manager->getAccountCustomerByTarget($target);
                     $customer->setTarget($account, $target);
                 } else {
-                    $account = $this->manager->createAccountForTarget($target);
                     $customer = AccountCustomerManager::createCustomer($account, $target);
                     $this->doctrineHelper->getEntityManager($customer)->persist($customer);
                 }
