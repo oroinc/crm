@@ -110,15 +110,22 @@ class AccountExtension extends AbstractExtension
     protected function getColumnDefinition()
     {
         return [
-            'label' => $this->customerConfigProvider->getLabel(Account::class),
+            'label'         => $this->customerConfigProvider->getLabel(Account::class),
+            'type'          => 'field',
+            'frontend_type' => 'string',
+            'translatable'  => true,
+            'editable'      => false,
+            'renderable'    => true,
         ];
     }
 
     protected function getColumnFilterDefinition()
     {
         return [
-            'type'      => 'string',
-            'data_name' => static::COLUMN_NAME,
+            'type'         => 'string',
+            'data_name'    => static::COLUMN_NAME,
+            'translatable' => true,
+            'enabled'      => true,
         ];
     }
 

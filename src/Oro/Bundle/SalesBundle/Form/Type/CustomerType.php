@@ -79,7 +79,9 @@ class CustomerType extends AbstractType
         $hasGridData         = false;
         $createCustomersData = [];
         foreach ($customersData as $customer) {
-            if ($this->securityFacade->isGranted($this->getGridAclResource($customer['gridName']))) {
+            if ($customer['gridName'] &&
+                $this->securityFacade->isGranted($this->getGridAclResource($customer['gridName']))
+            ) {
                 $hasGridData = true;
                 unset($customer['gridName']);
             }
