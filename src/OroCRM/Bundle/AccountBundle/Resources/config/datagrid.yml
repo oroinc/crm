@@ -191,6 +191,9 @@ datagrid:
                 updatedAt:
                     type:      datetime
                     data_name: a.updatedAt
+                duplicate:
+                    type: duplicate
+                    data_name: a.name
         actions:
             view:
                 type:          navigate
