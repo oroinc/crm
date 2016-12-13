@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity\Manager;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -12,6 +11,7 @@ use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\AccountProviderInterface;
 
 class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,8 +24,8 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
     /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
-    /** @var EntityNameResolver|\PHPUnit_Framework_MockObject_MockObject */
-    protected $nameResolver;
+    /** @var AccountProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $accountProvider;
 
     /** @var CustomerRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepo;
@@ -48,15 +48,12 @@ class AccountCustomerManagerTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(ConfigProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->nameResolver   = $this
-            ->getMockBuilder(EntityNameResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->accountProvider = $this->getMockForAbstractClass(AccountProviderInterface::class);
 
         $this->manager = new AccountCustomerManager(
             $this->doctrineHelper,
             $this->configProvider,
-            $this->nameResolver
+            $this->accountProvider
         );
     }
 

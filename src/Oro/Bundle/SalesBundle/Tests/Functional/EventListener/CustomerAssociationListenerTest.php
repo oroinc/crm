@@ -35,7 +35,12 @@ class CustomerAssociationListenerTest extends WebTestCase
             ->getQuery()
             ->getResult();
 
-        $target1Ids = array_map(function(TestCustomer1 $target) {return $target->getId();}, $targets1);
+        $target1Ids = array_map(
+            function (TestCustomer1 $target) {
+                return $target->getId();
+            },
+            $targets1
+        );
         $target1Field = AccountCustomerManager::getCustomerTargetField(TestCustomer1::class);
 
         $target2Repository = $em->getRepository(TestCustomer2::class);
@@ -45,7 +50,12 @@ class CustomerAssociationListenerTest extends WebTestCase
             ->getQuery()
             ->getResult();
 
-        $target2Ids = array_map(function(TestCustomer2 $target) {return $target->getId();}, $targets2);
+        $target2Ids = array_map(
+            function (TestCustomer2 $target) {
+                return $target->getId();
+            },
+            $targets2
+        );
         $target2Field = AccountCustomerManager::getCustomerTargetField(TestCustomer2::class);
 
         $customerRepository = $em->getRepository(Customer::class);
@@ -59,7 +69,7 @@ class CustomerAssociationListenerTest extends WebTestCase
             ->getResult();
 
         $customerTargets = array_map(
-            function(Customer $customer) {
+            function (Customer $customer) {
                 return $customer->getTarget();
             },
             $customers
@@ -100,8 +110,7 @@ class CustomerAssociationListenerTest extends WebTestCase
     {
         $name = 'test_%s_%s';
 
-        foreach (range(1, 5) as $id)
-        {
+        foreach (range(1, 5) as $id) {
             $this->loadTestCustomerTarget1($em, sprintf($name, 1, $id));
             $this->loadTestCustomerTarget2($em, sprintf($name, 2, $id));
         }
