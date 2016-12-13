@@ -63,3 +63,4 @@ channels:
             integration_type: magento
             customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
             lifetime_value: lifetime
+            seletable: true
