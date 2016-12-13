@@ -5,11 +5,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
-use Oro\Bundle\EntityBundle\ORM\QueryUtils;
-use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
+use Oro\Component\DoctrineUtils\ORM\SqlQueryBuilder;
+use Oro\Component\DoctrineUtils\ORM\UnionQueryBuilder;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
 use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
 use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
@@ -141,8 +142,12 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
         /** @var EntityManager $em */
         $em = $this->getObjectManager();
 
-        $selectStmt = null;
-        $subQueries = [];
+        $qb = new UnionQueryBuilder($em);
+        $qb
+            ->addSelect('channelId', 'channelId', Type::INTEGER)
+            ->addSelect('entityId', 'id', Type::INTEGER)
+            ->addSelect('entityClass', 'entity')
+            ->addSelect('accountName', 'accountName');
         foreach ($this->getCustomerListFilters($searchResult) as $customerClass => $customerIds) {
             $subQb = $em->getRepository($customerClass)->createQueryBuilder('e')
                 ->select(
@@ -154,35 +159,10 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
                 ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel')
                 ->leftJoin('e.account', 'account');
             $subQb->where($subQb->expr()->in('e.id', $customerIds));
-
-            $subQuery = $subQb->getQuery();
-
-            $subQueries[] = QueryUtils::getExecutableSql($subQuery);
-
-            if (empty($selectStmt)) {
-                $mapping    = QueryUtils::parseQuery($subQuery)->getResultSetMapping();
-                $selectStmt = sprintf(
-                    'entity.%s AS channelId, entity.%s as entityId, entity.%s AS entityClass, entity.%s as accountName',
-                    QueryUtils::getColumnNameByAlias($mapping, 'channelId'),
-                    QueryUtils::getColumnNameByAlias($mapping, 'entityId'),
-                    QueryUtils::getColumnNameByAlias($mapping, 'entityClass'),
-                    QueryUtils::getColumnNameByAlias($mapping, 'accountName')
-                );
-            }
+            $qb->addSubQuery($subQb->getQuery());
         }
 
-        $rsm = QueryUtils::createResultSetMapping($em->getConnection()->getDatabasePlatform());
-        $rsm
-            ->addScalarResult('channelId', 'channelId', 'integer')
-            ->addScalarResult('entityId', 'id', 'integer')
-            ->addScalarResult('entityClass', 'entity')
-            ->addScalarResult('accountName', 'accountName');
-        $qb = new SqlQueryBuilder($em, $rsm);
-        $qb
-            ->select($selectStmt)
-            ->from('(' . implode(' UNION ALL ', $subQueries) . ')', 'entity');
-
-        return $qb;
+        return $qb->getQueryBuilder();
     }
 
     /**
