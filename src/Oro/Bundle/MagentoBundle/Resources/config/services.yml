@@ -654,6 +654,7 @@ services:
         class: %oro_magento.provider.analytics.customer_recency.class%
         arguments:
             - "@oro_entity.doctrine_helper"
+            - "@oro_channel.provider.settings_provider"
             - %oro_magento.entity.customer.class%
         tags:
             - { name: oro_analytics.builder.rfm }
@@ -662,6 +663,7 @@ services:
         class: %oro_magento.provider.analytics.customer_frequency.class%
         arguments:
             - "@oro_entity.doctrine_helper"
+            - "@oro_channel.provider.settings_provider"
             - %oro_magento.entity.customer.class%
         tags:
             - { name: oro_analytics.builder.rfm }
@@ -671,6 +673,7 @@ services:
         class: %oro_magento.provider.analytics.customer_monetary.class%
         arguments:
             - "@oro_entity.doctrine_helper"
+            - "@oro_channel.provider.settings_provider"
             - %oro_magento.entity.customer.class%
         tags:
             - { name: oro_analytics.builder.rfm }

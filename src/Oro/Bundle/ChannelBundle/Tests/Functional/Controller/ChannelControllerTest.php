@@ -126,7 +126,7 @@ class ChannelControllerTest extends WebTestCase
     }
 
     /**
-     * @depends testChangeStatusChannel
+     * @depends testUpdateChannel
      *
      * @param $channel
      */

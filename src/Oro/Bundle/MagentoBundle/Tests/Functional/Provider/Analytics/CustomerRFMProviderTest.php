@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Provider\Analytics;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Provider\Analytics;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -31,12 +31,13 @@ class CustomerRFMProviderTest extends WebTestCase
     public function testAnalyticsProviderValues($dataChannelRef, array $expectedValue)
     {
         $doctrineHelper = $this->getContainer()->get('oro_entity.doctrine_helper');
+        $settings = $this->getContainer()->get('oro_channel.provider.settings_provider');
         /** @var Channel $dataChannel */
         $dataChannel = $this->getReference($dataChannelRef);
         $className = 'Oro\Bundle\MagentoBundle\Entity\Customer';
-        $recencyProvider = new CustomerRecencyProvider($doctrineHelper, $className);
-        $frequencyProvider = new CustomerFrequencyProvider($doctrineHelper, $className);
-        $monetaryProvider = new CustomerMonetaryProvider($doctrineHelper, $className);
+        $recencyProvider = new CustomerRecencyProvider($doctrineHelper, $settings, $className);
+        $frequencyProvider = new CustomerFrequencyProvider($doctrineHelper, $settings, $className);
+        $monetaryProvider = new CustomerMonetaryProvider($doctrineHelper, $settings, $className);
 
         $recencyData = $recencyProvider->getValues($dataChannel);
         $this->assertCount(1, $recencyData);
