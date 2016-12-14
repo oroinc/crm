@@ -48,7 +48,7 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                     'is_extend' => true,
                 ],
                 'form' => [
-                    'is_enabled' => false,
+                    'is_enabled' => true,
                     'form_type' => 'oro_channel_select_type'
                 ],
                 'view' => ['is_displayable' => true],
@@ -72,7 +72,7 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                     'is_extend' => true,
                 ],
                 'form' => [
-                    'is_enabled' => false,
+                    'is_enabled' => true,
                     'form_type' => 'oro_channel_select_type'
                 ],
                 'view' => ['is_displayable' => true],
