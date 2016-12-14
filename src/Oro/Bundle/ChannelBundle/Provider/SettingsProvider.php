@@ -72,6 +72,23 @@ class SettingsProvider
     }
 
     /**
+     * Return whether given entity is related to customer
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool
+     */
+    public function isCustomerEntity($entityFQCN)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $classes = array_map(function ($item) {
+            return $item['customer_identity'];
+        }, $settings);
+
+        return in_array($entityFQCN, $classes, true);
+    }
+
+    /**
      * Return whether entity dependent to any business entity
      *
      * @param string $entityFQCN entity full class name

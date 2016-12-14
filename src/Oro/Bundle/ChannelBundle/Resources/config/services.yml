@@ -148,6 +148,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_search.index"
             - "@event_dispatcher"
+            - "@oro_channel.provider.settings_provider"
 
     # Providers
     oro_channel.provider.settings_provider:

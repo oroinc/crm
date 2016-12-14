@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\ChannelBundle\Entity\Manager;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -8,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\EntityBundle\ORM\QueryUtils;
 use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
@@ -22,28 +24,32 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
     const CHANNEL_ENTITY_CLASS = 'Oro\Bundle\ChannelBundle\Entity\Channel';
 
-    const CUSTOMER_IDENTITY_INTERFACE = 'Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface';
-
     /** @var SearchIndexer */
     protected $searchIndexer;
 
     /** @var EventDispatcherInterface */
     protected $dispatcher;
 
+    /** @var SettingsProvider */
+    protected $settings;
+
     /**
      * {@inheritdoc}
-     * @param SearchIndexer            $searchIndexer
+     * @param SearchIndexer $searchIndexer
      * @param EventDispatcherInterface $dispatcher
+     * @param SettingsProvider $settings
      */
     public function __construct(
         $class,
         ObjectManager $om,
         SearchIndexer $searchIndexer,
-        EventDispatcherInterface $dispatcher
+        EventDispatcherInterface $dispatcher,
+        SettingsProvider $settings
     ) {
         parent::__construct($class, $om);
         $this->searchIndexer = $searchIndexer;
-        $this->dispatcher   = $dispatcher;
+        $this->dispatcher = $dispatcher;
+        $this->settings = $settings;
     }
 
     /**
@@ -263,7 +269,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
                     return
                         !$metadata->isMappedSuperclass
-                        && $metadata->getReflectionClass()->isSubclassOf(self::CUSTOMER_IDENTITY_INTERFACE);
+                        && $this->settings->isCustomerEntity($metadata->getReflectionClass()->getName());
                 }
             )
         );

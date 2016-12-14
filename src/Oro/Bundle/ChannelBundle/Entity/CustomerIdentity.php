@@ -5,7 +5,6 @@ namespace Oro\Bundle\ChannelBundle\Entity;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ChannelBundle\Model\ExtendCustomerIdentity;
 
@@ -33,7 +32,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *  }
  * )
  */
-class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInterface, CustomerIdentityInterface
+class CustomerIdentity extends ExtendCustomerIdentity implements ChannelAwareInterface
 {
     use ChannelEntityTrait;
 
