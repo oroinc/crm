@@ -6,18 +6,34 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class CreateActivityAssociation implements Migration, ActivityExtensionAwareInterface, NoteExtensionAwareInterface
+class CreateActivityAssociation implements Migration, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
-    /** @var NoteExtension */
-    protected $noteExtension;
+    /**
+     * {@inheritdoc}
+     */
+    public function up(Schema $schema, QueryBag $queries)
+    {
+        $this->addNoteAssociations($schema);
+    }
+
+    /**
+     * Enable notes for Magento Order entity
+     *
+     * @param Schema $schema
+     */
+    protected function addNoteAssociations(Schema $schema)
+    {
+        $associationTableName = $this->activityExtension->getAssociationTableName('oro_note', 'orocrm_magento_order');
+        if (!$schema->hasTable($associationTableName)) {
+            $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_magento_order');
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -25,35 +41,5 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function up(Schema $schema, QueryBag $queries)
-    {
-        self::addNoteAssociations($schema, $this->noteExtension);
-    }
-
-    /**
-     * Enable notes for Magento Order entity
-     *
-     * @param Schema        $schema
-     * @param NoteExtension $noteExtension
-     */
-    public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
-    {
-        $table = $schema->getTable('oro_note');
-        if (!$table->hasColumn($noteExtension->getAssociationColumnName('orocrm_magento_order'))) {
-            $noteExtension->addNoteAssociation($schema, 'orocrm_magento_order');
-        }
     }
 }

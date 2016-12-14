@@ -22,8 +22,8 @@ Feature: Activity list feature
 
   Scenario: Paginate activity list
     Given the following note:
-      | target          | createdAt                       | updatedAt                       |
-      | @contactCharlie | <dateTimeBetween("now", "now")> | <dateTimeBetween("now", "now")> |
+      | activityTargets   | createdAt                       | updatedAt                       |
+      | [@contactCharlie] | <dateTimeBetween("now", "now")> | <dateTimeBetween("now", "now")> |
     And I reset Activity Type filter
     And I shouldn't see "Merry Christmas" email in activity list
     When go to older activities
