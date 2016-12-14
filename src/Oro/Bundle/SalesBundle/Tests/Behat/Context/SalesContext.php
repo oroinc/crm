@@ -50,6 +50,8 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
+     * Load account_with_customers.yml alice fixture
+     *
      * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
      */
     public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
@@ -58,6 +60,8 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
+     * Load users.yml alice fixture
+     *
      * @Given /^two users (charlie) and (samantha) exists in the system$/
      */
     public function twoUsersExistsInTheSystem()
@@ -66,6 +70,10 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
+     * Create Channel with enabled entities from frontend
+     * Example: And "First Sales Channel" is a channel with enabled Business Customer entity
+     * Example: And "First Sales Channel" is a channel with enabled Business Customer, Magento Customer entities
+     *
      * @Given /^"(?P<channelName>([\w\s]+))" is a channel with enabled (?P<entities>(.+)) (entities|entity)$/
      */
     public function createChannelWithEnabledEntities($channelName, $entities)
@@ -115,6 +123,8 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
+     * Load accounts_with_customers.yml alice fixture
+     *
      * @Given they has their own Accounts and Customers
      */
     public function accountHasBusinessCustomers()

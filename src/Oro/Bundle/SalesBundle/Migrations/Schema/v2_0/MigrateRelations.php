@@ -25,7 +25,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
     {
         $this->renameActivityTables($schema, $queries);
         $this->updateAttachments($schema, $queries);
-        $this->updateNotes($schema, $queries);
 
         $queries->addPostQuery(
             new UpdateEntityConfigFieldValueQuery(
@@ -135,54 +134,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             'Oro\Bundle\SalesBundle\Entity\Opportunity',
             'opportunity_ec95a95f',
             'opportunity_f89bd07c',
-            RelationType::MANY_TO_ONE
-        ));
-    }
-
-    /**
-     * @param Schema $schema
-     * @param QueryBag $queries
-     */
-    private function updateNotes(Schema $schema, QueryBag $queries)
-    {
-        $extension = $this->renameExtension;
-        $notes = $schema->getTable('oro_note');
-
-        $notes->removeForeignKey('FK_BA066CE1D449B7E7');
-        $extension->renameColumn($schema, $queries, $notes, 'opportunity_ec95a95f_id', 'opportunity_f89bd07c_id');
-        $extension->addForeignKeyConstraint(
-            $schema,
-            $queries,
-            'oro_note',
-            'orocrm_sales_opportunity',
-            ['opportunity_f89bd07c_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\NoteBundle\Entity\Note',
-            'Oro\Bundle\SalesBundle\Entity\Opportunity',
-            'opportunity_ec95a95f',
-            'opportunity_f89bd07c',
-            RelationType::MANY_TO_ONE
-        ));
-
-        $notes->removeForeignKey('fk_oro_note_lead_5b29b7d2_id');
-        $extension->renameColumn($schema, $queries, $notes, 'lead_5b29b7d2_id', 'lead_ac2d73a_id');
-        $extension->addForeignKeyConstraint(
-            $schema,
-            $queries,
-            'oro_note',
-            'orocrm_sales_lead',
-            ['lead_ac2d73a_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\NoteBundle\Entity\Note',
-            'Oro\Bundle\SalesBundle\Entity\Lead',
-            'lead_5b29b7d2',
-            'lead_ac2d73a',
             RelationType::MANY_TO_ONE
         ));
     }
