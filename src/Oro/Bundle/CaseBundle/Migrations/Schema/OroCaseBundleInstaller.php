@@ -12,26 +12,19 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\CaseBundle\Migrations\Schema\v1_7\InheritanceActivityTargets;
-use Oro\Bundle\CaseBundle\Migrations\Schema\v1_8\CreateActivityAssociation;
 
 class OroCaseBundleInstaller implements
     Installation,
     AttachmentExtensionAwareInterface,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface,
-    NoteExtensionAwareInterface
+    ActivityListExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
 
     /** @var ActivityExtension */
     protected $activityExtension;
-
-    /** @var NoteExtension */
-    protected $noteExtension;
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
@@ -71,15 +64,6 @@ class OroCaseBundleInstaller implements
     /**
      * {@inheritdoc}
      */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
@@ -100,8 +84,7 @@ class OroCaseBundleInstaller implements
         $this->addOrocrmCaseCommentForeignKeys($schema);
         $this->addOroEmailMailboxProcessSettingsForeignKeys($schema);
 
-        $this->addActivityAssociations($schema, $this->activityExtension);
-        CreateActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
+        $this->addActivityAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
@@ -433,11 +416,11 @@ class OroCaseBundleInstaller implements
     /**
      * Enables Email activity for Case entity
      *
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
+     * @param Schema $schema
      */
-    protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    protected function addActivityAssociations(Schema $schema)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_case');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
     }
 }

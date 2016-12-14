@@ -6,8 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -22,7 +20,6 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroMagentoBundle as IntegrationUpdate;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
-use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_40\CreateActivityAssociation as OrderActivityAssociation;
 
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
@@ -41,7 +38,6 @@ class OroMagentoBundleInstaller implements
     ExtendExtensionAwareInterface,
     VisitEventAssociationExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    NoteExtensionAwareInterface,
     OpportunityExtensionAwareInterface,
     LeadExtensionAwareInterface
 {
@@ -49,9 +45,6 @@ class OroMagentoBundleInstaller implements
 
     /** @var ActivityExtension */
     protected $activityExtension;
-
-    /** @var NoteExtension */
-    protected $noteExtension;
 
     /** @var IdentifierEventExtension */
     protected $identifierEventExtension;
@@ -79,14 +72,6 @@ class OroMagentoBundleInstaller implements
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
     }
 
     /**
@@ -174,7 +159,6 @@ class OroMagentoBundleInstaller implements
         $this->addOrocrmMagentoNewslSubscrForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
-        OrderActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
         $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
         $this->leadExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
@@ -1454,6 +1438,7 @@ class OroMagentoBundleInstaller implements
      */
     protected function addActivityAssociations(Schema $schema)
     {
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_magento_order');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
 
         CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
