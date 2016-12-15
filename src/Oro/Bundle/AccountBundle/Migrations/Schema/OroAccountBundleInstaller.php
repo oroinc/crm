@@ -14,8 +14,6 @@ use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
 use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
@@ -26,14 +24,10 @@ use Oro\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
  */
 class OroAccountBundleInstaller implements
     Installation,
-    NoteExtensionAwareInterface,
     ActivityExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
     AttachmentExtensionAwareInterface
 {
-    /** @var NoteExtension */
-    protected $noteExtension;
-
     /** @var ActivityExtension */
     protected $activityExtension;
 
@@ -49,14 +43,6 @@ class OroAccountBundleInstaller implements
     public function setActivityListExtension(ActivityListExtension $activityListExtension)
     {
         $this->activityListExtension = $activityListExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
     }
 
     /**
@@ -96,7 +82,7 @@ class OroAccountBundleInstaller implements
         $this->addOrocrmAccountForeignKeys($schema);
         $this->addOrocrmAccountToContactForeignKeys($schema);
 
-        $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,

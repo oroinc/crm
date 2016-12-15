@@ -13,7 +13,7 @@ class OroAnalyticsBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_0';
+        return 'v2_0';
     }
 
     /**

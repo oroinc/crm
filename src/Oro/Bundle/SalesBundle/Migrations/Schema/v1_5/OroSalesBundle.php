@@ -4,41 +4,44 @@ namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-class OroSalesBundle implements Migration, NoteExtensionAwareInterface
+class OroSalesBundle implements Migration, ActivityExtensionAwareInterface
 {
-    /** @var NoteExtension */
-    protected $noteExtension;
-
     /**
-     * {@inheritdoc}
+     * @var ActivityExtension
      */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
+    protected $activityExtension;
 
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addNoteAssociations($schema, $this->noteExtension);
+        $this->addNoteAssociations($schema);
     }
 
     /**
      * Enable notes for Lead and Opportunity entities
      *
-     * @param Schema        $schema
-     * @param NoteExtension $noteExtension
+     * @param Schema $schema
      */
-    public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
+    protected function addNoteAssociations(Schema $schema)
     {
-        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_lead');
-        $noteExtension->addNoteAssociation($schema, 'orocrm_sales_opportunity');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_sales_lead');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_sales_opportunity');
+    }
+
+    /**
+     * Sets the ActivityExtension
+     *
+     * @param ActivityExtension $activityExtension
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
     }
 }
