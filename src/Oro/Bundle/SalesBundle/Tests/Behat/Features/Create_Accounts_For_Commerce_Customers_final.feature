@@ -102,11 +102,11 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
 
 # Req ID CRM-6111-9, CRM-6111-10, CRM-6111-11, Req ID CRM-6111-12, Req ID CRM-6111-13
 # Req ID CRM-6111-14,
-    Scenario: Checking that the user can view customer details in "OroCommerce" section on the ‘Account’ view
+    Scenario: Checking that the user can view customer details in "OroCommerce" section on the "Account" view
     Given I go to Customers/ Accounts
     And I click on <Account> on Account grid
     And Account view is displayed
-    Then I see that 'Commerce Customers’ section is available on the ‘Account’ view
+    Then I see that "Commerce Customers" section is available on the "Account" view
     And I can see the following tabs in "Commerce Customers" section on Account view:
     | Tabs                |
     | Customer Users      |
