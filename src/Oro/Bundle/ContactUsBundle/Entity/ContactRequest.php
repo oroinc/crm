@@ -9,8 +9,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
 
 /**
@@ -44,10 +42,8 @@ use Oro\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *      }
  * )
  */
-class ContactRequest extends ExtendContactRequest implements ChannelAwareInterface
+class ContactRequest extends ExtendContactRequest
 {
-    use ChannelEntityTrait;
-
     const CONTACT_METHOD_BOTH  = 'oro.contactus.contactrequest.method.both';
     const CONTACT_METHOD_PHONE = 'oro.contactus.contactrequest.method.phone';
     const CONTACT_METHOD_EMAIL = 'oro.contactus.contactrequest.method.email';
