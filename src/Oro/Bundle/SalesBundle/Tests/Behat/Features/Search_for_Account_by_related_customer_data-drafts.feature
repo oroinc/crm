@@ -10,7 +10,7 @@
   # A-Z
   # a-z
   # 0-9
-  # { [ ( ~ ! @ # $ % ^ & * ` | \ : ” ; ’ < > ? , . / * - + ) ] }
+  # special characters
   # Blank spaces
   # special set - 2 blank spaces – should be trimmed and error message should be displayed
   # Blank spaces followed with special characters or numbers
