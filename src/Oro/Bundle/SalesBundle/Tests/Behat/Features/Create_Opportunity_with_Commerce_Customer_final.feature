@@ -16,7 +16,7 @@ Scenario: Create Opportunity and relate existing customer to it by pressing hamb
   And I start filling out all mandatory fields with the following data:
     | Owner     | Opportunity Name    | Status  |
     | John Doe  | Prospective Andrew  | Open    |
-  And I press “hamburger" button on “Account” field
+  And I press "hamburger" button on "Account" field
   And “Account” popup will be displayed
   And I select “Partner C” customer
   Then “Partner C (Customer)” should be visible in the “Account” field
