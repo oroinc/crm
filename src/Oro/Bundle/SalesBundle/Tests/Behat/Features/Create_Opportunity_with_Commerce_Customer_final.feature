@@ -16,7 +16,7 @@ Scenario: Create Opportunity and relate existing customer to it by pressing hamb
   And I start filling out all mandatory fields with the following data:
     | Owner     | Opportunity Name    | Status  |
     | John Doe  | Prospective Andrew  | Open    |
-  And I press “hamburger’ button on “Account” field
+  And I press "hamburger" button on "Account" field
   And “Account” popup will be displayed
   And I select “Partner C” customer
   Then “Partner C (Customer)” should be visible in the “Account” field
@@ -56,7 +56,7 @@ Scenario: Create Opportunity, create new commerce customer and relate opportunit
     | Owner     | Name               |  Account   |
     | John Doe  | Customer Creation  |  Account G |
   And I press "Save" button
-  Then I should see "Customer Creation (Customer) in Account field
+  Then I should see "Customer Creation (Customer)" in Account field
   And I fill out other mandatory fields with the following:
     | Owner     | Opportunity Name  | Channel         | Status  |
     | John Doe  | Prospective Kate  | Magento Channel | Open    |
