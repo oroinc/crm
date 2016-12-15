@@ -221,7 +221,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | BATEMAN.COM             |
 
   Scenario Outline: Searching for keyword by relevant Magento customer phone
-
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" contact in search result
@@ -242,7 +241,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 0672659873  |
 
     Scenario Outline: Searching for keyword by relevant Commerce customer's name
-
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
@@ -291,16 +289,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
 
 
 
-    Scenario: Searching for keyword by relevant Commerce customer phone
-
-      Given I am on "Create Opportunity" page
+    Scenario Outline: Searching for keyword by relevant Commerce customer phone
+     Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant Commerce customers that contain <keyword>
       And <keyword> in search results should be underlined
       And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
-
     Examples:
         | keyword     |
         | 06          |
@@ -317,7 +313,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     Given I am on "Create Opportunity" page
     And I start typing "067" in "Account" field
     Then I should see 20 relevant contacts in search result from the following table:
-
         | Contact             | Phone       |
         | Drew Latham         | 0671234568  |
         | Tom Valco           | 0671598763  |
@@ -367,7 +362,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | Owner     | Opportunity Name  | Channel       | Status  | Account     |
         | John Doe  | New Opportunity   | Sales Channel | Open    | Josh Gordon |
 
-  Scenario: Search results should not be shown for entities names
+  Scenario Outline: Search results should not be shown for entities names
     Given I am on "Create Opportunity" page
     And I start typing <Entity name> into the Account field
     Then nothing appears in search results
