@@ -1,5 +1,5 @@
 @not-automated
-@drafts
+@draft
 
   # functionality - to be tested for:
   # CRM - Magento customers
@@ -70,8 +70,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | Bill Saito          | 0672259637  |
       | Mike Bell           | 0671115872  |
 
-  Scenario: Searching for keyword by relevant account name
-
+  Scenario Outline: Searching for keyword by relevant account name
     Given I log in as Administrator
     And I go to Sales/ Opportunities
     And I press "Create Opportunity" button
@@ -99,7 +98,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | lawrence  |
         | Lawrence  |
 
-    Scenario: Searching for keyword by relevant contact name
+    Scenario Outline: Searching for keyword by relevant contact name
       Given I am on "create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
@@ -123,7 +122,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | pr      |
         | PR      |
 
-    Scenario: Searching for keyword by relevant contact phone
+    Scenario Outline: Searching for keyword by relevant contact phone
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
@@ -143,7 +142,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 050148779   |
       | 0501487795  |
 
-    Scenario: Searching for keyword by relevant contact email
+    Scenario Outline: Searching for keyword by relevant contact email
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
@@ -170,7 +169,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | .com                    |
       | SCREENPLAY@ARRIVAL.COM  |
 
-  Scenario: Searching for keyword by relevant Magento customer's name
+  Scenario Outline: Searching for keyword by relevant Magento customer's name
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
@@ -194,7 +193,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | GO      |
       | go      |
 
-  Scenario: Searching for keyword by relevant Magento customer's email
+  Scenario Outline: Searching for keyword by relevant Magento customer's email
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
@@ -221,7 +220,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | .com                    |
       | BATEMAN.COM             |
 
-  Scenario: Searching for keyword by relevant Magento customer phone
+  Scenario Outline: Searching for keyword by relevant Magento customer phone
 
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
@@ -242,7 +241,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 067265987   |
       | 0672659873  |
 
-    Scenario: Searching for keyword by relevant Commerce customer's name
+    Scenario Outline: Searching for keyword by relevant Commerce customer's name
 
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
@@ -267,7 +266,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | MA      |
         | ma      |
 
-    Scenario: Searching for keyword by relevant Commerce customer's email
+    Scenario Outline: Searching for keyword by relevant Commerce customer's email
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
@@ -275,7 +274,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       And <keyword> in search results should be underlined
       And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
-
     Examples:
         | keyword               |
         | re                    |
