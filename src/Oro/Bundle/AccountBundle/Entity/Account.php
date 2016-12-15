@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\AccountBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -67,7 +65,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -82,7 +79,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @var string
      *
      * @ORM\Column(type="string", length=255)
-     * @Soap\ComplexType("string")
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
@@ -104,7 +100,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "merge"={
@@ -169,7 +164,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -187,7 +181,6 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "entity"={

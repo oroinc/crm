@@ -4,7 +4,6 @@ namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -26,7 +25,6 @@ class Method
      *
      * @ORM\Column(name="name", type="string", length=32)
      * @ORM\Id
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -41,7 +39,6 @@ class Method
      * @var string
      *
      * @ORM\Column(name="label", type="string", length=255, unique=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $label;
 
