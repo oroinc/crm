@@ -106,7 +106,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
+      And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
     Examples:
         | keyword |
@@ -130,7 +130,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
+      And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
 
     Examples:
@@ -151,8 +151,8 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
-      And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
+      And grouping for search results should be the following: Account - relevant contact
+      And "Chris Pratt" contact should be displayed as "Chris Pratt (Contact)"
 
     Examples:
       | keyword                 |
@@ -175,12 +175,12 @@ Feature: In order to quickly find necessary account even if I don't remember it'
 
   Scenario: Searching for keyword by relevant Magento customer's name
 
-    Given I am on "create Opportunity" page
+    Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
     And I should see all relevant customers that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant magento customer
+    And grouping for search results should be the following: Account - relevant magento customer
     And "Josh Gordon" customer should be displayed as "Josh Gordon" (Magento Customer)
   Examples:
       | keyword |
@@ -204,7 +204,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     Then I should see "Josh Gordon" Magento customer in search result
     And I should see all relevant contacts that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant magento customer
+    And grouping for search results should be the following: Account - relevant magento customer
     And "Josh Gordon" Magento customer should be displayed as "Josh Gordon" (Magento customer)
 
   Examples:
@@ -235,7 +235,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     Then I should see "Josh Gordon" contact in search result
     And I should see all relevant contacts that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant contact
+    And grouping for search results should be the following: Account - relevant contact
     And "Josh Gordon" contact should be displayed as "Josh Gordon" (Contact)
 
   Examples:
@@ -254,12 +254,12 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     --------------
     Scenario: Searching for keyword by relevant Commerce customer's name
 
-      Given I am on "create Opportunity" page
+      Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant commerce customer
+      And grouping for search results should be the following: Account - relevant commerce customer
       And "Justin Malen" customer should be displayed as "Justin Malen" (Commerce Customer)
     Examples:
         | keyword |
@@ -283,7 +283,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant Commerce customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant Commerce customer
+      And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
 
     Examples:
@@ -310,7 +310,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant Commerce customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant Commerce customer
+      And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
 
     Examples:
@@ -379,7 +379,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | Owner     | Opportunity Name  | Channel       | Status  | Account     |
         | John Doe  | New Opportunity   | Sales Channel | Open    | Josh Gordon |
 
-  Scenario: Search results should not be shown for entities' names
+  Scenario: Search results should not be shown for entities names
     Given I am on "Create Opportunity" page
     And I start typing <Entity name> into the Account field
     Then nothing appears in search results
