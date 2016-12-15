@@ -81,7 +81,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     And I should see all relevant accounts that contain <keyword>
     And <keyword> in search results should be underlined
     And "Jennifer Lawrence" account should be displayed as "Jennifer Lawrence" (Account)
-
     Examples:
         | keyword   |
         | Je        |
@@ -132,7 +131,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       And <keyword> in search results should be underlined
       And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
-
     Examples:
       | keyword     |
       | 05          |
@@ -153,7 +151,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       And <keyword> in search results should be underlined
       And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt (Contact)"
-
     Examples:
       | keyword                 |
       | sc                      |
@@ -174,7 +171,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | SCREENPLAY@ARRIVAL.COM  |
 
   Scenario: Searching for keyword by relevant Magento customer's name
-
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
@@ -206,7 +202,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     And <keyword> in search results should be underlined
     And grouping for search results should be the following: Account - relevant magento customer
     And "Josh Gordon" Magento customer should be displayed as "Josh Gordon" (Magento customer)
-
   Examples:
       | keyword                 |
       | of                      |
@@ -226,8 +221,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | .com                    |
       | BATEMAN.COM             |
 
-
-
   Scenario: Searching for keyword by relevant Magento customer phone
 
     Given I am on "Create Opportunity" page
@@ -237,7 +230,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     And <keyword> in search results should be underlined
     And grouping for search results should be the following: Account - relevant contact
     And "Josh Gordon" contact should be displayed as "Josh Gordon" (Contact)
-
   Examples:
       | keyword     |
       | 06          |
@@ -250,8 +242,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 067265987   |
       | 0672659873  |
 
-
-    --------------
     Scenario: Searching for keyword by relevant Commerce customer's name
 
       Given I am on "Create Opportunity" page
