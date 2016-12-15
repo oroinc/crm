@@ -32,7 +32,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
    Background:
     Given the owner named John Doe
     And account named Jennifer Lawrence
-    And two contacts that belong to account Jennifer Lawrence"
+    And two contacts that belong to account "Jennifer Lawrence"
       | Name          | Phone       | Email                   |
       | Chris Pratt   | 0501463398  | whatever@passengers.com |
       | Jeremy Renner | 0501487795  | screenplay@arrival.com  |
