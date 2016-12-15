@@ -1,10 +1,11 @@
 @not-automated
+@draft
 Feature: Creating Accounts for Commerce Customers
 In order to manage commerce customers after CRM/Commerce integration more efficiently
 As an Administrator
 I want to be able to create CRM accounts for Commerce Customers
 
-  Background:
+  Scenario: Feature Background
     Given a successful installation CRM and Commerce
     And root customer named "Company A"
     And children customer named Company A - East Division
@@ -77,7 +78,7 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
 
 
 # Req ID CRM-6111-8
-    Scenario: Checking that the "Account" column is available on Customers grid and is editable inline
+    Scenario Outline: Checking that the "Account" column is available on Customers grid and is editable inline
     Given I go to Customers/ Customers
     When I observe the Customers grid
     Then I see that the "Account" column is visible
@@ -90,7 +91,7 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
       | Wholesaler B  |
 
 
-    Scenario: Checking that the user can change Account when editing the Customer
+    Scenario Outline: Checking that the user can change Account when editing the Customer
     Given I click "Magento Company" customer on customer grid
     And I press "Edit"
     And I select <Another Account> from the Account dropdown
@@ -102,7 +103,7 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
 
 # Req ID CRM-6111-9, CRM-6111-10, CRM-6111-11, Req ID CRM-6111-12, Req ID CRM-6111-13
 # Req ID CRM-6111-14,
-    Scenario: Checking that the user can view customer details in "OroCommerce" section on the "Account" view
+    Scenario Outline: Checking that the user can view customer details in "OroCommerce" section on the "Account" view
     Given I go to Customers/ Accounts
     And I click on <Account> on Account grid
     And Account view is displayed
