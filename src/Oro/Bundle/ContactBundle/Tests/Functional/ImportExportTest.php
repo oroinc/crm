@@ -154,9 +154,9 @@ class ImportExportTest extends WebTestCase
         $this->assertEquals(
             [
                 'success'    => true,
-//                'message'    => 'File was successfully imported.',
-//                'errorsUrl'  => null,
-//                'importInfo' => sprintf('%s contacts were added, %s contacts were updated', $added, $replaced)
+                // 'message'    => 'File was successfully imported.',
+                // 'errorsUrl'  => null,
+                // 'importInfo' => sprintf('%s contacts were added, %s contacts were updated', $added, $replaced)
             ],
             $data
         );
