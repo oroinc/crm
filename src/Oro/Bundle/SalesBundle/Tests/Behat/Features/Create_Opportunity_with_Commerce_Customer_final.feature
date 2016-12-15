@@ -56,7 +56,7 @@ Scenario: Create Opportunity, create new commerce customer and relate opportunit
     | Owner     | Name               |  Account   |
     | John Doe  | Customer Creation  |  Account G |
   And I press "Save" button
-  Then I should see "Customer Creation (Customer) in Account field
+  Then I should see "Customer Creation (Customer)" in Account field
   And I fill out other mandatory fields with the following:
     | Owner     | Opportunity Name  | Channel         | Status  |
     | John Doe  | Prospective Kate  | Magento Channel | Open    |
