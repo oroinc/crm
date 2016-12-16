@@ -17,7 +17,6 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
@@ -72,7 +71,6 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  */
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
-    CustomerIdentityInterface,
     RFMAwareInterface,
     OriginAwareInterface,
     IntegrationAwareInterface

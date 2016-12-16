@@ -17,7 +17,6 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
@@ -71,8 +70,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    ChannelAwareInterface,
-    CustomerIdentityInterface
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
 

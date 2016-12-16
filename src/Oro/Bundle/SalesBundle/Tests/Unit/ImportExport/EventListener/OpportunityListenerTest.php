@@ -9,9 +9,9 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 
 class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,6 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         );
         $listener->onProcessAfter($strategyEvent);
 
-        $this->assertSame($channel, $b2bCustomer->getDataChannel());
         $this->assertSame($organization, $b2bCustomer->getOrganization());
         $this->assertEquals($b2bCustomerName, $b2bCustomer->getAccount()->getName());
     }

@@ -115,7 +115,6 @@
     {% set formFields = formFields|merge([
         form_row(form.name, {attr: {autofocus: true}}),
         form_row(form.customer),
-        form_row(form.dataChannel),
         form_row(form.contact),
         form_row(form.status),
         form_row(form.probability),
@@ -124,6 +123,11 @@
         form_row(form.closeRevenue),
         form_row(form.closeReason)
     ]) %}
+    {% if form.data_channel is defined %}
+        {% set formFields = formFields|merge([
+            form_row(form.data_channel)
+        ]) %}
+    {% endif %}
 
     {% set dataBlocks = [{
         'title': 'General'|trans,

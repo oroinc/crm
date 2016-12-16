@@ -19,11 +19,6 @@ class OpportunityRelationsBuilder
             return;
         }
 
-        if (!$customer->getDataChannel()) {
-            // new customer needs a channel
-            $customer->setDataChannel($opportunity->getDataChannel());
-        }
-
         if (!$customer->getOrganization()) {
             $customer->setOrganization($opportunity->getOrganization());
         }

@@ -9,6 +9,9 @@ class OpportunityStub extends Opportunity
     /** @var object|null */
     protected $customerTarget;
 
+    /** @var object|null */
+    protected $dataChannel;
+
     /**
      * @return object|null
      */
@@ -23,5 +26,21 @@ class OpportunityStub extends Opportunity
     public function setCustomerTarget($customerTarget)
     {
         $this->customerTarget = $customerTarget;
+    }
+
+    /**
+     * @return object|null
+     */
+    public function getDataChannel()
+    {
+        return $this->dataChannel;
+    }
+
+    /**
+     * @param object|null $dataChannel
+     */
+    public function setDataChannel($dataChannel)
+    {
+        $this->dataChannel = $dataChannel;
     }
 }

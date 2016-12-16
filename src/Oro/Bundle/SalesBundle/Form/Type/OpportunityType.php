@@ -97,14 +97,6 @@ class OpportunityType extends AbstractType
             )
             ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
             ->add(
-                'dataChannel',
-                'oro_channel_select_type',
-                [
-                    'required' => false,
-                    'label'    => 'oro.sales.opportunity.data_channel.label',
-                ]
-            )
-            ->add(
                 'closeDate',
                 'oro_date',
                 ['required' => false, 'label' => 'oro.sales.opportunity.close_date.label']

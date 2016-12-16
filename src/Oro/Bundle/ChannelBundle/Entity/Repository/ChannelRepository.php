@@ -22,9 +22,7 @@ class ChannelRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c.id', 'c.name');
-        $qb->from('OroChannelBundle:Channel', 'c', 'c.id')
-            ->where($qb->expr()->eq('c.status', ':status'))
-            ->setParameter('status', Channel::STATUS_ACTIVE);
+        $qb->from('OroChannelBundle:Channel', 'c', 'c.id');
 
         if (null !== $type) {
             $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));
@@ -57,15 +55,13 @@ class ChannelRepository extends EntityRepository
             ->where($qb->expr()->orX(
                 $qb->expr()->isNull('channel.id'),
                 $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type'),
-                    $qb->expr()->eq('channel.status', ':status')
+                    $qb->expr()->eq('channel.channelType', ':type')
                 )
             ))
             ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
             ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
-            ->setParameter('status', Channel::STATUS_ACTIVE);
+            ->setParameter('dateEnd', $end);
 
         return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -109,9 +105,7 @@ class ChannelRepository extends EntityRepository
             $query->having($countDistinctName);
             $query->setParameter('count', count($entities));
         }
-        $query->andWhere('c.status = :status');
         $query->orderBy('c.name', 'ASC');
-        $query->setParameter('status', $status);
 
         return $query;
     }
@@ -132,12 +126,10 @@ class ChannelRepository extends EntityRepository
             ->where($qb->expr()->orX(
                 $qb->expr()->isNull('channel.id'),
                 $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type'),
-                    $qb->expr()->eq('channel.status', ':status')
+                    $qb->expr()->eq('channel.channelType', ':type')
                 )
             ))
-            ->setParameter('type', $type)
-            ->setParameter('status', Channel::STATUS_ACTIVE);
+            ->setParameter('type', $type);
 
         return $qb;
     }
