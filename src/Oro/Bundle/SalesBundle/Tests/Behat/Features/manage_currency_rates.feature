@@ -65,8 +65,7 @@ Feature: Managing Currency Rates
     And I fill out the fields for "Irish Pound (IEP)" currency with the following:
       | BASE    | CURRENCY NAME | CURRENCY CODE | CURRENCY SYMBOL | RATE FROM | RATE TO |
       | Checked | Irish Pound   | IEP           | IEP             |     5     |    5.5  |
-    Then confirmation message is displayed: "You are about to change the base currency. By doing so, the values for
-    your entire financial data using this currency will be recalculated. Do you want to continue?"
+    Then confirmation message is displayed: "You are about to change the base currency. By doing so, the values for your entire financial data using this currency will be recalculated. Do you want to continue?"
     And I press "OK"
     Then I should see the following on currency grid:
       | BASE    | CURRENCY NAME | CURRENCY CODE | CURRENCY SYMBOL | RATE FROM | RATE TO |
@@ -110,8 +109,7 @@ Feature: Managing Currency Rates
     And I create segment "Must see" with the following data:
       | Entity      | Type    |
       | Opportunity | Dynamic |
-    And I choose the following columns: Opportunity > Base Budget Amount, Opportunity > Budget Amount Currency,
-  Opportunity > Budget Amount Value, Opportunity > Close Revenue Currency, Opportunity > Close Revenue Value
+    And I choose the following columns: Opportunity > Base Budget Amount, Opportunity > Budget Amount Currency, Opportunity > Budget Amount Value, Opportunity > Close Revenue Currency, Opportunity > Close Revenue Value
     And I press "Save and Close" button
     Then I should see values for Base Budget Amount in IEP
 
@@ -135,16 +133,10 @@ Feature: Managing Currency Rates
   Scenario: Testing UI to provide the user with better usability and user experience
     Given I go to System/ Configuration
     And I click Currency
-    Then I should see that the tooltip for "Rate to" contains the following: "The conversion rate from the base
-  currency to selected currency. Used to calculate new exchange rates when base currency is changed. Maximum precision
-  is 10 digits."
-    And the tooltip for "Rate From" is: "The conversion rate from selected currency to the base
-  currency. Used to calculate transaction amounts (e.g. opportunity budget) in base currency if they were entered in
-  other currencies. Maximum precision is 10 digits."
-    And "Please, select currency" is displayed as a placeholder of currency add dropdown (above the rate management
-  grid)
-    And column names for the rate management grid are as follows: Base, Currency name, Currency code,
-  Currency symbol, Rate from, Rate to, Sort, Actions
+    Then I should see that the tooltip for "Rate to" contains the following: "The conversion rate from the base currency to selected currency. Used to calculate new exchange rates when base currency is changed. Maximum precision is 10 digits."
+    And the tooltip for "Rate From" is: "The conversion rate from selected currency to the base currency. Used to calculate transaction amounts (e.g. opportunity budget) in base currency if they were entered in other currencies. Maximum precision is 10 digits."
+    And "Please, select currency" is displayed as a placeholder of currency add dropdown (above the rate management grid)
+    And column names for the rate management grid are as follows: Base, Currency name, Currency code, Currency symbol, Rate from, Rate to, Sort, Actions
     And the "Delete" icon in the rate management grid is a cross sign
 
   # Req ID OEE-996-19
@@ -179,8 +171,7 @@ Feature: Managing Currency Rates
   # Req ID OEE-996-17, Req ID OEE-996-18
   Scenario: Deleting currency rate
     Given I click "Delete currency" for "Bolivian Mvdol (BOV)" currency on currency grid
-    And the confirmation message "You are about to delete the currency. Do you want to continue?" is displayed and I
-    confirm popup message
+    And the confirmation message "You are about to delete the currency. Do you want to continue?" is displayed and I confirm popup message
     Then I should not see the Bolivian Mvdol (BOV) currency on currency grid
     When I press "Save Settings" button
     Then I should not see the Bolivian Mvdol (BOV) currency on currency grid
