@@ -3,3 +3,5 @@ config:
         'oro/magento/soap-checker': 'bundles/oromagento/js/soap-checker.js'
         'oromagento/js/app/components/subscription-manager': 'bundles/oromagento/js/app/components/subscription-manager.js'
         'oromagento/js/app/components/customer-registration-manager': 'bundles/oromagento/js/app/components/customer-registration-manager.js'
+        'oromagento/js/app/views/magento-account-multicustomer-view': 'bundles/oromagento/js/app/views/magento-account-multicustomer-view.js'
+        'oro/magento-customer-info-widget': 'bundles/oromagento/js/widget/magento-customer-info-widget.js'

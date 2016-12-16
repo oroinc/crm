@@ -17,11 +17,11 @@ workflows:
                                 required: true
                                 constraints:
                                   - NotBlank: ~
-                        b2bcustomer:
-                            form_type: oro_sales_b2bcustomer_select
+                        customer_association:
+                            form_type: oro_sales_customer
                             options:
                                 required: false
-                                channel_id: $dataChannel.id
+                                parent_class: Oro\Bundle\AccountBundle\Entity\Account
                         company_name:
                             form_type: text
                             options:
@@ -32,21 +32,31 @@ workflows:
                                 required: false
                     attribute_default_values:
                         opportunity_name: $lead.name
-                        b2bcustomer: $lead.customer
+                        customer_association: $lead.customer_association
                         company_name: $lead.companyName
                         notes: $lead.notes
                     form_init:
+                        - '@find_entity': # try to find account by company name
+                            conditions:
+                                '@and': # if customer is empty and company name is specified
+                                    - '@empty':     $customer_association
+                                    - '@not_empty': $company_name
+                            parameters:
+                                class: Oro\Bundle\AccountBundle\Entity\Account
+                                attribute: $account
+                                where:
+                                    name: $company_name
+                            case_insensitive: true
                         - '@find_entity': # try to find customer by company name
                             conditions:
                                 '@and': # if customer is empty and company name is specified
-                                    - '@empty':     $b2bcustomer
-                                    - '@not_empty': $company_name
+                                    - '@empty':     $customer_association
+                                    - '@not_empty': $account
                             parameters:
-                                class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
-                                attribute: $b2bcustomer
+                                class:     Oro\Bundle\SalesBundle\Entity\Customer
+                                attribute: $customer_association
                                 where:
-                                    name: $company_name
-                                case_insensitive: true
+                                    account: $account
                 transition_definition: qualify_definition
             cancel:
                 step_to: cancelled

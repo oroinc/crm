@@ -12,6 +12,8 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+
 class CustomerApiHandler
 {
     /** @var FormInterface */
@@ -23,25 +25,31 @@ class CustomerApiHandler
     /** @var ObjectManager */
     protected $manager;
 
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
+
     /** @var Organization */
     protected $organization;
 
     /**
-     * @param FormInterface     $form
-     * @param Request           $request
-     * @param RegistryInterface $registry
+     * @param FormInterface            $form
+     * @param Request                  $request
+     * @param RegistryInterface        $registry
      * @param SecurityContextInterface $security
+     * @param AccountCustomerManager   $accountCustomerManager
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $registry,
-        SecurityContextInterface $security
+        SecurityContextInterface $security,
+        AccountCustomerManager $accountCustomerManager
     ) {
-        $this->form         = $form;
-        $this->request      = $request;
-        $this->manager      = $registry->getManager();
+        $this->form = $form;
+        $this->request = $request;
+        $this->manager = $registry->getManager();
         $this->organization = $security->getToken()->getOrganizationContext();
+        $this->accountCustomerManager = $accountCustomerManager;
     }
 
     /**
@@ -87,7 +95,15 @@ class CustomerApiHandler
             }
         }
 
+        if ($entity->getId()) {
+            $customerAssociation = $this->accountCustomerManager->getAccountCustomerByTarget($entity);
+            $customerAssociation->setTarget($entity->getAccount(), $entity);
+        } else {
+            $customerAssociation = AccountCustomerManager::createCustomer($entity->getAccount(), $entity);
+        }
+
         $this->manager->persist($entity);
+        $this->manager->persist($customerAssociation);
         $this->manager->flush();
     }
 }
