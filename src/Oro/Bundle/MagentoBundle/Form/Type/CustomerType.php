@@ -96,8 +96,7 @@ class CustomerType extends AbstractType
                     'options' => ['data_class' => $this->customerAddressClassName]
                 ]
             )
-            ->add('contact', 'oro_contact_select', ['label' => 'oro.magento.customer.contact.label'])
-            ->add('account', 'oro_account_select', ['label' => 'oro.magento.customer.account.label']);
+            ->add('contact', 'oro_contact_select', ['label' => 'oro.magento.customer.contact.label']);
 
         if ($this->isPasswordSetAllowed($builder->getData())) {
             $builder->add(

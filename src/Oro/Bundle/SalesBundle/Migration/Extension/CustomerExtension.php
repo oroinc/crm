@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SalesBundle\Migration\Extension\Customers;
+namespace Oro\Bundle\SalesBundle\Migration\Extension;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -14,9 +14,9 @@ use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
 use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class OpportunityExtension implements ExtendExtensionAwareInterface, NameGeneratorAwareInterface
+class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorAwareInterface
 {
-    const OPPORTUNITY_TABLE_NAME = 'orocrm_sales_opportunity';
+    const CUSTOMER_TABLE_NAME = 'orocrm_sales_customer';
 
     /** @var ExtendExtension */
     protected $extendExtension;
@@ -41,7 +41,7 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
     }
 
     /**
-     * Adds the association between the target customer table and the opportunity table
+     * Adds the association between the target customer table and the customer table
      *
      * @param Schema $schema
      * @param string $targetTableName  Target entity table name
@@ -52,7 +52,7 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
         $targetTableName,
         $targetColumnName = null
     ) {
-        $table   = $schema->getTable(self::OPPORTUNITY_TABLE_NAME);
+        $table   = $schema->getTable(self::CUSTOMER_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
 
         if (empty($targetColumnName)) {
@@ -61,7 +61,7 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
         }
 
         $options = new OroOptions();
-        $options->set('opportunity', 'enabled', true);
+        $options->set('customer', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
 
         $associationName = ExtendHelper::buildAssociationName(
@@ -82,6 +82,9 @@ class OpportunityExtension implements ExtendExtensionAwareInterface, NameGenerat
                 'datagrid' => [
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
                 ],
+                'extend' => [
+                    'on_delete' => 'SET NULL'
+                ]
             ]
         );
     }

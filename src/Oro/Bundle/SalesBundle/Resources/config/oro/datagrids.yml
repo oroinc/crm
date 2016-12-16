@@ -2183,6 +2183,7 @@ datagrids:
                     - o.probability
                     - s.id as status
                     - o.closeDate
+                    - o.createdAt
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
@@ -2202,6 +2203,8 @@ datagrids:
                     data_name: o.status
                 closeDate:
                     data_name: o.closeDate
+                createdAt:
+                    data_name: o.createdAt
                 ownerName:
                     data_name: o.owner
         sorters:
@@ -2216,6 +2219,8 @@ datagrids:
                     data_name: status
                 closeDate:
                     data_name: o.closeDate
+                createdAt:
+                    data_name: o.createdAt
                 ownerName:
                     data_name: ownerName
             default:
@@ -2246,6 +2251,9 @@ datagrids:
                 closeDate:
                     type: date
                     data_name: o.closeDate
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
                 owner:
                     type: entity
                     label: oro.user.owner.label
@@ -2282,6 +2290,9 @@ datagrids:
             closeDate:
                 label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
             ownerName:
                 label:         oro.sales.opportunity.owner.label
         actions:
@@ -2318,3 +2329,6 @@ datagrids:
                 type:       url
                 route:      oro_api_delete_opportunity
                 params:     [ id ]
+
+    sales-customers-opportunities-alternate-grid:
+        extends: sales-customers-opportunities-grid

@@ -24,6 +24,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
  * @Config(
  *      routeName="oro_account_index",
  *      routeView="oro_account_view",
+ *      routeCreate="oro_account_create",
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-suitcase"
