@@ -1,20 +1,43 @@
 {% if resource_granted('oro_magento_customer_view') and customers|length > 0 %}
-    <div class="widget-content">
-        <div class="pull-right label label-info orocrm-channel-lifetime-value-label">
-            <b>{{ 'oro.magento.customer.lifetime.label'|trans}}: {{ oro_channel_account_lifetime(account, channel)|oro_format_currency }}</b>
-        </div>
-
-        {% set tabs = [] %}
-        {% for customer in customers %}
-            {% set tabs = tabs|merge([
-                {
-                    'alias': 'oro_magento_customer_info_customer_' ~ customer.id ~ '_channel_' ~ channel.id,
+    {% if (customers|length > 1) %}
+        {% import 'OroUIBundle::macros.html.twig' as UI %}
+        <div class="widget-content magento-account-customer-info multicustomer" {{ UI.renderPageComponentAttributes({
+            module: 'oroui/js/app/components/view-component',
+            options: {
+                view: 'oromagento/js/app/views/magento-account-multicustomer-view'
+            }
+        }) }}>
+    {% else %}
+        <div class="widget-content magento-account-customer-info">
+    {% endif %}
+            {% if (customers|length > 1) %}
+                {% set tabs = [] %}
+                {% if isMobileVersion() %}
+                    {% set tabsOptions = {useDropdown: true} %}
+                {% else %}
+                    {% set tabsOptions = {verticalTabs: true, subtitle: 'oro.magento.customer_tabs_title'|trans} %}
+                {% endif %}
+                {% for customer in customers %}
+                    {% set tabs = tabs|merge([
+                        {
+                            'alias': 'oro_magento_customer_info_customer_' ~ customer.id ~ '_channel_' ~ channel.id,
+                            'widgetType': 'magento-customer-info',
+                            'label': customer|oro_format_name,
+                            'url': path('oro_magento_widget_customer_info', {
+                                'id': customer.id, 'channelId': channel.id
+                            })
+                        }
+                    ]) %}
+                {% endfor %}
+                {{ tabPanel(tabs, tabsOptions) }}
+            {% else %}
+                {{ oro_widget_render({
+                    'alias': 'oro_magento_customer_info_customer_' ~ customers[0].id ~ '_channel_' ~ channel.id,
                     'widgetType': 'block',
-                    'label': customer|oro_format_name,
-                    'url': path('oro_magento_widget_customer_info', {'id': customer.id, 'channelId': channel.id})
-                }
-            ]) %}
-        {% endfor %}
-        {{ tabPanel(tabs) }}
-    </div>
+                    'url': path('oro_magento_widget_customer_info', {
+                        'id': customers[0].id, 'channelId': channel.id
+                    })
+                }) }}
+            {% endif %}
+        </div>
 {% endif %}

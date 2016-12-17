@@ -1,0 +1,11 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+{% set gridName = 'sales-customers-opportunities-grid' %}
+
+{% if app.request.query.get('grid') and app.request.query.get('grid')[gridName] is defined %}
+    {% set gridName = 'sales-customers-opportunities-alternate-grid' %}
+{% endif %}
+
+<div class="widget-content">
+    {{ dataGrid.renderGrid(gridName, gridParams) }}
+</div>
