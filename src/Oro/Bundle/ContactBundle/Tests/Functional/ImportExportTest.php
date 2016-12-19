@@ -76,7 +76,9 @@ class ImportExportTest extends WebTestCase
      */
     public function testImportExport($strategy, $added, $replaced)
     {
-        // @todo - must be fixed in BAP-12713
+        $this->markTestSkipped(
+            'This test will be completely removed and replaced with a set of smaller functional tests (see BAP-13063 and BAP-13064)'
+        );
         $this->validateImportFile($strategy);
         $this->doImport($strategy, $added, $replaced);
 
