@@ -321,3 +321,8 @@ services:
             - 'owner'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-contacts-activity-grid, method: onResultBefore }
+
+    orocrm_contact.contacts_view_list:
+        class: OroCRM\Bundle\ContactBundle\Datagrid\ContactsViewList
+        arguments:
+            - @translator
