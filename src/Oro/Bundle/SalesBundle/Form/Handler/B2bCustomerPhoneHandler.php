@@ -14,6 +14,9 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerPhoneHandler
 {
     /** @var FormInterface */

@@ -46,6 +46,10 @@ class Configuration implements ConfigurationInterface
                     'value' => false,
                     'type'  => 'boolean',
                 ],
+                'b2bcustomer_feature_enabled' => [
+                    'value' => false,
+                    'type'  => 'boolean',
+                ],
                 'default_opportunity_probabilities' => [
                     'value' => $defaults,
                     'type' => 'array',

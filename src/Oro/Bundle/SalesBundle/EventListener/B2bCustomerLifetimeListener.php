@@ -68,7 +68,7 @@ class B2bCustomerLifetimeListener
         foreach ($entities as $entity) {
             if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation, just add to prev lifetime value and recalculate change set
-                $b2bCustomer = $entity->getCustomer();
+                $b2bCustomer = $entity->getCustomerAssociation()->getTarget();
                 $closeRevenueValue = $this->rateConverter->getBaseCurrencyAmount($entity->getCloseRevenue());
                 $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $closeRevenueValue);
                 $this->scheduleUpdate($b2bCustomer);
@@ -82,7 +82,7 @@ class B2bCustomerLifetimeListener
                 // handle update
                 $changeSet = $this->uow->getEntityChangeSet($entity);
 
-                if ($this->isChangeSetValuable($changeSet)) {
+                if ($this->isChangeSetValuable($changeSet) && array_key_exists('customer', $changeSet)) {
                     if (!empty($changeSet['customer'])
                         && $changeSet['customer'][0] instanceof B2bCustomer
                         && B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
@@ -162,7 +162,7 @@ class B2bCustomerLifetimeListener
     protected function isValuable(Opportunity $opportunity, $takeZeroRevenue = false)
     {
         return
-            $opportunity->getCustomer()
+            $this->hasB2bCustomerTarget($opportunity)
             && $opportunity->getStatus()
             && $opportunity->getStatus()->getId() === B2bCustomerRepository::VALUABLE_STATUS
             && ($takeZeroRevenue || $opportunity->getCloseRevenueValue() > 0);
@@ -216,5 +216,16 @@ class B2bCustomerLifetimeListener
     {
         $this->em  = $args->getEntityManager();
         $this->uow = $this->em->getUnitOfWork();
+    }
+
+    public function hasB2bCustomerTarget($entity)
+    {
+        if (!$entity instanceof Opportunity) {
+            return false;
+        }
+
+        return $entity->getCustomerAssociation()
+            && $entity->getCustomerAssociation()->getTarget()
+            && $entity->getCustomerAssociation()->getTarget() instanceof B2bCustomer;
     }
 }

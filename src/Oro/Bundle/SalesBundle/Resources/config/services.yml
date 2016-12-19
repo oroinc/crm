@@ -564,6 +564,23 @@ services:
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
 
+    oro_sales.datagrid.extension.customers.leads:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\B2bCustomerLeadsExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.customers.leads_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\LeadsListener
+        arguments:
+            - '@oro_sales.customer.account_config_provider'
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_featuretoggle.checker.feature_checker'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addLeads }
+
     oro_sales.action.find_customer_association:
         class: 'Oro\Bundle\SalesBundle\Action\FindCustomerAssociation'
         arguments:

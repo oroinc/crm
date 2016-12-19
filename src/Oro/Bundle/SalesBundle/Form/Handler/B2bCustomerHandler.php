@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerHandler
 {
     /** @var FormInterface */

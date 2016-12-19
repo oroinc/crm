@@ -12,6 +12,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 /**
  * Class B2bCustomerEmailApiHandler
  * @package Oro\Bundle\SalesBundle\Handler
+ * @deprecated
  */
 class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
 {

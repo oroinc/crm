@@ -6,6 +6,9 @@ use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
 {
     /** @var PhoneProviderInterface */

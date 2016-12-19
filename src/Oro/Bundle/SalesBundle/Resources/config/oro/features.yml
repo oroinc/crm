@@ -82,6 +82,25 @@ features:
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
             - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
 
+    sales_b2bcustomer:
+        label: oro.sales.b2bcustomer.feature.label
+        description: oro.sales.b2bcustomer.feature.description
+        toggle: oro_sales.b2bcustomer_feature_enabled
+        routes:
+            - oro_sales_b2bcustomer_index
+            - oro_sales_b2bcustomer_view
+            - oro_sales_b2bcustomer_widget_info
+            - oro_sales_b2bcustomer_widget_leads
+            - oro_sales_b2bcustomer_create
+            - oro_sales_b2bcustomer_update
+            - oro_sales_b2bcustomer_widget_opportunities
+            - oro_sales_widget_account_b2bcustomers_info
+            - oro_sales_widget_b2bcustomer_info
+        api_resources:
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomer
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
+            - Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
+
     salesfunnel:
         label: oro.sales.salesfunnel.feature.label
         description: oro.sales.salesfunnel.feature.description

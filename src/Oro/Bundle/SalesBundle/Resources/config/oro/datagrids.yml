@@ -31,8 +31,6 @@ datagrids:
                     - channel.name as channelName
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
-                    - customer.id as customerId
-                    - customer.name as customerName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
@@ -43,7 +41,6 @@ datagrids:
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: own }
-                        - { join: o.customer, alias: customer }
         inline_editing:
             enable: true
         columns:
@@ -69,9 +66,6 @@ datagrids:
                     autocomplete_api_accessor:
                         search_handler_name: contacts
                         label_field_name: fullName
-            customerName:
-                label: oro.sales.opportunity.customer.label
-                renderable: false
             closeRevenue:
                 label:         oro.sales.opportunity.close_revenue.label
                 frontend_type: multi-currency
@@ -135,8 +129,6 @@ datagrids:
                     data_name: o.updatedAt
                 contactName:
                     data_name: o.contact
-                customerName:
-                    data_name: o.customer
                 closeRevenue:
                     data_name: o.closeRevenue
                 closeRevenueCurrency:
@@ -185,8 +177,6 @@ datagrids:
                     data_name: o.updatedAt
                 contactName:
                     data_name: contactName
-                customerName:
-                    data_name: customerName
                 closeRevenue:
                     data_name: closeRevenue
                 closeReasonLabel:
@@ -229,9 +219,6 @@ datagrids:
                 contactName:
                     type: string
                     data_name: contactName
-                customerName:
-                    type: string
-                    data_name: customerName
                     enabled: false
                 closeRevenue:
                     type: currency
@@ -357,7 +344,6 @@ datagrids:
                     - l.twitter
                     - l.linkedIn
                     - source.name as sourceName
-                    - customer.name as customerName
                     - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
@@ -387,7 +373,6 @@ datagrids:
                         - { join: l.dataChannel, alias: channel }
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
-                        - { join: l.customer, alias: customer }
                         - { join: l.source, alias: source }
             hints:
                 - HINT_TRANSLATABLE
@@ -431,9 +416,6 @@ datagrids:
                 renderable: false
             sourceName:
                 label:         oro.sales.lead.source.label
-                renderable: false
-            customerName:
-                label: oro.sales.lead.customer.label
                 renderable: false
             email:
                 label:         oro.sales.lead.email.label
@@ -553,8 +535,6 @@ datagrids:
                     data_name: l.numberOfEmployees
                 sourceName:
                     data_name: source.name
-                customerName:
-                    data_name: customerName
                 email:
                     data_name: email.email
                 phone:
@@ -655,9 +635,6 @@ datagrids:
                     enum_code: lead_source
                     data_name: source.id
                     enabled: false
-                customerName:
-                    type: string
-                    data_name: customerName
                     enabled: false
                 email:
                     type: string
@@ -2332,3 +2309,6 @@ datagrids:
 
     sales-customers-opportunities-alternate-grid:
         extends: sales-customers-opportunities-grid
+
+    sales-customers-leads-grid:
+        extends: base-sales-b2bcustomer-leads-grid

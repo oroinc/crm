@@ -9,6 +9,8 @@ use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
  *
  * @TODO this class is a workaround and should be removed after implementation of
  * entity name representation configuration.
+ *
+ * @deprecated
  */
 class B2bCustomerEntityNameProvider implements EntityNameProviderInterface
 {

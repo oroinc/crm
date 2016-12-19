@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\ImportExport\EventListener;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\CurrencyBundle\Provider\CurrencyProviderInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
@@ -9,6 +10,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener;
@@ -37,9 +39,10 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
 
         $b2bCustomerName = 'test_name';
         $b2bCustomer->setName($b2bCustomerName);
+        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $b2bCustomer);
         $entity->setDataChannel($channel);
         $entity->setOrganization($organization);
-        $entity->setCustomer($b2bCustomer);
+        $entity->setCustomerAssociation($accountCustomer);
 
         $strategyEvent = new StrategyEvent($strategy, $entity, $context);
         $listener      = new OpportunityListener(

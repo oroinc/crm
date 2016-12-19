@@ -7,6 +7,9 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerRepository extends EntityRepository
 {
     const VALUABLE_STATUS = 'won';

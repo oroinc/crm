@@ -12,8 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInterface
+class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInterface, VersionedFixtureInterface
 {
     use ContainerAwareTrait;
 
@@ -27,7 +28,16 @@ class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInt
         'Oro\Bundle\SalesBundle\Entity\Lead'        => 'oro_sales.lead_feature_enabled',
         'Oro\Bundle\SalesBundle\Entity\Opportunity' => 'oro_sales.opportunity_feature_enabled',
         'Oro\Bundle\SalesBundle\Entity\SalesFunnel' => 'oro_sales.salesfunnel_feature_enabled',
+        'Oro\Bundle\SalesBundle\Entity\B2bCustomer' => 'oro_sales.b2bcustomer_feature_enabled',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.1';
+    }
 
     /**
      * {@inheritdoc}
@@ -84,6 +94,7 @@ SQL;
                 'classes' => [
                     'Oro\Bundle\SalesBundle\Entity\Lead',
                     'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                    'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
                 ],
             ],
             [

@@ -6,6 +6,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerEmailType extends AbstractType
 {
     /**

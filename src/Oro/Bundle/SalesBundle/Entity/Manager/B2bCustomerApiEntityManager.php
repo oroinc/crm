@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Entity\Manager;
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerApiEntityManager extends ApiEntityManager
 {
     /**

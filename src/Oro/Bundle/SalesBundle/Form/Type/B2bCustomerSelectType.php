@@ -5,6 +5,9 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * @deprecated
+ */
 class B2bCustomerSelectType extends AbstractType
 {
     /**

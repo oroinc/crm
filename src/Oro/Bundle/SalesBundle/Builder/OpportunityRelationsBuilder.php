@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Builder;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRelationsBuilder
@@ -14,12 +16,12 @@ class OpportunityRelationsBuilder
 
     public function buildCustomer(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomer();
+        $customer = $opportunity->getCustomerAssociation()->getTarget();
         if (!$customer) {
             return;
         }
 
-        if (!$customer->getDataChannel()) {
+        if (method_exists($customer, 'getDataChannel') && !$customer->getDataChannel()) {
             // new customer needs a channel
             $customer->setDataChannel($opportunity->getDataChannel());
         }
@@ -28,18 +30,21 @@ class OpportunityRelationsBuilder
             $customer->setOrganization($opportunity->getOrganization());
         }
 
-        $this->buildCustomerContact($opportunity);
+        if ($customer instanceof B2bCustomer) {
+            $this->buildCustomerContact($opportunity);
+        }
     }
 
     public function buildAccount(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomer();
+        $customer = $opportunity->getCustomerAssociation()->getTarget();
         if (!$customer) {
             return;
         }
 
         $contact = $opportunity->getContact();
-        $account = $customer->getAccount();
+
+        $account = $customer instanceof Account ? $customer : $customer->getAccount();
 
         if (!$contact || !$account) {
             return;
@@ -52,7 +57,7 @@ class OpportunityRelationsBuilder
 
     protected function buildCustomerContact(Opportunity $opportunity)
     {
-        $customer           = $opportunity->getCustomer();
+        $customer           = $opportunity->getCustomerAssociation()->getTarget();
         $opportunityContact = $opportunity->getContact();
 
         if (!$customer || !$opportunityContact || $customer->getContact()) {
