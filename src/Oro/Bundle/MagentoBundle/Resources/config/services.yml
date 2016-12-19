@@ -1061,3 +1061,8 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: onClear }
+
+    oro_magento.provider.prepare_result_item_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountAutocompleteProvider
+        tags:
+            - { name: oro_sales.provider.customer.account_autocomplete }

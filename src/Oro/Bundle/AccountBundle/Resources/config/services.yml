@@ -103,3 +103,8 @@ services:
             - 'owner'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-accounts-activity-grid, method: onResultBefore }
+
+    oro_account.provider.prepare_result_item_provider:
+        class: Oro\Bundle\AccountBundle\Provider\AccountAutocompleteProvider
+        tags:
+            - { name: oro_sales.provider.customer.account_autocomplete }

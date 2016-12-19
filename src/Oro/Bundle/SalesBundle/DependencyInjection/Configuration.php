@@ -54,6 +54,10 @@ class Configuration implements ConfigurationInterface
                     'value' => true,
                     'type'  => 'boolean',
                 ],
+                'account_limit_of_lookup_results' => [
+                    'value' => 20,
+                    'type' => 'integer'
+                ]
             ]
         );
 

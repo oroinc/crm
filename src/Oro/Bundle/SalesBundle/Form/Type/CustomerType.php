@@ -13,12 +13,13 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Component\PhpUtils\ArrayUtil;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class CustomerType extends AbstractType
 {
@@ -43,6 +44,9 @@ class CustomerType extends AbstractType
     /** @var ManagerInterface */
     protected $gridManager;
 
+    /** @var ConfigManager */
+    protected $configManager;
+
     /**
      * @param DataTransformerInterface      $transformer
      * @param ConfigProvider                $customerConfigProvider
@@ -51,6 +55,7 @@ class CustomerType extends AbstractType
      * @param TranslatorInterface           $translator
      * @param SecurityFacade                $securityFacade
      * @param ManagerInterface              $gridManager
+     * @param ConfigManager                 $configManager
      */
     public function __construct(
         DataTransformerInterface $transformer,
@@ -59,7 +64,8 @@ class CustomerType extends AbstractType
         CustomerIconProviderInterface $customerIconProvider,
         TranslatorInterface $translator,
         SecurityFacade $securityFacade,
-        ManagerInterface $gridManager
+        ManagerInterface $gridManager,
+        ConfigManager $configManager
     ) {
         $this->transformer            = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
@@ -68,6 +74,7 @@ class CustomerType extends AbstractType
         $this->translator             = $translator;
         $this->securityFacade         = $securityFacade;
         $this->gridManager            = $gridManager;
+        $this->configManager          = $configManager;
     }
 
     /**
@@ -116,12 +123,13 @@ class CustomerType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        $autocompleteAcountResult = $this->configManager->get('oro_sales.account_limit_of_lookup_results');
         $resolver->setRequired('parent_class');
         $resolver->addAllowedTypes('parent_class', 'string');
 
         $resolver->setDefaults(
             [
-                'configs' => function (Options $options, $value) {
+                'configs' => function (Options $options, $value) use ($autocompleteAcountResult) {
                     return [
                         'component'               => 'sales-customer',
                         'renderedPropertyName'    => 'text',
@@ -133,7 +141,9 @@ class CustomerType extends AbstractType
                         'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
                         'minimumInputLength'      => 1,
+                        'per_page'                => $autocompleteAcountResult,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
+                        'dropdownCssClass'        => 'sales-account-autocomplete',
                         'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                         'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                         'route_parameters'        => [
