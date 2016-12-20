@@ -48,6 +48,7 @@ features:
             - oro_sales_opportunity_index
             - oro_sales_opportunity_data_channel_aware_create
             - oro_sales_datagrid_opportunity_datachannel_aware
+            - oro_sales_opportunity_customer_aware_create
         workflows:
             - opportunity_flow
         api_resources:
@@ -58,6 +59,8 @@ features:
             - opportunity_status_probabilities
         placeholder_items:
             - opportunities_launchpad
+            - oro_sales_create_opportunity_link
+            - oro_sales_create_opportunity_button
         dashboard_widgets:
             - quick_launchpad.opportunities
             - opportunities_by_lead_source_chart

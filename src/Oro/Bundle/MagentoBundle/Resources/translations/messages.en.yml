@@ -618,9 +618,11 @@ oro:
 
         order_information: Order Information
         customer_information: Customer Information
+        general_info: General Info
         general_information: General Information
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
+        customer_tabs_title: Customers
 
 "E-commerce": "E-commerce"

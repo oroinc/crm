@@ -32,20 +32,6 @@
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
-            {% if entity.account %}
-                {%- set accountData -%}
-                    {% if entity.account %}
-                        {% set accountViewGranted = resource_granted('oro_account_view') %}
-                        {%- if accountViewGranted -%}
-                            <a href="{{ path('oro_account_view', {'id': entity.account.id}) }}">{{ ui.renderEntityViewLabel(entity.account, 'name', 'oro.account.entity_label') }}</a>
-                        {%- else -%}
-                            {{ ui.renderEntityViewLabel(entity.account, 'name') }}
-                        {%- endif -%}
-                    {% endif %}
-                {%- endset -%}
-                {{ ui.renderHtmlProperty('oro.magento.customer.account.label'|trans, accountData) }}
-            {% endif %}
-
             {% if entity.contact %}
                 {%- set contactData -%}
                     {% if entity.contact %}

@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Entity\Store;
@@ -99,6 +100,14 @@ class CustomerControllerTest extends WebTestCase
     }
 
     /**
+     * @return Account
+     */
+    protected function getAccount()
+    {
+        return $this->getReference('account');
+    }
+
+    /**
      * @return array
      */
     public function testCreateCustomer()
@@ -118,6 +127,7 @@ class CustomerControllerTest extends WebTestCase
             'store'        => $this->getStore()->getId(),
             'website'      => $this->getWebsite()->getId(),
             'group'        => $this->getCustomerGroup()->getId(),
+            'account'      => $this->getAccount()->getId(),
             'addresses'    => [
                 [
                     'label'        => 'new1',
