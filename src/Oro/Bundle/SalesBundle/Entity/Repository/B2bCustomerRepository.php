@@ -36,22 +36,4 @@ class B2bCustomerRepository extends EntityRepository
 
         return (float)$qb->getQuery()->getSingleScalarResult();
     }
-
-    /**
-     * Calculates new lifetime value for customer
-     *
-     * @param B2bCustomer $b2bCustomer
-     *
-     * @return bool Returns true if value was changed, false otherwise
-     *
-     * @deprecated Use {@see calculateLifetimeValue} instead
-     */
-    public function calculateLifetime(B2bCustomer $b2bCustomer)
-    {
-        $currentLifetime = $b2bCustomer->getLifetime();
-
-        $b2bCustomer->setLifetime($this->calculateLifetimeValue($b2bCustomer));
-
-        return $b2bCustomer->getLifetime() != $currentLifetime;
-    }
 }
