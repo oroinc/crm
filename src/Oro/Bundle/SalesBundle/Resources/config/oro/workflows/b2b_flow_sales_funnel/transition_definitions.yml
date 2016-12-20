@@ -328,11 +328,15 @@ workflows:
                         enum_code: opportunity_status
                         identifier: 'in_progress'
                         attribute: $opportunity.status
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $budget_amount
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $close_revenue
                     - '@assign_value':
-                        - [$budget_amount, ~]
                         - [$customer_need, ~]
                         - [$proposed_solution, ~]
                         - [$probability, ~]
-                        - [$close_revenue, ~]
                         - [$close_reason, ~]
                         - [$close_date, ~]
