@@ -35,7 +35,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerPhone;
  *          }
  *      }
  * )
- * @deprecated
  */
 class B2bCustomerPhone extends ExtendB2bCustomerPhone
 {

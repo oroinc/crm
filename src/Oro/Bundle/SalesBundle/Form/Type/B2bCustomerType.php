@@ -8,9 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
-/**
- * @deprecated
- */
 class B2bCustomerType extends AbstractType
 {
     /**

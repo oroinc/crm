@@ -35,7 +35,6 @@ use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
  *          }
  *      }
  * )
- * @deprecated
  */
 class B2bCustomerEmail extends ExtendB2bCustomerEmail
 {

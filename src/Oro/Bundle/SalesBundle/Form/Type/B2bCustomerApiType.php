@@ -7,9 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-/**
- * @deprecated
- */
 class B2bCustomerApiType extends B2bCustomerType
 {
     /**

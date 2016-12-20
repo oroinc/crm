@@ -14,9 +14,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-/**
- * @deprecated
- */
 class B2bCustomerEmailHandler
 {
     /** @var FormInterface */

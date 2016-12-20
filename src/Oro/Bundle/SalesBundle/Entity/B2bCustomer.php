@@ -69,7 +69,6 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @deprecated
  */
 class B2bCustomer extends ExtendB2bCustomer implements
     ChannelAwareInterface,

@@ -11,9 +11,6 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
-/**
- * @deprecated
- */
 class B2bCustomerWithChannelCreateOrSelectType extends AbstractType
 {
     /** @var SecurityFacade */

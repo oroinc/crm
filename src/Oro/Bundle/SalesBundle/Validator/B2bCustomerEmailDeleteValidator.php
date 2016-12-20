@@ -4,9 +4,6 @@ namespace Oro\Bundle\SalesBundle\Validator;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 
-/**
- * @deprecated
- */
 class B2bCustomerEmailDeleteValidator
 {
     /**

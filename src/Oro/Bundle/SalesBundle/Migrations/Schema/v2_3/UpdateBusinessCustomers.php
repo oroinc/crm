@@ -47,29 +47,9 @@ class UpdateBusinessCustomers implements
     {
         $customerColumnName = $this->getCustomerColumnName($schema);
 
-        if ($this->hasCustomerAssociation($schema, $customerColumnName)) {
-            $queries->addQuery(new UpdateAccountsQuery($customerColumnName));
-            $queries->addQuery(new UpdateLeadsQuery($customerColumnName));
-            $queries->addQuery(new UpdateOpportunitiesQuery($customerColumnName));
-        }
-    }
-
-    /**
-     * @param Schema $schema
-     * @param string $customerColumnName
-     * @return bool
-     */
-    protected function hasCustomerAssociation(Schema $schema, $customerColumnName)
-    {
-        $customerTable = $schema->getTable('orocrm_sales_customer');
-
-        try {
-            $customerTable->getColumn($customerColumnName);
-
-            return true;
-        } catch (\SchemaException $e) {
-            return false;
-        }
+        $queries->addQuery(new UpdateAccountsQuery($customerColumnName));
+        $queries->addQuery(new UpdateLeadsQuery($customerColumnName));
+        $queries->addQuery(new UpdateOpportunitiesQuery($customerColumnName));
     }
 
     /**

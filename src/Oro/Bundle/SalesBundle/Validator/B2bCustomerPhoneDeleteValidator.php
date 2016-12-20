@@ -10,7 +10,6 @@ class B2bCustomerPhoneDeleteValidator
      * {@inheritdoc}
      *
      * @param B2bCustomerPhone $value
-     * @deprecated
      */
     public function validate(B2bCustomerPhone $value)
     {

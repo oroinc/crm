@@ -19,10 +19,6 @@ system_configuration:
             icon:  fa-usd
             title: oro.sales.system_configuration.groups.salesfunnel.title
 
-        b2bcustomer:
-            icon:  fa-user-md
-            title: oro.sales.system_configuration.groups.b2bcustomer.title
-
         opportunity_status_probabilities:
             title: oro.sales.system_configuration.groups.opportunity_status_probabilities.title
             priority: 10
@@ -58,15 +54,6 @@ system_configuration:
             options:
                 required: false
                 label: oro.sales.system_configuration.fields.sales_salesfunnel.feature_enabled.label
-
-        oro_sales.b2bcustomer_feature_enabled:
-            data_type: boolean
-            type: oro_config_checkbox
-            priority: 20
-            page_reload: true
-            options:
-                required: false
-                label: oro.sales.system_configuration.fields.sales_b2bcustomer.feature_enabled.label
 
         oro_sales.opportunity_statuses:
             ui_only: true
@@ -127,8 +114,3 @@ system_configuration:
                                     general_setup:
                                         children:
                                             - oro_sales.salesfunnel_feature_enabled
-                            b2bcustomer:
-                                children:
-                                    general_setup:
-                                        children:
-                                            - oro_sales.b2bcustomer_feature_enabled

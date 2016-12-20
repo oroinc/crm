@@ -443,8 +443,6 @@ oro:
                     shipping_address_street.label:      Shipping Address Street
                     shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
-            feature.label:        Business Customer
-            feature.description:  Enables Business Customer entity
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
@@ -501,7 +499,6 @@ oro:
                 crm.title: CRM
                 sales_pipeline.title: Sales Pipeline
                 salesfunnel.title: Sales Process (Deprecated)
-                b2bcustomer.title: Business Customer (Deprecated)
                 lead.title: Lead
                 opportunity.title: Opportunity
                 opportunity_status_probabilities:
@@ -521,8 +518,6 @@ oro:
                     probability.tooltip:                       Enter default probability (%) for this status
                 sales_salesfunnel:
                     feature_enabled.label:                     Enable Sales Process
-                sales_b2bcustomer:
-                    feature_enabled.label:                     Enable Business Customer
                 display_relevant_opportunities:
                     label:                                     Display relevant opportunities
                     tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
