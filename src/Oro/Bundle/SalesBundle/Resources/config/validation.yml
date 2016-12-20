@@ -57,8 +57,6 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             - NotBlank: ~
             - Length:
                 max: 255
-        account:
-            - NotBlank: ~
         dataChannel:
             - NotBlank: ~
         organization:
