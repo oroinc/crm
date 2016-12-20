@@ -191,6 +191,10 @@ datagrids:
                 updatedAt:
                     type:      datetime
                     data_name: a.updatedAt
+                duplicate:
+                    type: duplicate
+                    data_name: a.name
+                    visible: false
         actions:
             view:
                 type:          navigate
@@ -225,6 +229,7 @@ datagrids:
             entityHint: account
             export: true
             entity_pagination: true
+        views_list: '@oro_account.accounts_view_list'
 
     base-account-contacts-grid:
         extended_entity_name: %oro_contact.entity.class%

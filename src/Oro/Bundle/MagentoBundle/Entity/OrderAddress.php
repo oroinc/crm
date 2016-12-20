@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -74,7 +72,6 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=500, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $street;
 
@@ -82,7 +79,6 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $city;
 
@@ -90,7 +86,6 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $postalCode;
 
@@ -99,7 +94,6 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
-     * @Soap\ComplexType("string", nillable=false)
      */
     protected $country;
 
@@ -108,7 +102,6 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
      * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $region;
 

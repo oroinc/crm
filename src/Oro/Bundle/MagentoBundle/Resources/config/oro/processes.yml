@@ -130,7 +130,27 @@ processes:
                                 owner:          $owner
                                 organization:   $organization
                         - '@unset_value': [$.accountName]
-
+                 # @TODO should be removed after CRM-7178 will be fixed
+                - '@tree':
+                    actions:
+                    # find for existing customer association for magento customer
+                        - '@find_customer_association':
+                            parameters:
+                                attribute: $.customer_association
+                                customer: $.data
+                        - '@tree':
+                            conditions:
+                                '@empty': $.customer_association
+                            actions:
+                            # create new customer association for magento customer
+                                - '@create_entity':
+                                    parameters:
+                                        class:     Oro\Bundle\SalesBundle\Entity\Customer
+                                        attribute: $.customer_association
+                                - '@call_method':
+                                    object: $.customer_association
+                                    method: setTarget
+                                    method_parameters: [$account, $.data]
         magento_customer_export:
             label:   'Export Magento Customer to Magento'
             enabled: true

@@ -63,7 +63,7 @@ class LeadType extends AbstractType
                 )
             )
             ->add(
-                'customer',
+                'customerAssociation',
                 'oro_sales_customer',
                 [
                     'required'     => false,

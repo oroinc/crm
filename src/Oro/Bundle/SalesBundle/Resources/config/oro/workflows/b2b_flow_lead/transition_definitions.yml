@@ -14,8 +14,8 @@ workflows:
                     '@or':
                         parameters:
                             - '@not_empty': $company_name
-                            - '@not_empty': $b2bcustomer
-                        message: "Company name or customer must be selected."
+                            - '@not_empty': $customer_association
+                        message: "Company name or account must be selected."
                 actions: # set lead.status = "qualified"
                     - '@request_enum_entity':
                         enum_code: lead_status
@@ -112,52 +112,47 @@ workflows:
                                                 [$.result.phone, $.result.leadPhone]
                     - '@tree':
                         conditions:
-                            '@and': # if customer not selected and company name is selected
-                                - '@empty':     $b2bcustomer
+                            '@and': # if customer association not selected and company name exists
+                                - '@empty':     $customer_association
                                 - '@not_empty': $company_name
                         actions:
-                            - '@find_entity': # try to find b2bcustomer by company name
-                                class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
-                                attribute: $b2bcustomer
-                                where:
-                                    name: $company_name
-                                case_insensitive: true
                             - '@find_entity': # try to find account by company name
-                                conditions:
-                                    '@empty': $b2bcustomer
                                 parameters:
                                     class: Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $account
                                     where:
                                         name: $company_name
                                 case_insensitive: true
-                            - '@create_entity': # if b2bcustomer not found - create new one
+                            - '@find_entity': # try to find customer association by account
+                                conditions:
+                                    '@not_empty': $account
+                                parameters:
+                                    class: Oro\Bundle\SalesBundle\Entity\Customer
+                                    attribute: $customer_association
+                                    where:
+                                        account: $account
+                            - '@create_entity': # if account not found - create new one
                                 conditions:
                                     '@and':
                                         - '@empty': $account
-                                        - '@empty': $b2bcustomer
+                                        - '@empty': $customer_association
                                 parameters:
                                     class:     Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $account
                                     data:
                                         name: $company_name
-                            - '@create_entity': # if b2bcustomer not found - create new one
+                            - '@create_entity': # if customer association not found - create new one
                                 conditions:
-                                    '@empty': $b2bcustomer
+                                    '@empty': $customer_association
                                 parameters:
-                                    class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
-                                    attribute: $b2bcustomer
+                                    class: Oro\Bundle\SalesBundle\Entity\Customer
+                                    attribute: $customer_association
                                     data:
-                                        name:        $company_name
-                                        account:     $account
-                                        website:     $lead.website
-                                        employees:   $lead.numberOfEmployees
-                    - '@call_method': # connect customer with Contact
-                        conditions:
-                            '@empty': $b2bcustomer.contact
+                                        target: $account
+                    - '@call_method': # connect account with Contact
                         parameters:
-                            object: $b2bcustomer
-                            method: setContact
+                            object: $account
+                            method: addContact
                             method_parameters: [$lead.contact]
                     - '@create_entity': # create an opportunity
                         class: Oro\Bundle\SalesBundle\Entity\Opportunity
@@ -166,7 +161,7 @@ workflows:
                         data:
                             name:        $opportunity_name
                             contact:     $lead.contact
-                            customer:    $b2bcustomer
+                            customer_association: $customer_association
                             lead:        $lead
                             notes:       $notes
                     - '@request_enum_entity': # set status "In Progress" to opportunity
@@ -174,7 +169,7 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
                     - '@unset_value':
-                        [$account, $b2bcustomer]
+                        [$account, $customer_association]
                     - '@redirect': # redirect to workflow item edit page
                         route: 'oro_sales_opportunity_view'
                         route_parameters:

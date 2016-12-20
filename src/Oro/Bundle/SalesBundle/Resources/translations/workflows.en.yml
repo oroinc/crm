@@ -13,6 +13,8 @@ oro:
                     label: 'Opportunity name'
                 account:
                     label: 'Account'
+                customer_association:
+                    label: 'Account'
                 b2bcustomer:
                     label: 'Business customer'
                 company_name:
@@ -48,6 +50,8 @@ oro:
                     label: 'Opportunity name'
                 new_b2bcustomer:
                     label: 'Business customer'
+                new_customer_association:
+                    label: 'Account'
                 new_account:
                     label: 'Account'
                 new_company_name:

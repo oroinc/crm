@@ -551,6 +551,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customer-tracking-events-widget, method: onPreBuild, priority: 255 }
 
+    oro_magento.event_listener.account_view:
+        class: 'Oro\Bundle\SalesBundle\EventListener\AccountViewListener'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@request_stack'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.manager.account_customer'
+            - %oro_magento.entity.customer.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.magentoCustomerView, method: onView }
+
     # Customer API
     oro_magento.customer_address.manager.api:
         class: %oro_magento.customer_address.manager.api.class%
@@ -975,6 +986,7 @@ services:
             - "@request"
             - "@doctrine"
             - "@security.context"
+            - "@oro_sales.manager.account_customer"
 
     oro_magento.form.api.handler.customer_address:
         class: %oro_magento.form.handler.customer_address.class%
@@ -1023,6 +1035,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
         arguments:
             - '@oro_magento.provider.channel_type'
+            - '@liip_imagine.cache.manager'
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
 
@@ -1030,3 +1043,53 @@ services:
         class: Oro\Bundle\MagentoBundle\Datagrid\CartViewList
         arguments:
             - '@translator'
+
+    oro_magento.customer_account_change_subscriber:
+        class: Oro\Bundle\MagentoBundle\EventListener\CustomerAccountChangeSubscriber
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    oro_magento.provider.customer.account:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountProvider
+        arguments:
+            - '@oro_magento.provider.customer.account.new_entities_helper'
+        public: false
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+
+    oro_magento.provider.customer.account.new_entities_helper:
+        class: Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: onClear }
+
+    oro_magento.form.extension.customer_association:
+        class: Oro\Bundle\MagentoBundle\Form\Extension\CustomerAssociationExtension
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_magento.customer.association_checker'
+        tags:
+            - { name: form.type_extension, alias: oro_magento_customer }
+
+    oro_magento.form.extension.opportunity_customer_association:
+        class: Oro\Bundle\MagentoBundle\Form\Extension\OpportunityCustomerAssociationExtension
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_magento.customer.association_checker'
+        tags:
+            - { name: form.type_extension, alias: oro_sales_opportunity }
+
+    oro_magento.customer.customer_association_listener:
+        class: Oro\Bundle\MagentoBundle\EventListener\Customer\CustomerAssociationListener
+        arguments:
+            - '@oro_magento.customer.association_checker'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: checkCustomer, priority: 10 }
+
+    oro_magento.customer.association_checker:
+        class: Oro\Bundle\MagentoBundle\Customer\AssociationChecker
+        arguments:
+            - '@oro_sales.manager.account_customer'
+            - '@oro_entity.doctrine_helper'
