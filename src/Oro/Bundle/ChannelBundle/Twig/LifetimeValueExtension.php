@@ -16,8 +16,9 @@ class LifetimeValueExtension extends \Twig_Extension
     /**
      * @param AmountProvider $amountProvider
      */
-    public function __construct(AmountProvider $amountProvider)
-    {
+    public function __construct(
+        AmountProvider $amountProvider
+    ) {
         $this->amountProvider = $amountProvider;
     }
 
@@ -28,7 +29,9 @@ class LifetimeValueExtension extends \Twig_Extension
     {
         $lifetimeValue = new \Twig_SimpleFunction('oro_channel_account_lifetime', [$this, 'getLifetimeValue']);
 
-        return [$lifetimeValue->getName() => $lifetimeValue];
+        return [
+            $lifetimeValue->getName() => $lifetimeValue
+        ];
     }
 
     /**

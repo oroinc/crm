@@ -157,13 +157,13 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
 
         $this->em->getConnection()->executeUpdate(
-            'UPDATE oro_channel_lifetime_hist SET status = :status
+            'UPDATE orocrm_channel_lifetime_hist SET status = :status
              WHERE data_channel_id = :channel_id AND account_id IN (:account_ids)',
             ['status' => false, 'channel_id' => $channel->getId(), 'account_ids' => $accountIds],
             ['status' => Type::BOOLEAN, 'channel_id' => Type::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
         );
         $this->em->getConnection()->executeUpdate(
-            'INSERT INTO oro_channel_lifetime_hist'
+            'INSERT INTO orocrm_channel_lifetime_hist'
             . ' (account_id, data_channel_id, status, amount, created_at)'
             . sprintf(
                 ' SELECT e.account_id AS hist_account_id, e.data_channel_id AS hist_data_channel_id,'

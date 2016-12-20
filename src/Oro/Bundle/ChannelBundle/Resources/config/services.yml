@@ -332,7 +332,7 @@ services:
     oro_channel.twig.lifetime_value_extension:
         class: %oro_channel.twig.lifetime_value_extension.class%
         arguments:
-            - "@oro_channel.provider.lifetime.amount_provider"
+            - '@oro_channel.provider.lifetime.amount_provider'
         tags:
             - { name: twig.extension }
 
