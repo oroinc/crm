@@ -21,7 +21,7 @@ Feature: Display relevant data on Opportunity view
 
   Scenario: Observe the opportunity
     Given I login as "joconn" user
-    And I go to Sales/Opportunities
+    And I go to Opportunities
     When I open "Disney Logo" opportunity
     Then I should see "Relevant opportunities" table
     And I should see following columns:
@@ -47,10 +47,10 @@ Feature: Display relevant data on Opportunity view
 
   Scenario: Hide Relevant opportunities
     Given I login as "Administrator" user
-    And I go to System/Configuration/CRM/Sales Pipeline/Opportunity/Display settings
+    And I go to Configuration/CRM/Sales Pipeline/Opportunity/Display settings
     And I uncheck "Display relevant opportunities"
     When I save setting
     Then I login as "joconn" user
-    And I go to Sales/Opportunities
+    And I go to Opportunities
     And I open "Disney Logo" opportunity
     And I should not see "Relevant opportunities" table
