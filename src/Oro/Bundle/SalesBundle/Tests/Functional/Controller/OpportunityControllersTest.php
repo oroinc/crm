@@ -4,8 +4,8 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
@@ -16,6 +16,9 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
+
+    /** @var Account */
+    protected static $account;
 
     /** @var bool */
     protected $isRealGridRequest = false;
@@ -33,6 +36,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
     protected function postFixtureLoad()
     {
         self::$customer = $this->getReference('default_b2bcustomer');
+        self::$account = $this->getReference('default_account');
     }
 
     public function testIndex()
@@ -40,6 +44,35 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $this->client->request('GET', $this->getUrl('oro_sales_opportunity_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+    }
+
+    public function testCreateWithCustomer()
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl(
+                'oro_sales_opportunity_customer_aware_create',
+                [
+                    'targetClass' => 'Oro_Bundle_AccountBundle_Entity_Account',
+                    'targetId' => self::$account->getId(),
+                ]
+            )
+        );
+
+        /** @var Form $form */
+        $form = $crawler->selectButton('Save and Close')->form();
+        $form['oro_sales_opportunity_form[name]'] = 'opname';
+        $form['oro_sales_opportunity_form[probability]'] = 1000;
+        $form['oro_sales_opportunity_form[budgetAmount][value]'] = 50;
+        $form['oro_sales_opportunity_form[budgetAmount][currency]'] = 'USD';
+        $form['oro_sales_opportunity_form[owner]'] = 1;
+
+        $this->client->followRedirects(true);
+        $crawler = $this->client->submit($form);
+
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains("Opportunity saved", $crawler->html());
     }
 
     public function testCreate()
@@ -56,6 +89,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $form['oro_sales_opportunity_form[customerNeed]'] = 10001;
         $form['oro_sales_opportunity_form[closeReason]']  = 'cancelled';
         $form['oro_sales_opportunity_form[owner]']        = 1;
+        $form['oro_sales_opportunity_form[customerAssociation]'] = '{"value":"Account"}'; //create with new Account
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -185,7 +219,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                         'budgetAmount' => 'USD50.0000',
                         'probability'  => 10,
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 2
                 ],
             ],
             'Opportunity grid with filter'    => [
@@ -202,7 +236,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
                         'budgetAmount'      => 'USD50.0000',
                         'probability'       => 10,
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 2
                 ]
             ],
             'Opportunity grid without result' => [

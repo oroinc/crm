@@ -6,3 +6,4 @@ config:
         orosales/js/app/views/create-customr-view: 'bundles/orosales/js/app/views/create-customer-view.js'
         orosales/js/app/components/customer-component: 'bundles/orosales/js/app/components/customer-component.js'
         orosales/js/app/components/customer-grid-component: 'bundles/orosales/js/app/components/customer-grid-component.js'
+        oro/select2-sales-customer-component: 'bundles/orosales/js/app/components/select2-sales-customer-component.js'

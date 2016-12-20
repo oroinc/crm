@@ -22,7 +22,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->renameActivityTables($schema, $queries);
-        $this->updateNotes($schema, $queries);
     }
 
     /**
@@ -49,35 +48,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             'contact_cdc90e7a',
             'contact_a6d273bd',
             RelationType::MANY_TO_MANY
-        ));
-    }
-
-    /**
-     * @param Schema $schema
-     * @param QueryBag $queries
-     */
-    private function updateNotes(Schema $schema, QueryBag $queries)
-    {
-        $extension = $this->renameExtension;
-        $notes = $schema->getTable('oro_note');
-
-        $notes->removeForeignKey('FK_BA066CE14BCD64E0');
-        $extension->renameColumn($schema, $queries, $notes, 'contact_6d50e87e_id', 'contact_48c5c037_id');
-        $extension->addForeignKeyConstraint(
-            $schema,
-            $queries,
-            'oro_note',
-            'orocrm_contact',
-            ['contact_48c5c037_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\NoteBundle\Entity\Note',
-            'Oro\Bundle\ContactBundle\Entity\Contact',
-            'contact_6d50e87e',
-            'contact_48c5c037',
-            RelationType::MANY_TO_ONE
         ));
     }
 

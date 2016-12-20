@@ -4,6 +4,36 @@ UPGRADE FROM 1.10 to 2.0
 ####General
 - Changed minimum required php version to 5.6
 
+###SOAP API was removed
+- removed all dependencies to the `besimple/soap-bundle` bundle. 
+- removed SOAP annotations from the entities. Updated entities:
+    - Oro\Bundle\AccountBundle\Entity\Account
+    - Oro\Bundle\ContactBundle\Entity\Contact
+    - Oro\Bundle\ContactBundle\Entity\ContactAddress
+    - Oro\Bundle\ContactBundle\Entity\ContactEmail
+    - Oro\Bundle\ContactBundle\Entity\ContactPhone
+    - Oro\Bundle\ContactBundle\Entity\Group
+    - Oro\Bundle\ContactBundle\Entity\Method
+    - Oro\Bundle\ContactBundle\Entity\Source
+    - Oro\Bundle\MagentoBundle\Entity\Address
+    - Oro\Bundle\MagentoBundle\Entity\CartAddress
+    - Oro\Bundle\MagentoBundle\Entity\OrderAddress
+    - Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
+    - Oro\Bundle\SalesBundle\Entity\LeadAddress
+    - Oro\Bundle\SalesBundle\Entity\LeadEmail
+- removed classes:
+    - Oro\Bundle\AccountBundle\Controller\Api\Soap\AccountController
+    - Oro\Bundle\ContactBundle\Controller\Api\Soap\ContactController
+    - Oro\Bundle\ContactBundle\Controller\Api\Soap\ContactGroupController
+    - Oro\Bundle\SearchBundle\Controller\Api\SoapController
+    - Oro\Bundle\CaseBundle\Entity\CaseCommentSoap
+    - Oro\Bundle\CaseBundle\Entity\CaseEntitySoap
+    - Oro\Bundle\AccountBundle\Tests\Functional\API\SoapAccountTest
+    - Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap\CaseControllerTest
+    - Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap\CommentControllerTest
+    - Oro\Bundle\ContactBundle\Tests\Functional\API\SoapContactApiTest
+    - Oro\Bundle\ContactBundle\Tests\Functional\API\SoapContactGroupApiTest
+
 ####OroSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Opportunity`

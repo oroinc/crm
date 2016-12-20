@@ -5,12 +5,14 @@ namespace Oro\Bundle\SalesBundle\Autocomplete;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+
 use Oro\Bundle\SearchBundle\Query\Result\Item;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerSearchHandler extends ContextSearchHandler
 {
@@ -20,7 +22,7 @@ class CustomerSearchHandler extends ContextSearchHandler
     /** @var CustomerIconProviderInterface */
     protected $customerIconProvider;
 
-    /** @var CustomerConfigProvider */
+    /** @var ConfigProvider */
     protected $customerConfigProvider;
 
     /** @var DoctrineHelper */
@@ -35,9 +37,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     }
 
     /**
-     * @param CustomerConfigProvider $customerConfigProvider
+     * @param ConfigProvider $customerConfigProvider
      */
-    public function setCustomerConfigProvider(CustomerConfigProvider $customerConfigProvider)
+    public function setCustomerConfigProvider(ConfigProvider $customerConfigProvider)
     {
         $this->customerConfigProvider = $customerConfigProvider;
     }
@@ -106,7 +108,7 @@ class CustomerSearchHandler extends ContextSearchHandler
      */
     protected function getSearchAliases()
     {
-        $customers = $this->customerConfigProvider->getAssociatedCustomerClasses($this->class);
+        $customers = $this->customerConfigProvider->getCustomerClasses();
 
         return array_values($this->indexer->getEntityAliases($customers));
     }

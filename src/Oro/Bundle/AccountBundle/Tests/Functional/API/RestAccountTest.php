@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AccountBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @outputBuffering enabled
@@ -17,6 +18,10 @@ class RestAccountTest extends WebTestCase
 
     public function testCreate()
     {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $manager = $doctrine->getManagerForClass(Account::class);
+        $manager->createQuery(sprintf('DELETE FROM %s', Account::class))->execute();
+
         $request = array(
             "account" => array (
                 "name" => 'Account_name_' . mt_rand(),
