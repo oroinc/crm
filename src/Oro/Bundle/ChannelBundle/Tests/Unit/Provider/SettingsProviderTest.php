@@ -290,4 +290,59 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getChannelTypeChoiceList());
     }
+
+    /**
+     * @return array
+     */
+    public function channelConfigProvider()
+    {
+        return [
+            'system channel' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom',
+                            'system' => true
+                        ]
+                    ],
+                ],
+                '$expectedResults' => true
+            ],
+            'non system channel' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom',
+                            'system' => false
+                        ]
+                    ],
+                ],
+                '$expectedResults' => false
+            ],
+            'default channel type' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom'
+                        ]
+                    ],
+                ],
+                '$expectedResults' => false
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider channelConfigProvider
+     *
+     * @param array $config
+     * @param $expectedResults
+     */
+    public function testIsSystemChannel(array $config, $expectedResults)
+    {
+        $this->assertEquals($expectedResults, $this->getSettingsProvider($config)->isChannelSystem('custom'));
+    }
 }
