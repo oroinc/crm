@@ -208,6 +208,27 @@ class SettingsProvider
     }
 
     /**
+     * Check system status of channel
+     *
+     * @param string $channelType
+     *
+     * @return bool
+     *
+     * @throws \LogicException If channel type config not found
+     */
+    public function isChannelSystem($channelType)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+
+        if (!isset($settings[$channelType])) {
+            throw new \LogicException(sprintf('Unable to find "%s" channel type\'s config', $channelType));
+        }
+
+        return !empty($settings[$channelType]['system'])
+            ? $settings[$channelType]['system'] : false;
+    }
+
+    /**
      * Returns integration connector name that entity belongs to
      *
      * @param string $entityFQCN entity full class name
