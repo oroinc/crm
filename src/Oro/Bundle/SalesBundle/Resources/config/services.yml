@@ -588,3 +588,8 @@ services:
             - '@oro_sales.manager.account_customer'
         tags:
             - { name: oro_action.action, alias: find_customer_association }
+
+    oro_sales.customer_account_change_subscriber:
+         class: Oro\Bundle\SalesBundle\EventListener\CustomerAccountChangeSubscriber
+         tags:
+             - { name: doctrine.event_subscriber }
