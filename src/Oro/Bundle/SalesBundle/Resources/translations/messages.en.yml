@@ -490,7 +490,6 @@ oro:
             entity_label:            Lead Mailbox Process Settings
             entity_plural_label:     Lead Mailbox Process Settings
             id.label:                Id
-            serialized_data.label:   Serialized Data
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner

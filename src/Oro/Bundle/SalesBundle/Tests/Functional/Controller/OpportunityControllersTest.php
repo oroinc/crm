@@ -89,6 +89,7 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         $form['oro_sales_opportunity_form[customerNeed]'] = 10001;
         $form['oro_sales_opportunity_form[closeReason]']  = 'cancelled';
         $form['oro_sales_opportunity_form[owner]']        = 1;
+        $form['oro_sales_opportunity_form[customerAssociation]'] = '{"value":"Account"}'; //create with new Account
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

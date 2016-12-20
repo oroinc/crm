@@ -103,6 +103,64 @@ processes:
                                               method: addPhone
                                               method_parameters: [$.magentoAddress.contactPhone]
 
+                - '@automatic_discovery':
+                    conditions: # if Account not exists
+                        '@empty': $account
+                    parameters:
+                        entity: $.data
+                        attribute: $.matchedEntity
+                - '@assign_value': # check matched entity and its account
+                    conditions:
+                        '@not_empty': $.matchedEntity
+                        '@not_empty': $.matchedEntity.account
+                    parameters: [$account, $.matchedEntity.account]
+
+                - '@tree': # set Account
+                    conditions: # if Account not exists
+                        '@empty': $account
+                    actions:
+                        - '@format_string': # generate Account name
+                            attribute: $.accountName
+                            string:    '%firstName% %lastName%'
+                            arguments:
+                                firstName: $firstName
+                                lastName:  $lastName
+                        - '@assign_value': # check and generate N/A Account name
+                            conditions:
+                                '@and':
+                                    - '@empty': $firstName
+                                    - '@empty': $lastName
+                            parameters: [$.accountName, 'N/A']
+                        - '@create_entity': # create Account
+                            class:     Oro\Bundle\AccountBundle\Entity\Account
+                            attribute: $account
+                            data:
+                                defaultContact: $contact
+                                name:           $.accountName
+                                owner:          $owner
+                                organization:   $organization
+                        - '@unset_value': [$.accountName]
+                 # @TODO should be removed after CRM-7178 will be fixed
+                - '@tree':
+                    actions:
+                    # find for existing customer association for magento customer
+                        - '@find_customer_association':
+                            parameters:
+                                attribute: $.customer_association
+                                customer: $.data
+                        - '@tree':
+                            conditions:
+                                '@empty': $.customer_association
+                            actions:
+                            # create new customer association for magento customer
+                                - '@create_entity':
+                                    parameters:
+                                        class:     Oro\Bundle\SalesBundle\Entity\Customer
+                                        attribute: $.customer_association
+                                - '@call_method':
+                                    object: $.customer_association
+                                    method: setTarget
+                                    method_parameters: [$account, $.data]
         magento_customer_export:
             label:   'Export Magento Customer to Magento'
             enabled: true

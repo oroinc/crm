@@ -35,6 +35,7 @@ system_configuration:
         display_settings:
             title: oro.sales.system_configuration.groups.display_settings.title
             priority: 20
+
     fields:
         oro_sales.lead_feature_enabled:
             data_type: boolean
@@ -92,7 +93,6 @@ system_configuration:
                 required: false
                 tooltip: oro.sales.system_configuration.fields.display_relevant_opportunities.tooltip
                 label:   oro.sales.system_configuration.fields.display_relevant_opportunities.label
-
 
         oro_sales.account_limit_of_lookup_results:
             data_type: integer

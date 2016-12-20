@@ -178,7 +178,7 @@ workflows:
                                     where:
                                         name: $new_company_name
                                 case_insensitive: true
-                            - '@find_entity': # try to find customer asscoation by account
+                            - '@find_entity': # try to find customer association by account
                                 conditions:
                                     '@not_empty': $new_account
                                 parameters:

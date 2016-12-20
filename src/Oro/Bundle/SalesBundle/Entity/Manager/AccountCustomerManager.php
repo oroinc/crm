@@ -72,9 +72,9 @@ class AccountCustomerManager
     }
 
     /**
-     * @param $target
+     * @param object $target
      *
-     * @return null|Account
+     * @return Account
      */
     public function createAccountForTarget($target)
     {
@@ -86,12 +86,12 @@ class AccountCustomerManager
 
     /**
      * @param object $target
+     * @param bool   $throwExceptionOnNotFound
      *
      * @return Customer
-     *
      * @throws EntityNotFoundException
      */
-    public function getAccountCustomerByTarget($target)
+    public function getAccountCustomerByTarget($target, $throwExceptionOnNotFound = true)
     {
         $customerRepo = $this->getCustomerRepository();
         if ($target instanceof Account) {
@@ -104,10 +104,12 @@ class AccountCustomerManager
             $targetClassName = ClassUtils::getClass($target);
             $this->assertValidTarget($targetClassName);
             $targetField = self::getCustomerTargetField($targetClassName);
-            $id          = $this->doctrineHelper->getSingleEntityIdentifier($target);
-            $customer    = $customerRepo->findOneBy([$targetField => $id]);
+            $id          = $this->doctrineHelper->getSingleEntityIdentifier($target, false);
+            $customer    = $id
+                ? $customerRepo->findOneBy([$targetField => $id])
+                : null;
 
-            if (!$customer) {
+            if (!$customer && $throwExceptionOnNotFound) {
                 throw new EntityNotFoundException(
                     sprintf(
                         'Sales Customer for target of type "%s" and identifier %s was not found',

@@ -104,6 +104,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-accounts-activity-grid, method: onResultBefore }
 
+    oro_account.accounts_view_list:
+        class: Oro\Bundle\AccountBundle\Datagrid\AccountsViewList
+        arguments:
+            - @translator
+
     oro_account.provider.prepare_result_item_provider:
         class: Oro\Bundle\AccountBundle\Provider\AccountAutocompleteProvider
         tags:

@@ -8,13 +8,17 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\PlatformBundle\EventListener\OptionalListenerInterface;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 
-class CustomerAssociationListener
+class CustomerAssociationListener implements OptionalListenerInterface
 {
+    /** @var bool */
+    protected $enabled = true;
+
     /** @var [object[]] */
     protected $createdTargetCustomers = [];
 
@@ -43,12 +47,24 @@ class CustomerAssociationListener
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setEnabled($enabled = true)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
      * Collect created customer targets
      *
      * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         $uow = $args->getEntityManager()->getUnitOfWork();
         $this->prepareCreatedCustomers($uow->getScheduledEntityInsertions());
     }

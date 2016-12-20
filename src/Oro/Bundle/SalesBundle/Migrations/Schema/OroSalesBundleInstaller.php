@@ -15,18 +15,16 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
+
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_11\OroSalesBundle as SalesOrganizations;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_5\OroSalesBundle as SalesNoteMigration;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v2_1\AddCustomersTable;
 
 /**
@@ -36,7 +34,6 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v2_1\AddCustomersTable;
 class OroSalesBundleInstaller implements
     Installation,
     ExtendExtensionAwareInterface,
-    NoteExtensionAwareInterface,
     ActivityExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
@@ -44,9 +41,6 @@ class OroSalesBundleInstaller implements
 {
     /** @var ExtendExtension */
     protected $extendExtension;
-
-    /** @var NoteExtension */
-    protected $noteExtension;
 
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -74,14 +68,6 @@ class OroSalesBundleInstaller implements
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
     }
 
     /**
@@ -150,8 +136,8 @@ class OroSalesBundleInstaller implements
         $this->addOrocrmSalesLeadEmailForeignKeys($schema);
         AddCustomersTable::addCustomersTableForeignKeys($schema);
 
-        /** Apply extensions */
-        SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_sales_lead');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_lead');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_sales_b2bcustomer');

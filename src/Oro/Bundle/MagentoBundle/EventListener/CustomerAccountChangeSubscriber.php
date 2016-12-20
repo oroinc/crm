@@ -59,14 +59,23 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
         if (!$this->changedCustomers) {
             return;
         }
+        $needFlush = false;
+
         /** @var MagentoCustomer $magentoCustomer */
         foreach ($this->changedCustomers as $customer) {
             $magentoCustomer = $customer->getTarget();
-            $magentoCustomer->setAccount($customer->getAccount());
+            $account         = $customer->getAccount();
+            $magentoAccount  = $magentoCustomer->getAccount();
+            if ($account !== $magentoAccount) {
+                $magentoCustomer->setAccount($account);
+                $needFlush = true;
+            }
         }
         $this->changedCustomers = [];
         $em = $args->getEntityManager();
-        $em->flush();
+        if ($needFlush) {
+            $em->flush();
+        }
     }
 
     /**

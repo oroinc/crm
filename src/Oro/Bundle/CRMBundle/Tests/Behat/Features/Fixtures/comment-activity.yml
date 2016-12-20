@@ -38,7 +38,7 @@ Oro\Bundle\EmailBundle\Entity\EmailUser:
 Oro\Bundle\NoteBundle\Entity\Note:
   note:
     message: 'Charlie works hard'
-    target: @contactCharlie
+    addActivityTarget: [@contactCharlie]
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     owner: @admin

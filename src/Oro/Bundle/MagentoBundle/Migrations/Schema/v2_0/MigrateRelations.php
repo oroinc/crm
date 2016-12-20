@@ -24,7 +24,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
         $this->renameActivityTables($schema, $queries);
         $this->updateTrackingVisitEvent($schema, $queries);
         $this->updateTrackingVisit($schema, $queries);
-        $this->updateNotes($schema, $queries);
     }
 
     /**
@@ -220,35 +219,6 @@ class MigrateRelations implements Migration, RenameExtensionAwareInterface
             'Oro\Bundle\MagentoBundle\Entity\Customer',
             'customer_ff3bb796',
             'customer_7c2d0d96',
-            RelationType::MANY_TO_ONE
-        ));
-    }
-
-    /**
-     * @param Schema $schema
-     * @param QueryBag $queries
-     */
-    private function updateNotes(Schema $schema, QueryBag $queries)
-    {
-        $extension = $this->renameExtension;
-        $notes = $schema->getTable('oro_note');
-
-        $notes->removeForeignKey('fk_oro_note_order_142bf5fc_id');
-        $extension->renameColumn($schema, $queries, $notes, 'order_142bf5fc_id', 'order_e1ff24e2_id');
-        $extension->addForeignKeyConstraint(
-            $schema,
-            $queries,
-            'oro_note',
-            'orocrm_magento_order',
-            ['order_e1ff24e2_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $queries->addQuery(new UpdateExtendRelationQuery(
-            'Oro\Bundle\NoteBundle\Entity\Note',
-            'Oro\Bundle\MagentoBundle\Entity\Order',
-            'order_142bf5fc',
-            'order_e1ff24e2',
             RelationType::MANY_TO_ONE
         ));
     }

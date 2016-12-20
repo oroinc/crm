@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
@@ -90,9 +91,10 @@ class OpportunityType extends AbstractType
                 'customerAssociation',
                 'oro_sales_customer',
                 [
-                    'required' => false,
+                    'required' => true,
                     'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
+                    'constraints' => [new NotBlank()]
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])

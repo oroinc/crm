@@ -4,40 +4,41 @@ namespace Oro\Bundle\AccountBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-class OroAccountBundle implements Migration, NoteExtensionAwareInterface
+class OroAccountBundle implements Migration, ActivityExtensionAwareInterface
 {
-    /** @var NoteExtension */
-    protected $noteExtension;
-
     /**
-     * {@inheritdoc}
+     * @var ActivityExtension
      */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
+    protected $activityExtension;
 
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addNoteAssociations($schema, $this->noteExtension);
+        $this->addNoteAssociations($schema);
     }
 
     /**
      * Enable notes for Account entity
      *
      * @param Schema        $schema
-     * @param NoteExtension $noteExtension
      */
-    public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
+    protected function addNoteAssociations(Schema $schema)
     {
-        $noteExtension->addNoteAssociation($schema, 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_account');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
     }
 }

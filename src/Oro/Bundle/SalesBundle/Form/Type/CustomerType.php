@@ -55,7 +55,6 @@ class CustomerType extends AbstractType
      * @param TranslatorInterface           $translator
      * @param SecurityFacade                $securityFacade
      * @param ManagerInterface              $gridManager
-     * @param ConfigManager                 $configManager
      */
     public function __construct(
         DataTransformerInterface $transformer,
@@ -82,8 +81,8 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $customersData       = $this->customerConfigProvider->getCustomersData();
-        $hasGridData         = false;
+        $customersData = $this->customerConfigProvider->getCustomersData();
+        $hasGridData = false;
         $createCustomersData = [];
         foreach ($customersData as $customer) {
             if ($customer['gridName'] &&
@@ -92,7 +91,8 @@ class CustomerType extends AbstractType
                 $hasGridData = true;
                 unset($customer['gridName']);
             }
-            if ($this->securityFacade->isGranted($customer['routeCreate'])) {
+
+            if ($this->securityFacade->isGranted('CREATE', sprintf('entity:%s', $customer['className']))) {
                 $createCustomersData[] = $customer;
             }
         }
