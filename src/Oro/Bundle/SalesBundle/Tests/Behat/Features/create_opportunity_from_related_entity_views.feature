@@ -26,7 +26,7 @@ Feature: Create Opportunity from related entity views
 
   Scenario: Sales Rep creates Opportunity for Account
     Given I login as "johnconnor" user
-    And I go to Customers/Accounts
+    And I go to Accounts
     And I open "SkyNet" entity
     When I go to More Actions/Create Opportunity
     And I fill in "Opportunity name" with "First Invasion"
@@ -35,7 +35,7 @@ Feature: Create Opportunity from related entity views
     And "Account" should be filled with "SkyNet"
 
   Scenario: Sales Rep creates Opportunity for Account
-    Given I go to Customers/Magento Customers
+    Given I go to Magento Customers
     And I open "Mr. Robot" entity
     When I go to More Actions/Create Opportunity
     And I fill in "Opportunity name" with "Second Invasion"
@@ -44,7 +44,7 @@ Feature: Create Opportunity from related entity views
     And "Account" should be filled with "Mr. Robot"
 
   Scenario: Sales Rep creates Opportunity for Account
-    Given I go to Customers/Business Customers
+    Given I go to Business Customers
     And I open "BusSkyNet" entity
     When I go to More Actions/Create Opportunity
     And I fill in "Opportunity name" with "Third Invasion"
@@ -53,7 +53,7 @@ Feature: Create Opportunity from related entity views
     And "Account" should be filled with "BusSkyNet"
 
   Scenario: Sales Rep creates Opportunity for Account
-    Given I go to Customers/Customers
+    Given I go to Customers
     And I open "CommSkyNet" entity
     When I go to More Actions/Create Opportunity
     And I fill in "Opportunity name" with "Fourth Invasion"
