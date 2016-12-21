@@ -25,7 +25,7 @@ class ActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMarketingListItemPermissions($isSubscribed, array $actions, array $expected)
     {
-        $record = $this->getMock('Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface');
+        $record = $this->createMock('Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface');
 
         $record
             ->expects($this->once())

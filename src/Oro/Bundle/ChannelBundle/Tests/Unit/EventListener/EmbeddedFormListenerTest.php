@@ -94,11 +94,11 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
         $formEntity = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\EmbeddedFormStub')
             ->disableOriginalConstructor()->getMock();
 
-        $dataChannel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $dataChannel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $formEntity->expects($this->once())
             ->method('getDataChannel')
             ->will($this->returnValue($dataChannel));
-        $data = $this->getMock('Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface');
+        $data = $this->createMock('Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface');
         $data->expects($this->once())
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);

@@ -22,9 +22,9 @@ class ChannelTest extends AbstractEntityTestCase
     public function getDataProvider()
     {
         $name             = 'Some name';
-        $owner            = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        $integration      = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $customerIdentity = $this->getMock('Oro\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
+        $owner            = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $integration      = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $customerIdentity = $this->createMock('Oro\Bundle\ChannelBundle\Entity\EntityName', [], ['phone']);
         $status           = true;
         $channelType      = 'Custom';
         $someDateTime     = new \DateTime();

@@ -37,7 +37,7 @@ class EmailTransportSelectTypeTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getVisibleTransportChoices')
             ->will($this->returnValue($choices));
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver
             ->expects($this->once())
             ->method('setDefaults')

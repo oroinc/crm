@@ -42,7 +42,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->defaultStrategy = $this
-            ->getMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
+            ->createMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $this->metadataProvider = $this
             ->getMockBuilder('Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider')
             ->disableOriginalConstructor()
@@ -220,7 +220,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface $customStrategy */
         $customStrategy = $this
-            ->getMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
+            ->createMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $customStrategy->expects($this->once())
             ->method('apply')
             ->with($qb, AutomaticDiscovery::ROOT_ALIAS, 'test2', $config[Configuration::DISCOVERY_NODE], $entity);

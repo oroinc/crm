@@ -119,7 +119,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntity')
             ->will($this->returnValue($this->entityConfig3));
 
-        $extendConfigModel = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $extendConfigModel = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $extendConfigModel->expects($this->any())
             ->method('get')
             ->with($this->equalTo('owner'))

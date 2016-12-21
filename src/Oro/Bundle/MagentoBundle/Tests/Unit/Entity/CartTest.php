@@ -41,8 +41,8 @@ class CartTest extends AbstractEntityTestCase
         $testCustomer        = new Customer();
         $testItemsCollection = new ArrayCollection([new CartItem()]);
         $testStore           = new Store();
-        $owner               = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization        = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $owner               = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization        = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'status'            => ['status', $testStatus, $testStatus],

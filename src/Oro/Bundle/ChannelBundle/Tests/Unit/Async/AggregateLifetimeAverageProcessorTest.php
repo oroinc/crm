@@ -231,7 +231,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createLocaleSettingsMock()
     {
-        return $this->getMock(LocaleSettings::class, [], [], '', false);
+        return $this->createMock(LocaleSettings::class);
     }
 
     /**
@@ -239,7 +239,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createLifetimeValueAverageAggregationRepositoryMock()
     {
-        return $this->getMock(LifetimeValueAverageAggregationRepository::class, [], [], '', false);
+        return $this->createMock(LifetimeValueAverageAggregationRepository::class);
     }
 
     /**
@@ -247,7 +247,7 @@ class AggregateLifetimeAverageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createRegistryStub($entityRepository = null)
     {
-        $registryMock = $this->getMock(RegistryInterface::class);
+        $registryMock = $this->createMock(RegistryInterface::class);
         $registryMock
             ->expects($this->any())
             ->method('getRepository')

@@ -41,7 +41,7 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm(array $enumOptions)
     {
         /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $builder->expects($this->exactly(count($enumOptions)))
             ->method('add');

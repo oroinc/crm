@@ -217,12 +217,12 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
         $isSupportedExtensionVersion = false,
         $channelId = null
     ) {
-        $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $settings = [];
         if (null !== $isTwoWaySyncEnabled) {
             $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
         }
-        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
+        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
         $transport->expects($this->any())->method('isSupportedExtensionVersion')
             ->willReturn($isSupportedExtensionVersion);
         $settings = ConfigObject::create($settings);
