@@ -56,6 +56,10 @@ class DashboardController extends Controller
             $this->get('oro_security.acl_helper')
         );
 
+        foreach ($data as &$item) {
+            $item['label'] = $this->get('oro_workflow.helper.translation')->findTranslation($item['label']);
+        }
+
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         if (!$dateFrom) {
             $dateFrom = new \DateTime(FilterDateRangeConverter::MIN_DATE, new \DateTimeZone('UTC'));
