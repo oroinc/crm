@@ -187,6 +187,21 @@ class SettingsProvider
     }
 
     /**
+     * Returns channel types that could be used in channel type selector
+     * sorted by priority
+     *
+     * @return array
+     */
+    public function getNonSystemChannelTypeChoiceList()
+    {
+        $channelTypes = array_filter($this->getChannelTypeChoiceList(), function ($channelTypeName) {
+            return !$this->isChannelSystem($channelTypeName);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $channelTypes;
+    }
+
+    /**
      * Get required integration type for given channel type
      *
      * @param string $channelType

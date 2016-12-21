@@ -80,5 +80,29 @@ class ConvertDataChannelToExtend implements Migration, ConvertToExtendExtensionA
                 'dataaudit' => ['auditable' => false]
             ]
         );
+        $this->сonvertToExtendExtension->manyToOneRelation(
+            $queries,
+            $schema,
+            'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
+            'dataChannel',
+            'orocrm_sales_funnel',
+            'data_channel',
+            'orocrm_channel',
+            'name',
+            [
+                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
+                'extend' => [
+                    'owner' => ExtendScope::OWNER_CUSTOM,
+                    'is_extend' => true,
+                ],
+                'form' => [
+                    'is_enabled' => true,
+                    'form_type' => 'oro_channel_select_type'
+                ],
+                'view' => ['is_displayable' => true],
+                'merge' => ['display' => false],
+                'dataaudit' => ['auditable' => false]
+            ]
+        );
     }
 }

@@ -1,11 +1,11 @@
 <% if (icon.type === 'file-path') { %>
-    <img width="16" height="16" src="<%= icon.data.path %>">
+    <img src="<%= icon.data.path %>" class="separated-img">
 <% } else if (icon.type === 'icon') { %>
-    <i class="<%= icon.data.class %> hide-text"></i>
+    <i class="<%= icon.data.class %> hide-text separated-img"></i>
 <% } %>
 <%= highlight(_.escape(text)) %>
 <% if (id === null) { %>
     <span class="select2__result-entry-info">
-        (<%= _.__('oro.form.add_new') %>)
+        (<%= _.__('oro.sales.form.add_new_customer', {'account': context.account}) %>)
     </span>
 <% } %>

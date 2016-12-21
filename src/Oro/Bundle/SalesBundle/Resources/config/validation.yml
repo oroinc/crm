@@ -42,8 +42,6 @@ Oro\Bundle\SalesBundle\Entity\SalesFunnel:
         startDate:
             - NotBlank: ~
             - Date: ~
-        dataChannel:
-            - NotBlank: ~
         organization:
             - NotBlank: ~
 

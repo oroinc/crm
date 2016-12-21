@@ -179,7 +179,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         );
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         if (!$this->workflowManager->isStartTransitionAvailable(
             'b2b_flow_sales_funnel',
             $step,

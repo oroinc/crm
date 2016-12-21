@@ -1,3 +1,5 @@
+@skip
+# todo: Should be enabled in CRM-6722
 Feature: Import opportunity feature
   In order to simplify work with opportunities
   As crm user

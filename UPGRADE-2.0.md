@@ -5,6 +5,36 @@ UPGRADE FROM 1.10 to 2.0
 - Changed minimum required php version to 5.6
 - Field `dataChannel` for `Lead` and `Opportunity` was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name `data_channel`. 
 
+###SOAP API was removed
+- removed all dependencies to the `besimple/soap-bundle` bundle. 
+- removed SOAP annotations from the entities. Updated entities:
+    - Oro\Bundle\AccountBundle\Entity\Account
+    - Oro\Bundle\ContactBundle\Entity\Contact
+    - Oro\Bundle\ContactBundle\Entity\ContactAddress
+    - Oro\Bundle\ContactBundle\Entity\ContactEmail
+    - Oro\Bundle\ContactBundle\Entity\ContactPhone
+    - Oro\Bundle\ContactBundle\Entity\Group
+    - Oro\Bundle\ContactBundle\Entity\Method
+    - Oro\Bundle\ContactBundle\Entity\Source
+    - Oro\Bundle\MagentoBundle\Entity\Address
+    - Oro\Bundle\MagentoBundle\Entity\CartAddress
+    - Oro\Bundle\MagentoBundle\Entity\OrderAddress
+    - Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail
+    - Oro\Bundle\SalesBundle\Entity\LeadAddress
+    - Oro\Bundle\SalesBundle\Entity\LeadEmail
+- removed classes:
+    - Oro\Bundle\AccountBundle\Controller\Api\Soap\AccountController
+    - Oro\Bundle\ContactBundle\Controller\Api\Soap\ContactController
+    - Oro\Bundle\ContactBundle\Controller\Api\Soap\ContactGroupController
+    - Oro\Bundle\SearchBundle\Controller\Api\SoapController
+    - Oro\Bundle\CaseBundle\Entity\CaseCommentSoap
+    - Oro\Bundle\CaseBundle\Entity\CaseEntitySoap
+    - Oro\Bundle\AccountBundle\Tests\Functional\API\SoapAccountTest
+    - Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap\CaseControllerTest
+    - Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Soap\CommentControllerTest
+    - Oro\Bundle\ContactBundle\Tests\Functional\API\SoapContactApiTest
+    - Oro\Bundle\ContactBundle\Tests\Functional\API\SoapContactGroupApiTest
+
 ####OroSalesBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Lead`
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\SalesBundle\Entity\Opportunity`
@@ -78,3 +108,9 @@ UPGRADE FROM 1.10 to 2.0
 
 ####CalendarCRMBridgeBundle:
 - CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
+
+####OroDataGridBundle:
+- New ACL Capability "Export Grid View" added under "Application" Category to control Export Grid action.
+
+####OroSecurityBundle:
+- Added fixture data loader `Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData` to provide easy way for setting default ACLs for Roles

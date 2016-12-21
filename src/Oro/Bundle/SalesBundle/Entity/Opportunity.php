@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrencyHolderInterface;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -16,6 +15,8 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ *
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
  *      name="orocrm_sales_opportunity",
@@ -478,7 +479,15 @@ class Opportunity extends ExtendOpportunity implements
     protected $closedAt;
 
     /**
-     * @inheritDoc
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
+     * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     */
+    protected $customerAssociation;
+
+    /**
+     * {@inheritdoc}
      */
     public function __construct()
     {
@@ -1040,5 +1049,25 @@ class Opportunity extends ExtendOpportunity implements
 
         $this->setCloseRevenueCurrency(null);
         $this->setBaseCloseRevenueValue(null);
+    }
+
+    /**
+     * @param Customer|null $customer
+     *
+     * @return $this
+     */
+    public function setCustomerAssociation(Customer $customer = null)
+    {
+        $this->customerAssociation = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomerAssociation()
+    {
+        return $this->customerAssociation;
     }
 }
