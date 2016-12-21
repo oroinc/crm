@@ -131,8 +131,6 @@ class StateProvider
             $qb->distinct(true);
             $qb->select('e.name')
                 ->from('OroChannelBundle:Channel', 'c')
-//                ->andWhere('c.status = :status')
-//                ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');
 
             $assignedEntityNames = $this->aclHelper->apply($qb)->getArrayResult();

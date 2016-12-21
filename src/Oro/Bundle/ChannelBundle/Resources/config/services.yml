@@ -289,6 +289,7 @@ services:
       class: %oro_channel.event_listener.doctrine.class%
       arguments:
           - "@oro_channel.provider.settings_provider"
+          - "@oro_sales.provider.customer.account_creation.chain"
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }

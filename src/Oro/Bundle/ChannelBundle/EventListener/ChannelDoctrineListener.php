@@ -14,6 +14,7 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider;
 
 class ChannelDoctrineListener
 {
@@ -24,6 +25,9 @@ class ChannelDoctrineListener
 
     /** @var EntityManager */
     protected $em;
+
+    /** @var ChainAccountProvider */
+    protected $chainAccountProvider;
 
     /** @var LifetimeHistoryRepository */
     protected $lifetimeRepo;
@@ -39,9 +43,13 @@ class ChannelDoctrineListener
 
     /**
      * @param SettingsProvider $settingsProvider
+     * @param ChainAccountProvider $chainAccountProvider
      */
-    public function __construct(SettingsProvider $settingsProvider)
-    {
+    public function __construct(
+        SettingsProvider $settingsProvider,
+        ChainAccountProvider $chainAccountProvider
+    ) {
+        $this->chainAccountProvider = $chainAccountProvider;
         $settings = $settingsProvider->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
@@ -61,7 +69,7 @@ class ChannelDoctrineListener
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
-                $this->scheduleUpdate($className, $entity->getAccount(), $entity->getDataChannel());
+                $this->scheduleUpdate($className, $this->chainAccountProvider->getAccount($entity), $entity->getDataChannel());
             }
         }
     }
@@ -175,7 +183,7 @@ class ChannelDoctrineListener
         $className = ClassUtils::getClass($entity);
 
         if ($this->isUpdateRequired($className, $changeSet)) {
-            $account = $entity->getAccount();
+            $account = $this->chainAccountProvider->getAccount($entity);
             $channel = $entity->getDataChannel();
             $this->scheduleUpdate($className, $account, $channel);
 
