@@ -94,7 +94,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
      */
     private function getFormMock()
     {
-        return $this->getMock(FormInterface::class);
+        return $this->createMock(FormInterface::class);
     }
 
     /**

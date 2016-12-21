@@ -224,7 +224,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createIntegrationRepositoryStub(Integration $integration = null)
     {
-        $repositoryMock = $this->getMock(IntegrationRepository::class, [], [], '', false);
+        $repositoryMock = $this->createMock(IntegrationRepository::class);
         $repositoryMock
             ->expects(self::any())
             ->method('getOrLoadById')
@@ -239,7 +239,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createRegistryStub(IntegrationRepository $integrationRepository = null)
     {
-        $registryMock = $this->getMock(RegistryInterface::class);
+        $registryMock = $this->createMock(RegistryInterface::class);
         $registryMock
             ->expects(self::any())
             ->method('getRepository')
@@ -255,7 +255,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createSyncProcessorMock()
     {
-        return $this->getMock(CartExpirationProcessor::class, [], [], '', false);
+        return $this->createMock(CartExpirationProcessor::class);
     }
 
     /**
@@ -263,6 +263,6 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createLoggerMock()
     {
-        return $this->getMock(LoggerInterface::class);
+        return $this->createMock(LoggerInterface::class);
     }
 }

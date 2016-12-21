@@ -61,15 +61,14 @@ workflows:
                             parameters:
                                 - '@not_equal': [$lead.status.id, 'qualified']
                                 - '@not_equal': [$lead.status.id, 'canceled']
-                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
                         - '@feature_enabled':
                             feature: sales_opportunity
                 conditions:
                     '@or':
                         parameters:
                             - '@not_empty': $new_company_name
-                            - '@not_empty': $new_b2bcustomer
-                        message: "Company name or customer must be selected."
+                            - '@not_empty': $new_customer_association
+                        message: "Company name or account must be selected."
                 actions: # set lead.status = "qualified"
                     - '@request_enum_entity':
                         enum_code: lead_status
@@ -166,53 +165,54 @@ workflows:
                                                 [$.result.phone, $.result.leadPhone]
                     - '@tree':
                         conditions:
-                            '@and': # if customer not selected and company name is selected
-                                - '@empty':     $new_b2bcustomer
+                            '@and': # if customer association not selected and company name is selected
+                                - '@empty':     $new_customer_association
                                 - '@not_empty': $new_company_name
                         actions:
-                            - '@find_entity': # try to find b2bcustomer by company name
-                                class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
-                                attribute: $new_b2bcustomer
-                                where:
-                                    name: $new_company_name
-                                case_insensitive: true
                             - '@find_entity': # try to find account by company name
                                 conditions:
-                                    '@empty': $new_b2bcustomer
+                                    '@empty': $new_customer_association
                                 parameters:
                                     class: Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     where:
                                         name: $new_company_name
                                 case_insensitive: true
-                            - '@create_entity': # if b2bcustomer not found - create new one
+                            - '@find_entity': # try to find customer association by account
+                                conditions:
+                                    '@not_empty': $new_account
+                                parameters:
+                                    class: Oro\Bundle\SalesBundle\Entity\Customer
+                                    attribute: $new_customer_association
+                                    where:
+                                        account: $new_account
+                            - '@create_entity': # if account not found - create new one
                                 conditions:
                                     '@and':
                                         - '@empty': $new_account
-                                        - '@empty': $new_b2bcustomer
+                                        - '@empty': $new_customer_association
                                 parameters:
                                     class:     Oro\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     data:
                                         name: $new_company_name
-                            - '@create_entity': # if b2bcustomer not found - create new one
+                            - '@create_entity': # if customer asscociation not found - create new one
                                 conditions:
-                                    '@empty': $new_b2bcustomer
+                                    '@empty': $new_customer_association
                                 parameters:
-                                    class:     Oro\Bundle\SalesBundle\Entity\B2bCustomer
-                                    attribute: $new_b2bcustomer
+                                    class:     Oro\Bundle\SalesBundle\Entity\Customer
+                                    attribute: $new_customer_association
                                     data:
-                                        name:      $new_company_name
-                                        account:   $new_account
-                                        website:   $lead.website
-                                        employees: $lead.numberOfEmployees
-                                        dataChannel: $dataChannel
+                                        target: $new_account
+                            - '@call_method': # connect Lead with Account
+                                parameters:
+                                    object: $lead
+                                    method: setCustomerAssociation
+                                    method_parameters: [$new_customer_association]
                     - '@call_method': # connect customer with Contact
-                        conditions:
-                            '@empty': $new_b2bcustomer.contact
                         parameters:
-                            object: $new_b2bcustomer
-                            method: setContact
+                            object: $new_account
+                            method: addContact
                             method_parameters: [$lead.contact]
                     - '@create_entity': # create an opportunity
                         class:     Oro\Bundle\SalesBundle\Entity\Opportunity
@@ -221,7 +221,7 @@ workflows:
                         data:
                             name:        $new_opportunity_name
                             contact:     $lead.contact
-                            customer:    $new_b2bcustomer
+                            customer_association: $new_customer_association
                             dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
@@ -230,7 +230,7 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $opportunity.status
                     - '@unset_value':
-                        [$new_account, $new_customer]
+                        [$new_account, $new_customer_association]
             develop_definition:
                 preconditions: # if opportunity.status NOT IN ("won", "lost")
                     '@and':
@@ -239,7 +239,6 @@ workflows:
                             parameters:
                                 - '@not_equal': [$opportunity.status.id, 'won']
                                 - '@not_equal': [$opportunity.status.id, 'lost']
-                        - '@channel_entity_availiable': [$dataChannel, ['Oro\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status NOT IN ("won", "lost")
                     '@and':
                         - '@greater_or_equal':
@@ -329,11 +328,15 @@ workflows:
                         enum_code: opportunity_status
                         identifier: 'in_progress'
                         attribute: $opportunity.status
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $budget_amount
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $close_revenue
                     - '@assign_value':
-                        - [$budget_amount, ~]
                         - [$customer_need, ~]
                         - [$proposed_solution, ~]
                         - [$probability, ~]
-                        - [$close_revenue, ~]
                         - [$close_reason, ~]
                         - [$close_date, ~]

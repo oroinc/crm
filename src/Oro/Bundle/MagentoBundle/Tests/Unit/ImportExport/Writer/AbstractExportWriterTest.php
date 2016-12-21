@@ -18,14 +18,14 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
      */
     public function testChannelIdMissing()
     {
-        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $this->contextRegistry->expects($this->once())
             ->method('getByStepExecution')
             ->with($stepExecution)
@@ -47,21 +47,21 @@ abstract class AbstractExportWriterTest extends PersistentBatchWriterTest
      */
     public function testChannelMissing()
     {
-        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->writer->setTransport($transport);
 
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository->expects($this->any())->method('find')
             ->will($this->returnValue(null));
 
         $this->registry->expects($this->any())->method('getRepository')
             ->will($this->returnValue($repository));
 
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->once())
             ->method('getOption')
             ->with($this->equalTo('channel'))

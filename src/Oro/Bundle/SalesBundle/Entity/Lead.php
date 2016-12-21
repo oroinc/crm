@@ -498,8 +498,13 @@ class Lead extends ExtendLead implements
     protected $linkedIn;
 
     /**
-     * Constructor
+     * @var Customer
+     *
+     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
+     * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
+    protected $customerAssociation;
+
     public function __construct()
     {
         parent::__construct();
@@ -1353,5 +1358,25 @@ class Lead extends ExtendLead implements
     public function setLinkedIn($linkedIn)
     {
         $this->linkedIn = $linkedIn;
+    }
+
+    /**
+     * @param Customer $customer
+     *
+     * @return $this
+     */
+    public function setCustomerAssociation(Customer $customer)
+    {
+        $this->customerAssociation = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer
+     */
+    public function getCustomerAssociation()
+    {
+        return $this->customerAssociation;
     }
 }

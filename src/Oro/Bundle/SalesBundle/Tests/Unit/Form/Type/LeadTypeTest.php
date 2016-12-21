@@ -32,7 +32,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             'jobTitle' => 'text',
             'phones' => 'oro_phone_collection',
             'emails' => 'oro_email_collection',
-            'customer' => 'oro_sales_customer',
+            'customerAssociation' => 'oro_sales_customer',
             'companyName' => 'text',
             'website' => 'url',
             'numberOfEmployees' => 'number',
@@ -67,7 +67,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(

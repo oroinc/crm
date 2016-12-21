@@ -52,7 +52,7 @@
 
     {% set formFields = formFields|merge([
     form_row(form.name, {attr: {autofocus: true}}),
-    form_row(form.customer),
+    form_row(form.customerAssociation),
     form_row(form.dataChannel) ]) %}
 
     {% if not form.vars.use_full_contact_form %}

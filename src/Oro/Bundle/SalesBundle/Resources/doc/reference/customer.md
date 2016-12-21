@@ -23,22 +23,21 @@ Migration Extension
 -------------------
 
 To enable association you should create migration and add relation to opportunity and lead. 
-For this we have two migration extensions - OpportunityExtension, LeadExtension.
+For this we have migration extension - CustomerExtension.
 
 Migration example:
 
 ```
-class YourMigration implements Migration, OpportunityExtensionAwareInterface, LeadExtensionAwareInterface
+class YourMigration implements Migration, CustomerExtensionAwareInterface
 {
-    use LeadExtensionTrait, OpportunityExtensionTrait;
+    use CustomerExtensionTrait;
 
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->leadExtension->addCustomerAssociation($schema, 'target_customer_table');
-        $this->opportunityExtension->addCustomerAssociation($schema, 'target_customer_table');
+        $this->customerExtension->addCustomerAssociation($schema, 'target_customer_table');
     }
 }
 ```

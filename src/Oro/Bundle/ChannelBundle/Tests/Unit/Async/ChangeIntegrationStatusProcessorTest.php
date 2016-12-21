@@ -335,7 +335,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createEntityManagerMock()
     {
-        return $this->getMock(EntityManagerInterface::class);
+        return $this->createMock(EntityManagerInterface::class);
     }
 
     /**
@@ -343,7 +343,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createRegistryStub($entityManager = null)
     {
-        $registryMock = $this->getMock(RegistryInterface::class);
+        $registryMock = $this->createMock(RegistryInterface::class);
         $registryMock
             ->expects($this->any())
             ->method('getManager')
@@ -358,6 +358,6 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createLoggerMock()
     {
-        return $this->getMock(LoggerInterface::class);
+        return $this->createMock(LoggerInterface::class);
     }
 }

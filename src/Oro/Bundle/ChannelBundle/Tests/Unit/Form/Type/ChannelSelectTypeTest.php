@@ -31,7 +31,7 @@ class ChannelSelectTypeTest extends OrmTestCase
 
     public function setUp()
     {
-        $registry       = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry       = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
             'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity'

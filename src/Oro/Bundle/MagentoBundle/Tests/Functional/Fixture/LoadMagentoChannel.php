@@ -31,6 +31,7 @@ use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -419,8 +420,11 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->addAddress($address);
         $customer->setOwner($this->getUser());
         $customer->setOrganization($this->organization);
+        $customerAssociation = new CustomerAssociation();
+        $customerAssociation->setTarget($account, $customer);
 
         $this->em->persist($customer);
+        $this->em->persist($customerAssociation);
 
         return $customer;
     }

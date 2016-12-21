@@ -17,7 +17,7 @@ class AddressTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $owner      = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
+        $owner      = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Customer');
         $originId = 123;
 
         return [

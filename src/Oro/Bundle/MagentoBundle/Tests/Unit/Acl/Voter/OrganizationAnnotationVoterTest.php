@@ -71,7 +71,7 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
             ->will($this->returnValue($hasOrganizationApplicableChannels));
 
         /** @var TokenInterface $token */
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)

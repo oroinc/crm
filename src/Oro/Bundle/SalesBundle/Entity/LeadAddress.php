@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -52,7 +50,6 @@ class LeadAddress extends ExtendLeadAddress implements PrimaryItem
      * @var boolean
      *
      * @ORM\Column(name="is_primary", type="boolean", nullable=true)
-     * @Soap\ComplexType("boolean", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
