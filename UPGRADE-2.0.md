@@ -108,3 +108,9 @@ UPGRADE FROM 1.10 to 2.0
 
 ####CalendarCRMBridgeBundle:
 - CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
+
+####OroDataGridBundle:
+- New ACL Capability "Export Grid View" added under "Application" Category to control Export Grid action.
+
+####OroSecurityBundle:
+- Added fixture data loader `Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData` to provide easy way for setting default ACLs for Roles
