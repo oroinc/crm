@@ -27,12 +27,6 @@ workflows:
                                 required: true
                                 constraints:
                                     - NotBlank: ~
-                        dataChannel:
-                            form_type: oro_channel_select_type
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
                         lead:
                             form_type: oro_sales_lead_select
                             options:
@@ -73,12 +67,6 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         sales_funnel_start_date:
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
-                        dataChannel:
-                            form_type: oro_channel_select_type
                             options:
                                 required: true
                                 constraints:

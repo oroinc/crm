@@ -401,3 +401,13 @@ services:
             - '@oro_message_queue.job.runner'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_channel.security.acl.voter.channel:
+        class: 'Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter'
+        arguments:
+            - "@oro_entity.doctrine_helper"
+        calls:
+            - [setClassName, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
+            - [setSettingsProvider,  ['@oro_channel.provider.settings_provider']]
+        tags:
+            - { name: security.voter, priority: 500 }

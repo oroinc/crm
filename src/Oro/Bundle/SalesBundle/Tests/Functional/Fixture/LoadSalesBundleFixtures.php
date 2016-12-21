@@ -186,7 +186,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $date = new \DateTime('now');
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         $salesFunnel->setLead($this->getReference('default_lead'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);
@@ -201,7 +200,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $date = new \DateTime('now');
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         $salesFunnel->setOpportunity($this->getReference('default_opportunity'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);

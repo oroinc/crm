@@ -707,7 +707,6 @@ datagrids:
                     - opportunity.budgetAmountCurrency as budgetAmountCurrency
                     - opportunity.closeRevenueCurrency as closeRevenueCurrency
                     - opportunity.probability as opportunityProbability
-                    - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.salesfunnel.entity.class%, alias: salesFunnel }
@@ -715,13 +714,10 @@ datagrids:
                     left:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
-                        - { join: salesFunnel.dataChannel, alias: channel }
                         - { join: salesFunnel.owner, alias: owner }
         columns:
             id:
                 label: oro.sales.salesfunnel.id.label
-            channelName:
-                label: oro.sales.salesfunnel.data_channel.label
             startDate:
                 label: oro.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -779,8 +775,6 @@ datagrids:
             columns:
                 id:
                     data_name: salesFunnel.id
-                channelName:
-                    data_name: channelName
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
@@ -822,14 +816,6 @@ datagrids:
                 id:
                     type: number-range
                     data_name: salesFunnel.id
-                channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
