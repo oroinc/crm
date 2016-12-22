@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Builder;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -16,12 +17,13 @@ class OpportunityRelationsBuilder
 
     public function buildCustomer(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomerAssociation()->getTarget();
-        if (!$customer) {
+        if (!$opportunity->getCustomerAssociation()) {
             return;
         }
 
-        if (method_exists($customer, 'getDataChannel') && !$customer->getDataChannel()) {
+        $customer = $opportunity->getCustomerAssociation()->getTarget();
+
+        if ($customer instanceof ChannelAwareInterface && !$customer->getDataChannel()) {
             // new customer needs a channel
             $customer->setDataChannel($opportunity->getDataChannel());
         }

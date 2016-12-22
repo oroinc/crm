@@ -150,7 +150,7 @@ class OpportunityListener
             return;
         }
 
-        if ($entity->getCustomerAssociation()) {
+        if (!$entity->getCustomerAssociation()) {
             return;
         }
 
@@ -164,6 +164,7 @@ class OpportunityListener
                 $customer->setAccount($account);
             }
         }
+
         $this->relationsBuilder->buildAll($entity);
     }
 }

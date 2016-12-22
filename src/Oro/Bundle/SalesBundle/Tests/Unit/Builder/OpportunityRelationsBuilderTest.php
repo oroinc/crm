@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Builder;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +28,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $channel = new Channel();
         $customer = new B2bCustomer();
-        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setDataChannel($channel);
@@ -43,7 +42,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $organization = new Organization();
         $customer = new B2bCustomer();
-        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setOrganization($organization);
@@ -65,7 +64,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunityContact->setId($contactId);
         $customer = new B2bCustomer();
         $this->setObjectId($customer, $customerId);
-        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setContact($opportunityContact);
@@ -90,7 +89,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunityContact = new Contact();
         $customer = new B2bCustomer();
         $customer->setContact($customerContact);
-        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setContact($opportunityContact);
@@ -107,7 +106,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $opportunityContact->setId(1);
         $customer = new B2bCustomer();
         $this->setObjectId($customer, 1);
-        $accountCustomer = AccountCustomerManager::createCustomer(new Account(), $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setContact($opportunityContact);
@@ -132,7 +131,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 
         $customer = new B2bCustomer();
         $customer->setAccount($account);
-        $accountCustomer = AccountCustomerManager::createCustomer($account, $customer);
+        $accountCustomer = $this->createAccountCustomer(new Account(), $customer);
         $opportunity = new Opportunity();
         $opportunity->setCustomerAssociation($accountCustomer);
         $opportunity->setContact($contact);
@@ -161,5 +160,18 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
         $propertyReflection = $reflection->getProperty('id');
         $propertyReflection->setAccessible(true);
         $propertyReflection->setValue($object, $id);
+    }
+
+    /**
+     * @param Account     $account
+     * @param object|null $target
+     *
+     * @return Customer|CustomerStub
+     */
+    private function createAccountCustomer(Account $account, $target = null)
+    {
+        $customer = new CustomerStub();
+
+        return $customer->setTarget($account, $target);
     }
 }

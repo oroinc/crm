@@ -71,7 +71,7 @@ class UpdateInheritanceActivityTargets implements
 
         $newValue = array_filter(
             $inheritanceTargets,
-            function($inheritanceTarget) {
+            function ($inheritanceTarget) {
                 return $inheritanceTarget['target'] !== Opportunity::class;
             }
         );

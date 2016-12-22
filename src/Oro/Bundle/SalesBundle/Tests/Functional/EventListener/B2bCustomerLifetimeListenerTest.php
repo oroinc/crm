@@ -161,9 +161,11 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
+        $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
+
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
-        $b2bCustomer->addOpportunity($opportunity);
+
         $em->persist($opportunity);
         $em->flush();
 
@@ -171,7 +173,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $this->assertEquals(50, $b2bCustomer->getLifetime());
 
         // test that lifetime value is recalculated if "won" opportunity is removed from the customer
-        $b2bCustomer->removeOpportunity($opportunity);
+        $opportunity->setCustomerAssociation(null);
+
         $em->flush();
         $this->assertEquals(0, $b2bCustomer->getLifetime());
     }
@@ -201,7 +204,6 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
-        $b2bCustomer->addOpportunity($opportunity);
 
         $em->persist($opportunity);
         $em->flush();
