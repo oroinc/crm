@@ -18,7 +18,6 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
-use Oro\Bundle\AccountBundle\Entity\AccountAwareInterface;
 
 /**
  * Class Customer
@@ -76,8 +75,7 @@ class Customer extends ExtendCustomer implements
     CustomerIdentityInterface,
     RFMAwareInterface,
     OriginAwareInterface,
-    IntegrationAwareInterface,
-    AccountAwareInterface
+    IntegrationAwareInterface
 {
     const SYNC_TO_MAGENTO = 1;
     const MAGENTO_REMOVED = 2;

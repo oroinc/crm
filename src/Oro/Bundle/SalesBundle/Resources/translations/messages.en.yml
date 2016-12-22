@@ -509,24 +509,11 @@ oro:
                         except for system statuses Closed Won and Closed Lost.
                 display_settings:
                     title: Display settings
-                account_management:
-                    title: Account management
-                account_management_account:
-                    title: Account
-                account_management_account_selection_control:
-                    title: Account selection control
             fields:
                 sales_lead:
                     feature_enabled.label:                     Enable Lead
-                account:
-                    limit_of_lookup_results.label: Limit of lookup results
-                    limit_of_lookup_results.tooltip: This option limits the number of account and customer records that will be displayed in the dropdown of Account selection control for Opportunity and other records. High limits may lead to performance degradation.
-
-
                 sales_opportunity:
                     feature_enabled.label:                     Enable Opportunity
-                    autocomplete_settings:
-                        count_results.label:                   Count results
                 opportunity_status_probabilities:
                     probability.tooltip:                       Enter default probability (%) for this status
                 sales_salesfunnel:

@@ -4,15 +4,6 @@ system_configuration:
             icon:  fa-users
             title: oro.sales.system_configuration.groups.crm.title
 
-        account_management:
-            title: oro.sales.system_configuration.groups.account_management.title
-
-        account_management_account:
-            title: oro.sales.system_configuration.groups.account_management_account.title
-
-        account_management_account_selection_control:
-            title: oro.sales.system_configuration.groups.account_management_account_selection_control.title
-
         sales_pipeline:
             title: oro.sales.system_configuration.groups.sales_pipeline.title
 
@@ -93,7 +84,6 @@ system_configuration:
                 required: false
                 tooltip: oro.sales.system_configuration.fields.display_relevant_opportunities.tooltip
                 label:   oro.sales.system_configuration.fields.display_relevant_opportunities.label
-
     tree:
         system_configuration:
             crm:
@@ -124,10 +114,3 @@ system_configuration:
                                     general_setup:
                                         children:
                                             - oro_sales.salesfunnel_feature_enabled
-                    account_management:
-                        children:
-                            account_management_account:
-                                children:
-                                    account_management_account_selection_control:
-                                        children:
-                                            - oro_sales.account_limit_of_lookup_results
