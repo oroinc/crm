@@ -69,7 +69,11 @@ class ChannelDoctrineListener
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
-                $this->scheduleUpdate($className, $this->chainAccountProvider->getAccount($entity), $entity->getDataChannel());
+                $this->scheduleUpdate(
+                    $className,
+                    $this->chainAccountProvider->getAccount($entity),
+                    $entity->getDataChannel()
+                );
             }
         }
     }
@@ -103,6 +107,7 @@ class ChannelDoctrineListener
                     $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
                     $toOutDate[] = [$account, $channel, $entity];
 
+                    $this->em->persist($account);
                     $this->em->persist($entity);
                 }
             }

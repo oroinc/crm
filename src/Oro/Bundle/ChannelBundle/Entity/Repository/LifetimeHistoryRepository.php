@@ -22,18 +22,31 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->from($identityFQCN, 'e');
-        $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
-        $qb->andWhere('e.account = :account');
-        $qb->setParameter('account', $account);
-
-        if (null !== $channel) {
-            $qb->andWhere('e.dataChannel = :channel');
-            $qb->setParameter('channel', $channel);
-        }
-
-        return (float)$qb->getQuery()->getSingleScalarResult();
+        // todo: fix it
+        return 0.0;
+//        $qb = $this->getEntityManager()->createQueryBuilder();
+//        $qb->from($identityFQCN, 'e');
+//        $qb->from('Oro\Bundle\SalesBundle\Entity\Customer', 'e');
+//
+//        $qb->leftJoin(
+//            Customer::class,
+//            'customerAssociation',
+//            'WITH',
+//            sprintf('customerAssociation.%s = %s', $customerField, $rootAlias)
+//        );
+//        $qb->leftJoin('customerAssociation.account', 'associatedAccount');
+//
+//        $qb->leftJoin('site.channel', 'channel');
+//        $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
+//        $qb->andWhere('e.account = :account');
+//        $qb->setParameter('account', $account);
+//
+//        if (null !== $channel) {
+//            $qb->andWhere('e.dataChannel = :channel');
+//            $qb->setParameter('channel', $channel);
+//        }
+//
+//        return (float)$qb->getQuery()->getSingleScalarResult();
     }
 
     /**
