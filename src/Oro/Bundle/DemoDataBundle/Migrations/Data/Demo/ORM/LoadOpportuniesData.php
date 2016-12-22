@@ -2,17 +2,19 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
@@ -25,6 +27,18 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
 
     /** @var Organization */
     protected $organization;
+
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
+    }
 
     /**
      * {@inheritdoc}
@@ -95,7 +109,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setContact($contact);
         $opportunity->setOwner($user);
         $opportunity->setOrganization($this->organization);
-        $opportunity->setCustomer($customer);
+        $opportunity->setCustomerAssociation($this->accountCustomerManager->getAccountCustomerByTarget($customer));
         $budgetAmountVal = mt_rand(10, 10000);
         $opportunity->setBudgetAmount(MultiCurrency::create($budgetAmountVal, 'USD'));
         $opportunity->setDataChannel($dataChannel);
