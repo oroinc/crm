@@ -237,7 +237,6 @@ class ChannelDoctrineListener
 
             $this->queued[$customerIdentity][$key] = [
                 'account' => $account,
-//                'account' => $account->getId() ? : $account,
                 'channel' => $channel->getId() ? : $channel
             ];
         }
