@@ -26,7 +26,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 'value2';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer */
-        $serializer = $this->getMock('Symfony\Component\Serializer\SerializerInterface');
+        $serializer = $this->createMock('Symfony\Component\Serializer\SerializerInterface');
         $serializer->expects($this->once())
             ->method('deserialize')
             ->will(
@@ -40,7 +40,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->setSerializer($serializer);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|StrategyInterface $strategy */
-        $strategy = $this->getMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
+        $strategy = $this->createMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
         $strategy->expects($this->once())
             ->method('process')
             ->with($this->isType('object'))
@@ -59,7 +59,7 @@ class ContextProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processor->setEntityName('\stdClass');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->once())->method('getConfiguration')->will($this->returnValue([]));
 
         $this->processor->setImportExportContext($context);

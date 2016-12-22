@@ -27,11 +27,11 @@ class LeadTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $now          = new \DateTime('now');
-        $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $customer     = $this->getMock('Oro\Bundle\SalesBundle\Entity\Customer');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $user         = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $customer     = $this->createMock('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'name'                  => ['name', 'test', 'test'],

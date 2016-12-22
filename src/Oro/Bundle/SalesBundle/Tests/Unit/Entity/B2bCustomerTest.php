@@ -44,12 +44,12 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $name         = uniqid('name');
-        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $contact      = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $contact      = $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $owner        = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         $date         = new \DateTime();
         $lifetime     = 12.22;
 

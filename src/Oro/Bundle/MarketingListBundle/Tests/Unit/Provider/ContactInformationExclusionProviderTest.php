@@ -28,7 +28,7 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->configProvider = $this
             ->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
@@ -53,7 +53,7 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
             ->with($className)
             ->will($this->returnValue(true));
 
-        $config = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $config = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
 
         $config
             ->expects($this->once())
@@ -86,13 +86,13 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
                 )
             );
 
-        $entityConfig = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $entityConfig = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $entityConfig->expects($this->once())
             ->method('has')
             ->with($this->equalTo('contact_information'))
             ->will($this->returnValue(false));
 
-        $fieldConfig = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $fieldConfig = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $fieldConfig->expects($this->once())
             ->method('has')
             ->with($this->equalTo('contact_information'))
@@ -148,13 +148,13 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
                 )
             );
 
-        $entityConfig = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $entityConfig = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $entityConfig->expects($this->once())
             ->method('has')
             ->with($this->equalTo('contact_information'))
             ->will($this->returnValue(false));
 
-        $fieldConfig = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $fieldConfig = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $fieldConfig->expects($this->once())
             ->method('has')
             ->with($this->equalTo('contact_information'))
@@ -210,7 +210,7 @@ class ContactInformationExclusionProviderTest extends \PHPUnit_Framework_TestCas
                 )
             );
 
-        $entityConfig = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $entityConfig = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $entityConfig->expects($this->once())
             ->method('has')
             ->with($this->equalTo('contact_information'))

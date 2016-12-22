@@ -71,10 +71,10 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     {
         $args = new OnFlushEventArgs($this->em);
 
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $account->expects($this->any())->method('getId')
             ->will($this->returnValue(self::TEST_ACCOUNT_ID));
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $channel->expects($this->any())->method('getId')
             ->will($this->returnValue(self::TEST_CHANNEL_ID));
 
@@ -123,8 +123,8 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     {
         $args = new PostFlushEventArgs($this->em);
 
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $channel->expects($this->any())->method('getId')->will($this->returnValue(1));
         $account2 = clone $account;
 
@@ -155,8 +155,8 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
     public function testScheduleEntityUpdate()
     {
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $customer = new CustomerEntity();
         $customer
@@ -180,8 +180,8 @@ class ChannelDoctrineListenerTest extends OrmTestCase
      */
     public function testScheduleEntityUpdateFailed()
     {
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $customer = new CustomerEntity();
         $customer

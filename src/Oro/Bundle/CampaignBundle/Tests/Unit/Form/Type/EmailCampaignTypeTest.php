@@ -40,7 +40,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->method('addEventListener')
             ->with(FormEvents::PRE_SET_DATA);
 
-        $subscriber = $this->getMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $subscriber = $this->createMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
         $builder->expects($this->once())
             ->method('addEventSubscriber')
             ->with($subscriber);
@@ -58,7 +58,7 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver
             ->expects($this->once())
             ->method('setDefaults')

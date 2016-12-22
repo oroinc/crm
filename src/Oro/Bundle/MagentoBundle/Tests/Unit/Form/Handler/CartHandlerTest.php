@@ -19,9 +19,9 @@ class CartHandlerTest extends AbstractHandlerTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
 
-        $this->manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $registry->expects($this->once())
             ->method('getManager')

@@ -52,7 +52,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')->will($this->returnValue(false));
 
         $this->helper->expects($this->once())->method('getTransport')
@@ -78,7 +78,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')
@@ -119,7 +119,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')

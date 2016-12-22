@@ -34,7 +34,7 @@ class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnCallback(function ($className) use ($entityConfigs) {
                 return new Config(
-                    $this->getMock('Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface'),
+                    $this->createMock('Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface'),
                     $entityConfigs[$className]
                 );
             }));

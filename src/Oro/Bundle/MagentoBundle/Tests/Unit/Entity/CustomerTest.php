@@ -27,13 +27,13 @@ class CustomerTest extends AbstractEntityTestCase
     public function getSetDataProvider()
     {
         $date         = new \DateTime('now');
-        $group        = $this->getMock('Oro\Bundle\MagentoBundle\Entity\CustomerGroup');
-        $website      = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
-        $store        = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Store');
-        $contact      = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $group        = $this->createMock('Oro\Bundle\MagentoBundle\Entity\CustomerGroup');
+        $website      = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $store        = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Store');
+        $contact      = $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $owner        = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'createdAt'    => ['createdAt', $date, $date],
@@ -64,8 +64,8 @@ class CustomerTest extends AbstractEntityTestCase
         $this->entity->setLastName(self::TEST_STRING . 'last');
         $this->assertNull($this->entity->getOrganization());
 
-        $this->entity->addAddress($this->getMock('Oro\Bundle\MagentoBundle\Entity\Address'));
-        $this->entity->setOrganization($this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'));
+        $this->entity->addAddress($this->createMock('Oro\Bundle\MagentoBundle\Entity\Address'));
+        $this->entity->setOrganization($this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization'));
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
         $this->assertInstanceOf('Oro\Bundle\OrganizationBundle\Entity\Organization', $this->entity->getOrganization());
@@ -77,7 +77,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getWebsiteName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));
@@ -90,7 +90,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getStoreName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Store');
+        $website = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Store');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));

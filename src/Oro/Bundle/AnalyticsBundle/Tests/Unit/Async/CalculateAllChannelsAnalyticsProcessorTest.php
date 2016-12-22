@@ -46,7 +46,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
+        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 
     /**
@@ -54,6 +54,6 @@ class CalculateAllChannelsAnalyticsProcessorTest extends \PHPUnit_Framework_Test
      */
     private function createDoctrineHelperMock()
     {
-        return $this->getMock(DoctrineHelper::class, [], [], '', false);
+        return $this->createMock(DoctrineHelper::class);
     }
 }

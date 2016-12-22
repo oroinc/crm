@@ -21,9 +21,9 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnProcessAfter()
     {
         /** @var StrategyInterface $strategy */
-        $strategy = $this->getMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
+        $strategy = $this->createMock('Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface');
         /** @var ContextInterface $context */
-        $context      = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context      = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
 
         $currencyConfigManager = $this
             ->getMockBuilder(CurrencyProviderInterface::class)
@@ -31,7 +31,7 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCurrencyList', 'getDefaultCurrency'])
             ->getMock();
 
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
 
         $organization = new Organization();
         $channel      = new Channel();

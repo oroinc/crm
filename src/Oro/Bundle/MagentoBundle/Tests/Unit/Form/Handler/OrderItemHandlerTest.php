@@ -22,7 +22,7 @@ class OrderItemHandlerTest extends AbstractHandlerTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $registry->expects($this->once())
             ->method('getManager')

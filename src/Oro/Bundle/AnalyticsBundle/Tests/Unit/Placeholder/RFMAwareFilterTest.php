@@ -45,7 +45,7 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
         $channelValid = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $customerIdentity = $this->getMock($this->interface);
+        $customerIdentity = $this->createMock($this->interface);
         $channelValid->expects($this->any())
             ->method('getCustomerIdentity')
             ->will($this->returnValue($customerIdentity));
@@ -91,7 +91,7 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
         $channelValidDisabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $customerIdentity = $this->getMock($this->interface);
+        $customerIdentity = $this->createMock($this->interface);
         $channelValidDisabledRFM->expects($this->any())
             ->method('getCustomerIdentity')
             ->will($this->returnValue($customerIdentity));
@@ -99,7 +99,7 @@ class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
         $channelValidEnabledRFM = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $customerIdentity = $this->getMock($this->interface);
+        $customerIdentity = $this->createMock($this->interface);
         $channelValidEnabledRFM->expects($this->any())
             ->method('getCustomerIdentity')
             ->will($this->returnValue($customerIdentity));
