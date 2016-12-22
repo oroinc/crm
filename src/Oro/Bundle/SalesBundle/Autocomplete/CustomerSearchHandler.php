@@ -320,7 +320,7 @@ class CustomerSearchHandler extends ContextSearchHandler
      *
      * @return string
      */
-        protected function generateId(Item $item)
+    protected function generateId(Item $item)
     {
         return json_encode([
             "entityClass" => $item->getEntityName(),
