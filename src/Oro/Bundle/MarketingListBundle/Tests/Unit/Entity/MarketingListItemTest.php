@@ -50,7 +50,7 @@ class MarketingListItemTest extends \PHPUnit_Framework_TestCase
         return array(
             array('entityId', 2),
             array('contactedTimes', 3),
-            array('marketingList', $this->getMock('Oro\Bundle\MarketingListBundle\Entity\MarketingList')),
+            array('marketingList', $this->createMock('Oro\Bundle\MarketingListBundle\Entity\MarketingList')),
             array('lastContactedAt', new \DateTime()),
             array('createdAt', new \DateTime()),
         );

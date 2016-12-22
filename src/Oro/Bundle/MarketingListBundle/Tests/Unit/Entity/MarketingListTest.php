@@ -57,9 +57,9 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
             array('description', 'test'),
             array('entity', 'Test'),
             array('type', $type),
-            array('segment', $this->getMock('Oro\Bundle\SegmentBundle\Entity\Segment')),
-            array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')),
+            array('segment', $this->createMock('Oro\Bundle\SegmentBundle\Entity\Segment')),
+            array('owner', $this->createMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('organization', $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization')),
             array('lastRun', new \DateTime()),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),
@@ -99,7 +99,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function testSetDefinition()
     {
         $definition = 'test';
-        $segment = $this->getMock('Oro\Bundle\SegmentBundle\Entity\Segment');
+        $segment = $this->createMock('Oro\Bundle\SegmentBundle\Entity\Segment');
         $segment->expects($this->once())
             ->method('setDefinition')
             ->with($definition);
@@ -110,7 +110,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
     public function testGetDefinition()
     {
         $definition = 'test';
-        $segment = $this->getMock('Oro\Bundle\SegmentBundle\Entity\Segment');
+        $segment = $this->createMock('Oro\Bundle\SegmentBundle\Entity\Segment');
         $segment->expects($this->once())
             ->method('getDefinition')
             ->will($this->returnValue($definition));
@@ -143,8 +143,8 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
         $resetMethodName = 'reset' . $entityShortName . 's';
         $getMethodName = 'get' . $entityShortName . 's';
 
-        $itemOne = $this->getMock($entityClass);
-        $itemTwo = $this->getMock($entityClass);
+        $itemOne = $this->createMock($entityClass);
+        $itemTwo = $this->createMock($entityClass);
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->{$getMethodName}());
         $this->assertCount(0, $this->entity->{$getMethodName}());

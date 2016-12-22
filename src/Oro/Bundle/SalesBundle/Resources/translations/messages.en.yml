@@ -165,24 +165,24 @@ oro:
                 label:            Budget amount
                 description:      The expected revenue of the opportunity
             budget_amount_value:
-                label:            Budget Amount Value
+                label:            Budget Amount
             budget_amount_currency:
                 label:            Budget Amount Currency
             budget_amount_base_currency:
-                label:            Base Budget Amount
+                label:            Budget Amount (%sign%)
             base_budget_amount_value:
-                label:            Base Budget Amount
+                label:            Budget Amount (%sign%)
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed
             close_revenue_value:
-                label:            Close revenue Value
+                label:            Close revenue
             close_revenue_currency:
                 label:            Close revenue Currency
             base_close_revenue_value:
-                label:            Base Close Revenue
+                label:            Close Revenue (%sign%)
             close_revenue_base_currency:
-                label:            Base Close Revenue
+                label:            Close Revenue (%sign%)
             customer_need:
                 label:            Customer need
                 description:      The detailed description of customers' needs that constitute the business opportunity

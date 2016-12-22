@@ -32,8 +32,8 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->form        = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $this->formBuilder = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+        $this->formBuilder = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $this->formBuilder
             ->expects($this->any())
             ->method('createNamed')
@@ -131,7 +131,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
             $this->request->request->set($key, $value);
         }
         if (null !== $expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $this->form->expects($this->any())->method('getName')
@@ -171,10 +171,10 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-            $formConfig  = $this->getMock('Symfony\Component\Form\FormConfigInterface');
-            $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
-            $formType    = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+            $form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+            $formConfig  = $this->createMock('Symfony\Component\Form\FormConfigInterface');
+            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+            $formType    = $this->createMock('Symfony\Component\Form\ResolvedFormTypeInterface');
 
             $formConfig->expects($this->once())->method('getFormFactory')
                 ->will($this->returnValue($formFactory));

@@ -75,8 +75,8 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $transportName = uniqid('transport');
         $assetsHelper    = $this->getMockBuilder('Symfony\Component\Asset\Packages')
             ->disableOriginalConstructor()->getMock();
-        $integrationType = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\ChannelInterface');
-        $transportType   = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\TransportInterface');
+        $integrationType = $this->createMock('Oro\Bundle\IntegrationBundle\Provider\ChannelInterface');
+        $transportType   = $this->createMock('Oro\Bundle\IntegrationBundle\Provider\TransportInterface');
         $transportType->expects($this->exactly(2))
             ->method('getLabel')
             ->willReturn($transportName);
@@ -97,13 +97,13 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->will($this->returnValue($metadata));
         $metadata->expects($this->once())->method('getSingleIdentifierFieldName')
             ->will($this->returnValue(self::TEST_ID_FIELD_NAME));
-        $searchHandler = $this->getMock('Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface');
+        $searchHandler = $this->createMock('Oro\Bundle\FormBundle\Autocomplete\SearchHandlerInterface');
         $searchHandler->expects($this->any())->method('getEntityName')
             ->will($this->returnValue('OroUser:User'));
         $searchRegistry = new SearchRegistry();
         $searchRegistry->addSearchHandler('acl_users', $searchHandler);
 
-        $config = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
+        $config = $this->createMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $config->expects($this->any())->method('has')->with($this->equalTo('grid_name'))
             ->will($this->returnValue(true));
         $config->expects($this->any())->method('get')->with($this->equalTo('grid_name'))
@@ -145,7 +145,8 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                 [
                     'form'                         => [
                         new FormTypeCsrfExtension(
-                            $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
+                            $this
+                                ->createMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
                         ),
                         new FormTypeValidatorExtension($validator),
                         new TooltipFormExtension($this->entityConfigProvider, $this->translator),

@@ -53,7 +53,7 @@ class EmailTransportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->emailHelper = $this->getMock('Oro\Bundle\EmailBundle\Tools\EmailAddressHelper');
+        $this->emailHelper = $this->createMock('Oro\Bundle\EmailBundle\Tools\EmailAddressHelper');
 
         $this->transport = new EmailTransport($this->processor, $this->renderer, $this->helper, $this->emailHelper);
     }

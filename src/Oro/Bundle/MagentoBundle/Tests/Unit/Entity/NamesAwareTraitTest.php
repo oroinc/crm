@@ -37,7 +37,7 @@ class NamesAwareTraitTest extends \PHPUnit_Framework_TestCase
         $address->expects($this->any())->method('getFirstName')->will($this->returnValue($testAddressFirstName));
         $address->expects($this->any())->method('getLastName')->will($this->returnValue($testAddressLastName));
 
-        $customer = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
+        $customer = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Customer');
         $customer->expects($this->any())->method('getFirstName')->will($this->returnValue($testCustomerFirstName));
         $customer->expects($this->any())->method('getLastName')->will($this->returnValue($testCustomerLastName));
 

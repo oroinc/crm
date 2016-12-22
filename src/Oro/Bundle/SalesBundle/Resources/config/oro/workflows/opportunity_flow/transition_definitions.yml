@@ -3,8 +3,10 @@ workflows:
         transition_definitions:
             create_definition:
                 actions:
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $close_revenue
                     - '@assign_value':
-                        - [$close_revenue, null]
                         - [$close_reason, null]
             develop_definition:
                 conditions:
@@ -72,6 +74,8 @@ workflows:
                         - '@neq': [$status.id, 'lost']
                         - '@neq': [$status.id, 'won']
                 actions:
+                    - '@create_object':
+                        class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
+                        attribute: $close_revenue
                     - '@assign_value':
-                        - [$close_revenue, null]
                         - [$close_reason, null]

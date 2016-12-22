@@ -26,7 +26,7 @@ class CampaignTest extends AbstractEntityTestCase
         $description    = 'some description';
         $budget         = 10.44;
         $owner          = new User();
-        $organization   = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $organization   = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'name'         => ['name', $name, $name],

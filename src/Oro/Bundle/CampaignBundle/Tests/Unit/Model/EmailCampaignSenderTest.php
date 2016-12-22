@@ -87,11 +87,11 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->logger = $this->createMock('Psr\Log\LoggerInterface');
 
-        $this->transport = $this->getMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
+        $this->transport = $this->createMock('Oro\Bundle\CampaignBundle\Transport\TransportInterface');
 
-        $this->transportProvider = $this->getMock('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider');
+        $this->transportProvider = $this->createMock('Oro\Bundle\CampaignBundle\Provider\EmailTransportProvider');
 
         $this->sender = new EmailCampaignSender(
             $this->marketingListProvider,
@@ -102,7 +102,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             $this->transportProvider
         );
 
-        $this->validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $this->validator = $this->createMock('Symfony\Component\Validator\ValidatorInterface');
         $this->sender->setValidator($this->validator);
 
         $this->sender->setLogger($this->logger);

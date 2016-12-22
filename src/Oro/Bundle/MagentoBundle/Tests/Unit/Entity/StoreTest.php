@@ -20,7 +20,7 @@ class StoreTest extends AbstractEntityTestCase
      */
     public function getSetDataProvider()
     {
-        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
 
         return [
             'id'      => ['id', self::TEST_ID, self::TEST_ID],
@@ -35,7 +35,7 @@ class StoreTest extends AbstractEntityTestCase
         $this->assertNull($this->entity->getWebsiteName());
 
         $expectedValue = 'test';
-        $website = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $website = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $website->expects($this->once())
             ->method('getName')
             ->will($this->returnValue($expectedValue));

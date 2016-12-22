@@ -28,7 +28,7 @@ class InternalTransportSettingsTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver
             ->expects($this->once())
             ->method('setDefaults')
@@ -43,7 +43,7 @@ class InternalTransportSettingsTypeTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $subscriber  = $this->getMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $subscriber  = $this->createMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
 
         $formBuilder
             ->expects($this->once())

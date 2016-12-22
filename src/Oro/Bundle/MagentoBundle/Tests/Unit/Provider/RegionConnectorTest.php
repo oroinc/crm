@@ -68,7 +68,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
 
     public function testSkippedIfSyncedDuringConfiguredInterval()
     {
-        $transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $channel = new Channel();
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, $channel);

@@ -16,7 +16,6 @@
         "psr-0": { "Oro\\Bundle\\ReportBundle": "" }
     },
     "target-dir": "Oro/Bundle/ReportBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

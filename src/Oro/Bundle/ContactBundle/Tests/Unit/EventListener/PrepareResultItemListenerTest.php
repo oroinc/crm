@@ -147,13 +147,13 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getObjectManager($entity)
     {
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $repository = $this->createMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->any())
             ->method('find')
             ->will($this->returnValue($entity));
 
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $om = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
         $om->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($repository));

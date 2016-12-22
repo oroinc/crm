@@ -26,7 +26,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild(array $builders)
     {
         /** @var Channel|\PHPUnit_Framework_MockObject_MockObject $entity */
-        $entity = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $entity = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         foreach ($builders as $builder) {
             $this->builder->addBuilder($builder);
@@ -91,6 +91,6 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getBuilderMock()
     {
-        return $this->getMock('Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface');
+        return $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface');
     }
 }

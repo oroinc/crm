@@ -15,7 +15,6 @@
         "psr-0": { "Oro\\Bundle\\ActivityContactBundle": "" }
     },
     "target-dir": "Oro/Bundle/ActivityContactBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
