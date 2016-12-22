@@ -94,20 +94,6 @@ system_configuration:
                 tooltip: oro.sales.system_configuration.fields.display_relevant_opportunities.tooltip
                 label:   oro.sales.system_configuration.fields.display_relevant_opportunities.label
 
-        oro_sales.account_limit_of_lookup_results:
-            data_type: integer
-            type: integer
-            priority: 20
-            options:
-                label: oro.sales.system_configuration.fields.account.limit_of_lookup_results.label
-                tooltip: oro.sales.system_configuration.fields.account.limit_of_lookup_results.tooltip
-                required: true
-                constraints:
-                    - NotBlank: ~
-                    - Range:
-                        min: 0
-                    - Type:
-                        type: integer
     tree:
         system_configuration:
             crm:

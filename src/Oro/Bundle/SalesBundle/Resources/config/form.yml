@@ -464,7 +464,6 @@ services:
             - '@translator'
             - '@oro_security.security_facade'
             - '@oro_datagrid.datagrid.manager'
-            - '@oro_config.manager'
         tags:
             - { name: form.type, alias: oro_sales_customer }
 
