@@ -303,12 +303,7 @@ class CustomerSearchHandler extends ContextSearchHandler
                 }
 
                 foreach ($childrens as $children) {
-                    if ($children['id'] === json_encode([
-                            "entityClass" => $item->getEntityName(),
-                            "entityId" => $item->getRecordId()
-                        ])
-                    ) {
-
+                    if ($children['id'] === $this->generateId($item)) {
                         $sortedResult[] = $result;
                         $result['isAdded'] = true;
                         break;
@@ -318,6 +313,19 @@ class CustomerSearchHandler extends ContextSearchHandler
         }
 
         return $sortedResult;
+    }
+
+    /**
+     * @param Item $item
+     *
+     * @return string
+     */
+        protected function generateId(Item $item)
+    {
+        return json_encode([
+            "entityClass" => $item->getEntityName(),
+            "entityId" => $item->getRecordId()
+        ]);
     }
 
     /**
