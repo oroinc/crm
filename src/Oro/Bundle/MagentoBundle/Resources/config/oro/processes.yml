@@ -35,16 +35,6 @@ processes:
                                 nameSuffix:   $nameSuffix
                                 owner:        $owner
                                 organization: $organization
-                        - '@tree':
-                            conditions:
-                                '@not_empty': $account
-                            actions:
-                                - '@assign_value':
-                                    parameters: [$account.organization, $organization]
-                                - '@assign_value':
-                                    parameters: [$account.owner, $owner]
-                                - '@assign_value':
-                                    parameters: [$account.defaultContact, $contact]
                         - '@tree': # add Contact Email
                             conditions:
                                 '@not_empty': $email
