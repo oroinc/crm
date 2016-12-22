@@ -50,15 +50,15 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->transportMock     = $this
-            ->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
+            ->createMock('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
 
         $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
             ->setMethods(['getExecutionContext', 'getJobExecution'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->executionContextMock = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+        $this->executionContextMock = $this->createMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
 
-        $this->jobExecutionMock = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
+        $this->jobExecutionMock = $this->createMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
         $this->jobExecutionMock->expects($this->any())
             ->method('getExecutionContext')
             ->will($this->returnValue($this->executionContextMock));
@@ -92,7 +92,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
-            ->will($this->returnValue($this->getMock('\Iterator')));
+            ->will($this->returnValue($this->createMock('\Iterator')));
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
@@ -112,7 +112,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
 
-        $iterator = $this->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iterator = $this->createMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
@@ -129,7 +129,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     public function testInitializationWithPredefinedFilters($iterator, $exceptionExpected = null)
     {
         if (null !== $exceptionExpected) {
-            $this->setExpectedException($exceptionExpected);
+            $this->expectException($exceptionExpected);
         } else {
             $iterator->expects($this->once())->method('setPredefinedFiltersBag');
         }
@@ -148,8 +148,8 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function predefinedIteratorProvider()
     {
-        $iterator1 = $this->getMock('\Iterator');
-        $iterator2 = $this->getMock('Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\PredefinedFiltersAwareFixture');
+        $iterator1 = $this->createMock('\Iterator');
+        $iterator2 = $this->createMock('Oro\Bundle\MagentoBundle\Tests\Unit\Fixtures\PredefinedFiltersAwareFixture');
 
         return [
             'should throw exception' => [
@@ -179,7 +179,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testInitializationErrorsBadTransportGiven()
     {
-        $badTransport = $this->getMock('Oro\\Bundle\\IntegrationBundle\\Provider\\TransportInterface');
+        $badTransport = $this->createMock('Oro\\Bundle\\IntegrationBundle\\Provider\\TransportInterface');
         $connector    = $this->getConnector($badTransport, $this->stepExecutionMock);
         $this->transportMock->expects($this->never())->method('init');
 
@@ -197,7 +197,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testRead($dateInContext, $dateInItem, $expectedDate, $hasData = true, $dateInIterator = null)
     {
-        $iteratorMock = $this->getMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
+        $iteratorMock = $this->createMock('Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
@@ -295,7 +295,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     protected function getConnector($transport, $stepExecutionMock, $channel = null, $context = null)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry $contextRegistryMock */
-        $contextRegistryMock = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
+        $contextRegistryMock = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ConnectorContextMediator $contextMediatorMock */
         $contextMediatorMock = $this

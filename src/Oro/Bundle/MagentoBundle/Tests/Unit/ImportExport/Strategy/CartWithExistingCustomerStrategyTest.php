@@ -36,7 +36,7 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $strategy = $this->getStrategy();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $strategy->setImportExportContext($context);
 
         $customer = new Customer();
@@ -66,14 +66,14 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
 
         $strategy = $this->getStrategy();
 
-        $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+        $execution = $this->createMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
             ->will($this->returnValue($execution));
         $strategy->setStepExecution($this->stepExecution);
 
         $cartItem = ['customerId' => uniqid()];
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $context->expects($this->once())
             ->method('getValue')
             ->will($this->returnValue($cartItem));

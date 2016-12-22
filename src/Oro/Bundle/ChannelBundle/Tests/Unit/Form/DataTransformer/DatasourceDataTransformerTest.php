@@ -22,7 +22,7 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $this->transformer = new DatasourceDataTransformer($this->formFactory);
     }
 
@@ -80,7 +80,7 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
     public function testReverseTransform($data, $expectedResult, $expectedSubmit = false, $expectedException = null)
     {
         if (null !== $expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $this->initializeMocks($expectedSubmit, $expectedException);
@@ -155,7 +155,7 @@ class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
     private function initializeMocks($expectedSubmit, $expectedException)
     {
         if ($expectedSubmit) {
-            $formMock = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+            $formMock = $this->createMock('Symfony\Component\Form\Test\FormInterface');
 
             $data = null;
             $this->formFactory->expects($this->once())

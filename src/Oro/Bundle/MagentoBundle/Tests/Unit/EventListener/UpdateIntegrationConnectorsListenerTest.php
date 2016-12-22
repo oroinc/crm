@@ -20,7 +20,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->typesRegistry = $this->getMock('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry');
+        $this->typesRegistry = $this->createMock('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry');
     }
 
     /**
@@ -57,7 +57,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
             ->getMock();
 
         $dictionaryConnector = $this
-            ->getMock('Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface');
+            ->createMock('Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface');
 
         $this->typesRegistry->expects($this->any())
             ->method('getConnectorType')

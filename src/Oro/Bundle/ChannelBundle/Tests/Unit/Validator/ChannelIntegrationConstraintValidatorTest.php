@@ -28,7 +28,7 @@ class ChannelIntegrationConstraintValidatorTest extends \PHPUnit_Framework_TestC
      */
     public function testValidateException()
     {
-        $constraint = $this->getMock('Symfony\Component\Validator\Constraint');
+        $constraint = $this->createMock('Symfony\Component\Validator\Constraint');
         $validator  = new ChannelIntegrationConstraintValidator($this->provider);
         $validator->validate(false, $constraint);
     }

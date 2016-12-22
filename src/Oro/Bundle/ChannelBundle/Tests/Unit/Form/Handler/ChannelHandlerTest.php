@@ -46,9 +46,9 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->em         = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
-        $this->registry   = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $this->registry   = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
 
         $this->entity  = new Channel();
         $this->handler = new ChannelHandler($this->request, $this->form, $this->registry, $this->dispatcher);
@@ -124,10 +124,10 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         $form = $this->form;
         if ($isUpdateMode) {
-            $form        = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-            $formConfig  = $this->getMock('Symfony\Component\Form\FormConfigInterface');
-            $formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
-            $formType    = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+            $form        = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+            $formConfig  = $this->createMock('Symfony\Component\Form\FormConfigInterface');
+            $formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+            $formType    = $this->createMock('Symfony\Component\Form\ResolvedFormTypeInterface');
 
             $formConfig->expects($this->once())->method('getFormFactory')
                 ->will($this->returnValue($formFactory));

@@ -44,12 +44,12 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $name         = uniqid('name');
-        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $contact      = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $contact      = $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $owner        = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         $date         = new \DateTime();
         $lifetime     = 12.22;
 
@@ -95,7 +95,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
         $this->assertCount(0, $result);
 
-        $lead = $this->getMock('Oro\Bundle\SalesBundle\Entity\Lead');
+        $lead = $this->createMock('Oro\Bundle\SalesBundle\Entity\Lead');
         $this->entity->addLead($lead);
         $this->assertCount(1, $this->entity->getLeads());
         $this->assertTrue($this->entity->getLeads()->contains($lead));
@@ -116,7 +116,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
         $this->assertCount(0, $result);
 
-        $opportunity = $this->getMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
+        $opportunity = $this->createMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
         $this->entity->addOpportunity($opportunity);
         $this->assertCount(1, $this->entity->getOpportunities());
         $this->assertTrue($this->entity->getOpportunities()->contains($opportunity));
