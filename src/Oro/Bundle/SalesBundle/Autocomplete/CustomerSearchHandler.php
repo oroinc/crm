@@ -82,8 +82,9 @@ class CustomerSearchHandler extends ContextSearchHandler
     /**
      * @param ChainAccountAutocompleteProvider $chainAccountAutocompleteProvider
      */
-    public function setChainAccountAutocompleteProvider(ChainAccountAutocompleteProvider $chainAccountAutocompleteProvider)
-    {
+    public function setChainAccountAutocompleteProvider(
+        ChainAccountAutocompleteProvider $chainAccountAutocompleteProvider
+    ) {
         $this->chainAccountAutocompleteProvider = $chainAccountAutocompleteProvider;
     }
 
