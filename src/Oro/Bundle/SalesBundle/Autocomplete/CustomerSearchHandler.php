@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Autocomplete;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityNotFoundException;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ActivityBundle\Autocomplete\ContextSearchHandler;
@@ -119,9 +120,8 @@ class CustomerSearchHandler extends ContextSearchHandler
             }
         } else {
             foreach ($customers as $customer) {
-                $account = $this->detectAccount($customer);
-
-                if ($account) {
+                try {
+                    $account = $this->detectAccount($customer);
                     $identifierAccount = $this->doctrineHelper->getSingleEntityIdentifier($account);
                     $results = $this->addAccountInResults($results, $account, $groupedItems);
 
@@ -133,7 +133,7 @@ class CustomerSearchHandler extends ContextSearchHandler
                             $groupedItems
                         );
                     }
-                }
+                } catch (EntityNotFoundException $e) ()
             }
 
             $results = $this->sortResultsByItemsPriority($results, $items);
@@ -178,22 +178,17 @@ class CustomerSearchHandler extends ContextSearchHandler
     }
 
     /**
-     * @param $customer
+     * @param object $customer
      *
-     * @return Account|null
+     * @return Account
      */
     protected function detectAccount($customer)
     {
-        $account = null;
-
         if ($customer instanceof Account) {
             $account = $customer;
         } else {
             $salesCustomer = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
-
-            if ($salesCustomer) {
-                $account = $salesCustomer->getAccount();
-            }
+            $account = $salesCustomer->getAccount();
         }
 
         return $account;
