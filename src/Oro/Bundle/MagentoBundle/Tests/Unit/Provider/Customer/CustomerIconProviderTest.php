@@ -17,7 +17,7 @@ class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $channelType = $this->getMock('Oro\Bundle\MagentoBundle\Provider\ChannelType');
+        $channelType = $this->createMock('Oro\Bundle\MagentoBundle\Provider\ChannelType');
         $channelType->expects($this->any())
             ->method('getIcon')
             ->willReturn('bundles/acmedemo/img/logo.png');

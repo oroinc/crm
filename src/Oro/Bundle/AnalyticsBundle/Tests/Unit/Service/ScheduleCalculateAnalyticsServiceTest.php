@@ -14,7 +14,7 @@ class CalculateAnalyticsSchedulerTest extends \PHPUnit_Framework_TestCase
 
     public function testCouldBeConstructedWithMessageProducerAsFirstArgument()
     {
-        new CalculateAnalyticsScheduler($this->getMock(MessageProducerInterface::class));
+        new CalculateAnalyticsScheduler($this->createMock(MessageProducerInterface::class));
     }
 
     public function testShouldSendCalculateAnalyticsForSingleChannel()

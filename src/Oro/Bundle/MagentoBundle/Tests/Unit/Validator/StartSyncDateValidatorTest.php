@@ -27,7 +27,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->validator = new StartSyncDateValidator($this->registry);
     }
 
@@ -47,9 +47,9 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate($value, $formData, $queryResult = null, $expectsViolation = false)
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
-        $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())->method('getData')->willReturn($formData);
         $context->expects($this->any())->method('getRoot')->willReturn($form);
         $context->expects($expectsViolation ? $this->once() : $this->never())
@@ -112,7 +112,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
 
         if ($transportClass) {
             /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransport $transport */
-            $transport = $this->getMock($transportClass);
+            $transport = $this->createMock($transportClass);
             if ($transportId) {
                 $transport->expects($this->any())->method('getId')->willReturn($transportId);
             }

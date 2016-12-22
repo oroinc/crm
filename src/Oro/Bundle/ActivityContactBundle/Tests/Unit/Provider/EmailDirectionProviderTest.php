@@ -88,7 +88,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testOutgoingDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue(self::FROM_EMAIL));
 
@@ -107,7 +107,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testIncomingDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue(self::TO_EMAIL));
 
@@ -132,7 +132,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testUnknownDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue('test' . self::TO_EMAIL));
 

@@ -33,7 +33,7 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->registry        = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $this->registry        = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $this->settingProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->event           = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent')

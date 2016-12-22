@@ -18,7 +18,7 @@ class EntityNameTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $name   = 'testName';
 
         return [

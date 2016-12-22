@@ -24,7 +24,7 @@ class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
      */
     public function getDataProvider()
     {
-        $channel         = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel         = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $someDateTime    = new \DateTime();
         $someInteger     = 3;
         $someFloat       = 121.12;

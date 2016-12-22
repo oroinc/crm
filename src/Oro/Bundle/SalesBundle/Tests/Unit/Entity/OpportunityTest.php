@@ -19,7 +19,7 @@ class OpportunityTest extends \PHPUnit_Framework_TestCase
 
     public function getSetDataProvider()
     {
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         return array(
             'organization' => array('organization', $organization, $organization)
         );

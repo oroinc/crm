@@ -52,6 +52,6 @@ class ProcessChannelStateProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected function createStateProvider()
     {
-        return $this->getMock(StateProvider::class, [], [], '', false);
+        return $this->createMock(StateProvider::class);
     }
 }

@@ -17,7 +17,7 @@ class AddressHandlerTest extends AbstractHandlerTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $registry     = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry     = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $security     = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
             ->setMethods(['getToken'])
             ->disableOriginalConstructor()
@@ -38,7 +38,7 @@ class AddressHandlerTest extends AbstractHandlerTest
             ->method('getToken')
             ->will($this->returnValue($token));
 
-        $this->manager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
 
         $registry->expects($this->once())
             ->method('getManager')

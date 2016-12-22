@@ -31,7 +31,7 @@ class AmountProviderTest extends OrmTestCase
         $config->setMetadataDriverImpl($metadataDriver);
         $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnValue($this->em));
@@ -60,7 +60,7 @@ class AmountProviderTest extends OrmTestCase
             ->with($expectedSQL)
             ->will($this->returnValue($smt));
 
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $this->assertSame($result, $this->provider->getAccountLifeTimeValue($account, $channel));
     }
 
@@ -69,7 +69,7 @@ class AmountProviderTest extends OrmTestCase
      */
     public function lifetimeValueProvider()
     {
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'get account summary lifetime'    => [
