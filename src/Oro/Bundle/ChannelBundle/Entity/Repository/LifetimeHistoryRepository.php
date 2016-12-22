@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
@@ -22,31 +24,21 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
-        // todo: fix it
-        return 0.0;
-//        $qb = $this->getEntityManager()->createQueryBuilder();
-//        $qb->from($identityFQCN, 'e');
-//        $qb->from('Oro\Bundle\SalesBundle\Entity\Customer', 'e');
-//
-//        $qb->leftJoin(
-//            Customer::class,
-//            'customerAssociation',
-//            'WITH',
-//            sprintf('customerAssociation.%s = %s', $customerField, $rootAlias)
-//        );
-//        $qb->leftJoin('customerAssociation.account', 'associatedAccount');
-//
-//        $qb->leftJoin('site.channel', 'channel');
-//        $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
-//        $qb->andWhere('e.account = :account');
-//        $qb->setParameter('account', $account);
-//
-//        if (null !== $channel) {
-//            $qb->andWhere('e.dataChannel = :channel');
-//            $qb->setParameter('channel', $channel);
-//        }
-//
-//        return (float)$qb->getQuery()->getSingleScalarResult();
+        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->from($identityFQCN, 'e');
+        $qb->join(CustomerAssociation::class, 'ca', 'WITH', sprintf('ca.%s = e', $field));
+        $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
+        $qb->andWhere('ca.account = :account');
+        $qb->setParameter('account', $account);
+
+        if (null !== $channel) {
+            $qb->andWhere('e.dataChannel = :channel');
+            $qb->setParameter('channel', $channel);
+        }
+
+        return (float)$qb->getQuery()->getSingleScalarResult();
     }
 
     /**

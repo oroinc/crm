@@ -69,9 +69,14 @@ class ChannelDoctrineListener
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
+                $account = $this->chainAccountProvider->getAccount($entity);
+                if (!$account->getId()) {
+                    $this->em->persist($account);
+                    $this->uow->computeChangeSet($this->em->getClassMetadata(ClassUtils::getClass($account)), $account);
+                }
                 $this->scheduleUpdate(
                     $className,
-                    $this->chainAccountProvider->getAccount($entity),
+                    $account,
                     $entity->getDataChannel()
                 );
             }
@@ -107,7 +112,6 @@ class ChannelDoctrineListener
                     $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
                     $toOutDate[] = [$account, $channel, $entity];
 
-                    $this->em->persist($account);
                     $this->em->persist($entity);
                 }
             }
@@ -189,6 +193,10 @@ class ChannelDoctrineListener
 
         if ($this->isUpdateRequired($className, $changeSet)) {
             $account = $this->chainAccountProvider->getAccount($entity);
+            if (!$account->getId()) {
+                $this->em->persist($account);
+                $this->uow->computeChangeSet($this->em->getClassMetadata(ClassUtils::getClass($account)), $account);
+            }
             $channel = $entity->getDataChannel();
             $this->scheduleUpdate($className, $account, $channel);
 
@@ -228,7 +236,8 @@ class ChannelDoctrineListener
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
             $this->queued[$customerIdentity][$key] = [
-                'account' => $account->getId() ? : $account,
+                'account' => $account,
+//                'account' => $account->getId() ? : $account,
                 'channel' => $channel->getId() ? : $channel
             ];
         }
