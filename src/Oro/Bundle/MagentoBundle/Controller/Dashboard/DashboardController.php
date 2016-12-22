@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Controller\Dashboard;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -12,10 +13,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowTranslationHelper;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 use Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 
 class DashboardController extends Controller
@@ -56,8 +57,10 @@ class DashboardController extends Controller
             $this->get('oro_security.acl_helper')
         );
 
+        /* @var $translator TranslatorInterface */
+        $translator = $this->get('translator');
         foreach ($data as &$item) {
-            $item['label'] = $this->get('oro_workflow.helper.translation')->findTranslation($item['label']);
+            $item['label'] = $translator->trans($item['label'], [], WorkflowTranslationHelper::TRANSLATION_DOMAIN);
         }
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
