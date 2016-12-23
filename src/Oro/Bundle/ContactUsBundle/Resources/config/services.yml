@@ -19,7 +19,6 @@ services:
             - "oro_contactus_contact_request"
             - "oro_contactus_contact_request"
             - null
-            - { dataChannelField : true }
 
     oro_contact_us.contact_request.form.handler:
         class: %oro_contact_us.contact_request.form.handler.class%

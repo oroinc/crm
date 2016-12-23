@@ -45,7 +45,6 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'owner'        => array('owner', $user, $user),
             'createdAt'    => array('createdAt', $now, $now),
             'updatedAt'    => array('updatedAt', $now, $now),
-            'dataChannel'  => ['dataChannel', $channel, $channel],
             'organization' => array('organization', $organization, $organization)
         );
     }

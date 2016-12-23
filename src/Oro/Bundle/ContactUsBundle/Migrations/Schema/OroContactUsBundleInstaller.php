@@ -33,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -96,7 +96,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('preferred_contact_method', 'string', ['length' => 100]);
         $table->addColumn('feedback', 'text', ['notnull' => false]);
@@ -109,7 +108,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['contact_reason_id'], 'IDX_342872E8374A36E9', []);
-        $table->addIndex(['data_channel_id'], 'IDX_342872E8BDC09B73', []);
         $table->addIndex(['opportunity_id'], 'IDX_342872E89A34590F', []);
         $table->addIndex(['lead_id'], 'IDX_342872E855458D', []);
         $table->addIndex(['created_at'], 'request_create_idx', []);
@@ -164,13 +162,6 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
             ['opportunity_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_342872E8BDC09B73'
         );
     }
 }

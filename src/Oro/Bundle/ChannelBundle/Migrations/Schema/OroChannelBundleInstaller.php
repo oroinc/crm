@@ -33,7 +33,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v2_1';
     }
 
     /**
@@ -294,7 +294,10 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
             'dataChannel',
             'orocrm_channel',
             'name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true],
+                'form' => ['is_enabled' => false]
+            ]
         );
     }
 }

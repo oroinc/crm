@@ -67,6 +67,20 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         if (!$data->getId()) {
             $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
             $this->addEntitiesToChannel($data, $channelTypeEntities);
+
+            // restrict to choose non system channels if create action
+            $form->remove('channelType');
+            $form->add(
+                'channelType',
+                'genemu_jqueryselect2_choice',
+                [
+                    'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
+                    'required' => true,
+                    'label'    => 'oro.channel.channel_type.label',
+                    'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
+                    'empty_value' => '',
+                ]
+            );
         }
     }
 

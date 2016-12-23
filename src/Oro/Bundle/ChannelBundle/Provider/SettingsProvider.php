@@ -72,6 +72,23 @@ class SettingsProvider
     }
 
     /**
+     * Return whether given entity is related to customer
+     *
+     * @param string $entityFQCN entity full class name
+     *
+     * @return bool
+     */
+    public function isCustomerEntity($entityFQCN)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $classes = array_map(function ($item) {
+            return $item['customer_identity'];
+        }, $settings);
+
+        return in_array($entityFQCN, $classes, true);
+    }
+
+    /**
      * Return whether entity dependent to any business entity
      *
      * @param string $entityFQCN entity full class name
@@ -170,6 +187,21 @@ class SettingsProvider
     }
 
     /**
+     * Returns channel types that could be used in channel type selector
+     * sorted by priority
+     *
+     * @return array
+     */
+    public function getNonSystemChannelTypeChoiceList()
+    {
+        $channelTypes = array_filter($this->getChannelTypeChoiceList(), function ($channelTypeName) {
+            return !$this->isChannelSystem($channelTypeName);
+        }, ARRAY_FILTER_USE_KEY);
+
+        return $channelTypes;
+    }
+
+    /**
      * Get required integration type for given channel type
      *
      * @param string $channelType
@@ -188,6 +220,27 @@ class SettingsProvider
 
         return !empty($settings[$channelType]['integration_type'])
             ? $settings[$channelType]['integration_type'] : false;
+    }
+
+    /**
+     * Check system status of channel
+     *
+     * @param string $channelType
+     *
+     * @return bool
+     *
+     * @throws \LogicException If channel type config not found
+     */
+    public function isChannelSystem($channelType)
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+
+        if (!isset($settings[$channelType])) {
+            throw new \LogicException(sprintf('Unable to find "%s" channel type\'s config', $channelType));
+        }
+
+        return !empty($settings[$channelType]['system'])
+            ? $settings[$channelType]['system'] : false;
     }
 
     /**

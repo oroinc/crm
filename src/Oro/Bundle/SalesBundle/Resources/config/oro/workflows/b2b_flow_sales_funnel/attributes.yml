@@ -7,8 +7,6 @@ workflows:
                 property_path: sales_funnel.owner
             lead:
                 property_path: sales_funnel.lead
-            dataChannel:
-                property_path: sales_funnel.dataChannel
             lead_notes:
                 property_path: sales_funnel.lead.notes
             new_notes:

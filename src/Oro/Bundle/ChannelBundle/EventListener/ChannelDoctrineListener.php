@@ -13,7 +13,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelDoctrineListener
@@ -139,7 +138,7 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @return array|CustomerIdentityInterface[]
+     * @return array|[]
      */
     protected function getChangedTrackedEntities()
     {
@@ -162,17 +161,16 @@ class ChannelDoctrineListener
         return array_filter(
             $entities,
             function ($entity) {
-                return $entity instanceof CustomerIdentityInterface
-                && array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
+                return array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
             }
         );
     }
 
     /**
-     * @param CustomerIdentityInterface $entity
-     * @param array                     $changeSet
+     * @param object $entity
+     * @param array $changeSet
      */
-    protected function checkAndUpdate(CustomerIdentityInterface $entity, array $changeSet)
+    protected function checkAndUpdate($entity, array $changeSet)
     {
         $className = ClassUtils::getClass($entity);
 

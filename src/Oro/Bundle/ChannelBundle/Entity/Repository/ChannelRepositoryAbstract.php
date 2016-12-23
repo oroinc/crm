@@ -10,15 +10,13 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 abstract class ChannelRepositoryAbstract extends EntityRepository implements ChannelRepositoryInterface
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getAvailableChannelNames(AclHelper $aclHelper, $type = null)
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c.id', 'c.name');
-        $qb->from('OroChannelBundle:Channel', 'c', 'c.id')
-            ->where($qb->expr()->eq('c.status', ':status'))
-            ->setParameter('status', Channel::STATUS_ACTIVE);
+        $qb->from('OroChannelBundle:Channel', 'c', 'c.id');
 
         if (null !== $type) {
             $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));
@@ -29,7 +27,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getVisitsCountByPeriodForChannelType(
         \DateTime $start,
@@ -51,21 +49,19 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
             ->where($qb->expr()->orX(
                 $qb->expr()->isNull('channel.id'),
                 $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type'),
-                    $qb->expr()->eq('channel.status', ':status')
+                    $qb->expr()->eq('channel.channelType', ':type')
                 )
             ))
             ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
             ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
-            ->setParameter('status', Channel::STATUS_ACTIVE);
+            ->setParameter('dateEnd', $end);
 
         return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getChannelsByEntities(
         array $entities = [],
@@ -82,7 +78,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
     {
@@ -96,9 +92,7 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
             $query->having($countDistinctName);
             $query->setParameter('count', count($entities));
         }
-        $query->andWhere('c.status = :status');
         $query->orderBy('c.name', 'ASC');
-        $query->setParameter('status', $status);
 
         return $query;
     }
