@@ -454,6 +454,8 @@ services:
             - [setCustomerConfigProvider, ['@oro_sales.customer.account_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setRoutingHelper, ['@oro_entity.routing_helper']]
+            - [setAccountCustomerManager, ['@oro_sales.manager.account_customer']]
+            - [setChainAccountAutocompleteProvider, ['@oro_sales.provider.customer.account_autocomplete.chain']]
 
     oro_sales.customers.opportunities_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
@@ -571,3 +573,6 @@ services:
             - '@oro_sales.manager.account_customer'
         tags:
             - { name: oro_action.action, alias: find_customer_association }
+
+    oro_sales.provider.customer.account_autocomplete.chain:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\ChainAccountAutocompleteProvider

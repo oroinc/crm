@@ -1093,3 +1093,8 @@ services:
         arguments:
             - '@oro_sales.manager.account_customer'
             - '@oro_entity.doctrine_helper'
+
+    oro_magento.provider.prepare_result_item_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountAutocompleteProvider
+        tags:
+            - { name: oro_sales.provider.customer.account_autocomplete }
