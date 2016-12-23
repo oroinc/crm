@@ -216,7 +216,9 @@ oro:
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
-            customer_association.label : Customer
+            customer_association:
+                label :           Customer
+                description:      A customer or an account the opportunity is created for
 
             add_entity:           Add opportunity
 
