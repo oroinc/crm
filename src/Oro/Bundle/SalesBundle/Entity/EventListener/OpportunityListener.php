@@ -141,7 +141,7 @@ class OpportunityListener
         $defaultCurrency = $this->currencyProvider->getDefaultCurrency();
 
         $budgetAmount = $opportunity->getBudgetAmount();
-        if ($budgetAmount && null === $budgetAmount->getValue()) {
+        if ($budgetAmount && null !== $budgetAmount->getValue()) {
             if ($defaultCurrency && $budgetAmount->getCurrency()
                 && null !== $budgetAmount->getBaseCurrencyValue()) {
                 $opportunity->setBaseBudgetAmountValue($budgetAmount->getValue());
