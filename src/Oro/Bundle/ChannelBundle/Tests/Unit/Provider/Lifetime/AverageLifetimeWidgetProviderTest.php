@@ -30,7 +30,7 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry            = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry            = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->localeSettings      = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
             ->disableOriginalConstructor()->getMock();
         $this->aclHelper           = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')

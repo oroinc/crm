@@ -26,8 +26,8 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
     {
         $someDateTime = new \DateTime();
         $someAmount   = 123.12;
-        $account      = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account      = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $status       = true;
 
         return [

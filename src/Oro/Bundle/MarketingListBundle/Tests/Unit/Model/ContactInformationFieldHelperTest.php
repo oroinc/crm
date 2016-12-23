@@ -94,7 +94,7 @@ class ContactInformationFieldHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetContactInformationFields()
     {
-        $entity = 'Entity';
+        $entity = \stdClass::class;
 
         $this->queryDesigner->expects($this->once())
             ->method('getDefinition')

@@ -71,8 +71,8 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->request = new Request();
 
-        $this->validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
-        $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $this->validator = $this->createMock('Symfony\Component\Validator\ValidatorInterface');
+        $this->translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
 
         $this->testEntity = new MarketingList();
         $this->handler = new MarketingListHandler(

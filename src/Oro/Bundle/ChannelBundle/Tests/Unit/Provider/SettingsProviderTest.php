@@ -232,7 +232,7 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSettingsProvider(array $settings)
     {
-        $resolverMock = $this->getMock('Oro\Component\Config\Resolver\ResolverInterface');
+        $resolverMock = $this->createMock('Oro\Component\Config\Resolver\ResolverInterface');
         $resolverMock->expects($this->once())->method('resolve')
             ->with($this->equalTo($settings))
             ->will($this->returnArgument(0));

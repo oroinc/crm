@@ -87,7 +87,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
     protected function prepareLeadAndOpportunity($withAddress = true)
     {
         $accessor = PropertyAccess::createPropertyAccessor();
-        $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $user         = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
 
         $opportunityFields = [
             'firstName'         => 'test_firstName',
