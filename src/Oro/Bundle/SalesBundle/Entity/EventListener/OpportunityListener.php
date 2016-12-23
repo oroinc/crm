@@ -4,7 +4,7 @@ namespace Oro\Bundle\SalesBundle\Entity\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
@@ -24,12 +24,19 @@ class OpportunityListener
      */
     protected $rateConverter;
 
+    /** @var DefaultCurrencyProviderInterface */
+    protected $currencyProvider;
+
     /**
      * @param RateConverterInterface $rateConverter
+     * @param DefaultCurrencyProviderInterface $currencyProvider
      */
-    public function __construct(RateConverterInterface $rateConverter)
-    {
+    public function __construct(
+        RateConverterInterface $rateConverter,
+        DefaultCurrencyProviderInterface $currencyProvider
+    ) {
         $this->rateConverter = $rateConverter;
+        $this->currencyProvider = $currencyProvider;
     }
 
     /**
@@ -127,29 +134,38 @@ class OpportunityListener
      */
     protected function updateBaseBudgetAmountFields($newStatusId, Opportunity $opportunity)
     {
-        $isOppportunityChanged = false;
+        $isOpportunityChanged = false;
         if (! in_array($newStatusId, Opportunity::getClosedStatuses())) {
-            return $isOppportunityChanged;
+            return $isOpportunityChanged;
+        }
+        $defaultCurrency = $this->currencyProvider->getDefaultCurrency();
+
+        $budgetAmount = $opportunity->getBudgetAmount();
+        if ($budgetAmount && null === $budgetAmount->getValue()) {
+            if ($defaultCurrency && $budgetAmount->getCurrency()
+                && null !== $budgetAmount->getBaseCurrencyValue()) {
+                $opportunity->setBaseBudgetAmountValue($budgetAmount->getValue());
+                $isOpportunityChanged = true;
+            } elseif (null === $budgetAmount->getBaseCurrencyValue()) {
+                $baseBudgetAmount = $this->rateConverter->getBaseCurrencyAmount($budgetAmount);
+                $opportunity->setBaseBudgetAmountValue($baseBudgetAmount);
+                $isOpportunityChanged = true;
+            }
         }
 
-        if ($opportunity->getBudgetAmount() instanceof MultiCurrency
-            && null === $opportunity->getBaseBudgetAmountValue()
-            && null !== $opportunity->getBudgetAmountValue()
-        ) {
-            $baseBudgetAmount = $this->rateConverter->getBaseCurrencyAmount($opportunity->getBudgetAmount());
-            $opportunity->setBaseBudgetAmountValue($baseBudgetAmount);
-            $isOppportunityChanged = true;
+        $closeRevenue = $opportunity->getCloseRevenue();
+        if ($closeRevenue && null !== $closeRevenue->getValue()) {
+            if ($defaultCurrency == $closeRevenue->getCurrency()
+                && null !== $closeRevenue->getBaseCurrencyValue()) {
+                $opportunity->setBaseCloseRevenueValue($closeRevenue->getValue());
+                $isOpportunityChanged = true;
+            } elseif (null === $closeRevenue->getBaseCurrencyValue()) {
+                $closeRevenueAmount = $this->rateConverter->getBaseCurrencyAmount($closeRevenue);
+                $opportunity->setBaseCloseRevenueValue($closeRevenueAmount);
+                $isOpportunityChanged = true;
+            }
         }
 
-        if ($opportunity->getCloseRevenue() instanceof MultiCurrency
-            && null === $opportunity->getBaseCloseRevenueValue()
-            && null !== $opportunity->getCloseRevenueValue()
-        ) {
-            $closeRevenueAmount = $this->rateConverter->getBaseCurrencyAmount($opportunity->getCloseRevenue());
-            $opportunity->setBaseCloseRevenueValue($closeRevenueAmount);
-            $isOppportunityChanged = true;
-        }
-
-        return $isOppportunityChanged;
+        return $isOpportunityChanged;
     }
 }
