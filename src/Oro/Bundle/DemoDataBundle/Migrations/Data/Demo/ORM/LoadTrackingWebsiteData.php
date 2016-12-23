@@ -18,6 +18,7 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
 
 class LoadTrackingWebsiteData extends AbstractFixture implements
     ContainerAwareInterface,
@@ -99,7 +100,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
         foreach ($channels as $channel) {
             $website = new TrackingWebsite();
             $website->setName($channel->getName())
-                ->setIdentifier(uniqid())
+                ->setIdentifier(UUIDGenerator::v4())
                 ->setUrl('http://magento.domain')
                 ->setChannel($channel)
                 ->setOrganization($organization);
