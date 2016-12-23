@@ -133,7 +133,7 @@ class CustomerSearchHandler extends ContextSearchHandler
                             $groupedItems
                         );
                     }
-                } catch (EntityNotFoundException $e) ()
+                } catch (EntityNotFoundException $e) {}
             }
 
             $results = $this->sortResultsByItemsPriority($results, $items);
