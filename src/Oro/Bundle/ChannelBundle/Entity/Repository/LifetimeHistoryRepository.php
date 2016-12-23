@@ -24,6 +24,10 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
+            return 0.0;
+        }
+
         $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
 
         $qb = $this->getEntityManager()->createQueryBuilder();

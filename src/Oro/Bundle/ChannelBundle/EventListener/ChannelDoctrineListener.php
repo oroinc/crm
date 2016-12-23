@@ -14,6 +14,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider;
 
 class ChannelDoctrineListener
@@ -31,6 +33,9 @@ class ChannelDoctrineListener
 
     /** @var LifetimeHistoryRepository */
     protected $lifetimeRepo;
+
+    /** @var CustomerRepository */
+    protected $customerRepo;
 
     /** @var array */
     protected $queued = [];
@@ -69,11 +74,10 @@ class ChannelDoctrineListener
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
-                $account = $this->chainAccountProvider->getAccount($entity);
-                if (!$account->getId()) {
-                    $this->em->persist($account);
-                    $this->uow->computeChangeSet($this->em->getClassMetadata(ClassUtils::getClass($account)), $account);
-                }
+                $account = $this->getAccount($entity);
+
+
+
                 $this->scheduleUpdate(
                     $className,
                     $account,
@@ -192,11 +196,7 @@ class ChannelDoctrineListener
         $className = ClassUtils::getClass($entity);
 
         if ($this->isUpdateRequired($className, $changeSet)) {
-            $account = $this->chainAccountProvider->getAccount($entity);
-            if (!$account->getId()) {
-                $this->em->persist($account);
-                $this->uow->computeChangeSet($this->em->getClassMetadata(ClassUtils::getClass($account)), $account);
-            }
+            $account = $this->getAccount($entity);
             $channel = $entity->getDataChannel();
             $this->scheduleUpdate($className, $account, $channel);
 
@@ -236,7 +236,7 @@ class ChannelDoctrineListener
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
             $this->queued[$customerIdentity][$key] = [
-                'account' => $account,
+                'account' => $account->getId() ? : $account,
                 'channel' => $channel->getId() ? : $channel
             ];
         }
@@ -289,5 +289,38 @@ class ChannelDoctrineListener
         }
 
         return $this->lifetimeRepo;
+    }
+
+    /**
+     * @return CustomerRepository
+     */
+    protected function getCustomerRepository()
+    {
+        if (null === $this->customerRepo) {
+            $this->customerRepo = $this->em->getRepository('OroSalesBundle:Customer');
+        }
+
+        return $this->customerRepo;
+    }
+
+    /**
+     * @param object $entity
+     * @return null|Account
+     */
+    protected function getAccount($entity)
+    {
+        $identityFQCN = ClassUtils::getClass($entity);
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
+            return null;
+        }
+
+        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+
+        $customer = $this->getCustomerRepository()->getCustomerByTarget($entity->getId(), $field);
+        if (!$customer) {
+            return null;
+        }
+
+        return $customer->getAccount();
     }
 }
