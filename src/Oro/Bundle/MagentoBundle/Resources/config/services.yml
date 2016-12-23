@@ -128,6 +128,7 @@ parameters:
     oro_magento.service.automatic_discovery.class:                       Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery
     oro_magento.strategy.automatic_discovery.default.class:              Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
     oro_magento.strategy.automatic_discovery.addresses.class:            Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
+    oro_magento.strategy.automatic_discovery.email.class:                Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\EmailDiscoveryStrategy
 
     oro_magento.wsdl_manager.class:                                      Oro\Bundle\MagentoBundle\Service\WsdlManager
     oro_magento.wsdl.cache_clearer.class:                                Oro\Bundle\MagentoBundle\Cache\WsdlCacheClearer
@@ -800,6 +801,9 @@ services:
     oro_magento.strategy.automatic_discovery.addresses:
         class: %oro_magento.strategy.automatic_discovery.addresses.class%
 
+    oro_magento.strategy.automatic_discovery.email:
+        class: %oro_magento.strategy.automatic_discovery.email.class%
+
     oro_magento.service.automatic_discovery:
         class: %oro_magento.service.automatic_discovery.class%
         arguments:
@@ -810,6 +814,7 @@ services:
             - []
         calls:
             - [addStrategy, ['addresses', "@oro_magento.strategy.automatic_discovery.addresses"]]
+            - [addStrategy, ['email', "@oro_magento.strategy.automatic_discovery.email"]]
         tags:
             - { name: oro_magento.bundle_config.aware, argument_number: 4 }
 
