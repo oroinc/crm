@@ -39,11 +39,11 @@ class OpportunityRelationsBuilder
 
     public function buildAccount(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomerAssociation()->getTarget();
-        if (!$customer) {
+        if (!$opportunity->getCustomerAssociation()) {
             return;
         }
 
+        $customer = $opportunity->getCustomerAssociation()->getTarget();
         $contact = $opportunity->getContact();
 
         $account = $customer instanceof Account ? $customer : $customer->getAccount();

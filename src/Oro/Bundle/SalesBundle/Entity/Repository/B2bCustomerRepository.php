@@ -5,9 +5,8 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class B2bCustomerRepository extends EntityRepository
 {
@@ -25,10 +24,7 @@ class B2bCustomerRepository extends EntityRepository
         B2bCustomer $customer,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
-        $associationName = ExtendHelper::buildAssociationName(
-            B2bCustomer::class,
-            CustomerScope::ASSOCIATION_KIND
-        );
+        $associationName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class);
 
         $qb = $this->getEntityManager()->getRepository('OroSalesBundle:Opportunity')
             ->createQueryBuilder('o');

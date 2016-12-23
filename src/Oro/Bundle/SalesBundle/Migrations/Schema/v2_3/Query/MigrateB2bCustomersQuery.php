@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
-class UpdateAccountsQuery extends ParametrizedMigrationQuery
+class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
 {
     /** @var string */
     protected $customerColumnName;
