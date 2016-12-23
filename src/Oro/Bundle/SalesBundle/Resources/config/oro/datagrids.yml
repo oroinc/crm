@@ -2312,3 +2312,72 @@ datagrids:
 
     sales-customers-leads-grid:
         extends: base-sales-b2bcustomer-leads-grid
+        columns:
+            name:
+                label:         oro.sales.lead.name.label
+            status:
+                frontend_type: select
+                label:         oro.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+            firstName:
+                label:         oro.sales.lead.first_name.label
+            lastName:
+                label:         oro.sales.lead.last_name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            email:
+                label:         oro.sales.lead.email.label
+            phone:
+                label:         oro.sales.lead.phone_number.label
+            countryName:
+                label:         oro.sales.lead.datagrid.country
+            regionLabel:
+                label:         oro.sales.lead.datagrid.region
+            addressPostalCode:
+                label:         oro.sales.lead.datagrid.postal_code
+        sorters:
+            columns:
+                name:
+                    data_name: l.name
+                status:
+                    data_name: status
+                firstName:
+                    data_name: l.firstName
+                lastName:
+                    data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
+                email:
+                    data_name: email.email
+                phone:
+                    data_name: phone.phone
+                countryName:
+                    data_name: address.country
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: addressPostalCode
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                 countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        lazy: true
+                        field_options:
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            translatable_options: false
+                 regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                 addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false

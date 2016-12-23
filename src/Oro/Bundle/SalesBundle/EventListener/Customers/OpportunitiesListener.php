@@ -2,15 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Doctrine\Common\Util\ClassUtils;
+
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
-use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
+use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class OpportunitiesListener
 {
@@ -64,6 +65,7 @@ class OpportunitiesListener
         if (!$this->featureChecker->isFeatureEnabled('sales_opportunity')) {
             return;
         }
+
         $entity = $event->getEntity();
         if ($this->customerConfigProvider->isCustomerClass($entity)) {
             $environment          = $event->getTwigEnvironment();
@@ -72,11 +74,13 @@ class OpportunitiesListener
             $priority             = $this->getBlockPriority($targetClass);
             $opportunitiesData    = $environment->render(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
-                ['gridParams' =>
-                     [
-                         'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
-                         'customer_class' => $targetClass,
-                     ]
+                [
+                    'gridParams' =>
+                         [
+                             'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
+                             'customer_class' => $targetClass,
+                             'entity_class' => Opportunity::class,
+                         ]
                 ]
             );
             $data['dataBlocks'][] = [

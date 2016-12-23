@@ -7,7 +7,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
-class AccountOpportunitiesExtension extends OpportunitiesExtension
+class AccountCustomerAssociationExtension extends CustomerAssociationExtension
 {
     /**
      * {@inheritdoc}

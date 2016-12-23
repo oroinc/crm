@@ -475,19 +475,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addRelevantOpportunities }
 
-    oro_sales.datagrid.extension.customers.opportunities:
-        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
-        arguments:
-            - '@oro_sales.customer.config_provider'
-        tags:
-            - { name: oro_datagrid.extension }
-
-    oro_sales.datagrid.extension.customers.account_opportunities:
-        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountOpportunitiesExtension
-        parent: oro_sales.datagrid.extension.customers.opportunities
-        tags:
-            - { name: oro_datagrid.extension }
-
     oro_sales.datagrid.extension.customers.account:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension
         arguments:
@@ -518,7 +505,7 @@ services:
 
     oro_sales.datagrid.extension.customers.relevant_opportunities:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelevantOpportunitiesExtension
-        parent: oro_sales.datagrid.extension.customers.opportunities
+        parent: oro_sales.datagrid.extension.customers.customer_association
         tags:
             - { name: oro_datagrid.extension }
 
@@ -564,10 +551,17 @@ services:
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
 
-    oro_sales.datagrid.extension.customers.leads:
-        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\B2bCustomerLeadsExtension
+    oro_sales.datagrid.extension.customers.account_customer_association:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountCustomerAssociationExtension
+        parent: oro_sales.datagrid.extension.customers.customer_association
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.datagrid.extension.customers.customer_association:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\CustomerAssociationExtension
         arguments:
             - '@oro_sales.customer.config_provider'
+            - '@oro_datagrid.grid_configuration.helper'
         tags:
             - { name: oro_datagrid.extension }
 

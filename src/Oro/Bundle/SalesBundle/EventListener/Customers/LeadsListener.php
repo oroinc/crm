@@ -2,13 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
+use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class LeadsListener
 {
@@ -57,15 +59,19 @@ class LeadsListener
         }
 
         $entity = $event->getEntity();
-        if ($this->customerConfigProvider->isCustomerClass($entity) && $entity instanceof B2bCustomer) {
-            $environment          = $event->getTwigEnvironment();
-            $data                 = $event->getData();
+        if ($this->customerConfigProvider->isCustomerClass($entity)) {
+            $environment  = $event->getTwigEnvironment();
+            $data         = $event->getData();
+            $targetClass  = ClassUtils::getClass($entity);
             $leadsData    = $environment->render(
                 'OroSalesBundle:Customer:leadsGrid.html.twig',
-                ['gridParams' =>
-                    [
-                        'business_customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity)
-                    ]
+                [
+                    'gridParams' =>
+                        [
+                            'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
+                            'customer_class' => $targetClass,
+                            'entity_class' => Lead::class,
+                        ]
                 ]
             );
             $data['dataBlocks'][] = [
