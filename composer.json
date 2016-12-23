@@ -19,7 +19,8 @@
         "oro/platform": "1.x-dev",
         "oro/crm-task-bundle": "1.x-dev",
         "oro/crm-call-bundle": "1.x-dev",
-        "oro/calendar-bundle": "1.x-dev"
+        "oro/calendar-bundle": "1.x-dev",
+        "oro/marketing": "1.x-dev"
     },
     "extra": {
         "branch-alias": {
