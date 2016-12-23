@@ -17,7 +17,8 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
-use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TrackingEvents;
+use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
 
 class LoadTrackingWebsiteData extends AbstractFixture implements
     ContainerAwareInterface,
@@ -99,7 +100,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
         foreach ($channels as $channel) {
             $website = new TrackingWebsite();
             $website->setName($channel->getName())
-                ->setIdentifier(uniqid())
+                ->setIdentifier(UUIDGenerator::v4())
                 ->setUrl('http://magento.domain')
                 ->setChannel($channel)
                 ->setOrganization($organization);
@@ -120,14 +121,14 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
     protected function persistEventDictionaries(ObjectManager $om, array $websites)
     {
         $events = [
-            TCI::EVENT_REGISTRATION_FINISHED,
-            TCI::EVENT_CART_ITEM_ADDED,
-            TCI::EVENT_CHECKOUT_STARTED,
-            TCI::EVENT_ORDER_PLACE_SUCCESS,
-            TCI::EVENT_ORDER_PLACED,
-            TCI::EVENT_CUSTOMER_LOGIN,
-            TCI::EVENT_CUSTOMER_LOGOUT,
-            TCI::EVENT_VISIT,
+            TrackingEvents::EVENT_REGISTRATION_FINISHED,
+            TrackingEvents::EVENT_CART_ITEM_ADDED,
+            TrackingEvents::EVENT_CHECKOUT_STARTED,
+            TrackingEvents::EVENT_ORDER_PLACE_SUCCESS,
+            TrackingEvents::EVENT_ORDER_PLACED,
+            TrackingEvents::EVENT_CUSTOMER_LOGIN,
+            TrackingEvents::EVENT_CUSTOMER_LOGOUT,
+            TrackingEvents::EVENT_VISIT,
         ];
 
         $dictionaries = [];

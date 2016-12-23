@@ -108,3 +108,8 @@ services:
         class: Oro\Bundle\AccountBundle\Datagrid\AccountsViewList
         arguments:
             - @translator
+
+    oro_account.provider.prepare_result_item_provider:
+        class: Oro\Bundle\AccountBundle\Provider\AccountAutocompleteProvider
+        tags:
+            - { name: oro_sales.provider.customer.account_autocomplete }

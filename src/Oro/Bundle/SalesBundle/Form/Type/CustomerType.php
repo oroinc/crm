@@ -13,12 +13,13 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Component\PhpUtils\ArrayUtil;
 
-use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
-use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 class CustomerType extends AbstractType
 {
@@ -134,7 +135,9 @@ class CustomerType extends AbstractType
                         'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
                         'minimumInputLength'      => 1,
+                        'per_page'                => CustomerSearchHandler::AMOUNT_SEARCH_RESULT,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
+                        'dropdownCssClass'        => 'sales-account-autocomplete',
                         'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                         'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                         'route_parameters'        => [
