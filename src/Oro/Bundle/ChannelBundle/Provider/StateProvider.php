@@ -80,8 +80,6 @@ class StateProvider
         $qb = $this->getManager()->createQueryBuilder('c');
         $qb->from('OroChannelBundle:Channel', 'c');
         $qb->select('c.id');
-        $qb->andWhere('c.status = :status');
-        $qb->setParameter('status', Channel::STATUS_ACTIVE);
 
         if (!empty($entities)) {
             $countDistinctName = $qb->expr()->eq($qb->expr()->countDistinct('e.name'), ':count');
@@ -133,8 +131,8 @@ class StateProvider
             $qb->distinct(true);
             $qb->select('e.name')
                 ->from('OroChannelBundle:Channel', 'c')
-                ->andWhere('c.status = :status')
-                ->setParameter('status', Channel::STATUS_ACTIVE)
+//                ->andWhere('c.status = :status')
+//                ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');
 
             $assignedEntityNames = $this->aclHelper->apply($qb)->getArrayResult();

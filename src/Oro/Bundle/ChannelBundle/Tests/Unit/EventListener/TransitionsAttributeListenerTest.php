@@ -73,33 +73,4 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($attributeOptions, $event->getAttributeOptions());
     }
-
-    public function testAbstractChannelAwareType()
-    {
-        $propertyPath = new PropertyPath('data.dataChannel.id');
-        $formType = 'oro_sales_opportunity_select';
-        $expectedAttrOptions = [
-            'form_type' => $formType,
-            'options' => ['channel_id' => self::EXPECTED_CHANNEL_ID]
-        ];
-        $workflowItem = new WorkflowItem();
-        $attribute = new Attribute();
-        $attributeOptions = ['form_type' => $formType];
-        $options = ['workflow_item' => $workflowItem];
-
-        $this->contextAccessor->expects($this->at(0))
-            ->method('getValue')
-            ->with($workflowItem, $formType)
-            ->will($this->returnValue($formType));
-
-        $this->contextAccessor->expects($this->at(1))
-            ->method('getValue')
-            ->with($workflowItem, $propertyPath)
-            ->will($this->returnValue(self::EXPECTED_CHANNEL_ID));
-
-        $event = new TransitionsAttributeEvent($attribute, $attributeOptions, $options);
-        $this->listener->beforeAddAttribute($event);
-
-        $this->assertEquals($expectedAttrOptions, $event->getAttributeOptions());
-    }
 }

@@ -59,14 +59,6 @@ The list of records that will be deleted, could be limited by filters.
 
 **The required field**
 
-### dataChannel
-
-#### create
-
-{@inheritdoc}
-
-**The required field**
-
 ## SUBRESOURCES
 
 ### closeReason
@@ -110,20 +102,6 @@ Get a B2B customer the opportunity is created for.
 #### update_relationship
 
 Update a B2B customer the opportunity is created for.
-
-### dataChannel
-
-#### get_subresource
-
-Get full information about a channel from which the application will get information on this opportunity.
-
-#### get_relationship
-
-Get a channel from which the application will get information on this opportunity.
-
-#### update_relationship
-
-Update a channel from which the application will get information on this opportunity.
 
 ### lead
 

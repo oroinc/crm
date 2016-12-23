@@ -3,14 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Builder;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub as Opportunity;
 
 class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,19 +21,6 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->relationsBuilder = new OpportunityRelationsBuilder();
-    }
-
-    public function testShouldSetCustomerDataChannel()
-    {
-        $channel = new Channel();
-        $customer = new B2bCustomer();
-        $opportunity = new Opportunity();
-        $opportunity->setCustomer($customer);
-        $opportunity->setDataChannel($channel);
-
-        $this->relationsBuilder->buildCustomer($opportunity);
-
-        $this->assertSame($channel, $customer->getDataChannel());
     }
 
     public function testShouldSetCustomerOrganization()

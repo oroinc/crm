@@ -67,10 +67,8 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
     protected function getChannelIntegrations(LoggerInterface $logger)
     {
         $sql = 'SELECT i.id FROM oro_integration_channel i' .
-               ' INNER JOIN orocrm_channel c ON c.data_source_id = i.id ' .
-               ' WHERE c.status = :status';
+               ' INNER JOIN orocrm_channel c ON c.data_source_id = i.id';
 
-        $params       = ['status' => Channel::STATUS_ACTIVE];
         $types        = ['status' => Type::BOOLEAN];
 
         $this->logQuery($logger, $sql, $params, $types);

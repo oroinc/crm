@@ -99,7 +99,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_2';
+        return 'v2_3';
     }
 
     /**
@@ -165,7 +165,6 @@ class OroSalesBundleInstaller implements
         $table->addColumn('close_reason_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('close_date', 'date', ['notnull' => false]);
@@ -217,7 +216,6 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['user_owner_id'], 'idx_c0fe4aac9eb185f9', []);
         $table->addIndex(['lead_id'], 'idx_c0fe4aac55458d', []);
         $table->addIndex(['customer_id'], 'IDX_C0FE4AAC9395C3F3', []);
-        $table->addIndex(['data_channel_id'], 'IDX_C0FE4AACBDC09B73', []);
         $table->addIndex(['close_reason_name'], 'idx_c0fe4aacd81b931c', []);
         $table->addIndex(['customer_association_id'], 'IDX_C0FE4AAC76D4FC6F', []);
         $table->setPrimaryKey(['id']);
@@ -249,7 +247,6 @@ class OroSalesBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('startdate', 'date', []);
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
@@ -258,7 +255,6 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['startdate'], 'sales_start_idx', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'idx_e20c73449eb185f9', []);
-        $table->addIndex(['data_channel_id'], 'IDX_E20C7344BDC09B73', []);
     }
 
     /**
@@ -302,7 +298,6 @@ class OroSalesBundleInstaller implements
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
-        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
@@ -344,7 +339,6 @@ class OroSalesBundleInstaller implements
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
-        $table->addIndex(['data_channel_id'], 'IDX_73DB4633BDC09B73', []);
         $table->addIndex(['createdat'], 'lead_created_idx', []);
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
@@ -539,13 +533,6 @@ class OroSalesBundleInstaller implements
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_C0FE4AACBDC09B73'
-        );
-        $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_lead'),
             ['lead_id'],
             ['id'],
@@ -584,13 +571,6 @@ class OroSalesBundleInstaller implements
             ['lead_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_E20C7344BDC09B73'
         );
     }
 
@@ -631,13 +611,6 @@ class OroSalesBundleInstaller implements
             ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_channel'),
-            ['data_channel_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null],
-            'FK_73DB4633BDC09B73'
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_customer'),
