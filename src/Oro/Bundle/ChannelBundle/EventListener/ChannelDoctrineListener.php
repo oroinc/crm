@@ -16,7 +16,6 @@ use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
-use Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider;
 
 class ChannelDoctrineListener
 {
@@ -27,9 +26,6 @@ class ChannelDoctrineListener
 
     /** @var EntityManager */
     protected $em;
-
-    /** @var ChainAccountProvider */
-    protected $chainAccountProvider;
 
     /** @var LifetimeHistoryRepository */
     protected $lifetimeRepo;
@@ -48,13 +44,10 @@ class ChannelDoctrineListener
 
     /**
      * @param SettingsProvider $settingsProvider
-     * @param ChainAccountProvider $chainAccountProvider
      */
     public function __construct(
-        SettingsProvider $settingsProvider,
-        ChainAccountProvider $chainAccountProvider
+        SettingsProvider $settingsProvider
     ) {
-        $this->chainAccountProvider = $chainAccountProvider;
         $settings = $settingsProvider->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
