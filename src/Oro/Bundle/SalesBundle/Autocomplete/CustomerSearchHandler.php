@@ -133,7 +133,12 @@ class CustomerSearchHandler extends ContextSearchHandler
                             $groupedItems
                         );
                     }
-                } catch (EntityNotFoundException $e) {}
+                } catch (EntityNotFoundException $e) {
+                    // in the $this->detectAccounе used method getAccountCustomerByTarget of AccountCustomerManager
+                    // which makes search by sales customer. getAccountCustomerByTarget method throws exception
+                    // EntityNotFoundException in case when customer was not found and we should skip handling
+                    // account for customer
+                }
             }
 
             $results = $this->sortResultsByItemsPriority($results, $items);
