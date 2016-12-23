@@ -75,9 +75,6 @@ class ChannelDoctrineListener
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
                 $account = $this->getAccount($entity);
-
-
-
                 $this->scheduleUpdate(
                     $className,
                     $account,
