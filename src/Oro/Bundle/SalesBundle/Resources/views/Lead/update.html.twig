@@ -83,18 +83,17 @@
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
 
-    {% set secondInformationBlock = [form_row(form.source)] %}
+    {% set secondInformationBlock = [
+        form_row(form.source)
+    ] %}
     {% if feature_enabled('marketing') %}
-        {% set secondInformationBlock = secondInformationBlock | merge(
-            [form_row(form.campaign)]
-        ) %}
+        {% set secondInformationBlock = secondInformationBlock | merge([
+            form_row(form.campaign)
+        ]) %}
     {% endif %}
-    {% set secondInformationBlock = secondInformationBlock | merge(
-        [
-            form_row(form.dataChannel),
-            form_row(form.notes)
-        ]
-    ) %}
+    {% set secondInformationBlock = secondInformationBlock | merge([
+        form_row(form.notes)
+    ]) %}
 
     {% set dataBlocks = [{
             'title': 'General'|trans,
