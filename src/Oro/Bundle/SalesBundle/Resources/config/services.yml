@@ -281,9 +281,20 @@ services:
             - '@oro_sales.builder.opportunity_relations'
             - '@oro_currency.config.currency'
             - '@translator'
+            - '@oro_importexport.strategy.import.helper'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_before, method: onProcessBefore }
+
+    oro_sales.import_export.event_listener.customer_association:
+        class: Oro\Bundle\SalesBundle\ImportExport\EventListener\CustomerAssociationListener
+        arguments:
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_importexport.strategy.import.helper'
+            - '@oro_sales.manager.account_customer'
+        tags:
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 
     oro_sales.provider.opportunity_by_status:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider

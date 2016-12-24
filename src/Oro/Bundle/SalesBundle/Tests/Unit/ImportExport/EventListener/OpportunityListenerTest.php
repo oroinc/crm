@@ -22,13 +22,14 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         /** @var ContextInterface $context */
         $context      = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
 
-        $currencyConfigManager = $this
+        $currencyProvider = $this
             ->getMockBuilder(CurrencyProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCurrencyList', 'getDefaultCurrency'])
             ->getMock();
 
         $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
+        $importStrategyHelper = $this->createMock('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper');
 
         $organization = new Organization();
         $channel      = new Channel();
@@ -44,20 +45,13 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         $strategyEvent = new StrategyEvent($strategy, $entity, $context);
         $listener      = new OpportunityListener(
             new OpportunityRelationsBuilder(),
-            $currencyConfigManager,
-            $translator
+            $currencyProvider,
+            $translator,
+            $importStrategyHelper
         );
         $listener->onProcessAfter($strategyEvent);
 
         $this->assertSame($organization, $b2bCustomer->getOrganization());
         $this->assertEquals($b2bCustomerName, $b2bCustomer->getAccount()->getName());
-    }
-
-    public function dataProviderOnProcessBefore()
-    {
-        return [
-            'Record with empty budget amount and non-empty budget amount currency' => '',
-            'Record with empty close revenue amount and non-empty close revenue amount currency' => '',
-        ];
     }
 }

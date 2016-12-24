@@ -1,5 +1,5 @@
 @skip
-# todo: Should be enabled in CRM-6722
+# @todo: fix this test with import/export functionality for lead and opportunity in CRM-6722
 Feature: Import opportunity feature
   In order to simplify work with opportunities
   As crm user

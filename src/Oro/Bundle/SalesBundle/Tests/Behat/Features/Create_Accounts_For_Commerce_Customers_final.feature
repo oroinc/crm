@@ -1,5 +1,6 @@
 @not-automated
 @draft
+# @todo: Should be moved to the Commerce and CRM integration
 Feature: Creating Accounts for Commerce Customers
 In order to manage commerce customers after CRM/Commerce integration more efficiently
 As an Administrator

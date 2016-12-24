@@ -73,7 +73,7 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
             $targetColumnName,
             [
                 'importexport' => [
-                    'excluded' => true,
+                    'full' => true,
                 ],
                 'datagrid' => [
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,

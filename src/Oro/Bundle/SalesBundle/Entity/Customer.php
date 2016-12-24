@@ -7,11 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
  * @ORM\Table("orocrm_sales_customer")
  * @ORM\HasLifecycleCallbacks()
- * @Config()
+ * @Config(
+ *      mode="hidden"
+ * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository")
  */
 class Customer extends ExtendCustomer
@@ -22,6 +25,13 @@ class Customer extends ExtendCustomer
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -30,6 +40,13 @@ class Customer extends ExtendCustomer
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "short"=true,
+     *          }
+     *      }
+     * )
      */
     protected $account;
 
