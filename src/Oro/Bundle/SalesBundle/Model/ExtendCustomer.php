@@ -8,6 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
  * @method bool                    supportCustomerTarget($targetClass)
  * @method ExtendCustomer|Customer setCustomerTarget($target)
  * @method object|null             getCustomerTarget()
+ * @method []                      getCustomerTargetEntities()
  */
 class ExtendCustomer
 {

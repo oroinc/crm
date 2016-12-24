@@ -96,6 +96,9 @@ class AccountCustomerManager
         $customerRepo = $this->getCustomerRepository();
         if ($target instanceof Account) {
             $customerFields = $this->getCustomerTargetFields();
+            if ($this->doctrineHelper->isNewEntity($target)) {
+                return self::createCustomer($target);
+            }
             $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
             if (!$customer) {
                 $customer = self::createCustomer($target);

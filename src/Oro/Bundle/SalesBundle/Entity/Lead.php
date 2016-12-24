@@ -2,17 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -455,7 +452,7 @@ class Lead extends ExtendLead implements
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
      *          "order"=160,
-     *          "short"=true
+     *          "excluded"=true
      *      }
      *  }
      * )
@@ -497,6 +494,13 @@ class Lead extends ExtendLead implements
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *     }
+     * )
      */
     protected $customerAssociation;
 

@@ -70,7 +70,6 @@ parameters:
     oro_magento.event_listener.integration_sync_after.class:             Oro\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
     oro_magento.event_listener.update_integration_connectors.class:      Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener
     oro_magento.event_listener.customer_datagrid_listener.class:         Oro\Bundle\MagentoBundle\EventListener\CustomerDataGridListener
-    oro_magento.event_listener.tracking_events_datagrid_listener.class:  Oro\Bundle\MagentoBundle\EventListener\TrackingEventsDataGridListener
 
     # generator
     oro_magento.magento_url_generator.class:                             Oro\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -107,7 +106,6 @@ parameters:
     oro_magento.provider.analytics.customer_frequency.class:             Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     oro_magento.provider.analytics.customer_monetary.class:              Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
-    oro_magento.provider.tracking_customer_identificator.class:          Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification
     # Search handlers
     oro_magento.form.autocomplete.customer_group.search_handler.class:   Oro\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
     oro_magento.form.autocomplete.store.search_handler.class:            Oro\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
@@ -135,6 +133,7 @@ parameters:
     oro_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
     oro_magento.provider.big_number.class:                               Oro\Bundle\MagentoBundle\Provider\MagentoBigNumberProvider
+    oro_magento.provider.website_visit.class:                            Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProvider
 
     oro_magento.model.channel_settings_provider.class:                   Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 
@@ -546,11 +545,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
-    oro_magento.event_listener.tracking_events_datagrid_listener:
-        class: %oro_magento.event_listener.tracking_events_datagrid_listener.class%
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customer-tracking-events-widget, method: onPreBuild, priority: 255 }
-
     oro_magento.event_listener.account_view:
         class: 'Oro\Bundle\SalesBundle\EventListener\AccountViewListener'
         arguments:
@@ -680,7 +674,6 @@ services:
             - { name: oro_analytics.builder.rfm }
 
     oro_magento.provider.analytics.customer_monetary:
-
         class: %oro_magento.provider.analytics.customer_monetary.class%
         arguments:
             - "@oro_entity.doctrine_helper"
@@ -688,15 +681,6 @@ services:
             - %oro_magento.entity.customer.class%
         tags:
             - { name: oro_analytics.builder.rfm }
-
-    oro_magento.provider.tracking_customer_identificator:
-        class: %oro_magento.provider.tracking_customer_identificator.class%
-        arguments:
-           - "@doctrine"
-           - "@oro_entity_config.provider.extend"
-           - "@oro_channel.provider.settings_provider"
-        tags:
-           - {name: oro_tracking.provider.identification, priority: 10}
 
     # Search handlers
     oro_magento.form.autocomplete.customer_group.search_handler:
@@ -865,8 +849,16 @@ services:
             - "@doctrine"
             - "@oro_security.acl_helper"
             - "@oro_dashboard.provider.big_number.date_helper"
+            - "@oro_magento.provider.website_visit"
         tags:
             - { name: oro_dashboard.big_number.provider, alias: magento }
+
+    oro_magento.provider.website_visit:
+        class: %oro_magento.provider.website_visit.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_security.acl_helper"
+            - "@oro_dashboard.provider.big_number.date_helper"
 
     oro_magento.service.order.information_loader:
         class: %oro_magento.service.information_loader.class%

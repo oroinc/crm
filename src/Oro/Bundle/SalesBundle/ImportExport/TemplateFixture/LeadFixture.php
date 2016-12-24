@@ -5,6 +5,8 @@ namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
@@ -80,6 +82,10 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setWebsite('http://oro.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');
+
+                $customer = new Customer();
+                $customer->setTarget((new Account())->setName('Jerry Coleman'));
+                $entity->setCustomerAssociation($customer);
 
                 return;
         }

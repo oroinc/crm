@@ -1,0 +1,6 @@
+bundles:
+    # needs to be loaded after MarketingListBundle's priority: 20
+    # needs to be loaded after TrackingBundle's priority: 25
+    # needs to be loaded after CampaignBundle's priority: 30
+    # needs to be loaded after CRM's MagentoBundle priority: 50
+    - { name: Oro\Bridge\MarketingCRM\OroMarketingCRMBridgeBundle, priority: 51 }

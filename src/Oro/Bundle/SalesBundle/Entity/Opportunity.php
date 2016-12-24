@@ -455,7 +455,7 @@ class Opportunity extends ExtendOpportunity implements
      *      "dataaudit"={"auditable"=true},
      *      "importexport"={
      *          "order"=110,
-     *          "short"=true
+     *          "excluded"=true
      *      },
      *      "form"={
      *          "form_type"="oro_sales_b2bcustomer_select"
@@ -483,6 +483,13 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *     }
+     * )
      */
     protected $customerAssociation;
 

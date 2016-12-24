@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Tools;
 
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AssociationEntityConfigDumperExtension;
 use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
 class CustomerConfigDumperExtension extends AssociationEntityConfigDumperExtension

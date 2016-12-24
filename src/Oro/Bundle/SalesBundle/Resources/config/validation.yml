@@ -58,3 +58,7 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
         organization:
             - NotBlank: ~
 
+Oro\Bundle\SalesBundle\Entity\Customer:
+    properties:
+        account:
+            - NotBlank: ~
