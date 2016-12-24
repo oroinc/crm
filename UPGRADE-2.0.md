@@ -91,7 +91,10 @@ UPGRADE FROM 1.10 to 2.0
 - The parameter `orocrm_channel.event_listener.timezone_change.class` was removed.
 - Channel configuration file now loads from `Resources/config/oro/channels.yml` instead of `Resources/config/channel_configuration.yml`.
 - Root node for channel config in `Resources/config/oro/channels.yml` were changed from `orocrm_channel` to `channels`.
-- The interface `Oro/Bundle/ChannelBundle/Model/CustomerIdentityInterface` was removed.
+- Added channel repository interface `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface`.
+- Added channel repository abstract `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryAbstract`.
+- Deprecated `getVisitsCountByPeriodForChannelType()` method in `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface`.
+- The interface `Oro/Bundle/ChannelBundle/Model/CustomerIdentityInterfaceCustomerIdentityInterface` was removed.
 - Using active/inactive status for channel terminated.
 
 ###OroMarketingListBundle
@@ -108,6 +111,12 @@ UPGRADE FROM 1.10 to 2.0
 
 ####CalendarCRMBridgeBundle:
 - CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
+
+####OroCampaignBundle
+- Moved ``CampaignBundle`` to a separate ``marketing`` package, required by default in the CRM application.
+
+####OroMarketingListBundle
+- Moved ``MarketingListBundle`` to a separate ``marketing`` package, required by default in the CRM application.
 
 ####OroDataGridBundle:
 - New ACL Capability "Export Grid View" added under "Application" Category to control Export Grid action.

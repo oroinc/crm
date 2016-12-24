@@ -2,135 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-
-class ChannelRepository extends EntityRepository
+/**
+ * The real implementation of this class is at \Oro\Bridge\MarketingCRM\Entity\Repository\ChannelRepository
+ */
+class ChannelRepository extends ChannelRepositoryAbstract
 {
     /**
-     * Returns channel names indexed by id
-     *
-     * @param AclHelper $aclHelper
-     * @param           $type
-     *
-     * @return array
-     */
-    public function getAvailableChannelNames(AclHelper $aclHelper, $type = null)
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c.id', 'c.name');
-        $qb->from('OroChannelBundle:Channel', 'c', 'c.id');
-
-        if (null !== $type) {
-            $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));
-            $qb->setParameter('type', $type);
-        }
-
-        return $aclHelper->apply($qb)->getArrayResult();
-    }
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     * @param AclHelper $aclHelper
-     * @param string    $type
-     *
-     * @return integer
-     */
-    public function getVisitsCountByPeriodForChannelType(
-        \DateTime $start,
-        \DateTime $end,
-        AclHelper $aclHelper,
-        $type
-    ) {
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb->select('COUNT(visit.id)')
-            ->from('OroTrackingBundle:TrackingVisit', 'visit')
-            ->join('visit.trackingWebsite', 'site')
-            ->leftJoin('site.channel', 'channel')
-            ->where($qb->expr()->orX(
-                $qb->expr()->isNull('channel.id'),
-                $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type')
-                )
-            ))
-            ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
-            ->setParameter('type', $type)
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
-
-        return (int) $aclHelper->apply($qb)->getSingleScalarResult();
-    }
-
-    /**
-     * @param array     $entities
-     * @param bool      $status
-     * @param AclHelper $aclHelper
-     *
-     * @return array
-     */
-    public function getChannelsByEntities(
-        array $entities = [],
-        $status = Channel::STATUS_ACTIVE,
-        AclHelper $aclHelper = null
-    ) {
-        $query = $this->getChannelsByEntitiesQB($entities, $status)->getQuery();
-
-        if ($aclHelper) {
-            return $aclHelper->apply($query)->getResult();
-        }
-
-        return $query->getResult();
-    }
-
-    /**
-     * @param array $entities
-     * @param bool  $status
-     *
-     * @return QueryBuilder
-     */
-    public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
-    {
-        $query = $this->createQueryBuilder('c');
-        if (!empty($entities)) {
-            $countDistinctName = $query->expr()->eq($query->expr()->countDistinct('e.name'), ':count');
-
-            $query->innerJoin('c.entities', 'e');
-            $query->andWhere($query->expr()->in('e.name', $entities));
-            $query->groupBy('c.name', 'c.id');
-            $query->having($countDistinctName);
-            $query->setParameter('count', count($entities));
-        }
-        $query->orderBy('c.name', 'ASC');
-
-        return $query;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return QueryBuilder
+     * @inheritdoc
      */
     public function getVisitsCountForChannelTypeQB($type)
     {
-        $qb = $this->_em->createQueryBuilder();
-
-        $qb->select('COUNT(visit.id)')
-            ->from('OroTrackingBundle:TrackingVisit', 'visit')
-            ->join('visit.trackingWebsite', 'site')
-            ->leftJoin('site.channel', 'channel')
-            ->where($qb->expr()->orX(
-                $qb->expr()->isNull('channel.id'),
-                $qb->expr()->andX(
-                    $qb->expr()->eq('channel.channelType', ':type')
-                )
-            ))
-            ->setParameter('type', $type);
-
-        return $qb;
+        return null;
     }
 }
