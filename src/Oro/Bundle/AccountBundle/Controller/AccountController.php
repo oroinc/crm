@@ -29,7 +29,7 @@ class AccountController extends Controller
     {
         $channels = $this->getDoctrine()
             ->getRepository('OroChannelBundle:Channel')
-            ->findBy(['status' => Channel::STATUS_ACTIVE], ['channelType' => 'ASC', 'name' => 'ASC']);
+            ->findBy([], ['channelType' => 'ASC', 'name' => 'ASC']);
 
         $customers = $this->getDoctrine()
             ->getRepository('OroMagentoBundle:Customer')

@@ -11,10 +11,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -68,11 +66,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
-    ChannelAwareInterface,
     MultiCurrencyHolderInterface
 {
-    use ChannelEntityTrait;
-
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
     const STATUS_LOST = 'lost';
@@ -462,6 +457,13 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *     }
+     * )
      */
     protected $customerAssociation;
 

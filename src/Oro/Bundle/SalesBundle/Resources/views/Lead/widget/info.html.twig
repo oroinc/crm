@@ -18,7 +18,9 @@
             {{ ui.renderProperty('oro.sales.lead.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('oro.sales.lead.last_name.label'|trans, entity.lastName) }}
 
-            {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% if entity['dataChannel'] is defined %}
+                {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% endif %}
 
             {%- if resource_granted('oro_contact_view') and entity.contact -%}
                 {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}

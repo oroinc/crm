@@ -33,7 +33,6 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'sales-funnel-grid[_filter][leadName][value]' => 'Lead name',
                     ],
                     'assert'              => [
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'leadName'    => 'Lead name',
                     ],
                     'expectedResultCount' => 1
@@ -48,7 +47,6 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'sales-funnel-grid[_filter][leadName][value]' => 'something',
                     ],
                     'assert'              => [
-                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'leadName'    => 'Lead name',
                     ],
                     'expectedResultCount' => 0
@@ -63,7 +61,6 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'sales-funnel-grid[_filter][opportunityName][value]' => 'opname',
                     ],
                     'assert'              => [
-                        'channelName'            => LoadSalesBundleFixtures::CHANNEL_NAME,
                         'opportunityName'        => 'opname',
                         'budgetAmount'           => 'USD50.0000',
                         'opportunityProbability' => 10

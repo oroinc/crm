@@ -124,7 +124,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function createLead()
     {
         $lead = new Lead();
-        $lead->setDataChannel($this->getReference('default_channel'));
         $lead->setName('Lead name');
         $lead->setFirstName('fname');
         $lead->setLastName('lname');
@@ -135,7 +134,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setOrganization($this->organization);
 
         $lead2 = new Lead();
-        $lead2->setDataChannel($this->getReference('default_channel'));
         $lead2->setName('Lead name 2');
         $lead2->setFirstName('fname 2');
         $lead2->setLastName('lname 2');
@@ -146,7 +144,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead2->setOrganization($this->organization);
 
         $lead3 = new Lead();
-        $lead3->setDataChannel($this->getReference('default_channel'));
         $lead3->setName('Lead name 3');
         $lead3->setFirstName('fname 3');
         $lead3->setLastName('lname 3');
@@ -174,7 +171,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $opportunity = new Opportunity();
         $opportunity->setName('opname');
         $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(10);
@@ -193,7 +189,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $date = new \DateTime('now');
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         $salesFunnel->setLead($this->getReference('default_lead'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);
@@ -208,7 +203,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $date = new \DateTime('now');
 
         $salesFunnel = new SalesFunnel();
-        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         $salesFunnel->setOpportunity($this->getReference('default_opportunity'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);

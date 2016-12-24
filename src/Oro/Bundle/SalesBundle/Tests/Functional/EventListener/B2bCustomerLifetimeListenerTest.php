@@ -36,7 +36,6 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity = new Opportunity();
         $opportunity->setName(uniqid('name'));
         $opportunity->setCustomerAssociation($accountCustomer);
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity2 = clone $opportunity;
@@ -109,7 +108,6 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $newCustomer = new B2bCustomer();
         $newCustomer->setName(uniqid('name'));
-        $newCustomer->setDataChannel($opportunity->getDataChannel());
 
         $em->persist($newCustomer);
         $em->flush();
@@ -157,7 +155,6 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         // add an opportunity to the database
         $opportunity = new Opportunity();
         $opportunity->setName('unset_b2bcustomer_test');
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
@@ -193,7 +190,6 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $closeRevenue = $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setBudgetAmount($budgetAmount);

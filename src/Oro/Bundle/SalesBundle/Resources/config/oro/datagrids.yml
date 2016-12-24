@@ -28,7 +28,6 @@ datagrids:
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
-                    - channel.name as channelName
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                 from:
@@ -39,13 +38,10 @@ datagrids:
                         - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: own }
         inline_editing:
             enable: true
         columns:
-            channelName:
-                label:         oro.sales.opportunity.data_channel.label
             name:
                 label:         oro.sales.opportunity.name.label
             createdAt:
@@ -119,8 +115,6 @@ datagrids:
                         permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Opportunity
         fields_acl:
             columns:
-                channelName:
-                    data_name: o.dataChannel
                 name:
                     data_name: o.name
                 createdAt:
@@ -167,8 +161,6 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: o.name
                 createdAt:
@@ -198,14 +190,6 @@ datagrids:
             toolbar_sorting: true
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 name:
                     type: string
                     data_name: o.name
@@ -356,7 +340,6 @@ datagrids:
                               ELSE region.name
                             END, ''
                         ) as regionLabel
-                    - channel.name as channelName
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - own.id as owner
@@ -370,7 +353,6 @@ datagrids:
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
-                        - { join: l.dataChannel, alias: channel }
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
                         - { join: l.source, alias: source }
@@ -379,8 +361,6 @@ datagrids:
         inline_editing:
             enable: true
         columns:
-            channelName:
-                label:         oro.sales.lead.data_channel.label
             name:
                 label:         oro.sales.lead.name.label
             status:
@@ -509,8 +489,6 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: l.name
                 status:
@@ -584,14 +562,6 @@ datagrids:
                 name:
                     type: string
                     data_name: l.name
-                channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 status:
                     type: enum
                     data_name: status
@@ -714,7 +684,6 @@ datagrids:
                     - opportunity.budgetAmountCurrency as budgetAmountCurrency
                     - opportunity.closeRevenueCurrency as closeRevenueCurrency
                     - opportunity.probability as opportunityProbability
-                    - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.salesfunnel.entity.class%, alias: salesFunnel }
@@ -722,13 +691,10 @@ datagrids:
                     left:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
-                        - { join: salesFunnel.dataChannel, alias: channel }
                         - { join: salesFunnel.owner, alias: owner }
         columns:
             id:
                 label: oro.sales.salesfunnel.id.label
-            channelName:
-                label: oro.sales.salesfunnel.data_channel.label
             startDate:
                 label: oro.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -786,8 +752,6 @@ datagrids:
             columns:
                 id:
                     data_name: salesFunnel.id
-                channelName:
-                    data_name: channelName
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
@@ -829,14 +793,6 @@ datagrids:
                 id:
                     type: number-range
                     data_name: salesFunnel.id
-                channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -883,36 +839,6 @@ datagrids:
                     type: choice-business-unit
                     data_name: salesFunnel.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-
-    sales-funnel-lead-with-data-channel-grid:
-        extends: sales-funnel-lead-grid
-        channel_limitation:
-            channel_relation_path: dataChannel
-        source:
-            query:
-                join:
-                    left:
-                        - { join: lead.dataChannel, alias: dataChannel }
-                where:
-                    and:
-                        - IDENTITY(lead.dataChannel) in (:channelIds)
-            bind_parameters:
-                - channelIds
-
-    sales-funnel-opportunity-with-data-channel-grid:
-        extends: sales-funnel-opportunity-grid
-        channel_limitation:
-            channel_relation_path: dataChannel
-        source:
-            query:
-                join:
-                    left:
-                        - { join: opportunity.dataChannel, alias: dataChannel }
-                where:
-                    and:
-                        - IDENTITY(opportunity.dataChannel) in (:channelIds)
-            bind_parameters:
-                - channelIds
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -1810,21 +1736,17 @@ datagrids:
                     - l.lastName
                     - email.email
                     - s.id as status
-                    - channel.name as channelName
                 from:
                     - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
-                        - { join: l.dataChannel, alias: channel }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
         columns:
             id:
                 label:         oro.sales.lead.id.label
-            channelName:
-                label:         oro.sales.lead.data_channel.label
             name:
                 label:         oro.sales.lead.name.label
             status:
@@ -1839,8 +1761,6 @@ datagrids:
                 label:         oro.sales.lead.email.label
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: l.name
                 status:
@@ -1855,14 +1775,6 @@ datagrids:
                 createdAt:  DESC
         filters:
             columns:
-                 channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                  name:
                     type: string
                     data_name: l.name
@@ -1899,7 +1811,6 @@ datagrids:
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
-                    - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
@@ -1908,13 +1819,10 @@ datagrids:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
         columns:
             id:
                 label:         oro.sales.opportunity.id.label
-            channelName:
-                label:         oro.sales.opportunity.data_channel.label
             name:
                 label:         oro.sales.opportunity.name.label
             status:
@@ -1927,8 +1835,6 @@ datagrids:
                 label:         oro.sales.opportunity.owner.label
         fields_acl:
             columns:
-                channelName:
-                    data_name: o.dataChannel
                 name:
                     data_name: o.name
                 statusLabel:
@@ -1939,8 +1845,6 @@ datagrids:
                     data_name: o.owner
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: o.name
                 status:
@@ -1953,14 +1857,6 @@ datagrids:
                 createdAt: DESC
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 name:
                     type: string
                     data_name: o.name

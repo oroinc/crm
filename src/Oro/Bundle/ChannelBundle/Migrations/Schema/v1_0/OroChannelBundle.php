@@ -188,7 +188,10 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
             'dataChannel',
             'orocrm_channel',
             'name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true],
+                'form' => ['is_enabled' => false]
+            ]
         );
     }
 }

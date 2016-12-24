@@ -112,7 +112,6 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setCustomerAssociation($this->accountCustomerManager->getAccountCustomerByTarget($customer));
         $budgetAmountVal = mt_rand(10, 10000);
         $opportunity->setBudgetAmount(MultiCurrency::create($budgetAmountVal, 'USD'));
-        $opportunity->setDataChannel($dataChannel);
 
         $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
         $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
