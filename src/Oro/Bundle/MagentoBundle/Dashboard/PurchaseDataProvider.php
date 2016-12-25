@@ -15,7 +15,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use Oro\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
-use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
 
 class PurchaseDataProvider
 {
@@ -30,7 +30,7 @@ class PurchaseDataProvider
     protected $configProvider;
 
     /**
-     * @var TrackingVisitProvider
+     * @var TrackingVisitProviderInterface
      */
     protected $trackingVisitProvider;
 
@@ -45,16 +45,16 @@ class PurchaseDataProvider
     protected $aclHelper;
 
     /**
-     * @param ManagerRegistry       $registry
-     * @param ConfigProvider        $configProvider
-     * @param TrackingVisitProvider $trackingVisitProvider
-     * @param TranslatorInterface   $translator
-     * @param AclHelper             $aclHelper
+     * @param ManagerRegistry                $registry
+     * @param ConfigProvider                 $configProvider
+     * @param TrackingVisitProviderInterface $trackingVisitProvider
+     * @param TranslatorInterface            $translator
+     * @param AclHelper                      $aclHelper
      */
     public function __construct(
         ManagerRegistry $registry,
         ConfigProvider $configProvider,
-        TrackingVisitProvider $trackingVisitProvider,
+        TrackingVisitProviderInterface $trackingVisitProvider,
         TranslatorInterface $translator,
         AclHelper $aclHelper
     ) {
