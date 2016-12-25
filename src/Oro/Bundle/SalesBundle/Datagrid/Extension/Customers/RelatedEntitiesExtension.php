@@ -15,27 +15,22 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
-class CustomerAssociationExtension extends AbstractExtension
+class RelatedEntitiesExtension extends AbstractExtension
 {
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
-    /** @var GridConfigurationHelper */
-    protected $gridConfigurationHelper;
-
     /** @var string */
-    protected $entityClassName;
+    protected $relatedEntityClass;
 
     /**
-     * @param ConfigProvider $customerConfigProvider
-     * @param GridConfigurationHelper $gridConfigurationHelper
+     * @param ConfigProvider          $customerConfigProvider
+     * @param string                  $relatedEntityClass
      */
-    public function __construct(
-        ConfigProvider $customerConfigProvider,
-        GridConfigurationHelper $gridConfigurationHelper
-    ) {
+    public function __construct(ConfigProvider $customerConfigProvider, $relatedEntityClass )
+    {
         $this->customerConfigProvider = $customerConfigProvider;
-        $this->gridConfigurationHelper = $gridConfigurationHelper;
+        $this->relatedEntityClass = $relatedEntityClass;
     }
 
     /**
@@ -47,6 +42,8 @@ class CustomerAssociationExtension extends AbstractExtension
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') &&
             $this->parameters->get('customer_id') &&
+            $this->parameters->get('related_entity_class') &&
+            $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
             $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
     }
 
@@ -60,9 +57,9 @@ class CustomerAssociationExtension extends AbstractExtension
         $customerField    = $this->getCustomerField($customerClass);
         $queryBuilder     = $datasource->getQueryBuilder();
         $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
-        $leadAlias        = $this->getEntityAlias($queryBuilder, $config);
+        $alias            = $this->getEntityAlias($queryBuilder);
         $customerAlias    = 'customer';
-        $queryBuilder->join(sprintf('%s.customerAssociation', $leadAlias), $customerAlias);
+        $queryBuilder->join(sprintf('%s.customerAssociation', $alias), $customerAlias);
         $queryBuilder->andWhere(
             sprintf(
                 '%s.%s = %s',
@@ -75,40 +72,25 @@ class CustomerAssociationExtension extends AbstractExtension
     }
 
     /**
-     * @param DatagridConfiguration $config
-     *
-     * @return string|null
-     */
-    protected function getEntityClassName(DatagridConfiguration $config)
-    {
-        if ($this->entityClassName === null) {
-            $this->entityClassName = $this->gridConfigurationHelper->getEntity($config);
-        }
-
-        return $this->entityClassName;
-    }
-
-    /**
      * @param QueryBuilder $qb
-     * @param DatagridConfiguration $config
      *
-     * @return string|null
+     * @return string
      *
      * @throws DatasourceException
      */
-    protected function getEntityAlias(QueryBuilder $qb, DatagridConfiguration $config)
+    protected function getEntityAlias(QueryBuilder $qb)
     {
         $fromParts = $qb->getDQLPart('from');
         /** @var $fromPart Expr\From */
         foreach ($fromParts as $fromPart) {
-            if ($fromPart->getFrom() === $this->getEntityClassName($config)) {
+            if ($fromPart->getFrom() === $this->relatedEntityClass) {
                 return $fromPart->getAlias();
             }
         }
 
         throw new DatasourceException(sprintf(
             "Couldn't find %s alias in QueryBuilder.",
-            $this->getEntityClassName($config)
+            $this->relatedEntityClass
         ));
     }
 

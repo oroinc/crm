@@ -70,6 +70,7 @@ class RelevantOpportunitiesListener
                     [
                         'customer_id'    => $account->getId(),
                         'customer_class' => Account::class,
+                        'related_entity_class' => Opportunity::class,
                         'opportunity_id' => $entity->getId(),
                     ]
             ]

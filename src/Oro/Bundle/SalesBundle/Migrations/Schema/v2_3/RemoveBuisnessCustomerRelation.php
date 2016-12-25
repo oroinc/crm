@@ -34,14 +34,9 @@ class RemoveBuisnessCustomerRelation implements Migration, OrderedMigrationInter
     public function removeFromLeadTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_lead');
-        $table->dropColumn('customer_id');
+        $table->removeForeignKey('FK_73DB46339395C3F3');
         $table->dropIndex('IDX_73DB46339395C3F3');
-
-        foreach ($table->getForeignKeys() as $foreignKey) {
-            if ($foreignKey->getForeignTableName() === 'orocrm_sales_b2bcustomer') {
-                $table->removeForeignKey($foreignKey->getName());
-            }
-        }
+        $table->dropColumn('customer_id');
     }
 
     /**
@@ -51,13 +46,8 @@ class RemoveBuisnessCustomerRelation implements Migration, OrderedMigrationInter
     public function removeFromOpportunityTable(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
-        $table->dropColumn('customer_id');
+        $table->removeForeignKey('FK_C0FE4AAC9395C3F3');
         $table->dropIndex('IDX_C0FE4AAC9395C3F3');
-
-        foreach ($table->getForeignKeys() as $foreignKey) {
-            if ($foreignKey->getForeignTableName() === 'orocrm_sales_b2bcustomer') {
-                $table->removeForeignKey($foreignKey->getName());
-            }
-        }
+        $table->dropColumn('customer_id');
     }
 }

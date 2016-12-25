@@ -49,15 +49,13 @@ class UpdateInheritanceActivityTargets implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if ($schema->hasTable('orocrm_sales_opportunity') && $schema->hasTable('orocrm_account')) {
-            $this->removeOldInheritanceActivityTargets($queries);
-            $this->activityListExtension->addInheritanceTargets(
-                $schema,
-                'orocrm_account',
-                'orocrm_sales_opportunity',
-                ['customerAssociation', 'account']
-            );
-        }
+        $this->removeOldInheritanceActivityTargets($queries);
+        $this->activityListExtension->addInheritanceTargets(
+            $schema,
+            'orocrm_account',
+            'orocrm_sales_opportunity',
+            ['customerAssociation', 'account']
+        );
     }
 
     /**

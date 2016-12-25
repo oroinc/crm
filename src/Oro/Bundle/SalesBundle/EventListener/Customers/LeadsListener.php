@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
 use Doctrine\Common\Util\ClassUtils;
 
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -14,8 +15,8 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class LeadsListener
 {
-    // below opportunity block which have 1010
-    const GRID_BLOCK_PRIORITY = 1020;
+    // above opportunity block which have 1010
+    const GRID_BLOCK_PRIORITY = 1005;
 
     /** @var CustomerConfigProvider */
     protected $customerConfigProvider;
@@ -59,7 +60,7 @@ class LeadsListener
         }
 
         $entity = $event->getEntity();
-        if ($this->customerConfigProvider->isCustomerClass($entity)) {
+        if ($entity && ClassUtils::getClass($entity) === B2bCustomer::class) {
             $environment  = $event->getTwigEnvironment();
             $data         = $event->getData();
             $targetClass  = ClassUtils::getClass($entity);
@@ -70,7 +71,7 @@ class LeadsListener
                         [
                             'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
                             'customer_class' => $targetClass,
-                            'entity_class' => Lead::class,
+                            'related_entity_class' => Lead::class,
                         ]
                 ]
             );

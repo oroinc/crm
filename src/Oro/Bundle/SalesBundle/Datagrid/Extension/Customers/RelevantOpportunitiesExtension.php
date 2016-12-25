@@ -6,7 +6,7 @@ use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 
-class RelevantOpportunitiesExtension extends AccountCustomerAssociationExtension
+class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class RelevantOpportunitiesExtension extends AccountCustomerAssociationExtension
         /** @var $datasource OrmDataSource */
         $opportunityId      = $this->parameters->get('opportunity_id');
         $queryBuilder       = $datasource->getQueryBuilder();
-        $opportunityAlias   = $this->getEntityAlias($queryBuilder, $config);
+        $opportunityAlias   = $this->getEntityAlias($queryBuilder);
         $opportunityIdParam = ':opportunity_id';
         $queryBuilder->andWhere(sprintf('%s.id <> %s', $opportunityAlias, $opportunityIdParam));
         $queryBuilder->setParameter($opportunityIdParam, $opportunityId);

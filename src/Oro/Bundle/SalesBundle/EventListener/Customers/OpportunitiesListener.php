@@ -79,7 +79,7 @@ class OpportunitiesListener
                          [
                              'customer_id'    => $this->doctrineHelper->getSingleEntityIdentifier($entity),
                              'customer_class' => $targetClass,
-                             'entity_class' => Opportunity::class,
+                             'related_entity_class' => Opportunity::class,
                          ]
                 ]
             );

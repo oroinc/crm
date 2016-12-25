@@ -104,7 +104,6 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function createOpportunity($contact, $customer, $user)
     {
         $opportunity = new Opportunity();
-        $dataChannel = $this->getReference('default_channel');
         $opportunity->setName($contact->getFirstName() . ' ' . $contact->getLastName());
         $opportunity->setContact($contact);
         $opportunity->setOwner($user);

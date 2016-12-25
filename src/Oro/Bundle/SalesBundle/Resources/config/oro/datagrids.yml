@@ -1478,9 +1478,12 @@ datagrids:
         extends: base-sales-b2bcustomer-leads-grid
         source:
             query:
+                join:
+                    left:
+                        - { join: l.customerAssociation, alias: ca }
                 where:
                     and:
-                        - l.customer = :customerId
+                        - ca.b2b_customer_188b774c = :customerId
             bind_parameters:
                 - customerId
         columns:
@@ -1664,9 +1667,12 @@ datagrids:
         extends: base-sales-b2bcustomer-opportunities-grid
         source:
             query:
+                join:
+                    left:
+                        - { join: o.customerAssociation, alias: ca }
                 where:
                     and:
-                        - o.customer = :customerId
+                        - ca.b2b_customer_188b774c = :customerId
             bind_parameters:
                 - customerId
         columns:
