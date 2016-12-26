@@ -12,6 +12,7 @@ use Oro\Bundle\CurrencyBundle\Converter\RateConverterInterface;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 use Oro\Component\DependencyInjection\ServiceLink;
@@ -30,10 +31,10 @@ class B2bCustomerLifetimeListener
     /** @var bool */
     protected $isInProgress = false;
 
-    /** @var RateConverterInterface  */
+    /** @var RateConverterInterface */
     protected $rateConverter;
 
-    /** @var CurrencyQueryBuilderTransformerInterface  */
+    /** @var CurrencyQueryBuilderTransformerInterface */
     protected $qbTransformer;
 
     public function __construct(
@@ -45,6 +46,7 @@ class B2bCustomerLifetimeListener
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param OnFlushEventArgs $args
      */
     public function onFlush(OnFlushEventArgs $args)
@@ -66,39 +68,42 @@ class B2bCustomerLifetimeListener
         );
 
         foreach ($entities as $entity) {
+            $b2bCustomer = null;
+            $needRecompute = false;
             if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation, just add to prev lifetime value and recalculate change set
-                $b2bCustomer = $entity->getCustomer();
+                $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
                 $closeRevenueValue = $this->rateConverter->getBaseCurrencyAmount($entity->getCloseRevenue());
                 $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $closeRevenueValue);
-                $this->scheduleUpdate($b2bCustomer);
-                $this->uow->computeChangeSet(
-                    $this->em->getClassMetadata(ClassUtils::getClass($b2bCustomer)),
-                    $b2bCustomer
-                );
+                $needRecompute = true;
             } elseif ($this->uow->isScheduledForDelete($entity) && $this->isValuable($entity)) {
-                $this->scheduleUpdate($entity->getCustomer());
+                $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
             } elseif ($this->uow->isScheduledForUpdate($entity)) {
                 // handle update
                 $changeSet = $this->uow->getEntityChangeSet($entity);
-
                 if ($this->isChangeSetValuable($changeSet)) {
-                    if (!empty($changeSet['customer'])
-                        && $changeSet['customer'][0] instanceof B2bCustomer
-                        && B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
-                    ) {
+                    $takeZeroRevenue = isset($changeSet['closeRevenueValue']);
+                    if ($this->hasChangedB2bCustomer($changeSet)
+                        && $this->isOldStatusValuable($entity, $changeSet)) {
                         // handle change of b2b customer
-                        $this->scheduleUpdate($changeSet['customer'][0]);
+                        /** @var Customer $customer */
+                        $customer = $changeSet['customerAssociation'][0];
+                        $oldCustomer = $customer->getTarget();
+                        /** @var B2bCustomer $oldCustomer */
+                        $this->scheduleUpdate($oldCustomer);
                     }
-
-                    if ($this->isValuable($entity, isset($changeSet['closeRevenueValue']))
-                        || (
-                            B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
-                            && $entity->getCustomer()
-                        )
+                    if ($this->isValuable($entity, $takeZeroRevenue)
+                        || ($this->isOldStatusValuable($entity, $changeSet) && $this->hasB2bCustomerTarget($entity))
                     ) {
-                        $this->scheduleUpdate($entity->getCustomer());
+                        $b2bCustomer = $entity->getCustomerAssociation()->getTarget();
                     }
+                }
+            }
+            if (null !== $b2bCustomer) {
+                /** @var B2bCustomer $b2bCustomer */
+                $this->scheduleUpdate($b2bCustomer);
+                if ($needRecompute) {
+                    $this->uow->computeChangeSet($this->em->getClassMetadata(B2bCustomer::class), $b2bCustomer);
                 }
             }
         }
@@ -162,7 +167,7 @@ class B2bCustomerLifetimeListener
     protected function isValuable(Opportunity $opportunity, $takeZeroRevenue = false)
     {
         return
-            $opportunity->getCustomer()
+            $this->hasB2bCustomerTarget($opportunity)
             && $opportunity->getStatus()
             && $opportunity->getStatus()->getId() === B2bCustomerRepository::VALUABLE_STATUS
             && ($takeZeroRevenue || $opportunity->getCloseRevenueValue() > 0);
@@ -176,7 +181,7 @@ class B2bCustomerLifetimeListener
     protected function isChangeSetValuable(array $changeSet)
     {
         $fieldsUpdated = array_intersect(
-            ['customer', 'status', 'closeRevenueValue', 'closeRevenueCurrency', 'baseCloseRevenueValue'],
+            ['customerAssociation', 'status', 'closeRevenueValue', 'closeRevenueCurrency', 'baseCloseRevenueValue'],
             array_keys($changeSet)
         );
 
@@ -204,6 +209,7 @@ class B2bCustomerLifetimeListener
     protected function getOldStatus(Opportunity $opportunity, array $changeSet)
     {
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+
         return isset($changeSet['status']) && ClassUtils::getClass($changeSet['status'][0]) === $enumClass
             ? $changeSet['status'][0]->getId()
             : ($opportunity->getStatus() ? $opportunity->getStatus()->getId() : false);
@@ -216,5 +222,43 @@ class B2bCustomerLifetimeListener
     {
         $this->em  = $args->getEntityManager();
         $this->uow = $this->em->getUnitOfWork();
+    }
+
+    /**
+     * @param Opportunity $entity
+     *
+     * @return bool
+     */
+    protected function hasB2bCustomerTarget(Opportunity $entity)
+    {
+        return $entity->getCustomerAssociation()
+               && $entity->getCustomerAssociation()->getTarget() instanceof B2bCustomer;
+    }
+
+    /**
+     * @param array $changeSet
+     *
+     * @return bool
+     */
+    protected function hasChangedB2bCustomer(array $changeSet)
+    {
+        if (empty($changeSet['customerAssociation']) || !$changeSet['customerAssociation'][0]) {
+            return false;
+        }
+        /** @var Customer $customer */
+        $customer = $changeSet['customerAssociation'][0];
+
+        return $customer->getTarget() instanceof B2bCustomer;
+    }
+
+    /**
+     * @param Opportunity $entity
+     * @param array       $changeSet
+     *
+     * @return bool
+     */
+    protected function isOldStatusValuable(Opportunity $entity, array $changeSet)
+    {
+        return B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet);
     }
 }

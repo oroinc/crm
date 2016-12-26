@@ -443,23 +443,6 @@ class Lead extends ExtendLead implements
     protected $organization;
 
     /**
-     * @var B2bCustomer
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=160,
-     *          "excluded"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $customer;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
@@ -1063,23 +1046,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @param B2bCustomer $customer
-     * @TODO remove null after BAP-5248
-     */
-    public function setCustomer(B2bCustomer $customer = null)
-    {
-        $this->customer = $customer;
-    }
-
-    /**
-     * @return B2bCustomer
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
@@ -1100,18 +1066,6 @@ class Lead extends ExtendLead implements
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * Remove Customer
-     *
-     * @return Lead
-     */
-    public function removeCustomer()
-    {
-        $this->customer = null;
-
-        return $this;
     }
 
     /**

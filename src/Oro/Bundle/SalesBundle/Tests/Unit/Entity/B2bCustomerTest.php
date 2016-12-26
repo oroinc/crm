@@ -89,48 +89,6 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThan(3, $this->entity->getUpdatedAt()->diff(new \DateTime())->s);
     }
 
-    public function testLeadsInteraction()
-    {
-        $result = $this->entity->getLeads();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
-        $this->assertCount(0, $result);
-
-        $lead = $this->createMock('Oro\Bundle\SalesBundle\Entity\Lead');
-        $this->entity->addLead($lead);
-        $this->assertCount(1, $this->entity->getLeads());
-        $this->assertTrue($this->entity->getLeads()->contains($lead));
-
-        $this->entity->removeLead($lead);
-        $result = $this->entity->getLeads();
-        $this->assertCount(0, $result);
-
-        $newCollection = new ArrayCollection();
-        $this->entity->setLeads($newCollection);
-        $this->assertNotSame($result, $this->entity->getLeads());
-        $this->assertSame($newCollection, $this->entity->getLeads());
-    }
-
-    public function testOpportunitiesInteraction()
-    {
-        $result = $this->entity->getOpportunities();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $result);
-        $this->assertCount(0, $result);
-
-        $opportunity = $this->createMock('Oro\Bundle\SalesBundle\Entity\Opportunity');
-        $this->entity->addOpportunity($opportunity);
-        $this->assertCount(1, $this->entity->getOpportunities());
-        $this->assertTrue($this->entity->getOpportunities()->contains($opportunity));
-
-        $this->entity->removeOpportunity($opportunity);
-        $result = $this->entity->getLeads();
-        $this->assertCount(0, $result);
-
-        $newCollection = new ArrayCollection();
-        $this->entity->setOpportunities($newCollection);
-        $this->assertNotSame($result, $this->entity->getOpportunities());
-        $this->assertSame($newCollection, $this->entity->getOpportunities());
-    }
-
     public function testToSting()
     {
         $this->entity->setName(self::TEST_NAME);
