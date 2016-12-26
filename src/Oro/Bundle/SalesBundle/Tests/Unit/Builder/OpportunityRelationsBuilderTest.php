@@ -20,6 +20,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Due to CRM-7290');
         $this->relationsBuilder = new OpportunityRelationsBuilder();
     }
 
@@ -151,7 +152,7 @@ class OpportunityRelationsBuilderTest extends \PHPUnit_Framework_TestCase
      * @param Account     $account
      * @param object|null $target
      *
-     * @return Customer|CustomerStub
+     * @return CustomerStub
      */
     private function createAccountCustomer(Account $account, $target = null)
     {
