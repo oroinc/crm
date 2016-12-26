@@ -25,7 +25,7 @@ class RelatedEntitiesExtension extends AbstractExtension
      * @param ConfigProvider          $customerConfigProvider
      * @param string                  $relatedEntityClass
      */
-    public function __construct(ConfigProvider $customerConfigProvider, $relatedEntityClass )
+    public function __construct(ConfigProvider $customerConfigProvider, $relatedEntityClass)
     {
         $this->customerConfigProvider = $customerConfigProvider;
         $this->relatedEntityClass = $relatedEntityClass;

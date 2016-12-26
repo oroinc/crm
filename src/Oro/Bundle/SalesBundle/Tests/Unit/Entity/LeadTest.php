@@ -29,7 +29,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $now          = new \DateTime('now');
         $user         = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
         $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $customer     = $this->createMock('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
+        $customer     = $this->createMock('Oro\Bundle\SalesBundle\Entity\Customer');
         $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
