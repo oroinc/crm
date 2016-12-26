@@ -1164,7 +1164,7 @@ datagrids:
             entity_pagination: true
             export: true
 
-    orocrm-sales-b2bcustomers-grid:
+    oro-sales-b2bcustomers-grid:
         extends: base-sales-b2bcustomers-grid
         mixins: activity-contact-data-hidden-mixin
         source:
@@ -1884,7 +1884,7 @@ datagrids:
                             property: fullName
                             translatable_options: false
 
-    orocrm-sales-b2bcustomers-for-context-grid:
+    oro-sales-b2bcustomers-for-context-grid:
         extended_entity_name: %oro_sales.b2bcustomer.entity.class%
         acl_resource: oro_sales_b2bcustomer_view
         source:

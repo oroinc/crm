@@ -90,10 +90,10 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
     public function testUpdate($name)
     {
         $response = $this->client->requestGrid(
-            'orocrm-sales-b2bcustomers-grid',
+            'oro-sales-b2bcustomers-grid',
             [
-                'orocrm-sales-b2bcustomers-grid[_filter][name][channelName]' => 'b2b Channel',
-                'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => $name,
+                'oro-sales-b2bcustomers-grid[_filter][name][channelName]' => 'b2b Channel',
+                'oro-sales-b2bcustomers-grid[_filter][name][value]' => $name,
             ]
         );
 
@@ -197,7 +197,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             'B2B Customer grid'              => [
                 [
                     'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                        'gridName' => 'oro-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [],
                     'assert'              => [
@@ -210,10 +210,10 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             'B2B Customer grid with filter'  => [
                 [
                     'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                        'gridName' => 'oro-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'b2bCustomer name',
+                        'oro-sales-b2bcustomers-grid[_filter][name][value]' => 'b2bCustomer name',
                     ],
                     'assert'              => [
                         'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
@@ -225,10 +225,10 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
             'B2B Customer grid without data' => [
                 [
                     'gridParameters'      => [
-                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                        'gridName' => 'oro-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'some other type',
+                        'oro-sales-b2bcustomers-grid[_filter][name][value]' => 'some other type',
                     ],
                     'assert'              => [],
                     'expectedResultCount' => 0

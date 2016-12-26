@@ -56,8 +56,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "form_type"="oro_sales_b2bcustomer_select"
  *          },
  *          "grid"={
- *              "default"="orocrm-sales-b2bcustomers-grid",
- *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "default"="oro-sales-b2bcustomers-grid",
+ *              "context"="oro-sales-b2bcustomers-for-context-grid"
  *          },
  *         "tag"={
  *              "enabled"=true
