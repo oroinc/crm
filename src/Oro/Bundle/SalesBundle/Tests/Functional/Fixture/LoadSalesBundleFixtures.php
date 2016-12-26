@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\AccountBundle\Entity\Account;
@@ -19,6 +20,7 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\SalesBundle\Entity\Customer as AccountCustomer;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -45,12 +47,16 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     /** @var Organization */
     protected $organization;
 
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
+
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->factory = $container->get('oro_channel.builder.factory');
+        $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
     }
 
     /**
@@ -103,7 +109,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function createB2bCustomer()
     {
         $customer = new B2bCustomer();
-        $customer->setAccount($this->getReference('default_account'));
+        $account  = $this->getReference('default_account');
+        $customer->setAccount($account);
         $customer->setName(self::CUSTOMER_NAME);
         $customer->setDataChannel($this->getReference('default_channel'));
         $customer->setOrganization($this->organization);
@@ -114,7 +121,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_b2bcustomer', $customer);
-
+        $accountCustomer = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
+        $this->setReference('default_account_customer', $accountCustomer);
         return $this;
     }
 
@@ -124,7 +132,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setName('Lead name');
         $lead->setFirstName('fname');
         $lead->setLastName('lname');
-        $lead->setCustomer($this->getReference('default_b2bcustomer'));
+        $lead->setCustomerAssociation($this->getReference('default_account_customer'));
         $email = new LeadEmail('email@email.com');
         $email->setPrimary(true);
         $lead->addEmail($email);
@@ -134,7 +142,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead2->setName('Lead name 2');
         $lead2->setFirstName('fname 2');
         $lead2->setLastName('lname 2');
-        $lead2->setCustomer($this->getReference('default_b2bcustomer'));
+        $lead2->setCustomerAssociation($this->getReference('default_account_customer'));
         $email = new LeadEmail('email2@email.com');
         $email->setPrimary(true);
         $lead2->addEmail($email);
@@ -144,7 +152,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead3->setName('Lead name 3');
         $lead3->setFirstName('fname 3');
         $lead3->setLastName('lname 3');
-        $lead3->setCustomer($this->getReference('default_b2bcustomer'));
+        $lead3->setCustomerAssociation($this->getReference('default_account_customer'));
         $email = new LeadEmail('email3@email.com');
         $email->setPrimary(true);
         $lead3->addEmail($email);
@@ -167,7 +175,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     {
         $opportunity = new Opportunity();
         $opportunity->setName('opname');
-        $opportunity->setCustomer($this->getReference('default_b2bcustomer'));
+        $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
         $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(10);

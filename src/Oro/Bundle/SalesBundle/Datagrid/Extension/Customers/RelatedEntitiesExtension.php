@@ -10,23 +10,25 @@ use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
-
-
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
-class OpportunitiesExtension extends AbstractExtension
+class RelatedEntitiesExtension extends AbstractExtension
 {
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
+    /** @var string */
+    protected $relatedEntityClass;
+
     /**
-     * @param ConfigProvider $customerConfigProvider
+     * @param ConfigProvider          $customerConfigProvider
+     * @param string                  $relatedEntityClass
      */
-    public function __construct(ConfigProvider $customerConfigProvider)
+    public function __construct(ConfigProvider $customerConfigProvider, $relatedEntityClass)
     {
         $this->customerConfigProvider = $customerConfigProvider;
+        $this->relatedEntityClass = $relatedEntityClass;
     }
 
     /**
@@ -38,6 +40,7 @@ class OpportunitiesExtension extends AbstractExtension
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') &&
             $this->parameters->get('customer_id') &&
+            $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
             $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
     }
 
@@ -51,9 +54,9 @@ class OpportunitiesExtension extends AbstractExtension
         $customerField    = $this->getCustomerField($customerClass);
         $queryBuilder     = $datasource->getQueryBuilder();
         $customerIdParam  = sprintf(':customerIdParam_%s', $customerField);
-        $opportunityAlias = $this->getOpportunityAlias($queryBuilder);
+        $alias            = $this->getEntityAlias($queryBuilder);
         $customerAlias    = 'customer';
-        $queryBuilder->join(sprintf('%s.customerAssociation', $opportunityAlias), $customerAlias);
+        $queryBuilder->join(sprintf('%s.customerAssociation', $alias), $customerAlias);
         $queryBuilder->andWhere(
             sprintf(
                 '%s.%s = %s',
@@ -72,17 +75,22 @@ class OpportunitiesExtension extends AbstractExtension
      *
      * @throws DatasourceException
      */
-    protected function getOpportunityAlias(QueryBuilder $qb)
+    protected function getEntityAlias(QueryBuilder $qb)
     {
         $fromParts = $qb->getDQLPart('from');
         /** @var $fromPart Expr\From */
         foreach ($fromParts as $fromPart) {
-            if ($fromPart->getFrom() === Opportunity::class) {
+            if ($fromPart->getFrom() === $this->relatedEntityClass) {
                 return $fromPart->getAlias();
             }
         }
 
-        throw new DatasourceException('Couldn\'t find Opportunities alias in QueryBuilder.');
+        throw new DatasourceException(
+            sprintf(
+                "Couldn't find %s alias in QueryBuilder.",
+                $this->relatedEntityClass
+            )
+        );
     }
 
     /**
