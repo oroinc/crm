@@ -5,14 +5,14 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class OpportunityControllersTest extends AbstractDatagridTestCase
+class OpportunityControllersTest  extends WebTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
@@ -200,57 +200,5 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);
-    }
-
-    /**
-     * @return array
-     */
-    public function gridProvider()
-    {
-        return [
-//            'Opportunity grid'                => [
-//                [
-//                    'gridParameters'      => [
-//                        'gridName' => 'sales-opportunity-grid'
-//                    ],
-//                    'gridFilters'         => [],
-//                    'assert'              => [
-//                        'name'         => 'opname',
-//                        'budgetAmount' => 'USD50.0000',
-//                        'probability'  => 10,
-//                    ],
-//                    'expectedResultCount' => 2
-//                ],
-//            ],
-//            'Opportunity grid with filter'    => [
-//                [
-//                    'gridParameters'      => [
-//                        'gridName' => 'sales-opportunity-grid'
-//                    ],
-//                    'gridFilters'         => [
-//                        'sales-opportunity-grid[_filter][budgetAmountValue][value]' => '50.00',
-//                        'sales-opportunity-grid[_filter][budgetAmountValue][type]' => '3',
-//                    ],
-//                    'assert'              => [
-//                        'name'              => 'opname',
-//                        'budgetAmount'      => 'USD50.0000',
-//                        'probability'       => 10,
-//                    ],
-//                    'expectedResultCount' => 2
-//                ]
-//            ],
-            'Opportunity grid without result' => [
-                [
-                    'gridParameters'      => [
-                        'gridName' => 'sales-opportunity-grid'
-                    ],
-                    'gridFilters'         => [
-                        'sales-opportunity-grid[_filter][budgetAmount][value]' => '150.00',
-                    ],
-                    'assert'              => [],
-                    'expectedResultCount' => 0
-                ],
-            ]
-        ];
     }
 }
