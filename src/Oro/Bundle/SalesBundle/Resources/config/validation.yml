@@ -27,7 +27,7 @@ Oro\Bundle\SalesBundle\Entity\Lead:
                 max: 255
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of emails must be set as primary.
+                message: One of the emails must be set as primary.
         organization:
             - NotBlank: ~
         status:
