@@ -151,7 +151,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
      * @param string  $customerIdentity
      * @param string  $lifetimeFieldName
      */
-    private function updateLifetime(array $accountIds, Channel $channel, $customerIdentity, $lifetimeFieldName)
+    protected function updateLifetime(array $accountIds, Channel $channel, $customerIdentity, $lifetimeFieldName)
     {
         $customerMetadata   = $this->em->getClassMetadata($customerIdentity);
         $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
