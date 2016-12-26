@@ -17,7 +17,6 @@ class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
         return
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') === Account::class &&
-            $this->parameters->get('related_entity_class') &&
             $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
             $this->parameters->get('customer_id');
     }

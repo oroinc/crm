@@ -47,12 +47,16 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     /** @var Organization */
     protected $organization;
 
+    /** @var AccountCustomerManager */
+    protected $accountCustomerManager;
+
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->factory = $container->get('oro_channel.builder.factory');
+        $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
     }
 
     /**
@@ -67,7 +71,6 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->createAccount();
         $this->createContact();
         $this->createB2bCustomer();
-        $this->createAccountCustomer();
         $this->createLead();
         $this->createOpportunity();
         $this->createSalesFunnelByLead();
@@ -106,7 +109,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function createB2bCustomer()
     {
         $customer = new B2bCustomer();
-        $customer->setAccount($this->getReference('default_account'));
+        $account  = $this->getReference('default_account');
+        $customer->setAccount($account);
         $customer->setName(self::CUSTOMER_NAME);
         $customer->setDataChannel($this->getReference('default_channel'));
         $customer->setOrganization($this->organization);
@@ -117,7 +121,8 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_b2bcustomer', $customer);
-
+        $accountCustomer = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
+        $this->setReference('default_account_customer', $accountCustomer);
         return $this;
     }
 
@@ -287,17 +292,5 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         ]);
 
         return $country;
-    }
-
-    protected function createAccountCustomer()
-    {
-        $account = $this->getReference('default_account');
-        $b2bCustomer = $this->getReference('default_b2bcustomer');
-        $accountCustomer = AccountCustomerManager::createCustomer($account, $b2bCustomer);
-
-        $this->em->persist($accountCustomer);
-        $this->em->flush();
-
-        $this->setReference('default_account_customer', $accountCustomer);
     }
 }

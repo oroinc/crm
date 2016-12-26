@@ -10,8 +10,6 @@ use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Exception\DatasourceException;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
-use Oro\Bundle\DataGridBundle\Tools\GridConfigurationHelper;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
@@ -42,7 +40,6 @@ class RelatedEntitiesExtension extends AbstractExtension
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') &&
             $this->parameters->get('customer_id') &&
-            $this->parameters->get('related_entity_class') &&
             $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
             $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
     }
@@ -88,10 +85,12 @@ class RelatedEntitiesExtension extends AbstractExtension
             }
         }
 
-        throw new DatasourceException(sprintf(
-            "Couldn't find %s alias in QueryBuilder.",
-            $this->relatedEntityClass
-        ));
+        throw new DatasourceException(
+            sprintf(
+                "Couldn't find %s alias in QueryBuilder.",
+                $this->relatedEntityClass
+            )
+        );
     }
 
     /**

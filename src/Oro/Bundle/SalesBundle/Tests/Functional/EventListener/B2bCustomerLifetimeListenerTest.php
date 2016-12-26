@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -69,7 +70,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testChangeStatusAffectsLifetime(Opportunity $opportunity)
     {
         $em          = $this->getEntityManager();
-        $b2bCustomer = $opportunity->getCustomerAssociation()->getCustomerTarget();
+        $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($em->getReference($enumClass, 'lost'));
 
@@ -102,19 +103,19 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testCustomerChangeShouldUpdateBothCustomersIfValuable(Opportunity $opportunity)
     {
         $em          = $this->getEntityManager();
-        $b2bCustomer = $opportunity->getCustomerAssociation()->getCustomerTarget();
-
+        /** @var  B2bCustomer $b2bCustomer */
+        $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $this->assertEquals(100, $b2bCustomer->getLifetime());
-
         $newCustomer = new B2bCustomer();
         $newCustomer->setName(uniqid('name'));
-
+        $account = $this->getReference('default_account');
+        $newCustomer->setAccount($account);
         $em->persist($newCustomer);
         $em->flush();
 
         $this->assertEquals(0, $newCustomer->getLifetime());
-        $account = $this->getReference('default_account');
-        $accountCustomer = AccountCustomerManager::createCustomer($account, $b2bCustomer);
+
+        $accountCustomer = $this->getAccountCustomerManager()->getAccountCustomerByTarget($newCustomer);
         $opportunity->setCustomerAssociation($accountCustomer);
         $em->persist($opportunity);
         $em->flush();
@@ -196,11 +197,14 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity->setProbability(10);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setOrganization($organization);
-        $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
+        /** @var Customer $customer */
+        $customer = $this->getReference('default_account_customer');
+
+        $opportunity->setCustomerAssociation($customer);
 
         /** @var B2bCustomer $b2bCustomer */
-        $b2bCustomer = $this->getReference('default_b2bcustomer');
-
+        $b2bCustomer = $customer->getTarget();
+        $customer->setCustomerTarget(null);
         $em->persist($opportunity);
         $em->flush();
 
@@ -214,5 +218,13 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     protected function getEntityManager()
     {
         return $this->getContainer()->get('doctrine')->getManager();
+    }
+
+    /**
+     * @return AccountCustomerManager
+     */
+    protected function getAccountCustomerManager()
+    {
+        return $this->getContainer()->get('oro_sales.manager.account_customer');
     }
 }

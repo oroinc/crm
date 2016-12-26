@@ -68,7 +68,7 @@ class B2bCustomerControllerTest extends AbstractDatagridTestCase
         $name = 'name' . $this->generateRandomString();
 
         $form['oro_sales_b2bcustomer_form[name]'] = $name;
-        $form['oro_sales_b2bcustomer_form[account]'] = self::$account->getId();
+        $form['oro_sales_b2bcustomer_form[customer_association_account]'] = self::$account->getId();
         $form['oro_sales_b2bcustomer_form[dataChannel]'] = self::$channel->getId();
         $form['oro_sales_b2bcustomer_form[owner]']   = 1;
 

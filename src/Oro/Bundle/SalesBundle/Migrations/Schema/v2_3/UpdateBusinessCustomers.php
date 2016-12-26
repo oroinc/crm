@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v2_3\Query\MigrateB2bCustomersQuery
 use Oro\Bundle\SalesBundle\Migrations\Schema\v2_3\Query\UpdateLeadsQuery;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v2_3\Query\UpdateOpportunitiesQuery;
 
-class UpdateBusinessCustomers implements 
+class UpdateBusinessCustomers implements
     Migration,
     OrderedMigrationInterface
 {
