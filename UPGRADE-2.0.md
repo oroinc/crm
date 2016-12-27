@@ -2,7 +2,7 @@ UPGRADE FROM 1.10 to 2.0
 ========================
 
 ####General
-- Upgrade to 2.0 is available only from 1.10 version. For this update
+- **Upgrade to 2.0 is available only from 1.10 version**. For this update
   was added the command "oro:platform:upgrade20". Before run this command the cache has to be deleted.
   Command have to be run only one time. In next releases 2.x to apply release changes it will be enough run the command "oro:platform:update".
   Upgrade from version less then 1.10 is not supported.
