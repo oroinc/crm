@@ -300,12 +300,7 @@ class ChannelDoctrineListener
     protected function getAccount($entity)
     {
         $identityFQCN = ClassUtils::getClass($entity);
-        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
-            return null;
-        }
-
         $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
-
         $customer = $this->getCustomerRepository()->getCustomerByTarget($entity->getId(), $field);
         if (!$customer) {
             return null;
