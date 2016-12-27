@@ -294,6 +294,7 @@ oro:
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
             primary_email.label:  Primary Email
+            primary_addr.label:   Primary Address
             customer_association.label : Customer
             source:
                 unclassified:     No source
