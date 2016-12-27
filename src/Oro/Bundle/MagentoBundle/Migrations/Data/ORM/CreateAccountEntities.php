@@ -100,6 +100,5 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
     {
         $manager->clear(CustomerAssociation::class);
         $manager->clear(Customer::class);
-        $manager->clear(Account::class);
     }
 }
