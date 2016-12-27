@@ -42,11 +42,9 @@ class OpportunityRelationsBuilder
         if (!$opportunity->getCustomerAssociation()) {
             return;
         }
-
-        $customer = $opportunity->getCustomerAssociation()->getTarget();
+        $customer = $opportunity->getCustomerAssociation();
         $contact = $opportunity->getContact();
-
-        $account = $customer instanceof Account ? $customer : $customer->getAccount();
+        $account = $customer->getAccount();
 
         if (!$contact || !$account) {
             return;
