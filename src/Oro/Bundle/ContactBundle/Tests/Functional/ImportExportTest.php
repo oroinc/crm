@@ -4,13 +4,12 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
-use Oro\Bundle\ImportExportBundle\Async\Topics;
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Symfony\Component\DomCrawler\Form;
-
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Form;
 
 /**
  * @outputBuffering enabled
@@ -28,7 +27,7 @@ class ImportExportTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient(array(), $this->generateBasicAuthHeader());
+        $this->initClient([], $this->generateBasicAuthHeader());
     }
 
     /**
@@ -96,10 +95,10 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_import_form',
-                array(
+                [
                     'entity'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
                     '_widgetContainer' => 'dialog'
-                )
+                ]
             )
         );
         $result = $this->client->getResponse();
@@ -145,10 +144,10 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_import_process',
-                array(
+                [
                     'processorAlias' => $strategy,
                     '_format'        => 'json'
-                )
+                ]
             )
         );
 
@@ -164,10 +163,10 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_export_instant',
-                array(
+                [
                     'processorAlias' => 'oro_contact',
                     '_format'        => 'json'
-                )
+                ]
             )
         );
 
@@ -176,7 +175,6 @@ class ImportExportTest extends WebTestCase
         $this->assertCount(1, $data);
         $this->assertTrue($data['success']);
 
-        // @todo - tests must be implemented after BAP-12713
         $this->assertEquals(1, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
 
