@@ -31,7 +31,6 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                     ],
                     'gridFilters'         => [],
                     'assert'              => [
-                        'channelName'  => LoadContactUsBundleFixtures::CHANNEL_NAME,
                         'firstName'    => 'fname',
                         'lastName'     => 'lname',
                         'emailAddress' => 'email@email.com',

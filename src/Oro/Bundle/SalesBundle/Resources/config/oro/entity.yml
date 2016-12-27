@@ -38,6 +38,9 @@ oro_entity:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
     entity_aliases:
+        Oro\Bundle\SalesBundle\Entity\Customer:
+            alias:        salescustomer
+            plural_alias: salescustomers
         Extend\Entity\EV_Opportunity_Status:
             alias:        salesopportunitystatus
             plural_alias: salesopportunitystatuses

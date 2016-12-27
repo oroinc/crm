@@ -39,10 +39,10 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
     public function settersAndGettersDataProvider()
     {
         return [
-                ['channel', $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel'),
-                    $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel')],
-                ['owner', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'),
-                    $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
+                ['channel', $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel'),
+                    $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel')],
+                ['owner', $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization'),
+                    $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
                 ['category_type', RFMMetricCategory::TYPE_RECENCY, RFMMetricCategory::TYPE_RECENCY],
                 ['category_index', 1, 1],
                 ['minValue', 123, 123],

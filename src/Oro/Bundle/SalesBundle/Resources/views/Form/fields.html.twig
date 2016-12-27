@@ -7,7 +7,7 @@
                 {% endif %}
                 {{ form_row(form.name) }}
                 {{ form_row(form.contact) }}
-                {{ form_row(form.customer) }}
+                {{ form_row(form.customerAssociation) }}
                 {{ form_row(form.probability) }}
                 {{ form_row(form.budgetAmount) }}
                 {{ form_row(form.customerNeed) }}
@@ -55,7 +55,7 @@
                 {{ form_row(form.jobTitle) }}
                 {{ form_row(form.phones) }}
                 {{ form_row(form.emails) }}
-                {{ form_row(form.customer) }}
+                {{ form_row(form.customerAssociation) }}
                 {{ form_row(form.companyName) }}
                 {{ form_row(form.website) }}
                 {{ form_row(form.numberOfEmployees) }}
@@ -176,7 +176,7 @@
 {% endmacro %}
 
 {% block oro_sales_customer_widget %}
-    {% if not hasGridData %}
+    {% if not hasGridData and not createCustomersData %}
         {{ form_widget(form) }}
     {% else %}
         <div id="{{ id }}-el"
@@ -188,32 +188,34 @@
              }|json_encode }}">
             <div class="input-append">
                 {{ form_widget(form) }}
-                {% import 'OroUIBundle::macros.html.twig' as UI %}
-                {{ UI.clientLink({
-                    'dataUrl': path(
-                    'oro_sales_customer_grid_dialog', {
-                        entityClass: parentClass,
-                    }),
-                    'aCss': 'add-on btn entity-select-btn',
-                    'iCss': 'fa-bars',
-                    'widget' : {
-                        'type' : 'dialog',
-                        'multiple' : true,
-                        'options' : {
-                            'alias': 'customer-dialog',
-                            'dialogOptions' : {
-                                'title' : label|trans,
-                                'allowMaximize': true,
-                                'allowMinimize': true,
-                                'modal': true,
-                                'dblclick': 'maximize',
-                                'maximizedHeightDecreaseBy': 'minimize-bar',
-                                'width': 1000,
-                                'height': 600
+                {% if hasGridData %}
+                    {% import 'OroUIBundle::macros.html.twig' as UI %}
+                    {{ UI.clientLink({
+                        'dataUrl': path(
+                        'oro_sales_customer_grid_dialog', {
+                            entityClass: parentClass,
+                        }),
+                        'aCss': 'add-on btn entity-select-btn',
+                        'iCss': 'fa-bars',
+                        'widget' : {
+                            'type' : 'dialog',
+                            'multiple' : true,
+                            'options' : {
+                                'alias': 'customer-dialog',
+                                'dialogOptions' : {
+                                    'title' : label|trans({}, translation_domain),
+                                    'allowMaximize': true,
+                                    'allowMinimize': true,
+                                    'modal': true,
+                                    'dblclick': 'maximize',
+                                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                                    'width': 1000,
+                                    'height': 600
+                                }
                             }
                         }
-                    }
-                }) }}
+                    }) }}
+                {% endif %}
                 {% if createCustomersData|length %}
                     <div class="dropdown btn-group entity-create-dropdown">
                         <button type="button" data-toggle="dropdown" class="dropdown-toggle btn entity-create-btn">

@@ -1,0 +1,12 @@
+<div class="pull-left btn-group icons-holder">
+    <a href="{{ path('oro_sales_opportunity_customer_aware_create', {
+            targetId: entity.id,
+            targetClass: oro_class_name(entity, true)
+        }) }}"
+        class="btn icons-holder-text">
+        <i class="fa-usd hide-text">
+            {{ 'oro.sales.opportunity.create.label'|trans }}
+        </i>
+        {{- 'oro.sales.opportunity.create.label'|trans }}
+    </a>
+</div>

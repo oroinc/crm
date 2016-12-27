@@ -18,7 +18,9 @@
             {{ ui.renderProperty('oro.sales.lead.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('oro.sales.lead.last_name.label'|trans, entity.lastName) }}
 
-            {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% if entity['dataChannel'] is defined %}
+                {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% endif %}
 
             {%- if resource_granted('oro_contact_view') and entity.contact -%}
                 {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
@@ -43,17 +45,7 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {% set customer = entity.getCustomerTarget() %}
-            {%- set customerView -%}
-                {% set customerName = customer ? customer|oro_format_name|escape : '' %}
-                {%- if (customer and resource_granted('VIEW', customer)) -%}
-                    <a href="{{ oro_entity_object_view_link(customer) }}">{{ customerName }}</a>
-                {%- else -%}
-                    {{ customerName }}
-                {%- endif -%}
-            {%- endset -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
-
+            {{ sales.render_customer_info(entity) }}
             {{ ui.renderProperty('oro.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('oro.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('oro.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}

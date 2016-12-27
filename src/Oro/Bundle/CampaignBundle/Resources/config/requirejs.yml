@@ -1,3 +1,0 @@
-config:
-    paths:
-        'orocampaign/js/app/components/email-campaign-form': 'bundles/orocampaign/js/app/components/email-campaign-form.js'

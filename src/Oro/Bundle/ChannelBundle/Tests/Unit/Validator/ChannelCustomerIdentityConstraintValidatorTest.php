@@ -12,7 +12,7 @@ class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_
      */
     public function testValidateException()
     {
-        $constraint = $this->getMock('Symfony\Component\Validator\Constraint');
+        $constraint = $this->createMock('Symfony\Component\Validator\Constraint');
         $validator  = new ChannelCustomerIdentityConstraintValidator();
         $validator->validate(false, $constraint);
     }

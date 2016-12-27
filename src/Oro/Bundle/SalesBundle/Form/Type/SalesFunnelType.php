@@ -22,17 +22,6 @@ class SalesFunnelType extends AbstractType
                 'startDate',
                 'oro_date',
                 array('required' => true, 'label' => 'oro.sales.salesfunnel.start_date.label')
-            )
-            ->add(
-                'dataChannel',
-                'oro_channel_select_type',
-                array(
-                    'required' => true,
-                    'label' => 'oro.sales.salesfunnel.data_channel.label',
-                    'entities' => [
-                        'Oro\\Bundle\\SalesBundle\\Entity\\SalesFunnel'
-                    ],
-                )
             );
     }
 

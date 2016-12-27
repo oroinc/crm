@@ -40,18 +40,18 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
 
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->trackingVisitProvider =
-            $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider')
+            $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->any())
             ->method('trans')
             ->will($this->returnCallback(function ($id) {

@@ -44,11 +44,11 @@ class RestB2bCustomerTest extends WebTestCase
     {
         $request = [
             'b2bcustomer' => [
-                'name'            => 'b2bcustomer_name_' . mt_rand(1, 500),
-                'account'         => $this->getReference('default_account')->getId(),
-                'owner'           => '1',
-                'dataChannel'     => self::$dataChannel->getId(),
-                'shippingAddress' => $this->testAddress
+                'name'                          => 'b2bcustomer_name_' . mt_rand(1, 500),
+                'customer_association_account'  => $this->getReference('default_account')->getId(),
+                'owner'                         => '1',
+                'dataChannel'                   => self::$dataChannel->getId(),
+                'shippingAddress'               => $this->testAddress
             ]
         ];
 
@@ -83,7 +83,7 @@ class RestB2bCustomerTest extends WebTestCase
 
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['b2bcustomer']['name'], $result['name']);
-        $this->assertEquals($request['b2bcustomer']['account'], $result['account']);
+        $this->assertEquals($request['b2bcustomer']['customer_association_account'], $result['account']);
 
         // assert addresses
         $this->assertEquals(

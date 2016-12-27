@@ -5,6 +5,8 @@ namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
@@ -45,7 +47,6 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
-        $channelRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
@@ -55,7 +56,6 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setCompanyName('Oro Inc.');
                 $entity->setOwner($userRepo->getEntity('John Doo'));
                 $entity->setOrganization($organizationRepo->getEntity('default'));
-                $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
@@ -82,6 +82,10 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setWebsite('http://oro.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');
+
+                $customer = new Customer();
+                $customer->setTarget((new Account())->setName('Jerry Coleman'));
+                $entity->setCustomerAssociation($customer);
 
                 return;
         }

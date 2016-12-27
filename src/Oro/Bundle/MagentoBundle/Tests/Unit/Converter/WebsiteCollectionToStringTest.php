@@ -28,11 +28,11 @@ class WebsiteCollectionToStringTest extends \PHPUnit_Framework_TestCase
      */
     public function converterCallbackDataProvider()
     {
-        $websiteMock1 = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $websiteMock1 = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $websiteMock1->expects($this->any())->method('getName')
             ->will($this->returnValue('website 1'));
 
-        $websiteMock2 = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Website');
+        $websiteMock2 = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Website');
         $websiteMock2->expects($this->any())->method('getName')
             ->will($this->returnValue('website 2'));
 

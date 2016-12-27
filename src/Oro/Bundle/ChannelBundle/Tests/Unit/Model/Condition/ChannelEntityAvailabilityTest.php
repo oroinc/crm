@@ -28,7 +28,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function testEvaluate(array $options, $expectedResult)
     {
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $channel
             ->expects($this->once())
             ->method('getEntities')

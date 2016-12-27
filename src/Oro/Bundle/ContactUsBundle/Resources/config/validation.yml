@@ -14,8 +14,6 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
             - NotBlank: ~
         preferredContactMethod:
             - NotBlank: ~
-        dataChannel:
-            - NotBlank: ~
     constraints:
         - Callback:
             methods:

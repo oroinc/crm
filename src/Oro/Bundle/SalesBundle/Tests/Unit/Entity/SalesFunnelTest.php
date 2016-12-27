@@ -36,7 +36,7 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $user         = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
             ->disableOriginalConstructor()
             ->getMock();
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return array(
             'startDate'    => array('startDate', $now, $now),
@@ -45,7 +45,6 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'owner'        => array('owner', $user, $user),
             'createdAt'    => array('createdAt', $now, $now),
             'updatedAt'    => array('updatedAt', $now, $now),
-            'dataChannel'  => ['dataChannel', $channel, $channel],
             'organization' => array('organization', $organization, $organization)
         );
     }

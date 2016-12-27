@@ -54,7 +54,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         }
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|CategoriesConstraint $constraint */
-        $constraint = $this->getMock('Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
+        $constraint = $this->createMock('Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
         $constraint->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));

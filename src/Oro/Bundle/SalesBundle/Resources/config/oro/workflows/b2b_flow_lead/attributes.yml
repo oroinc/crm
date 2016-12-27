@@ -7,13 +7,11 @@ workflows:
                 type: entity
                 options:
                     class: Oro\Bundle\AccountBundle\Entity\Account
-            b2bcustomer:
-                type:  entity
+            customer_association:
+                type: entity
                 options:
-                    class: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+                    class: Oro\Bundle\SalesBundle\Entity\Customer
             company_name:
                 type: string
             notes:
                 type: string
-            dataChannel:
-                property_path: lead.dataChannel

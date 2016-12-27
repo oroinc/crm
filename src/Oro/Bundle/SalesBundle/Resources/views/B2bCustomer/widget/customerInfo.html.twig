@@ -3,26 +3,24 @@
 
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
 {% set tabs = [] %}
-{% if leadClassName in channel.entities %}
-    {% set tabs = tabs|merge([
-        {
-            'alias': 'oro_sales_b2bcustomer_leads' ~ uniqueSuffix,
-            'widgetType': 'block',
-            'label': 'oro.sales.b2bcustomer.leads.label'|trans,
-            'url': path('oro_sales_b2bcustomer_widget_leads', {'id': customer.id})
-        }
-    ]) %}
-{% endif %}
-{% if opportunityClassName in channel.entities %}
-    {% set tabs = tabs|merge([
-        {
-            'alias': 'oro_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
-            'widgetType': 'block',
-            'label': 'oro.sales.b2bcustomer.opportunities.label'|trans,
-            'url': path('oro_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
-        }
-    ]) %}
-{% endif %}
+
+{% set tabs = tabs|merge([
+    {
+        'alias': 'oro_sales_b2bcustomer_leads' ~ uniqueSuffix,
+        'widgetType': 'block',
+        'label': 'oro.sales.b2bcustomer.leads.label'|trans,
+        'url': path('oro_sales_b2bcustomer_widget_leads', {'id': customer.id})
+    }
+]) %}
+
+{% set tabs = tabs|merge([
+    {
+        'alias': 'oro_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
+        'widgetType': 'block',
+        'label': 'oro.sales.b2bcustomer.opportunities.label'|trans,
+        'url': path('oro_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
+    }
+]) %}
 
 {% set hasTabs = tabs|length > 0 %}
 
@@ -48,7 +46,7 @@
     </div>
 
     {% if hasTabs %}
-        <div class="responsive-cell" id="magento-without-border-tabs">
+        <div class="responsive-cell magento-without-border-tabs">
             {{ tabPanel(tabs) }}
         </div>
     {% endif %}

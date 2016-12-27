@@ -168,7 +168,7 @@ class ActivityListener
                 if (!isset($this->deletedEntities[$key])
                     && $this->activityContactProvider->isSupportedEntity($class)
                 ) {
-                    $targets     = $entity->getActivityTargetEntities();
+                    $targets     = $entity->getActivityTargets();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
                         $targetClassName = ClassUtils::getClass($target);
@@ -202,7 +202,7 @@ class ActivityListener
                         ->getActivityDirectionProvider($entity)
                         ->isDirectionChanged($changes);
 
-                    $targets     = $entity->getActivityTargetEntities();
+                    $targets     = $entity->getActivityTargets();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
                         $targetClassName = ClassUtils::getClass($target);

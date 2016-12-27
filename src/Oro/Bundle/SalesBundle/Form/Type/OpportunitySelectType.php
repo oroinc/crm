@@ -27,7 +27,7 @@ class OpportunitySelectType extends AbstractType
      */
     public function getParent()
     {
-        return 'oro_entity_create_or_select_inline_channel_aware';
+        return 'oro_entity_create_or_select_inline';
     }
 
     /**

@@ -46,7 +46,7 @@ class InheritanceActivityTargets implements Migration, ActivityListExtensionAwar
             $schema,
             'orocrm_account',
             'orocrm_sales_opportunity',
-            ['customer', 'account']
+            ['customerAssociation', 'account']
         );
         $activityListExtension->addInheritanceTargets(
             $schema,

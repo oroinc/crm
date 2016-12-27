@@ -1,3 +1,5 @@
+@skip-bamboo
+@skip
 Feature: Tie Opportunity probability to its status
   In order to improve sales forecasting
   As a Sales rep
@@ -23,6 +25,7 @@ Feature: Tie Opportunity probability to its status
       | Identification & Alignment | 20          |
       | Solution Development       | 60          |
 
+  # todo: Should be created with required Customer Account association (could be filled with Account)
   Scenario: Add new Opportunity
     Given I fill form with:
       | Opportunity Name | Build new Death Star |

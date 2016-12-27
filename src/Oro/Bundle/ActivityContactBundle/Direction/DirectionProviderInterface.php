@@ -9,6 +9,7 @@ interface DirectionProviderInterface
     const DIRECTION_INCOMING = 'incoming';
     const DIRECTION_OUTGOING = 'outgoing';
     const DIRECTION_UNKNOWN  = 'unknown';
+    const CONTACT_INFORMATION_SCOPE_EMAIL = 'email';
 
     /**
      * Return supported activity entity class name

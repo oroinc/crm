@@ -114,7 +114,7 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_Tes
         $em->expects($this->once())->method('getMetadataFactory')
             ->will($this->returnValue($metadataFactory));
 
-        $managerRegistry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $managerRegistry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $managerRegistry->expects($this->once())->method('getManagerForClass')->with(self::TEST_ENTITY_NAME)
             ->will($this->returnValue($em));
 

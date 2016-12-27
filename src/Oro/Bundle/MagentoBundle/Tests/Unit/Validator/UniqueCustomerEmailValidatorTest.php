@@ -51,7 +51,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $constraint = new UniqueCustomerEmailConstraint();
 
-        $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
         $context->expects($this->never())
             ->method($this->anything());
 
@@ -82,7 +82,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $constraint = new UniqueCustomerEmailConstraint();
 
-        $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
         $context->expects($this->once())
             ->method('addViolationAt')
             ->with('email', $constraint->message);

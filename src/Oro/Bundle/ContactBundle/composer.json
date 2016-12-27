@@ -22,7 +22,6 @@
         "psr-0": { "": "src/" }
     },
     "target-dir": "Oro/Bundle/ContactBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

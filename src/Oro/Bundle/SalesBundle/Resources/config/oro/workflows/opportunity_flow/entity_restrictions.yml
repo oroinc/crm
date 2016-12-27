@@ -33,7 +33,7 @@ workflows:
             opportunity_customer_won:
                 attribute: opportunity
                 step: won
-                field: customer
+                field: customerAssociation
             opportunity_status_won:
                 attribute: opportunity
                 step: won
@@ -61,7 +61,7 @@ workflows:
             opportunity_customer_lost:
                 attribute: opportunity
                 step: lost
-                field: customer
+                field: customerAssociation
             opportunity_status_lost:
                 attribute: opportunity
                 step: lost
