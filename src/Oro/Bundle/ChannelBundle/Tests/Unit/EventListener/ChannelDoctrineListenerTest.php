@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -12,6 +11,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
+use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\MagentoBundle\Entity\Customer as CustomerEntity;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
@@ -21,6 +21,9 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
     /** @var LifetimeHistoryRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $lifetimeRepo;
+
+    /** @var CustomerRepository|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerRepo;
 
     /** @var EntityManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $em;
@@ -44,15 +47,18 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $this->lifetimeRepo = $this
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository')
             ->disableOriginalConstructor()->getMock();
+
+        $this->customerRepo = $this
+            ->getMockBuilder('Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository')
+            ->disableOriginalConstructor()->getMock();
+
+
         $this->uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
             ->disableOriginalConstructor()->getMock();
         $this->em  = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
         $this->em->expects($this->any())->method('getUnitOfWork')
             ->will($this->returnValue($this->uow));
-        $this->em->expects($this->any())->method('getRepository')
-            ->with($this->equalTo('OroChannelBundle:LifetimeValueHistory'))
-            ->will($this->returnValue($this->lifetimeRepo));
 
         $settingProvider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
@@ -70,6 +76,15 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     public function testOnFlush()
     {
         $args = new OnFlushEventArgs($this->em);
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->withConsecutive(
+                [$this->equalTo('OroSalesBundle:Customer')],
+                [$this->equalTo('OroChannelBundle:LifetimeValueHistory')]
+            )->willReturnOnConsecutiveCalls(
+                $this->returnValue($this->customerRepo),
+                $this->returnValue($this->lifetimeRepo)
+            );
 
         $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $account->expects($this->any())->method('getId')
@@ -122,6 +137,10 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     public function testPostFlush()
     {
         $args = new PostFlushEventArgs($this->em);
+
+        $this->em->expects($this->any())->method('getRepository')
+            ->with($this->equalTo('OroChannelBundle:LifetimeValueHistory'))
+            ->will($this->returnValue($this->lifetimeRepo));
 
         $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
