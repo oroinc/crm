@@ -226,13 +226,6 @@ services:
         tags:
             - { name: form.type, alias: oro_sales_opportunity_status_select }
 
-    oro_sales.form.type.b2bcustomer_with_channel_select:
-        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelCreateOrSelectType
-        arguments:
-            - '@oro_security.security_facade'
-        tags:
-            - { name: form.type, alias: oro_sales_b2bcustomer_with_channel_create_or_select }
-
     oro_sales.salesfunnel.form.type:
         class: %oro_sales.salesfunnel.form.type.class%
         tags:

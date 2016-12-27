@@ -12,14 +12,15 @@ use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
-use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension;
+use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
-class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
+class RelatedEntitiesExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var OpportunitiesExtension */
+    /** @var RelatedEntitiesExtension */
     protected $extension;
 
     /** @var ConfigProvider|\PHPUnit_Framework_MockObject_MockObject */
@@ -33,7 +34,10 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isCustomerClass'])
             ->getMock();
 
-        $this->extension = new OpportunitiesExtension($this->configProvider);
+        $this->extension = new RelatedEntitiesExtension(
+            $this->configProvider,
+            Opportunity::class
+        );
     }
 
     /**
@@ -57,28 +61,49 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicableDataProvider()
     {
         $class = TestEntity::class;
-
+        $relatedClass = Opportunity::class;
         return [
             'not orm source type'           => [
-                ['source' => ['type' => 'not_orm']], [], false
+                ['source' => ['type' => 'not_orm']],
+                [],
+                false
             ],
             'no customer_class param'       => [
-                ['source' => ['type' => 'orm']], ['customer_id' => 1], false
+                ['source' => ['type' => 'orm']],
+                ['customer_id' => 1, 'related_entity_class' => $relatedClass],
+                false
             ],
             'no customer_id param'          => [
-                ['source' => ['type' => 'orm']], ['customer_class' => 'test'], false
+                ['source' => ['type' => 'orm']],
+                ['customer_class' => 'test', 'related_entity_class' => $relatedClass],
+                false
             ],
             'empty customer_class param'    => [
-                ['source' => ['type' => 'orm']], ['customer_id' => 1, 'customer_class' => ''], false
+                ['source' => ['type' => 'orm']],
+                ['customer_id' => 1, 'customer_class' => '', 'related_entity_class' => $relatedClass],
+                false
             ],
             'empty customer_id param'       => [
-                ['source' => ['type' => 'orm']], ['customer_class' => $class, 'customer_id' => null], false
+                ['source' => ['type' => 'orm']],
+                ['customer_class' => $class, 'customer_id' => null, 'related_entity_class' => $relatedClass],
+                false
             ],
             'not supported customer class'  => [
-                ['source' => ['type' => 'orm']], ['customer_class' => $class, 'customer_id' => 1], false, false
+                ['source' => ['type' => 'orm']],
+                ['customer_class' => $class, 'customer_id' => 1, 'related_entity_class' => $relatedClass],
+                false,
+                false
+            ],
+            'invalid related entity class' => [
+                ['source' => ['type' => 'orm']],
+                ['customer_class' => $class, 'customer_id' => 1, 'related_entity_class' => Lead::class],
+                false
             ],
             'all parameters and config set' => [
-                ['source' => ['type' => 'orm']], ['customer_class' => $class, 'customer_id' => 1], true, true
+                ['source' => ['type' => 'orm']],
+                ['customer_class' => $class, 'customer_id' => 1, 'related_entity_class' => $relatedClass],
+                true,
+                true
             ]
         ];
     }
@@ -97,14 +122,20 @@ class OpportunitiesExtensionTest extends \PHPUnit_Framework_TestCase
         $config          = DatagridConfiguration::create([]);
 
         $this->extension->setParameters(
-            new ParameterBag(['customer_class' => $customerClass, 'customer_id' => $customerId])
+            new ParameterBag(
+                [
+                    'customer_class' => $customerClass,
+                    'customer_id' => $customerId,
+                    'related_entity_class' => Opportunity::class
+                ]
+            )
         );
         $this->extension->visitDatasource($config, $datasource);
     }
 
     /**
      * @expectedException \Oro\Bundle\DataGridBundle\Exception\DatasourceException
-     * @expectedExceptionMessage Couldn't find Opportunities alias in QueryBuilder.
+     * @expectedExceptionMessage Couldn't find Oro\Bundle\SalesBundle\Entity\Opportunity alias in QueryBuilder.
      */
     public function testVisitDatasourceNotFoundOpportunityFrom()
     {

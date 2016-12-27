@@ -43,31 +43,39 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
         if (!$targetCustomer instanceof Customer) {
             return null;
         }
-        /** @var Customer|null $similar */
-        $automaticDiscovery = $this->getAutomaticDiscovery();
-        $similar            = $automaticDiscovery->discoverSimilar($targetCustomer);
         $newAccountKey = 'magentocustomer_%s_account';
+        if ($targetCustomer->getAccount()) {
+            // get account from direct relation if it is already set in b2b customer
+            $account = $targetCustomer->getAccount();
+        } else {
+            // try to find similar customer and get its account
+            /** @var Customer|null $similar */
+            $automaticDiscovery = $this->getAutomaticDiscovery();
+            $similar            = $automaticDiscovery->discoverSimilar($targetCustomer);
 
-        if (null !== $similar) {
-            if ($similar->getAccount()) {
-                //return existing account from similar customer
-                return $similar->getAccount();
+            if (null !== $similar) {
+                if ($similar->getAccount()) {
+                    return $similar->getAccount();
+                }
+                //try to get from storage
+                $key             = sprintf($newAccountKey, $similar->getId());
+                $storedAccount   = $this->newEntitiesHelper->getEntity($key);
+                if ($storedAccount) {
+                    return $storedAccount;
+                }
             }
-            //try to get from storage
-            $key             = sprintf($newAccountKey, $similar->getId());
-            $storedAccount   = $this->newEntitiesHelper->getEntity($key);
-            if ($storedAccount) {
-                return $storedAccount;
-            }
+
+            // create new Account
+            $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
+                ? 'N/A'
+                : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+
+            $account = (new Account())->setName($accountName);
         }
 
-        // create and store new Account
-        $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
-            ? 'N/A'
-            : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
-
-        $account = (new Account())->setName($accountName);
-        $this->newEntitiesHelper->setEntity(sprintf($newAccountKey, $targetCustomer->getId()), $account);
+        if ($targetCustomer->getId()) {
+            $this->newEntitiesHelper->setEntity(sprintf($newAccountKey, $targetCustomer->getId()), $account);
+        }
 
         return $account;
     }
