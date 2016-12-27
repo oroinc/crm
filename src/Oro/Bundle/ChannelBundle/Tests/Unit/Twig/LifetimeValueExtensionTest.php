@@ -29,8 +29,8 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
     public function testGetLifetimeValue()
     {
         $expectedResult = 12.33;
-        $account        = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel        = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account        = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel        = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $this->provider->expects($this->once())->method('getAccountLifeTimeValue')
             ->with($this->equalTo($account), $this->equalTo($channel))

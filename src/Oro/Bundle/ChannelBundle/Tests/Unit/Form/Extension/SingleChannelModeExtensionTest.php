@@ -47,7 +47,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildForm(array $entities, array $channels, callable $callback = null)
     {
-        $builder = $this->getMock('Symfony\Component\Form\Test\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\Test\FormBuilderInterface');
         $this->channelsProvider
             ->expects($this->once())
             ->method('getChannelsByEntities')
@@ -69,7 +69,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $view = new FormView();
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $options = ['entities' => $entities, 'single_channel_mode' => true];
 
         $view->vars['read_only'] = false;
@@ -89,7 +89,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(['single_channel_mode' => true]);

@@ -195,7 +195,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
     protected function getFormEvent(array $data)
     {
         /* @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject*/
-        $form = $this->getMock(FormInterface::class);
+        $form = $this->createMock(FormInterface::class);
 
         return new FormEvent($form, $data);
     }
@@ -205,7 +205,7 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEnumFieldConfigSubscriber()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->createMock('Symfony\Component\Translation\TranslatorInterface');
         $enumSynchronizer = $this->getMockBuilder('Oro\Bundle\EntityExtendBundle\Tools\EnumSynchronizer')
             ->disableOriginalConstructor()
             ->getMock();

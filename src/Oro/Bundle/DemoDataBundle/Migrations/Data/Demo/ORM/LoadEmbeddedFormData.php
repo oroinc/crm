@@ -81,26 +81,8 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
     {
         $this->organization = $this->getReference('default_organization');
 
-        $this->createDataChannel($om);
         $this->persistDemoEmbeddedForm($om);
         $this->persistDemoContactUsForm($om);
-        $om->flush();
-    }
-
-    /**
-     * @param ObjectManager $om
-     */
-    public function createDataChannel(ObjectManager $om)
-    {
-        /** @var BuilderFactory $builderFactory */
-        $builderFactory = $this->container->get('oro_channel.builder.factory');
-        $this->dataChannel = $builderFactory
-            ->createBuilder()
-            ->setStatus(Channel::STATUS_ACTIVE)
-            ->setEntities(['Oro\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'])
-            ->setChannelType('custom')
-            ->getChannel();
-        $om->persist($this->dataChannel);
         $om->flush();
     }
 
@@ -118,7 +100,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
         $embeddedForm->setOwner($this->organization);
-        $embeddedForm->setDataChannel($this->dataChannel);
         $om->persist($embeddedForm);
     }
 
@@ -137,7 +118,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             $request->setOwner($this->organization);
-            $request->setDataChannel($this->dataChannel);
             $om->persist($request);
         }
     }

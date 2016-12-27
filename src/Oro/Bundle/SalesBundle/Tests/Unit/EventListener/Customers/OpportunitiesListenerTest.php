@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -46,7 +47,7 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getSingleEntityIdentifier'])
             ->getMock();
 
-        $this->translator     = $this->getMock(TranslatorInterface::class);
+        $this->translator     = $this->createMock(TranslatorInterface::class);
 
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
@@ -87,7 +88,13 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->method('render')
             ->with(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
-                ['gridParams' => ['customer_id' => $id, 'customer_class' => $customerClass]]
+                [
+                    'gridParams' => [
+                        'customer_id' => $id,
+                        'customer_class' => $customerClass,
+                        'related_entity_class' => Opportunity::class
+                    ]
+                ]
             )
             ->willReturn($opportunitiesData);
 
@@ -102,7 +109,7 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->with('oro.sales.customers.opportunities.grid.label')
             ->willReturn($opportunitiesTitle);
 
-        $config = $this->getMock(ConfigInterface::class);
+        $config = $this->createMock(ConfigInterface::class);
 
         $this->configProvider->expects($this->once())
             ->method('getConfig')

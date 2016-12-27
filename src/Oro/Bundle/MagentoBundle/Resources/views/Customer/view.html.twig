@@ -129,15 +129,20 @@
             'subblocks': [
                 {'data' : [salesTabsWidget] }
             ]
-        },
-        {
-            'title': 'oro.magento.website_activity.label'|trans,
-            'priority': 1050,
-            'subblocks': [
-                {'data' : [websiteActivityTabsWidget] }
-            ]
         }
     ] %}
+
+    {% if websiteActivityTabsWidget|trim|length > 0 %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'oro.magento.website_activity.label'|trans,
+                'priority': 1050,
+                'subblocks': [
+                    {'data' : [websiteActivityTabsWidget] }
+                ]
+            }
+        ]) %}
+    {% endif %}
 
     {% if entity.newsletterSubscribers|length > 0 %}
         {% set newsletterSubscriberBlock %}

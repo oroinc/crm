@@ -463,7 +463,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
         $source = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Source');
         $method = $this->getMockBuilder('Oro\Bundle\ContactBundle\Entity\Method');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),

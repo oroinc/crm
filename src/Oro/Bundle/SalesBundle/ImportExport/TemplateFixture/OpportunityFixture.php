@@ -6,6 +6,8 @@ use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
@@ -41,18 +43,14 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
         $leadRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
-        $channelRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         switch ($key) {
             case 'Jerry Coleman':
                 $entity->setName('Oro Inc. Opportunity Name');
-                $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
-                $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));
@@ -62,6 +60,10 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setLead($leadRepo->getEntity('Jerry Coleman'));
 
+                $customer = new Customer();
+                $customer->setTarget((new Account())->setName('Jerry Coleman'));
+
+                $entity->setCustomerAssociation($customer);
                 $statusName = 'in_progress';
                 $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
                 $id = ExtendHelper::buildEnumValueId($statusName);

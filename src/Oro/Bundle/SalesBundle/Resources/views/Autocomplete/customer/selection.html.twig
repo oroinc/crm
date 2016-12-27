@@ -1,7 +1,9 @@
-<% if (icon.type === 'file-path') { %>
-    <img src="<%= icon.data.path %>" class="separated-img">
-<% } else if (icon.type === 'icon') { %>
-    <i class="<%= icon.data.class %> hide-text separated-img"></i>
+<% if (typeof(icon) !== "undefined") { %>
+    <% if (icon.type === 'file-path') { %>
+        <img src="<%= icon.data.path %>" class="separated-img">
+    <% } else if (icon.type === 'icon') { %>
+        <i class="<%= icon.data.class %> hide-text separated-img"></i>
+    <% } %>
 <% } %>
 <%= _.escape(text) %>
 <% if (id === null) { %>

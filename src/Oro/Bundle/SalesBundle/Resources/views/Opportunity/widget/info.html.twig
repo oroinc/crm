@@ -10,8 +10,10 @@
             {{ ui.renderProperty('oro.sales.opportunity.name.label'|trans, entity.name, entity, 'name') }}
             {{ ui.renderProperty('oro.sales.opportunity.status.label'|trans, entity.status, entity, 'status') }}
 
-            {% if resource_granted('VIEW', entity, 'channel') %}
-                {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% if entity['dataChannel'] is defined %}
+                {% if resource_granted('VIEW', entity, 'channel') %}
+                    {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+                {% endif %}
             {% endif %}
 
             {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}

@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\CustomerIconProviderPass;
 use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\AccountCreationStrategyProviderPass;
+use Oro\Bundle\SalesBundle\DependencyInjection\Compiler\AccountAutocompleteProviderPass;
 
 class OroSalesBundle extends Bundle
 {
@@ -18,5 +19,6 @@ class OroSalesBundle extends Bundle
         parent::build($container);
         $container->addCompilerPass(new CustomerIconProviderPass());
         $container->addCompilerPass(new AccountCreationStrategyProviderPass());
+        $container->addCompilerPass(new AccountAutocompleteProviderPass());
     }
 }

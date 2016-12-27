@@ -33,7 +33,7 @@ class ChannelHelperTest extends OrmTestCase
         $config->setMetadataDriverImpl($metadataDriver);
         $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
-        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->any())
             ->method('getManager')
             ->will($this->returnValue($this->em));
@@ -55,12 +55,13 @@ class ChannelHelperTest extends OrmTestCase
      */
     public function testGetChannel($integrationId, $expected, $optional = false)
     {
-        $integration = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $integration = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $integration->expects($this->any())
             ->method('getId')->will($this->returnValue($integrationId));
 
         if (false === $expected) {
-            $this->setExpectedException('\LogicException', 'Unable to find channel for given integration');
+            $this->expectException('\LogicException');
+            $this->expectExceptionMessage('Unable to find channel for given integration');
         }
 
         $existingIntegrationId = self::TEST_INTEGRATION_ID_WITH_CHANNEL;

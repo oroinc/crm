@@ -148,7 +148,7 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     protected function getChannel($channelId = 1, array $data = [])
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $channel->expects($this->any())
             ->method('getId')
@@ -180,6 +180,6 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
+        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 }

@@ -235,7 +235,6 @@ class LeadToOpportunityProvider
     protected function setContactAndAccountToLeadFromOpportunity(Lead $lead, Opportunity $opportunity)
     {
         $lead->setContact($opportunity->getContact());
-        $lead->setCustomer($opportunity->getCustomer());
     }
 
     /**

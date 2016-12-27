@@ -232,7 +232,7 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSettingsProvider(array $settings)
     {
-        $resolverMock = $this->getMock('Oro\Component\Config\Resolver\ResolverInterface');
+        $resolverMock = $this->createMock('Oro\Component\Config\Resolver\ResolverInterface');
         $resolverMock->expects($this->once())->method('resolve')
             ->with($this->equalTo($settings))
             ->will($this->returnArgument(0));
@@ -289,5 +289,60 @@ class SettingsProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetChannelTypeChoiceList(array $config, array $expectedResults)
     {
         $this->assertSame($expectedResults, $this->getSettingsProvider($config)->getChannelTypeChoiceList());
+    }
+
+    /**
+     * @return array
+     */
+    public function channelConfigProvider()
+    {
+        return [
+            'system channel' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom',
+                            'system' => true
+                        ]
+                    ],
+                ],
+                '$expectedResults' => true
+            ],
+            'non system channel' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom',
+                            'system' => false
+                        ]
+                    ],
+                ],
+                '$expectedResults' => false
+            ],
+            'default channel type' => [
+                '$config' => [
+                    'entity_data' => [],
+                    'channel_types' => [
+                        'custom' => [
+                            'label' => 'Custom'
+                        ]
+                    ],
+                ],
+                '$expectedResults' => false
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider channelConfigProvider
+     *
+     * @param array $config
+     * @param $expectedResults
+     */
+    public function testIsSystemChannel(array $config, $expectedResults)
+    {
+        $this->assertEquals($expectedResults, $this->getSettingsProvider($config)->isChannelSystem('custom'));
     }
 }

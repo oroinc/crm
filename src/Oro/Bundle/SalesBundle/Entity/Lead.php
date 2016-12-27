@@ -2,24 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendLead;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -80,11 +75,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class Lead extends ExtendLead implements
     FullNameInterface,
-    EmailHolderInterface,
-    ChannelAwareInterface
+    EmailHolderInterface
 {
-    use ChannelEntityTrait;
-
     const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
@@ -451,23 +443,6 @@ class Lead extends ExtendLead implements
     protected $organization;
 
     /**
-     * @var B2bCustomer
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=160,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $customer;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
@@ -502,6 +477,13 @@ class Lead extends ExtendLead implements
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *     }
+     * )
      */
     protected $customerAssociation;
 
@@ -1064,23 +1046,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @param B2bCustomer $customer
-     * @TODO remove null after BAP-5248
-     */
-    public function setCustomer(B2bCustomer $customer = null)
-    {
-        $this->customer = $customer;
-    }
-
-    /**
-     * @return B2bCustomer
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
@@ -1101,18 +1066,6 @@ class Lead extends ExtendLead implements
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * Remove Customer
-     *
-     * @return Lead
-     */
-    public function removeCustomer()
-    {
-        $this->customer = null;
-
-        return $this;
     }
 
     /**

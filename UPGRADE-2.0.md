@@ -3,6 +3,7 @@ UPGRADE FROM 1.10 to 2.0
 
 ####General
 - Changed minimum required php version to 5.6
+- Field `dataChannel` for `Lead` and `Opportunity` was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name `data_channel`. 
 
 ###SOAP API was removed
 - removed all dependencies to the `besimple/soap-bundle` bundle. 
@@ -57,12 +58,23 @@ UPGRADE FROM 1.10 to 2.0
       - `EntityFieldProvider $entityFieldProvider`,
         `ChangeLeadStatus $changeLeadStatus`
 - Service (`Oro\Bundle\SalesBundle\Model\B2bGuesser`) removed
+- Guesser (`Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser`) removed
+- `Lead` and `Opportunity` entities do not implement `ChannelAwareInterface`
+- `ChannelEntityTrait` was removed from `Lead` and `Opportunity` entities
+- Type (`Oro\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType`) is removed
+- Type (`Oro\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType`) is removed
+- For the type (`Oro\Bundle\SalesBundle\Form\Type\LeadSelectType`) was changed parent from `oro_entity_create_or_select_inline_channel_aware` to `oro_entity_create_or_select_inline`
+- For the type (`Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType`) was changed parent from `oro_entity_create_or_select_inline_channel_aware` to `oro_entity_create_or_select_inline`
+- Data girds `sales-funnel-lead-with-data-channel-grid` and `sales-funnel-opportunity-with-data-channel-grid` were removed
+- Validation NotBlank for field `dataChannel` of entities `Oro\Bundle\ContactUsBundle\Entity\ContactRequest, Oro\Bundle\SalesBundle\Entity\Opportunity, Oro\Bundle\SalesBundle\Entity\Lead` was removed
+- Configurations of data grids `sales-opportunity-for-context-grid, sales-lead-for-context-grid, sales-lead-grid, sales-opportunity-grid` were updated. There were deleted configurations channelName in the sections columns, filters, sorters.
 
 ####OroCaseBundle:
 - `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
 
 ####OroContactUsBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\ContactUsBundle\Entity\ContactRequest`
+- Removed implementation `ChannelAwareInterface` in `Oro/Bundle/ContactUsBundle/Entity/ContactRequest`
 
 ####OroMagentoBundle:
 - Removed fields `workflowItem` and `workflowStep` from entity `Oro\Bundle\MagentoBundle\Entity\Cart`
@@ -79,6 +91,11 @@ UPGRADE FROM 1.10 to 2.0
 - The parameter `orocrm_channel.event_listener.timezone_change.class` was removed.
 - Channel configuration file now loads from `Resources/config/oro/channels.yml` instead of `Resources/config/channel_configuration.yml`.
 - Root node for channel config in `Resources/config/oro/channels.yml` were changed from `orocrm_channel` to `channels`.
+- Added channel repository interface `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface`.
+- Added channel repository abstract `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryAbstract`.
+- Deprecated `getVisitsCountByPeriodForChannelType()` method in `Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryInterface`.
+- The interface `Oro/Bundle/ChannelBundle/Model/CustomerIdentityInterfaceCustomerIdentityInterface` was removed.
+- Using active/inactive status for channel terminated.
 
 ###OroMarketingListBundle
 - Class `Oro\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper`:
@@ -94,6 +111,12 @@ UPGRADE FROM 1.10 to 2.0
 
 ####CalendarCRMBridgeBundle:
 - CalendarCRMBridgeBundle was added to integrate OroCalendarBundle into CRM
+
+####OroCampaignBundle
+- Moved ``CampaignBundle`` to a separate ``marketing`` package, required by default in the CRM application.
+
+####OroMarketingListBundle
+- Moved ``MarketingListBundle`` to a separate ``marketing`` package, required by default in the CRM application.
 
 ####OroDataGridBundle:
 - New ACL Capability "Export Grid View" added under "Application" Category to control Export Grid action.

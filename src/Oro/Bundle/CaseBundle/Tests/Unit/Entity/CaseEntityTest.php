@@ -51,8 +51,8 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('subject', 'Test subject'),
             array('description', 'Test Description'),
             array('resolution', 'Test Resolution'),
-            array('assignedTo', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
-            array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('assignedTo', $this->createMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('owner', $this->createMock('Oro\Bundle\UserBundle\Entity\User')),
             array('source', $source),
             array('status', $status),
             array('priority', $priority),
@@ -60,9 +60,9 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('updatedAt', new \DateTime()),
             array('reportedAt', new \DateTime()),
             array('closedAt', new \DateTime()),
-            array('relatedContact', $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact')),
-            array('relatedAccount', $this->getMock('Oro\Bundle\AccountBundle\Entity\Account')),
-            array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
+            array('relatedContact', $this->createMock('Oro\Bundle\ContactBundle\Entity\Contact')),
+            array('relatedAccount', $this->createMock('Oro\Bundle\AccountBundle\Entity\Account')),
+            array('organization', $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
         );
     }
 
@@ -75,7 +75,7 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testAddComment()
     {
-        $comment = $this->getMock('Oro\Bundle\CaseBundle\Entity\CaseComment');
+        $comment = $this->createMock('Oro\Bundle\CaseBundle\Entity\CaseComment');
         $comment->expects($this->once())
             ->method('setCase')
             ->with($this->case);

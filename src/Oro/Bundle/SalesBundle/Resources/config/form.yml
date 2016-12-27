@@ -33,9 +33,6 @@ parameters:
     oro_sales.mailbox_process.lead.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
     oro_sales.lead_mailbox_process_source.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
-    oro_sales.lead_data_channel_aware_select.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
-    oro_sales.opportunity_data_channel_aware_select.type.class: Oro\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
-
     oro_sales.lead_email.type.class: Oro\Bundle\SalesBundle\Form\Type\LeadEmailType
     oro_sales.lead_email.handler.class: Oro\Bundle\SalesBundle\Form\Handler\LeadEmailHandler
 
@@ -229,13 +226,6 @@ services:
         tags:
             - { name: form.type, alias: oro_sales_opportunity_status_select }
 
-    oro_sales.form.type.b2bcustomer_with_channel_select:
-        class: Oro\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelCreateOrSelectType
-        arguments:
-            - '@oro_security.security_facade'
-        tags:
-            - { name: form.type, alias: oro_sales_b2bcustomer_with_channel_create_or_select }
-
     oro_sales.salesfunnel.form.type:
         class: %oro_sales.salesfunnel.form.type.class%
         tags:
@@ -332,16 +322,6 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_channel.provider.request_channel"
-
-    oro_sales.lead_data_channel_aware_select.type:
-        class: %oro_sales.lead_data_channel_aware_select.type.class%
-        tags:
-            - { name: form.type, alias: oro_sales_lead_data_channel_aware_select }
-
-    oro_sales.opportunity_data_channel_aware_select.type:
-        class: %oro_sales.opportunity_data_channel_aware_select.type.class%
-        tags:
-            - { name: form.type, alias: oro_sales_opportunity_data_channel_aware_select }
 
     oro_sales.type.widget_oppotunity_status_select:
         class: Oro\Bundle\SalesBundle\Form\Type\WidgetOpportunityStatusSelectType

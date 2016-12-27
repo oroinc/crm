@@ -49,7 +49,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     {
         $fields = [];
 
-        $this->builder->expects($this->exactly(4))->method('add')
+        $this->builder->expects($this->exactly(3))->method('add')
             ->will(
                 $this->returnCallback(
                     function ($filedName, $fieldType) use (&$fields) {
@@ -64,8 +64,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             [
                 'name'             => 'text',
                 'entities'         => 'oro_channel_entities',
-                'channelType'      => 'genemu_jqueryselect2_choice',
-                'status'           => 'choice'
+                'channelType'      => 'genemu_jqueryselect2_choice'
             ],
             $fields
         );
@@ -78,7 +77,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with($this->isType('array'));
@@ -87,7 +86,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testFinishViewShouldNotFailsIfNoOwnerField()
     {
-        $this->type->finishView(new FormView(), $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+        $this->type->finishView(new FormView(), $this->createMock('Symfony\Component\Form\Test\FormInterface'), []);
     }
 
     /**
@@ -104,7 +103,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 
         $ownerView->vars['choices'] = $choices;
 
-        $this->type->finishView($mainView, $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+        $this->type->finishView($mainView, $this->createMock('Symfony\Component\Form\Test\FormInterface'), []);
 
         if ($shouldAdd) {
             $this->assertArrayHasKey('attr', $ownerView->vars);
@@ -124,7 +123,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
         $mainView->children['owner'] = $ownerView;
         $ownerView->vars             = ['choices' => [], 'attr' => ['class' => 'testClass']];
 
-        $this->type->finishView($mainView, $this->getMock('Symfony\Component\Form\Test\FormInterface'), []);
+        $this->type->finishView($mainView, $this->createMock('Symfony\Component\Form\Test\FormInterface'), []);
 
         $this->assertContains('hide', $ownerView->vars['attr']['class']);
         $this->assertContains('testClass', $ownerView->vars['attr']['class']);

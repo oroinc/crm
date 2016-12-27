@@ -15,7 +15,7 @@ class OpportunityPhoneProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rootProvider = $this->getMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
+        $this->rootProvider = $this->createMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
         $this->provider = new OpportunityPhoneProvider();
         $this->provider->setRootProvider($this->rootProvider);
     }

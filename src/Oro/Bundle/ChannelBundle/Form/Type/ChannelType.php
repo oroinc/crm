@@ -60,18 +60,6 @@ class ChannelType extends AbstractType
                 'empty_value'     => '',
             ]
         );
-        $builder->add(
-            'status',
-            'choice',
-            [
-                'choices'  => [
-                    Channel::STATUS_INACTIVE    => 'oro.channel.inactive.label',
-                    Channel::STATUS_ACTIVE      => 'oro.channel.active.label'
-                ],
-                'required' => true,
-                'label'    => 'oro.channel.status.label',
-            ]
-        );
     }
 
     /**

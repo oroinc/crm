@@ -90,6 +90,6 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
+        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 }

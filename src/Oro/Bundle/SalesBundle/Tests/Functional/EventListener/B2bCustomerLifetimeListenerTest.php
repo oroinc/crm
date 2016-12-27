@@ -6,8 +6,10 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -31,10 +33,10 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $em = $this->getEntityManager();
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
+        $accountCustomer = $this->getReference('default_account_customer');
         $opportunity = new Opportunity();
         $opportunity->setName(uniqid('name'));
-        $opportunity->setCustomer($b2bCustomer);
-        $opportunity->setDataChannel($this->getReference('default_channel'));
+        $opportunity->setCustomerAssociation($accountCustomer);
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity2 = clone $opportunity;
@@ -68,7 +70,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testChangeStatusAffectsLifetime(Opportunity $opportunity)
     {
         $em          = $this->getEntityManager();
-        $b2bCustomer = $opportunity->getCustomer();
+        $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunity->setStatus($em->getReference($enumClass, 'lost'));
 
@@ -101,20 +103,20 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testCustomerChangeShouldUpdateBothCustomersIfValuable(Opportunity $opportunity)
     {
         $em          = $this->getEntityManager();
-        $b2bCustomer = $opportunity->getCustomer();
-
+        /** @var  B2bCustomer $b2bCustomer */
+        $b2bCustomer = $opportunity->getCustomerAssociation()->getTarget();
         $this->assertEquals(100, $b2bCustomer->getLifetime());
-
         $newCustomer = new B2bCustomer();
         $newCustomer->setName(uniqid('name'));
-        $newCustomer->setDataChannel($opportunity->getDataChannel());
-
+        $account = $this->getReference('default_account');
+        $newCustomer->setAccount($account);
         $em->persist($newCustomer);
         $em->flush();
 
         $this->assertEquals(0, $newCustomer->getLifetime());
 
-        $opportunity->setCustomer($newCustomer);
+        $accountCustomer = $this->getAccountCustomerManager()->getAccountCustomerByTarget($newCustomer);
+        $opportunity->setCustomerAssociation($accountCustomer);
         $em->persist($opportunity);
         $em->flush();
         $em->refresh($b2bCustomer);
@@ -136,7 +138,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testRemoveSubtractLifetime(Opportunity $opportunity)
     {
         $em          = $this->getEntityManager();
-        $b2bCustomer = $opportunity->getCustomer();
+        $b2bCustomer = $opportunity->getCustomerAssociation()->getCustomerTarget();
 
         $em->remove($opportunity);
         $em->flush();
@@ -154,13 +156,14 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         // add an opportunity to the database
         $opportunity = new Opportunity();
         $opportunity->setName('unset_b2bcustomer_test');
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $closeRevenue = MultiCurrency::create(50, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
+        $opportunity->setCustomerAssociation($this->getReference('default_account_customer'));
+
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
-        $b2bCustomer->addOpportunity($opportunity);
+
         $em->persist($opportunity);
         $em->flush();
 
@@ -168,7 +171,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $this->assertEquals(50, $b2bCustomer->getLifetime());
 
         // test that lifetime value is recalculated if "won" opportunity is removed from the customer
-        $b2bCustomer->removeOpportunity($opportunity);
+        $opportunity->setCustomerAssociation(null);
+
         $em->flush();
         $this->assertEquals(0, $b2bCustomer->getLifetime());
     }
@@ -187,19 +191,20 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
-        $opportunity->setDataChannel($this->getReference('default_channel'));
         $closeRevenue = $budgetAmount = MultiCurrency::create(50.00, 'USD');
         $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setBudgetAmount($budgetAmount);
         $opportunity->setProbability(10);
         $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setOrganization($organization);
-        $opportunity->setCustomer($this->getReference('default_b2bcustomer'));
+        /** @var Customer $customer */
+        $customer = $this->getReference('default_account_customer');
+
+        $opportunity->setCustomerAssociation($customer);
 
         /** @var B2bCustomer $b2bCustomer */
-        $b2bCustomer = $this->getReference('default_b2bcustomer');
-        $b2bCustomer->addOpportunity($opportunity);
-
+        $b2bCustomer = $customer->getTarget();
+        $customer->setCustomerTarget(null);
         $em->persist($opportunity);
         $em->flush();
 
@@ -213,5 +218,13 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     protected function getEntityManager()
     {
         return $this->getContainer()->get('doctrine')->getManager();
+    }
+
+    /**
+     * @return AccountCustomerManager
+     */
+    protected function getAccountCustomerManager()
+    {
+        return $this->getContainer()->get('oro_sales.manager.account_customer');
     }
 }

@@ -54,21 +54,17 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
     ) {
         $table   = $schema->getTable(self::CUSTOMER_TABLE_NAME);
         $targetTable = $schema->getTable($targetTableName);
-
         if (empty($targetColumnName)) {
             $primaryKeyColumns = $targetTable->getPrimaryKeyColumns();
             $targetColumnName  = reset($primaryKeyColumns);
         }
-
         $options = new OroOptions();
         $options->set('customer', 'enabled', true);
         $targetTable->addOption(OroOptions::KEY, $options);
-
         $associationName = ExtendHelper::buildAssociationName(
             $this->extendExtension->getEntityClassByTableName($targetTableName),
             CustomerScope::ASSOCIATION_KIND
         );
-
         $this->extendExtension->addManyToOneRelation(
             $schema,
             $table,
@@ -77,7 +73,7 @@ class CustomerExtension implements ExtendExtensionAwareInterface, NameGeneratorA
             $targetColumnName,
             [
                 'importexport' => [
-                    'excluded' => true,
+                    'full' => true,
                 ],
                 'datagrid' => [
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
