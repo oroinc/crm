@@ -1,17 +1,17 @@
 define(function(require) {
     'use strict';
 
-    var MagentoCustomerInfoWidget;
+    var CustomerInfoWidget;
     var mediator = require('oroui/js/mediator');
     var BlockWidget = require('oro/block-widget');
 
-    MagentoCustomerInfoWidget = BlockWidget.extend({
+    CustomerInfoWidget = BlockWidget.extend({
 
         activeTab: null,
 
         initializeWidget: function(options) {
-            MagentoCustomerInfoWidget.__super__.initializeWidget.call(this, options);
-            mediator.trigger('magento-customer-info-widget:init', this, options);
+            CustomerInfoWidget.__super__.initializeWidget.call(this, options);
+            mediator.trigger('customer-info-widget:init', this, options);
         },
 
         setActiveTab: function(value) {
@@ -19,7 +19,7 @@ define(function(require) {
         },
 
         prepareContentRequestOptions: function(data, method, url) {
-            var options = MagentoCustomerInfoWidget.__super__.prepareContentRequestOptions.call(
+            var options = CustomerInfoWidget.__super__.prepareContentRequestOptions.call(
                 this, data, method, url
             );
             if (this.activeTab) {
@@ -29,6 +29,6 @@ define(function(require) {
             return options;
         }
     });
-    return MagentoCustomerInfoWidget;
+    return CustomerInfoWidget;
 });
 
