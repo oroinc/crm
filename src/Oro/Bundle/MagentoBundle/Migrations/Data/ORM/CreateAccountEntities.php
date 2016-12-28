@@ -19,6 +19,8 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
 {
     use ContainerAwareTrait;
 
+    const BATCH_SIZE = 500;
+
     /**
      * {@inheritdoc}
      */
@@ -36,9 +38,11 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
             ->where('ca.id IS NULL');
 
         $iterator = new BufferedQueryResultIterator($qb);
-        $iterator->setBufferSize(500);
+        $iterator->setBufferSize(self::BATCH_SIZE);
         $objects = [];
+        $iteration = 0;
         foreach ($iterator as $entity) {
+            $iteration++;
             $account = $entity->getAccount();
             if (!$account) {
                 $account = $this->createAccount($entity);
@@ -55,7 +59,7 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
             $manager->persist($customerAssociation);
 
             $objects[] = $customerAssociation;
-            if (count($objects) >= 100) {
+            if (0 === $iteration % self::BATCH_SIZE) {
                 $manager->flush($objects);
                 $this->clear($manager);
                 $objects = [];
@@ -96,6 +100,5 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
     {
         $manager->clear(CustomerAssociation::class);
         $manager->clear(Customer::class);
-        $manager->clear(Account::class);
     }
 }

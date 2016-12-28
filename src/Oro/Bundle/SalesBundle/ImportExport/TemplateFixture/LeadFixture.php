@@ -45,7 +45,6 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
         $organizationRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
@@ -58,7 +57,6 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setOrganization($organizationRepo->getEntity('default'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
-                $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->addEmail(new LeadEmail('JerryAColeman@armyspy.com'));
                 $primaryAddress = $this->createLeadAddress(1);

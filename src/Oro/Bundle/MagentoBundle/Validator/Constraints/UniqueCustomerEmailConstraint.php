@@ -12,6 +12,11 @@ class UniqueCustomerEmailConstraint extends Constraint
     public $message = 'oro.magento.unique_customer_email.message';
 
     /**
+     * @var string
+     */
+    public $transportMessage = 'oro.magento.unique_customer_email.transport_message';
+
+    /**
      * {@inheritdoc}
      */
     public function getTargets()
