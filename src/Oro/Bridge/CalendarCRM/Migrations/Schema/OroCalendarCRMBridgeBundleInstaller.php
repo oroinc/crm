@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bridge\TaskCRM\Migrations\Schema;
+namespace Oro\Bridge\CalendarCRM\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -9,12 +9,12 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterfac
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroTaskCRMBundleInstaller implements
+class OroCalendarCRMBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
-    protected $activityExtension;
+    private $activityExtension;
 
     /**
      * {@inheritdoc}
@@ -37,28 +37,32 @@ class OroTaskCRMBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->addTaskActivityRelations($schema);
+        $this->addCalendarActivityAssociations($schema);
     }
 
     /**
      * @param Schema $schema
      */
-    private function addTaskActivityRelations(Schema $schema)
+    private function addCalendarActivityAssociations(Schema $schema)
     {
-        $targetTables = [
-            'orocrm_account',
+        $associationTables = [
             'orocrm_contact',
+            'orocrm_case',
+            'orocrm_account',
+            'orocrm_magento_customer',
+            'orocrm_magento_order',
             'orocrm_sales_lead',
             'orocrm_sales_opportunity',
             'orocrm_sales_b2bcustomer',
-            'orocrm_case',
-            'orocrm_magento_customer',
-            'orocrm_magento_order'
         ];
-        foreach ($targetTables as $targetTable) {
-            $associationTableName = $this->activityExtension->getAssociationTableName('orocrm_task', $targetTable);
+
+        foreach ($associationTables as $tableName) {
+            $associationTableName = $this->activityExtension->getAssociationTableName(
+                'oro_calendar_event',
+                $tableName
+            );
             if (!$schema->hasTable($associationTableName)) {
-                $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', $targetTable);
+                $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', $tableName);
             }
         }
     }

@@ -33,7 +33,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
      */
     public function getMigrationVersion()
     {
-        return 'v2_1';
+        return 'v1_8';
     }
 
     /**
