@@ -34,6 +34,18 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+
+    virtual_relations:
+        OroCRM\Bundle\SalesBundle\Entity\Lead:
+            primaryAddr:
+                relation_type: oneToMany
+                related_entity_name: OroCRM\Bundle\SalesBundle\Entity\LeadAddress
+                label: orocrm.sales.lead.primary_addr.label
+                query:
+                    join:
+                        left:
+                            - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+
     entity_aliases:
         Extend\Entity\EV_Opportunity_Status:
             alias:        salesopportunitystatus

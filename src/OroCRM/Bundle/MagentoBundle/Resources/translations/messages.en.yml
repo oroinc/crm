@@ -176,6 +176,7 @@ orocrm:
             contact.label:       Contact
             account.label:       Account
             addresses.label:     Addresses
+            primary_addr.label:  Primary Address
             carts.label:         Carts
             channel.label:       Integration
             data_channel.label:  Channel
