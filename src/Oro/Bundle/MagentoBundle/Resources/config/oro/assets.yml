@@ -2,4 +2,3 @@ assets:
     css:
         'oromagento':
             - 'bundles/oromagento/css/style.css'
-            - 'bundles/oromagento/css/less/main.less'

@@ -1,14 +1,18 @@
 define(function(require) {
     'use strict';
 
-    var MagentoAccountMulticustomerView;
+    var AccountMulticustomerView;
     var _ = require('underscore');
     var $ = require('jquery');
     var BaseView = require('oroui/js/app/views/base/view');
 
-    MagentoAccountMulticustomerView = BaseView.extend({
+    AccountMulticustomerView = BaseView.extend({
 
         activeTab: null,
+
+        customerType: 'sales_b2bcustomer',
+
+        useChannel: true,
 
         events: {
             'shown.bs.tab .tab-content': 'onTabShown',
@@ -16,11 +20,16 @@ define(function(require) {
         },
 
         listen: {
-            'magento-customer-info-widget:init mediator': function(widget, options) {
+            'customer-info-widget:init mediator': function(widget, options) {
                 if (this.$(options.container || options.el).length !== 0) {
                     widget.setActiveTab(this.activeTab);
                 }
             }
+        },
+
+        initialize: function(options) {
+            _.extend(this, _.pick(options, ['customerType', 'useChannel']));
+            AccountMulticustomerView.__super__.initialize.call(this, options);
         },
 
         onTabShown: function(e) {
@@ -42,9 +51,13 @@ define(function(require) {
         },
 
         makeTargetRegExp: function(activeTabPlaceholder) {
-            return new RegExp('#oro_magento_customer_' + activeTabPlaceholder + '_customer_\\d+_channel_\\d+');
+            var pattern = '#oro_' + this.customerType + '_' + activeTabPlaceholder + '_customer_\\d+';
+            if (this.useChannel) {
+                pattern += '_channel_\\d+';
+            }
+            return new RegExp(pattern);
         }
     });
 
-    return MagentoAccountMulticustomerView;
+    return AccountMulticustomerView;
 });
