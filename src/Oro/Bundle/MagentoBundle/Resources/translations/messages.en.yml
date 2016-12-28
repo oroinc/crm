@@ -111,7 +111,7 @@ oro:
                 order_is_guest:
                     label: Is Guest
                 is_subscriber:
-                    label: Is a Subscriber
+                    label: Is Subscriber
                     yes: Yes
                     no: No
                     unknown: Not defined
