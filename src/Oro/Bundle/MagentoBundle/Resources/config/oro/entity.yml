@@ -2,7 +2,7 @@ oro_entity:
     virtual_relations:
         Oro\Bundle\MagentoBundle\Entity\Customer:
             primaryAddr:
-                relation_type: oneToMany
+                relation_type: oneToOne
                 related_entity_name: Oro\Bundle\MagentoBundle\Entity\Address
                 label: oro.magento.customer.primary_addr.label
                 query:

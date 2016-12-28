@@ -41,7 +41,7 @@ oro_entity:
     virtual_relations:
         Oro\Bundle\SalesBundle\Entity\Lead:
             primaryAddr:
-                relation_type: oneToMany
+                relation_type: oneToOne
                 related_entity_name: Oro\Bundle\SalesBundle\Entity\LeadAddress
                 label: oro.sales.lead.primary_addr.label
                 query:

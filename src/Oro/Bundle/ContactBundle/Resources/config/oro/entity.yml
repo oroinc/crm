@@ -21,7 +21,7 @@ oro_entity:
     virtual_relations:
         Oro\Bundle\ContactBundle\Entity\Contact:
             primaryAddr:
-                relation_type: oneToMany
+                relation_type: oneToOne
                 related_entity_name: Oro\Bundle\ContactBundle\Entity\ContactAddress
                 label: oro.contact.primary_addr.label
                 query:
