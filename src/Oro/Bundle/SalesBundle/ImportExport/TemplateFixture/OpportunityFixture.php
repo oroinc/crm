@@ -43,7 +43,6 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
     public function fillEntityData($key, $entity)
     {
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
         $leadRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
         $organizationRepo = $this->templateManager
@@ -52,7 +51,6 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
         switch ($key) {
             case 'Jerry Coleman':
                 $entity->setName('Oro Inc. Opportunity Name');
-                $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));

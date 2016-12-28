@@ -532,3 +532,5 @@ oro:
         customers:
             opportunities:
                 grid.label: Opportunities
+            leads:
+                grid.label: Leads

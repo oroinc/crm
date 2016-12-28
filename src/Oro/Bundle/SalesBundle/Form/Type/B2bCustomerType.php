@@ -41,14 +41,6 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
-            'account',
-            'oro_account_select',
-            [
-                'required' => true,
-                'label'    => 'oro.sales.b2bcustomer.account.label'
-            ]
-        );
-        $builder->add(
             'contact',
             'oro_contact_select',
             [

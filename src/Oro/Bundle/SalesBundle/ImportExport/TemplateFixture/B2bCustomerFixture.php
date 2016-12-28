@@ -43,15 +43,12 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
         $addressRepo = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
         $userRepo    = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $contactRepo = $this->templateManager->getEntityRepository('Oro\Bundle\ContactBundle\Entity\Contact');
-        $leadRepo    = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Lead');
         $accountRepo = $this->templateManager->getEntityRepository('Oro\Bundle\AccountBundle\Entity\Account');
         $channelRepo = $this->templateManager->getEntityRepository('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $opportunityRepo = $this->templateManager->getEntityRepository('Oro\Bundle\SalesBundle\Entity\Opportunity');
 
         switch ($key) {
             case 'Jerry Coleman':
                 $entity->setName('Jerry Coleman');
-                $entity->addLead($leadRepo->getEntity('Jerry Coleman'));
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setAccount($accountRepo->getEntity('Coleman'));
                 $entity->setOwner($userRepo->getEntity('John Doo'));
@@ -60,7 +57,6 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
-                $entity->addOpportunity($opportunityRepo->getEntity('Jerry Coleman'));
 
                 $phone = new B2bCustomerPhone('585-255-1127');
                 $phone->setPrimary(true);

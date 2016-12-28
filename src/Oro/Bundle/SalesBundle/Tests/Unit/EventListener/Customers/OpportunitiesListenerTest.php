@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\EventListener\Customers;
 
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -87,7 +88,13 @@ class OpportunitiesListenerTest extends \PHPUnit_Framework_TestCase
             ->method('render')
             ->with(
                 'OroSalesBundle:Customer:opportunitiesGrid.html.twig',
-                ['gridParams' => ['customer_id' => $id, 'customer_class' => $customerClass]]
+                [
+                    'gridParams' => [
+                        'customer_id' => $id,
+                        'customer_class' => $customerClass,
+                        'related_entity_class' => Opportunity::class
+                    ]
+                ]
             )
             ->willReturn($opportunitiesData);
 
