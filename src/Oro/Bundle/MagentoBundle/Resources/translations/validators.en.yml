@@ -1,5 +1,6 @@
 oro:
     magento:
         unique_customer_email.message: This email address already in use. Please, provide another one.
+        unique_customer_email.transport_message: Unable to communicate with the Magento instance. Please check integration settings.
         start_sync_date.message: New date should be less or equals than previously defined.
         unique_wsdl_url_and_website_ids.message: Integration with this WSDL URL and website(s) is already used.
