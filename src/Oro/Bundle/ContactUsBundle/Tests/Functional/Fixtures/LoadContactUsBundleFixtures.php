@@ -5,31 +5,15 @@ namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
-class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAwareInterface
+class LoadContactUsBundleFixtures extends AbstractFixture
 {
     const CHANNEL_TYPE = 'custom';
     const CHANNEL_NAME = 'custom Channel';
 
     /** @var ObjectManager */
     protected $em;
-
-    /** @var BuilderFactory */
-    protected $factory;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->factory = $container->get('oro_channel.builder.factory');
-    }
 
     /**
      * {@inheritDoc}
@@ -38,7 +22,6 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
     {
         $this->em = $manager;
         $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
-        $this->createChannel();
 
         $contactUsRequest = new ContactRequest();
         $contactUsRequest->setFirstName('fname');
@@ -46,32 +29,11 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
         $contactUsRequest->setPhone('123123123');
         $contactUsRequest->setEmailAddress('email@email.com');
         $contactUsRequest->setComment('some comment');
-        $contactUsRequest->setDataChannel($this->getReference('default_channel'));
         $contactUsRequest->setOwner($organization);
 
         $this->em->persist($contactUsRequest);
         $this->em->flush();
 
         $this->setReference('default_contact_us_request', $contactUsRequest);
-    }
-
-    /**
-     * @return Channel
-     */
-    protected function createChannel()
-    {
-        $channel = $this
-            ->factory
-            ->createBuilder()
-            ->setName(self::CHANNEL_NAME)
-            ->setChannelType(self::CHANNEL_TYPE)
-            ->setStatus(Channel::STATUS_ACTIVE)
-            ->setOwner($this->em->getRepository('OroOrganizationBundle:Organization')->getFirst())
-            ->getChannel();
-
-        $this->em->persist($channel);
-        $this->em->flush();
-
-        $this->setReference('default_channel', $channel);
     }
 }

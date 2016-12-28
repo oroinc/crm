@@ -21,7 +21,7 @@ class ConfigProvider
     }
 
     /**
-     * @param object|string|null $objectOrClass
+     * @param object|string $objectOrClass
      *
      * @return bool
      */

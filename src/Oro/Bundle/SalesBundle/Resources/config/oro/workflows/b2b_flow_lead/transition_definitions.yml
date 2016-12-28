@@ -162,7 +162,6 @@ workflows:
                             name:        $opportunity_name
                             contact:     $lead.contact
                             customer_association: $customer_association
-                            dataChannel: $lead.dataChannel
                             lead:        $lead
                             notes:       $notes
                     - '@request_enum_entity': # set status "In Progress" to opportunity

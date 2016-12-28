@@ -18,14 +18,13 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        // 8 is the number of fields in form
-        $builder->expects($this->exactly(8))
+        // 7 is the number of fields in form
+        $builder->expects($this->exactly(7))
             ->method('add')
             ->will(
                 $this->returnValueMap(
                     [
                         [['name', 'text'], $this->returnSelf()],
-                        [['account', 'oro_account_select'], $this->returnSelf()],
                         [['contact', 'oro_contact_select'], $this->returnSelf()],
                         [['channel', 'oro_channel_select_type'], $this->returnSelf()],
                         [['shippingAddress', 'oro_address'], $this->returnSelf()],

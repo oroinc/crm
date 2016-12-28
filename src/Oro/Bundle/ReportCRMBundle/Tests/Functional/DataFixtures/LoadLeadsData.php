@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -248,7 +247,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
-        $lead->setDataChannel($this->channel);
         /** @var LeadAddress $address */
         $address = new LeadAddress();
         $address->setLabel('Primary Address');

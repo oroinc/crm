@@ -11,10 +11,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -64,15 +62,14 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
-    ChannelAwareInterface,
     MultiCurrencyHolderInterface
 {
-    use ChannelEntityTrait;
-
     const INTERNAL_STATUS_CODE = 'opportunity_status';
 
     const STATUS_LOST = 'lost';
@@ -445,30 +442,6 @@ class Opportunity extends ExtendOpportunity implements
     protected $organization;
 
     /**
-     * @var B2bCustomer
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Oro\Bundle\SalesBundle\Entity\B2bCustomer",
-     *     inversedBy="opportunities",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=110,
-     *          "short"=true
-     *      },
-     *      "form"={
-     *          "form_type"="oro_sales_b2bcustomer_select"
-     *      }
-     *  }
-     * )
-     */
-    protected $customer;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", name="closed_at", nullable=true)
@@ -486,6 +459,13 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"})
      * @ORM\JoinColumn(name="customer_association_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *     }
+     * )
      */
     protected $customerAssociation;
 
@@ -957,23 +937,6 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @param B2bCustomer $customer
-     * @TODO remove null after BAP-5248
-     */
-    public function setCustomer(B2bCustomer $customer = null)
-    {
-        $this->customer = $customer;
-    }
-
-    /**
-     * @return B2bCustomer
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
@@ -994,14 +957,6 @@ class Opportunity extends ExtendOpportunity implements
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * Remove Customer
-     */
-    public function removeCustomer()
-    {
-        $this->customer = null;
     }
 
     /**

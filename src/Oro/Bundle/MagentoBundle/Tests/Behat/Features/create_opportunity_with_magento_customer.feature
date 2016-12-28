@@ -1,3 +1,5 @@
+@skip
+#todo: CRM-7282. Rewrite feature according to new functionality
 Feature: Create opportunity with magento customer
 
   Scenario: Required fields

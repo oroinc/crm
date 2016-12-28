@@ -216,7 +216,9 @@ oro:
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
-            customer_association.label : Customer
+            customer_association:
+                label :           Customer
+                description:      A customer or an account the opportunity is created for
 
             add_entity:           Add opportunity
 
@@ -235,8 +237,8 @@ oro:
                     recently_closed: Recently Closed Opportunities
             relevant_opportunities:  Relevant Opportunities
             create.label: Create Opportunity
-            importexport.invalid_currency: 'Error in row #%row%. The next currency %currency% not available in current organization.'
-            importexport.invalid_currencies: 'Error in row #%row%. The next currencies %currencies% not available in current organization.'
+            importexport.invalid_currency: 'The next currency %currency% not available in current organization.'
+            importexport.invalid_currencies: 'The next currencies %currencies% not available in current organization.'
 
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
@@ -477,6 +479,9 @@ oro:
             id.label:                   Id
             account.label:              Account
             customer_association_label: Customer
+            importexport.empty_account: 'Customer Account must not be empty.'
+            importexport.multiple_association: 'Association with multiple Customers is not allowed.'
+            importexport.not_matched_account: 'Customer does not match the Account.'
 
         widgets:
             b2bcustomer_information: Business Customer Information
@@ -527,3 +532,5 @@ oro:
         customers:
             opportunities:
                 grid.label: Opportunities
+            leads:
+                grid.label: Leads

@@ -69,7 +69,7 @@ class DashboardControllerTest extends WebTestCase
         $this->assertContains('Average order amount', $result->getContent());
 
         /** @var Channel[] $channels */
-        $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')->findAll();
+        $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')->findBy(['channelType' => 'magento']);
         foreach ($channels as $channel) {
             $this->assertContains($channel->getName(), $result->getContent());
         }

@@ -11,14 +11,19 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use Oro\Component\PhpUtils\ArrayUtil;
 
-use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
-use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 
 class CustomerType extends AbstractType
 {
@@ -43,6 +48,9 @@ class CustomerType extends AbstractType
     /** @var ManagerInterface */
     protected $gridManager;
 
+    /** @var EntityNameResolver */
+    protected $entityNameResolver;
+
     /**
      * @param DataTransformerInterface      $transformer
      * @param ConfigProvider                $customerConfigProvider
@@ -51,6 +59,7 @@ class CustomerType extends AbstractType
      * @param TranslatorInterface           $translator
      * @param SecurityFacade                $securityFacade
      * @param ManagerInterface              $gridManager
+     * @param EntityNameResolver            $entityNameResolver
      */
     public function __construct(
         DataTransformerInterface $transformer,
@@ -59,15 +68,17 @@ class CustomerType extends AbstractType
         CustomerIconProviderInterface $customerIconProvider,
         TranslatorInterface $translator,
         SecurityFacade $securityFacade,
-        ManagerInterface $gridManager
+        ManagerInterface $gridManager,
+        EntityNameResolver $entityNameResolver
     ) {
-        $this->transformer            = $transformer;
+        $this->transformer = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
-        $this->entityAliasResolver    = $entityAliasResolver;
-        $this->customerIconProvider   = $customerIconProvider;
-        $this->translator             = $translator;
-        $this->securityFacade         = $securityFacade;
-        $this->gridManager            = $gridManager;
+        $this->entityAliasResolver = $entityAliasResolver;
+        $this->customerIconProvider = $customerIconProvider;
+        $this->translator = $translator;
+        $this->securityFacade = $securityFacade;
+        $this->gridManager = $gridManager;
+        $this->entityNameResolver = $entityNameResolver;
     }
 
     /**
@@ -102,6 +113,34 @@ class CustomerType extends AbstractType
             },
             $view->vars['createCustomersData']
         );
+
+        if ($form->getData()) {
+            $view->vars['attr']['data-selected-data'] = $this->getSelectedData($form);
+        }
+    }
+
+    protected function getSelectedData(FormInterface $form)
+    {
+        /** @var Customer $target */
+        $customer = $form->getData();
+
+        $target = $customer->getTarget();
+        $className = ClassUtils::getClass($target);
+        $identifier = $target->getId();
+
+        $item = [
+            'id'   => json_encode(
+                [
+                    'entityClass' => $className,
+                    'entityId'    => $identifier,
+                ]
+            )
+            ,
+            'text' => $this->entityNameResolver->getName($target),
+            'icon' => $this->customerIconProvider->getIcon($target),
+        ];
+
+        return json_encode([$item]);
     }
 
     /**
@@ -134,7 +173,9 @@ class CustomerType extends AbstractType
                         'placeholder'             => 'oro.sales.form.choose_account',
                         'separator'               => ';',
                         'minimumInputLength'      => 1,
+                        'per_page'                => CustomerSearchHandler::AMOUNT_SEARCH_RESULT,
                         'route_name'              => 'oro_sales_customers_form_autocomplete_search',
+                        'dropdownCssClass'        => 'sales-account-autocomplete',
                         'selection_template_twig' => 'OroSalesBundle:Autocomplete:customer/selection.html.twig',
                         'result_template_twig'    => 'OroSalesBundle:Autocomplete:customer/result.html.twig',
                         'route_parameters'        => [

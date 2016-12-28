@@ -559,7 +559,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setStore($store)
                 ->setFirstName($contact->getFirstName())
                 ->setLastName($contact->getLastName())
-                ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
                 ->setVat(mt_rand(10000000, 99999999))
                 ->setGroup($group)
@@ -571,6 +570,10 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setOrganization($organization)
                 ->setOwner($this->getRandomOwner())
                 ->setDataChannel($channel);
+
+            if ($contact->getPrimaryEmail()) {
+                $customer->setEmail($contact->getPrimaryEmail()->getEmail());
+            }
 
             $om->persist($customer);
             $customers[] = $customer;
