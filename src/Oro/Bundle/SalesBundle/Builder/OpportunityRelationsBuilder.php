@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Builder;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRelationsBuilder
@@ -14,25 +17,32 @@ class OpportunityRelationsBuilder
 
     public function buildCustomer(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomer();
-        if (!$customer) {
+        if (!$opportunity->getCustomerAssociation()) {
             return;
+        }
+
+        $customer = $opportunity->getCustomerAssociation()->getTarget();
+
+        if ($customer instanceof ChannelAwareInterface && !$customer->getDataChannel()) {
+            // new customer needs a channel
+            $customer->setDataChannel($opportunity->getDataChannel());
         }
 
         if (!$customer->getOrganization()) {
             $customer->setOrganization($opportunity->getOrganization());
         }
 
-        $this->buildCustomerContact($opportunity);
+        if ($customer instanceof B2bCustomer) {
+            $this->buildCustomerContact($opportunity);
+        }
     }
 
     public function buildAccount(Opportunity $opportunity)
     {
-        $customer = $opportunity->getCustomer();
-        if (!$customer) {
+        if (!$opportunity->getCustomerAssociation()) {
             return;
         }
-
+        $customer = $opportunity->getCustomerAssociation();
         $contact = $opportunity->getContact();
         $account = $customer->getAccount();
 
@@ -47,7 +57,7 @@ class OpportunityRelationsBuilder
 
     protected function buildCustomerContact(Opportunity $opportunity)
     {
-        $customer           = $opportunity->getCustomer();
+        $customer           = $opportunity->getCustomerAssociation()->getTarget();
         $opportunityContact = $opportunity->getContact();
 
         if (!$customer || !$opportunityContact || $customer->getContact()) {

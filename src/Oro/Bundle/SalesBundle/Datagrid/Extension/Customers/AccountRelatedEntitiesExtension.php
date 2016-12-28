@@ -7,7 +7,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
-class AccountOpportunitiesExtension extends OpportunitiesExtension
+class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
 {
     /**
      * {@inheritdoc}
@@ -17,6 +17,7 @@ class AccountOpportunitiesExtension extends OpportunitiesExtension
         return
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->parameters->get('customer_class') === Account::class &&
+            $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
             $this->parameters->get('customer_id');
     }
 

@@ -76,7 +76,12 @@ class OpportunityListener
             return;
         }
 
-        $customer = $entity->getCustomer();
+        if (!$entity->getCustomerAssociation()) {
+            return;
+        }
+
+        $customer = $entity->getCustomerAssociation()->getCustomerTarget();
+
         if ($customer) {
             if (!$customer->getAccount()) {
                 // new Account for new B2bCustomer
@@ -85,6 +90,7 @@ class OpportunityListener
                 $customer->setAccount($account);
             }
         }
+
         $this->relationsBuilder->buildAll($entity);
     }
 

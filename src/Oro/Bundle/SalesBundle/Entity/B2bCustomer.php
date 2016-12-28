@@ -56,8 +56,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "form_type"="oro_sales_b2bcustomer_select"
  *          },
  *          "grid"={
- *              "default"="orocrm-sales-b2bcustomers-grid",
- *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "default"="oro-sales-b2bcustomers-grid",
+ *              "context"="oro-sales-b2bcustomers-for-context-grid"
  *          },
  *         "tag"={
  *              "enabled"=true
@@ -192,24 +192,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     protected $contact;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"remove"})
-     */
-    protected $leads;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity",
-     *     mappedBy="customer",
-     *     cascade={"remove"}
-     * )
-     */
-    protected $opportunities;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
@@ -312,8 +294,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         parent::__construct();
 
-        $this->leads         = new ArrayCollection();
-        $this->opportunities = new ArrayCollection();
         $this->phones        = new ArrayCollection();
         $this->emails        = new ArrayCollection();
     }
@@ -420,82 +400,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function setContact(Contact $contact = null)
     {
         $this->contact = $contact;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getLeads()
-    {
-        return $this->leads;
-    }
-
-    /**
-     * @param ArrayCollection $leads
-     */
-    public function setLeads(ArrayCollection $leads)
-    {
-        $this->leads = $leads;
-    }
-
-    /**
-     * @param Lead $lead
-     */
-    public function addLead(Lead $lead)
-    {
-        if (!$this->getLeads()->contains($lead)) {
-            $this->getLeads()->add($lead);
-            $lead->setCustomer($this);
-        }
-    }
-
-    /**
-     * @param Lead $lead
-     */
-    public function removeLead(Lead $lead)
-    {
-        if ($this->getLeads()->contains($lead)) {
-            $this->getLeads()->removeElement($lead);
-            $lead->removeCustomer();
-        }
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getOpportunities()
-    {
-        return $this->opportunities;
-    }
-
-    /**
-     * @param ArrayCollection $opportunities
-     */
-    public function setOpportunities(ArrayCollection $opportunities)
-    {
-        $this->opportunities = $opportunities;
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function addOpportunity(Opportunity $opportunity)
-    {
-        if (!$this->getOpportunities()->contains($opportunity)) {
-            $this->getOpportunities()->add($opportunity);
-            $opportunity->setCustomer($this);
-        }
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function removeOpportunity(Opportunity $opportunity)
-    {
-        if ($this->getOpportunities()->contains($opportunity)) {
-            $this->getOpportunities()->removeElement($opportunity);
-            $opportunity->removeCustomer();
-        }
     }
 
     /**

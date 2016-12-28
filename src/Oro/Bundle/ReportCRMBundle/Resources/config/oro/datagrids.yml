@@ -82,7 +82,7 @@ datagrids:
                     - a.name
                 join:
                     inner:
-                        - { join: o.customer, alias: c }
+                        - { join: o.customerAssociation, alias: c }
                         - { join: c.account, alias: a }
                         - { join: o.status, alias: s }
                 groupBy:  a.id
