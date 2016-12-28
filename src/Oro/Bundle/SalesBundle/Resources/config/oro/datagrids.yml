@@ -1755,6 +1755,7 @@ datagrids:
                 select:
                     - l.id
                     - l.name
+                    - l.createdAt
                     - l.firstName
                     - l.lastName
                     - email.email
@@ -1782,6 +1783,9 @@ datagrids:
                 label:         oro.sales.lead.last_name.label
             email:
                 label:         oro.sales.lead.email.label
+            createdAt:
+                renderable:     false
+                frontend_type:  datetime
         sorters:
             columns:
                 name:
@@ -1794,6 +1798,8 @@ datagrids:
                     data_name: l.lastName
                 email:
                     data_name: email.email
+                createdAt:
+                    data_name: l.createdAt
             default:
                 createdAt:  DESC
         filters:
@@ -1831,6 +1837,7 @@ datagrids:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
@@ -1856,6 +1863,9 @@ datagrids:
                 label:         oro.contact.email.label
             ownerName:
                 label:         oro.sales.opportunity.owner.label
+            createdAt:
+                renderable: false
+                frontend_type: datetime
         fields_acl:
             columns:
                 name:
@@ -1876,6 +1886,8 @@ datagrids:
                     data_name: email.email
                 ownerName:
                     data_name: ownerName
+                createdAt:
+                    data_name: o.createdAt
             default:
                 createdAt: DESC
         filters:
