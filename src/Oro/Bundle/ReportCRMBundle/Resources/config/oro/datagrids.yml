@@ -416,7 +416,7 @@ datagrids:
             ownerName:        { label: oro.reportcrm.datagrid.columns.ownerName,        frontend_type: string }
             inProgressCount:  { label: oro.reportcrm.datagrid.columns.inProgressCount,  frontend_type: integer }
             budgetAmount:     { label: oro.reportcrm.datagrid.columns.budgetAmount,     frontend_type: currency }
-            weightedForecast: { label: oro.report.datagrid.columns.weightedForecast, frontend_type: currency }
+            weightedForecast: { label: oro.reportcrm.datagrid.columns.weightedForecast, frontend_type: currency }
         sorters:
             columns:
                 ownerName:        { data_name: ownerName }
