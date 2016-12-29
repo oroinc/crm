@@ -111,7 +111,7 @@ oro:
                 order_is_guest:
                     label: Is Guest
                 is_subscriber:
-                    label: Is a Subscriber
+                    label: Is Subscriber
                     yes: Yes
                     no: No
                     unknown: Not defined
@@ -177,6 +177,7 @@ oro:
             contact.label:       Contact
             account.label:       Account
             addresses.label:     Addresses
+            primary_addr.label:  Primary Address
             carts.label:         Carts
             channel.label:       Integration
             data_channel.label:  Channel

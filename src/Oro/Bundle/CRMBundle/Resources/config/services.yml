@@ -1,6 +1,11 @@
 parameters:
 
 services:
+    oro_crm.extension.transtation_packages_provider:
+        class: 'Oro\Bundle\CRMBundle\Provider\TranslationPackagesProviderExtension'
+        tags:
+            - {name: oro_translation.extension.packages_provider}
+
     oro_crm.namespace_migration_provider:
         class: 'Oro\Bundle\CRMBundle\Cache\NamespaceMigrationProvider'
         tags:

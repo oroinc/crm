@@ -1,11 +1,13 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\Api\Rest;
+namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
+ * @group crm
+ *
  * @outputBuffering enabled
  * @dbIsolation
  */
@@ -25,32 +27,55 @@ class ChannelApiControllerTest extends WebTestCase
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($channels);
-        $this->assertCount(2, $channels);
+        $this->assertCount($this->getExpectedCountForCget(), $channels);
+    }
+
+    /**
+     * @return int
+     */
+    protected function getExpectedCountForCget()
+    {
+        return 2;
     }
 
     public function testCgetWithActiveFilter()
     {
-        /** @var Channel $activeChannel */
-        $activeChannel = $this->getReference('channel_1');
-
-        /** @var Channel $inactiveChannel */
-        $inactiveChannel = $this->getReference('channel_2');
-
         //fetch active channels
         $url = $this->getUrl('oro_api_get_channels', ['active' => 'false']);
         $this->client->request('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
-
-        $this->assertNotEmpty($channels);
-        $this->assertCount(1, $channels);
-        $this->assertEquals($channels[0]['name'], $inactiveChannel->getName());
+        $this->assertInactiveChannels($channels);
 
         //fetch inactive channels
         $url = $this->getUrl('oro_api_get_channels', ['active' => 'true']);
         $this->client->request('GET', $url);
 
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
+        $this->assertActiveChannels($channels);
+    }
+
+    /**
+     * @param array $channels
+     */
+    protected function assertInactiveChannels($channels)
+    {
+        /** @var Channel $inactiveChannel */
+        $inactiveChannel = $this->getReference('channel_2');
+
+        $this->assertNotEmpty($channels);
+        $this->assertCount(1, $channels);
+        $this->assertEquals($channels[0]['name'], $inactiveChannel->getName());
+    }
+
+    /**
+     * @param array $channels
+     */
+    protected function assertActiveChannels($channels)
+    {
+        /** @var Channel $activeChannel */
+        $activeChannel = $this->getReference('channel_1');
 
         $this->assertNotEmpty($channels);
         $this->assertCount(1, $channels);

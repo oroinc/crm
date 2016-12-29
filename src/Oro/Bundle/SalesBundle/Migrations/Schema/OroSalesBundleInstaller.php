@@ -26,7 +26,7 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v2_1\AddCustomersTable;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_29\AddCustomersTable;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_3';
+        return 'v1_31';
     }
 
     /**

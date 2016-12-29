@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
@@ -22,10 +24,17 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
+            return 0.0;
+        }
+
+        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->from($identityFQCN, 'e');
+        $qb->join(CustomerAssociation::class, 'ca', 'WITH', sprintf('ca.%s = e', $field));
         $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
-        $qb->andWhere('e.account = :account');
+        $qb->andWhere('ca.account = :account');
         $qb->setParameter('account', $account);
 
         if (null !== $channel) {

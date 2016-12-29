@@ -62,6 +62,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
  * )
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Opportunity extends ExtendOpportunity implements

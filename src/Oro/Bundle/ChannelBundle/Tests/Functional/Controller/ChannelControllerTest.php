@@ -14,6 +14,8 @@ use Oro\Component\Testing\ResponseExtension;
 use Symfony\Component\Form\Form;
 
 /**
+ * @group crm
+ *
  * @outputBuffering enabled
  * @dbIsolation
  */
