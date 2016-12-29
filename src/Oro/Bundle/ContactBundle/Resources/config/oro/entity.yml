@@ -18,6 +18,17 @@ oro_entity:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
 
+    virtual_relations:
+        Oro\Bundle\ContactBundle\Entity\Contact:
+            primaryAddr:
+                relation_type: oneToOne
+                related_entity_name: Oro\Bundle\ContactBundle\Entity\ContactAddress
+                label: oro.contact.primary_addr.label
+                query:
+                    join:
+                        left:
+                            - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+
     entity_aliases:
         Oro\Bundle\ContactBundle\Entity\Group:
             alias:        contactgroup
