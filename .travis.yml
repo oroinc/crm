@@ -33,5 +33,5 @@ before_script:
 
 script:
   - ./vendor/bin/phpunit
-  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platfrom/build/phpcs.xml
-  - if [[ $DIFF ]]; then ./vendor/bin/phpmd ${DIFF//$'\n'/,} text ./vendor/oro/platfrom/build/phpmd.xml --suffixes php; fi
+  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platform/build/phpcs.xml
+  - if [[ $DIFF ]]; then ./vendor/bin/phpmd ${DIFF//$'\n'/,} text ./vendor/oro/platform/build/phpmd.xml --suffixes php; fi
