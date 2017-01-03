@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\CRMBundle\Provider\Tests\Unit;
+namespace Oro\Bundle\CRMBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\CRMBundle\Provider\TranslationPackagesProviderExtension;
 
