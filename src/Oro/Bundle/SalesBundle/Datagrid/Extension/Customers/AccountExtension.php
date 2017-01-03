@@ -45,11 +45,11 @@ class AccountExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
-            $config->getDatasourceType() === OrmDatasource::TYPE &&
-            $this->customerConfigProvider->isCustomerClass($this->getEntity($config)) &&
-            $config->getOrmQuery()->getRootAlias() &&
-            !$this->isReportOrSegmentGrid($config) &&
-            !$this->isDisabled();
+            $config->isOrmDatasource()
+            && !$this->isDisabled()
+            && !$this->isReportOrSegmentGrid($config)
+            && $config->getOrmQuery()->getRootAlias()
+            && $this->customerConfigProvider->isCustomerClass($this->getEntity($config));
     }
 
     /**
@@ -64,8 +64,8 @@ class AccountExtension extends AbstractExtension
         $gridName = $config->getName();
 
         return
-            strpos($gridName, 'oro_report') === 0 ||
-            strpos($gridName, 'oro_segment') === 0;
+            0 === strpos($gridName, 'oro_report')
+            || 0 === strpos($gridName, 'oro_segment');
     }
 
     /**
@@ -76,8 +76,8 @@ class AccountExtension extends AbstractExtension
         $parameters = $this->getParameters()->get(self::CUSTOMER_ROOT_PARAM);
 
         return
-            $parameters &&
-            !empty($parameters[self::DISABLED_PARAM]);
+            $parameters
+            && !empty($parameters[self::DISABLED_PARAM]);
     }
 
     /**
@@ -136,7 +136,7 @@ class AccountExtension extends AbstractExtension
      */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
-        /** @var $datasource OrmDataSource */
+        /** @var OrmDatasource $datasource */
         $customerClass = $this->getEntity($config);
         $customerField = $this->getCustomerField($customerClass);
         $queryBuilder = $datasource->getQueryBuilder();

@@ -21,7 +21,7 @@ class ChannelLimitationExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
-            $config->getDatasourceType() === OrmDatasource::TYPE
+            $config->isOrmDatasource()
             && $this->getParameters()->get('channelIds', false);
     }
 
@@ -44,9 +44,8 @@ class ChannelLimitationExtension extends AbstractExtension
      */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
-        $path = $config->offsetGetByPath(self::CHANNEL_RELATION_OPTION_PATH);
-
         /** @var OrmDatasource $datasource */
+        $path = $config->offsetGetByPath(self::CHANNEL_RELATION_OPTION_PATH);
         $queryBuilder = $datasource->getQueryBuilder();
         if (strpos($path, '.') !== false) {
             list($mainEntity, $relationName) = explode('.', $path);
