@@ -1,4 +1,15 @@
 oro_entity:
+    virtual_relations:
+        OroCRM\Bundle\MagentoBundle\Entity\Customer:
+            primaryAddr:
+                relation_type: oneToMany
+                related_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Address
+                label: orocrm.magento.customer.primary_addr.label
+                query:
+                    join:
+                        left:
+                            - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+
     entity_aliases:
         OroCRM\Bundle\MagentoBundle\Entity\Address:
             alias:        magentoaddress

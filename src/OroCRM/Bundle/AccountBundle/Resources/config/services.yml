@@ -103,3 +103,8 @@ services:
             - 'owner'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-accounts-activity-grid, method: onResultBefore }
+
+    orocrm_account.accounts_view_list:
+        class: OroCRM\Bundle\AccountBundle\Datagrid\AccountsViewList
+        arguments:
+            - @translator

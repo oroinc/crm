@@ -75,6 +75,7 @@ orocrm:
         phones.label:        Phones
         primary_email.label: Primary Email
         primary_phone.label: Primary Phone
+        primary_addr.label:  Primary Address
         skype.label:         Skype
         social.label:        Social
         source.label:        Source

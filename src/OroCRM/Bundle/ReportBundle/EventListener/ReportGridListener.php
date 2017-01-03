@@ -21,6 +21,8 @@ class ReportGridListener
      * Event: oro_datagrid.datagrid.build.before.orocrm_report-opportunities-won_by_period
      *
      * @param BuildBefore $event
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function onBuildBefore(BuildBefore $event)
     {
@@ -66,24 +68,31 @@ class ReportGridListener
 
         // and setup separate sorting column, used as well in grouping, but not affecting grouping result
         // period will be always the first column, unless changed in datagrid.yml
+        // Use sorters configuration from datagrids.yml for "Period" = "All", not apply period sorting and grouping
+        $groupAlias = '';
+        $sortAlias = '';
         if ($period == 'yearPeriod') {
             $groupAlias = $period;
             $sortAlias = $period;
-        } else {
+        } elseif ($period !== '') {
             $groupAlias = $period;
             $sortAlias  = sprintf('%sSorting', $period);
         }
 
-        $config->offsetSetByPath('[source][query][groupBy]', $groupAlias);
+        if ($groupAlias) {
+            $config->offsetSetByPath('[source][query][groupBy]', $groupAlias);
+        }
 
-        $config->offsetSetByPath(
-            sprintf(
-                '%s[%s][%s]',
-                OrmSorterConfiguration::COLUMNS_PATH,
-                self::PERIOD_COLUMN_NAME,
-                PropertyInterface::DATA_NAME_KEY
-            ),
-            $sortAlias
-        );
+        if ($sortAlias) {
+            $config->offsetSetByPath(
+                sprintf(
+                    '%s[%s][%s]',
+                    OrmSorterConfiguration::COLUMNS_PATH,
+                    self::PERIOD_COLUMN_NAME,
+                    PropertyInterface::DATA_NAME_KEY
+                ),
+                $sortAlias
+            );
+        }
     }
 }
