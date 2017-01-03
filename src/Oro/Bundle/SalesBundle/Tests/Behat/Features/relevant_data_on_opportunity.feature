@@ -1,5 +1,4 @@
 @not-automated
-@draft
 Feature: Display relevant data on Opportunity view
   In order to have 360-degree account view
   As Sales Rep
