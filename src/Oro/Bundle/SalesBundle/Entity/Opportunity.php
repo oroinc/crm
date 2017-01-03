@@ -287,9 +287,9 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * Changes to this value object wont affect entity change set
-     * To change persisted price value you should create and set new Multicurrency
+     * To change persisted price value you should create and set new MultiCurrency
      *
-     * @var Multicurrency
+     * @var MultiCurrency
      */
     protected $closeRevenue;
 
