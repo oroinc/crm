@@ -2,19 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
-use Doctrine\ORM\Query\Expr;
-
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
-
+use Oro\Bundle\EntityBundle\ORM\EntityClassResolver;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-
-use Oro\Bundle\DataGridBundle\Tools\GridConfigurationHelper;
-
-use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountExtension extends AbstractExtension
@@ -27,21 +22,21 @@ class AccountExtension extends AbstractExtension
     /** @var ConfigProvider */
     protected $customerConfigProvider;
 
-    /** @var GridConfigurationHelper */
-    protected $gridConfigurationHelper;
+    /** @var EntityClassResolver */
+    protected $entityClassResolver;
 
     protected $entityClassName;
 
     /**
-     * @param ConfigProvider          $customerConfigProvider
-     * @param GridConfigurationHelper $gridConfigurationHelper
+     * @param ConfigProvider      $customerConfigProvider
+     * @param EntityClassResolver $entityClassResolver
      */
     public function __construct(
         ConfigProvider $customerConfigProvider,
-        GridConfigurationHelper $gridConfigurationHelper
+        EntityClassResolver $entityClassResolver
     ) {
         $this->customerConfigProvider = $customerConfigProvider;
-        $this->gridConfigurationHelper = $gridConfigurationHelper;
+        $this->entityClassResolver = $entityClassResolver;
     }
 
     /**
@@ -52,7 +47,7 @@ class AccountExtension extends AbstractExtension
         return
             $config->getDatasourceType() === OrmDatasource::TYPE &&
             $this->customerConfigProvider->isCustomerClass($this->getEntity($config)) &&
-            $this->gridConfigurationHelper->getEntityRootAlias($config) &&
+            $config->getOrmQuery()->getRootAlias() &&
             !$this->isReportOrSegmentGrid($config) &&
             !$this->isDisabled();
     }
@@ -146,13 +141,11 @@ class AccountExtension extends AbstractExtension
         $customerField = $this->getCustomerField($customerClass);
         $queryBuilder = $datasource->getQueryBuilder();
 
-        $rootAlias = $this->gridConfigurationHelper->getEntityRootAlias($config);
-
         $queryBuilder->leftJoin(
             Customer::class,
             'customerAssociation',
             'WITH',
-            sprintf('customerAssociation.%s = %s', $customerField, $rootAlias)
+            sprintf('customerAssociation.%s = %s', $customerField, $config->getOrmQuery()->getRootAlias())
         );
         $queryBuilder->leftJoin('customerAssociation.account', 'associatedAccount');
         $queryBuilder->addSelect(sprintf('associatedAccount.name as %s', static::COLUMN_NAME));
@@ -176,7 +169,7 @@ class AccountExtension extends AbstractExtension
     protected function getEntity(DatagridConfiguration $config)
     {
         if ($this->entityClassName === null) {
-            $this->entityClassName = $this->gridConfigurationHelper->getEntity($config);
+            $this->entityClassName = $config->getOrmQuery()->getRootEntity($this->entityClassResolver, true);
         }
 
         return $this->entityClassName;

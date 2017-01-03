@@ -121,7 +121,7 @@ class ChannelVoterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($isChannelSystem));
 
         /** @var TokenInterface $token */
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)
@@ -156,6 +156,6 @@ class ChannelVoterTest extends \PHPUnit_Framework_TestCase
      */
     protected function getChannel()
     {
-        return $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        return $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
     }
 }
