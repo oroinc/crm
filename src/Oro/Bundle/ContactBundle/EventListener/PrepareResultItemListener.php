@@ -2,8 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\EventListener;
 
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class PrepareResultItemListener
 {
@@ -11,11 +13,19 @@ class PrepareResultItemListener
     protected $nameFormatter;
 
     /**
-     * @param ContactNameFormatter $nameFormatter
+     * @var DoctrineHelper
      */
-    public function __construct(ContactNameFormatter $nameFormatter)
+    protected $doctrineHelper;
+
+    /**
+     * PrepareResultItemListener constructor.
+     * @param ContactNameFormatter $nameFormatter
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function __construct(ContactNameFormatter $nameFormatter, DoctrineHelper $doctrineHelper)
     {
         $this->nameFormatter = $nameFormatter;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -30,6 +40,14 @@ class PrepareResultItemListener
         }
 
         $resultItem = $event->getResultItem();
-        $resultItem->setRecordTitle($this->nameFormatter->format($resultItem->getEntity()));
+
+        /** @var Contact $entity */
+        $entity = $this
+            ->doctrineHelper
+            ->getEntityRepository($resultItem->getEntityName())
+            ->find($resultItem->getId());
+
+
+        $resultItem->setRecordTitle($this->nameFormatter->format($entity));
     }
 }

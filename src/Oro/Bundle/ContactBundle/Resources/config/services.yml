@@ -292,6 +292,7 @@ services:
         class: '%oro_contact.listener.prepare_result_item_listener.class%'
         arguments:
             - '@oro_contact.formatter.contact_entity_name'
+            - '@oro_entity.doctrine_helper'
         tags:
             - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
 

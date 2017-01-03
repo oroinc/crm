@@ -127,3 +127,6 @@ UPGRADE FROM 1.10 to 2.0
 
 ####OroSecurityBundle:
 - Added fixture data loader `Oro\Bundle\SecurityBundle\Migrations\Data\ORM\AbstractLoadAclData` to provide easy way for setting default ACLs for Roles
+
+####ContactBundle:
+ - Constructor of `Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener` was changed. Added `Oro\Bundle\EntityBundle\ORM\DoctrineHelper` as last argument.
