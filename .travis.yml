@@ -10,6 +10,7 @@ branches:
 php:
     - 5.6
     - 7.0
+    - 7.1
 
 cache:
   directories:
@@ -20,12 +21,17 @@ before_script:
   - phpenv config-rm xdebug.ini
   - phpenv config-add travis.php.ini
   - composer self-update
+  - composer config minimum-stability dev
+  - composer config prefer-stable true
   - composer config repositories.oro composer https://packagist.orocrm.com
+  - composer require --no-update --dev "phpunit/phpunit:5.7.*"
+  - composer require --no-update --dev "squizlabs/php_codesniffer:2.7.*"
+  - composer require --no-update --dev "phpmd/phpmd:2.5.*"
   - composer global show fxp/composer-asset-plugin 1.2.2 || composer global require fxp/composer-asset-plugin:1.2.2
   - travis_wait composer update --prefer-dist --optimize-autoloader --no-interaction  --no-suggest --prefer-stable
-  - DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$")
+  - set +e; DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$"); set -e;
 
 script:
   - ./vendor/bin/phpunit
-  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platfrom/build/phpcs.xml
-  - if [[ $DIFF ]]; then ./vendor/bin/phpmd ${DIFF//$'\n'/,} text ./vendor/oro/platfrom/build/phpmd.xml --suffixes php; fi
+  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=./vendor/oro/platform/build/phpcs.xml
+  - if [[ $DIFF ]]; then ./vendor/bin/phpmd ${DIFF//$'\n'/,} text ./vendor/oro/platform/build/phpmd.xml --suffixes php; fi

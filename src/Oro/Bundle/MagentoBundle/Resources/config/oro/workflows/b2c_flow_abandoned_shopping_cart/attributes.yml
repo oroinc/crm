@@ -15,7 +15,9 @@ workflows:
                options:
                    class: Oro\Bundle\UserBundle\Entity\User
            opportunity_budget:
-               type: float
+               type: object
+               options:
+                   class: Oro\Bundle\CurrencyBundle\Entity\MultiCurrency
            account:
                type: entity
                options:
