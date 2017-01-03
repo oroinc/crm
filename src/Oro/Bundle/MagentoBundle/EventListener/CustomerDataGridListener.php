@@ -71,33 +71,28 @@ class CustomerDataGridListener
      */
     protected function addNewsletterSubscribers(DatagridConfiguration $config)
     {
-        $query = $config->offsetGetByPath('[source][query]', []);
-        foreach ($query['select'] as &$field) {
+        $query = $config->getOrmQuery();
+        $selects = $query->getSelect();
+        foreach ($selects as &$field) {
             if ($field === 'c.id') {
                 $field = 'DISTINCT ' . $field;
+                $query->setSelect($selects);
                 break;
             }
         }
-        $query['select'][] = "CASE WHEN
-                transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL
-            THEN (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 'yes' ELSE 'no' END)
-            ELSE 'unknown'
-            END as isSubscriber";
-
-        $query['join']['left'][] = [
-            'join' => 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
-            'alias' => 'transport',
-            'conditionType' => 'WITH',
-            'condition' => 'channel.transport = transport'
-        ];
-        $query['join']['left'][] = [
-            'join' => 'c.newsletterSubscribers',
-            'alias' => 'newsletterSubscribers'
-        ];
-        $query['join']['left'][] = [
-            'join' => 'newsletterSubscribers.status',
-            'alias' => 'newsletterSubscriberStatus'
-        ];
-        $config->offsetSetByPath('[source][query]', $query);
+        $query->addSelect(
+            'CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL'
+            . ' THEN (CASE WHEN newsletterSubscriberStatus.id = \'1\' THEN \'yes\' ELSE \'no\' END)'
+            . ' ELSE \'unknown\''
+            . ' END as isSubscriber'
+        );
+        $query->addLeftJoin(
+            'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+            'transport',
+            'WITH',
+            'channel.transport = transport'
+        );
+        $query->addLeftJoin('c.newsletterSubscribers', 'newsletterSubscribers');
+        $query->addLeftJoin('newsletterSubscribers.status', 'newsletterSubscriberStatus');
     }
 }

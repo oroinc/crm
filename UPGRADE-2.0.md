@@ -1,4 +1,4 @@
-UPGRADE FROM 1.10 to 2.0 
+UPGRADE FROM 1.10 to 2.0
 ========================
 
 ####General
@@ -7,10 +7,10 @@ UPGRADE FROM 1.10 to 2.0
   Command have to be run only one time. In next releases 2.x to apply release changes it will be enough run the command "oro:platform:update".
   Upgrade from version less then 1.10 is not supported.
 - Changed minimum required php version to 5.6
-- Field `dataChannel` for `Lead` and `Opportunity` was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name `data_channel`. 
+- Field `dataChannel` for `Lead` and `Opportunity` was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name `data_channel`.
 
 ###SOAP API was removed
-- removed all dependencies to the `besimple/soap-bundle` bundle. 
+- removed all dependencies to the `besimple/soap-bundle` bundle.
 - removed SOAP annotations from the entities. Updated entities:
     - Oro\Bundle\AccountBundle\Entity\Account
     - Oro\Bundle\ContactBundle\Entity\Contact
@@ -72,6 +72,7 @@ UPGRADE FROM 1.10 to 2.0
 - Data girds `sales-funnel-lead-with-data-channel-grid` and `sales-funnel-opportunity-with-data-channel-grid` were removed
 - Validation NotBlank for field `dataChannel` of entities `Oro\Bundle\ContactUsBundle\Entity\ContactRequest, Oro\Bundle\SalesBundle\Entity\Opportunity, Oro\Bundle\SalesBundle\Entity\Lead` was removed
 - Configurations of data grids `sales-opportunity-for-context-grid, sales-lead-for-context-grid, sales-lead-grid, sales-opportunity-grid` were updated. There were deleted configurations channelName in the sections columns, filters, sorters.
+- Changed signature of constructor of `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`. The argument `GridConfigurationHelper $gridConfigurationHelper` was replaces with `EntityClassResolver $entityClassResolver`.
 
 ####OroCaseBundle:
 - `OroCRM/Bundle/CaseBundle/Entity/CaseMailboxProcessSettings` extends `Oro\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings`
@@ -86,6 +87,7 @@ UPGRADE FROM 1.10 to 2.0
 - The `Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor` now implements `Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface`
 - The class `Oro\Bundle\MagentoBundle\Command\CartExpirationSyncCommand` renamed to `Oro\Bundle\MagentoBundle\Command\SyncCartExpirationCommand`.
 - The `Oro\Bundle\MagentoBundle\Command\InitialSyncCommand` command was removed.
+- Removed constant `SELECT_PATH` from `Oro\Bundle\MagentoBundle\EventListener\OrderGridListener`
 
 ####OroChannelBundle:
 - The event `orocrm_channel.channel.status_change` was removed. Use the message queue topic `oro.channel.channel_status_changed` instead.
