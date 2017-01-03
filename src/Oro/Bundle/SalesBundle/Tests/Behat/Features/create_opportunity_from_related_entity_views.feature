@@ -1,5 +1,4 @@
-@non-automated
-@draft
+@not-automated
 Feature: Create Opportunity from related entity views
   In order to ease opportunity management
   as a Sales Rep
