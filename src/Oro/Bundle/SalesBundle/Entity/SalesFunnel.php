@@ -10,8 +10,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
 
 /**
@@ -27,7 +25,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *      routeView="oro_sales_salesfunnel_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-filter"
+ *              "icon"="fa-filter"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -52,11 +50,9 @@ use Oro\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  * @deprecated since 2.0 will be removed after 2.2
  */
 class SalesFunnel extends ExtendSalesFunnel implements
-    ChannelAwareInterface,
     FirstNameInterface,
     EmailHolderInterface
 {
-    use ChannelEntityTrait;
     /**
      * @var integer
      *

@@ -13,8 +13,9 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
 
 class ChannelDoctrineListener
 {
@@ -29,6 +30,9 @@ class ChannelDoctrineListener
     /** @var LifetimeHistoryRepository */
     protected $lifetimeRepo;
 
+    /** @var CustomerRepository */
+    protected $customerRepo;
+
     /** @var array */
     protected $queued = [];
 
@@ -41,8 +45,9 @@ class ChannelDoctrineListener
     /**
      * @param SettingsProvider $settingsProvider
      */
-    public function __construct(SettingsProvider $settingsProvider)
-    {
+    public function __construct(
+        SettingsProvider $settingsProvider
+    ) {
         $settings = $settingsProvider->getLifetimeValueSettings();
         foreach ($settings as $singleChannelTypeData) {
             $this->customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
@@ -62,7 +67,12 @@ class ChannelDoctrineListener
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
-                $this->scheduleUpdate($className, $entity->getAccount(), $entity->getDataChannel());
+                $account = $this->getAccount($entity);
+                $this->scheduleUpdate(
+                    $className,
+                    $account,
+                    $entity->getDataChannel()
+                );
             }
         }
     }
@@ -139,7 +149,7 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @return array|CustomerIdentityInterface[]
+     * @return array|[]
      */
     protected function getChangedTrackedEntities()
     {
@@ -162,22 +172,21 @@ class ChannelDoctrineListener
         return array_filter(
             $entities,
             function ($entity) {
-                return $entity instanceof CustomerIdentityInterface
-                && array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
+                return array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
             }
         );
     }
 
     /**
-     * @param CustomerIdentityInterface $entity
-     * @param array                     $changeSet
+     * @param object $entity
+     * @param array $changeSet
      */
-    protected function checkAndUpdate(CustomerIdentityInterface $entity, array $changeSet)
+    protected function checkAndUpdate($entity, array $changeSet)
     {
         $className = ClassUtils::getClass($entity);
 
         if ($this->isUpdateRequired($className, $changeSet)) {
-            $account = $entity->getAccount();
+            $account = $this->getAccount($entity);
             $channel = $entity->getDataChannel();
             $this->scheduleUpdate($className, $account, $channel);
 
@@ -270,5 +279,33 @@ class ChannelDoctrineListener
         }
 
         return $this->lifetimeRepo;
+    }
+
+    /**
+     * @return CustomerRepository
+     */
+    protected function getCustomerRepository()
+    {
+        if (null === $this->customerRepo) {
+            $this->customerRepo = $this->em->getRepository('OroSalesBundle:Customer');
+        }
+
+        return $this->customerRepo;
+    }
+
+    /**
+     * @param object $entity
+     * @return null|Account
+     */
+    protected function getAccount($entity)
+    {
+        $identityFQCN = ClassUtils::getClass($entity);
+        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+        $customer = $this->getCustomerRepository()->getCustomerByTarget($entity->getId(), $field);
+        if (!$customer) {
+            return null;
+        }
+
+        return $customer->getAccount();
     }
 }

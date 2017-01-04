@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,6 +13,8 @@ use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
+ * @group crm
+ *
  * @dbIsolationPerTest
  */
 class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
@@ -64,7 +67,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
     /**
      * @return EntityManagerInterface
      */
-    private function getEntityManager()
+    protected function getEntityManager()
     {
         return self::getContainer()->get('doctrine.orm.entity_manager');
     }

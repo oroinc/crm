@@ -165,18 +165,24 @@ oro:
                 label:            Budget amount
                 description:      The expected revenue of the opportunity
             budget_amount_value:
-                label:            Budget Amount Value
+                label:            Budget Amount
             budget_amount_currency:
                 label:            Budget Amount Currency
             budget_amount_base_currency:
-                label:            Base Budget Amount
+                label:            Budget Amount (%sign%)
+            base_budget_amount_value:
+                label:            Budget Amount (%sign%)
             close_revenue:
                 label:            Close revenue
                 description:      The actual revenue received from the opportunity after it's been closed
             close_revenue_value:
-                label:            Close revenue Value
+                label:            Close revenue
             close_revenue_currency:
                 label:            Close revenue Currency
+            base_close_revenue_value:
+                label:            Close Revenue (%sign%)
+            close_revenue_base_currency:
+                label:            Close Revenue (%sign%)
             customer_need:
                 label:            Customer need
                 description:      The detailed description of customers' needs that constitute the business opportunity
@@ -210,6 +216,9 @@ oro:
             created_at.label:     Created At
             updated_at.label:     Updated At
             closed_at.label:      Closed At
+            customer_association:
+                label :           Customer
+                description:      A customer or an account the opportunity is created for
 
             add_entity:           Add opportunity
 
@@ -226,6 +235,11 @@ oro:
                     open:            Open Opportunities
                     overdue:         Overdue Opportunities
                     recently_closed: Recently Closed Opportunities
+            relevant_opportunities:  Relevant Opportunities
+            create.label: Create Opportunity
+            importexport.invalid_currency: 'The next currency %currency% not available in current organization.'
+            importexport.invalid_currencies: 'The next currencies %currencies% not available in current organization.'
+
         #
         # Oro/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -280,6 +294,8 @@ oro:
             assigned.label:       Assigned
             primary_phone.label:  Primary Phone
             primary_email.label:  Primary Email
+            primary_addr.label:   Primary Address
+            customer_association.label : Customer
             source:
                 unclassified:     No source
                 others:           Others
@@ -455,6 +471,19 @@ oro:
             owner.label:         Owner
             primary.label:       Primary
 
+        #
+        # Entity Oro\Bundle\SalesBundle\Entity\Customer
+        #
+        customer:
+            entity_label:               Customer
+            entity_plural_label:        Customers
+            id.label:                   Id
+            account.label:              Account
+            customer_association_label: Customer
+            importexport.empty_account: 'Customer Account must not be empty.'
+            importexport.multiple_association: 'Association with multiple Customers is not allowed.'
+            importexport.not_matched_account: 'Customer does not match the Account.'
+
         widgets:
             b2bcustomer_information: Business Customer Information
             leads:                   Leads
@@ -467,7 +496,6 @@ oro:
             entity_label:            Lead Mailbox Process Settings
             entity_plural_label:     Lead Mailbox Process Settings
             id.label:                Id
-            serialized_data.label:   Serialized Data
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
@@ -485,6 +513,8 @@ oro:
                     options.tooltip: >
                         Manage opportunity statuses and assign default probabilities to them,
                         except for system statuses Closed Won and Closed Lost.
+                display_settings:
+                    title: Display settings
             fields:
                 sales_lead:
                     feature_enabled.label:                     Enable Lead
@@ -494,9 +524,14 @@ oro:
                     probability.tooltip:                       Enter default probability (%) for this status
                 sales_salesfunnel:
                     feature_enabled.label:                     Enable Sales Process
+                display_relevant_opportunities:
+                    label:                                     Display relevant opportunities
+                    tooltip:                                   If turned on, will display the list of other opportunities related to the same account at the opportunity view to give the sales rep quick access to deal history.
 
         privilege:
             category.sales_data.label: Sales Data
         customers:
             opportunities:
                 grid.label: Opportunities
+            leads:
+                grid.label: Leads

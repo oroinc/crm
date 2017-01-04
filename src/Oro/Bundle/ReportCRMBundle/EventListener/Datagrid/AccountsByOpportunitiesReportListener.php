@@ -8,7 +8,6 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class AccountsByOpportunitiesReportListener
 {
-    const SELECT_PATH = '[source][query][select]';
     const GRAND_TOTAL_PATH = '[totals][grand_total][columns]';
     const COLUMNS_PATH = '[columns]';
     const SORTERS_PATH = '[sorters][columns]';
@@ -45,7 +44,7 @@ class AccountsByOpportunitiesReportListener
         $selectTemplate = 'SUM( (CASE WHEN (s.id=\'%s\') THEN 1 ELSE 0 END) ) as %s';
         $grandTotalTemplate = "SUM( (CASE WHEN (s.id='%s') THEN 1 ELSE 0 END) )";
 
-        $selects = $config->offsetGetByPath(self::SELECT_PATH, array());
+        $selects = $config->getOrmQuery()->getSelect();
         $grandTotals = $config->offsetGetByPath(self::GRAND_TOTAL_PATH, array());
         $columns = $config->offsetGetByPath(self::COLUMNS_PATH, array());
         $sorters = $config->offsetGetByPath(self::SORTERS_PATH, array());
@@ -79,7 +78,7 @@ class AccountsByOpportunitiesReportListener
             'filter_by_having' => true
         ];
 
-        $config->offsetSetByPath(self::SELECT_PATH, $selects);
+        $config->getOrmQuery()->setSelect($selects);
         $config->offsetSetByPath(self::GRAND_TOTAL_PATH, $grandTotals);
         $config->offsetSetByPath(self::COLUMNS_PATH, $columns);
         $config->offsetSetByPath(self::SORTERS_PATH, $sorters);

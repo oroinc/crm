@@ -14,6 +14,8 @@ use Oro\Component\Testing\ResponseExtension;
 use Symfony\Component\Form\Form;
 
 /**
+ * @group crm
+ *
  * @outputBuffering enabled
  * @dbIsolation
  */
@@ -30,36 +32,6 @@ class ChannelControllerTest extends WebTestCase
         $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
         $this->client->enableReboot();
         $this->client->useHashNavigation(true);
-    }
-
-    public function testShouldSendChannelStatusChangedMessage()
-    {
-        $this->client->disableReboot();
-        $em = $this->getEntityManager();
-
-        $channel = new Channel();
-        $channel->setName('aName');
-        $channel->setEntities([CustomerIdentity::class]);
-        $channel->setChannelType('custom');
-        $channel->setCustomerIdentity(CustomerIdentity::class);
-        $em->persist($channel);
-
-        $em->flush();
-
-        $this->client->request(
-            'GET',
-            $this->getUrl('oro_channel_change_status', ['id' => $channel->getId()])
-        );
-
-        $this->assertLastResponseStatus(302);
-
-        self::assertMessageSent(
-            Topics::CHANNEL_STATUS_CHANGED,
-            new Message(
-                ['channelId' => $channel->getId()],
-                MessagePriority::HIGH
-            )
-        );
     }
 
     public function testCreateChannel()
@@ -157,24 +129,6 @@ class ChannelControllerTest extends WebTestCase
 
     /**
      * @depends testUpdateChannel
-     *
-     * @param $channel
-     */
-    public function testChangeStatusChannel($channel)
-    {
-        $crawler = $this->client->request(
-            'GET',
-            $this->getUrl('oro_channel_change_status', ['id' => $channel['id']])
-        );
-
-        $this->client->getResponse();
-        $this->assertContains('Channel deactivated', $crawler->html());
-
-        return $channel;
-    }
-
-    /**
-     * @depends testChangeStatusChannel
      *
      * @param $channel
      */

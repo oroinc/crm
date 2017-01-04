@@ -60,7 +60,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
             ->will($this->returnValue($hasApplicableChannels));
 
         /** @var TokenInterface $token */
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->assertEquals(
             $expected,
             $this->voter->vote($token, $object, $attributes)
@@ -154,7 +154,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
      */
     public function getObjectIdentity($objectIdentityClass, $className)
     {
-        $objectIdentity = $this->getMock($objectIdentityClass);
+        $objectIdentity = $this->createMock($objectIdentityClass);
         $objectIdentity->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($className));
@@ -169,8 +169,8 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
      */
     protected function getCustomer($originId = null)
     {
-        $customer = $this->getMock('Oro\Bundle\MagentoBundle\Entity\Customer');
-        $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
+        $customer = $this->createMock('Oro\Bundle\MagentoBundle\Entity\Customer');
+        $channel = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
         $customer->expects($this->any())
             ->method('getChannel')
             ->will($this->returnValue($channel));

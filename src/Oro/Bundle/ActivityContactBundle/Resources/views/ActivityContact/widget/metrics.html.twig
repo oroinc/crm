@@ -55,7 +55,7 @@
         {% if  resource_granted('VIEW', entity, last_contact_date_key) %}
             {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
         {% endif %}
-        {% set direction     = '<i class="icon-sign'
+        {% set direction     = '<i class="fa-sign-'
             ~ ( data[last_contact_date_in_key] >= data[last_contact_date_out_key] ? 'in' : 'out' )
             ~ '"></i>'
         %}

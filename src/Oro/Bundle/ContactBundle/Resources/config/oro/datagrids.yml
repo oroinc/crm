@@ -519,12 +519,16 @@ datagrids:
                     type: choice-business-unit
                     data_name: c.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                duplicate:
+                    type: duplicate
+                    data_name: email.email
+                    visible: false
         actions:
             view:
                 type: navigate
                 acl_resource: oro_contact_view
                 label: oro.grid.action.view
-                icon: eye-open
+                icon: eye
                 link: view_link
                 rowAction: true
             update:
@@ -548,6 +552,7 @@ datagrids:
             entityHint: contact
             export: true
             entity_pagination: true
+        views_list: '@oro_contact.contacts_view_list'
 
     # assigned accounts grid
     contact-accounts-grid:

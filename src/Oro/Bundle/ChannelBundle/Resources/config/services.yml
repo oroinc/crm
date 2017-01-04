@@ -18,8 +18,6 @@ parameters:
     oro_channel.form.type.multiple_entity_channel_aware.class:         Oro\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
     oro_channel.form.embedded_type_extension.class:                    Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
     oro_channel.form.integration_type_extension.class:                 Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
-    oro_channel.form.guesser.channel.class:                            Oro\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser
-
 
     # manager
     oro_channel.manager.channel.api.class:                             Oro\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
@@ -113,15 +111,9 @@ services:
             - { name: form.type, alias: oro_multiple_entity_channel_aware }
 
     oro_channel.form.channel:
-        class:                        Symfony\Component\Form\Form
-        factory_method:               createNamed
-        factory_service:              form.factory
-        arguments:                    ["oro_channel_form", "oro_channel_form", null]
-
-    oro_channel.form.guesser.channel:
-        class: %oro_channel.form.guesser.channel.class%
-        tags:
-            - { name: form.type_guesser, priority: 20 }
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', 'createNamed']
+        arguments: ["oro_channel_form", "oro_channel_form", null]
 
     # handlers
     oro_channel.channel_form.handler:
@@ -156,6 +148,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@oro_search.index"
             - "@event_dispatcher"
+            - "@oro_channel.provider.settings_provider"
 
     # Providers
     oro_channel.provider.settings_provider:
@@ -339,7 +332,7 @@ services:
     oro_channel.twig.lifetime_value_extension:
         class: %oro_channel.twig.lifetime_value_extension.class%
         arguments:
-            - "@oro_channel.provider.lifetime.amount_provider"
+            - '@oro_channel.provider.lifetime.amount_provider'
         tags:
             - { name: twig.extension }
 
@@ -408,3 +401,13 @@ services:
             - '@oro_message_queue.job.runner'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    oro_channel.security.acl.voter.channel:
+        class: 'Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter'
+        arguments:
+            - "@oro_entity.doctrine_helper"
+        calls:
+            - [setClassName, ['Oro\Bundle\ChannelBundle\Entity\Channel']]
+            - [setSettingsProvider,  ['@oro_channel.provider.settings_provider']]
+        tags:
+            - { name: security.voter, priority: 500 }

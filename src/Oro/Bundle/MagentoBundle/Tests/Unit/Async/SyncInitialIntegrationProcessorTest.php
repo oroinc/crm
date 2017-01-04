@@ -298,7 +298,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createInitialSyncProcessorMock()
     {
-        $initialProcessor = $this->getMock(InitialSyncProcessor::class, [], [], '', false);
+        $initialProcessor = $this->createMock(InitialSyncProcessor::class);
         $initialProcessor
             ->expects($this->any())
             ->method('getLoggerStrategy')
@@ -313,7 +313,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createOptionalListenerManagerStub($listeners = null)
     {
-        $managerMock = $this->getMock(OptionalListenerManager::class, [], [], '', false);
+        $managerMock = $this->createMock(OptionalListenerManager::class);
         $managerMock
             ->expects(self::any())
             ->method('getListeners')
@@ -328,7 +328,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createCalculateAnalyticsSchedulerMock()
     {
-        return $this->getMock(CalculateAnalyticsScheduler::class, [], [], '', false);
+        return $this->createMock(CalculateAnalyticsScheduler::class);
     }
 
     /**
@@ -338,14 +338,14 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $configuration = new Configuration();
 
-        $connectionMock = $this->getMock(Connection::class, [], [], '', false);
+        $connectionMock = $this->createMock(Connection::class);
         $connectionMock
             ->expects($this->any())
             ->method('getConfiguration')
             ->willReturn($configuration)
         ;
 
-        $entityManagerMock = $this->getMock(EntityManagerInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $entityManagerMock
             ->expects($this->any())
             ->method('getConnection')
@@ -368,14 +368,14 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($integration)
         ;
 
-        $entityRepositoryMock = $this->getMock(EntityRepository::class, [], [], '', false);
+        $entityRepositoryMock = $this->createMock(EntityRepository::class);
         $entityRepositoryMock
             ->expects(self::any())
             ->method('findOneBy')
             ->willReturn($channel)
         ;
 
-        $helperMock = $this->getMock(DoctrineHelper::class, [], [], '', false);
+        $helperMock = $this->createMock(DoctrineHelper::class);
         $helperMock
             ->expects($this->any())
             ->method('getEntityManager')
@@ -397,7 +397,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createIndexerInterfaceMock()
     {
-        return $this->getMock(IndexerInterface::class, [], [], '', false);
+        return $this->createMock(IndexerInterface::class);
     }
 
     /**
@@ -405,6 +405,6 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createLoggerMock()
     {
-        return $this->getMock(LoggerInterface::class);
+        return $this->createMock(LoggerInterface::class);
     }
 }

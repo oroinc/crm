@@ -37,8 +37,8 @@ class OrderTest extends AbstractEntityTestCase
         $createdAt    = new \DateTime('now');
         $updatedAt    = new \DateTime('now');
         $channel      = new Channel();
-        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $owner        = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'incrementId'         => ['incrementId', 1, 1],

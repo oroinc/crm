@@ -191,12 +191,16 @@ datagrids:
                 updatedAt:
                     type:      datetime
                     data_name: a.updatedAt
+                duplicate:
+                    type: duplicate
+                    data_name: a.name
+                    visible: false
         actions:
             view:
                 type:          navigate
                 acl_resource:  oro_account_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -211,6 +215,11 @@ datagrids:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+                defaultMessages:
+                    confirm_content: oro.ui.delete_confirm_cascade
+                    confirm_content_params:
+                        entity_label: '@translator->trans(oro.account.entity_label)'
+
         mass_actions:
             merge:
                 type: merge
@@ -220,6 +229,7 @@ datagrids:
             entityHint: account
             export: true
             entity_pagination: true
+        views_list: '@oro_account.accounts_view_list'
 
     base-account-contacts-grid:
         extended_entity_name: %oro_contact.entity.class%

@@ -363,14 +363,14 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $configuration = new Configuration();
 
-        $connectionMock = $this->getMock(Connection::class, [], [], '', false);
+        $connectionMock = $this->createMock(Connection::class);
         $connectionMock
             ->expects($this->any())
             ->method('getConfiguration')
             ->willReturn($configuration)
         ;
 
-        $entityManagerMock = $this->getMock(EntityManagerInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $entityManagerMock
             ->expects($this->any())
             ->method('getConnection')
@@ -385,7 +385,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createAnalyticsBuilder()
     {
-        return $this->getMock(AnalyticsBuilder::class, [], [], '', false);
+        return $this->createMock(AnalyticsBuilder::class);
     }
 
     /**
@@ -393,7 +393,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createDoctrineHelperStub($entityManager = null)
     {
-        $helperMock = $this->getMock(DoctrineHelper::class, [], [], '', false);
+        $helperMock = $this->createMock(DoctrineHelper::class);
         $helperMock
             ->expects($this->any())
             ->method('getEntityManager')
@@ -408,6 +408,6 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private function createLoggerMock()
     {
-        return $this->getMock(LoggerInterface::class);
+        return $this->createMock(LoggerInterface::class);
     }
 }

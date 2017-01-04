@@ -17,14 +17,14 @@ Oro\Bundle\ContactBundle\Entity\Contact:
             - NotBlank: ~
         addresses:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of addresses must be set as primary.
+                message: One of the addresses must be set as primary.
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of emails must be set as primary.
+                message: One of the emails must be set as primary.
         phones:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of phones must be set as primary.
+                message: One of the phones must be set as primary.
 
 Oro\Bundle\ContactBundle\Entity\Group:
     constraints:

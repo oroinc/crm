@@ -292,6 +292,7 @@ services:
         class: '%oro_contact.listener.prepare_result_item_listener.class%'
         arguments:
             - '@oro_contact.formatter.contact_entity_name'
+            - '@oro_entity.doctrine_helper'
         tags:
             - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
 
@@ -321,3 +322,8 @@ services:
             - 'owner'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-contacts-activity-grid, method: onResultBefore }
+
+    oro_contact.contacts_view_list:
+        class: Oro\Bundle\ContactBundle\Datagrid\ContactsViewList
+        arguments:
+            - @translator

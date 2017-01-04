@@ -415,12 +415,12 @@ class OpportunityRepository extends EntityRepository
         $qb->select('COUNT(o.id)');
         if ($start) {
             $qb
-                ->andWhere('o.createdAt > :start')
+                ->andWhere('o.createdAt >= :start')
                 ->setParameter('start', $start);
         }
         if ($end) {
             $qb
-                ->andWhere('o.createdAt < :end')
+                ->andWhere('o.createdAt <= :end')
                 ->setParameter('end', $end);
         }
 
@@ -659,10 +659,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**
@@ -672,10 +675,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.closeDate', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**

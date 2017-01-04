@@ -1,2 +1,0 @@
-classes:
-  - Oro\Bundle\AccountBundle\Controller\Api\Soap\AccountController

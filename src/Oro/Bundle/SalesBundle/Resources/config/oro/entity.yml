@@ -1,4 +1,7 @@
 oro_entity:
+    exclusions:
+        - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseBudgetAmountValue }
+        - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseCloseRevenueValue }
     virtual_fields:
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             primaryEmail:
@@ -34,7 +37,22 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+
+    virtual_relations:
+        Oro\Bundle\SalesBundle\Entity\Lead:
+            primaryAddr:
+                relation_type: oneToOne
+                related_entity_name: Oro\Bundle\SalesBundle\Entity\LeadAddress
+                label: oro.sales.lead.primary_addr.label
+                query:
+                    join:
+                        left:
+                            - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+
     entity_aliases:
+        Oro\Bundle\SalesBundle\Entity\Customer:
+            alias:        salescustomer
+            plural_alias: salescustomers
         Extend\Entity\EV_Opportunity_Status:
             alias:        salesopportunitystatus
             plural_alias: salesopportunitystatuses

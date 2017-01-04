@@ -22,7 +22,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         /** @var $builder FormBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $type = $this->getFormType();
         $type->buildForm($builder, ['allow_multiple_selection' => false]);
@@ -39,7 +39,7 @@ class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
         $type = $this->getFormType();
 
         /** @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject */
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->once())
             ->method('add')
             ->with(

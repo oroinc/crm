@@ -19,17 +19,11 @@ class FeatureContext extends OroFeatureContext implements
     OroPageObjectAware,
     KernelAwareContext
 {
-    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary, SalesExtension;
+    use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
-     * @Given they has their own Accounts and Customers
-     */
-    public function accountHasBusinessCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
-    }
-
-    /**
+     * Load "second_sales_channel.yml" alice fixture
+     *
      * @Given CRM has second sales channel with Accounts and Magento Customers
      */
     public function crmHasSecondSalesChannel()
@@ -38,14 +32,9 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Given crm has (Acme) Account with (Charlie) and (Samantha) customers
-     */
-    public function crmHasAcmeAccountWithCharlieAndSamanthaCustomers()
-    {
-        $this->fixtureLoader->loadFixtureFile('account_with_customers.yml');
-    }
-
-    /**
+     * Get accounts and customers from database according to user parmissions and compare its with list of
+     *  accounts from "Account" field in entity edit page
+     *
      * @Then /^Accounts and Customers in the control are filtered according to (?P<user>(\w+)) ACL permissions$/
      */
     public function accountsInTheControlAreFilteredAccordingToUserAclPermissions($username)

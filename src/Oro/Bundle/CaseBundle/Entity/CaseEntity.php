@@ -30,7 +30,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
  *              "auditable"=true
  *          },
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="fa-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -277,7 +277,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
 
     /**
      * Flag to update closedAt field when status is set to closed.
-     * Use null instead of false because of behaviour of BeSimpleSoapBundle.
      *
      * @var bool
      */

@@ -1,18 +1,7 @@
 entity_config:
-    opportunity:
+    customer:
         entity:
             items:
                 enabled: # boolean
-                    options:
-                        require_schema_update: true
-                        priority:           250
-                        default_value:      false
-
-    lead:
-        entity:
-            items:
-                enabled: # boolean
-                    options:
-                        require_schema_update: true
-                        priority:           250
-                        default_value:      false
+                # priority of associated opportunity grid block on the associated customer entity
+                associated_opportunity_block_priority: #integer

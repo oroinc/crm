@@ -97,8 +97,8 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
         $channelType,
         array $channelSettings
     ) {
-        $customerClass = $channelSettings['entity'];
-        $lifetimeField = $channelSettings['field'];
+        $customerClass = $this->getCustomerClass($channelSettings);
+        $lifetimeField = $this->getLifetimeField($channelSettings);
 
         /** @var EntityManager $em */
         $em                    = $this->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -218,5 +218,25 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
             $progress = $this->getHelper('progress');
             $progress->finish();
         }
+    }
+
+    /**
+     * @param array $channelSettings
+     *
+     * @return mixed
+     */
+    protected function getCustomerClass($channelSettings)
+    {
+        return $channelSettings['entity'];
+    }
+
+    /**
+     * @param array $channelSettings
+     *
+     * @return mixed
+     */
+    protected function getLifetimeField($channelSettings)
+    {
+        return $channelSettings['field'];
     }
 }

@@ -21,7 +21,7 @@ class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($stub->getDataChannel());
 
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $stub->setDataChannel($channel);
 
         $this->assertSame($channel, $stub->getDataChannel());

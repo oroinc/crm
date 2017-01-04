@@ -30,7 +30,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_account_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
         totals:
@@ -82,7 +82,7 @@ datagrids:
                     - a.name
                 join:
                     inner:
-                        - { join: o.customer, alias: c }
+                        - { join: o.customerAssociation, alias: c }
                         - { join: c.account, alias: a }
                         - { join: o.status, alias: s }
                 groupBy:  a.id
@@ -97,7 +97,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_account_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
         totals:
@@ -416,7 +416,7 @@ datagrids:
             ownerName:        { label: oro.reportcrm.datagrid.columns.ownerName,        frontend_type: string }
             inProgressCount:  { label: oro.reportcrm.datagrid.columns.inProgressCount,  frontend_type: integer }
             budgetAmount:     { label: oro.reportcrm.datagrid.columns.budgetAmount,     frontend_type: currency }
-            weightedForecast: { label: oro.report.datagrid.columns.weightedForecast, frontend_type: currency }
+            weightedForecast: { label: oro.reportcrm.datagrid.columns.weightedForecast, frontend_type: currency }
         sorters:
             columns:
                 ownerName:        { data_name: ownerName }

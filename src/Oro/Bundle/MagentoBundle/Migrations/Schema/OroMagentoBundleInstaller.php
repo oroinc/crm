@@ -6,8 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -15,19 +13,12 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
-use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
-use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension;
-use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroMagentoBundle as IntegrationUpdate;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
-use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_40\CreateActivityAssociation as OrderActivityAssociation;
 
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtensionTrait;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTrait;
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
+use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -37,30 +28,17 @@ use Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtensionTra
 class OroMagentoBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
-    VisitEventAssociationExtensionAwareInterface,
     ActivityListExtensionAwareInterface,
-    NoteExtensionAwareInterface,
-    OpportunityExtensionAwareInterface,
-    LeadExtensionAwareInterface
+    CustomerExtensionAwareInterface
 {
-    use LeadExtensionTrait, OpportunityExtensionTrait;
+    use CustomerExtensionTrait;
 
     /** @var ActivityExtension */
     protected $activityExtension;
 
-    /** @var NoteExtension */
-    protected $noteExtension;
-
-    /** @var IdentifierEventExtension */
-    protected $identifierEventExtension;
-
     /** @var ExtendExtension $extendExtension */
     protected $extendExtension;
-
-    /** @var VisitEventAssociationExtension */
-    protected $visitExtension;
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
@@ -84,22 +62,6 @@ class OroMagentoBundleInstaller implements
     /**
      * {@inheritdoc}
      */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdentifierEventExtension(IdentifierEventExtension $identifierEventExtension)
-    {
-        $this->identifierEventExtension = $identifierEventExtension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
@@ -108,17 +70,9 @@ class OroMagentoBundleInstaller implements
     /**
      * {@inheritdoc}
      */
-    public function setVisitEventAssociationExtension(VisitEventAssociationExtension $extension)
-    {
-        $this->visitExtension = $extension;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getMigrationVersion()
     {
-        return 'v2_1';
+        return 'v1_45';
     }
 
     /**
@@ -174,11 +128,8 @@ class OroMagentoBundleInstaller implements
         $this->addOrocrmMagentoNewslSubscrForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
-        OrderActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
-        $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
-        $this->leadExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
-        $this->opportunityExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
+        $this->customerExtension->addCustomerAssociation($schema, 'orocrm_magento_customer');
     }
 
     /**
@@ -699,6 +650,8 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('createdAt', 'datetime', ['precision' => 0]);
         $table->addColumn('updatedAt', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addIndex(['payment_details'], 'magecart_payment_details_idx', []);
+        $table->addIndex(['status_name', 'items_qty'], 'status_name_items_qty_idx', []);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -1015,7 +968,7 @@ class OroMagentoBundleInstaller implements
             $schema->getTable('orocrm_account'),
             ['account_id'],
             ['id'],
-            ['onDelete' => 'SET NULL']
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
@@ -1452,20 +1405,9 @@ class OroMagentoBundleInstaller implements
      */
     protected function addActivityAssociations(Schema $schema)
     {
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_magento_order');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_magento_customer');
 
         CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
-    }
-
-    /**
-     * @param Schema $schema
-     */
-    protected function addIdentifierEventAssociations(Schema $schema)
-    {
-        $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_cart');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_customer');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_order');
-        $this->visitExtension->addVisitEventAssociation($schema, 'orocrm_magento_product');
     }
 }

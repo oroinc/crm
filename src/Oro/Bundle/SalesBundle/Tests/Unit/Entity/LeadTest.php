@@ -27,33 +27,32 @@ class LeadTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $now          = new \DateTime('now');
-        $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $customer     = $this->getMock('Oro\Bundle\SalesBundle\Entity\B2bCustomer');
-        $channel      = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
-        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $user         = $this->createMock('Oro\Bundle\UserBundle\Entity\User');
+        $address      = $this->createMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $customer     = $this->createMock('Oro\Bundle\SalesBundle\Entity\Customer');
+        $channel      = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $organization = $this->createMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
-            'name'              => ['name', 'test', 'test'],
-            'namePrefix'        => ['namePrefix', 'test', 'test'],
-            'firstName'         => ['firstName', 'test', 'test'],
-            'middleName'        => ['middleName', 'test', 'test'],
-            'lastName'          => ['lastName', 'test', 'test'],
-            'nameSuffix'        => ['nameSuffix', 'test', 'test'],
-            'numberOfEmployees' => ['numberOfEmployees', 10, 10],
-            'website'           => ['website', 'test', 'test'],
-            'companyName'       => ['companyName', 'test', 'test'],
-            'jobTitle'          => ['jobTitle', 'test', 'test'],
-            'industry'          => ['nameSuffix', 'test', 'test'],
-            'owner'             => ['owner', $user, $user],
-            'createdAt'         => ['createdAt', $now, $now],
-            'updatedAt'         => ['updatedAt', $now, $now],
-            'notes'             => ['notes', 'test', 'test'],
-            'customer'          => ['customer', $customer, $customer],
-            'dataChannel'       => ['dataChannel', $channel, $channel],
-            'organization'      => array('organization', $organization, $organization),
-            'twitter'           => ['twitter', 'test', 'test'],
-            'linkedIn'          => ['linkedIn', 'test', 'test'],
+            'name'                  => ['name', 'test', 'test'],
+            'namePrefix'            => ['namePrefix', 'test', 'test'],
+            'firstName'             => ['firstName', 'test', 'test'],
+            'middleName'            => ['middleName', 'test', 'test'],
+            'lastName'              => ['lastName', 'test', 'test'],
+            'nameSuffix'            => ['nameSuffix', 'test', 'test'],
+            'numberOfEmployees'     => ['numberOfEmployees', 10, 10],
+            'website'               => ['website', 'test', 'test'],
+            'companyName'           => ['companyName', 'test', 'test'],
+            'jobTitle'              => ['jobTitle', 'test', 'test'],
+            'industry'              => ['nameSuffix', 'test', 'test'],
+            'owner'                 => ['owner', $user, $user],
+            'createdAt'             => ['createdAt', $now, $now],
+            'updatedAt'             => ['updatedAt', $now, $now],
+            'notes'                 => ['notes', 'test', 'test'],
+            'customerAssociation'   => ['customerAssociation', $customer, $customer],
+            'organization'          => array('organization', $organization, $organization),
+            'twitter'               => ['twitter', 'test', 'test'],
+            'linkedIn'              => ['linkedIn', 'test', 'test'],
         ];
     }
 

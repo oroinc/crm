@@ -12,7 +12,7 @@ workflows:
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-money'
+                    icon: 'fa-money'
                     dialog:
                         alias: transaction-dialog
                         dialogOptions:
@@ -38,7 +38,7 @@ workflows:
                 is_unavailable_hidden: true
                 acl_resource: oro_sales_opportunity_create
                 frontend_options:
-                    icon: 'icon-usd'
+                    icon: 'fa-usd'
                 transition_definition: convert_to_opportunity_definition
                 form_options:
                     attribute_fields:
@@ -55,15 +55,13 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity_budget:
-                            form_type: oro_money
+                            form_type: oro_multicurrency
                             options:
                                 required: false
                         notes:
                             form_type: oro_resizeable_rich_text
                             options:
                                 required: false
-                    attribute_default_values:
-                        opportunity_budget: $cart.subTotal
                     form_init:
                         - '@assign_active_user': $opportunity_owner
                         - '@format_name':
@@ -75,12 +73,17 @@ workflows:
                             arguments:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $cart.id
+                        - '@call_service_method':
+                            service: oro_magento.converter.cart_subtotal_to_multicurrency
+                            method: convertCartTotalToMultiCurrency
+                            method_parameters: [$cart]
+                            attribute: $opportunity_budget
             abandon:
                 step_to: abandoned
                 is_start: true
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-remove-circle'
+                    icon: 'fa-close-circle'
                 transition_definition: abandon_definition
                 form_options:
                     attribute_fields:
@@ -92,7 +95,7 @@ workflows:
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-backward'
+                    icon: 'fa-backward'
                 transition_definition: reopen_definition
                 form_options:
                     attribute_fields:

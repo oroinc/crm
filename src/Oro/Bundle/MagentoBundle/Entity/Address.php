@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -47,7 +45,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="label", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $label;
 
@@ -55,7 +52,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=500, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $street;
 
@@ -63,7 +59,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="street2", type="string", length=500, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $street2;
 
@@ -71,7 +66,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $city;
 
@@ -79,7 +73,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $postalCode;
 
@@ -88,7 +81,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
      * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
-     * @Soap\ComplexType("string", nillable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -104,7 +96,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
      * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -119,7 +110,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $regionText;
 
@@ -127,7 +117,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $namePrefix;
 
@@ -135,7 +124,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $firstName;
 
@@ -143,7 +131,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $middleName;
 
@@ -151,7 +138,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $lastName;
 
@@ -159,7 +145,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $nameSuffix;
 
@@ -180,7 +165,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $phone;
 

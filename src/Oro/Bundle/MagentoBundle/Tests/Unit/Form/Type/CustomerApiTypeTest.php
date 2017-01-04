@@ -45,7 +45,8 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
             'group'        => 'translatable_entity',
             'dataChannel'  => 'translatable_entity',
             'addresses'    => 'oro_address_collection',
-            'owner'        => 'translatable_entity'
+            'owner'        => 'translatable_entity',
+            'account'      => 'oro_account_select'
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))
@@ -65,13 +66,14 @@ class CustomerApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(
                 [
                     'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Customer',
-                    'csrf_protection' => false
+                    'csrf_protection' => false,
+                    'customer_association_disabled' => true
                 ]
             );
 

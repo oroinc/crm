@@ -22,7 +22,7 @@ class ContactRequestCallbackValidatorTest extends \PHPUnit_Framework_TestCase
         $request->setEmailAddress($email);
         $request->setPreferredContactMethod($method);
 
-        $context = $this->getMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\Context\ExecutionContextInterface');
         $context->expects($this->exactly($expectedViolationCount))->method('addViolationAt');
         ContactRequestCallbackValidator::validate($request, $context);
     }

@@ -43,7 +43,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     public function testBuildForm()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormBuilderInterface $builder */
-        $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
+        $builder = $this->createMock('Symfony\Component\Form\FormBuilderInterface');
 
         $builder->expects($this->atLeastOnce())->method('addEventListener');
 
@@ -66,12 +66,12 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($channel));
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $event->expects($this->any())
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $childForm = $this->getMock('Symfony\Component\Form\FormInterface');
+        $childForm = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())
             ->method('get')
             ->will($this->returnValue($childForm));
@@ -137,7 +137,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getChannelMock($identityClass = null)
     {
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         if ($identityClass) {
             $channel->expects($this->any())
@@ -175,7 +175,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->isType('array'))
             ->will($this->returnValue($categories));
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $event->expects($this->any())
             ->method('getForm')
             ->will($this->returnValue($form));
@@ -286,7 +286,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($channel));
 
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())
             ->method('has')
             ->will($this->returnValue($hasStateForm));
@@ -294,7 +294,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getForm')
             ->will($this->returnValue($form));
 
-        $stateForm = $this->getMock('Symfony\Component\Form\FormInterface');
+        $stateForm = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())
             ->method('get')
             ->will($this->returnValue($stateForm));
@@ -421,7 +421,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDefaults($feature, array $expected)
     {
-        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\FormInterface');
         $form->expects($this->any())
             ->method('get')
             ->will($this->returnValue($form));

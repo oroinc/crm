@@ -8,7 +8,6 @@ datagrids:
                     - c.id
                     - c.name
                     - c.channelType
-                    - CASE WHEN c.status = true THEN 'enabled' ELSE 'disabled' END as status
                 from:
                     - { table: %oro_channel.entity.class%, alias: c }
                 groupBy: c.id
@@ -19,18 +18,11 @@ datagrids:
                 label: oro.channel.channel_type.label
                 frontend_type:  select
                 choices: '@oro_channel.provider.settings_provider->getChannelTypeChoiceList'
-            status:
-                label: oro.channel.status.label
-                frontend_type: select
-                choices:
-                    enabled:  oro.channel.active.label
-                    disabled: oro.channel.inactive.label
 
         sorters:
             columns:
                 name:        { data_name: c.name }
                 channelType: { data_name: c.channelType }
-                status:      { data_name: c.status }
             default:
                 name: ASC
         filters:
@@ -44,14 +36,6 @@ datagrids:
                     options:
                         field_options:
                             choices: '@oro_channel.provider.settings_provider->getChannelTypeChoiceList'
-                status:
-                    data_name: c.status
-                    type:      choice
-                    options:
-                        field_options:
-                            choices:
-                                - oro.channel.inactive.label
-                                - oro.channel.active.label
         properties:
             id: ~
             update_link:
@@ -71,7 +55,7 @@ datagrids:
                 type:         navigate
                 link:         view_link
                 acl_resource: oro_channel_view
-                icon:         eye-open
+                icon:         eye
                 label:        oro.grid.action.view
                 rowAction:    true
             update:

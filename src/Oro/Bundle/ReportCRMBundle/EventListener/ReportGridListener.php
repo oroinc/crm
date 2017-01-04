@@ -2,13 +2,14 @@
 
 namespace Oro\Bundle\ReportCRMBundle\EventListener;
 
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmQueryConfiguration;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
+use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
+use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
-use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
 use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
-use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
 
 class ReportGridListener
 {
@@ -52,38 +53,43 @@ class ReportGridListener
 
         // in order to meet sql standards on some RDBMS (e.g. Postgres)
         // unset columns not used in aggregation or group by statements
-        $path        = '[source][query][select]';
         $aliasFields = ['monthPeriod', 'monthPeriodSorting', 'quarterPeriod', 'quarterPeriodSorting', 'yearPeriod'];
-
         foreach ($aliasFields as $index => $alias) {
             // skip current period alias and it's sorting helper alias
-            if ($alias == $period || str_replace('Sorting', '', $alias) == $period) {
+            if ($alias === $period || str_replace('Sorting', '', $alias) === $period) {
                 continue;
             }
 
-            $config->offsetUnsetByPath(sprintf('%s[%s]', $path, $index));
+            $config->offsetUnsetByPath(sprintf('%s[%s]', OrmQueryConfiguration::SELECT_PATH, $index));
         }
 
         // and setup separate sorting column, used as well in grouping, but not affecting grouping result
         // period will be always the first column, unless changed in datagrids.yml
-        if ($period == 'yearPeriod') {
+        // Use sorters configuration from datagrids.yml for "Period" = "All", not apply period sorting and grouping
+        $groupAlias = '';
+        $sortAlias = '';
+        if ('yearPeriod' === $period) {
             $groupAlias = $period;
             $sortAlias = $period;
-        } else {
+        } elseif ($period !== '') {
             $groupAlias = $period;
             $sortAlias  = sprintf('%sSorting', $period);
         }
 
-        $config->offsetSetByPath('[source][query][groupBy]', $groupAlias);
+        if ($groupAlias) {
+            $config->getOrmQuery()->setGroupBy($groupAlias);
+        }
 
-        $config->offsetSetByPath(
-            sprintf(
-                '%s[%s][%s]',
-                OrmSorterConfiguration::COLUMNS_PATH,
-                self::PERIOD_COLUMN_NAME,
-                PropertyInterface::DATA_NAME_KEY
-            ),
-            $sortAlias
-        );
+        if ($sortAlias) {
+            $config->offsetSetByPath(
+                sprintf(
+                    '%s[%s][%s]',
+                    OrmSorterConfiguration::COLUMNS_PATH,
+                    self::PERIOD_COLUMN_NAME,
+                    PropertyInterface::DATA_NAME_KEY
+                ),
+                $sortAlias
+            );
+        }
     }
 }

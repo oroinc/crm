@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -47,13 +45,11 @@ class Group extends ExtendGroup
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
-     * @Soap\ComplexType("string")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -68,7 +64,6 @@ class Group extends ExtendGroup
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $owner;
 

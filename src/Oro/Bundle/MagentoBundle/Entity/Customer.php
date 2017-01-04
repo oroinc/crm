@@ -17,7 +17,6 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
@@ -43,7 +42,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="oro_magento_customer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user"
+ *              "icon"="fa-user"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -72,7 +71,6 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  */
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
-    CustomerIdentityInterface,
     RFMAwareInterface,
     OriginAwareInterface,
     IntegrationAwareInterface
@@ -288,8 +286,8 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

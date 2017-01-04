@@ -42,7 +42,7 @@ workflows:
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: icon-play
+                    icon: fa-play
                     class: btn-primary
                     pageComponent:
                         module: 'oroui/js/app/components/view-component'
@@ -85,7 +85,7 @@ workflows:
                 step_to: won
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-ok-circle'
+                    icon: 'fa-check-circle-o'
                     class: 'btn-success'
                 transition_definition: close_won_definition
                 form_options:
@@ -111,7 +111,7 @@ workflows:
                 step_to: lost
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-remove-circle'
+                    icon: 'fa-close-circle'
                     class: 'btn-danger'
                 transition_definition: close_lost_definition
                 form_options:
@@ -146,7 +146,7 @@ workflows:
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'icon-backward'
+                    icon: 'fa-backward'
                     class: 'btn-primary'
                     pageComponent:
                         module: 'oroui/js/app/components/view-component'

@@ -32,7 +32,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $encoder = $this->getMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
+        $encoder = $this->createMock('Oro\Bundle\SecurityBundle\Encoder\Mcrypt');
         $encoder->expects($this->any())
             ->method('decryptData')
             ->with($this->encryptedApiKey)
@@ -41,11 +41,10 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->transport = $this->getMock(
-            'Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport',
-            ['getSoapClient'],
-            [$encoder, $wsdlManager]
-        );
+        $this->transport = $this->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
+            ->setMethods(['getSoapClient'])
+            ->setConstructorArgs([$encoder, $wsdlManager])
+            ->getMock();
         // Do not attempt to run request several times in Unit test. This leads to sleep and test performance impact
         $this->transport->setMultipleAttemptsEnabled(false);
 
@@ -54,7 +53,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->settings        = new ParameterBag();
-        $this->transportEntity = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
+        $this->transportEntity = $this->createMock('Oro\Bundle\IntegrationBundle\Entity\Transport');
         $this->transportEntity->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($this->settings));
     }
@@ -113,7 +112,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     {
         $this->sessionId = uniqid();
 
-        $this->setExpectedException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
+        $this->expectException('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException');
         $this->settings->set('api_key', $this->encryptedApiKey);
         $this->settings->set('wsdl_url', 'http://localhost/?wsdl');
         $this->transport->init($this->transportEntity);
@@ -158,7 +157,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $expectedException = false
     ) {
         if (false !== $expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $this->initSettings(false, ['oroPing']);

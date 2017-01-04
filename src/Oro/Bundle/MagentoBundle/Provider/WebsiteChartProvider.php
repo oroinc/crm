@@ -8,7 +8,7 @@ use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Utils\ColorUtils;
-use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification as TCI;
+use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -35,7 +35,7 @@ abstract class WebsiteChartProvider
         TCI::EVENT_VISIT => 'oro.magento.website_activity.chart.legend.event_visit',
     ];
 
-    /** @var TrackingVisitEventProvider */
+    /** @var TrackingVisitEventProviderInterface */
     protected $visitEventProvider;
 
     /** @var ConfigProvider */
@@ -48,13 +48,13 @@ abstract class WebsiteChartProvider
     protected $translator;
 
     /**
-     * @param TrackingVisitEventProvider $visitEventProvider
+     * @param TrackingVisitEventProviderInterface $visitEventProvider
      * @param ConfigProvider $configProvider
      * @param Container $container
      * @param TranslatorInterface $translator
      */
     public function __construct(
-        TrackingVisitEventProvider $visitEventProvider,
+        TrackingVisitEventProviderInterface $visitEventProvider,
         ConfigProvider $configProvider,
         Container $container,
         TranslatorInterface $translator

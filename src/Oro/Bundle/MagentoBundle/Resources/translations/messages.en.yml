@@ -56,6 +56,8 @@ oro:
                 added_to_cart: Added to cart
                 purchased: Purchased
         datagrid:
+            views:
+                non_empty_carts.label: Magento Shopping Carts
             actions:
                 view:
                     label: View
@@ -109,7 +111,7 @@ oro:
                 order_is_guest:
                     label: Is Guest
                 is_subscriber:
-                    label: Is a Subscriber
+                    label: Is Subscriber
                     yes: Yes
                     no: No
                     unknown: Not defined
@@ -175,6 +177,7 @@ oro:
             contact.label:       Contact
             account.label:       Account
             addresses.label:     Addresses
+            primary_addr.label:  Primary Address
             carts.label:         Carts
             channel.label:       Integration
             data_channel.label:  Channel
@@ -616,9 +619,11 @@ oro:
 
         order_information: Order Information
         customer_information: Customer Information
+        general_info: General Info
         general_information: General Information
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
+        customer_tabs_title: Customers
 
 "E-commerce": "E-commerce"
