@@ -210,7 +210,7 @@ class ImportExportTest extends WebTestCase
         $this->assertCollectionData($expected, $actual, ['Emails 2 Email', 'Emails 3 Email']);
         $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
         $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
-        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/postal code', 'Addresses 3 Zip/postal code']);
+        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/Postal Code', 'Addresses 3 Zip/Postal Code']);
         $this->assertArrayData($expected, $actual, 'Tags');
 
         $this->assertEquals($expected, $actual);
