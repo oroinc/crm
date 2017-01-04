@@ -1095,3 +1095,6 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\AccountAutocompleteProvider
         tags:
             - { name: oro_sales.provider.customer.account_autocomplete }
+
+    oro_magento.converter.cart_subtotal_to_multicurrency:
+        class: Oro\Bundle\MagentoBundle\Converter\CartSubtotalToMultiCurrency
