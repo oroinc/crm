@@ -10,5 +10,3 @@ Oro\Bundle\CaseBundle\Entity\CaseEntity:
             - NotBlank: ~
         priority:
             - NotBlank: ~
-        organization:
-            - NotBlank: ~
