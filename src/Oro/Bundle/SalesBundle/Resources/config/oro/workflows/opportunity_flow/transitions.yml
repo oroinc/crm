@@ -106,7 +106,6 @@ workflows:
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
-                        - '@assign_value': [$close_revenue, $budget_amount]
             close_lost:
                 step_to: lost
                 is_unavailable_hidden: true
