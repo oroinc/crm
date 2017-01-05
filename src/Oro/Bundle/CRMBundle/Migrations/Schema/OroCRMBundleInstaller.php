@@ -14,7 +14,7 @@ class OroCRMBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_1';
+        return 'v2_0';
     }
 
     /**
