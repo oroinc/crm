@@ -64,7 +64,7 @@ class OpportunityListener
 
                 /** @var AbstractEnumValue $oldStatus */
                 $newStatusId = $opportunity->getStatus() ? $opportunity->getStatus()->getId() : null;
-                $isOppportunityChanged = $this->updateBaseBudgetAmountFields($newStatusId, $opportunity);
+                $isOppportunityChanged = $this->updateBaseBudgetAmountFields($newStatusId, $opportunity, $entityChangeSet);
                 $isOppportunityChanged |= $this->onStatusChange($newStatusId, $entityChangeSet, $opportunity);
 
                 if ($isOppportunityChanged) {
@@ -132,7 +132,7 @@ class OpportunityListener
      *
      * @return bool
      */
-    protected function updateBaseBudgetAmountFields($newStatusId, Opportunity $opportunity)
+    protected function updateBaseBudgetAmountFields($newStatusId, Opportunity $opportunity, $changeSet)
     {
         $isOpportunityChanged = false;
         if (! in_array($newStatusId, Opportunity::getClosedStatuses())) {
@@ -142,7 +142,7 @@ class OpportunityListener
 
         $budgetAmount = $opportunity->getBudgetAmount();
         if ($budgetAmount && null !== $budgetAmount->getValue()) {
-            if ($defaultCurrency && $budgetAmount->getCurrency()
+            if ($defaultCurrency == $budgetAmount->getCurrency()
                 && null !== $budgetAmount->getBaseCurrencyValue()) {
                 $opportunity->setBaseBudgetAmountValue($budgetAmount->getValue());
                 $isOpportunityChanged = true;
