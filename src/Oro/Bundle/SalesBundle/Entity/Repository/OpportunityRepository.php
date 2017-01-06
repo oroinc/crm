@@ -5,15 +5,14 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -59,7 +58,7 @@ class OpportunityRepository extends EntityRepository
     ) {
         $qb = $this->createQueryBuilder('opportunity');
         $qb
-            ->select('count(opportunity.id)')
+            ->select('COUNT(opportunity.id)')
             ->where($qb->expr()->in('opportunity.budgetAmountCurrency', $removingCurrencies))
             ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', $removingCurrencies));
         if ($organization instanceof Organization) {

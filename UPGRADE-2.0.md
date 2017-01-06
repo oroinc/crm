@@ -132,3 +132,6 @@ UPGRADE FROM 1.10 to 2.0
 
 ####ContactBundle:
  - Constructor of `Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener` was changed. Added `Oro\Bundle\EntityBundle\ORM\DoctrineHelper` as last argument.
+
+####ReportCRMBundle
+- The command `oro:report:update` and its class `Oro\Bundle\ReportCRMBundle\Command\ReportUpdateCommand` were removed. 
