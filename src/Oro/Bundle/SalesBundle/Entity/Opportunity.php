@@ -235,6 +235,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=55
+     *      },
+     *      "multicurrency"={
+     *          "target"="budgetAmount"
      *      }
      *  }
      * )
@@ -259,9 +262,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "importexport"={
      *          "order"=50
      *      },
-     *     "multicurrency"={
-     *          "target" = "budgetAmount",
-     *          "virtual_field" = "budgetAmountBaseCurrency"
+     *      "multicurrency"={
+     *          "target"="budgetAmount",
+     *          "virtual_field"="budgetAmountBaseCurrency"
      *      }
      *  }
      * )
@@ -279,6 +282,9 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=56
+     *      },
+     *      "multicurrency"={
+     *          "target"="budgetAmount"
      *      }
      *  }
      * )
@@ -302,6 +308,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=65
+     *      },
+     *      "multicurrency"={
+     *          "target"="closeRevenue"
      *      }
      *  }
      * )
@@ -327,8 +336,8 @@ class Opportunity extends ExtendOpportunity implements
      *          "order"=60
      *      },
      *      "multicurrency"={
-     *          "target" = "closeRevenue",
-     *          "virtual_field" = "closeRevenueBaseCurrency"
+     *          "target"="closeRevenue",
+     *          "virtual_field"="closeRevenueBaseCurrency"
      *      }
      *  }
      * )
@@ -346,6 +355,9 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=66
+     *      },
+     *      "multicurrency"={
+     *          "target"="closeRevenue"
      *      }
      *  }
      * )
