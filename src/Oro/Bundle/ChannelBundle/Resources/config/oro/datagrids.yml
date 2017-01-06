@@ -1,5 +1,5 @@
 datagrids:
-    orocrm-channels-grid:
+    oro-channels-grid:
         acl_resource: oro_channel_view
         source:
             type: orm
