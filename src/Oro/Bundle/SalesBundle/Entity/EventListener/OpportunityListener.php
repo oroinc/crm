@@ -64,7 +64,11 @@ class OpportunityListener
 
                 /** @var AbstractEnumValue $oldStatus */
                 $newStatusId = $opportunity->getStatus() ? $opportunity->getStatus()->getId() : null;
-                $isOppportunityChanged = $this->updateBaseBudgetAmountFields($newStatusId, $opportunity, $entityChangeSet);
+                $isOppportunityChanged = $this->updateBaseBudgetAmountFields(
+                    $newStatusId,
+                    $opportunity,
+                    $entityChangeSet
+                );
                 $isOppportunityChanged |= $this->onStatusChange($newStatusId, $entityChangeSet, $opportunity);
 
                 if ($isOppportunityChanged) {
