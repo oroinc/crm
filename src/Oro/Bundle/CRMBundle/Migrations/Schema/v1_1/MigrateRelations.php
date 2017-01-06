@@ -15,15 +15,16 @@ class MigrateRelations implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->updateWorkFlow($schema, $queries);
+        self::updateWorkFlow($schema, $queries);
     }
 
     /**
      * Change name OroCRM to Oro for workflows tables
      *
-     * @param Schema $schema
+     * @param Schema   $schema
+     * @param QueryBag $queries
      */
-    private function updateWorkFlow(Schema $schema, QueryBag $queries)
+    public static function updateWorkFlow(Schema $schema, QueryBag $queries)
     {
         if ($schema->hasTable('oro_workflow_entity_acl')) {
             $queries->addQuery(new UpdateTableFieldQuery(
