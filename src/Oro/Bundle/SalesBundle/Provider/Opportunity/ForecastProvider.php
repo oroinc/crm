@@ -127,7 +127,6 @@ class ForecastProvider
             QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
-        $this->applyProbabilityCondition($qb, 'o');
 
         return $this->aclHelper->apply($qb)->getOneOrNullResult();
     }
@@ -284,23 +283,6 @@ HAVING
                 ->andWhere(sprintf('%s < :end', $field))
                 ->setParameter('end', $end);
         }
-    }
-
-    /**
-     * @param QueryBuilder $qb
-     * @param string       $alias
-     */
-    protected function applyProbabilityCondition(QueryBuilder $qb, $alias)
-    {
-        $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->andX(
-                    sprintf('%s.probability <> 0', $alias),
-                    sprintf('%s.probability <> 1', $alias)
-                ),
-                sprintf('%s.probability is NULL', $alias)
-            )
-        );
     }
 
     /**
