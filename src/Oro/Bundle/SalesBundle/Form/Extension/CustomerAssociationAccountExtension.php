@@ -64,7 +64,6 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
             'customer_association_account',
             'oro_account_select',
             [
-                'required' => true,
                 'label'    => 'oro.account.entity_label',
                 'mapped'   => false,
             ]
