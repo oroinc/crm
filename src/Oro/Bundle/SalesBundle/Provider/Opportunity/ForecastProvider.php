@@ -180,7 +180,6 @@ AND EXISTS(
     FROM OroDataAuditBundle:AuditField afph
     WHERE
         afph.id = MAX(afp.id)
-        AND (afph.newFloat NOT IN (:excludedProbabilities) or afph.newFloat IS NULL)
 )
 HAVING
             )
@@ -190,7 +189,6 @@ HAVING
                 'closeDateField'        => 'closeDate',
                 'probabilityField'      => 'probability',
                 'budgetAmountField'     => 'budgetAmount',
-                'excludedProbabilities' => [0, 1],
                 'moment'                => $moment,
             ]);
 
