@@ -401,6 +401,7 @@ services:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
         arguments:
             - '@oro_currency.converter.rate'
+            - '@oro_currency.config.currency'
         tags:
             - { name: doctrine.event_listener, event: onFlush, priority: 100 }
 
