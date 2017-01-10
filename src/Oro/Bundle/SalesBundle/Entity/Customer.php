@@ -75,9 +75,7 @@ class Customer extends ExtendCustomer
     public function setTarget(Account $account, $target = null)
     {
         $this->account = $account;
-        if (null !== $target) {
-            $this->setCustomerTarget($target);
-        }
+        $this->setCustomerTarget($target);
 
         return $this;
     }

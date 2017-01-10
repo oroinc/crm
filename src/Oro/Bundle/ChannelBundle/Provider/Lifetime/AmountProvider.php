@@ -78,6 +78,12 @@ class AmountProvider
         $qb->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW));
         $qb->setMaxResults(1);
 
+        if (!$addChannelParam) {
+            $qb
+                ->andWhere('ch.status = :channel_status OR ch.id IS NULL')
+                ->setParameter('channel_status', Channel::STATUS_ACTIVE);
+        }
+
         return $qb;
     }
 
