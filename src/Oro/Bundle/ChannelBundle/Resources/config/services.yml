@@ -411,3 +411,11 @@ services:
             - [setSettingsProvider,  ['@oro_channel.provider.settings_provider']]
         tags:
             - { name: security.voter, priority: 500 }
+
+    oro_channel.account_lifetime_subscriber:
+        class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber
+        arguments:
+            - '@oro_sales.manager.account_customer'
+            - '@oro_currency.query.currency_transformer'
+        tags:
+            - { name: doctrine.event_subscriber }

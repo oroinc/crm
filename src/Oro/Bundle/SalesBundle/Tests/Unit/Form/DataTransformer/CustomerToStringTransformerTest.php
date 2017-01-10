@@ -6,9 +6,8 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerToStringTransformer;
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as CustomerStub;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub as Customer;
+use Oro\Bundle\SalesBundle\Tests\Unit\Stub\AccountCustomerManager;
 
 class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +29,7 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
         $this->accountCustomerManager = $this
             ->getMockBuilder(AccountCustomerManager::class)
             ->disableOriginalConstructor()
+            ->setMethodsExcept(['createCustomer'])
             ->getMock();
 
         $this->transformer = new CustomerToStringTransformer(
@@ -101,7 +101,7 @@ class CustomerToStringTransformerTest extends \PHPUnit_Framework_TestCase
     {
         $account = new Account();
         $account->setName('account');
-        $customer = (new CustomerStub())->setTarget($account);
+        $customer = (new Customer())->setTarget($account);
         $this->dataTransformer->expects($this->any())
             ->method('transform')
             ->with($account)
