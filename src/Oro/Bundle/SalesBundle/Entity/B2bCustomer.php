@@ -316,10 +316,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -380,10 +384,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param Account|null $account
+     *
+     * @return $this
      */
     public function setAccount(Account $account = null)
     {
         $this->account = $account;
+
+        return $this;
     }
 
     /**
