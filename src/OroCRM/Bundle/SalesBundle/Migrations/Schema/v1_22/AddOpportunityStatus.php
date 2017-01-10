@@ -8,17 +8,16 @@ use Doctrine\DBAL\Types\Type;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
-
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class AddOpportunityStatus implements
@@ -71,7 +70,7 @@ class AddOpportunityStatus implements
         self::addStatusField($schema, $this->extendExtension, $immutableCodes);
 
         $statuses = [
-            'in_progress' => 'In Progress',
+            'in_progress' => 'Open',
             'identification_alignment' => 'Identification & Alignment',
             'needs_analysis' => 'Needs Analysis',
             'solution_development' => 'Solution Development',
