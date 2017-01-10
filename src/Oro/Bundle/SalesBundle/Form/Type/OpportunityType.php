@@ -94,7 +94,8 @@ class OpportunityType extends AbstractType
                     'required' => true,
                     'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
-                    'constraints' => [new NotBlank()]
+                    'constraints' => [new NotBlank()],
+                    'error_bubbling' => false,
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
