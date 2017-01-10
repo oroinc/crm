@@ -90,7 +90,7 @@ class ConfigProvider
     {
         $config = $this->configManager->getProvider('grid')->getConfig($entityClass);
 
-        return $config->get('default');
+        return $config->get('context');
     }
 
     /**
