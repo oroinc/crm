@@ -376,7 +376,7 @@ datagrids:
             query:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
-                    - SUM( (CASE WHEN (s.id NOT IN ('lost', 'won')) THEN 1 ELSE 0 END) ) as inProgressCount
+                    - COUNT( o.id ) as inProgressCount
                     - SUM( o.budgetAmountValue ) as budgetAmount
                     - SUM( o.budgetAmountValue * o.probability ) as weightedForecast
                 from:
@@ -387,10 +387,7 @@ datagrids:
                         - { join: o.owner, alias: oo }
                 where:
                     and:
-                        - o.probability <> 0
-                        - o.probability <> 1
-                    or:
-                        - o.probability is NULL
+                        - s.id NOT IN ('lost', 'won')
                 groupBy: oo.id
         totals:
             total:
@@ -405,7 +402,7 @@ datagrids:
                     ownerName:
                         label: oro.magento.datagrid.columns.grand_total
                     inProgressCount:
-                        expr: SUM( (CASE WHEN (s.id NOT IN ('lost', 'won')) THEN 1 ELSE 0 END) )
+                        expr: COUNT( o.id )
                     budgetAmount:
                         expr: SUM( o.budgetAmountValue )
                         formatter: currency

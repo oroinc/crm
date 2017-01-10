@@ -28,6 +28,14 @@ class LifetimeAverageAggregateCommand extends Command implements CronCommandInte
     }
 
     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configure()

@@ -24,7 +24,7 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
-        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Customer') {
             return 0.0;
         }
 

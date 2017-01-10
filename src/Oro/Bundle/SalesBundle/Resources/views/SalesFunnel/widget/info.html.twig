@@ -1,13 +1,10 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
-{% import 'OroChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('oro.sales.salesfunnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
-
-            {{ channel.renderChannelProperty(entity, 'oro.sales.salesfunnel.data_channel.label') }}
 
             {%- if entity.lead and resource_granted('VIEW', entity.lead) -%}
                 {% set leadView = ui.renderUrl(

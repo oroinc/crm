@@ -103,7 +103,7 @@ oro:
             name_suffix.label:   Name suffix
             organization.label:  Organization
             owner.label:         Owner
-            postal_code.label:   Zip/postal code
+            postal_code.label:   Zip/Postal Code
             primary.label:       Primary
             region.label:        State
             region_text.label:   State

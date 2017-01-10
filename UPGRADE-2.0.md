@@ -2,9 +2,18 @@ UPGRADE FROM 1.10 to 2.0
 ========================
 
 ####General
-- **Upgrade to 2.0 is available only from 1.10 version**. For this update
-  was added the command "oro:platform:upgrade20". Before run this command the cache has to be deleted.
-  Command have to be run only one time. In next releases 2.x to apply release changes it will be enough run the command "oro:platform:update".
+- **Upgrade to 2.0 is available only from 1.10 version**.
+
+  To correctly upgrade to version 2.0 follow the steps in the guide [How to Upgrade to a New Version](https://www.orocrm.com/documentation/index/current/cookbook/how-to-upgrade-to-new-version).
+  At **Step 7** instead of running
+  ```shell
+  $ sudo -u www-data php app/console oro:platform:update --env=prod --force
+  ```
+  you will run **only once** the upgrade command introduced to help upgrading from 1.10 to 2.0
+  ```shell
+  $ sudo -u www-data php app/console oro:platform:upgrade20 --env=prod --force
+  ```
+  
   Upgrade from version less then 1.10 is not supported.
 - Changed minimum required php version to 5.6
 - Field `dataChannel` for `Lead` and `Opportunity` was removed. To keep BC after upgrade to 2.0 and keep data in reports and data grids this field is converted in extend field with name `data_channel`.
@@ -132,3 +141,6 @@ UPGRADE FROM 1.10 to 2.0
 
 ####ContactBundle:
  - Constructor of `Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener` was changed. Added `Oro\Bundle\EntityBundle\ORM\DoctrineHelper` as last argument.
+
+####ReportCRMBundle
+- The command `oro:report:update` and its class `Oro\Bundle\ReportCRMBundle\Command\ReportUpdateCommand` were removed. 

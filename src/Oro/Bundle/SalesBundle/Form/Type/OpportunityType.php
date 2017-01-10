@@ -116,7 +116,8 @@ class OpportunityType extends AbstractType
                     'label' => 'oro.sales.opportunity.budget_amount.label',
                     'currency_empty_value' => false,
                     'full_currency_list' => false,
-                    'attr' => ['class' => 'currency-price']
+                    'attr' => ['class' => 'currency-price'],
+                    'error_bubbling' => false,
                 ]
             )
             ->add(
@@ -127,6 +128,7 @@ class OpportunityType extends AbstractType
                     'label' => 'oro.sales.opportunity.close_revenue.label',
                     'currency_empty_value' => false,
                     'full_currency_list' => false,
+                    'error_bubbling' => false,
                 ]
             )
             ->add(
