@@ -9,6 +9,8 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
 class ConfigProvider
 {
+    const GRID_KEY = 'context';
+
     /** @var ConfigManager */
     protected $configManager;
 
@@ -58,7 +60,7 @@ class ConfigProvider
         $customerClasses = $this->getCustomerClasses();
         foreach ($customerClasses as $class) {
             $routeCreate = $this->getRouteCreate($class);
-            $defaultGrid = $this->getDefaultGrid($class);
+            $defaultGrid = $this->getGrid($class);
             $result[]    = [
                 'className'       => $class,
                 'label'           => $this->getLabel($class),
@@ -86,11 +88,11 @@ class ConfigProvider
      *
      * @return string|null
      */
-    public function getDefaultGrid($entityClass)
+    public function getGrid($entityClass)
     {
         $config = $this->configManager->getProvider('grid')->getConfig($entityClass);
 
-        return $config->get('context');
+        return $config->get(self::GRID_KEY);
     }
 
     /**

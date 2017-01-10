@@ -57,7 +57,7 @@ class CustomerController extends Controller
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
 
         return [
-            'gridName'     => $this->getCustomerConfigProvider()->getDefaultGrid($resolvedClass),
+            'gridName'     => $this->getCustomerConfigProvider()->getGrid($resolvedClass),
             'multiselect'  => false,
             'params'       => [
                 'class_name' => $resolvedClass,
