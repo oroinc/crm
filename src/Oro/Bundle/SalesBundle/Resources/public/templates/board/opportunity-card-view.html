@@ -3,7 +3,7 @@
 <div class="card-amount"><% if (budgetAmount !== null) { %><%- numberFormatter.formatCurrency(budgetAmount, budgetCurrency) %><% } else { %>&nbsp;<% } %></div>
 <div class="card-probability"><% if (probability !== null) { %><%- numberFormatter.formatPercent(probability) %><% } else { %>&nbsp;<% } %></div>
 <div class="card-additional">
-    <div class="card-additional-line"><% if (customerName) { %><%- customerName %><% } else { %>&nbsp;<% } %></div>
+    <div class="card-additional-line"><% if (accountName) { %><%- accountName %><% } else { %>&nbsp;<% } %></div>
     <div class="card-additional-line"><% if (contactName) { %><%- contactName %><% } else { %>&nbsp;<% } %></div>
 </div>
 <div class="card-date"><%- datetimeFormatter.formatDate(updatedAt) %></div>
