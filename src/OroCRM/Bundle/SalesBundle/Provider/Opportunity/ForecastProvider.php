@@ -121,7 +121,6 @@ class ForecastProvider
             QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
-        $this->applyProbabilityCondition($qb, 'o');
 
         return $this->aclHelper->apply($qb)->getOneOrNullResult();
     }
@@ -175,7 +174,6 @@ AND EXISTS(
     FROM OroDataAuditBundle:AuditField afph
     WHERE
         afph.id = MAX(afp.id)
-        AND (afph.newFloat NOT IN (:excludedProbabilities) or afph.newFloat IS NULL)
 )
 HAVING
             )
@@ -185,7 +183,6 @@ HAVING
                 'closeDateField'        => 'closeDate',
                 'probabilityField'      => 'probability',
                 'budgetAmountField'     => 'budgetAmount',
-                'excludedProbabilities' => [0, 1],
                 'moment'                => $moment,
             ]);
 
@@ -278,23 +275,6 @@ HAVING
                 ->andWhere(sprintf('%s < :end', $field))
                 ->setParameter('end', $end);
         }
-    }
-
-    /**
-     * @param QueryBuilder $qb
-     * @param string       $alias
-     */
-    protected function applyProbabilityCondition(QueryBuilder $qb, $alias)
-    {
-        $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->andX(
-                    sprintf('%s.probability <> 0', $alias),
-                    sprintf('%s.probability <> 1', $alias)
-                ),
-                sprintf('%s.probability is NULL', $alias)
-            )
-        );
     }
 
     /**

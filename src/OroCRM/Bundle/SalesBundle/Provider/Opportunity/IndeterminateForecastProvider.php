@@ -96,16 +96,6 @@ class IndeterminateForecastProvider
                     $filters,
                     $alias
                 );
-            $qb
-                ->andWhere(
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            sprintf('%s.probability <> 0', $alias),
-                            sprintf('%s.probability <> 1', $alias)
-                        ),
-                        sprintf('%s.probability is NULL', $alias)
-                    )
-                );
 
             if (!empty($ownerIds)) {
                 $qb->join('o.owner', 'owner');

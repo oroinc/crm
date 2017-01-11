@@ -194,15 +194,6 @@ class OpportunityRepository extends EntityRepository
             QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
 
-        $probabilityCondition = $qb->expr()->orX(
-            $qb->expr()->andX(
-                'opportunity.probability <> 0',
-                'opportunity.probability <> 1'
-            ),
-            'opportunity.probability is NULL'
-        );
-
-        $qb->andWhere($probabilityCondition);
         if ($start) {
             $qb
                 ->andWhere('opportunity.closeDate >= :startDate')
@@ -249,15 +240,12 @@ class OpportunityRepository extends EntityRepository
             $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
             if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
-                $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
                 $probability     = $oldProbability;
             } else {
                 $probability     = $opportunity->getProbability();
-                $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
             }
 
-            if ($isProbabilityOk
-                && $this->isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
+            if ($this->isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
                 && $this->isStatusOk($opportunityHistory, $opportunity)
             ) {
                 $result = $this->calculateOpportunityOldValue($result, $opportunityHistory, $opportunity, $probability);
@@ -430,8 +418,6 @@ class OpportunityRepository extends EntityRepository
             ->select('SUM(o.budgetAmount)')
             ->andWhere('o.closeDate IS NULL')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
         if ($start) {
             $qb
@@ -468,8 +454,6 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount)')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
         if ($start) {
             $qb
@@ -530,8 +514,6 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         $this->setCreationPeriod($qb, $start, $end);
