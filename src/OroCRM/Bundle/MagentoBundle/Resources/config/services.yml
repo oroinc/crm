@@ -542,8 +542,6 @@ services:
 
     orocrm_magento.event_listener.customer_datagrid_listener:
         class: %orocrm_magento.event_listener.customer_datagrid_listener.class%
-        arguments:
-            - "@request_stack"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
