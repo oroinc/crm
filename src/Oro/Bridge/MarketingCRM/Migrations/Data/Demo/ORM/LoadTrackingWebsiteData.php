@@ -54,7 +54,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData'
+            'Oro\Bundle\MagentoBundle\Migrations\Data\Demo\ORM\LoadMagentoData'
         ];
     }
 
