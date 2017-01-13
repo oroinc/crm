@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
