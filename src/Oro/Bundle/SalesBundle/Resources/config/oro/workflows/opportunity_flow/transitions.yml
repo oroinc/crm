@@ -27,17 +27,6 @@ workflows:
                                     - won
                                     - lost
                         probability: ~
-                    form_init:
-                        - '@request_enum_entity':
-                            enum_code: opportunity_status
-                            order_by:
-                                priority: ASC
-                            attribute: $opportunity.status
-                        - '@call_service_method':
-                            service: oro_sales.provider.probability
-                            method: get
-                            method_parameters: [$opportunity.status]
-                            attribute: $opportunity.probability
             develop:
                 step_to: open
                 is_unavailable_hidden: true
