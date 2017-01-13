@@ -30,6 +30,7 @@ datagrids:
                     - email.email as primaryEmail
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+                    - account.name as accountName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
@@ -39,6 +40,8 @@ datagrids:
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.owner, alias: own }
+                        - { join: o.customerAssociation, alias: customer }
+                        - { join: customer.account, alias: account }
         inline_editing:
             enable: true
         columns:
@@ -113,6 +116,9 @@ datagrids:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Opportunity
+            accountName:
+                label: oro.sales.b2bcustomer.datagrid.columns.account_name.label
+                renderable: false
         fields_acl:
             columns:
                 name:
