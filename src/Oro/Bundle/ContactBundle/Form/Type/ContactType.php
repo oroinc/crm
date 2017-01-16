@@ -50,7 +50,11 @@ class ContactType extends AbstractType
             ->add('lastName', 'text', array('required' => false, 'label' => 'oro.contact.last_name.label'))
             ->add('nameSuffix', 'text', array('required' => false, 'label' => 'oro.contact.name_suffix.label'))
             ->add('gender', 'oro_gender', array('required' => false, 'label' => 'oro.contact.gender.label'))
-            ->add('birthday', OroBirthdayType::class, array('required' => false, 'label' => 'oro.contact.birthday.label'))
+            ->add(
+                'birthday',
+                OroBirthdayType::class,
+                array('required' => false, 'label' => 'oro.contact.birthday.label')
+            )
             ->add(
                 'description',
                 'oro_resizeable_rich_text',
