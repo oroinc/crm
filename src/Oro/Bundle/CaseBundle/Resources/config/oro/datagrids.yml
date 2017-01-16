@@ -47,9 +47,13 @@ datagrids:
                 frontend_type: html
                 template: OroCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
             reportedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.reported_on.label
                 frontend_type: datetime
             closedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.closed_on.label
                 frontend_type: datetime
             statusLabel:
