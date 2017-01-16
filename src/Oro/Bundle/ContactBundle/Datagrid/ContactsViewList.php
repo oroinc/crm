@@ -21,7 +21,7 @@ class ContactsViewList extends AbstractViewsList
             ))
             ->setLabel($this->translator->trans(
                 'oro.datagrid.gridview.duplicate.label',
-                ['%entity%' => $this->translator->trans('oro.contact.entity_label')]
+                ['%entity%' => $this->translator->trans('oro.contact.entity_plural_label')]
             ))
         ];
     }
