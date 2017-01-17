@@ -1,13 +1,12 @@
 <?php
 
-namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+namespace Oro\Bundle\MagentoBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
@@ -306,7 +305,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     /**
      * @param ObjectManager $om
      * @param Store         $store
-     * @param Integration   $integration
+     * @param Channel       $channel
      * @param Customer      $customer
      * @param string        $status
      * @param Cart          $cart
@@ -528,7 +527,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
 
     /**
      * @param ObjectManager $om
-     * @param Website       $website
      * @param Store         $store
      * @param CustomerGroup $group
      * @param Channel       $channel

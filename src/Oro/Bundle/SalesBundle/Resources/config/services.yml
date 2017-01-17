@@ -401,6 +401,7 @@ services:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
         arguments:
             - '@oro_currency.converter.rate'
+            - '@oro_currency.config.currency'
         tags:
             - { name: doctrine.event_listener, event: onFlush, priority: 100 }
 
@@ -492,7 +493,7 @@ services:
         class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension
         arguments:
             - '@oro_sales.customer.config_provider'
-            - '@oro_datagrid.grid_configuration.helper'
+            - '@oro_entity.orm.entity_class_resolver'
         tags:
             - { name: oro_datagrid.extension }
 
@@ -616,3 +617,8 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\B2bAccountProvider
         tags:
          - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+
+    oro_tag.event_listener.import_export_tags_subscriber:
+        class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber
+        tags:
+            - { name: kernel.event_subscriber }

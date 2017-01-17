@@ -57,6 +57,7 @@ features:
             - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
         configuration:
             - opportunity_status_probabilities
+            - display_settings
         placeholder_items:
             - opportunities_launchpad
             - oro_sales_create_opportunity_link

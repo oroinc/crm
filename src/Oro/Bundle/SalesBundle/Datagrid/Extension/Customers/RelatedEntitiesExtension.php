@@ -22,8 +22,8 @@ class RelatedEntitiesExtension extends AbstractExtension
     protected $relatedEntityClass;
 
     /**
-     * @param ConfigProvider          $customerConfigProvider
-     * @param string                  $relatedEntityClass
+     * @param ConfigProvider $customerConfigProvider
+     * @param string         $relatedEntityClass
      */
     public function __construct(ConfigProvider $customerConfigProvider, $relatedEntityClass)
     {
@@ -37,11 +37,11 @@ class RelatedEntitiesExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
-            $config->getDatasourceType() === OrmDatasource::TYPE &&
-            $this->parameters->get('customer_class') &&
-            $this->parameters->get('customer_id') &&
-            $this->parameters->get('related_entity_class') === $this->relatedEntityClass &&
-            $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
+            $config->isOrmDatasource()
+            && $this->parameters->get('customer_id')
+            && $this->parameters->get('customer_class')
+            && $this->parameters->get('related_entity_class') === $this->relatedEntityClass
+            && $this->customerConfigProvider->isCustomerClass($this->parameters->get('customer_class'));
     }
 
     /**
@@ -49,7 +49,7 @@ class RelatedEntitiesExtension extends AbstractExtension
      */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
-        /** @var $datasource OrmDataSource */
+        /** @var OrmDatasource $datasource */
         $customerClass    = $this->parameters->get('customer_class');
         $customerField    = $this->getCustomerField($customerClass);
         $queryBuilder     = $datasource->getQueryBuilder();

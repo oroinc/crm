@@ -166,6 +166,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $this->isExtensionInstalled = null;
         $this->adminUrl = null;
         $this->isWsiMode = $wsiMode;
+        $this->serverTime = null;
 
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = null;

@@ -36,13 +36,10 @@ class TrackingEventsDataGridListener
      */
     protected function replaceSourceTable(DatagridConfiguration $config)
     {
-        $sourceEntityName = $config['extended_entity_name'];
-
-        $config->offsetSetByPath('[source][query][from]', [
-            ['table' => $sourceEntityName, 'alias' => 've'],
-        ]);
-
-        $config->joinTable('inner', ['join' => 've.webEvent', 'alias' => 'e']);
+        $config->getOrmQuery()
+            ->resetFrom()
+            ->addFrom($config->getExtendedEntityClassName(), 've')
+            ->addInnerJoin('ve.webEvent', 'e');
     }
 
     /**
@@ -50,17 +47,16 @@ class TrackingEventsDataGridListener
      */
     protected function addCustomersFilter(DatagridConfiguration $config)
     {
-        $customerAssociationName = ExtendHelper::buildAssociationName(
-            self::CUSTOMER_CLASS_NAME,
-            self::ASSOCIATION_KIND
+        $config->getOrmQuery()->addAndWhere(
+            sprintf(
+                'IDENTITY(ve.%s) IN (:customerIds)',
+                ExtendHelper::buildAssociationName(self::CUSTOMER_CLASS_NAME, self::ASSOCIATION_KIND)
+            )
         );
 
-        $config->offsetAddToArrayByPath('[source][query][where][and]', [
-            sprintf('IDENTITY(ve.%s) IN (:customerIds)', $customerAssociationName)
-        ]);
-
-        $config->offsetAddToArrayByPath('[source][bind_parameters]', [
-            ['name' => 'customerIds']
-        ]);
+        $config->offsetAddToArrayByPath(
+            DatagridConfiguration::DATASOURCE_BIND_PARAMETERS_PATH,
+            [['name' => 'customerIds']]
+        );
     }
 }

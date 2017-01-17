@@ -154,13 +154,8 @@ class ActivityListener
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
-                $entityIdentifiersByClassName = $this->doctrineHelper->getEntityIdentifierFieldNamesForClass($class);
-
-                /**
-                 * Skip entities where we can't get single identifier
-                 */
-                if (count($entityIdentifiersByClassName) > 1) {
-                    return;
+                if (!$this->isSupportedClass($class)) {
+                    continue;
                 }
 
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
@@ -192,6 +187,10 @@ class ActivityListener
 
             foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
+                if (!$this->isSupportedClass($class)) {
+                    continue;
+                }
+
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
                 if (!isset($this->updatedEntities[$key])
@@ -384,5 +383,16 @@ class ActivityListener
         return $currentDirection === DirectionProviderInterface::DIRECTION_INCOMING
             ? [ActivityScope::CONTACT_COUNT_IN, ActivityScope::CONTACT_COUNT_IN]
             : [ActivityScope::CONTACT_COUNT_OUT, ActivityScope::CONTACT_COUNT_OUT];
+    }
+
+    /**
+     * @param string $class
+     * @return bool
+     */
+    protected function isSupportedClass($class)
+    {
+        $entityIdentifiersByClassName = $this->doctrineHelper->getEntityIdentifierFieldNamesForClass($class);
+
+        return count($entityIdentifiersByClassName) === 1;
     }
 }

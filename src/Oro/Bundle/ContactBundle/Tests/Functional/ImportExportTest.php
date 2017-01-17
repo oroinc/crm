@@ -4,11 +4,12 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
-use Symfony\Component\DomCrawler\Form;
-
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Form;
 
 /**
  * @outputBuffering enabled
@@ -17,6 +18,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ImportExportTest extends WebTestCase
 {
+    use MessageQueueExtension;
+
     /**
      * @var string
      */
@@ -24,7 +27,7 @@ class ImportExportTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient(array(), $this->generateBasicAuthHeader());
+        $this->initClient([], $this->generateBasicAuthHeader());
     }
 
     /**
@@ -72,6 +75,10 @@ class ImportExportTest extends WebTestCase
      */
     public function testImportExport($strategy, $added, $replaced)
     {
+        $this->markTestSkipped(
+            'This test will be completely removed and replaced with a set of smaller functional tests
+            (see BAP-13063 and BAP-13064)'
+        );
         $this->validateImportFile($strategy);
         $this->doImport($strategy, $added, $replaced);
 
@@ -88,10 +95,10 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_import_form',
-                array(
+                [
                     'entity'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
                     '_widgetContainer' => 'dialog'
-                )
+                ]
             )
         );
         $result = $this->client->getResponse();
@@ -118,7 +125,7 @@ class ImportExportTest extends WebTestCase
 
         $result = $this->client->getResponse();
 
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertJsonResponseStatusCodeEquals($result, 200);
 
         $crawler = $this->client->getCrawler();
         $this->assertEquals(0, $crawler->filter('.import-errors')->count());
@@ -137,24 +144,16 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_import_process',
-                array(
+                [
                     'processorAlias' => $strategy,
                     '_format'        => 'json'
-                )
+                ]
             )
         );
 
         $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
-        $this->assertEquals(
-            [
-                'success'    => true,
-                'message'    => 'File was successfully imported.',
-                'errorsUrl'  => null,
-                'importInfo' => sprintf('%s contacts were added, %s contacts were updated', $added, $replaced)
-            ],
-            $data
-        );
+        $this->assertEquals(['success' => true], $data);
     }
 
     protected function doExport()
@@ -164,16 +163,18 @@ class ImportExportTest extends WebTestCase
             'GET',
             $this->getUrl(
                 'oro_importexport_export_instant',
-                array(
+                [
                     'processorAlias' => 'oro_contact',
                     '_format'        => 'json'
-                )
+                ]
             )
         );
 
         $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
+        $this->assertCount(1, $data);
         $this->assertTrue($data['success']);
+
         $this->assertEquals(1, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
 
@@ -209,7 +210,7 @@ class ImportExportTest extends WebTestCase
         $this->assertCollectionData($expected, $actual, ['Emails 2 Email', 'Emails 3 Email']);
         $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
         $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
-        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/postal code', 'Addresses 3 Zip/postal code']);
+        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/Postal Code', 'Addresses 3 Zip/Postal Code']);
         $this->assertArrayData($expected, $actual, 'Tags');
 
         $this->assertEquals($expected, $actual);

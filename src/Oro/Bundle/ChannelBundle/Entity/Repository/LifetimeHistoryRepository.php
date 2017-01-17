@@ -24,7 +24,7 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
-        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Account') {
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Customer') {
             return 0.0;
         }
 
@@ -67,7 +67,7 @@ class LifetimeHistoryRepository extends EntityRepository
         /** @var Channel $channel */
         foreach ($records as $row) {
             list($account, $channel, $excludeEntry) = $row;
-            $groupedByChannel[$channel->getId()][] = [$account, $excludeEntry];
+            $groupedByChannel[$channel ? $channel->getId() : ''][] = [$account, $excludeEntry];
         }
 
         foreach ($groupedByChannel as $channelId => $pairs) {
@@ -77,8 +77,14 @@ class LifetimeHistoryRepository extends EntityRepository
             $qb->update('OroChannelBundle:LifetimeValueHistory', 'l');
             $qb->set('l.status', ':status');
             $qb->setParameter('status', $qb->expr()->literal($status));
-            $qb->andWhere('l.dataChannel = :channel');
-            $qb->setParameter('channel', $channelId);
+
+            if ($channelId !== '') {
+                $qb
+                    ->andWhere('l.dataChannel = :channel')
+                    ->setParameter('channel', $channelId);
+            } else {
+                $qb->andWhere($qb->expr()->isNull('l.dataChannel'));
+            }
 
             $criteria = [];
             foreach ($pairs as $k => $pair) {

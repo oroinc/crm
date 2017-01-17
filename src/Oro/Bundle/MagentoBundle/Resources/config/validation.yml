@@ -171,8 +171,6 @@ Oro\Bundle\MagentoBundle\Entity\Cart:
             - Length: { max: 255 }
         dataChannel:
             - NotBlank: ~
-        organization:
-            - NotBlank: ~
 
 Oro\Bundle\MagentoBundle\Entity\CartAddress:
     properties:
@@ -269,8 +267,6 @@ Oro\Bundle\MagentoBundle\Entity\Order:
             - DateTime: ~
             - NotBlank: ~
         dataChannel:
-            - NotBlank: ~
-        organization:
             - NotBlank: ~
 
 Oro\Bundle\MagentoBundle\Entity\OrderItem:

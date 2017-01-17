@@ -117,36 +117,6 @@ class B2bBigNumberProvider
      * @param array $dateRange
      * @param int[] $owners
      *
-     * @return int
-     */
-    public function getTotalServicePipelineAmount(array $dateRange, $owners = [])
-    {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
-
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Opportunity')
-            ->getTotalServicePipelineAmount($this->aclHelper, $start, $end, $owners);
-    }
-
-    /**
-     * @param array $dateRange
-     * @param int[] $owners
-     *
-     * @return double
-     */
-    public function getOpenWeightedPipelineAmount($dateRange, $owners = [])
-    {
-        list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
-
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Opportunity')
-            ->getOpenWeightedPipelineAmount($this->aclHelper, $start, $end, $owners);
-    }
-
-    /**
-     * @param array $dateRange
-     * @param int[] $owners
-     *
      * @return double
      */
     public function getNewOpportunitiesAmount($dateRange, $owners = [])

@@ -67,7 +67,7 @@ class MagentoDeleteManagerTest extends WebTestCase
     protected function getRecordsCount($repository, $channel)
     {
         $result = $this->em->createQueryBuilder()
-            ->select('count(e)')
+            ->select('COUNT(e)')
             ->from($repository, 'e')
             ->where('e.channel = :channel')
             ->setParameter('channel', $channel)

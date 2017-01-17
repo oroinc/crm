@@ -97,7 +97,7 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
         return [
             ConfigUtil::CLASS_NAME                           => Account::class,
             $customersDataMap['account'][self::ID_FIELD_KEY] =>
-                $data[$this->accountField][$customersDataMap['account'][self::ID_FIELD_KEY]]
+                $data[$customersDataMap['account'][self::ID_FIELD_KEY]],
         ];
     }
 

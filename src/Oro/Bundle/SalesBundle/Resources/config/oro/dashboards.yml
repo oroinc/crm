@@ -4,7 +4,7 @@ dashboards:
             items:
                 leads:
                     label:      oro.sales.lead.entity_plural_label
-                    icon:       phone-sign
+                    icon:       phone-square
                     route:      oro_sales_lead_index
                     acl:        oro_sales_lead_view
                     position:   20

@@ -25,7 +25,7 @@ class ChannelControllerTest extends WebTestCase
     use MessageQueueExtension;
 
     const CHANNEL_NAME = 'some name';
-    const GRID_NAME    = 'orocrm-channels-grid';
+    const GRID_NAME    = 'oro-channels-grid';
 
     public function setUp()
     {

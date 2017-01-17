@@ -55,15 +55,13 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity_budget:
-                            form_type: oro_money
+                            form_type: oro_multicurrency
                             options:
                                 required: false
                         notes:
                             form_type: oro_resizeable_rich_text
                             options:
                                 required: false
-                    attribute_default_values:
-                        opportunity_budget: $cart.subTotal
                     form_init:
                         - '@assign_active_user': $opportunity_owner
                         - '@format_name':
@@ -75,6 +73,11 @@ workflows:
                             arguments:
                                 customer_name: $.result.formattedCustomerName
                                 shopping_cart_id: $cart.id
+                        - '@call_service_method':
+                            service: oro_magento.converter.cart_subtotal_to_multicurrency
+                            method: convertCartTotalToMultiCurrency
+                            method_parameters: [$cart]
+                            attribute: $opportunity_budget
             abandon:
                 step_to: abandoned
                 is_start: true

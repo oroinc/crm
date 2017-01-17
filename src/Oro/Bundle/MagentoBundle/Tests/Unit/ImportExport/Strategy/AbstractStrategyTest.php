@@ -120,6 +120,10 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->strategyHelper->expects($this->any())
+            ->method('isGranted')
+            ->will($this->returnValue(true));
+
         $this->defaultOwnerHelper = $this
             ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper')
             ->disableOriginalConstructor()

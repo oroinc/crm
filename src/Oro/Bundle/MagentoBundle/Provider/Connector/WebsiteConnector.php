@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 class WebsiteConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
@@ -38,5 +39,15 @@ class WebsiteConnector extends AbstractMagentoConnector implements DictionaryCon
     public function getType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * @param ContextInterface $context
+     */
+    protected function initializeTransport(ContextInterface $context)
+    {
+        $this->contextMediator->resetInitializedTransport();
+
+        parent::initializeTransport($context);
     }
 }
