@@ -15,6 +15,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 class AccountExtension extends AbstractExtension
 {
     const COLUMN_NAME = 'associatedAccountName';
+    const FULL_COLUMN_NAME = 'associatedAccount.name';
 
     const CUSTOMER_ROOT_PARAM = '_customers';
     const DISABLED_PARAM      = '_disabled';
@@ -118,7 +119,7 @@ class AccountExtension extends AbstractExtension
     {
         return [
             'type'         => 'string',
-            'data_name'    => static::COLUMN_NAME,
+            'data_name'    => static::FULL_COLUMN_NAME,
             'translatable' => true,
             'enabled'      => true,
         ];
@@ -148,7 +149,7 @@ class AccountExtension extends AbstractExtension
             sprintf('customerAssociation.%s = %s', $customerField, $config->getOrmQuery()->getRootAlias())
         );
         $queryBuilder->leftJoin('customerAssociation.account', 'associatedAccount');
-        $queryBuilder->addSelect(sprintf('associatedAccount.name as %s', static::COLUMN_NAME));
+        $queryBuilder->addSelect(sprintf('%s as %s', static::FULL_COLUMN_NAME, static::COLUMN_NAME));
     }
 
     /**
