@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\CampaignBundle\Tests\Functional\Fixture;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;

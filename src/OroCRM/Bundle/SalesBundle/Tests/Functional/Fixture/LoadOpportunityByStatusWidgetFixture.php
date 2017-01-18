@@ -44,7 +44,6 @@ class LoadOpportunityByStatusWidgetFixture extends AbstractFixture
         $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $openStatus = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId('in_progress'));
         $opportunity = new Opportunity();
-        $opportunity->setName('Opportunity name');
         $opportunity->setName('name '.$id);
         $opportunity->setStatus($openStatus);
         $opportunity->setOrganization($this->organization);
