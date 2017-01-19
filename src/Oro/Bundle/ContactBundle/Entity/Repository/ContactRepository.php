@@ -21,7 +21,7 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
             ->orderBy('name')
             ->leftJoin('c.organization', 'o')
             ->leftJoin('c.emails', 'e')
-            ->andWhere('e.primary = 1');
+            ->andWhere('e.primary = true');
 
         if ($query) {
             $qb
