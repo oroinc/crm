@@ -15,9 +15,9 @@ oro:
             shortcut_list_contacts.description:     List of contacts
             shortcut_list_contacts.label:           Show contacts list
             shortcut_new_contact.description:       Create new contact instance
-            shortcut_new_contact.label:             Create new contact
+            shortcut_new_contact.label:             Create new Contact
             shortcut_new_contact_group.description: Create new contact group instance
-            shortcut_new_contact_group.label:       Create new contact group
+            shortcut_new_contact_group.label:       Create new Contact Group
         controller:
             contact_group.saved.message: Contact Group saved
             contact.saved.message:       Contact saved

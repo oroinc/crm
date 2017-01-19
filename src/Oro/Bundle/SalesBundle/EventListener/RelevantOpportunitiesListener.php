@@ -12,8 +12,8 @@ use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
 
 class RelevantOpportunitiesListener
 {
-    // below activity block which have 1000
-    const GRID_BLOCK_PRIORITY = 1010;
+    // below additional information block which have 1200
+    const GRID_BLOCK_PRIORITY = 1210;
 
     /** @var TranslatorInterface */
     protected $translator;

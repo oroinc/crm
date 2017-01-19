@@ -5,15 +5,15 @@ oro:
             accounts_report_tab.label: Accounts
             leads_report_tab.label: Leads
             opportunities_report_tab.label: Opportunities
-            accounts_life_time_value.label: Life time
+            accounts_life_time_value.label: Life Time
             accounts_life_time_value.description: Accounts lifetime report
-            accounts_by_opportunities.label: By opportunities
+            accounts_by_opportunities.label: By Opportunities
             accounts_by_opportunities.description: Accounts by opportunities report
-            leads_by_date.label: Leads by date
+            leads_by_date.label: Leads By Date
             leads_by_date.description: Leads by date report
-            opportunities_by_status.label: Opportunities by status
+            opportunities_by_status.label: Opportunities By Status
             opportunities_by_status.description: Opportunities by status report
-            won_by_period.label: Won opportunities by period
+            won_by_period.label: Won Opportunities By Period
             won_by_period.description: Won opportunities by period report
             total_forecast.label: Total Forecast
             total_forecast.description: Total Forecast report
