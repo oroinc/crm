@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ContactBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\EmailBundle\Entity\Repository\EmailAwareRepository;
 
@@ -18,16 +17,17 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
 
         $qb
             ->select(sprintf('%s AS name', $fullNameQueryPart))
-            ->addSelect('c.id AS entityId, c.email, o.name AS organization')
+            ->addSelect('c.id AS entityId, e.email, o.name AS organization')
             ->orderBy('name')
             ->leftJoin('c.organization', 'o')
-            ->andWhere('c.email IS NOT NULL');
+            ->leftJoin('c.emails', 'e')
+            ->andWhere('e.primary = 1');
 
         if ($query) {
             $qb
                 ->andWhere($qb->expr()->orX(
                     $qb->expr()->like($fullNameQueryPart, ':query'),
-                    $qb->expr()->like('c.email', ':query')
+                    $qb->expr()->like('e.email', ':query')
                 ))
                 ->setParameter('query', sprintf('%%%s%%', $query));
         }
@@ -35,7 +35,7 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
         if ($excludedEmailNames) {
             $qb
                 ->andWhere($qb->expr()->notIn(
-                    sprintf('TRIM(CONCAT(%s, \' <\', c.email, \'>|\', o.name))', $fullNameQueryPart),
+                    sprintf('TRIM(CONCAT(%s, \' <\', e.email, \'>|\', o.name))', $fullNameQueryPart),
                     ':excluded_emails'
                 ))
                 ->setParameter('excluded_emails', array_values($excludedEmailNames));
