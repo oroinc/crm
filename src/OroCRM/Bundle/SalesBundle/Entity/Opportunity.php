@@ -22,7 +22,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
  *      name="orocrm_sales_opportunity",
- *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
+ *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at", "id"})}
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable

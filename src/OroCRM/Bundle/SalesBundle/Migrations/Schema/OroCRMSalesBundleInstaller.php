@@ -100,7 +100,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_25_6';
+        return 'v1_25_7';
     }
 
     /**
@@ -195,7 +195,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $table->addIndex(['contact_id'], 'idx_c0fe4aace7a1254a', []);
-        $table->addIndex(['created_at'], 'opportunity_created_idx', []);
+        $table->addIndex(['created_at', 'id'], 'opportunity_created_idx', []);
         $table->addUniqueIndex(['workflow_item_id'], 'uniq_c0fe4aac1023c4ee');
         $table->addIndex(['user_owner_id'], 'idx_c0fe4aac9eb185f9', []);
         $table->addIndex(['lead_id'], 'idx_c0fe4aac55458d', []);
@@ -328,7 +328,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
         $table->addIndex(['data_channel_id'], 'IDX_73DB4633BDC09B73', []);
-        $table->addIndex(['createdat'], 'lead_created_idx', []);
+        $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['workflow_step_id'], 'idx_73db463371fe882c', []);
