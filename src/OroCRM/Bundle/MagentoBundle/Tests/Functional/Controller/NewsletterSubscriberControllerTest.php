@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
@@ -108,8 +106,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
                     'gridFilters' => [],
                     'assert' => [
                         'channelName' => 'Magento channel',
-                        'email' => 'subscriber@example.com',
-                        'status' => 'Subscribed',
+                        'email' => 'subscriber3@example.com',
+                        'status' => 'Unsubscribed',
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
@@ -124,8 +122,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
                     ],
                     'assert' => [
                         'channelName' => 'Magento channel',
-                        'email' => 'subscriber@example.com',
-                        'status' => 'Subscribed',
+                        'email' => 'subscriber3@example.com',
+                        'status' => 'Unsubscribed',
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],

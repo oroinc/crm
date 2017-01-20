@@ -28,17 +28,6 @@ workflows:
                                     - won
                                     - lost
                         probability: ~
-                    init_actions:
-                        - '@request_enum_entity':
-                            enum_code: opportunity_status
-                            order_by:
-                                priority: ASC
-                            attribute: $opportunity.status
-                        - '@call_service_method':
-                            service: orocrm_sales.provider.probability
-                            method: get
-                            method_parameters: [$opportunity.status]
-                            attribute: $opportunity.probability
             develop:
                 label: 'Develop'
                 step_to: open
@@ -107,7 +96,6 @@ workflows:
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
-                        - '@assign_value': [$close_revenue, $budget_amount]
             close_lost:
                 label: 'Close as Lost'
                 step_to: lost

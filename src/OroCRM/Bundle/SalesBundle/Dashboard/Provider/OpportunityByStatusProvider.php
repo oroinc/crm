@@ -2,16 +2,15 @@
 
 namespace OroCRM\Bundle\SalesBundle\Dashboard\Provider;
 
-use Doctrine\ORM\Query\Expr as Expr;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
-use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Doctrine\ORM\Query\Expr as Expr;
 
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class OpportunityByStatusProvider
@@ -59,7 +58,8 @@ class OpportunityByStatusProvider
         $orderBy          = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
         $qb               = $this->getOpportunityRepository()
             ->getGroupedOpportunitiesByStatusQB('o', $orderBy);
-        $this->dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
+
+        $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'o.createdAt');
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);

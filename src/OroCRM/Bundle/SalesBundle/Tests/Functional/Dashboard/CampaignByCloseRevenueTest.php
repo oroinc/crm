@@ -1,0 +1,92 @@
+<?php
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Dashboard;
+
+use Oro\Bundle\DashboardBundle\Entity\Widget;
+use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+
+/**
+ * @dbIsolationPerTest
+ */
+class CampaignByCloseRevenueTest extends AbstractWidgetTestCase
+{
+    /** @var  Widget */
+    protected $widget;
+
+    public function setUp()
+    {
+        $this->initClient(
+            ['debug' => false],
+            array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
+        );
+        $this->loadFixtures([
+            'OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignByCloseRevenueWidgetFixture'
+        ]);
+
+        $this->widget = $this->getReference('widget_campaigns_by_close_revenue');
+    }
+
+    /**
+     * @dataProvider widgetProvider
+     * @param $requestData
+     */
+    public function testDateRangeAllTypeFilter($requestData)
+    {
+        $this->configureWidget($this->widget, $requestData['widgetConfig']);
+
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl(
+                'orocrm_campaign_dashboard_campaigns_by_close_revenue_chart',
+                [
+                    'widget' => 'campaigns_by_close_revenue',
+                    '_widgetId' => $this->widget->getId()
+                ]
+            )
+        );
+        $response = $this->client->getResponse();
+        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertNotEmpty($crawler->html());
+
+        $chartData = $this->getChartData($crawler);
+        //If we have data for chart we need only first campaign
+        if ($chartData) {
+            $chartData = reset($chartData);
+        }
+
+        $this->assertEquals(
+            $requestData['expectedResult'],
+            round($chartData->value),
+            'Revenue for campaign widget calculated incorrectly'
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function widgetProvider()
+    {
+        return [
+            'Closed lost opportunities' => [
+                [
+                    'widgetConfig' => [
+                        'campaigns_by_close_revenue[dateRange][part]'   => 'value',
+                        'campaigns_by_close_revenue[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
+                    ],
+                    'expectedResult' => 200 // 2 opportunities * $100
+                ],
+            ],
+            'Opportunities for today' => [
+                [
+                    'widgetConfig' => [
+                        'campaigns_by_close_revenue[dateRange][part]'   => 'value',
+                        'campaigns_by_close_revenue[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
+                        'campaigns_by_close_revenue[dateRange][value][start]'   => '2016-12-29 00:00:00',
+                        'campaigns_by_close_revenue[dateRange][value][end]'   => '2016-12-29 23:59:59',
+                    ],
+                    'expectedResult' => 100 // 1 opportunity * $100
+                ],
+            ]
+        ];
+    }
+}

@@ -6,16 +6,9 @@ use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Request
-     */
-    protected $request;
-
     /**
      * @var CustomerDataGridListener
      */
@@ -23,42 +16,253 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RequestStack $requestStack */
-        $requestStack = $this->getMockBuilder('Symfony\Component\HttpFoundation\RequestStack')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = new Request();
-        $requestStack->expects($this->once())
-            ->method('getCurrentRequest')
-            ->will($this->returnValue($this->request));
-
-        $this->listener = new CustomerDataGridListener($requestStack);
+        $this->listener = new CustomerDataGridListener();
     }
 
-    public function testWithoutFilter()
+    public function testAddNewsletterSubscribersWhenFilteringByIsSubscriberWasNotRequested()
     {
-        $config = DatagridConfiguration::create([]);
         $parameters = new ParameterBag();
-        $event = new PreBuild($config, $parameters);
 
-        $this->listener->onPreBuild($event);
-        $this->assertArrayHasKey('isSubscriber', $config->offsetGetByPath('[filters][columns]'));
+        $config = DatagridConfiguration::create(
+            [
+                'source' => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            'c.firstName'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $this->listener->onPreBuild(new PreBuild($config, $parameters));
+
+        $this->assertEquals(
+            [
+                'source'  => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            'c.firstName'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ]
+                    ]
+                ],
+                'filters' => [
+                    'columns' => [
+                        'isSubscriber' => [
+                            'label'     => 'orocrm.magento.datagrid.columns.is_subscriber.label',
+                            'type'      => 'single_choice',
+                            'data_name' => 'isSubscriber',
+                            'options'   => [
+                                'field_options' => [
+                                    'choices' => [
+                                        'unknown' => 'orocrm.magento.datagrid.columns.is_subscriber.unknown',
+                                        'no'      => 'orocrm.magento.datagrid.columns.is_subscriber.no',
+                                        'yes'     => 'orocrm.magento.datagrid.columns.is_subscriber.yes'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $config->toArray()
+        );
     }
 
-    public function testWithFilter()
+    public function testAddNewsletterSubscribersWhenFilteringByIsSubscriberWasRequested()
     {
-        $this->request->query->set('magento-customers-grid', ['_filter' => ['isSubscriber' => ['value' => 'yes']]]);
-
-        $config = DatagridConfiguration::create([]);
-        $config->offsetSetByPath('[source][query][select]', ['c.id', 'c.firstName']);
         $parameters = new ParameterBag();
-        $event = new PreBuild($config, $parameters);
+        $parameters->set(
+            '_filter',
+            ['isSubscriber' => ['value' => 'yes']]
+        );
 
-        $this->assertEmpty($config->offsetGetByPath('[source][query][join][left]'));
-        $this->listener->onPreBuild($event);
-        $this->assertArrayHasKey('isSubscriber', $config->offsetGetByPath('[filters][columns]'));
-        $this->assertEquals('DISTINCT c.id', $config->offsetGetByPath('[source][query][select][0]'));
-        $this->assertContains('isSubscriber', $config->offsetGetByPath('[source][query][select][2]'));
-        $this->assertCount(3, $config->offsetGetByPath('[source][query][join][left]'));
+        $config = DatagridConfiguration::create(
+            [
+                'source' => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            'c.firstName'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $this->listener->onPreBuild(new PreBuild($config, $parameters));
+
+        $this->assertEquals(
+            [
+                'source'  => [
+                    'query' => [
+                        'select'   => [
+                            'DISTINCT c.id',
+                            'c.firstName',
+                            'CASE WHEN'
+                            . ' transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL'
+                            . ' THEN (CASE WHEN'
+                            . ' IDENTITY(newsletterSubscribers.status) = \'1\' THEN \'yes\' ELSE \'no\' END)'
+                            . ' ELSE \'unknown\''
+                            . ' END as isSubscriber'
+                        ],
+                        'from'     => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ],
+                        'join'     => [
+                            'left' => [
+                                [
+                                    'join'  => 'c.channel',
+                                    'alias' => 'channel'
+                                ],
+                                [
+                                    'join'          => 'OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+                                    'alias'         => 'transport',
+                                    'conditionType' => 'WITH',
+                                    'condition'     => 'channel.transport = transport'
+                                ],
+                                [
+                                    'join'  => 'c.newsletterSubscribers',
+                                    'alias' => 'newsletterSubscribers'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'filters' => [
+                    'columns' => [
+                        'isSubscriber' => [
+                            'label'     => 'orocrm.magento.datagrid.columns.is_subscriber.label',
+                            'type'      => 'single_choice',
+                            'data_name' => 'isSubscriber',
+                            'options'   => [
+                                'field_options' => [
+                                    'choices' => [
+                                        'unknown' => 'orocrm.magento.datagrid.columns.is_subscriber.unknown',
+                                        'no'      => 'orocrm.magento.datagrid.columns.is_subscriber.no',
+                                        'yes'     => 'orocrm.magento.datagrid.columns.is_subscriber.yes'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $config->toArray()
+        );
+    }
+
+    public function testConvertJoinsToSubQueriesWhenSortingWasNotRequested()
+    {
+        $parameters = new ParameterBag();
+
+        $config = DatagridConfiguration::create(
+            [
+                'source' => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            'dataChannel.name as channelName',
+                            'cw.name as websiteName',
+                            'cg.name as customerGroup'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ],
+                        'join'   => [
+                            'left' => [
+                                ['join' => 'c.dataChannel', 'alias' => 'dataChannel'],
+                                ['join' => 'c.website', 'alias' => 'cw'],
+                                ['join' => 'c.group', 'alias' => 'cg']
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $this->listener->onPreBuild(new PreBuild($config, $parameters));
+
+        $this->assertEquals(
+            [
+                'source' => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            '(SELECT dataChannel.name FROM OroCRM\Bundle\ChannelBundle\Entity\Channel AS dataChannel'
+                            . ' WHERE dataChannel = c.dataChannel) AS channelName',
+                            '(SELECT cw.name FROM OroCRM\Bundle\MagentoBundle\Entity\Website AS cw'
+                            . ' WHERE cw = c.website) AS websiteName',
+                            '(SELECT cg.name FROM OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup AS cg'
+                            . ' WHERE cg = c.group) AS customerGroup'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ],
+                        'join'   => [
+                            'left' => []
+                        ]
+                    ]
+                ]
+            ],
+            $config->toArray(['source'])
+        );
+    }
+
+    public function testConvertJoinsToSubQueriesWhenSortingWasRequested()
+    {
+        $parameters = new ParameterBag();
+        $parameters->set(
+            '_sort_by',
+            [
+                'channelName'   => '1',
+                'websiteName'   => '2',
+                'customerGroup' => '3'
+            ]
+        );
+
+        $config = DatagridConfiguration::create(
+            [
+                'source' => [
+                    'query' => [
+                        'select' => [
+                            'c.id',
+                            'dataChannel.name as channelName',
+                            'cw.name as websiteName',
+                            'cg.name as customerGroup'
+                        ],
+                        'from'   => [
+                            ['table' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer', 'alias' => 'c']
+                        ],
+                        'join'   => [
+                            'left' => [
+                                ['join' => 'c.dataChannel', 'alias' => 'dataChannel'],
+                                ['join' => 'c.website', 'alias' => 'cw'],
+                                ['join' => 'c.group', 'alias' => 'cg']
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        $originalConfig = $config->toArray(['source']);
+
+        $this->listener->onPreBuild(new PreBuild($config, $parameters));
+
+        $this->assertEquals(
+            $originalConfig,
+            $config->toArray(['source'])
+        );
     }
 }

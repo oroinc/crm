@@ -47,7 +47,7 @@ class CampaignDataProvider
     {
         $qb = $this->getCampaignRepository()->getCampaignsLeadsQB('lead');
         $qb->setMaxResults(self::CAMPAIGN_LEAD_COUNT);
-        $this->dateFilterProcessor->process($qb, $dateRange, 'lead.createdAt');
+        $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'lead.createdAt');
 
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
@@ -75,7 +75,7 @@ class CampaignDataProvider
     {
         $qb = $this->getCampaignRepository()->getCampaignsByCloseRevenueQB('opportunities');
         $qb->setMaxResults(self::CAMPAIGN_CLOSE_REVENUE_COUNT);
-        $this->dateFilterProcessor->process($qb, $dateRange, 'opportunities.createdAt');
+        $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'opportunities.createdAt');
 
         return $this->aclHelper->apply($qb)->getArrayResult();
     }

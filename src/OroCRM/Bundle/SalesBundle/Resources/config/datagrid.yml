@@ -315,9 +315,9 @@ datagrid:
                     - l.numberOfEmployees
                     - l.twitter
                     - l.linkedIn
-                    - source.name as sourceName
+                    - IDENTITY(l.source) as source
                     - customer.name as customerName
-                    - s.id as status
+                    - IDENTITY(l.status) as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -337,7 +337,6 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: s }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -347,7 +346,6 @@ datagrid:
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
                         - { join: l.customer, alias: customer }
-                        - { join: l.source, alias: source }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -358,9 +356,10 @@ datagrid:
             name:
                 label:         orocrm.sales.lead.name.label
             status:
-                frontend_type: select
+                context:
+                    enum_code: lead_status
+                frontend_type: enum
                 label:         orocrm.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -388,7 +387,10 @@ datagrid:
                 label:         orocrm.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
                 renderable: false
-            sourceName:
+            source:
+                context:
+                    enum_code: lead_source
+                frontend_type: enum
                 label:         orocrm.sales.lead.source.label
                 renderable: false
             customerName:
@@ -510,8 +512,8 @@ datagrid:
                     data_name: l.website
                 numberOfEmployees:
                     data_name: l.numberOfEmployees
-                sourceName:
-                    data_name: source.name
+                source:
+                    data_name: source
                 customerName:
                     data_name: customerName
                 email:
@@ -609,10 +611,10 @@ datagrid:
                     type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
-                sourceName:
+                source:
                     type: enum
                     enum_code: lead_source
-                    data_name: source.id
+                    data_name: source
                     enabled: false
                 customerName:
                     type: string

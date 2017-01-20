@@ -16,7 +16,7 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - dataChannel.name as channelName
-                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
+                    - IDENTITY(c.channel) as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
@@ -29,7 +29,6 @@ datagrid:
                 join:
                     left:
                         - { join: c.dataChannel, alias: dataChannel }
-                        - { join: c.channel, alias: channel }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }

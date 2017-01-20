@@ -152,6 +152,7 @@ class CampaignRepository extends EntityRepository
             ->from('OroCRMCampaignBundle:Campaign', 'campaign')
             ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
             ->join('lead.opportunities', $opportunitiesAlias)
+            ->where(sprintf('%s.status=\'won\'', $opportunitiesAlias))
             ->orderBy('closeRevenue', 'DESC')
             ->groupBy('campaign.name');
 

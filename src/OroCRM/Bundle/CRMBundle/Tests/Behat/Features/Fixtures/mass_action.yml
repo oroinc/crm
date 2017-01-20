@@ -1,11 +1,23 @@
 include:
     - contacts.yml
 
+OroCRM\Bundle\TaskBundle\Entity\TaskPriority:
+  testPriority:
+    __construct: [test]
+    label: test
+    order: 1
+
+Extend\Entity\EV_Task_Status:
+  testStatus:
+    __construct: [test, test]
+
 OroCRM\Bundle\TaskBundle\Entity\Task:
   task-{1..30}:
     subject: '<sentence()>'
     owner: '@admin'
     organization: '@organization'
+    taskPriority: '@testPriority'
+    status: '@testStatus'
 
 OroCRM\Bundle\AccountBundle\Entity\Account:
   account-{1..30}:
