@@ -32,7 +32,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
  *      indexes={
  *          @ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"}),
- *          @ORM\Index(name="magecustomer_rev_name_idx",columns={"last_name", "first_name"}),
+ *          @ORM\Index(name="magecustomer_rev_name_idx",columns={"last_name", "first_name", "id"}),
  *          @ORM\Index(name="magecustomer_email_guest_idx",columns={"email"})
  *      }
  * )
