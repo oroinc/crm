@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
@@ -8,7 +8,7 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 /**
  * @dbIsolationPerTest
  */
-class OpportunityByStatusTest extends AbstractWidgetTestCase
+class CampaignLeadsTest extends AbstractWidgetTestCase
 {
     /** @var  Widget */
     protected $widget;
@@ -20,10 +20,10 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidgetFixture'
+            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadCampaignLeadsWidgetFixture'
         ]);
 
-        $this->widget = $this->getReference('widget_opportunity_by_status');
+        $this->widget = $this->getReference('widget_campaigns_leads');
     }
     public function testGetWidgetConfigureDialog()
     {
@@ -42,9 +42,9 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'oro_sales_dashboard_opportunity_by_state_chart',
+                'oro_campaign_dashboard_campaigns_leads_chart',
                 [
-                    'widget' => 'opportunities_by_state',
+                    'widget' => 'campaigns_leads',
                     '_widgetId' => $this->widget->getId()
                 ]
             )
@@ -54,27 +54,8 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
-        $this->assertEquals('Open', $data[0]->label);
+        $this->assertEquals('Campaign', $data[0]->label);
         $this->assertEquals($requestData['expectedResultCount'], $data[0]->value);
-    }
-
-    /**
-     * @param $crawler
-     * @return array
-     */
-    protected function getChartData($crawler)
-    {
-        $dataComponent = $crawler->filter('.column-chart');
-        if ($dataComponent->extract(['data-page-component-options'])) {
-            $data = $dataComponent->extract(['data-page-component-options']);
-            $data = json_decode($data[0]);
-            return $data->chartOptions->dataSource->data;
-        } else {
-            $dataComponent = $crawler->filter('.opportunities-by-state-widget-content>div');
-            $data = $dataComponent->extract(['data-page-component-options']);
-            $data = json_decode($data[0]);
-            return $data->data;
-        }
     }
 
     protected function getConfigureDialog()
@@ -99,11 +80,10 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             'Opportunity by status with between date range filter' => [
                 [
                     'widgetConfig' => [
-                        'opportunities_by_state[dateRange][part]'   => 'value',
-                        'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
-                        'opportunities_by_state[dateRange][value][start]'  => '2016-12-28',
-                        'opportunities_by_state[dateRange][value][end]'    => '2016-12-29',
-                        'opportunities_by_state[useQuantityAsData]' => 1
+                        'campaigns_leads[dateRange][part]'   => 'value',
+                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_BETWEEN,
+                        'campaigns_leads[dateRange][value][start]'  => '2016-12-28',
+                        'campaigns_leads[dateRange][value][end]'    => '2016-12-29'
                     ],
                     'expectedResultCount' => 2
                 ],
@@ -111,9 +91,8 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             'Opportunity by status with this month date range filter'  => [
                 [
                     'widgetConfig' => [
-                        'opportunities_by_state[dateRange][part]'   => 'value',
-                        'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_THIS_MONTH,
-                        'opportunities_by_state[useQuantityAsData]' => 1
+                        'campaigns_leads[dateRange][part]'   => 'value',
+                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_THIS_MONTH
                     ],
                     'expectedResultCount' => 1
                 ],
@@ -121,9 +100,8 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             'Opportunity by status with this all time date range filter' => [
                 [
                     'widgetConfig' => [
-                        'opportunities_by_state[dateRange][part]'   => 'value',
-                        'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
-                        'opportunities_by_state[useQuantityAsData]' => 1
+                        'campaigns_leads[dateRange][part]'   => 'value',
+                        'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME
                     ],
                     'expectedResultCount' => 5
                 ],
