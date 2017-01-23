@@ -12,8 +12,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\MagentoBundle\Model\ExtendOrder;
@@ -27,7 +25,7 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="orocrm_magento_order",
  *     indexes={
- *          @ORM\Index(name="mageorder_created_idx",columns={"created_at"})
+ *          @ORM\Index(name="mageorder_created_idx",columns={"created_at", "id"})
  *     },
  *     uniqueConstraints={
  *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})

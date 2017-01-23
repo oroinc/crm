@@ -17,7 +17,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name"})})
+ * @ORM\Table(name="orocrm_account", indexes={@ORM\Index(name="account_name_idx", columns={"name", "id"})})
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_account_index",
