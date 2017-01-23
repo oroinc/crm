@@ -13,6 +13,9 @@ Oro\Bundle\ContactBundle\Entity\Contact:
                 choices: [male, female]
         birthday:
             - Date: ~
+            - LessThanOrEqual:
+                value: now UTC
+                message: This value cannot be in the future.
         addresses:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the addresses must be set as primary.
