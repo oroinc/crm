@@ -19,7 +19,11 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="orocrm_sales_b2bcustomer")
+ * @ORM\Table(name="orocrm_sales_b2bcustomer", indexes={
+ *      @ORM\Index(
+ *          name="orocrm_b2bcustomer_name_idx", columns={"name", "id"}
+ *      )
+ * })
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_sales_b2bcustomer_index",
