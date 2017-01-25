@@ -3,6 +3,7 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\ContactBundle\Form\Type\ContactType;
+use Oro\Bundle\FormBundle\Form\Type\OroBirthdayType;
 
 class ContactTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +40,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'lastName' => 'text',
             'nameSuffix' => 'text',
             'gender' => 'oro_gender',
-            'birthday' => 'oro_date',
+            'birthday' => OroBirthdayType::class,
             'description' => 'oro_resizeable_rich_text',
             'jobTitle' => 'text',
             'fax' => 'text',
