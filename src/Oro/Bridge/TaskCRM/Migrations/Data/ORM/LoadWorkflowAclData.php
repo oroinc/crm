@@ -2,7 +2,6 @@
 
 namespace Oro\Bridge\TaskCRM\Migrations\Data\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadAclRolesData;
 
 /**
