@@ -31,7 +31,7 @@ class DeactivateSalesWorkflows extends AbstractFixture implements ContainerAware
     public function load(ObjectManager $manager)
     {
         /** @var WorkflowManager $workflowManager */
-        $workflowManager = $this->container->get('oro_workflow.manager');
+        $workflowManager = $this->container->get('oro_workflow.manager.system');
         $workflowManager->deactivateWorkflow('b2b_flow_lead');
         $workflowManager->deactivateWorkflow('opportunity_flow');
     }
