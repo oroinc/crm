@@ -22,7 +22,11 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="orocrm_sales_b2bcustomer")
+ * @ORM\Table(name="orocrm_sales_b2bcustomer", indexes={
+ *      @ORM\Index(
+ *          name="orocrm_b2bcustomer_name_idx", columns={"name", "id"}
+ *      )
+ * })
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="orocrm_sales_b2bcustomer_index",

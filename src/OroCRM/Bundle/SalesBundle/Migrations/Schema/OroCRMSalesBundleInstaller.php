@@ -120,6 +120,7 @@ class OroCRMSalesBundleInstaller implements
         $this->createOrocrmSalesLeadEmailTable($schema);
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
+        $this->addB2bCustomerNameIndex($schema);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);
@@ -826,5 +827,16 @@ class OroCRMSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * Add orocrm_sales_b2bcustomer index on field name
+     *
+     * @param Schema $schema
+     */
+    protected function addB2bCustomerNameIndex(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table->addIndex(['name', 'id'], 'orocrm_b2bcustomer_name_idx', []);
     }
 }
