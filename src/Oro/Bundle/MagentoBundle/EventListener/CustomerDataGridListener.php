@@ -4,7 +4,6 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use Oro\Bundle\DataGridBundle\Extension\Sorter\OrmSorterExtension;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
@@ -19,7 +18,6 @@ class CustomerDataGridListener
         $config = $event->getConfig();
         $parameters = $event->getParameters();
         $this->addNewsletterSubscribers($config, $parameters);
-        $this->convertJoinsToSubQueries($config, $parameters);
     }
 
     /**
@@ -67,37 +65,6 @@ class CustomerDataGridListener
                 'channel.transport = transport'
             );
             $query->addLeftJoin('c.newsletterSubscribers', 'newsletterSubscribers');
-        }
-    }
-
-    /**
-     * @param DatagridConfiguration $config
-     * @param ParameterBag          $parameters
-     */
-    protected function convertJoinsToSubQueries(DatagridConfiguration $config, ParameterBag $parameters)
-    {
-        // by a performance reasons, convert some joins to sub-queries
-        $sorters = $parameters->get(OrmSorterExtension::SORTERS_ROOT_PARAM, []);
-        if (empty($sorters['channelName'])) {
-            $config->getOrmQuery()->convertAssociationJoinToSubquery(
-                'dataChannel',
-                'channelName',
-                'Oro\Bundle\ChannelBundle\Entity\Channel'
-            );
-        }
-        if (empty($sorters['websiteName'])) {
-            $config->getOrmQuery()->convertAssociationJoinToSubquery(
-                'cw',
-                'websiteName',
-                'Oro\Bundle\MagentoBundle\Entity\Website'
-            );
-        }
-        if (empty($sorters['customerGroup'])) {
-            $config->getOrmQuery()->convertAssociationJoinToSubquery(
-                'cg',
-                'customerGroup',
-                'Oro\Bundle\MagentoBundle\Entity\CustomerGroup'
-            );
         }
     }
 }
