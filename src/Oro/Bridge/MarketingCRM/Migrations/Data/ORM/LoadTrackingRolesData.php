@@ -67,7 +67,7 @@ class LoadTrackingRolesData extends AbstractFixture implements DependentFixtureI
                 $manager->persist($role);
             }
 
-            if ($aclManager->isAclEnabled()) {
+            if ($role && $aclManager->isAclEnabled()) {
                 $sid = $aclManager->getSid($role);
                 foreach ($roleConfigData['permissions'] as $permission => $acls) {
                     $this->processPermission($aclManager, $sid, $permission, $acls);
