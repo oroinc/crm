@@ -5,11 +5,11 @@ namespace Oro\Bundle\ContactBundle\Form\Handler;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class ContactHandler
 {
@@ -51,8 +51,8 @@ class ContactHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->submit($this->request);
+        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+            $this->form->submit($this->request, false);
 
             if ($this->form->isValid()) {
                 $appendAccounts = $this->form->get('appendAccounts')->getData();
