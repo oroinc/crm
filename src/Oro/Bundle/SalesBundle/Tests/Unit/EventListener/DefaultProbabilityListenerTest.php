@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
-use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 
 class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
@@ -160,11 +160,11 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
      * @param string $statusId
      * @param float|null $probability
      *
-     * @return Opportunity
+     * @return OpportunityStub
      */
     private function getOpportunity($statusId, $probability = null)
     {
-        $opportunity = new Opportunity();
+        $opportunity = new OpportunityStub();
         $opportunity->setStatus($this->getOpportunityStatus($statusId));
         $opportunity->setProbability($probability);
 
