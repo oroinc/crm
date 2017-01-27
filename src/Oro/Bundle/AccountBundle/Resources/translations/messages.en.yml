@@ -13,7 +13,7 @@ oro:
             account_list.description: List of accounts
             shortcut_new_account.label: Create new Account
             shortcut_new_account.description: Create new account instance
-            shortcut_list_accounts.label: Show accounts list
+            shortcut_list_accounts.label: Show Accounts list
             shortcut_list_accounts.description: List of accounts
         widgets:
             magento_channel:        Magento Channel
