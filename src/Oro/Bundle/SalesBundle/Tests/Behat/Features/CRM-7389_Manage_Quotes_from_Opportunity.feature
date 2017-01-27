@@ -1,5 +1,5 @@
 @not-automated
-@drafts
+@draft
 Feature: In order send the customer detailed proposal while negotiating a deal
   As a Sales Representative
   I want to be able to create Quotes from Opportunity View
