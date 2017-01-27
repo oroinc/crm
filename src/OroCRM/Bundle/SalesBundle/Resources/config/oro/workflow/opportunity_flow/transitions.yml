@@ -96,6 +96,9 @@ workflows:
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
+                        - '@clone_object':
+                            target: $budget_amount
+                            attribute: $close_revenue
             close_lost:
                 label: 'Close as Lost'
                 step_to: lost
