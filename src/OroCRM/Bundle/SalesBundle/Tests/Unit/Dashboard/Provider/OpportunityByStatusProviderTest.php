@@ -1,0 +1,358 @@
+<?php
+
+namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
+
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+
+use OroCRM\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
+
+class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
+{
+    /** @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $registry;
+
+    /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $aclHelper;
+
+    /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dateFilterProcessor;
+
+    /** @var OwnerHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $ownerHelper;
+
+    protected $opportunityStatuses = [
+        ['id' => 'won', 'name' => 'Won'],
+        ['id' => 'identification_alignment', 'name' => 'Identification'],
+        ['id' => 'in_progress', 'name' => 'Open'],
+        ['id' => 'needs_analysis', 'name' => 'Analysis'],
+        ['id' => 'negotiation', 'name' => 'Negotiation'],
+        ['id' => 'solution_development', 'name' => 'Development'],
+        ['id' => 'lost', 'name' => 'Lost']
+    ];
+
+    /** @var  OpportunityByStatusProvider */
+    protected $provider;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
+    {
+        $this->registry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->ownerHelper = $this->getMockBuilder('Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new OpportunityByStatusProvider(
+            $this->registry,
+            $this->aclHelper,
+            $this->dateFilterProcessor,
+            $this->ownerHelper
+        );
+    }
+
+    /**
+     * @param WidgetOptionBag $widgetOptions
+     * @param string          $expectation
+     *
+     * @dataProvider getOpportunitiesGroupedByStatusDQLDataProvider
+     */
+    public function testGetOpportunitiesGroupedByStatusDQL($widgetOptions, $expectation)
+    {
+        $this->ownerHelper->expects($this->once())
+            ->method('getOwnerIds')
+            ->willReturn([]);
+
+        $opportunityQB = new QueryBuilder($this->getMock('Doctrine\ORM\EntityManagerInterface'));
+        $opportunityQB
+            ->from('OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
+
+        $statusesQB = $this->getMockQueryBuilder();
+        $statusesQB->expects($this->once())
+            ->method('select')
+            ->with('s.id, s.name')
+            ->willReturnSelf();
+        $statusesQB->expects($this->once())
+            ->method('getQuery')
+            ->willReturnSelf();
+        $statusesQB->expects($this->once())
+            ->method('getArrayResult')
+            ->willReturn($this->opportunityStatuses);
+
+        $repository = $this->getMockRepository();
+        $repository->expects($this->exactly(2))
+            ->method('createQueryBuilder')
+            ->withConsecutive(['o'], ['s'])
+            ->willReturnOnConsecutiveCalls($opportunityQB, $statusesQB);
+
+        $this->registry->expects($this->exactly(2))
+            ->method('getRepository')
+            ->withConsecutive(
+                ['OroCRMSalesBundle:Opportunity'],
+                [ExtendHelper::buildEnumValueClassName('opportunity_status')]
+            )
+            ->willReturn($repository);
+
+        $mockResult = $this->getMockQueryBuilder();
+        $mockResult->expects($this->once())
+            ->method('getArrayResult')
+            ->willReturn([]);
+
+        $self = $this;
+        $this->aclHelper->expects($this->once())
+            ->method('apply')
+            ->with(
+                $this->callback(function ($query) use ($self, $expectation) {
+                    /** @var Query $query */
+                    $self->assertEquals($expectation, $query->getDQL());
+
+                    return true;
+                })
+            )
+            ->willReturn($mockResult);
+
+        $this->provider->getOpportunitiesGroupedByStatus($widgetOptions);
+    }
+
+    public function getOpportunitiesGroupedByStatusDQLDataProvider()
+    {
+        return [
+            'request quantities'                                                    => [
+                'widgetOptions' => new WidgetOptionBag([
+                    'excluded_statuses' => [],
+                    'useQuantityAsData' => true
+                ]),
+                'expected DQL'  =>
+                    'SELECT IDENTITY (o.status) status, COUNT(o.id) as quantity '
+                    . 'FROM OroCRM\Bundle\SalesBundle\Entity\Opportunity o '
+                    . 'GROUP BY status '
+                    . 'ORDER BY quantity DESC'
+            ],
+            'request quantities with excluded statuses - should not affect DQL'     => [
+                'widgetOptions' => new WidgetOptionBag([
+                    'excluded_statuses' => ['in_progress', 'won'],
+                    'useQuantityAsData' => true
+                ]),
+                'expected DQL'  =>
+                    'SELECT IDENTITY (o.status) status, COUNT(o.id) as quantity '
+                    . 'FROM OroCRM\Bundle\SalesBundle\Entity\Opportunity o '
+                    . 'GROUP BY status '
+                    . 'ORDER BY quantity DESC'
+            ],
+            'request budget amounts'                                                => [
+                'widgetOptions' => new WidgetOptionBag([
+                    'excluded_statuses' => [],
+                    'useQuantityAsData' => false
+                ]),
+                'expected DQL'  => <<<DQL
+SELECT IDENTITY (o.status) status, SUM(
+                        CASE WHEN o.status = 'won'
+                            THEN (CASE WHEN o.closeRevenue IS NOT NULL THEN o.closeRevenue ELSE 0 END)
+                            ELSE (CASE WHEN o.budgetAmount IS NOT NULL THEN o.budgetAmount ELSE 0 END)
+                        END
+                    ) as budget FROM OroCRM\Bundle\SalesBundle\Entity\Opportunity o GROUP BY status ORDER BY budget DESC
+DQL
+            ],
+            'request budget amounts with excluded statuses - should not affect DQL' => [
+                'widgetOptions' => new WidgetOptionBag([
+                    'excluded_statuses' => ['in_progress', 'won'],
+                    'useQuantityAsData' => false
+                ]),
+                'expected DQL'  => <<<DQL
+SELECT IDENTITY (o.status) status, SUM(
+                        CASE WHEN o.status = 'won'
+                            THEN (CASE WHEN o.closeRevenue IS NOT NULL THEN o.closeRevenue ELSE 0 END)
+                            ELSE (CASE WHEN o.budgetAmount IS NOT NULL THEN o.budgetAmount ELSE 0 END)
+                        END
+                    ) as budget FROM OroCRM\Bundle\SalesBundle\Entity\Opportunity o GROUP BY status ORDER BY budget DESC
+DQL
+            ]
+        ];
+    }
+
+    /**
+     * @param WidgetOptionBag $widgetOptions
+     * @param array           $result
+     * @param string          $expected
+     *
+     * @dataProvider getOpportunitiesGroupedByStatusResultDataProvider
+     */
+    public function testGetOpportunitiesGroupedByStatusResultFormatter($widgetOptions, $result, $expected)
+    {
+        $this->ownerHelper->expects($this->once())
+            ->method('getOwnerIds')
+            ->willReturn([]);
+
+        $opportunityQB = new QueryBuilder($this->getMock('Doctrine\ORM\EntityManagerInterface'));
+        $opportunityQB
+            ->from('OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
+
+        $statusesQB = $this->getMockQueryBuilder();
+        $statusesQB->expects($this->once())
+            ->method('select')
+            ->with('s.id, s.name')
+            ->willReturnSelf();
+        $statusesQB->expects($this->once())
+            ->method('getQuery')
+            ->willReturnSelf();
+        $statusesQB->expects($this->once())
+            ->method('getArrayResult')
+            ->willReturn($this->opportunityStatuses);
+
+        $repository = $this->getMockRepository();
+        $repository->expects($this->exactly(2))
+            ->method('createQueryBuilder')
+            ->withConsecutive(['o'], ['s'])
+            ->willReturnOnConsecutiveCalls($opportunityQB, $statusesQB);
+
+        $this->registry->expects($this->exactly(2))
+            ->method('getRepository')
+            ->withConsecutive(
+                ['OroCRMSalesBundle:Opportunity'],
+                [ExtendHelper::buildEnumValueClassName('opportunity_status')]
+            )
+            ->willReturn($repository);
+
+        $mockResult = $this->getMockQueryBuilder();
+        $mockResult->expects($this->once())
+            ->method('getArrayResult')
+            ->willReturn($result);
+
+        $this->aclHelper->expects($this->once())
+            ->method('apply')
+            ->willReturn($mockResult);
+
+        $data = $this->provider->getOpportunitiesGroupedByStatus($widgetOptions);
+
+        $this->assertEquals($expected, $data);
+    }
+
+    public function getOpportunitiesGroupedByStatusResultDataProvider()
+    {
+        return [
+            'result with all statuses, no exclusions - only labels should be added'               => [
+                'widgetOptions'             => new WidgetOptionBag([
+                    'excluded_statuses' => [],
+                    'useQuantityAsData' => true
+                ]),
+                'result data'               => [
+                    0 => ['quantity' => 700, 'status' => 'won'],
+                    1 => ['quantity' => 600, 'status' => 'identification_alignment'],
+                    2 => ['quantity' => 500, 'status' => 'in_progress'],
+                    3 => ['quantity' => 400, 'status' => 'needs_analysis'],
+                    4 => ['quantity' => 300, 'status' => 'negotiation'],
+                    5 => ['quantity' => 200, 'status' => 'solution_development'],
+                    6 => ['quantity' => 100, 'status' => 'lost'],
+                ],
+                'expected formatted result' => [
+                    0 => ['quantity' => 700, 'status' => 'won', 'label' => 'Won'],
+                    1 => ['quantity' => 600, 'status' => 'identification_alignment', 'label' => 'Identification'],
+                    2 => ['quantity' => 500, 'status' => 'in_progress', 'label' => 'Open'],
+                    3 => ['quantity' => 400, 'status' => 'needs_analysis', 'label' => 'Analysis'],
+                    4 => ['quantity' => 300, 'status' => 'negotiation', 'label' => 'Negotiation'],
+                    5 => ['quantity' => 200, 'status' => 'solution_development', 'label' => 'Development'],
+                    6 => ['quantity' => 100, 'status' => 'lost', 'label' => 'Lost'],
+                ]
+            ],
+            'result with all statuses, with exclusions - excluded should be removed, labels'      => [
+                'widgetOptions'             => new WidgetOptionBag([
+                    'excluded_statuses' => ['identification_alignment', 'solution_development'],
+                    'useQuantityAsData' => true
+                ]),
+                'result data'               => [
+                    0 => ['quantity' => 700, 'status' => 'won'],
+                    1 => ['quantity' => 600, 'status' => 'identification_alignment'],
+                    2 => ['quantity' => 500, 'status' => 'in_progress'],
+                    3 => ['quantity' => 400, 'status' => 'needs_analysis'],
+                    4 => ['quantity' => 300, 'status' => 'negotiation'],
+                    5 => ['quantity' => 200, 'status' => 'solution_development'],
+                    6 => ['quantity' => 100, 'status' => 'lost'],
+                ],
+                'expected formatted result' => [
+                    0 => ['quantity' => 700, 'status' => 'won', 'label' => 'Won'],
+                    2 => ['quantity' => 500, 'status' => 'in_progress', 'label' => 'Open'],
+                    3 => ['quantity' => 400, 'status' => 'needs_analysis', 'label' => 'Analysis'],
+                    4 => ['quantity' => 300, 'status' => 'negotiation', 'label' => 'Negotiation'],
+                    6 => ['quantity' => 100, 'status' => 'lost', 'label' => 'Lost'],
+                ]
+            ],
+            'result with NOT all statuses, no exclusions - all statuses, labels'                  => [
+                'widgetOptions'             => new WidgetOptionBag([
+                    'excluded_statuses' => [],
+                    'useQuantityAsData' => true
+                ]),
+                'result data'               => [
+                    0 => ['quantity' => 700, 'status' => 'won'],
+                    1 => ['quantity' => 300, 'status' => 'negotiation'],
+                ],
+                'expected formatted result' => [
+                    0 => ['quantity' => 700, 'status' => 'won', 'label' => 'Won'],
+                    1 => ['quantity' => 300, 'status' => 'negotiation', 'label' => 'Negotiation'],
+                    2 => ['quantity' => 0, 'status' => 'identification_alignment', 'label' => 'Identification'],
+                    3 => ['quantity' => 0, 'status' => 'in_progress', 'label' => 'Open'],
+                    4 => ['quantity' => 0, 'status' => 'needs_analysis', 'label' => 'Analysis'],
+                    5 => ['quantity' => 0, 'status' => 'solution_development', 'label' => 'Development'],
+                    6 => ['quantity' => 0, 'status' => 'lost', 'label' => 'Lost'],
+                ]
+            ],
+            'result with NOT all statuses AND exclusions - all statuses(except excluded), labels' => [
+                'widgetOptions'             => new WidgetOptionBag([
+                    'excluded_statuses' => ['identification_alignment', 'lost', 'in_progress'],
+                    'useQuantityAsData' => true
+                ]),
+                'result data'               => [
+                    0 => ['quantity' => 700, 'status' => 'won'],
+                    1 => ['quantity' => 500, 'status' => 'in_progress'],
+                    2 => ['quantity' => 300, 'status' => 'negotiation'],
+                    3 => ['quantity' => 100, 'status' => 'lost'],
+                ],
+                'expected formatted result' => [
+                    0 => ['quantity' => 700, 'status' => 'won', 'label' => 'Won'],
+                    2 => ['quantity' => 300, 'status' => 'negotiation', 'label' => 'Negotiation'],
+                    4 => ['quantity' => 0, 'status' => 'needs_analysis', 'label' => 'Analysis'],
+                    5 => ['quantity' => 0, 'status' => 'solution_development', 'label' => 'Development'],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @return EntityRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockRepository()
+    {
+        return $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->setMethods(['createQueryBuilder'])
+            ->getMockForAbstractClass();
+    }
+
+    /**
+     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockQueryBuilder()
+    {
+        return $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['select', 'where', 'setParameter', 'getQuery', 'getArrayResult'])
+            ->getMockForAbstractClass();
+    }
+}
