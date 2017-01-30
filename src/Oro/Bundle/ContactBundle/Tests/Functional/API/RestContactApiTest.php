@@ -4,11 +4,11 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\API;
 
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\ContactBundle\Entity\Group;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @outputBuffering enabled
@@ -198,7 +198,7 @@ class RestContactApiTest extends WebTestCase
     {
         /** @var Account $account */
         $account         = $this->getReference('Account_second');
-        $this->testAddress['types'] = ['billing'];
+        $this->testAddress['types'] = ['billing', 'shipping'];
 
         $request['contact']['firstName'] .= "_Updated";
         $request['contact']['addresses'][0]['types']   = $this->testAddress['types'];
