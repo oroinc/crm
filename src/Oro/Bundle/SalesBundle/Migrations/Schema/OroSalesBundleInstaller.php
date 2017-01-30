@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_31';
+        return 'v1_32';
     }
 
     /**
@@ -124,6 +124,7 @@ class OroSalesBundleInstaller implements
         $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
         AddCustomersTable::addCustomersTable($schema);
+        $this->addB2bCustomerNameIndex($schema);
 
         /** Tables update */
         $this->addOroEmailMailboxProcessorColumns($schema);
@@ -216,7 +217,7 @@ class OroSalesBundleInstaller implements
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $table->addIndex(['contact_id'], 'idx_c0fe4aace7a1254a', []);
-        $table->addIndex(['created_at'], 'opportunity_created_idx', []);
+        $table->addIndex(['created_at', 'id'], 'opportunity_created_idx', []);
         $table->addIndex(['user_owner_id'], 'idx_c0fe4aac9eb185f9', []);
         $table->addIndex(['lead_id'], 'idx_c0fe4aac55458d', []);
         $table->addIndex(['close_reason_name'], 'idx_c0fe4aacd81b931c', []);
@@ -340,7 +341,7 @@ class OroSalesBundleInstaller implements
         );
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
-        $table->addIndex(['createdat'], 'lead_created_idx', []);
+        $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['address_id'], 'idx_73db4633f5b7af75', []);
@@ -780,5 +781,16 @@ class OroSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * Add orocrm_sales_b2bcustomer index on field name
+     *
+     * @param Schema $schema
+     */
+    protected function addB2bCustomerNameIndex(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table->addIndex(['name', 'id'], 'orocrm_b2bcustomer_name_idx', []);
     }
 }

@@ -23,7 +23,7 @@ use Oro\Bundle\SalesBundle\Model\ExtendLead;
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",
- *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt"})}
+ *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt", "id"})}
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()
