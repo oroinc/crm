@@ -198,7 +198,7 @@ class RestContactApiTest extends WebTestCase
     {
         /** @var Account $account */
         $account         = $this->getReference('Account_second');
-        $this->testAddress['types'] = ['billing', 'shipping'];
+        $this->testAddress['types'] = ['billing'];
 
         $request['contact']['firstName'] .= "_Updated";
         $request['contact']['addresses'][0]['types']   = $this->testAddress['types'];
