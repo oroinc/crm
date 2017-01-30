@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -158,7 +157,7 @@ class OroSalesBundleInstaller implements
         AddLeadAddressTable::createLeadAddressTable($schema);
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');
 
-        $this->addOpportunityByStatusIndex($schema);
+        $this->addOpportunitiesByStatusIndex($schema);
     }
 
     /**
@@ -802,7 +801,7 @@ class OroSalesBundleInstaller implements
      *
      * @param Schema $schema
      */
-    protected function addOpportunityByStatusIndex(Schema $schema)
+    protected function addOpportunitiesByStatusIndex(Schema $schema)
     {
         $table = $schema->getTable('orocrm_sales_opportunity');
         $table->addIndex(
