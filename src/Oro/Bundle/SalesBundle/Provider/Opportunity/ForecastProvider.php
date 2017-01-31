@@ -278,7 +278,7 @@ HAVING
         }
         if ($end) {
             $qb
-                ->andWhere(sprintf('%s < :end', $field))
+                ->andWhere(sprintf('%s <= :end', $field))
                 ->setParameter('end', $end);
         }
     }
