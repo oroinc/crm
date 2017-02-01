@@ -1,0 +1,17 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+  salesChannel:
+    owner: '@organization'
+    name: Business Customers
+    channelType: b2b
+    status: 1
+    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+  salesEntityName:
+    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
+    channel: '@salesChannel'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  margeAccount:
+    name: Marge Simpson
+    organization: '@organization'
