@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_32';
+        return 'v1_33';
     }
 
     /**
@@ -156,6 +156,8 @@ class OroSalesBundleInstaller implements
         AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
         AddLeadAddressTable::createLeadAddressTable($schema);
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');
+
+        $this->addOpportunitiesByStatusIndex($schema);
     }
 
     /**
@@ -792,5 +794,19 @@ class OroSalesBundleInstaller implements
     {
         $table = $schema->getTable('orocrm_sales_b2bcustomer');
         $table->addIndex(['name', 'id'], 'orocrm_b2bcustomer_name_idx', []);
+    }
+
+    /**
+     * Add opportunity 'opportunities_by_status_idx' index, used to speedup 'Opportunity By Status' widget
+     *
+     * @param Schema $schema
+     */
+    protected function addOpportunitiesByStatusIndex(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table->addIndex(
+            ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
+            'opportunities_by_status_idx'
+        );
     }
 }
