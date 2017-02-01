@@ -1,3 +1,4 @@
+@fixture-lead.yml
 Feature: Quickly create Lead in a single form
   In order to decrease time for Lead creation
   As a Sales rep
@@ -57,5 +58,22 @@ Feature: Quickly create Lead in a single form
       | Emails     | [lead3@ex.com, lead4@ex.com] |
 
   Scenario: Inline edit Lead
+    Given I go to Sales/ Leads
+    When I edit first record from grid:
+      | name      | editedName       |
+      | status    | Qualified        |
+      | First Name| editedFirstName  |
+      | Last Name | editedLastName   |
+      | email     | edit@example.com |
+      | phone     | +111111111111    |
+      | owner     | Marge Simpson    |
+    Then I should see editedName in grid with following data:
+      | First Name | editedFirstName    |
+      | Last Name  | editedLastName     |
+      | Phone      | +111111111111      |
+      | Email      | edit@example.com   |
+      | status     | Qualified          |
+      | owner      | Marge Marge Simpson|
+      | status     | Qualified          |
 
   Scenario: Import Lead
