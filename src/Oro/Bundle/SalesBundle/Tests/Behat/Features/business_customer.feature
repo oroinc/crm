@@ -27,12 +27,31 @@ Feature: Managing business customer
 #      | Emails          | [m1@ex.com, m2@ex.com] |
 #      | Phones          | [11-11-11, 22-22-22]         |
     When I go to Customers/ Business Customers
-    Then I should see Business Customer in grid with following data:
+    Then I should see SimpsonCustomer in grid with following data:
       | Account         | Marge Simpson          |
       | Customer Name   | SimpsonCustomer        |
       | Email           | m1@ex.com              |
       | Channel         | Business Customers     |
-#      | Phone number    | 11-11-11               |
+
+  Scenario: Edit business customer
+    Given I click Edit Bruce Customer in grid
+    And I fill form with:
+      | Account         | Keanu Reeves           |
+      | Customer Name   | Charlie Customer       |
+      | Phones          | [11-11-11, 22-22-22]   |
+      | Emails          | [edited@ex.com]        |
+      | Country         | United States          |
+      | Street          | Selma Ave              |
+      | City            | Los Angeles            |
+      | Zip/Postal Code | 90028                  |
+      | State           | California             |
+    When I save and close form
+    And I go to Customers/ Business Customers
+    Then I should see Charlie Customer in grid with following data:
+      | Account         | Keanu Reeves         |
+      | Customer Name   | Charlie Customer     |
+      | Channel         | Business Customers   |
+      | Email           | edited@ex.com        |
 
   Scenario: Deleting business customer
     Given I click Delete SimpsonCustomer in grid
