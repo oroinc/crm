@@ -10,6 +10,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Model\ExtendContact;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -28,7 +29,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @ORM\Table(
  *      name="orocrm_contact",
  *      indexes={
- *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name", "id"}),
+ *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"}),
  *          @ORM\Index(name="contact_updated_at_idx",columns={"updatedAt"}),
  *      }
  * )

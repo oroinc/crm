@@ -33,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v1_14';
+        return 'v1_13';
     }
 
     /**
@@ -110,7 +110,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table->addIndex(['contact_reason_id'], 'IDX_342872E8374A36E9', []);
         $table->addIndex(['opportunity_id'], 'IDX_342872E89A34590F', []);
         $table->addIndex(['lead_id'], 'IDX_342872E855458D', []);
-        $table->addIndex(['created_at', 'id'], 'request_create_idx', []);
+        $table->addIndex(['created_at'], 'request_create_idx', []);
     }
 
     
