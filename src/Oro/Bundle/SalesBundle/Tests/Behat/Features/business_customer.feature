@@ -33,3 +33,13 @@ Feature: Managing business customer
       | Email           | m1@ex.com              |
       | Channel         | Business Customers     |
 #      | Phone number    | 11-11-11               |
+
+  Scenario: Deleting business customer
+    Given I click Delete SimpsonCustomer in grid
+    And I confirm deletion
+    Then I should see "Item deleted" flash message
+    And there is one record in grid
+    When I click view Charlie Customer in grid
+    And I press "Delete Business Customer"
+    And I confirm deletion
+    Then there is no records in grid

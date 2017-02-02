@@ -15,3 +15,11 @@ Oro\Bundle\AccountBundle\Entity\Account:
   margeAccount:
     name: Marge Simpson
     organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  customer20:
+    name: Charlie Customer
+    owner: '@admin'
+    organization: '@organization'
+    account: '@margeAccount'
+    dataChannel: 1
