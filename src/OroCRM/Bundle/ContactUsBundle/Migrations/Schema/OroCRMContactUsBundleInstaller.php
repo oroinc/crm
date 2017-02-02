@@ -34,7 +34,7 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
      */
     public function getMigrationVersion()
     {
-        return 'v1_10_1';
+        return 'v1_10';
     }
 
     /**
@@ -117,7 +117,7 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
         $table->addIndex(['opportunity_id'], 'IDX_342872E89A34590F', []);
         $table->addIndex(['lead_id'], 'IDX_342872E855458D', []);
         $table->addIndex(['workflow_step_id'], 'IDX_342872E871FE882C', []);
-        $table->addIndex(['created_at', 'id'], 'request_create_idx', []);
+        $table->addIndex(['created_at'], 'request_create_idx', []);
     }
 
     

@@ -42,7 +42,7 @@ class OroCRMCaseBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_9';
     }
 
     /**
@@ -138,7 +138,6 @@ class OroCRMCaseBundleInstaller implements
         $table->addIndex(['related_account_id'], 'IDX_AB3BAC1E11A6570A', []);
         $table->addIndex(['source_name'], 'IDX_AB3BAC1E5FA9FB05', []);
         $table->addIndex(['priority_name'], 'IDX_AB3BAC1E965BD3DF', []);
-        $table->addIndex(['reportedAt', 'id'], 'case_reported_at_idx', []);
     }
 
     /**

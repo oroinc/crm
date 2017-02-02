@@ -33,7 +33,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @ORM\Table(
  *      name="orocrm_contact",
  *      indexes={
- *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name", "id"}),
+ *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"}),
  *          @ORM\Index(name="contact_updated_at_idx",columns={"updatedAt"}),
  *      }
  * )
