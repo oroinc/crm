@@ -26,27 +26,50 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture
 
     private $opportunityCount = 0;
 
-    protected function createLead()
-    {
+    /**
+     * @param string    $name
+     * @param Campaign  $campaign
+     * @param string    $referenceName
+     *
+     * @return Lead
+     */
+    protected function createLead(
+        $name,
+        Campaign $campaign,
+        $referenceName = null
+    ) {
         $lead = new Lead();
-        $lead->setName('Lead name');
+        $lead->setName($name);
         $lead->setOrganization($this->organization);
-        $lead->setCampaign($this->getReference('default_campaign'));
+        $lead->setCampaign($campaign);
         $this->em->persist($lead);
         $this->em->flush();
-        $this->setReference('default_lead', $lead);
+
+        ($referenceName === null ) ?: $this->setReference($referenceName, $lead);
+
+        return $lead;
     }
 
-    protected function createOpportunity($createdAt, $status)
-    {
+    /**
+     * @param \DateTime $createdAt
+     * @param string    $status
+     * @param Lead      $lead
+     * @param int       $closeRevenue
+     */
+    protected function createOpportunity(
+        $createdAt,
+        $status,
+        Lead $lead,
+        $closeRevenue = null
+    ) {
         $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $opportunityStatus = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId($status));
 
         $opportunity = new Opportunity();
         $opportunity->setName(sprintf('Test Opportunity #%d', ++$this->opportunityCount));
         $opportunity->setStatus($opportunityStatus);
-        $opportunity->setLead($this->getReference('default_lead'));
-        $opportunity->setCloseRevenue(100);
+        $opportunity->setLead($lead);
+        ($closeRevenue === null ) ?: $opportunity->setCloseRevenue($closeRevenue);
         $opportunity->setOrganization($this->organization);
         $this->em->persist($opportunity);
 
@@ -54,28 +77,48 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture
         $this->em->flush();
     }
 
-    protected function createCampaign()
+    /**
+     * @param string $name
+     * @param string $code
+     * @param string $reference
+     *
+     * @return Campaign
+     */
+    protected function createCampaign($name, $code, $reference = null)
     {
         $campaign = new Campaign();
-        $campaign->setName('Campaign');
-        $campaign->setCode('cmp');
+        $campaign->setName($name);
+        $campaign->setCode($code);
         $campaign->setOrganization($this->organization);
         $campaign->setReportPeriod(Campaign::PERIOD_MONTHLY);
         $this->em->persist($campaign);
         $this->em->flush();
-        $this->setReference('default_campaign', $campaign);
+
+        ($reference === null) ?: $this->setReference($reference, $campaign);
+
+        return $campaign;
     }
 
     protected function createOpportunities()
     {
         $createdAt = new \DateTime('2016-12-28 12:03:10', new \DateTimeZone('UTC'));
+
+        $defaultCampaign = $this->createCampaign('Default campaing', 'cmt');
+        $anotherCampaign = $this->createCampaign('Another campaing', 'test');
+
+        $defaultLead = $this->createLead('Default Lead', $defaultCampaign);
+        $anotherLead = $this->createLead('Another Lead', $anotherCampaign);
+
         // Every opportunity has value of $100
-        $this->createOpportunity($createdAt, 'won');
-        $this->createOpportunity($createdAt, 'in_progress');
-        $this->createOpportunity($createdAt, 'lost');
+        $this->createOpportunity($createdAt, 'won', $defaultLead, 100);
+        $this->createOpportunity($createdAt, 'in_progress', $defaultLead, 100);
+        $this->createOpportunity($createdAt, 'lost', $defaultLead, 100);
+
+        //This opportunity without close revenue
+        $this->createOpportunity($createdAt, 'won', $anotherLead);
 
         $createdAt->add(new \DateInterval('P1D'));
-        $this->createOpportunity($createdAt, 'won');
+        $this->createOpportunity($createdAt, 'won', $defaultLead, 100);
     }
 
     /**
@@ -85,8 +128,6 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture
     {
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->em = $manager;
-        $this->createCampaign();
-        $this->createLead();
         $this->createOpportunities();
         $dashboard = new Dashboard();
         $dashboard->setName('dashboard');
