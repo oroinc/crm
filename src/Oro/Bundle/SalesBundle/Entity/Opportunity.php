@@ -62,7 +62,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
  *              "context"="sales-opportunity-for-context-grid"
  *          },
  *          "tag"={
- *              "enabled"=true
+ *              "enabled"=true,
+ *              "enableDefaultRendering"=false
  *          }
  *     }
  * )
