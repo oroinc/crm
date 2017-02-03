@@ -163,7 +163,7 @@ class FeatureContext extends OroFeatureContext implements
         return $customers;
     }
 
-    /*
+    /**
      * Open Opportunity index page
      *
      * @Given /^(?:|I )go to Opportunity Index page$/
@@ -244,5 +244,31 @@ class FeatureContext extends OroFeatureContext implements
             $this->waitForAjax();
             self::assertEquals($item['Probability'], $form->findField('Probability')->getValue());
         }
+    }
+
+    /**
+     * Click the plus dropdown, also known as entity create button
+     * Example: Then I press plus dropdown button
+     *
+     * @Then I press plus dropdown button
+     */
+    public function iPressPlusDropDownButton()
+    {
+        $content = $this->getSession()->getPage();
+        $content->find('css', '.entity-create-dropdown button')->click();
+    }
+
+    /**
+     * Submit provided form.
+     * Used when few forms present on page
+     * Example: When I submit form "SalesB2bCustomerForm"
+     *
+     * @When /^(?:|I )submit form "(?P<formName>(?:[^"]|\\")*)"$/
+     * @param string $formName
+     */
+    public function iSubmitForm($formName = "OroForm")
+    {
+        $form = $this->createElement($formName);
+        $form->submit();
     }
 }
