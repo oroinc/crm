@@ -75,5 +75,3 @@ Feature: Quickly create Lead in a single form
       | status     | Qualified          |
       | owner      | Marge Marge Simpson|
       | status     | Qualified          |
-
-  Scenario: Import Lead
