@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -117,6 +119,25 @@ class OpportunityController extends Controller
     }
 
     /**
+     * Create opportunity form with customer association set
+     *
+     * @Route("/create/{targetClass}/{targetId}", name="oro_sales_opportunity_customer_aware_create")
+     * @Template("OroSalesBundle:Opportunity:update.html.twig")
+     * @AclAncestor("oro_sales_opportunity_create")
+     *
+     */
+    public function opportunityWithCustomerCreateAction($targetClass, $targetId)
+    {
+        $target = $this->getEntityRoutingHelper()->getEntity($targetClass, $targetId);
+        $customer = $this->getAccountCustomerManager()->getAccountCustomerByTarget($target);
+
+        $opportunity = new Opportunity();
+        $opportunity->setCustomerAssociation($customer);
+
+        return $this->update($opportunity);
+    }
+
+    /**
      * @Route(
      *     "/datagrid/opportunity-with-datachannel/{channelIds}",
      *     name="oro_sales_datagrid_opportunity_datachannel_aware"
@@ -153,5 +174,21 @@ class OpportunityController extends Controller
             $this->get('translator')->trans('oro.sales.controller.opportunity.saved.message'),
             $this->get('oro_sales.opportunity.form.handler')
         );
+    }
+
+    /**
+     * @return EntityRoutingHelper
+     */
+    protected function getEntityRoutingHelper()
+    {
+        return $this->get('oro_entity.routing_helper');
+    }
+
+    /**
+     * @return AccountCustomerManager
+     */
+    protected function getAccountCustomerManager()
+    {
+        return $this->get('oro_sales.manager.account_customer');
     }
 }

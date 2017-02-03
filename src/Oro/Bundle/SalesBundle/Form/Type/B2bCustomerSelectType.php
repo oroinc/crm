@@ -18,7 +18,7 @@ class B2bCustomerSelectType extends AbstractType
                     'placeholder' => 'oro.sales.form.choose_b2bcustomer'
                 ),
                 'autocomplete_alias' => 'b2b_customers',
-                'grid_name'          => 'orocrm-sales-b2bcustomers-select-grid',
+                'grid_name'          => 'oro-sales-b2bcustomers-select-grid',
                 'create_form_route'  => 'oro_sales_b2bcustomer_create',
                 'create_enabled'     => true
             )

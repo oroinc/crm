@@ -61,13 +61,9 @@ class OpportunitiesByStatusReportListener
      */
     public function onBuildBefore(BuildBefore $event)
     {
-        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        $config = $event->getConfig();
-        $from[] = [
-            'table' => $className,
-            'alias' => 'status'
-        ];
-        $config->offsetSetByPath('[source][query][from]', $from);
+        $event->getConfig()->getOrmQuery()
+            ->resetFrom()
+            ->addFrom(ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE), 'status');
     }
 
     /**

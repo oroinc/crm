@@ -15,4 +15,5 @@ channels:
             label: oro.sales.channel_type.b2b.label
             customer_identity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
             lifetime_value: lifetime
+            system: false
             priority: -20

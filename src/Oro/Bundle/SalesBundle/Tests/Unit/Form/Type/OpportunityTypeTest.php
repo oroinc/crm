@@ -186,7 +186,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFormEvent($data = null)
     {
-        $form = $this->getMock(FormInterface::class);
+        $form = $this->createMock(FormInterface::class);
 
         return new FormEvent($form, $data);
     }

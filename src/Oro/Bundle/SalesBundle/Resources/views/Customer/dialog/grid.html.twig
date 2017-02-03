@@ -14,7 +14,7 @@
         {% endfor %}
 
         {% set firstItem = itemsArray|first %}
-        {% set gridWidgetName = 'customer-grid' %}
+        {% set gridWidgetName = 'activity-context-grid' %}
         {% set options = params|merge({
                 items: itemsArray,
                 params: params,
@@ -34,7 +34,7 @@
              data-page-component-options="{{ options|json_encode }}" class="btn-group">
             <button class="activity-context-current-block dropdown-toggle" data-toggle="dropdown">
                 <span class="activity-context-current-item"></span>
-                <span class="icon-caret-down"></span>
+                <span class="fa-caret-down"></span>
             </button>
             <ul class="context-items-dropdown dropdown-menu"></ul>
         </div>

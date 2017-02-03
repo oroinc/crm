@@ -23,32 +23,27 @@ datagrids:
                     - o.closeRevenueValue  as closeRevenue
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.closeRevenueCurrency as closeRevenueCurrency
-                    - s.id as status
+                    - IDENTITY(o.status) as status
                     - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
-                    - channel.name as channelName
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
-                    - customer.id as customerId
-                    - customer.name as customerName
+                    - account.name as accountName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: own }
-                        - { join: o.customer, alias: customer }
+                        - { join: o.customerAssociation, alias: customer }
+                        - { join: customer.account, alias: account }
         inline_editing:
             enable: true
         columns:
-            channelName:
-                label:         oro.sales.opportunity.data_channel.label
             name:
                 label:         oro.sales.opportunity.name.label
             createdAt:
@@ -69,9 +64,6 @@ datagrids:
                     autocomplete_api_accessor:
                         search_handler_name: contacts
                         label_field_name: fullName
-            customerName:
-                label: oro.sales.opportunity.customer.label
-                renderable: false
             closeRevenue:
                 label:         oro.sales.opportunity.close_revenue.label
                 frontend_type: multi-currency
@@ -107,9 +99,10 @@ datagrids:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
-                frontend_type: select
+                context:
+                    enum_code: opportunity_status
+                frontend_type: enum
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
@@ -123,10 +116,11 @@ datagrids:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Opportunity
+            accountName:
+                label: oro.sales.b2bcustomer.datagrid.columns.account_name.label
+                renderable: false
         fields_acl:
             columns:
-                channelName:
-                    data_name: o.dataChannel
                 name:
                     data_name: o.name
                 createdAt:
@@ -135,8 +129,6 @@ datagrids:
                     data_name: o.updatedAt
                 contactName:
                     data_name: o.contact
-                customerName:
-                    data_name: o.customer
                 closeRevenue:
                     data_name: o.closeRevenue
                 closeRevenueCurrency:
@@ -175,8 +167,6 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: o.name
                 createdAt:
@@ -185,8 +175,6 @@ datagrids:
                     data_name: o.updatedAt
                 contactName:
                     data_name: contactName
-                customerName:
-                    data_name: customerName
                 closeRevenue:
                     data_name: closeRevenue
                 closeReasonLabel:
@@ -208,14 +196,6 @@ datagrids:
             toolbar_sorting: true
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 name:
                     type: string
                     data_name: o.name
@@ -229,9 +209,6 @@ datagrids:
                 contactName:
                     type: string
                     data_name: contactName
-                customerName:
-                    type: string
-                    data_name: customerName
                     enabled: false
                 closeRevenue:
                     type: currency
@@ -296,7 +273,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -356,9 +333,8 @@ datagrids:
                     - l.numberOfEmployees
                     - l.twitter
                     - l.linkedIn
-                    - source.name as sourceName
-                    - customer.name as customerName
-                    - s.id as status
+                    - IDENTITY(l.source) as source
+                    - IDENTITY(l.status) as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -370,7 +346,6 @@ datagrids:
                               ELSE region.name
                             END, ''
                         ) as regionLabel
-                    - channel.name as channelName
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - own.id as owner
@@ -378,30 +353,25 @@ datagrids:
                     - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: s }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
-                        - { join: l.dataChannel, alias: channel }
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
-                        - { join: l.customer, alias: customer }
-                        - { join: l.source, alias: source }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
         columns:
-            channelName:
-                label:         oro.sales.lead.data_channel.label
             name:
                 label:         oro.sales.lead.name.label
             status:
-                frontend_type: select
+                context:
+                    enum_code: lead_status
+                frontend_type: enum
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
@@ -429,11 +399,11 @@ datagrids:
                 label:         oro.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
                 renderable: false
-            sourceName:
+            source:
+                context:
+                    enum_code: lead_source
+                frontend_type: enum
                 label:         oro.sales.lead.source.label
-                renderable: false
-            customerName:
-                label: oro.sales.lead.customer.label
                 renderable: false
             email:
                 label:         oro.sales.lead.email.label
@@ -527,8 +497,6 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: l.name
                 status:
@@ -551,10 +519,8 @@ datagrids:
                     data_name: l.website
                 numberOfEmployees:
                     data_name: l.numberOfEmployees
-                sourceName:
-                    data_name: source.name
-                customerName:
-                    data_name: customerName
+                source:
+                    data_name: source
                 email:
                     data_name: email.email
                 phone:
@@ -584,7 +550,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -604,14 +570,6 @@ datagrids:
                 name:
                     type: string
                     data_name: l.name
-                channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 status:
                     type: enum
                     data_name: status
@@ -650,14 +608,10 @@ datagrids:
                     type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
-                sourceName:
+                source:
                     type: enum
                     enum_code: lead_source
-                    data_name: source.id
-                    enabled: false
-                customerName:
-                    type: string
-                    data_name: customerName
+                    data_name: source
                     enabled: false
                 email:
                     type: string
@@ -732,10 +686,11 @@ datagrids:
                     - salesFunnel.startDate
                     - lead.name as leadName
                     - opportunity.name as opportunityName
-                    - opportunity.budgetAmountValue as opportunityBudget
-                    - opportunity.closeRevenueValue as opportunityRevenue
+                    - opportunity.budgetAmountValue as budgetAmount
+                    - opportunity.closeRevenueValue as closeRevenue
+                    - opportunity.budgetAmountCurrency as budgetAmountCurrency
+                    - opportunity.closeRevenueCurrency as closeRevenueCurrency
                     - opportunity.probability as opportunityProbability
-                    - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.salesfunnel.entity.class%, alias: salesFunnel }
@@ -743,13 +698,10 @@ datagrids:
                     left:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
-                        - { join: salesFunnel.dataChannel, alias: channel }
                         - { join: salesFunnel.owner, alias: owner }
         columns:
             id:
                 label: oro.sales.salesfunnel.id.label
-            channelName:
-                label: oro.sales.salesfunnel.data_channel.label
             startDate:
                 label: oro.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -757,12 +709,34 @@ datagrids:
                 label: oro.sales.salesfunnel.lead.label
             opportunityName:
                 label: oro.sales.salesfunnel.opportunity.label
-            opportunityBudget:
-                label: oro.sales.opportunity.budget_amount.label
-                frontend_type: currency
-            opportunityRevenue:
-                label: oro.sales.opportunity.close_revenue.label
-                frontend_type: currency
+            budgetAmount:
+                label:         oro.sales.opportunity.budget_amount.label
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: budgetAmount
+                    currency: budgetAmountCurrency
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
+                    entity_alias: opportunity
+            closeRevenue:
+                label:         oro.sales.opportunity.close_revenue.label
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                params:
+                    value: closeRevenue
+                    currency: closeRevenueCurrency
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
+                    original_field: closeRevenue
+                    value_field: closeRevenueValue
+                    currency_field: closeRevenueCurrency
+                    entity_alias: opportunity
             opportunityProbability:
                 label: oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -785,17 +759,15 @@ datagrids:
             columns:
                 id:
                     data_name: salesFunnel.id
-                channelName:
-                    data_name: channelName
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
                     data_name: lead.name
                 opportunityName:
                     data_name: opportunity.name
-                opportunityBudget:
+                budgetAmount:
                     data_name: opportunity.budgetAmountValue
-                opportunityRevenue:
+                closeRevenue:
                     data_name: opportunity.closeRevenueValue
                 opportunityProbability:
                     data_name: opportunity.probability
@@ -808,7 +780,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_salesfunnel_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -828,14 +800,6 @@ datagrids:
                 id:
                     type: number-range
                     data_name: salesFunnel.id
-                channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -845,12 +809,28 @@ datagrids:
                 opportunityName:
                     type: string
                     data_name: opportunity.name
-                opportunityBudget:
+                closeRevenue:
                     type: currency
-                    data_name: opportunity.budgetAmount
-                opportunityRevenue:
+                    data_name: closeRevenue
+                closeRevenueCurrency:
+                    type: choice
+                    data_name: closeRevenueCurrency
+                    label: oro.sales.opportunity.close_revenue_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
+                budgetAmount:
                     type: currency
-                    data_name: opportunity.closeRevenue
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 opportunityProbability:
                     type: percent
                     data_name: opportunity.probability
@@ -866,36 +846,6 @@ datagrids:
                     type: choice-business-unit
                     data_name: salesFunnel.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
-
-    sales-funnel-lead-with-data-channel-grid:
-        extends: sales-funnel-lead-grid
-        channel_limitation:
-            channel_relation_path: dataChannel
-        source:
-            query:
-                join:
-                    left:
-                        - { join: lead.dataChannel, alias: dataChannel }
-                where:
-                    and:
-                        - IDENTITY(lead.dataChannel) in (:channelIds)
-            bind_parameters:
-                - channelIds
-
-    sales-funnel-opportunity-with-data-channel-grid:
-        extends: sales-funnel-opportunity-grid
-        channel_limitation:
-            channel_relation_path: dataChannel
-        source:
-            query:
-                join:
-                    left:
-                        - { join: opportunity.dataChannel, alias: dataChannel }
-                where:
-                    and:
-                        - IDENTITY(opportunity.dataChannel) in (:channelIds)
-            bind_parameters:
-                - channelIds
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -1221,7 +1171,7 @@ datagrids:
             entity_pagination: true
             export: true
 
-    orocrm-sales-b2bcustomers-grid:
+    oro-sales-b2bcustomers-grid:
         extends: base-sales-b2bcustomers-grid
         mixins: activity-contact-data-hidden-mixin
         source:
@@ -1308,13 +1258,20 @@ datagrids:
                 saPostalCode:         { data_name: saPostalCode }
         filters:
             columns:
-                ownerName:
+                owner:
                     type: choice-tree
                     data_name: c.owner
+                    label: oro.user.owner.label
                     enabled: false
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: c.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                    enabled: false
                 accountName:
                     type: string
                     data_name: accountName
@@ -1396,7 +1353,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_b2bcustomer_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1412,7 +1369,7 @@ datagrids:
                 icon:          trash
                 link:          delete_link
 
-    orocrm-sales-b2bcustomers-select-grid:
+    oro-sales-b2bcustomers-select-grid:
         extends: base-sales-b2bcustomers-grid
         source:
             query:
@@ -1508,7 +1465,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_lead_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1528,9 +1485,12 @@ datagrids:
         extends: base-sales-b2bcustomer-leads-grid
         source:
             query:
+                join:
+                    left:
+                        - { join: l.customerAssociation, alias: ca }
                 where:
                     and:
-                        - l.customer = :customerId
+                        - ca.b2b_customer_188b774c = :customerId
             bind_parameters:
                 - customerId
         columns:
@@ -1616,6 +1576,7 @@ datagrids:
                     - o.closeDate
                     - o.probability
                     - o.budgetAmountValue as budgetAmount
+                    - o.budgetAmountCurrency as budgetAmountCurrency
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
@@ -1639,7 +1600,15 @@ datagrids:
                     data_name: o.closeDate
                 budgetAmount:
                     type: currency
-                    data_name: o.budgetAmountValue
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 probability:
                     type: percent
                     data_name: o.probability
@@ -1685,7 +1654,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -1705,9 +1674,12 @@ datagrids:
         extends: base-sales-b2bcustomer-opportunities-grid
         source:
             query:
+                join:
+                    left:
+                        - { join: o.customerAssociation, alias: ca }
                 where:
                     and:
-                        - o.customer = :customerId
+                        - ca.b2b_customer_188b774c = :customerId
             bind_parameters:
                 - customerId
         columns:
@@ -1721,7 +1693,14 @@ datagrids:
                 frontend_type: date
             budgetAmount:
                 label:         oro.sales.opportunity.budget_amount.label
-                frontend_type: currency
+                frontend_type: multi-currency
+                type:          callback
+                callable:      ['@oro_currency.converter.currency_to_string', 'convert']
+                multicurrency_config:
+                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    original_field: budgetAmount
+                    value_field: budgetAmountValue
+                    currency_field: budgetAmountCurrency
             probability:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
@@ -1766,25 +1745,22 @@ datagrids:
                 select:
                     - l.id
                     - l.name
+                    - l.createdAt
                     - l.firstName
                     - l.lastName
                     - email.email
                     - s.id as status
-                    - channel.name as channelName
                 from:
                     - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
                         - { join: l.status, alias: s }
-                        - { join: l.dataChannel, alias: channel }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
         columns:
             id:
                 label:         oro.sales.lead.id.label
-            channelName:
-                label:         oro.sales.lead.data_channel.label
             name:
                 label:         oro.sales.lead.name.label
             status:
@@ -1797,10 +1773,11 @@ datagrids:
                 label:         oro.sales.lead.last_name.label
             email:
                 label:         oro.sales.lead.email.label
+            createdAt:
+                renderable:     false
+                frontend_type:  datetime
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: l.name
                 status:
@@ -1811,18 +1788,12 @@ datagrids:
                     data_name: l.lastName
                 email:
                     data_name: email.email
+                createdAt:
+                    data_name: l.createdAt
             default:
                 createdAt:  DESC
         filters:
             columns:
-                 channelName:
-                    type:      entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                  name:
                     type: string
                     data_name: l.name
@@ -1856,10 +1827,10 @@ datagrids:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
-                    - channel.name as channelName
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
@@ -1868,13 +1839,10 @@ datagrids:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: s }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
-                        - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
         columns:
             id:
                 label:         oro.sales.opportunity.id.label
-            channelName:
-                label:         oro.sales.opportunity.data_channel.label
             name:
                 label:         oro.sales.opportunity.name.label
             status:
@@ -1885,10 +1853,11 @@ datagrids:
                 label:         oro.contact.email.label
             ownerName:
                 label:         oro.sales.opportunity.owner.label
+            createdAt:
+                renderable: false
+                frontend_type: datetime
         fields_acl:
             columns:
-                channelName:
-                    data_name: o.dataChannel
                 name:
                     data_name: o.name
                 statusLabel:
@@ -1899,8 +1868,6 @@ datagrids:
                     data_name: o.owner
         sorters:
             columns:
-                channelName:
-                    data_name: channelName
                 name:
                     data_name: o.name
                 status:
@@ -1909,18 +1876,12 @@ datagrids:
                     data_name: email.email
                 ownerName:
                     data_name: ownerName
+                createdAt:
+                    data_name: o.createdAt
             default:
                 createdAt: DESC
         filters:
             columns:
-                channelName:
-                    type: entity
-                    data_name: channel.id
-                    options:
-                        field_options:
-                            class: OroChannelBundle:Channel
-                            property: name
-                            translatable_options: false
                 name:
                     type: string
                     data_name: o.name
@@ -1942,7 +1903,7 @@ datagrids:
                             property: fullName
                             translatable_options: false
 
-    orocrm-sales-b2bcustomers-for-context-grid:
+    oro-sales-b2bcustomers-for-context-grid:
         extended_entity_name: %oro_sales.b2bcustomer.entity.class%
         acl_resource: oro_sales_b2bcustomer_view
         source:
@@ -2116,9 +2077,11 @@ datagrids:
                     - o.id
                     - o.name
                     - o.budgetAmountValue as budgetAmount
+                    - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.probability
                     - s.id as status
                     - o.closeDate
+                    - o.createdAt
                     - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
@@ -2138,6 +2101,8 @@ datagrids:
                     data_name: o.status
                 closeDate:
                     data_name: o.closeDate
+                createdAt:
+                    data_name: o.createdAt
                 ownerName:
                     data_name: o.owner
         sorters:
@@ -2152,6 +2117,8 @@ datagrids:
                     data_name: status
                 closeDate:
                     data_name: o.closeDate
+                createdAt:
+                    data_name: o.createdAt
                 ownerName:
                     data_name: ownerName
             default:
@@ -2163,7 +2130,15 @@ datagrids:
                     data_name: o.name
                 budgetAmount:
                     type: currency
-                    data_name: o.budgetAmountValue
+                    data_name: budgetAmount
+                budgetAmountCurrency:
+                    type: choice
+                    data_name: budgetAmountCurrency
+                    label: oro.sales.opportunity.budget_amount_currency.label
+                    options:
+                        field_options:
+                            choices: "@oro_currency.helper.currency_name->getCurrencyChoices('full_name')"
+                            multiple: true
                 probability:
                     type: percent
                     data_name: o.probability
@@ -2174,6 +2149,9 @@ datagrids:
                 closeDate:
                     type: date
                     data_name: o.closeDate
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
                 owner:
                     type: entity
                     label: oro.user.owner.label
@@ -2210,6 +2188,9 @@ datagrids:
             closeDate:
                 label:         oro.sales.opportunity.close_date.label
                 frontend_type: date
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
             ownerName:
                 label:         oro.sales.opportunity.owner.label
         actions:
@@ -2217,7 +2198,7 @@ datagrids:
                 type:          navigate
                 acl_resource:  oro_sales_opportunity_view
                 label:         oro.grid.action.view
-                icon:          eye-open
+                icon:          eye
                 link:          view_link
                 rowAction:     true
             update:
@@ -2246,3 +2227,78 @@ datagrids:
                 type:       url
                 route:      oro_api_delete_opportunity
                 params:     [ id ]
+
+    sales-customers-opportunities-alternate-grid:
+        extends: sales-customers-opportunities-grid
+
+    sales-customers-leads-grid:
+        extends: base-sales-b2bcustomer-leads-grid
+        columns:
+            name:
+                label:         oro.sales.lead.name.label
+            status:
+                frontend_type: select
+                label:         oro.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
+            firstName:
+                label:         oro.sales.lead.first_name.label
+            lastName:
+                label:         oro.sales.lead.last_name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            email:
+                label:         oro.sales.lead.email.label
+            phone:
+                label:         oro.sales.lead.phone_number.label
+            countryName:
+                label:         oro.sales.lead.datagrid.country
+            regionLabel:
+                label:         oro.sales.lead.datagrid.region
+            addressPostalCode:
+                label:         oro.sales.lead.datagrid.postal_code
+        sorters:
+            columns:
+                name:
+                    data_name: l.name
+                status:
+                    data_name: status
+                firstName:
+                    data_name: l.firstName
+                lastName:
+                    data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
+                email:
+                    data_name: email.email
+                phone:
+                    data_name: phone.phone
+                countryName:
+                    data_name: address.country
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: addressPostalCode
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                 countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        lazy: true
+                        field_options:
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: "@oro_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
+                            translatable_options: false
+                 regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                 addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false

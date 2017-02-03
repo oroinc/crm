@@ -272,8 +272,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $expectedLifetime = 200;
         $order = new Order();
 
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         $customer = new Customer();
         $customer

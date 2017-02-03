@@ -1,44 +1,24 @@
-OroCRM
-========================
-
-Welcome to OroCRM an Open Source Client Relationship Management (CRM) tool.
-
-This document contains information on how to download, install, and start
-using OroCRM. For a more detailed explanation, see the [Installation]
-chapter.
+# OroCRM
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/orocrm/crm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orocrm/crm/?branch=master) [![Travis CI build status](https://travis-ci.org/orocrm/crm.svg?branch=master)](https://travis-ci.org/orocrm/crm)
 
-Requirements
-------------
+OroCRM is an open source PHP Client Relationship Management (CRM) application that allows to create a 360° view
+of your customers across multiple channels, organize the sales pipeline, manage account and contact information,
+communicate with customers, run marketing campaigns and track campaign performance.  
 
-OroCRM requires Symfony 2.4, Doctrine 2 and PHP 5.5.9 or above.
+OroTeam, the team behind OroCRM, strongly believes that no two business are alike and this is why OroCRM
+is very flexible and highly customizable application that was adopted in eCommerce, Retail, Financial Services
+and many other industries. 
 
-Installation
-------------
+OroCRM is built on [OroPlatform](https://github.com/orocrm/platform) and [Symfony](http://symfony.com/) full-stack 
+web framework. 
 
-```bash
-git clone https://github.com/orocrm/crm.git
+## Installation
 
-curl -s https://getcomposer.org/installer | php
+OroCRM is a composer package that requires an application to initialize and run it.
+A [crm-application](https://github.com/orocrm/crm-application) is an example of such application which
+simplifies initial project setup and configuration.
 
-php composer.phar install
-```
-
-Run unit tests
---------------
-
-To run unit tests of any bundles :
-
-```bash
-phpunit
-```
-
-Use as dependency in composer
------------------------------
-
-```yaml
-    "require": {
-        "oro/crm": "1.0.*",
-    }
-```
+## Documentation
+  
+The documentation for the OroCRM can be found on [www.orocrm.com](http://www.orocrm.com/documentation/) website.

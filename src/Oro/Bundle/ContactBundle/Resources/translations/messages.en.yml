@@ -13,11 +13,11 @@ oro:
             contact_group_list.description:         List of contact groups
             contact_list.description:               List of contacts
             shortcut_list_contacts.description:     List of contacts
-            shortcut_list_contacts.label:           Show contacts list
+            shortcut_list_contacts.label:           Show Contacts list
             shortcut_new_contact.description:       Create new contact instance
-            shortcut_new_contact.label:             Create new contact
+            shortcut_new_contact.label:             Create new Contact
             shortcut_new_contact_group.description: Create new contact group instance
-            shortcut_new_contact_group.label:       Create new contact group
+            shortcut_new_contact_group.label:       Create new Contact Group
         controller:
             contact_group.saved.message: Contact Group saved
             contact.saved.message:       Contact saved
@@ -75,6 +75,7 @@ oro:
         phones.label:        Phones
         primary_email.label: Primary Email
         primary_phone.label: Primary Phone
+        primary_addr.label:  Primary Address
         skype.label:         Skype
         social.label:        Social
         source.label:        Source
@@ -102,7 +103,7 @@ oro:
             name_suffix.label:   Name suffix
             organization.label:  Organization
             owner.label:         Owner
-            postal_code.label:   Zip/postal code
+            postal_code.label:   Zip/Postal Code
             primary.label:       Primary
             region.label:        State
             region_text.label:   State

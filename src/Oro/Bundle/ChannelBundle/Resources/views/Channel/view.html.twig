@@ -16,25 +16,6 @@
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) and oro_channel_type_metadata()[entity.channelType] is defined %}
-        {% if entity.status %}
-            {{ UI.button({
-                'aCss':  'btn-danger',
-                'iCss':  'icon-remove',
-                'label': 'oro.channel.button.deactivate.label'|trans,
-                'path':  path('oro_channel_change_status', {'id' : entity.id}),
-                'title': 'oro.channel.button.deactivate.label'|trans,
-            }) }}
-        {% else %}
-            {{ UI.button({
-                'aCss':  'btn-success',
-                'iCss':  'icon-ok',
-                'label': 'oro.channel.button.activate.label'|trans,
-                'path':  path('oro_channel_change_status', {'id' : entity.id}),
-                'title': 'oro.channel.button.activate.label'|trans,
-            }) }}
-        {% endif %}
-
-        {{ UI.buttonSeparator() }}
         {{ UI.editButton({
             'path': path('oro_channel_update', {'id': entity.id}),
             'entity_label': 'oro.channel.entity_label'|trans
@@ -55,15 +36,6 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status %}
-            <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ 'oro.channel.active.label'|trans }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ 'oro.channel.inactive.label'|trans }}</div>
-        {% endif %}
-    </div>
 {% endblock breadcrumbs %}
 
 {% block content_data %}

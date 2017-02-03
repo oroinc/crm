@@ -7,12 +7,9 @@ use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -36,7 +33,7 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v1_8';
     }
 
     /**
@@ -60,7 +57,6 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
 
         /** Add extended fields */
         $this->addExtendedFields($schema);
-        $this->addChannelForeignKeyToTrackingWebsite($schema);
     }
 
     /**
@@ -298,43 +294,9 @@ class OroChannelBundleInstaller implements Installation, ExtendExtensionAwareInt
             'dataChannel',
             'orocrm_channel',
             'name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
-        );
-    }
-
-    /**
-     * Add 'channel' to oro_tracking_website
-     *
-     * @param Schema $schema
-     */
-    protected function addChannelForeignKeyToTrackingWebsite(Schema $schema)
-    {
-        $this->extendExtension->addManyToOneRelation(
-            $schema,
-            'oro_tracking_website',
-            'channel',
-            'orocrm_channel',
-            'name',
             [
-                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
-                'entity' => ['label' => 'oro.channel.entity_label'],
-                'extend' => [
-                    'is_extend' => true,
-                    'owner'     => ExtendScope::OWNER_CUSTOM
-                ],
-                'datagrid' => [
-                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE
-                ],
-                'form' => [
-                    'is_enabled' => true,
-                    'form_type'  => 'oro_channel_select_type',
-                    'form_options' => [
-                        'tooltip'  => 'oro.channel.tracking_website_channel_select.tooltip'
-                    ]
-                ],
-                'view'      => ['is_displayable' => true],
-                'merge'     => ['display' => false],
-                'dataaudit' => ['auditable' => false]
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true],
+                'form' => ['is_enabled' => false]
             ]
         );
     }

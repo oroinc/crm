@@ -6,14 +6,13 @@
     "homepage": "https://github.com/laboro/DemoDataBundle",
     "license": "MIT",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6",
         "doctrine/data-fixtures": "@dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\DemoDataBundle": "" }
     },
     "target-dir": "Oro/Bundle/DemoDataBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

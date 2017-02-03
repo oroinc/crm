@@ -11,7 +11,7 @@
             UI.clientButton({
                 'dataUrl': path('oro_magento_customer_orderplace', {'id': entity.id }),
                 'aCss':    'no-hash',
-                'iCss':    'icon-money',
+                'iCss':    'fa-money',
                 'dataId':  entity.id,
                 'label' : 'oro.magento.customer.create_order'|trans,
                 'widget' : {
@@ -77,7 +77,7 @@
     {% set generalSubBlocks = [{'data' : [customerInformationWidget]}] %}
 
     {% set salesTabsWidget %}
-        <div class="responsive-cell" id="magento-without-border-tabs">
+        <div class="responsive-cell customer-without-border-tabs">
             {% set tabs = [
                 {
                     'alias': 'oro_magento_customer_orders',
@@ -129,15 +129,20 @@
             'subblocks': [
                 {'data' : [salesTabsWidget] }
             ]
-        },
-        {
-            'title': 'oro.magento.website_activity.label'|trans,
-            'priority': 1050,
-            'subblocks': [
-                {'data' : [websiteActivityTabsWidget] }
-            ]
         }
     ] %}
+
+    {% if websiteActivityTabsWidget|trim|length > 0 %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'oro.magento.website_activity.label'|trans,
+                'priority': 1050,
+                'subblocks': [
+                    {'data' : [websiteActivityTabsWidget] }
+                ]
+            }
+        ]) %}
+    {% endif %}
 
     {% if entity.newsletterSubscribers|length > 0 %}
         {% set newsletterSubscriberBlock %}

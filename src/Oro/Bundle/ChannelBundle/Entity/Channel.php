@@ -23,7 +23,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *  routeView="oro_channel_view",
  *  defaultValues={
  *      "entity"={
- *          "icon"="icon-sitemap"
+ *          "icon"="fa-sitemap"
  *      },
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",
@@ -39,7 +39,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *            "form_type"="oro_channel_select_type"
  *      },
  *      "grid"={
- *          "default"="orocrm-channels-grid"
+ *          "default"="oro-channels-grid"
  *     }
  *  }
  * )

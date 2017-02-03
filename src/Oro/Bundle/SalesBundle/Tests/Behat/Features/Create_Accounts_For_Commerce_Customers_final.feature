@@ -1,12 +1,16 @@
 @not-automated
+@draft
+# @todo: Should be moved to the Commerce and CRM integration
 Feature: Creating Accounts for Commerce Customers
 In order to manage commerce customers after CRM/Commerce integration more efficiently
 As an Administrator
 I want to be able to create CRM accounts for Commerce Customers
 
-  Background:
+  Scenario: Feature Background
     Given a successful installation CRM and Commerce
-    And "Company A" root customer with 2 children customers: Company A - East Division and Company A - West Division
+    And root customer named "Company A"
+    And children customer named Company A - East Division
+    And children customer named Company A - West Division
     And an owner named "John Doe"
     And Account named "Body Toning"
     And Account named "Daddy's Pie" with customer user "Marlene Bradley"
@@ -26,8 +30,7 @@ Scenario: Creating CRM Accounts for existing customers if I selected to create a
     And I go to Integrations
     And I go to "CRM And Commerce" section
     And I select Creation New Account "For each Commerce Customer"
-    And I see notification message "You are about to change CRM account creation strategy. All customers will be
-        #reassigned to each own customer account"
+    And I see notification message
     And I press "Save Settings" button
     And I see "Configuration saved" flash message
     And I go to System/ Jobs
@@ -76,7 +79,7 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
 
 
 # Req ID CRM-6111-8
-    Scenario: Checking that the "Account" column is available on Customers grid and is editable inline
+    Scenario Outline: Checking that the "Account" column is available on Customers grid and is editable inline
     Given I go to Customers/ Customers
     When I observe the Customers grid
     Then I see that the "Account" column is visible
@@ -89,9 +92,9 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
       | Wholesaler B  |
 
 
-    Scenario: Checking that the user can change Account when editing the Customer
+    Scenario Outline: Checking that the user can change Account when editing the Customer
     Given I click "Magento Company" customer on customer grid
-    And I press 'Edit"
+    And I press "Edit"
     And I select <Another Account> from the Account dropdown
     And I press "Save And Close"
     Then I should see <Another Account> on the Customer view
@@ -99,16 +102,23 @@ Scenario: Creating CRM Account from back-end when creating new Commerce Customer
       | Another Account |
       | Daddy's Pie     |
 
-# Req ID CRM-6111-9, CRM-6111-10, CRM-6111-11, Req ID CRM-6111-12, Req ID CRM-6111-13, Req ID CRM-6111-14,
-    Scenario: Checking that the user can view customer details in "OroCommerce" section on the ‘Account’ view
+# Req ID CRM-6111-9, CRM-6111-10, CRM-6111-11, Req ID CRM-6111-12, Req ID CRM-6111-13
+# Req ID CRM-6111-14,
+    Scenario Outline: Checking that the user can view customer details in "OroCommerce" section on the "Account" view
     Given I go to Customers/ Accounts
     And I click on <Account> on Account grid
     And Account view is displayed
-    Then I see that 'Commerce Customers’ section is available on the ‘Account’ view
-    And I can see "Customer Users", "Shopping Lists", "Requests For Quote", "Quotes", "Orders", and "Opportunities" tabs
-    #in "Commerce Customers" section on Account view
+    Then I see that "Commerce Customers" section is available on the "Account" view
+    And I can see the following tabs in "Commerce Customers" section on Account view:
+    | Tabs                |
+    | Customer Users      |
+    | Shopping Lists      |
+    | Shopping Lists      |
+    | Requests For Quote  |
+    | Quotes              |
+    | Orders              |
+    | Opportunities       |
     And I can see that <Customer Users> are displayed by tabs
-    And for <Customer Users> the following fields are displayed: First Name, Last Name, Email Address, Enabled, Confirmed
     And when I click <Customer Users> on tab
     Then I see <Customer Users> Customer view
      Examples:

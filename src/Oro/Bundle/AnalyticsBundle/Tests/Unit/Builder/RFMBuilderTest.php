@@ -37,7 +37,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     public function testAddProviderFailed()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|RFMProviderInterface $provider */
-        $provider = $this->getMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
+        $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
         $provider->expects($this->once())
             ->method('getType')
             ->will($this->returnValue('wrong_type'));
@@ -48,7 +48,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     public function testAddProviderSuccess()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|RFMProviderInterface $provider */
-        $provider = $this->getMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
+        $provider = $this->createMock('Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface');
         $provider->expects($this->once())
             ->method('getType')
             ->will($this->returnValue(RFMMetricCategory::TYPE_FREQUENCY));
@@ -75,7 +75,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function supportsDataProvider()
     {
-        $mock = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $mock = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $mock->expects($this->once())
             ->method('getCustomerIdentity')
             ->willReturn(new RFMAwareStub());

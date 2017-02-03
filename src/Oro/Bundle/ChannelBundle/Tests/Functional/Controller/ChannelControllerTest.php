@@ -2,27 +2,35 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Functional\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\ChannelBundle\Async\Topics;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Entity\CustomerIdentity;
+use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\Testing\ResponseExtension;
 use Symfony\Component\Form\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
-
 /**
+ * @group crm
+ *
  * @outputBuffering enabled
  * @dbIsolation
  */
 class ChannelControllerTest extends WebTestCase
 {
+    use ResponseExtension;
+    use MessageQueueExtension;
+
     const CHANNEL_NAME = 'some name';
-    const GRID_NAME    = 'orocrm-channels-grid';
+    const GRID_NAME    = 'oro-channels-grid';
 
     public function setUp()
     {
-        $this->initClient(
-            ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
-        );
+        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
+        $this->client->enableReboot();
         $this->client->useHashNavigation(true);
     }
 
@@ -124,24 +132,6 @@ class ChannelControllerTest extends WebTestCase
      *
      * @param $channel
      */
-    public function testChangeStatusChannel($channel)
-    {
-        $crawler = $this->client->request(
-            'GET',
-            $this->getUrl('oro_channel_change_status', ['id' => $channel['id']])
-        );
-
-        $this->client->getResponse();
-        $this->assertContains('Channel deactivated', $crawler->html());
-
-        return $channel;
-    }
-
-    /**
-     * @depends testChangeStatusChannel
-     *
-     * @param $channel
-     */
     public function testDeleteChannel($channel)
     {
         $this->client->request(
@@ -225,5 +215,13 @@ class ChannelControllerTest extends WebTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return EntityManagerInterface
+     */
+    protected function getEntityManager()
+    {
+        return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
 }

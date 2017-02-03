@@ -108,10 +108,10 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
                 $this->role
             );
 
-            $user->setPlainPassword($username . '1Q');
+            $user->setPlainPassword($username);
             $this->userManager->updatePassword($user);
+            $this->userManager->updateUser($user);
 
-            $this->persist($user);
             if ($i % self::FLUSH_MAX == 0) {
                 $this->flush();
                 $this->em->clear();

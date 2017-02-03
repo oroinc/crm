@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 
 /**
  * @Route("/customer")
@@ -26,10 +26,10 @@ class CustomerController extends Controller
      */
     public function gridDialogAction($entityClass)
     {
-        $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
+        $resolvedClass    = $this->getRoutingHelper()->resolveEntityClass($entityClass);
         $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
             ->getPluralAlias($resolvedClass);
-        $entityTargets = $this->getCustomerConfigProvider()->getData($resolvedClass);
+        $entityTargets    = $this->getCustomersData();
 
         return [
             'sourceEntityClassAlias' => $entityClassAlias,
@@ -57,7 +57,7 @@ class CustomerController extends Controller
         $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
 
         return [
-            'gridName'     => $this->getCustomerConfigProvider()->getDefaultGrid($resolvedClass),
+            'gridName'     => $this->getCustomerConfigProvider()->getGrid($resolvedClass),
             'multiselect'  => false,
             'params'       => [
                 'class_name' => $resolvedClass,
@@ -75,10 +75,37 @@ class CustomerController extends Controller
     }
 
     /**
-     * @return CustomerConfigProvider
+     * @return ConfigProvider
      */
     protected function getCustomerConfigProvider()
     {
-        return $this->get('oro_sales.customer_config_provider');
+        return $this->get('oro_sales.customer.account_config_provider');
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomersData()
+    {
+        $customerData   = $this->getCustomerConfigProvider()->getCustomersData();
+        $securityFacade = $this->get('oro_security.security_facade');
+        $gridManager    = $this->get('oro_datagrid.datagrid.manager');
+        $allowed        = [];
+        $isFirstSet     = false;
+
+        foreach ($customerData as $customer) {
+            $gridConfig      = $gridManager->getConfigurationForGrid($customer['gridName']);
+            $gridAclResource = $gridConfig ? $gridConfig->getAclResource() : null;
+            $isAllowed       = $securityFacade->isGranted($gridAclResource);
+            if ($isAllowed) {
+                $customer['first'] = !$isFirstSet;
+                if (!$isFirstSet) {
+                    $isFirstSet = true;
+                }
+                $allowed[] = $customer;
+            }
+        }
+
+        return $allowed;
     }
 }

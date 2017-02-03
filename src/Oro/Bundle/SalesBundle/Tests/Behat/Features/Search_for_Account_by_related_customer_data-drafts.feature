@@ -1,5 +1,5 @@
 @not-automated
-@drafts
+@draft
 
   # functionality - to be tested for:
   # CRM - Magento customers
@@ -10,7 +10,7 @@
   # A-Z
   # a-z
   # 0-9
-  # { [ ( ~ ! @ # $ % ^ & * ` | \ : ” ; ’ < > ? , . / * - + ) ] }
+  # special characters
   # Blank spaces
   # special set - 2 blank spaces – should be trimmed and error message should be displayed
   # Blank spaces followed with special characters or numbers
@@ -32,7 +32,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
    Background:
     Given the owner named John Doe
     And account named Jennifer Lawrence
-    And two contacts that belong to account Jennifer Lawrence"
+    And two contacts that belong to account "Jennifer Lawrence"
       | Name          | Phone       | Email                   |
       | Chris Pratt   | 0501463398  | whatever@passengers.com |
       | Jeremy Renner | 0501487795  | screenplay@arrival.com  |
@@ -70,8 +70,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | Bill Saito          | 0672259637  |
       | Mike Bell           | 0671115872  |
 
-  Scenario: Searching for keyword by relevant account name
-
+  Scenario Outline: Searching for keyword by relevant account name
     Given I log in as Administrator
     And I go to Sales/ Opportunities
     And I press "Create Opportunity" button
@@ -81,7 +80,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     And I should see all relevant accounts that contain <keyword>
     And <keyword> in search results should be underlined
     And "Jennifer Lawrence" account should be displayed as "Jennifer Lawrence" (Account)
-
     Examples:
         | keyword   |
         | Je        |
@@ -100,13 +98,13 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | lawrence  |
         | Lawrence  |
 
-    Scenario: Searching for keyword by relevant contact name
+    Scenario Outline: Searching for keyword by relevant contact name
       Given I am on "create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
+      And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
     Examples:
         | keyword |
@@ -124,15 +122,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | pr      |
         | PR      |
 
-    Scenario: Searching for keyword by relevant contact phone
+    Scenario Outline: Searching for keyword by relevant contact phone
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
+      And grouping for search results should be the following: Account - relevant contact
       And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
-
     Examples:
       | keyword     |
       | 05          |
@@ -145,15 +142,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 050148779   |
       | 0501487795  |
 
-    Scenario: Searching for keyword by relevant contact email
+    Scenario Outline: Searching for keyword by relevant contact email
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Chris Pratt" contact in search result
       And I should see all relevant contacts that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant contact
-      And "Chris Pratt" contact should be displayed as "Chris Pratt" (Contact)
-
+      And grouping for search results should be the following: Account - relevant contact
+      And "Chris Pratt" contact should be displayed as "Chris Pratt (Contact)"
     Examples:
       | keyword                 |
       | sc                      |
@@ -173,14 +169,13 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | .com                    |
       | SCREENPLAY@ARRIVAL.COM  |
 
-  Scenario: Searching for keyword by relevant Magento customer's name
-
-    Given I am on "create Opportunity" page
+  Scenario Outline: Searching for keyword by relevant Magento customer's name
+    Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
     And I should see all relevant customers that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant magento customer
+    And grouping for search results should be the following: Account - relevant magento customer
     And "Josh Gordon" customer should be displayed as "Josh Gordon" (Magento Customer)
   Examples:
       | keyword |
@@ -198,15 +193,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | GO      |
       | go      |
 
-  Scenario: Searching for keyword by relevant Magento customer's email
+  Scenario Outline: Searching for keyword by relevant Magento customer's email
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" Magento customer in search result
     And I should see all relevant contacts that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant magento customer
+    And grouping for search results should be the following: Account - relevant magento customer
     And "Josh Gordon" Magento customer should be displayed as "Josh Gordon" (Magento customer)
-
   Examples:
       | keyword                 |
       | of                      |
@@ -226,18 +220,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | .com                    |
       | BATEMAN.COM             |
 
-
-
-  Scenario: Searching for keyword by relevant Magento customer phone
-
+  Scenario Outline: Searching for keyword by relevant Magento customer phone
     Given I am on "Create Opportunity" page
     And I start typing <keyword> in "Account" field
     Then I should see "Josh Gordon" contact in search result
     And I should see all relevant contacts that contain <keyword>
     And <keyword> in search results should be underlined
-    And grouping for search results should be the following: Account > relevant contact
+    And grouping for search results should be the following: Account - relevant contact
     And "Josh Gordon" contact should be displayed as "Josh Gordon" (Contact)
-
   Examples:
       | keyword     |
       | 06          |
@@ -250,16 +240,13 @@ Feature: In order to quickly find necessary account even if I don't remember it'
       | 067265987   |
       | 0672659873  |
 
-
-    --------------
-    Scenario: Searching for keyword by relevant Commerce customer's name
-
-      Given I am on "create Opportunity" page
+    Scenario Outline: Searching for keyword by relevant Commerce customer's name
+      Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant commerce customer
+      And grouping for search results should be the following: Account - relevant commerce customer
       And "Justin Malen" customer should be displayed as "Justin Malen" (Commerce Customer)
     Examples:
         | keyword |
@@ -277,15 +264,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | MA      |
         | ma      |
 
-    Scenario: Searching for keyword by relevant Commerce customer's email
+    Scenario Outline: Searching for keyword by relevant Commerce customer's email
       Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant Commerce customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant Commerce customer
+      And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
-
     Examples:
         | keyword               |
         | re                    |
@@ -303,16 +289,14 @@ Feature: In order to quickly find necessary account even if I don't remember it'
 
 
 
-    Scenario: Searching for keyword by relevant Commerce customer phone
-
-      Given I am on "Create Opportunity" page
+    Scenario Outline: Searching for keyword by relevant Commerce customer phone
+     Given I am on "Create Opportunity" page
       And I start typing <keyword> in "Account" field
       Then I should see "Justin Malen" Commerce customer in search result
       And I should see all relevant Commerce customers that contain <keyword>
       And <keyword> in search results should be underlined
-      And grouping for search results should be the following: Account > relevant Commerce customer
+      And grouping for search results should be the following: Account - relevant Commerce customer
       And "Justin Malen" Commerce customer should be displayed as "Justin Malen" (Commerce customer)
-
     Examples:
         | keyword     |
         | 06          |
@@ -329,7 +313,6 @@ Feature: In order to quickly find necessary account even if I don't remember it'
     Given I am on "Create Opportunity" page
     And I start typing "067" in "Account" field
     Then I should see 20 relevant contacts in search result from the following table:
-
         | Contact             | Phone       |
         | Drew Latham         | 0671234568  |
         | Tom Valco           | 0671598763  |
@@ -379,7 +362,7 @@ Feature: In order to quickly find necessary account even if I don't remember it'
         | Owner     | Opportunity Name  | Channel       | Status  | Account     |
         | John Doe  | New Opportunity   | Sales Channel | Open    | Josh Gordon |
 
-  Scenario: Search results should not be shown for entities' names
+  Scenario Outline: Search results should not be shown for entities names
     Given I am on "Create Opportunity" page
     And I start typing <Entity name> into the Account field
     Then nothing appears in search results

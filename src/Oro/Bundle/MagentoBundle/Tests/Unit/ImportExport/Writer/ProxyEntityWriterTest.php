@@ -117,7 +117,7 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetStepExecutionSetToWrappedWriter()
     {
-        $wrapped       = $this->getMock('Oro\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
+        $wrapped       = $this->createMock('Oro\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
         $writer        = new ProxyEntityWriter($wrapped, $this->databaseHelper);
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()->getMock();

@@ -29,12 +29,12 @@ class RestOpportunityTest extends WebTestCase
     {
         $request = [
             "opportunity" => [
-                'name'        => 'opportunity_name_' . mt_rand(1, 500),
-                'owner'       => '1',
-                'customer'    => $this->getReference('default_b2bcustomer')->getId(),
-                'contact'     => $this->getReference('default_contact')->getId(),
-                'status'      => 'in_progress'
-            ]
+                'name'                => 'opportunity_name_' . mt_rand(1, 500),
+                'owner'               => '1',
+                'contact'             => $this->getReference('default_contact')->getId(),
+                'status'              => 'in_progress',
+                'customerAssociation' => '{"value":"Account"}', //create with new Account
+            ],
         ];
 
         $this->client->request(

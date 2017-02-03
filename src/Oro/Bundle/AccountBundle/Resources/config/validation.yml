@@ -4,5 +4,3 @@ Oro\Bundle\AccountBundle\Entity\Account:
             - NotBlank:     ~
             - Length:
                 max:        255
-        organization:
-            - NotBlank:     ~

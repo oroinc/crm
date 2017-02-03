@@ -2,102 +2,69 @@
 
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-
-use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class CustomerDataGridListener
 {
-    /**
-     * @var RequestStack
-     */
-    protected $requestStack;
-
-    /**
-     * @param RequestStack $requestStack
-     */
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
-
     /**
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
-            return;
-        }
-
         $config = $event->getConfig();
-        $this->addSubscribersFilter($config);
-
-        $requestParameters = $request->query->get('magento-customers-grid', false);
-        if ($requestParameters && !empty($requestParameters['_filter']['isSubscriber'])) {
-            $this->addNewsletterSubscribers($config);
-        }
+        $parameters = $event->getParameters();
+        $this->addNewsletterSubscribers($config, $parameters);
     }
 
     /**
      * @param DatagridConfiguration $config
+     * @param ParameterBag          $parameters
      */
-    protected function addSubscribersFilter(DatagridConfiguration $config)
+    protected function addNewsletterSubscribers(DatagridConfiguration $config, ParameterBag $parameters)
     {
-        $filters = $config->offsetGetByPath('[filters][columns]', []);
-        if (!array_key_exists('isSubscriber', $filters)) {
-            $filters['isSubscriber'] = [
-                'label' => 'oro.magento.datagrid.columns.is_subscriber.label',
-                'type' => 'single_choice',
+        $config->addFilter(
+            'isSubscriber',
+            [
+                'label'     => 'oro.magento.datagrid.columns.is_subscriber.label',
+                'type'      => 'single_choice',
                 'data_name' => 'isSubscriber',
-                'options' => [
+                'options'   => [
                     'field_options' => [
                         'choices' => [
                             'unknown' => 'oro.magento.datagrid.columns.is_subscriber.unknown',
-                            'no' => 'oro.magento.datagrid.columns.is_subscriber.no',
-                            'yes' => 'oro.magento.datagrid.columns.is_subscriber.yes'
+                            'no'      => 'oro.magento.datagrid.columns.is_subscriber.no',
+                            'yes'     => 'oro.magento.datagrid.columns.is_subscriber.yes'
                         ]
                     ]
                 ]
-            ];
-            $config->offsetSetByPath('[filters][columns]', $filters);
-        }
-    }
+            ]
+        );
 
-    /**
-     * @param DatagridConfiguration $config
-     */
-    protected function addNewsletterSubscribers(DatagridConfiguration $config)
-    {
-        $query = $config->offsetGetByPath('[source][query]', []);
-        foreach ($query['select'] as &$field) {
-            if ($field === 'c.id') {
-                $field = 'DISTINCT ' . $field;
-                break;
-            }
+        $filters = $parameters->get(OrmFilterExtension::FILTER_ROOT_PARAM, []);
+        if (!empty($filters['isSubscriber'])) {
+            $query = $config->getOrmQuery();
+            $query->setDistinct();
+            $query->addSelect(
+                sprintf(
+                    'CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL'
+                    . ' THEN (CASE WHEN IDENTITY(newsletterSubscribers.status) = \'%s\' THEN \'yes\' ELSE \'no\' END)'
+                    . ' ELSE \'unknown\''
+                    . ' END as isSubscriber',
+                    NewsletterSubscriber::STATUS_SUBSCRIBED
+                )
+            );
+            $query->addLeftJoin('c.channel', 'channel');
+            $query->addLeftJoin(
+                'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+                'transport',
+                'WITH',
+                'channel.transport = transport'
+            );
+            $query->addLeftJoin('c.newsletterSubscribers', 'newsletterSubscribers');
         }
-        $query['select'][] = "CASE WHEN
-                transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL
-            THEN (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 'yes' ELSE 'no' END)
-            ELSE 'unknown'
-            END as isSubscriber";
-
-        $query['join']['left'][] = [
-            'join' => 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
-            'alias' => 'transport',
-            'conditionType' => 'WITH',
-            'condition' => 'channel.transport = transport'
-        ];
-        $query['join']['left'][] = [
-            'join' => 'c.newsletterSubscribers',
-            'alias' => 'newsletterSubscribers'
-        ];
-        $query['join']['left'][] = [
-            'join' => 'newsletterSubscribers.status',
-            'alias' => 'newsletterSubscriberStatus'
-        ];
-        $config->offsetSetByPath('[source][query]', $query);
     }
 }

@@ -10,25 +10,17 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Oro": "src/"
-         }
+        "psr-4": {"": "src/"},
+        "exclude-from-classmap": ["/Tests/"]
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packagist.orocrm.com"
-        }
-    ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6",
         "oro/platform": "1.x-dev",
         "oro/crm-task-bundle": "1.x-dev",
         "oro/crm-call-bundle": "1.x-dev",
-        "oro/calendar-bundle": "1.x-dev"
+        "oro/calendar-bundle": "1.x-dev",
+        "oro/marketing": "1.x-dev"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev"

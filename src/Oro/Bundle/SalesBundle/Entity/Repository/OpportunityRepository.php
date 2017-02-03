@@ -5,15 +5,14 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -59,7 +58,7 @@ class OpportunityRepository extends EntityRepository
     ) {
         $qb = $this->createQueryBuilder('opportunity');
         $qb
-            ->select('count(opportunity.id)')
+            ->select('COUNT(opportunity.id)')
             ->where($qb->expr()->in('opportunity.budgetAmountCurrency', $removingCurrencies))
             ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', $removingCurrencies));
         if ($organization instanceof Organization) {
@@ -215,15 +214,6 @@ class OpportunityRepository extends EntityRepository
             QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
 
-        $probabilityCondition = $qb->expr()->orX(
-            $qb->expr()->andX(
-                'opportunity.probability <> 0',
-                'opportunity.probability <> 1'
-            ),
-            'opportunity.probability is NULL'
-        );
-
-        $qb->andWhere($probabilityCondition);
         if ($start) {
             $qb
                 ->andWhere('opportunity.closeDate >= :startDate')
@@ -270,15 +260,12 @@ class OpportunityRepository extends EntityRepository
             $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
             if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
-                $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
                 $probability     = $oldProbability;
             } else {
                 $probability     = $opportunity->getProbability();
-                $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
             }
 
-            if ($isProbabilityOk
-                && $this->isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
+            if ($this->isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
                 && $this->isStatusOk($opportunityHistory, $opportunity)
             ) {
                 $result = $this->calculateOpportunityOldValue($result, $opportunityHistory, $opportunity, $probability);
@@ -415,12 +402,12 @@ class OpportunityRepository extends EntityRepository
         $qb->select('COUNT(o.id)');
         if ($start) {
             $qb
-                ->andWhere('o.createdAt > :start')
+                ->andWhere('o.createdAt >= :start')
                 ->setParameter('start', $start);
         }
         if ($end) {
             $qb
-                ->andWhere('o.createdAt < :end')
+                ->andWhere('o.createdAt <= :end')
                 ->setParameter('end', $end);
         }
 
@@ -451,8 +438,6 @@ class OpportunityRepository extends EntityRepository
             ->select('SUM(o.budgetAmount)')
             ->andWhere('o.closeDate IS NULL')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
         if ($start) {
             $qb
@@ -489,8 +474,6 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount)')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
         if ($start) {
             $qb
@@ -551,8 +534,6 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
             ->andWhere('o.status = :status')
-            ->andWhere('o.probability != 0')
-            ->andWhere('o.probability != 1')
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         $this->setCreationPeriod($qb, $start, $end);
@@ -659,10 +640,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setCreationPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.createdAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.createdAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**
@@ -672,10 +656,13 @@ class OpportunityRepository extends EntityRepository
      */
     protected function setClosedPeriod(QueryBuilder $qb, \DateTime $start = null, \DateTime $end = null)
     {
-        $qb
-            ->andWhere($qb->expr()->between('o.closeDate', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb->andWhere('o.closedAt >= :dateStart')->setParameter('dateStart', $start);
+        }
+
+        if ($end) {
+            $qb->andWhere('o.closedAt <= :dateEnd')->setParameter('dateEnd', $end);
+        }
     }
 
     /**

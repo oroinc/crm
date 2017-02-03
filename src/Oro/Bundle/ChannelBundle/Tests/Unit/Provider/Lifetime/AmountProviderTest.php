@@ -31,7 +31,7 @@ class AmountProviderTest extends OrmTestCase
         $config->setMetadataDriverImpl($metadataDriver);
         $config->setEntityNamespaces(['OroChannelBundle' => 'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']);
 
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->will($this->returnValue($this->em));
@@ -60,7 +60,7 @@ class AmountProviderTest extends OrmTestCase
             ->with($expectedSQL)
             ->will($this->returnValue($smt));
 
-        $account = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $account = $this->createMock('Oro\Bundle\AccountBundle\Entity\Account');
         $this->assertSame($result, $this->provider->getAccountLifeTimeValue($account, $channel));
     }
 
@@ -69,19 +69,19 @@ class AmountProviderTest extends OrmTestCase
      */
     public function lifetimeValueProvider()
     {
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'get account summary lifetime'    => [
                 'SELECT SUM(l0_.amount) AS sclr_0 FROM LifetimeValueHistory l0_ ' .
                 'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
-                'WHERE l0_.account_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
+                'WHERE l0_.account_id = ? AND l0_.status = ? AND (c1_.status = ? OR c1_.id IS NULL) LIMIT 1',
                 100.00
             ],
             'get account lifetime in channel' => [
                 'SELECT SUM(l0_.amount) AS sclr_0 FROM LifetimeValueHistory l0_ ' .
                 'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
-                'WHERE l0_.account_id = ? AND l0_.data_channel_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
+                'WHERE l0_.account_id = ? AND l0_.data_channel_id = ? AND l0_.status = ? LIMIT 1',
                 100.00,
                 $channel
             ]

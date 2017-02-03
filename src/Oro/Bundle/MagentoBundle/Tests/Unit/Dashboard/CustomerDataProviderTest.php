@@ -26,7 +26,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry   = $this->createMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->aclHelper  = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();

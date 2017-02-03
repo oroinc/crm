@@ -51,7 +51,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $constraint = new UniqueCustomerEmailConstraint();
 
-        $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
         $context->expects($this->never())
             ->method($this->anything());
 
@@ -82,7 +82,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $constraint = new UniqueCustomerEmailConstraint();
 
-        $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
         $context->expects($this->once())
             ->method('addViolationAt')
             ->with('email', $constraint->message);
@@ -108,6 +108,47 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testShouldAddViolationWhenTransportInitFails()
+    {
+        $constraint = new UniqueCustomerEmailConstraint();
+
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context->expects($this->any())
+            ->method('addViolationAt')
+            ->with('email', $constraint->transportMessage);
+
+        $this->transport->expects($this->any())
+            ->method('init')
+            ->will($this->throwException(new \RuntimeException()));
+
+        $customer = $this->getCustomer();
+
+        $this->validator->initialize($context);
+        $this->validator->validate($customer, $constraint);
+    }
+
+    public function testShouldAddViolationWhenTransportCallFails()
+    {
+        $constraint = new UniqueCustomerEmailConstraint();
+
+        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context->expects($this->any())
+            ->method('addViolationAt')
+            ->with('email', $constraint->transportMessage);
+
+        $this->transport->expects($this->any())
+            ->method('init');
+
+        $this->transport->expects($this->any())
+            ->method('call')
+            ->will($this->throwException(new \RuntimeException()));
+
+        $customer = $this->getCustomer();
+
+        $this->validator->initialize($context);
+        $this->validator->validate($customer, $constraint);
+    }
+
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -120,25 +161,25 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
         $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $channel->expects($this->once())
+        $channel->expects($this->any())
             ->method('getTransport')
             ->will($this->returnValue($transport));
 
         $store = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Store')
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->once())
+        $store->expects($this->any())
             ->method('getOriginId')
             ->will($this->returnValue(42));
 
         $customer = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('getChannel')
             ->will($this->returnValue($channel));
 
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));
 

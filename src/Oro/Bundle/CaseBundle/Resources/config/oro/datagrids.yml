@@ -47,9 +47,13 @@ datagrids:
                 frontend_type: html
                 template: OroCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
             reportedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.reported_on.label
                 frontend_type: datetime
             closedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.closed_on.label
                 frontend_type: datetime
             statusLabel:
@@ -116,6 +120,20 @@ datagrids:
                         field_options:
                             class: OroCaseBundle:CaseSource
                             property: label
+                owner:
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: caseEntity.owner
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+                    enabled: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: caseEntity.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+                    enabled: false
         properties:
             id: ~
             view_link:
@@ -135,7 +153,7 @@ datagrids:
                 type:         navigate
                 acl_resource: oro_case_view
                 label:        oro.grid.action.view
-                icon:         eye-open
+                icon:         eye
                 link:         view_link
                 rowAction:    true
             update:
@@ -227,6 +245,7 @@ datagrids:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
+                    - caseEntity.reportedAt
                     - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
                     - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
                     - relatedAccount.name as relatedAccountName
@@ -261,6 +280,9 @@ datagrids:
                 label: oro.case.datagrid.status.label
             priorityLabel:
                 label: oro.case.datagrid.priority.label
+            reportedAt:
+                renderable: false
+                frontend_type: datetime
         sorters:
             columns:
                 subject:
@@ -271,6 +293,8 @@ datagrids:
                     data_name: status.order
                 priorityLabel:
                     data_name: priority.order
+                reportedAt:
+                    data_name: caseEntity.reportedAt
             default:
                 reportedAt: DESC
         filters:

@@ -2,15 +2,18 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducer;
+use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
@@ -89,44 +92,6 @@ class ChannelController extends Controller
     }
 
     /**
-     * @Route(
-     *      "/status/change/{id}",
-     *      requirements={"id"="\d+"},
-     *      name="oro_channel_change_status"
-     *  )
-     * @AclAncestor("oro_channel_update")
-     */
-    public function changeStatusAction(Channel $channel)
-    {
-        if ($channel->getStatus() == Channel::STATUS_ACTIVE) {
-            $message = 'oro.channel.controller.message.status.deactivated';
-            $channel->setStatus(Channel::STATUS_INACTIVE);
-        } else {
-            $message = 'oro.channel.controller.message.status.activated';
-            $channel->setStatus(Channel::STATUS_ACTIVE);
-        }
-
-        $this->getDoctrine()
-            ->getManager()
-            ->flush();
-
-        $event = new ChannelChangeStatusEvent($channel);
-
-        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
-        $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
-
-        return $this->redirect(
-            $this->generateUrl(
-                'oro_channel_view',
-                [
-                    'id' => $channel->getId(),
-                    '_enableContentProviders' => 'mainMenu'
-                ]
-            )
-        );
-    }
-
-    /**
      * @Route("/view/{id}", requirements={"id"="\d+"}, name="oro_channel_view")
      * @AclAncestor("oro_channel_view")
      * @Template()
@@ -148,5 +113,13 @@ class ChannelController extends Controller
         return [
             'channel' => $channel
         ];
+    }
+
+    /**
+     * @return MessageProducer
+     */
+    protected function getMessageProducer()
+    {
+        return $this->get('oro_message_queue.message_producer');
     }
 }

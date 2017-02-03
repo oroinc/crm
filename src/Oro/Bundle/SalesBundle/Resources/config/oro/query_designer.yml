@@ -5,10 +5,10 @@ query_designer:
             functions:
                 - { name: WonCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
                 - { name: LostCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
-                - { name: SolutionDevelopmentCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
+                - { name: InProgressCount, return_type: integer, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
             query_type: [report]
         opportunity:
-            applicable: [{entity: OroSalesBundle:Opportunity, field: closeRevenueValue}]
+            applicable: [{entity: OroSalesBundle:Opportunity, field: closeRevenueBaseCurrency}]
             functions:
                 - { name: WonRevenueSumFunction, return_type: money, expr: '@Oro\Bundle\SalesBundle\QueryDesigner\WonRevenueSumFunction' }
             query_type: [report]

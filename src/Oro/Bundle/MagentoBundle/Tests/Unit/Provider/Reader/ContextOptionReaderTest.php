@@ -31,7 +31,7 @@ class ContextOptionReaderTest extends \PHPUnit_Framework_TestCase
         $this->contextRegistry = $this->getMockbuilder('Oro\Bundle\ImportExportBundle\Context\ContextRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $this->context = $this->createMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
         $this->contextRegistry->expects($this->any())
             ->method('getByStepExecution')
             ->will($this->returnValue($this->context));

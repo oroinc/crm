@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
@@ -87,6 +88,16 @@ class CustomerApiType extends AbstractType
             ]
         );
 
+        $builder->add(
+            'account',
+            'oro_account_select',
+            [
+                'label'       => 'oro.magento.customer.account.label',
+                'required'    => true,
+                'constraints' => [new NotBlank()],
+            ]
+        );
+
         $builder->addEventSubscriber(new PatchSubscriber());
         $builder->addEventSubscriber(new CustomerTypeSubscriber());
     }
@@ -98,8 +109,9 @@ class CustomerApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'      => 'Oro\Bundle\MagentoBundle\Entity\Customer',
-                'csrf_protection' => false
+                'data_class'                    => 'Oro\Bundle\MagentoBundle\Entity\Customer',
+                'csrf_protection'               => false,
+                'customer_association_disabled' => true,
             ]
         );
     }

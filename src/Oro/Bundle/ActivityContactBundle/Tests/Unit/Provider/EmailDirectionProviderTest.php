@@ -10,7 +10,6 @@ use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
-use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +27,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $fieldConfigurationMock->method('get')
             ->with('contact_information')
-            ->will($this->returnValue(ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL));
+            ->will($this->returnValue(DirectionProviderInterface::CONTACT_INFORMATION_SCOPE_EMAIL));
 
         $configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
             ->disableOriginalConstructor()
@@ -89,7 +88,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testOutgoingDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue(self::FROM_EMAIL));
 
@@ -108,7 +107,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testIncomingDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue(self::TO_EMAIL));
 
@@ -133,7 +132,7 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
     public function testUnknownDirectionForCustomEntity()
     {
         $getMethodName = "get" . Inflector::classify(self::COLUMN_NAME);
-        $target = $this->getMock('Extend\Entity\Test', array($getMethodName));
+        $target = $this->createPartialMock(\ArrayObject::class, array($getMethodName));
         $target->method($getMethodName)
             ->will($this->returnValue('test' . self::TO_EMAIL));
 

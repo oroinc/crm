@@ -3,6 +3,7 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroSalesBundle::macros.html.twig' as sales %}
+{% import 'OroTagBundle::macros.html.twig' as Tag %}
 
 {%- macro getSocialUrl(type, value) -%}
     {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
@@ -18,7 +19,9 @@
             {{ ui.renderProperty('oro.sales.lead.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('oro.sales.lead.last_name.label'|trans, entity.lastName) }}
 
-            {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% if entity['dataChannel'] is defined %}
+                {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+            {% endif %}
 
             {%- if resource_granted('oro_contact_view') and entity.contact -%}
                 {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
@@ -43,23 +46,15 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {% set customer = entity.getCustomerTarget() %}
-            {%- set customerView -%}
-                {% set customerName = customer ? customer|oro_format_name|escape : '' %}
-                {%- if (customer and resource_granted('VIEW', customer)) -%}
-                    <a href="{{ oro_entity_object_view_link(customer) }}">{{ customerName }}</a>
-                {%- else -%}
-                    {{ customerName }}
-                {%- endif -%}
-            {%- endset -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, customerView, entity, 'customer') }}
-
+            {{ sales.render_customer_info(entity) }}
             {{ ui.renderProperty('oro.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('oro.sales.lead.industry.label'|trans, entity.industry) }}
             {{ ui.renderProperty('oro.sales.lead.number_of_employees.label'|trans, entity.numberOfEmployees) }}
             {{ ui.renderProperty('oro.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
+
+            {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, Tag.renderView(entity)) }}
         </div>
 
         {%- set socialData -%}
@@ -68,14 +63,14 @@
                     {% if entity.twitter %}
                         <li>
                             <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
-                                <i class="icon-twitter"></i>
+                                <i class="fa-twitter"></i>
                             </a>
                         </li>
                     {% endif %}
                     {% if entity.linkedIn %}
                         <li>
                             <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
-                                <i class="icon-linkedin"></i>
+                                <i class="fa-linkedin"></i>
                             </a>
                         </li>
                     {% endif %}
@@ -87,7 +82,7 @@
             {{ ui.renderHtmlProperty('oro.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
-            {{ ui.renderHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes, entity, 'notes') }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>

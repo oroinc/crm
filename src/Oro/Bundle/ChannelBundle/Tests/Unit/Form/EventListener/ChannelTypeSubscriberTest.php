@@ -70,9 +70,9 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
         $this->assertEquals($events[FormEvents::PRE_SET_DATA], 'preSet');
 
-        $form       = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $fieldMock  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
-        $configMock = $this->getMock('Symfony\Component\Form\FormConfigInterface');
+        $form       = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+        $fieldMock  = $this->createMock('Symfony\Component\Form\Test\FormInterface');
+        $configMock = $this->createMock('Symfony\Component\Form\FormConfigInterface');
 
         if ($formData) {
             $form->expects($this->any())
@@ -104,11 +104,11 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
      */
     public function formDataProviderForPreSet()
     {
-        $channelUpdate = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channelUpdate = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
         $channelUpdate->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $channel = $this->getMock('Oro\Bundle\ChannelBundle\Entity\Channel');
+        $channel = $this->createMock('Oro\Bundle\ChannelBundle\Entity\Channel');
 
         return [
             'without data' => [
@@ -132,7 +132,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
             ],
         ];
 
-        $form  = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $form  = $this->createMock('Symfony\Component\Form\Test\FormInterface');
         $event = new FormEvent($form, $data);
         $this->subscriber->preSubmit($event);
     }
@@ -149,7 +149,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         $data = new Channel();
         $data->setChannelType(self::TEST_CHANNEL_TYPE);
 
-        $form = $this->getMock('Symfony\Component\Form\Test\FormInterface');
+        $form = $this->createMock('Symfony\Component\Form\Test\FormInterface');
 
         $event = new FormEvent($form, $data);
         $this->subscriber->postSubmit($event);

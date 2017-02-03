@@ -8,7 +8,6 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bridge\TaskCRM\Migrations\Schema\v1_0\OroTaskCRMBundle as TaskCRMBundle_v1_0;
 
 class OroTaskCRMBundleInstaller implements
     Installation,
@@ -18,7 +17,7 @@ class OroTaskCRMBundleInstaller implements
     protected $activityExtension;
 
     /**
-     * @param ActivityExtension $activityExtension
+     * {@inheritdoc}
      */
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
@@ -30,7 +29,7 @@ class OroTaskCRMBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v1_0';
     }
 
     /**
@@ -38,6 +37,29 @@ class OroTaskCRMBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        TaskCRMBundle_v1_0::addTaskActivityRelations($schema, $this->activityExtension);
+        $this->addTaskActivityRelations($schema);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    private function addTaskActivityRelations(Schema $schema)
+    {
+        $targetTables = [
+            'orocrm_account',
+            'orocrm_contact',
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer',
+            'orocrm_case',
+            'orocrm_magento_customer',
+            'orocrm_magento_order'
+        ];
+        foreach ($targetTables as $targetTable) {
+            $associationTableName = $this->activityExtension->getAssociationTableName('orocrm_task', $targetTable);
+            if (!$schema->hasTable($associationTableName)) {
+                $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', $targetTable);
+            }
+        }
     }
 }

@@ -1,0 +1,26 @@
+include:
+  - ./users.yml
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  acmeAccount:
+    name: Acme
+    owner: '@charlie'
+    organization: '@organization'
+
+Oro\Bundle\MagentoBundle\Entity\Customer:
+  charlieCustomer:
+    firstName: Charlie
+    owner: '@admin'
+    organization: '@organization'
+    account: '@acmeAccount'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+  samanthaCustomer2:
+    firstName: Samantha
+    owner: '@admin'
+    organization: '@organization'
+    account: '@acmeAccount'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>

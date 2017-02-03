@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
@@ -22,10 +24,17 @@ class LifetimeHistoryRepository extends EntityRepository
      */
     public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
     {
+        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Customer') {
+            return 0.0;
+        }
+
+        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->from($identityFQCN, 'e');
+        $qb->join(CustomerAssociation::class, 'ca', 'WITH', sprintf('ca.%s = e', $field));
         $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
-        $qb->andWhere('e.account = :account');
+        $qb->andWhere('ca.account = :account');
         $qb->setParameter('account', $account);
 
         if (null !== $channel) {
@@ -58,7 +67,7 @@ class LifetimeHistoryRepository extends EntityRepository
         /** @var Channel $channel */
         foreach ($records as $row) {
             list($account, $channel, $excludeEntry) = $row;
-            $groupedByChannel[$channel->getId()][] = [$account, $excludeEntry];
+            $groupedByChannel[$channel ? $channel->getId() : ''][] = [$account, $excludeEntry];
         }
 
         foreach ($groupedByChannel as $channelId => $pairs) {
@@ -68,8 +77,14 @@ class LifetimeHistoryRepository extends EntityRepository
             $qb->update('OroChannelBundle:LifetimeValueHistory', 'l');
             $qb->set('l.status', ':status');
             $qb->setParameter('status', $qb->expr()->literal($status));
-            $qb->andWhere('l.dataChannel = :channel');
-            $qb->setParameter('channel', $channelId);
+
+            if ($channelId !== '') {
+                $qb
+                    ->andWhere('l.dataChannel = :channel')
+                    ->setParameter('channel', $channelId);
+            } else {
+                $qb->andWhere($qb->expr()->isNull('l.dataChannel'));
+            }
 
             $criteria = [];
             foreach ($pairs as $k => $pair) {

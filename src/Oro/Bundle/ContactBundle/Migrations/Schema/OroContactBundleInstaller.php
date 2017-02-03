@@ -10,9 +10,6 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-use Oro\Bundle\ContactBundle\Migrations\Schema\v1_4\OroContactBundle as NoteMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_5\OroContactBundle as AttachmentMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_6\OroContactBundle as ActivityMigration;
 use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactOrganizations;
@@ -23,7 +20,6 @@ use Oro\Bundle\ContactBundle\Migrations\Schema\v1_8\OroContactBundle as ContactO
  */
 class OroContactBundleInstaller implements
     Installation,
-    NoteExtensionAwareInterface,
     AttachmentExtensionAwareInterface,
     ActivityExtensionAwareInterface
 {
@@ -33,22 +29,9 @@ class OroContactBundleInstaller implements
     protected $activityExtension;
 
     /**
-     * @var NoteExtension
-     */
-    protected $noteExtension;
-
-    /**
      * @var AttachmentExtension
      */
     protected $attachmentExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setNoteExtension(NoteExtension $noteExtension)
-    {
-        $this->noteExtension = $noteExtension;
-    }
 
     /**
      * {@inheritdoc}
@@ -71,7 +54,7 @@ class OroContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v2_0';
+        return 'v1_15';
     }
 
     /**
@@ -100,9 +83,9 @@ class OroContactBundleInstaller implements
         $this->addOrocrmContactToContactGrpForeignKeys($schema);
         $this->oroEmailAddressForeignKeys($schema);
 
-        NoteMigration::addNoteAssociations($schema, $this->noteExtension);
         AttachmentMigration::addPhotoToContact($schema, $this->attachmentExtension);
         ActivityMigration::addActivityAssociations($schema, $this->activityExtension);
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_contact');
         ContactOrganizations::addOrganization($schema);
     }
 
@@ -148,7 +131,7 @@ class OroContactBundleInstaller implements
         $table->addIndex(['reports_to_contact_id'], 'IDX_403263EDF27EBC1E', []);
         $table->addIndex(['created_by_user_id'], 'IDX_403263ED7D182D95', []);
         $table->addIndex(['updated_by_user_id'], 'IDX_403263ED2793CC5E', []);
-        $table->addIndex(['last_name', 'first_name'], 'contact_name_idx', []);
+        $table->addIndex(['last_name', 'first_name', 'id'], 'contact_name_idx', []);
         $table->addIndex(['updatedAt'], 'contact_updated_at_idx', []);
     }
 

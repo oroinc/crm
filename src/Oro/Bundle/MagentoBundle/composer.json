@@ -5,7 +5,7 @@
     "keywords": ["CRM", "Magento", "Customers"],
     "license": "MIT",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6",
         "symfony/symfony": "2.8.*, !=2.8.10",
         "doctrine/orm": ">=2.3,<2.4-dev",
         "oro/log": "dev-master",
@@ -22,7 +22,6 @@
         }
     },
     "target-dir": "Oro/Bundle/MagentoBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

@@ -4,8 +4,8 @@ namespace Oro\Bundle\MagentoBundle\Provider\Analytics;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
-use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
 {
@@ -20,12 +20,19 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     protected $className;
 
     /**
+     * @var SettingsProvider
+     */
+    protected $settings;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
+     * @param SettingsProvider $settings
      * @param string $className
      */
-    public function __construct(DoctrineHelper $doctrineHelper, $className)
+    public function __construct(DoctrineHelper $doctrineHelper, SettingsProvider $settings, $className)
     {
         $this->doctrineHelper = $doctrineHelper;
+        $this->settings = $settings;
         $this->className = $className;
     }
 
@@ -36,7 +43,7 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     {
         $entityFQCN = $channel->getCustomerIdentity();
         return is_a($entityFQCN, 'Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true)
-            && is_a($entityFQCN, 'Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface', true)
+            && $this->settings->isCustomerEntity($entityFQCN)
             && is_a($entityFQCN, $this->className, true);
     }
 

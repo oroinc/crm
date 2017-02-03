@@ -33,7 +33,7 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if ($value instanceof Customer) {
-            $customers = $this->getRemoteCustomers($value);
+            $customers = $this->getRemoteCustomers($value, $constraint);
 
             $customers = array_filter(
                 $customers,
@@ -60,11 +60,18 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
 
     /**
      * @param Customer $value
+     * @param UniqueCustomerEmailConstraint|Constraint $constraint
      * @return array
      */
-    protected function getRemoteCustomers($value)
+    protected function getRemoteCustomers($value, Constraint $constraint)
     {
-        $this->transport->init($value->getChannel()->getTransport());
+        try {
+            $this->transport->init($value->getChannel()->getTransport());
+        } catch (\RuntimeException $e) {
+            $this->context->addViolationAt('email', $constraint->transportMessage);
+
+            return [];
+        }
 
         $filter = new BatchFilterBag();
         $filter->addComplexFilter(
@@ -89,7 +96,14 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
         );
 
         $filters = $filter->getAppliedFilters();
-        $customers = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
+
+        try {
+            $customers = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
+        } catch (\RuntimeException $e) {
+            $this->context->addViolationAt('email', $constraint->transportMessage);
+
+            return [];
+        }
 
         if (is_array($customers)) {
             return $customers;

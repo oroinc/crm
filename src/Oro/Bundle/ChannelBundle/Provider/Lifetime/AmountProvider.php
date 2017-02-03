@@ -74,11 +74,15 @@ class AmountProvider
             $qb->andWhere('h.dataChannel = :dataChannel');
         }
         $qb->leftJoin('h.dataChannel', 'ch');
-        $qb->andWhere('ch.status = :channelStatus');
-        $qb->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE));
         $qb->andWhere('h.status = :status');
         $qb->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW));
         $qb->setMaxResults(1);
+
+        if (!$addChannelParam) {
+            $qb
+                ->andWhere('ch.status = :channel_status OR ch.id IS NULL')
+                ->setParameter('channel_status', Channel::STATUS_ACTIVE);
+        }
 
         return $qb;
     }
@@ -98,8 +102,6 @@ class AmountProvider
         $qb->select('IDENTITY(h.account) AS accountId, SUM(h.amount) AS lifetimeValue')
             ->from('OroChannelBundle:LifetimeValueHistory', 'h')
             ->leftJoin('h.dataChannel', 'ch')
-            ->andWhere('ch.status = :channelStatus')
-            ->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE))
             ->andWhere('h.status = :status')
             ->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW))
             ->groupBy('h.account');

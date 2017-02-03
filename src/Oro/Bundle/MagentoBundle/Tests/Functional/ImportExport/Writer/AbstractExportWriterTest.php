@@ -22,7 +22,7 @@ abstract class AbstractExportWriterTest extends WebTestCase
 
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
-        $this->transport = $this->getMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $this->transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
 
         $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
     }

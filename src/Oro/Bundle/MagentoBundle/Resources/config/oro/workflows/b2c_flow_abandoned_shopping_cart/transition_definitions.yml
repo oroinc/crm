@@ -28,6 +28,9 @@ workflows:
                         - '@not_empty':
                             parameters: $opportunity_name
                             message: 'Opportunity name must be set'
+                        - '@in_currency_list':
+                              parameters: $opportunity_budget
+                              message: 'Currency is not in list of available currencies'
                         - '@not_empty':
                             parameters: $opportunity_owner
                             message: 'Owner must be set'
@@ -50,7 +53,6 @@ workflows:
                             contact: $cart.customer.contact
                             status: $.result.opportunity_status
                             notes: $notes
-                            dataChannel: $cart.dataChannel
 
             abandon_definition:
                 preconditions:

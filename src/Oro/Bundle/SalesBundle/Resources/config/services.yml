@@ -139,6 +139,9 @@ services:
 
     oro_sales.event_listener.b2bcustomer_lifetime:
         class: %oro_sales.event_listener.b2bcustomer_lifetime.class%
+        arguments:
+            - '@oro_currency.converter.rate.link'
+            - '@oro_currency.query.currency_transformer'
         tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
@@ -276,6 +279,20 @@ services:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         arguments:
             - '@oro_sales.builder.opportunity_relations'
+            - '@oro_currency.config.currency'
+            - '@translator'
+            - '@oro_importexport.strategy.import.helper'
+        tags:
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_before, method: onProcessBefore }
+
+    oro_sales.import_export.event_listener.customer_association:
+        class: Oro\Bundle\SalesBundle\ImportExport\EventListener\CustomerAssociationListener
+        arguments:
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_importexport.strategy.import.helper'
+            - '@oro_sales.manager.account_customer'
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 
@@ -382,6 +399,9 @@ services:
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
+        arguments:
+            - '@oro_currency.converter.rate'
+            - '@oro_currency.config.currency'
         tags:
             - { name: doctrine.event_listener, event: onFlush, priority: 100 }
 
@@ -401,37 +421,21 @@ services:
             - '@oro_workflow.registry'
             - '@oro_featuretoggle.checker.feature_checker'
 
-    oro_sales.migration.extension.opportunity_customers:
-        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\OpportunityExtension
-        tags:
-            - { name: oro_migration.extension, extension_name: opportunity }
-
-    oro_sales.entity_config_dumper.opportunity.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityConfigDumperExtension
+    oro_sales.entity_config_dumper.customer_extension:
+        class: Oro\Bundle\SalesBundle\Tools\CustomerConfigDumperExtension
         parent: oro_entity_extend.entity_config_dumper.extension.association
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
 
-    oro_sales.entity_generator.opportunity.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\OpportunityGeneratorExtension
+    oro_sales.entity_generator.customer_extension:
+        class: Oro\Bundle\SalesBundle\Tools\CustomerGeneratorExtension
         tags:
             - { name: oro_entity_extend.entity_generator_extension }
 
-    oro_sales.migration.extension.lead_customers:
-        class: Oro\Bundle\SalesBundle\Migration\Extension\Customers\LeadExtension
+    oro_sales.migration.extension.customer:
+        class: Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtension
         tags:
-            - { name: oro_migration.extension, extension_name: lead }
-
-    oro_sales.entity_config_dumper.lead.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadConfigDumperExtension
-        parent: oro_entity_extend.entity_config_dumper.extension.association
-        tags:
-            - { name: oro_entity_extend.entity_config_dumper_extension }
-
-    oro_sales.entity_generator.lead.customers_extension:
-        class: Oro\Bundle\SalesBundle\Tools\Customers\LeadGeneratorExtension
-        tags:
-            - { name: oro_entity_extend.entity_generator_extension }
+            - { name: oro_migration.extension, extension_name: customer }
 
     oro_sales.provider.customer.chain_customer_icon:
         class: Oro\Bundle\SalesBundle\Provider\Customer\ChainCustomerIconProvider
@@ -443,36 +447,53 @@ services:
         tags:
             - { name: oro_sales.customer_icon }
 
-    oro_sales.customer_config_provider:
-        class: Oro\Bundle\SalesBundle\Provider\CustomerConfigProvider
+    oro_sales.customer.config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider
         public: false
         arguments:
-            - '@oro_entity.routing_helper'
-            - '@oro_security.security_facade'
             - '@oro_entity_config.config_manager'
+
+    oro_sales.customer.account_config_provider:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider
+        public: false
+        parent: oro_sales.customer.config_provider
 
     oro_sales.autocomplete.customer_search_handler:
         class: Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler
         parent: oro_activity.form.handler.autocomplete
         calls:
             - [setCustomerIconProvider, ['@oro_sales.provider.customer.chain_customer_icon']]
-            - [setCustomerConfigProvider, ['@oro_sales.customer_config_provider']]
+            - [setCustomerConfigProvider, ['@oro_sales.customer.account_config_provider']]
             - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
             - [setRoutingHelper, ['@oro_entity.routing_helper']]
+            - [setAccountCustomerManager, ['@oro_sales.manager.account_customer']]
+            - [setChainAccountAutocompleteProvider, ['@oro_sales.provider.customer.account_autocomplete.chain']]
 
     oro_sales.customers.opportunities_listener:
         class: Oro\Bundle\SalesBundle\EventListener\Customers\OpportunitiesListener
         arguments:
-            - '@oro_entity_config.config_manager'
+            - '@oro_sales.customer.account_config_provider'
             - '@translator'
             - '@oro_entity.doctrine_helper'
+            - '@oro_entity_config.provider.customer'
+            - '@oro_featuretoggle.checker.feature_checker'
         tags:
             - { name: kernel.event_listener, event: entity_view.render.before, method: addOpportunities }
 
-    oro_sales.datagrid.extension.customers.opportunities:
-        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\OpportunitiesExtension
+    oro_sales.customers.relevant_opportunities_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\RelevantOpportunitiesListener
         arguments:
-            - '@oro_entity_config.config_manager'
+            - '@translator'
+            - '@request_stack'
+            - '@oro_sales.provider.opportunity.display_settings_config'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addRelevantOpportunities }
+
+    oro_sales.datagrid.extension.customers.account:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '@oro_entity.orm.entity_class_resolver'
         tags:
             - { name: oro_datagrid.extension }
 
@@ -483,3 +504,121 @@ services:
             - '@doctrine'
         tags:
             - { name: oro_multi_currency.currency_checker_provider }
+
+    oro_sales.manager.account_customer:
+        class: Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.provider.customer.account_creation.chain'
+
+    oro_sales.provider.opportunity.display_settings_config:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\DisplaySettingsConfigProvider
+        arguments:
+            - '@oro_config.manager'
+
+    oro_sales.datagrid.extension.customers.relevant_opportunities:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelevantOpportunitiesExtension
+        parent: oro_sales.datagrid.extension.customers.account_customer_association.opportunity
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.form.extension.customer_association:
+        class: Oro\Bundle\SalesBundle\Form\Extension\CustomerAssociationAccountExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '@oro_sales.manager.account_customer'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: form.type_extension, alias: form, extended_type: 'Symfony\Component\Form\Extension\Core\Type\FormType' }
+
+    oro_sales.form.listener.customer_association_account_field:
+        class: Oro\Bundle\SalesBundle\Form\EventListener\CustomerAssociationAccountFieldListener
+        tags:
+            - { name: kernel.event_listener, event: entity_form.render.before, method: addAccountField, priority: 10 }
+
+    oro_sales.customers.customer_association_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\CustomerAssociationListener
+        arguments:
+            - '@oro_sales.manager.account_customer'
+            - '@oro_sales.customer.config_provider'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+            - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
+    oro_sales.provider.customer.account_creation.chain:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\ChainAccountProvider
+
+    oro_sales.provider.customer.account_creation.default:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\DefaultProvider
+        arguments:
+            - '@oro_entity.entity_name_resolver'
+        tags:
+         - { name: oro_sales.provider.customer.account_creation }
+
+    oro_sales.create_opportunity.widget_provider.actions:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oro_sales_create_opportunity_button
+            - oro_sales_create_opportunity_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }
+
+    oro_sales.datagrid.extension.customers.account_customer_association.opportunity:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountRelatedEntitiesExtension
+        parent: oro_sales.datagrid.extension.customers.related_entities.opportunity
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.datagrid.extension.customers.related_entities.opportunity:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '%oro_sales.opportunity.class%'
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.datagrid.extension.customers.related_entities.lead:
+        class: Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension
+        arguments:
+            - '@oro_sales.customer.config_provider'
+            - '%oro_sales.lead.entity.class%'
+        tags:
+            - { name: oro_datagrid.extension }
+
+    oro_sales.customers.leads_listener:
+        class: Oro\Bundle\SalesBundle\EventListener\Customers\LeadsListener
+        arguments:
+            - '@oro_sales.customer.account_config_provider'
+            - '@translator'
+            - '@oro_entity.doctrine_helper'
+            - '@oro_featuretoggle.checker.feature_checker'
+        tags:
+            - { name: kernel.event_listener, event: entity_view.render.before, method: addLeads }
+
+    oro_sales.action.find_customer_association:
+        class: 'Oro\Bundle\SalesBundle\Action\FindCustomerAssociation'
+        arguments:
+            - '@oro_action.expression.context_accessor'
+            - '@oro_sales.manager.account_customer'
+        tags:
+            - { name: oro_action.action, alias: find_customer_association }
+
+    oro_sales.provider.customer.account_autocomplete.chain:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\ChainAccountAutocompleteProvider
+
+    oro_sales.customer_account_change_subscriber:
+         class: Oro\Bundle\SalesBundle\EventListener\CustomerAccountChangeSubscriber
+         tags:
+             - { name: doctrine.event_subscriber }
+
+    oro_sales.provider.customer.account_creation.b2bcustomer:
+        class: Oro\Bundle\SalesBundle\Provider\Customer\AccountCreation\B2bAccountProvider
+        tags:
+         - { name: oro_sales.provider.customer.account_creation, priority: 10 }
+
+    oro_tag.event_listener.import_export_tags_subscriber:
+        class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber
+        tags:
+            - { name: kernel.event_subscriber }

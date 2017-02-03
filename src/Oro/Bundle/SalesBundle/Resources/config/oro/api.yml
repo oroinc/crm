@@ -97,6 +97,16 @@ api:
                         constraints:
                             - Email: ~
                     property_path: _
+                customerAssociation:
+                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
+                    target_type: to-one
+                    exclude: false
+                    fields:
+                        account:
+                            exclude: true
+                        target:
+                            exclude: true
+                            data_type: association:manyToOne:customer
             filters:
                 fields:
                     phones:
@@ -119,6 +129,8 @@ api:
                         type: primaryField
                         options:
                             data_field: email
+                    customerAssociation:
+                        exclude: true
 
         Oro\Bundle\SalesBundle\Entity\LeadAddress: ~
 
@@ -132,7 +144,29 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
+            filters:
+                fields:
+                    customerAssociation:
+                        exclude: true
             fields:
                 closedAt:
                     exclude: true
+                customerAssociation:
+                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
+                    target_type: to-one
+                    exclude: false
+                    fields:
+                        account:
+                            exclude: true
+                        target:
+                            exclude: true
+                            data_type: association:manyToOne:customer
+
+        Oro\Bundle\SalesBundle\Entity\Customer:
+            actions: false
+            fields:
+                account: ~
+                target:
+                    data_type: association:manyToOne:customer
+
         Oro\Bundle\SalesBundle\Entity\SalesFunnel: ~

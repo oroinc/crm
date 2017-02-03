@@ -1,0 +1,4 @@
+oro_magento_bundle_marketing_crm_bridge:
+    resource:     "@OroMarketingCRMBridgeBundle/Controller"
+    type:         annotation
+    prefix:       /magento

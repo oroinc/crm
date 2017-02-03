@@ -65,7 +65,6 @@ class OpportunityViewList extends AbstractViewsList
                 'closeDate' => -1
             ],
             'columns'       => [
-                'channelName'          => ['renderable' => true, 'order' => 0],
                 'name'                 => ['renderable' => true, 'order' => 1],
                 'createdAt'            => ['renderable' => true, 'order' => 2],
                 'updatedAt'            => ['renderable' => false, 'order' => 3],

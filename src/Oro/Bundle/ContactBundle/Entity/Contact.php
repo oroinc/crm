@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +10,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
-use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Model\ExtendContact;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -31,7 +28,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @ORM\Table(
  *      name="orocrm_contact",
  *      indexes={
- *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name"}),
+ *          @ORM\Index(name="contact_name_idx",columns={"last_name", "first_name", "id"}),
  *          @ORM\Index(name="contact_updated_at_idx",columns={"updatedAt"}),
  *      }
  * )
@@ -41,7 +38,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      routeView="oro_contact_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-group",
+ *              "icon"="fa-users",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}
@@ -86,7 +83,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 class Contact extends ExtendContact implements EmailOwnerInterface
 {
     /*
-     * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
+     * Fields have to be duplicated here to enable dataaudit only for contact
      */
     /**
      * @var int
@@ -94,7 +91,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -109,7 +105,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -130,7 +125,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -152,7 +146,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -173,7 +166,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -195,7 +187,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -216,7 +207,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="gender", type="string", length=8, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -237,7 +227,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
-     * @Soap\ComplexType("date", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -258,7 +247,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -323,7 +311,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -388,7 +375,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -429,7 +415,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("Oro\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -453,7 +438,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * ))
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("Oro\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -474,7 +458,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -495,7 +478,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="skype", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -516,7 +498,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -537,7 +518,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -558,7 +538,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="google_plus", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -579,7 +558,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -695,7 +673,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -713,7 +690,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var \DateTime $updated
      *
      * @ORM\Column(type="datetime")
-     * @Soap\ComplexType("dateTime", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "entity"={

@@ -35,7 +35,7 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Job\JobExecutor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connector = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface');
+        $this->connector = $this->createMock('Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface');
         $this->processorAlias = 'test';
 
         $this->loader = new InformationLoader($this->jobExecutor, $this->connector, $this->processorAlias);

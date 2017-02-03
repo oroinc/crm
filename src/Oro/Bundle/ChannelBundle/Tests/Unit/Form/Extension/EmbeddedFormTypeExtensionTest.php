@@ -35,7 +35,9 @@ class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
                 [],
                 [
                     'form' => [
-                        new FormTypeValidatorExtension($this->getMock('Symfony\Component\Validator\ValidatorInterface'))
+                        new FormTypeValidatorExtension(
+                            $this->createMock('Symfony\Component\Validator\ValidatorInterface')
+                        )
                     ]
                 ]
             )

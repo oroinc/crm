@@ -197,7 +197,7 @@ class LeadToOpportunityProvider
                 ->setContact($contact)
                 ->setName($lead->getName());
 
-            $opportunity->setCustomerTarget($lead->getCustomerTarget());
+            $opportunity->setCustomerAssociation($lead->getCustomerAssociation());
         } else {
             $opportunity
                 // Set predefined contact entity to have proper validation
@@ -235,7 +235,6 @@ class LeadToOpportunityProvider
     protected function setContactAndAccountToLeadFromOpportunity(Lead $lead, Opportunity $opportunity)
     {
         $lead->setContact($opportunity->getContact());
-        $lead->setCustomer($opportunity->getCustomer());
     }
 
     /**

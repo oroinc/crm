@@ -63,7 +63,7 @@
                 {{ form_widget(form) }}
                 {% if form.vars.disabled is not sameas(true) %}
                     <a href="javascript:void(0)" class="no-hash sync-website-list-link">
-                        <i class="icon icon-refresh"></i>{{ 'Sync website list'|trans }}
+                        <i class="fa-refresh"></i>{{ 'Sync website list'|trans }}
                     </a>
                     <script type="text/javascript">
                         require(['oro/magento/soap-checker'], function (SoapChecker) {

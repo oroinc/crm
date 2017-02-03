@@ -1,0 +1,27 @@
+placeholders:
+    placeholders:
+        oro_website_summary:
+            items:
+                oro_magento_website_metrics: ~
+                oro_magento_website_events_chart: ~
+                oro_magento_website_channel_chart: ~
+        oro_website_activity:
+            items:
+                oro_magento_website_activity: ~
+
+    items:
+        oro_magento_website_metrics:
+            template: OroMarketingCRMBridgeBundle:Customer:websiteMetrics.html.twig
+            applicable: "@oro_magento.placeholder.filter->containsApplicable($customers$)"
+            data: "@oro_magento.provider.website_metrics->getTemplateData($customers$)"
+        oro_magento_website_events_chart:
+            template: OroMarketingCRMBridgeBundle:Customer:websiteChart.html.twig
+            applicable: "@oro_magento.placeholder.filter->isEventsChartApplicable($customers$, $byChannel$)"
+            data: "@oro_magento.provider.website_events_chart->getTemplateData($customers$)"
+        oro_magento_website_channel_chart:
+            template: OroMarketingCRMBridgeBundle:Customer:websiteChart.html.twig
+            applicable: "@oro_magento.placeholder.filter->isChannelChartApplicable($customers$, $byChannel$)"
+            data: "@oro_magento.provider.website_channel_chart->getTemplateData($customers$)"
+        oro_magento_website_activity:
+            template: OroMarketingCRMBridgeBundle:Customer:websiteActivity.html.twig
+            applicable: "@oro_magento.placeholder.filter->containsApplicable($customers$)"

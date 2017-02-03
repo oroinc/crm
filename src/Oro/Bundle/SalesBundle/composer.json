@@ -6,7 +6,7 @@
     "homepage": "https://github.com/orocrm/SalesBundle",
     "license": "MIT",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6",
         "symfony/symfony": "2.8.*, !=2.8.10",
 
         "oro/ui-bundle": "dev-master",
@@ -17,7 +17,6 @@
         "psr-0": { "": "src/" }
     },
     "target-dir": "Oro/Bundle/SalesBundle",
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"

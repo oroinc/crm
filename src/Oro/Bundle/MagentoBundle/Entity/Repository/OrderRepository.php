@@ -7,11 +7,11 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OrderRepository extends ChannelAwareEntityRepository
 {
@@ -48,7 +48,7 @@ class OrderRepository extends ChannelAwareEntityRepository
     public function getOrdersNumberValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
     {
         $qb    = $this->createQueryBuilder('o');
-        $qb->select('count(o.id) as val')
+        $qb->select('COUNT(o.id) as val')
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
@@ -249,7 +249,7 @@ class OrderRepository extends ChannelAwareEntityRepository
                     CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
                 ) AS amount');
 
-        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt', false);
 
         if ($to) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
@@ -337,7 +337,7 @@ class OrderRepository extends ChannelAwareEntityRepository
     public function getOrdersNumberValueQB()
     {
         $qb = $this->createQueryBuilder('o');
-        $qb->select('count(o.id) as val');
+        $qb->select('COUNT(o.id) as val');
 
         $this->applyActiveChannelLimitation($qb);
 

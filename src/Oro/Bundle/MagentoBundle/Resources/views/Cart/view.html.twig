@@ -26,7 +26,7 @@
         'path':  path('oro_magento_cart_actualize', {'id': entity.id}),
         'label': 'oro.magento.cart.refresh_label'|trans,
         'title': 'oro.magento.cart.refresh_label'|trans,
-        'iCss': 'icon-refresh'
+        'iCss': 'fa-refresh'
     }) }}
 {% endblock navButtons %}
 
@@ -65,7 +65,7 @@
     {% endif %}
 
     {% set itemsTabsWidget %}
-        <div class="responsive-cell" id="magento-without-border-tabs">
+        <div class="responsive-cell customer-without-border-tabs">
             {% set tabs = [
                 {
                     'alias': 'oro_magento_cart_items_active',

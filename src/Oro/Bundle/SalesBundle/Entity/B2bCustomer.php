@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -17,11 +16,14 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
- * @ORM\Table(name="orocrm_sales_b2bcustomer")
+ * @ORM\Table(name="orocrm_sales_b2bcustomer", indexes={
+ *      @ORM\Index(
+ *          name="orocrm_b2bcustomer_name_idx", columns={"name", "id"}
+ *      )
+ * })
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="oro_sales_b2bcustomer_index",
@@ -29,7 +31,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="oro_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
+ *              "icon"="fa-user-md",
  *              "contact_information"={
  *                  "email"={
  *                      {"fieldName"="primaryEmail"}
@@ -58,8 +60,8 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *              "form_type"="oro_sales_b2bcustomer_select"
  *          },
  *          "grid"={
- *              "default"="orocrm-sales-b2bcustomers-grid",
- *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "default"="oro-sales-b2bcustomers-grid",
+ *              "context"="oro-sales-b2bcustomers-for-context-grid"
  *          },
  *         "tag"={
  *              "enabled"=true
@@ -71,8 +73,7 @@ use Oro\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    ChannelAwareInterface,
-    CustomerIdentityInterface
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
 
@@ -195,24 +196,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     protected $contact;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"remove"})
-     */
-    protected $leads;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Oro\Bundle\SalesBundle\Entity\Opportunity",
-     *     mappedBy="customer",
-     *     cascade={"remove"}
-     * )
-     */
-    protected $opportunities;
-
-    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
@@ -315,8 +298,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         parent::__construct();
 
-        $this->leads         = new ArrayCollection();
-        $this->opportunities = new ArrayCollection();
         $this->phones        = new ArrayCollection();
         $this->emails        = new ArrayCollection();
     }
@@ -339,10 +320,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param string $name
+     *
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -403,10 +388,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param Account|null $account
+     *
+     * @return $this
      */
     public function setAccount(Account $account = null)
     {
         $this->account = $account;
+
+        return $this;
     }
 
     /**
@@ -423,82 +412,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function setContact(Contact $contact = null)
     {
         $this->contact = $contact;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getLeads()
-    {
-        return $this->leads;
-    }
-
-    /**
-     * @param ArrayCollection $leads
-     */
-    public function setLeads(ArrayCollection $leads)
-    {
-        $this->leads = $leads;
-    }
-
-    /**
-     * @param Lead $lead
-     */
-    public function addLead(Lead $lead)
-    {
-        if (!$this->getLeads()->contains($lead)) {
-            $this->getLeads()->add($lead);
-            $lead->setCustomer($this);
-        }
-    }
-
-    /**
-     * @param Lead $lead
-     */
-    public function removeLead(Lead $lead)
-    {
-        if ($this->getLeads()->contains($lead)) {
-            $this->getLeads()->removeElement($lead);
-            $lead->removeCustomer();
-        }
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getOpportunities()
-    {
-        return $this->opportunities;
-    }
-
-    /**
-     * @param ArrayCollection $opportunities
-     */
-    public function setOpportunities(ArrayCollection $opportunities)
-    {
-        $this->opportunities = $opportunities;
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function addOpportunity(Opportunity $opportunity)
-    {
-        if (!$this->getOpportunities()->contains($opportunity)) {
-            $this->getOpportunities()->add($opportunity);
-            $opportunity->setCustomer($this);
-        }
-    }
-
-    /**
-     * @param Opportunity $opportunity
-     */
-    public function removeOpportunity(Opportunity $opportunity)
-    {
-        if ($this->getOpportunities()->contains($opportunity)) {
-            $this->getOpportunities()->removeElement($opportunity);
-            $opportunity->removeCustomer();
-        }
     }
 
     /**

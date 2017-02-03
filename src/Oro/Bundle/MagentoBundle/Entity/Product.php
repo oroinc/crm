@@ -190,7 +190,7 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
     }
 
     /**
-     * @return Website
+     * @return Website[]
      */
     public function getWebsites()
     {

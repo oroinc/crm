@@ -1,13 +1,10 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
-{% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ channel.renderChannelProperty(entity, 'oro.contactus.contactrequest.data_channel.label') }}
-
             {{ ui.renderProperty('oro.contactus.contactrequest.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('oro.contactus.contactrequest.last_name.label'|trans, entity.lastName) }}
             {{ ui.renderHtmlProperty('oro.contactus.contactrequest.email_address.label'|trans, email.renderEmailWithActions(entity.emailAddress, entity)) }}

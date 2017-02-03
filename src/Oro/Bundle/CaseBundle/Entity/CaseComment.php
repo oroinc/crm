@@ -15,7 +15,7 @@ use Oro\Bundle\ContactBundle\Entity\Contact;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-comments"
+ *              "icon"="fa-comments"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Oro\Bundle\CurrencyBundle\Form\Type\MultiCurrencyType;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
@@ -87,23 +88,17 @@ class OpportunityType extends AbstractType
                 ]
             )
             ->add(
-                'customer',
+                'customerAssociation',
                 'oro_sales_customer',
                 [
-                    'required' => false,
+                    'required' => true,
                     'label'    => 'oro.sales.opportunity.customer.label',
                     'parent_class' => $options['data_class'],
+                    'constraints' => [new NotBlank()],
+                    'error_bubbling' => false,
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'oro.sales.opportunity.name.label'])
-            ->add(
-                'dataChannel',
-                'oro_channel_select_type',
-                [
-                    'required' => false,
-                    'label'    => 'oro.sales.opportunity.data_channel.label',
-                ]
-            )
             ->add(
                 'closeDate',
                 'oro_date',
@@ -122,7 +117,8 @@ class OpportunityType extends AbstractType
                     'label' => 'oro.sales.opportunity.budget_amount.label',
                     'currency_empty_value' => false,
                     'full_currency_list' => false,
-                    'attr' => ['class' => 'currency-price']
+                    'attr' => ['class' => 'currency-price'],
+                    'error_bubbling' => false,
                 ]
             )
             ->add(
@@ -133,6 +129,7 @@ class OpportunityType extends AbstractType
                     'label' => 'oro.sales.opportunity.close_revenue.label',
                     'currency_empty_value' => false,
                     'full_currency_list' => false,
+                    'error_bubbling' => false,
                 ]
             )
             ->add(

@@ -1,5 +1,4 @@
 @not-automated
-
 Feature: In order to ensure base currency amount for closed transactions is not adjusted according to going rates
   As an Administrator
   I want to ensure that currency exchange rates are frozen
@@ -11,7 +10,6 @@ Feature: In order to ensure base currency amount for closed transactions is not 
     | YES   | US Dollar     | USD           | $               | 1         | 1       |
     | NO    | Euro          | EUR           | €               | 2         | 2.5     |
     And workflow is disabled
-
 
 Scenario: Ensure that for Opportunity with status "Open" Base budget amount and Base Close revenue fields
 # are not editable
@@ -29,7 +27,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
   Then I should see the following on Opportunity view page:
     | Opportunity Name  | Status  | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
     | Josh Zuckerman    | Open    | €1,000.00     | $2,000.00           | €2,000.00     | $4,000.00           |
-  And when I press "Edit" button
+  But I press "Edit" button
   Then Base budget amount field should not be editable
   And Base Close revenue field should not be editable
 
@@ -48,7 +46,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     Then I should see the following on Opportunity view page:
       | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Josh Zuckerman    | Closed Won  | €2,000.00     | $4,000.00           | €3,000.00     | $6,000.00           |
-    And when I press "Edit" button
+    But I press "Edit" button
     Then Base budget amount field should be editable
     And Base Close revenue field should be editable
 
@@ -67,7 +65,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     Then I should see the following on Opportunity view page:
       | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Donna Reed        | Closed Lost | €3,000.00     | $6,000.00           | €5,000.00     | $10,000.00          |
-    And when I press "Edit" button
+    But I press "Edit" button
     Then Base budget amount field should be editable
     And Base Close revenue field should be editable
 
@@ -86,18 +84,18 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
       Then I should see the following on Opportunity view page:
         | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
         | Lionel Barrymore  | Closed Won  | €3,000.00     | $6,400.00           | €5,000.00     | $10,800.00          |
-      And when I fill out the following:
+      But I fill out the following:
         | Base budget amount  | Base close revenue  |
         | $5,300.00           | $9,500.00           |
       And I press "Save" button
       Then I should see the following on Opportunity view page:
         | Base budget amount  | Base close revenue  |
         | $5,300.00           | $9,500.00           |
-      And when I go to Sales/ Opportunities
+      But I go to Sales/ Opportunities
       Then I should see on Opportunities grid the following:
         | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
         | Lionel Barrymore  | Closed Won  | €3,000.00     | $5,300.00           | €5,000.00     | $9,500.00           |
-      And when I click on "Lionel Barrymore" opportunity on Opportunities grid
+      But I click on "Lionel Barrymore" opportunity on Opportunities grid
       And I click "Edit" button
       And I fill out the following:
       | Status      | Base budget amount  | Base Close revenue  |
@@ -106,7 +104,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
       Then I should see the following on Opportunity view page:
         | Base budget amount  | Base close revenue  |
         | $6,700.00           | $10,860.00          |
-      And when I go to Sales/ Opportunities
+      But I go to Sales/ Opportunities
       Then I should see on Opportunities grid the following:
         | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
         | Lionel Barrymore  | Closed Won  | €3,000.00     | $6,700.00           | €5,000.00     | $10,860.00          |
@@ -128,7 +126,6 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
       | Donna Reed        | €5,000.00      |  $10,000.00          | €3,000.00     | $6,000.00           | Closed Lost |
       | Lionel Barrymore  | €5,400.00      |  $10,860.00          | €3,200.00     | $6,700.00           | Closed Lost |
 
-
    Scenario: Ensure that Base Budget amount and base close currency for opportunities in status "Open" are recalculated
     Given I go press "Create Opportunity" button
      And I fill out the form with the following data:
@@ -138,9 +135,9 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
      Then I should see
        | Opportunity Name | Status  | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
        | Frank Faylen     | Open    | €100.00       | $300.00             | €200.00       | $600.00             |
-     And when I enter "€200.00" into "Budget Amount" field
+     But I enter "€200.00" into "Budget Amount" field
      Then I should see "$600.00" in "Base Budget Amount" field
-     And when I enter "€250.00" into "Close revenue" field
+     But I enter "€250.00" into "Close revenue" field
      Then I should see "$750.00" in "Base close revenue" field
 
   Scenario: Ensure that Base Budget amount and base close currency for opportunities in status "Closed Won" and "Closed
@@ -150,20 +147,20 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     Then I should see
       | Opportunity Name | Status     | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed won | €200.00       | $600.00             | €250.00       | $750.00             |
-    And when I enter "€400.00" into "Budget Amount" field
+    But I enter "€400.00" into "Budget Amount" field
     Then I should see "$600.00" in "Base Budget Amount" field
-    And when I enter "€550.00" into "Close revenue" field
+    But I enter "€550.00" into "Close revenue" field
     Then I should see "$750.00" in "Base close revenue" field
-    And when I select "Closed lost" in the "Status" field
+    But I select "Closed lost" in the "Status" field
     And I press "Save"
     Then I should see
       | Opportunity Name | Status       | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed lost  | €400.00       | $600.00             | €550.00       | $750.00             |
-    And when I enter "€200.00" into "Budget Amount" field
+    But I enter "€200.00" into "Budget Amount" field
     Then I should see "$600.00" in "Base Budget Amount" field
-    And when I enter "€150.00" into "Close revenue" field
+    But I enter "€150.00" into "Close revenue" field
     Then I should see "$750.00" in "Base close revenue" field
-    And when I press "Save"
+    But I press "Save"
     Then I should see
       | Opportunity Name | Status       | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Frank Faylen     | Closed lost  | €200.00       | $600.00             | €150.00       | $750.00             |
@@ -278,7 +275,6 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
       And when I click Edward Asner opportunity
       And when I click "Edit" button
       Then "Base Budget Amount" and "Base Close Revenue" should not be editable
-
 
       Scenario: "Base Budget Amount" and "Base Close Revenue" imported opportunity in Closed Won status are editable
         Given I fill Opportunities import template with the following data:

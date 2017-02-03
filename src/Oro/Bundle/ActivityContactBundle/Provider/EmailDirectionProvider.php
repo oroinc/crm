@@ -14,7 +14,6 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
-use Oro\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 /**
  * Class EmailDirectionProvider
@@ -106,7 +105,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
             $fieldConfiguration = $this->configProvider->getConfig($className, $column);
             $type = $fieldConfiguration->get('contact_information');
 
-            return $type == ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL;
+            return $type == self::CONTACT_INFORMATION_SCOPE_EMAIL;
         }
 
         return false;

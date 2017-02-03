@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -17,7 +15,7 @@ use Oro\Bundle\ContactBundle\Model\ExtendContactAddress;
  * @Config(
  *       defaultValues={
  *          "entity"={
- *              "icon"="icon-map-marker"
+ *              "icon"="fa-map-marker"
  *          },
  *          "note"={
  *              "immutable"=true
@@ -59,7 +57,6 @@ class ContactAddress extends ExtendContactAddress
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
-     * @Soap\ComplexType("string[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
