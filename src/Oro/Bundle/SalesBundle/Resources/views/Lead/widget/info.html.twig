@@ -3,6 +3,7 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroSalesBundle::macros.html.twig' as sales %}
+{% import 'OroTagBundle::macros.html.twig' as Tag %}
 
 {%- macro getSocialUrl(type, value) -%}
     {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
@@ -52,6 +53,8 @@
             {{ ui.renderProperty('oro.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
+
+            {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, Tag.renderView(entity)) }}
         </div>
 
         {%- set socialData -%}
@@ -79,7 +82,7 @@
             {{ ui.renderHtmlProperty('oro.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
             {{ ui.renderHtmlProperty('oro.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
-            {{ ui.renderHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.lead.notes.label'|trans, entity.notes, entity, 'notes') }}
             {{ ui.renderHtmlProperty('oro.contact.social.label'|trans, socialData) }}
             {{ ui.renderHtmlProperty('oro.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>

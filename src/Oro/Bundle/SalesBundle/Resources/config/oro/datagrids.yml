@@ -23,7 +23,7 @@ datagrids:
                     - o.closeRevenueValue  as closeRevenue
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.closeRevenueCurrency as closeRevenueCurrency
-                    - s.id as status
+                    - IDENTITY(o.status) as status
                     - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
@@ -36,7 +36,6 @@ datagrids:
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.owner, alias: own }
@@ -100,9 +99,10 @@ datagrids:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
-                frontend_type: select
+                context:
+                    enum_code: opportunity_status
+                frontend_type: enum
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
