@@ -13,7 +13,7 @@ use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class LeadToOpportunityProvider
+class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
 {
     /** @var PropertyAccessor */
     protected $accessor;
@@ -181,10 +181,7 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param Lead $lead
-     * @param bool $isGetRequest
-     *
-     * @return Opportunity
+     * {@inheritdoc}
      */
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
@@ -209,10 +206,7 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param Opportunity $opportunity
-     * @param callable    $errorMessageCallback
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
