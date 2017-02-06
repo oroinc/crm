@@ -81,12 +81,7 @@
                                         mediator.trigger('datagrid:doReset:magento-customer-orders-widget-grid');
                                         chooseMessage(data);
                                     },
-                                    error: function() {
-                                        messenger.notificationFlashMessage(
-                                                'error',
-                                                __('oro.magento.external_error')
-                                        );
-                                    }
+                                    errorHandlerMessage: __('oro.magento.external_error')
                                 }).always(function () {
                                     performMessage.close();
                                 });
