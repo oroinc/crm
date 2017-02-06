@@ -7,9 +7,6 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @group crm
- *
- * @outputBuffering enabled
- * @dbIsolation
  */
 class ChannelApiControllerTest extends WebTestCase
 {

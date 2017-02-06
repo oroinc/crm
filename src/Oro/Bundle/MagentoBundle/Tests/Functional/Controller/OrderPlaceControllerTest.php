@@ -11,8 +11,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
 
 /**
- * @outputBuffering enabled
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class OrderPlaceControllerTest extends WebTestCase
 {
@@ -43,9 +42,9 @@ class OrderPlaceControllerTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
+        $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
         $this->client->useHashNavigation(true);
-        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
         $this->soapTransport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
             ->setMethods(['init', 'call', 'getCarts', 'getCustomers', 'getOrders'])
@@ -87,8 +86,6 @@ class OrderPlaceControllerTest extends WebTestCase
 
     public function testSyncAction()
     {
-        $jobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $jobManager->beginTransaction();
         $newCart = $this->getModifiedCartData($this->cart, $this->customer);
 
         $cartIterator = new StubIterator([$newCart]);
@@ -126,8 +123,6 @@ class OrderPlaceControllerTest extends WebTestCase
             $arrayJson['url'],
             $this->getUrl('oro_magento_order_view', ['id' => $this->order->getId()])
         );
-        $jobManager->rollback();
-        $jobManager->getConnection()->close();
 
         $this->client->request('GET', $this->getUrl('oro_magento_cart_view', ['id' => $this->cart->getId()]));
         $result = $this->client->getResponse();
@@ -204,8 +199,6 @@ class OrderPlaceControllerTest extends WebTestCase
 
     public function testCustomerSyncAction()
     {
-        $jobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $jobManager->beginTransaction();
         $newCustomerOrder = $this->getModifiedCustomerOrder($this->customer);
 
         $orderIterator = new StubIterator([$newCustomerOrder]);
@@ -223,8 +216,6 @@ class OrderPlaceControllerTest extends WebTestCase
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
-        $jobManager->rollback();
-        $jobManager->getConnection()->close();
 
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
@@ -323,9 +314,6 @@ class OrderPlaceControllerTest extends WebTestCase
 
     public function testSyncGuestOrderAction()
     {
-        $jobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $jobManager->beginTransaction();
-
         $newCart = $this->getModifiedGuestCartData($this->guestCart);
         $cartIterator = new StubIterator([$newCart]);
 
@@ -356,8 +344,6 @@ class OrderPlaceControllerTest extends WebTestCase
             $arrayJson['url'],
             $this->getUrl('oro_magento_order_view', ['id' => $this->guestOrder->getId()])
         );
-        $jobManager->rollback();
-        $jobManager->getConnection()->close();
 
         $this->client->request('GET', $this->getUrl('oro_magento_cart_view', ['id' => $this->guestCart->getId()]));
         $result = $this->client->getResponse();

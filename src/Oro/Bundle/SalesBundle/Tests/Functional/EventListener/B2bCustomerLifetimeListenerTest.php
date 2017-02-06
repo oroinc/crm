@@ -12,10 +12,6 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class B2bCustomerLifetimeListenerTest extends WebTestCase
 {
     protected function setUp()

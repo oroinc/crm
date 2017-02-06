@@ -4,39 +4,16 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CartControllerTest extends AbstractController
 {
-    /** @var \Oro\Bundle\MagentoBundle\Entity\Cart */
-    public static $cart;
-
-    protected function postFixtureLoad()
-    {
-        parent::postFixtureLoad();
-
-        self::$cart = $this->getReference('cart');
-    }
-
-    /**
-     * @afterClass
-     */
-    public function clear()
-    {
-        self::$cart = null;
-        gc_collect_cycles();
-    }
-
     /**
      * @return int
      */
     protected function getMainEntityId()
     {
-        $this->assertNotEmpty(self::$cart);
+        $this->assertNotEmpty($this->getReference('cart'));
 
-        return self::$cart->getId();
+        return $this->getReference('cart')->getId();
     }
 
     public function testView()
@@ -60,7 +37,6 @@ class CartControllerTest extends AbstractController
         $this->assertContains('Open', $result->getContent());
         $this->assertContains('web site', $result->getContent());
         $this->assertContains('demo store', $result->getContent());
-        $this->assertContains('Send email', $result->getContent());
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
 

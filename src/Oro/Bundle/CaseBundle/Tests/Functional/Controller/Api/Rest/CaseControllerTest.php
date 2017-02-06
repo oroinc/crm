@@ -7,11 +7,6 @@ use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- * @dbReindex
- */
 class CaseControllerTest extends WebTestCase
 {
     /**

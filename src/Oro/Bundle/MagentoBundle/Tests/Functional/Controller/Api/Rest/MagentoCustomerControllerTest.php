@@ -13,10 +13,6 @@ use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class MagentoCustomerControllerTest extends WebTestCase
 {
     const CHANNEL_NAME = 'Demo Web store';

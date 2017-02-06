@@ -7,9 +7,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 abstract class AbstractController extends WebTestCase
 {
-    /** @var Integration */
-    protected static $integration;
-
     /** @var bool */
     protected $isRealGridRequest = false;
 
@@ -22,23 +19,9 @@ abstract class AbstractController extends WebTestCase
     }
 
     /**
-     * @afterClass
-     */
-    public function clear()
-    {
-        self::$integration = null;
-        gc_collect_cycles();
-    }
-
-    /**
      * @return int
      */
     abstract protected function getMainEntityId();
-
-    protected function postFixtureLoad()
-    {
-        self::$integration = $this->getReference('integration');
-    }
 
     /**
      * @dataProvider gridProvider
@@ -62,7 +45,7 @@ abstract class AbstractController extends WebTestCase
 
         if ($shouldPassIntegration) {
             $paramName = $gridName . '[' . $requestData['gridParameters']['channel'] . ']';
-            $requestData['gridParameters'][$paramName] = self::$integration->getId();
+            $requestData['gridParameters'][$paramName] = $this->getReference('integration')->getId();
         }
 
         if ($shouldPassRemoved) {

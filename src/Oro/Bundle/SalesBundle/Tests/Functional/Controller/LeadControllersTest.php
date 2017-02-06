@@ -9,10 +9,6 @@ use Symfony\Component\DomCrawler\Field\InputFormField;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class LeadControllersTest extends AbstractDatagridTestCase
 {
     /** @var bool */
