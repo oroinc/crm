@@ -27,7 +27,6 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
      */
     public function testCloseDateFilterSuccess($dateRangeType, $inProgressCount)
     {
-        $this->markTestSkipped('Skipped until CRM-7567 gets resolved');
         $widget = $this->getReference('widget_forecast');
 
         $this->configureWidget($widget, [
