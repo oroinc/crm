@@ -19,8 +19,14 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
- *      name="orocrm_sales_opportunity",
- *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at", "id"})}
+ *  name="orocrm_sales_opportunity",
+ *  indexes={
+ *    @ORM\Index(name="opportunity_created_idx",columns={"created_at"}),
+ *    @ORM\Index(
+ *      name="opportunities_by_status_idx",
+ *      columns={"organization_id","status_id","close_revenue_value","budget_amount_value","created_at"}
+ *    )
+ *  }
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Config(

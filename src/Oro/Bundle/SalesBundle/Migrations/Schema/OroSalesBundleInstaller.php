@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -103,7 +104,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_32';
+        return 'v1_33';
     }
 
     /**
@@ -156,6 +157,8 @@ class OroSalesBundleInstaller implements
         AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
         AddLeadAddressTable::createLeadAddressTable($schema);
         $this->customerExtension->addCustomerAssociation($schema, 'orocrm_sales_b2bcustomer');
+
+        $this->addOpportunityByStatusIndex($schema);
     }
 
     /**
@@ -217,7 +220,7 @@ class OroSalesBundleInstaller implements
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('closed_at', 'datetime', ['notnull' => false]);
         $table->addIndex(['contact_id'], 'idx_c0fe4aace7a1254a', []);
-        $table->addIndex(['created_at', 'id'], 'opportunity_created_idx', []);
+        $table->addIndex(['created_at'], 'opportunity_created_idx', []);
         $table->addIndex(['user_owner_id'], 'idx_c0fe4aac9eb185f9', []);
         $table->addIndex(['lead_id'], 'idx_c0fe4aac55458d', []);
         $table->addIndex(['close_reason_name'], 'idx_c0fe4aacd81b931c', []);
@@ -341,7 +344,7 @@ class OroSalesBundleInstaller implements
         );
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
-        $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
+        $table->addIndex(['createdat'], 'lead_created_idx', []);
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['address_id'], 'idx_73db4633f5b7af75', []);
@@ -792,5 +795,19 @@ class OroSalesBundleInstaller implements
     {
         $table = $schema->getTable('orocrm_sales_b2bcustomer');
         $table->addIndex(['name', 'id'], 'orocrm_b2bcustomer_name_idx', []);
+    }
+
+    /**
+     * Add opportunity 'opportunities_by_status_idx' index, used to speedup 'Opportunity By Status' widget
+     *
+     * @param Schema $schema
+     */
+    protected function addOpportunityByStatusIndex(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_sales_opportunity');
+        $table->addIndex(
+            ['organization_id', 'status_id', 'close_revenue_value', 'budget_amount_value', 'created_at'],
+            'opportunities_by_status_idx'
+        );
     }
 }

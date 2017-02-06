@@ -58,25 +58,6 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         $this->assertEquals($requestData['expectedResultCount'], $data[0]->value);
     }
 
-    /**
-     * @param $crawler
-     * @return array
-     */
-    protected function getChartData($crawler)
-    {
-        $dataComponent = $crawler->filter('.column-chart');
-        if ($dataComponent->extract(['data-page-component-options'])) {
-            $data = $dataComponent->extract(['data-page-component-options']);
-            $data = json_decode($data[0]);
-            return $data->chartOptions->dataSource->data;
-        } else {
-            $dataComponent = $crawler->filter('.opportunities-by-state-widget-content>div');
-            $data = $dataComponent->extract(['data-page-component-options']);
-            $data = json_decode($data[0]);
-            return $data->data;
-        }
-    }
-
     protected function getConfigureDialog()
     {
         $this->client->request(
