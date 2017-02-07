@@ -75,3 +75,31 @@ Feature: Quickly create Lead in a single form
       | status     | Qualified          |
       | owner      | Marge Marge Simpson|
       | status     | Qualified          |
+
+  Scenario: Delete lead
+    Given I click on editedName in grid
+    And I should be on "editedName" Lead View page
+    When I press "Delete Lead"
+    And confirm deletion
+    Then I should see "Lead deleted" flash message
+    And number of records should be 0
+
+  Scenario: Import Lead
+    Given I download "Lead" Data Template file
+    And I fill template with data:
+      | Lead name | Status Id | Owner Username | Organization Name | Customer Account Account name | Contact First name | Contact Last name |
+      | Jary      | new       | admin          | OroCRM            | Jary Carter                   | Jary               | Carter            |
+    When I import file
+    And I reload the page
+    Then there are 1 records in grid
+
+  Scenario: Convert to opportunity
+    Given I click on Jary in grid
+    And I press "Convert to Opportunity"
+    When I fill form with:
+      | Account    | Charlie            |
+      | First name | Jary               |
+      | Emails     | [jary@example.com] |
+    And press "Save and Close"
+    Then I should see "Opportunity saved" flash message
+    Then I should be on "Jary" Opportunity View page
