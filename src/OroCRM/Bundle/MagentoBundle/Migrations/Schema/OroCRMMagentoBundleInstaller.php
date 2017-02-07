@@ -110,7 +110,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_41_5';
+        return 'v1_41_4';
     }
 
     /**
@@ -336,7 +336,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
         $table->addIndex(['organization_id'], 'IDX_4D09F30532C8A3DE', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['created_at', 'id'], 'mageorder_created_idx', []);
+        $table->addIndex(['created_at'], 'mageorder_created_idx', []);
         $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_increment_id_channel_id');
     }
 
@@ -427,7 +427,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['organization_id'], 'IDX_2A61EE7D32C8A3DE', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['first_name', 'last_name'], 'magecustomer_name_idx', []);
-        $table->addIndex(['last_name', 'first_name', 'id'], 'magecustomer_rev_name_idx', []);
+        $table->addIndex(['last_name', 'first_name'], 'magecustomer_rev_name_idx', []);
         $table->addIndex(['email'], 'magecustomer_email_guest_idx', []);
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
     }
@@ -714,7 +714,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['organization_id'], 'IDX_96661A8032C8A3DE', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecart_origin_idx', []);
-        $table->addIndex(['updatedAt', 'id'], 'magecart_updated_idx', []);
+        $table->addIndex(['updatedAt'], 'magecart_updated_idx', []);
         $table->addIndex(['payment_details'], 'magecart_payment_details_idx', []);
         $table->addIndex(['status_name', 'items_qty'], 'status_name_items_qty_idx', []);
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_cart_origin_id_channel_id');

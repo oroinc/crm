@@ -32,7 +32,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",
- *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt", "id"})}
+ *      indexes={@ORM\Index(name="lead_created_idx",columns={"createdAt"})}
  * )
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()

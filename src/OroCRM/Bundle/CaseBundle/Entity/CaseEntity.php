@@ -20,8 +20,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *      name="orocrm_case",
- *      indexes={@ORM\Index(name="case_reported_at_idx",columns={"reportedAt", "id"})}
+ *      name="orocrm_case"
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
