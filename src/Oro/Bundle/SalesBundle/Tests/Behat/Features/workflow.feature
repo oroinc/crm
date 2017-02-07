@@ -3,7 +3,7 @@ Feature: Managing workflows
   As an Administrator
   I want to be able to manage workflow entity
 
-  Scenario: Workflow customer create
+  Scenario: Workflow creation
     Given I login as administrator
     Then I go to System/ Workflows
     And I press "Create Workflow"
@@ -41,3 +41,19 @@ Feature: Managing workflows
       | System          | No                     |
       | Priority        | 0                      |
 
+  Scenario: Workflow activation from grid
+    Given I click Activate Test workflow in grid
+    And I press "Activate"
+    Then I should see "Workflow activated" flash message
+    And I should see Test workflow in grid with following data:
+      | Related Entity  | Business Customer      |
+      | Active          | Yes                    |
+      | System          | No                     |
+      | Priority        | 0                      |
+
+  Scenario: Workflow deactivation from entity view
+    Given I sort grid by Related Entity
+    And I click View Test workflow in grid
+    And I press "Deactivate"
+    When I press "Yes, Deactivate"
+    Then I should see "Workflow deactivated" flash message
