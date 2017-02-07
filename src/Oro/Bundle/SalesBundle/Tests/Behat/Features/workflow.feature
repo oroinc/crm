@@ -53,7 +53,37 @@ Feature: Managing workflows
 
   Scenario: Workflow deactivation from entity view
     Given I sort grid by Related Entity
-    And I click View Test workflow in grid
-    And I press "Deactivate"
+    And I click Deactivate Test workflow in grid
     When I press "Yes, Deactivate"
-    Then I should see "Workflow deactivated" flash message
+    And I go to System/ Workflows
+    Then I should see Test workflow in grid with following data:
+      | Related Entity  | Business Customer      |
+      | Active          | No                     |
+      | System          | No                     |
+      | Priority        | 0                      |
+
+
+  Scenario: Workflow edit
+    Given I click Edit Test workflow in grid
+    And I fill form with:
+      | Name            | Glorious workflow  |
+      | Related Entity  | Business Unit      |
+    When I save and close form
+    Then I should see "Could not save workflow. Please add at least one step and one transition." flash message
+    Then I press "Add step"
+    And I fill form with:
+      | label           | Step1  |
+      | order           | 1      |
+      | is_final        | true   |
+    And I press "Apply"
+    Then I press "Add transition"
+    And I fill form with:
+      | label           | Trans1  |
+      | step_from       | (Start) |
+      | step_to         | Step1   |
+    And I press "Apply"
+    When I save and close form
+    And I go to System/ Workflows
+    Then I should see Glorious workflow in grid with following data:
+      | Name            | Glorious workflow  |
+      | Related Entity  | Business Unit      |
