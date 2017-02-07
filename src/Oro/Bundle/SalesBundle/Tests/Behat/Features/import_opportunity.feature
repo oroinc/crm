@@ -10,7 +10,7 @@ Feature: Import opportunity feature
     And "First Sales Channel" is a channel with enabled Business Customer entities
     And I open Opportunity Index page
     And there is no records in grid
-    When I download Data Template file
+    When I download "Opportunity" Data Template file
     Then I don't see Business Customer Name column
     And I see Account Customer name column
 
