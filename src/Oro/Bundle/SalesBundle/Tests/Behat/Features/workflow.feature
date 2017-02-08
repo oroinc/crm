@@ -42,7 +42,8 @@ Feature: Managing workflows
       | Priority        | 0                      |
 
   Scenario: Workflow activation from grid
-    Given I click Activate Test workflow in grid
+    Given I sort grid by Related Entity
+    And I click Activate Test workflow in grid
     And I press "Activate"
     Then I should see "Workflow activated" flash message
     And I should see Test workflow in grid with following data:
@@ -89,7 +90,8 @@ Feature: Managing workflows
       | Related Entity  | Business Unit      |
 
   Scenario: Workflow clone
-    Given I click Clone Glorious workflow in grid
+    Given I sort grid by Related Entity
+    And I click Clone Glorious workflow in grid
     When I save and close form
     Then I should see "Workflow saved." flash message
     When I go to System/ Workflows
@@ -99,3 +101,14 @@ Feature: Managing workflows
       | Active          | No                         |
       | System          | No                         |
       | Priority        | 0                          |
+
+  Scenario: Deleting business customer
+    Given I sort grid by Related Entity
+    And I click Delete Copy of Glorious workflow in grid
+    When I confirm deletion
+    Then I should see "Item deleted" flash message
+    And there is no "Copy of Glorious workflow" in grid
+    When I click view Glorious workflow in grid
+    And I press "Delete Workflow"
+    And I confirm deletion
+    Then there is no "Glorious workflow" in grid
