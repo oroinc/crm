@@ -299,7 +299,6 @@ services:
     oro_magento.form.handler.customer:
         class: %oro_magento.form.handler.customer.class%
         parent: oro_form.model.update_handler
-        scope: request
         calls:
             - [setStateHandler,  ["@oro_magento.customer_state_handler"]]
 

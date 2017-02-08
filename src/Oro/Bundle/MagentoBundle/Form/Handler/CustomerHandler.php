@@ -33,7 +33,7 @@ class CustomerHandler extends UpdateHandler
      */
     public function handleRegister(Customer $entity)
     {
-        if ($this->request->getMethod() === 'POST') {
+        if ($this->getCurrentRequest()->getMethod() === 'POST') {
             $manager = $this->doctrineHelper->getEntityManager($entity);
             $entity->setGuest(false);
             $entity->setIsActive(true);
@@ -58,42 +58,51 @@ class CustomerHandler extends UpdateHandler
             throw new \InvalidArgumentException('Customer expected');
         }
 
+        $request = $this->getCurrentRequest();
         $form->setData($entity);
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'], true)) {
-            $form->submit($this->request);
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $form->submit($request);
 
             if ($form->isValid()) {
-                $addressesToSync = [];
-                if ($entity->getId()) {
-                    $this->stateHandler->markCustomerForSync($entity);
-
-                    if (!$entity->getAddresses()->isEmpty()) {
-                        foreach ($entity->getAddresses() as $address) {
-                            if (!$address->getOriginId()) {
-                                $addressesToSync[] = $address;
-                            } else {
-                                $this->stateHandler->markAddressForSync($address);
-                            }
-                        }
-                    }
-                }
-                $this->saveEntity($entity);
-
-                // Process trigger listen for update, because create will trigger export during import
-                // This will schedule new entity for export
-                if (!$entity->getOriginId()) {
-                    $this->scheduleCustomerSyncToMagento($entity);
-                }
-
-                foreach ($addressesToSync as $address) {
-                    $this->scheduleAddressSyncToMagento($address);
-                }
+                $this->processFormSubmit($entity);
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    private function processFormSubmit(Customer $entity)
+    {
+        $addressesToSync = [];
+        if ($entity->getId()) {
+            $this->stateHandler->markCustomerForSync($entity);
+
+            if (!$entity->getAddresses()->isEmpty()) {
+                foreach ($entity->getAddresses() as $address) {
+                    if (!$address->getOriginId()) {
+                        $addressesToSync[] = $address;
+                    } else {
+                        $this->stateHandler->markAddressForSync($address);
+                    }
+                }
+            }
+        }
+        $this->saveEntity($entity);
+
+        // Process trigger listen for update, because create will trigger export during import
+        // This will schedule new entity for export
+        if (!$entity->getOriginId()) {
+            $this->scheduleCustomerSyncToMagento($entity);
+        }
+
+        foreach ($addressesToSync as $address) {
+            $this->scheduleAddressSyncToMagento($address);
+        }
     }
 
     /**
