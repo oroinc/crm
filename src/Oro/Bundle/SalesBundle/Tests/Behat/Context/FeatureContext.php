@@ -27,16 +27,6 @@ class FeatureContext extends OroFeatureContext implements
     use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
-     * Load "second_sales_channel.yml" alice fixture file
-     *
-     * @Given CRM has second sales channel with Accounts and Business Customers
-     */
-    public function crmHasSecondSalesChannel()
-    {
-        $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
-    }
-
-    /**
      * This is change the current page context
      * Go to 'Customers/ Business Customers' and assert row with given content
      * Example: Then "Absolute new account" Customer was created
@@ -119,21 +109,6 @@ class FeatureContext extends OroFeatureContext implements
             sort($existingCustomers),
             sort($actualCustomers)
         );
-    }
-
-    /**
-     * Assert that given string is not present in "Account" field suggestions
-     * Example: But should not see "Non Existent Account (Add new)" account
-     *
-     * @Then should not see :text account
-     */
-    public function shouldNotSeeAccount($text)
-    {
-        /** @var Select2Entity $accountField */
-        $accountField = $this->createElement('OroForm')->findField('Account');
-        $actualCustomers = $accountField->getSuggestedValues();
-
-        self::assertNotContains($text, $actualCustomers);
     }
 
     /**
