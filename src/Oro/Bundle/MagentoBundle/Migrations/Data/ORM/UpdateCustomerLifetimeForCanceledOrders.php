@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
@@ -52,7 +52,7 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
         // Get lifetime value only for customers that have canceled orders
         $this->addFilterByOrderStatus($queryBuilder, Order::STATUS_CANCELED);
 
-        $iterator = new BufferedQueryResultIterator($queryBuilder);
+        $iterator = new BufferedIdentityQueryResultIterator($queryBuilder);
         $iterator->setBufferSize(self::BUFFER_SIZE);
 
         $channels = [];
