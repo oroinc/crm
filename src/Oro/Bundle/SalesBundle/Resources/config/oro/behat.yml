@@ -15,3 +15,23 @@ pages:
   Opportunity Create:
     route: 'oro_sales_opportunity_create'
     class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityCreate
+
+  Opportunity View:
+    route: 'oro_sales_opportunity_view'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityView
+
+  Lead Index:
+    route: 'oro_sales_lead_index'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex
+
+  Lead Create:
+    route: 'oro_sales_lead_create'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadCreate
+
+  Lead View:
+    route: 'oro_sales_lead_view'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadView
+
+  Lead Index:
+    route: 'oro_sales_lead_index'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex

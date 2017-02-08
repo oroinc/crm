@@ -8,10 +8,6 @@ use Oro\Bundle\UserBundle\DataFixtures\UserUtilityTrait;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ControllersTest extends WebTestCase
 {
     use UserUtilityTrait;

@@ -9,9 +9,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 
-/**
- * @dbIsolation
- */
 class CustomerAccountChangeSubscriberTest extends WebTestCase
 {
     public function setUp()

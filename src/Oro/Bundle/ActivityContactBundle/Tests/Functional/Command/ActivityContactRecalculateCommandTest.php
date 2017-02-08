@@ -6,18 +6,11 @@ use Doctrine\ORM\EntityManager;
 
 use Monolog\Registry;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\DotmailerBundle\Entity\Contact;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ActivityContactRecalculateCommandTest extends WebTestCase
 {
     public function setUp()
@@ -42,11 +35,7 @@ class ActivityContactRecalculateCommandTest extends WebTestCase
 
     protected function runActivityContactRecalculateCommand()
     {
-        $app = new Application($this->getContainer()->get('kernel'));
-        $app->setAutoExit(false);
-        $app->run(new ArrayInput([
-            'command' => ActivityContactRecalculateCommand::COMMAND_NAME,
-        ]));
+        $this->runCommand(ActivityContactRecalculateCommand::COMMAND_NAME);
     }
 
     /**

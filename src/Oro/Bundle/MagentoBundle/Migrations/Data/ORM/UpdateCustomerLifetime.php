@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class UpdateCustomerLifetime extends AbstractFixture
@@ -38,7 +38,7 @@ class UpdateCustomerLifetime extends AbstractFixture
             'UPDATE OroMagentoBundle:Customer customer SET customer.lifetime = :lifetime WHERE customer.id = :id';
 
         // update lifetime for all customers
-        $iterator = new BufferedQueryResultIterator($queryBuilder);
+        $iterator = new BufferedIdentityQueryResultIterator($queryBuilder);
         foreach ($iterator as $row) {
             $customerId = $row['id'];
             $lifetime = $row['lifetime'] ?: 0;

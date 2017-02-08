@@ -12,7 +12,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIteratorInterface;
 
 abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
 {
@@ -163,11 +164,11 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
     /**
      * @param QueryBuilder $customersQueryBuilder
      *
-     * @return BufferedQueryResultIterator
+     * @return BufferedQueryResultIteratorInterface
      */
     protected function getCustomersIterator(QueryBuilder $customersQueryBuilder)
     {
-        $iterator = new BufferedQueryResultIterator($customersQueryBuilder);
+        $iterator = new BufferedIdentityQueryResultIterator($customersQueryBuilder);
         $iterator->setBufferSize(static::READ_BATCH_SIZE);
 
         return $iterator;

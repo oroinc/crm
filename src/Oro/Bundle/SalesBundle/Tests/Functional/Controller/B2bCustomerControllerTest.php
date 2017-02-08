@@ -10,10 +10,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class B2bCustomerControllerTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */

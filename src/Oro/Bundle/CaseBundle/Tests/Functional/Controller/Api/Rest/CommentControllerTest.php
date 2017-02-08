@@ -3,13 +3,7 @@
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- * @dbReindex
- */
 class CommentControllerTest extends WebTestCase
 {
     /**

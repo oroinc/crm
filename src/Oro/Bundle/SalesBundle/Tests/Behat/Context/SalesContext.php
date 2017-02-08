@@ -115,7 +115,14 @@ class SalesContext extends OroFeatureContext implements
 
         foreach ($channelEntities as $channelEntity) {
             $entitySelector->click();
-            $this->elementFactory->findElementContains('SelectToResultLabel', $channelEntity)->click();
+
+            $entityOption = $this->elementFactory->findElementContains('SelectToResultLabel', $channelEntity);
+            self::assertTrue(
+                $entityOption->isIsset(),
+                sprintf('Entity "%s" was not found in entity selector', $channelEntity)
+            );
+            $entityOption->click();
+
             $this->getPage()->clickLink('Add');
         }
 

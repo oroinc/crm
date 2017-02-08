@@ -7,9 +7,6 @@ use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 
-/**
- * @dbIsolation
- */
 class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
 {
     protected function setUp()

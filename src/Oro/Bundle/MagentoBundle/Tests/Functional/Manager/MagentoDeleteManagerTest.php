@@ -6,10 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class MagentoDeleteManagerTest extends WebTestCase
 {
     /** @var int */

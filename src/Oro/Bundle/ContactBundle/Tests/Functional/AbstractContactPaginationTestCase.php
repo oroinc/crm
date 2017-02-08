@@ -9,10 +9,6 @@ use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesDa
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class AbstractContactPaginationTestCase extends WebTestCase
 {
     /**

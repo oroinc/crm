@@ -2,25 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OrderControllerTest extends AbstractController
 {
-    /** @var \Oro\Bundle\MagentoBundle\Entity\Order */
-    public static $order;
-
-    protected function postFixtureLoad()
-    {
-        parent::postFixtureLoad();
-
-        self::$order = $this->getReference('order');
-    }
-
     protected function getMainEntityId()
     {
-        return self::$order->getid();
+        return $this->getReference('order')->getid();
     }
 
     public function testView()
@@ -32,7 +18,6 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('General Information', $result->getContent());
         $this->assertContains('Order items', $result->getContent());
         $this->assertContains('Activity', $result->getContent());
-        $this->assertContains('Send email', $result->getContent());
         $this->assertContains('Sync Data', $result->getContent());
         $this->assertContains('$4.40', $result->getContent());
         $this->assertContains('open', $result->getContent());

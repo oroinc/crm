@@ -10,10 +10,6 @@ use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\UserBundle\Entity\User;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestContactApiTest extends WebTestCase
 {
     /** @var array */
