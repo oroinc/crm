@@ -87,3 +87,15 @@ Feature: Managing workflows
     Then I should see Glorious workflow in grid with following data:
       | Name            | Glorious workflow  |
       | Related Entity  | Business Unit      |
+
+  Scenario: Workflow clone
+    Given I click Clone Glorious workflow in grid
+    When I save and close form
+    Then I should see "Workflow saved." flash message
+    When I go to System/ Workflows
+    Then I should see Copy of Glorious workflow in grid with following data:
+      | Name            | Copy of Glorious workflow  |
+      | Related Entity  | Business Unit              |
+      | Active          | No                         |
+      | System          | No                         |
+      | Priority        | 0                          |
