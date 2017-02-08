@@ -12,7 +12,7 @@ Feature: Managing business customer
       | Account         | Marge Simpson          |
       | Customer Name   | SimpsonCustomer        |
       | Phones          | [11-11-11, 22-22-22]   |
-      | Emails          | [m1@ex.com, m2@ex.com] |
+      | Emails          | [m1@ex.com]            |
       | Country         | United States          |
       | Street          | Selma Ave              |
       | City            | Los Angeles            |
@@ -68,14 +68,14 @@ Feature: Managing business customer
     And I fill "SalesB2bCustomerForm" with:
       | Account         | Marge Simpson          |
       | Customer Name   | SimpsonCustomer        |
-      | Phones          | [11-11-11, 22-22-22]   |
-      | Emails          | [m1@ex.com, m2@ex.com] |
+      | Phones          | [11-11-11]   |
+      | Emails          | [m1@ex.com] |
       | Country         | United States          |
       | Street          | Selma Ave              |
       | City            | Los Angeles            |
       | Zip/Postal Code | 90028                  |
       | State           | California             |
-    When I submit form "SalesB2bCustomerForm"
+    When I submit "Sales B2b Customer Form"
     Then Account field should has "Marge Simpson" value
     When I press "Cancel"
     And I go to Customers/ Business Customers
@@ -84,3 +84,16 @@ Feature: Managing business customer
       | Customer Name   | SimpsonCustomer        |
       | Email           | m1@ex.com              |
       | Channel         | Business Customers     |
+
+  Scenario: Inline edit Lead
+    Given I edit first record from grid:
+      | Customer Name         | editedName             |
+      | Lifetime sales value  | 22                     |
+      | Email                 | m3@ex.com              |
+      | Phone number          | 33-33-333              |
+    Then I should see editedName in grid with following data:
+      | Account               | Marge Simpson          |
+      | Channel               | Business Customers     |
+      | Lifetime sales value  | $22.00                 |
+      | Email                 | m3@ex.com              |
+      | Phone number          | 33-33-333              |

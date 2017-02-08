@@ -261,13 +261,14 @@ class FeatureContext extends OroFeatureContext implements
     /**
      * Submit provided form.
      * Used when few forms present on page
-     * Example: When I submit form "SalesB2bCustomerForm"
+     * Example: When I submit "Sales B2b Customer Form"
      *
-     * @When /^(?:|I )submit form "(?P<formName>(?:[^"]|\\")*)"$/
+     * @When /^(?:|I )submit "(?P<formName>(?:[^"]|\\")*)"$/
      * @param string $formName
      */
     public function iSubmitForm($formName = "OroForm")
     {
+        $formName = str_replace(' ', '', $formName);
         $form = $this->createElement($formName);
         $form->submit();
     }
