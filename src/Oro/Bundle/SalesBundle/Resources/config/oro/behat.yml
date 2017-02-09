@@ -7,6 +7,10 @@ elements:
     selector: 'form[name="opportunity"]'
     class: Oro\Bundle\SalesBundle\Tests\Behat\Element\OpportunityProbabilitiesConfigForm
 
+  SalesB2bCustomerForm:
+    selector: 'form[name="oro_sales_b2bcustomer_form"]'
+    class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+
 pages:
   Opportunity Index:
     route: 'oro_sales_opportunity_index'

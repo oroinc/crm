@@ -138,7 +138,7 @@ class FeatureContext extends OroFeatureContext implements
         return $customers;
     }
 
-    /*
+    /**
      * Open Opportunity index page
      *
      * @Given /^(?:|I )go to Opportunity Index page$/
@@ -219,5 +219,35 @@ class FeatureContext extends OroFeatureContext implements
             $this->waitForAjax();
             self::assertEquals($item['Probability'], $form->findField('Probability')->getValue());
         }
+    }
+
+    /**
+     * Press entity add button from plus dropdown
+     * Example: Then I add new Business Customer for Account field
+     *
+     * @param $entityButtonName
+     * @param $fieldName
+     * @Then /^I add new (?P<entityName>[\w\s]+) for (?P<fieldName>[\w\s]+) field$/
+     */
+    public function iAddNewEntityForField($entityButtonName, $fieldName)
+    {
+        /** @var Select2Entity $field */
+        $field = $this->createElement('OroForm')->findField($fieldName);
+        $field->openFromPlusButtonDropDown($entityButtonName);
+    }
+
+    /**
+     * Submit provided form.
+     * Used when few forms present on page
+     * Example: When I submit "Sales B2b Customer Form"
+     *
+     * @When /^(?:|I )submit "(?P<formName>(?:[^"]|\\")*)"$/
+     * @param string $formName
+     */
+    public function iSubmitForm($formName = "OroForm")
+    {
+        $formName = str_replace(' ', '', $formName);
+        $form = $this->createElement($formName);
+        $form->submit();
     }
 }
