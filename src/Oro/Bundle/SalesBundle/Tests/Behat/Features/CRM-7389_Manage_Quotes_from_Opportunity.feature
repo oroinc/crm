@@ -30,7 +30,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     | Name                  | Active |
     | Quote Management Flow | No     |
 
-  Scenario: Allowing user to create a quote
+  Scenario Outline: Allowing user to create a quote
     Given "Quote Management Flow" is enabled
     When I go to  Sales/Opportunities
     And I click "Create Opportunity"
@@ -47,7 +47,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     | Opportunity 4     | CommersSaint   | Solution Development      |
     | Opportunity 5     | CommersSaint   | Negotiation               |
 
-  Scenario: Disallowing the user to create a quote
+  Scenario Outline: Disallowing the user to create a quote
     Given "Quote Management Flow" is enabled
     And <Account Name> is not Commerce Customer
     And I go to Sales/Opportunities
