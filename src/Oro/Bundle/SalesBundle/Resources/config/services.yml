@@ -300,9 +300,8 @@ services:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
         arguments:
             - '@doctrine'
-            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.widget_provider_filter'
             - '@oro_dashboard.filter.date_filter_processor'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_currency.query.currency_transformer'
 
     oro_sales.handler.opportunity_api:
