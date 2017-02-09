@@ -247,15 +247,18 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * Click the plus dropdown, also known as entity create button
-     * Example: Then I press plus dropdown button
+     * Press entity add button from plus dropdown
+     * Example: Then I add new Business Customer for Account field
      *
-     * @Then I press plus dropdown button
+     * @param $entityButtonName
+     * @param $fieldName
+     * @Then /^I add new (?P<entityName>[\w\s]+) for (?P<fieldName>[\w\s]+) field$/
      */
-    public function iPressPlusDropDownButton()
+    public function iAddNewEntityForField($entityButtonName, $fieldName)
     {
-        $content = $this->getSession()->getPage();
-        $content->find('css', '.entity-create-dropdown button')->click();
+        /** @var Select2Entity $field */
+        $field = $this->createElement('OroForm')->findField($fieldName);
+        $field->openFromPlusButtonDropDown($entityButtonName);
     }
 
     /**

@@ -23,15 +23,12 @@ Feature: Managing business customer
       | Account         | Marge Simpson                |
       | Customer Name   | SimpsonCustomer              |
       | Channel         | Business Customers           |
-    When I go to Customers/ Business Customers
-    Then I should see SimpsonCustomer in grid with following data:
-      | Account         | Marge Simpson          |
-      | Customer Name   | SimpsonCustomer        |
-      | Email           | m1@ex.com              |
-      | Channel         | Business Customers     |
+      | Phone           | [11-11-11, 22-22-22]   |
+      | Email           | [m1@ex.com]            |
 
   Scenario: Edit business customer
-    Given I click Edit Bruce Customer in grid
+    Given I go to Customers/ Business Customers
+    And I click Edit Bruce Customer in grid
     And I fill form with:
       | Account         | Keanu Reeves           |
       | Customer Name   | Charlie Customer       |
@@ -63,13 +60,12 @@ Feature: Managing business customer
   Scenario: Business customer create from lead
     Given I go to Sales/ Leads
     And I press "Create Lead"
-    Then I press plus dropdown button
-    And I press "Business Customer"
+    Then I add new Business Customer for Account field
     And I fill "SalesB2bCustomerForm" with:
       | Account         | Marge Simpson          |
       | Customer Name   | SimpsonCustomer        |
-      | Phones          | [11-11-11]   |
-      | Emails          | [m1@ex.com] |
+      | Phones          | [11-11-11]             |
+      | Emails          | [m1@ex.com]            |
       | Country         | United States          |
       | Street          | Selma Ave              |
       | City            | Los Angeles            |
@@ -85,7 +81,7 @@ Feature: Managing business customer
       | Email           | m1@ex.com              |
       | Channel         | Business Customers     |
 
-  Scenario: Inline edit Lead
+  Scenario: Inline edit Business Customer
     Given I edit first record from grid:
       | Customer Name         | editedName             |
       | Lifetime sales value  | 22                     |
