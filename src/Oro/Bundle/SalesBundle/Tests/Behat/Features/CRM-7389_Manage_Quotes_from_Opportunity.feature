@@ -82,7 +82,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     Given I go to Sales/Opportunities
     When I click "Opportunity 2"
     And I send "First Quote" Quote from the Opportunity View Page
-    Then"Commersant2000" Commerce Customer  should see this quote in his Account
+    Then "Commersant2000" Commerce Customer  should see this quote in his Account
     And "Create Quote" button should still be available on the Opportunity view page
     But I send "Second Quote" Quote from the Opportunity View Page
     Then "Commersant2000" Commerce Customer should see this quote in his Account
