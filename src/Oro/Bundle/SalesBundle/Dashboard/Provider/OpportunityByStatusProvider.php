@@ -88,7 +88,7 @@ class OpportunityByStatusProvider
 
         $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'o.createdAt');
 
-        $result = $this->widgetProviderFilter->filter($qb, $widgetOptions);
+        $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getArrayResult();
 
         return $this->formatResult($result, $excludedStatuses, $orderBy);
     }
