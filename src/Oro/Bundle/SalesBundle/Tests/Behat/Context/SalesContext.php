@@ -7,7 +7,6 @@ use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
-use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
@@ -23,31 +22,6 @@ class SalesContext extends OroFeatureContext implements
     KernelAwareContext
 {
     use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
-
-    /**
-     * @Then Accounts and Customers in the control are filtered by selected sales channel and :username ACL permissions
-     */
-    public function accountsInTheControlAreFilteredBySelected($username)
-    {
-        /** @var Select2Entity $channelField */
-        $channelField = $this->createElement('OroForm')->findField('Channel');
-        $channels = $channelField->getSuggestedValues();
-
-        foreach ($channels as $channelName) {
-            $channelField->setValue($channelName);
-
-            $expectedCustomers = $this->getCustomers($channelName, $username);
-
-            /** @var Select2Entity $accountField */
-            $accountField = $this->createElement('OroForm')->findField('Account');
-            $actualCustomers = $accountField->getSuggestedValues();
-
-            self::assertEquals(
-                sort($expectedCustomers),
-                sort($actualCustomers)
-            );
-        }
-    }
 
     /**
      * Load account_with_customers.yml alice fixture
