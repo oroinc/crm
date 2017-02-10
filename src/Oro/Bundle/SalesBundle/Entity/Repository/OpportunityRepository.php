@@ -7,6 +7,8 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -352,51 +354,50 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
     public function getOpportunitiesCount(
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         \DateTime $start = null,
         \DateTime $end = null,
-        $owners = []
+        WidgetOptionBag $widgetOptions
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
+        $qb = $this->createOpportunitiesCountQb($start, $end);
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
     public function getNewOpportunitiesCount(
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         \DateTime $start = null,
         \DateTime $end = null,
-        $owners = []
+        WidgetOptionBag $widgetOptions
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
+        $qb = $this->createOpportunitiesCountQb($start, $end);
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[]    $owners
      *
      * @return QueryBuilder
      */
-    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
+    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)');
@@ -409,10 +410,6 @@ class OpportunityRepository extends EntityRepository
             $qb
                 ->andWhere('o.createdAt <= :end')
                 ->setParameter('end', $end);
-        }
-
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $qb;
@@ -546,20 +543,20 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return double
      */
     public function getNewOpportunitiesAmount(
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
-        $owners = []
+        WidgetOptionBag $widgetOptions
     ) {
         $qb = $this->createQueryBuilder('o');
         $baTransformedQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
@@ -567,26 +564,22 @@ class OpportunityRepository extends EntityRepository
 
         $this->setCreationPeriod($qb, $start, $end);
 
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
     public function getWonOpportunitiesToDateCount(
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         \DateTime $start = null,
         \DateTime $end = null,
-        $owners = []
+        WidgetOptionBag $widgetOptions
     ) {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)')
@@ -595,28 +588,24 @@ class OpportunityRepository extends EntityRepository
 
         $this->setClosedPeriod($qb, $start, $end);
 
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return double
      */
     public function getWonOpportunitiesToDateAmount(
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
-        $owners = []
+        WidgetOptionBag $widgetOptions
     ) {
         $qb = $this->createQueryBuilder('o');
         $crTransformedQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
@@ -626,11 +615,7 @@ class OpportunityRepository extends EntityRepository
 
         $this->setClosedPeriod($qb, $start, $end);
 
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**

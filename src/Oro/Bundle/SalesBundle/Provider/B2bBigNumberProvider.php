@@ -6,15 +6,16 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 
 class B2bBigNumberProvider
 {
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var AclHelper */
-    protected $aclHelper;
+    /** @var WidgetProviderFilter */
+    protected $widgetProviderFilter;
 
     /** @var BigNumberDateHelper */
     protected $dateHelper;
@@ -24,138 +25,149 @@ class B2bBigNumberProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param BigNumberDateHelper $dateHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         BigNumberDateHelper $dateHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
-        $this->doctrine      = $doctrine;
-        $this->aclHelper     = $aclHelper;
-        $this->dateHelper    = $dateHelper;
-        $this->qbTransformer = $qbTransformer;
+        $this->doctrine             = $doctrine;
+        $this->widgetProviderFilter = $widgetProviderFilter;
+        $this->dateHelper           = $dateHelper;
+        $this->qbTransformer        = $qbTransformer;
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getNewLeadsCount($dateRange, $owners = [])
+    public function getNewLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Lead')
-            ->getNewLeadsCount($this->aclHelper, $start, $end, $owners);
+            ->getNewLeadsCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getLeadsCount($dateRange, $owners = [])
+    public function getLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Lead')
-            ->getLeadsCount($this->aclHelper, $start, $end, $owners);
+            ->getLeadsCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getOpenLeadsCount($dateRange, $owners = [])
+    public function getOpenLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
     {
         return $this->doctrine
             ->getRepository('OroSalesBundle:Lead')
-            ->getOpenLeadsCount($this->aclHelper, $owners);
+            ->getOpenLeadsCount($this->widgetProviderFilter, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getNewOpportunitiesCount($dateRange, $owners = [])
+    public function getNewOpportunitiesCount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getNewOpportunitiesCount($this->aclHelper, $start, $end, $owners);
+            ->getNewOpportunitiesCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getOpportunitiesCount(array $dateRange, $owners = [])
+    public function getOpportunitiesCount(array $dateRange, WidgetOptionBag $widgetOptions)
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getOpportunitiesCount($this->aclHelper, $start, $end, $owners);
+            ->getOpportunitiesCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return double
      */
-    public function getNewOpportunitiesAmount($dateRange, $owners = [])
+    public function getNewOpportunitiesAmount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getNewOpportunitiesAmount($this->aclHelper, $this->qbTransformer, $start, $end, $owners);
+            ->getNewOpportunitiesAmount(
+                $this->widgetProviderFilter,
+                $this->qbTransformer,
+                $start,
+                $end,
+                $widgetOptions
+            );
     }
 
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getWonOpportunitiesToDateCount($dateRange, $owners = [])
+    public function getWonOpportunitiesToDateCount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getWonOpportunitiesToDateCount($this->aclHelper, $start, $end, $owners);
+            ->getWonOpportunitiesToDateCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
     }
 
     /**
      * @param array $dateRange
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return double
      */
-    public function getWonOpportunitiesToDateAmount($dateRange, $owners = [])
+    public function getWonOpportunitiesToDateAmount($dateRange, WidgetOptionBag $widgetOptions)
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
         return $this->doctrine
             ->getRepository('OroSalesBundle:Opportunity')
-            ->getWonOpportunitiesToDateAmount($this->aclHelper, $this->qbTransformer, $start, $end, $owners);
+            ->getWonOpportunitiesToDateAmount(
+                $this->widgetProviderFilter,
+                $this->qbTransformer,$start,
+                $end,
+                $widgetOptions
+            );
     }
 }

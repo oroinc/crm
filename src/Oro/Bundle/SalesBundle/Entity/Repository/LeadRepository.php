@@ -5,6 +5,8 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -136,64 +138,68 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this
-            ->createLeadsCountQb($start, $end, $owners)
-            ->innerJoin('l.opportunities', 'o');
+    public function getLeadsCount(
+        WidgetProviderFilter $widgetProviderFilter,
+        \DateTime $start = null,
+        \DateTime $end = null,
+        WidgetOptionBag $widgetOptions
+    ) {
+        $qb = $this->createLeadsCountQb($start, $end)->innerJoin('l.opportunities', 'o');
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this->createLeadsCountQb($start, $end, $owners);
+    public function getNewLeadsCount(
+        WidgetProviderFilter $widgetProviderFilter,
+        \DateTime $start = null,
+        \DateTime $end = null,
+        WidgetOptionBag $widgetOptions
+    ) {
+        $qb = $this->createLeadsCountQb($start, $end);
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
-     * @param AclHelper $aclHelper
-     * @param int[] $owners
+     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getOpenLeadsCount(AclHelper $aclHelper, $owners = [])
+    public function getOpenLeadsCount(WidgetProviderFilter $widgetProviderFilter, WidgetOptionBag $widgetOptions)
     {
-        $qb = $this->createLeadsCountQb(null, null, $owners);
+        $qb = $this->createLeadsCountQb(null, null);
         $qb->andWhere(
             $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
         );
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
      *
      * @return QueryBuilder
      */
     protected function createLeadsCountQb(
         \DateTime $start = null,
-        \DateTime $end = null,
-        $owners = []
+        \DateTime $end = null
     ) {
         $qb = $this
             ->createQueryBuilder('l')
@@ -208,10 +214,6 @@ class LeadRepository extends EntityRepository
             $qb
                 ->andWhere('l.createdAt <= :end')
                 ->setParameter('end', $end);
-        }
-
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'l.owner', $owners);
         }
 
         return $qb;

@@ -202,7 +202,7 @@ services:
         class: %oro_sales.provider.b2b_statistics.class%
         arguments:
             - '@doctrine'
-            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.widget_provider_filter'
             - '@oro_dashboard.provider.big_number.date_helper'
             - '@oro_currency.query.currency_transformer'
         tags:
