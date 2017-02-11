@@ -1,5 +1,3 @@
-@skip-bamboo
-@skip
 Feature: Tie Opportunity probability to its status
   In order to improve sales forecasting
   As a Sales rep
@@ -30,6 +28,7 @@ Feature: Tie Opportunity probability to its status
     Given I fill form with:
       | Opportunity Name | Build new Death Star |
       | Status           | Needs Analysis       |
+      | Account          | New Account          |
     When I save and close form
     Then should see Opportunity with:
       | Opportunity Name | Build new Death Star |
