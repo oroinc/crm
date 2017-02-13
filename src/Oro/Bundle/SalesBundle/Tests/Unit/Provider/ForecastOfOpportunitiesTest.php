@@ -10,7 +10,6 @@ use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 use Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
 
@@ -33,9 +32,6 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
     /** @var DateHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $dateHelper;
-
-    /** @var OwnerHelper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $ownerHelper;
 
     /** @var FilterDateRangeConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $filterDateRangeConverter;
@@ -70,18 +66,10 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->ownerHelper = $this->getMockBuilder('Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->forecastProvider = $this
             ->getMockBuilder('Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->ownerHelper->expects($this->any())
-            ->method('getOwnerIds')
-            ->willReturn([]);
 
         $this->filterDateRangeConverter = $this
             ->getMockBuilder('Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter')
@@ -93,7 +81,6 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->dateTimeFormatter,
             $this->translator,
             $this->dateHelper,
-            $this->ownerHelper,
             $this->forecastProvider,
             $this->filterDateRangeConverter
         );
@@ -106,7 +93,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->dateTimeFormatter,
             $this->translator,
             $this->dateHelper,
-            $this->ownerHelper,
+            $this->widgetProviderFilter,
             $this->provider
         );
     }
@@ -120,7 +107,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
         $this->forecastProvider->expects($this->exactly(3))
             ->method('getForecastData')
-            ->with([], null, null, null, [])
+            ->with($widgetOptions, null, null, null, [])
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 
         $result = $this->provider
@@ -184,7 +171,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $this->forecastProvider->expects($this->exactly(6))
             ->method('getForecastData')
             ->with(
-                [],
+                $widgetOptions,
                 $this->logicalOr($start, $prevStart),
                 $this->logicalOr($end, $prevEnd),
                 $this->logicalOr(null, $prevMoment)
