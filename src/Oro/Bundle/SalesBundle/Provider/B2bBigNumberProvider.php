@@ -165,7 +165,8 @@ class B2bBigNumberProvider
             ->getRepository('OroSalesBundle:Opportunity')
             ->getWonOpportunitiesToDateAmount(
                 $this->widgetProviderFilter,
-                $this->qbTransformer,$start,
+                $this->qbTransformer,
+                $start,
                 $end,
                 $widgetOptions
             );

@@ -79,16 +79,16 @@ class IndeterminateForecastProvider
         $cacheKey = $this->getCacheKey($widgetOptions);
 
         if (!isset($this->data[$cacheKey])) {
-        $qb = $this->getForcastQueryBuilder($widgetOptions->get('queryFilter', []));
+            $qb = $this->getForcastQueryBuilder($widgetOptions->get('queryFilter', []));
 
-        $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult()
-            ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
-
-        $this->data[$cacheKey] = [
-            'totalIndeterminate'    => $result['budgetAmount'],
-            'weightedIndeterminate' => $result['weightedForecast'],
-        ];
-    }
+            $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult()
+                ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
+    
+            $this->data[$cacheKey] = [
+                'totalIndeterminate'    => $result['budgetAmount'],
+                'weightedIndeterminate' => $result['weightedForecast'],
+            ];
+        }
 
         return $this->data[$cacheKey];
     }
