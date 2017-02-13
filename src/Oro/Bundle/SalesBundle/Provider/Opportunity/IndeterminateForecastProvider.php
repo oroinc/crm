@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Doctrine\ORM\QueryBuilder;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class IndeterminateForecastProvider
@@ -18,11 +18,8 @@ class IndeterminateForecastProvider
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var AclHelper */
-    protected $aclHelper;
-
-    /** @var OwnerHelper */
-    protected $ownerHelper;
+    /** @var WidgetProviderFilter */
+    protected $widgetProviderFilter;
 
     /** @var FilterProcessor */
     protected $filterProcessor;
@@ -38,23 +35,20 @@ class IndeterminateForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param AclHelper $aclHelper
-     * @param OwnerHelper $ownerHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param FilterProcessor $filterProcessor
      * @param NumberFormatter $numberFormatter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        AclHelper $aclHelper,
-        OwnerHelper $ownerHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         FilterProcessor $filterProcessor,
         NumberFormatter $numberFormatter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->doctrine = $doctrine;
-        $this->aclHelper = $aclHelper;
-        $this->ownerHelper = $ownerHelper;
+        $this->widgetProviderFilter = $widgetProviderFilter;
         $this->filterProcessor = $filterProcessor;
         $this->numberFormatter = $numberFormatter;
         $this->qbTransformer = $qbTransformer;
@@ -68,10 +62,7 @@ class IndeterminateForecastProvider
      */
     public function getForecastOfOpportunitiesValues(WidgetOptionBag $widgetOptions, $dataKey)
     {
-        $data = $this->getIndeterminateData(
-            $this->ownerHelper->getOwnerIds($widgetOptions),
-            $widgetOptions->get('queryFilter', [])
-        );
+        $data = $this->getIndeterminateData($widgetOptions);
 
         return [
             'value' => $this->numberFormatter->formatCurrency($data[$dataKey]),
@@ -79,43 +70,25 @@ class IndeterminateForecastProvider
     }
 
     /**
-     * @param array
-     * @param array
+     * @param WidgetOptionBag $widgetOptions
      *
-     * @return ['totalIndeterminate' => <double>, 'weightedIndeterminate' => <double>]
+     * @return mixed ['totalIndeterminate' => <double>, 'weightedIndeterminate' => <double>]
      */
-    public function getIndeterminateData(array $ownerIds, array $queryFilter = null)
+    public function getIndeterminateData(WidgetOptionBag $widgetOptions)
     {
-        $cacheKey = md5(serialize(func_get_args()));
+        $cacheKey = $this->getCacheKey($widgetOptions);
+
         if (!isset($this->data[$cacheKey])) {
-            $filters = isset($queryFilter['definition']['filters'])
-                ? $queryFilter['definition']['filters']
-                : [];
+        $qb = $this->getForcastQueryBuilder($widgetOptions->get('queryFilter', []));
 
-            $alias = 'o';
-            $qb = $this->filterProcessor
-                ->process(
-                    $this->getOpportunityRepository()
-                        ->getForecastQB($this->qbTransformer, $alias)
-                        ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
-                    'Oro\Bundle\SalesBundle\Entity\Opportunity',
-                    $filters,
-                    $alias
-                );
+        $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult()
+            ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
 
-            if (!empty($ownerIds)) {
-                $qb->join('o.owner', 'owner');
-                QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
-            }
-
-            $result = $this->aclHelper->apply($qb)->getOneOrNullResult()
-                ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
-
-            $this->data[$cacheKey] = [
-                'totalIndeterminate'    => $result['budgetAmount'],
-                'weightedIndeterminate' => $result['weightedForecast'],
-            ];
-        }
+        $this->data[$cacheKey] = [
+            'totalIndeterminate'    => $result['budgetAmount'],
+            'weightedIndeterminate' => $result['weightedForecast'],
+        ];
+    }
 
         return $this->data[$cacheKey];
     }
@@ -126,5 +99,40 @@ class IndeterminateForecastProvider
     protected function getOpportunityRepository()
     {
         return $this->doctrine->getRepository('OroSalesBundle:Opportunity');
+    }
+
+    /**
+     * @param array|null $queryFilter
+     *
+     * @return QueryBuilder
+     */
+    protected function getForcastQueryBuilder($queryFilter = null)
+    {
+        $filters = isset($queryFilter['definition']['filters'])
+            ? $queryFilter['definition']['filters']
+            : [];
+
+        $alias = 'o';
+        return $this->filterProcessor
+            ->process(
+                $this->getOpportunityRepository()
+                    ->getForecastQB($this->qbTransformer, $alias)
+                    ->andWhere(sprintf('%s.closeDate IS NULL', $alias)),
+                'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                $filters,
+                $alias
+            );
+    }
+
+    /**
+     * @param WidgetOptionBag $widgetOptions
+     *
+     * @return mixed
+     */
+    protected function getCacheKey(WidgetOptionBag $widgetOptions)
+    {
+        $ownerIds = $this->widgetProviderFilter->getOwnerIds($widgetOptions);
+
+        return md5(serialize([$ownerIds, $widgetOptions->get('queryFilter', [])]));
     }
 }

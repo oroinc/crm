@@ -11,9 +11,9 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class ForecastProvider
@@ -21,8 +21,8 @@ class ForecastProvider
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var AclHelper */
-    protected $aclHelper;
+    /** @var WidgetProviderFilter */
+    protected $widgetProviderFilter;
 
     /** @var EnumValueProvider */
     protected $enumProvider;
@@ -50,27 +50,27 @@ class ForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilter $widgetProviderFilter
      * @param EnumValueProvider $enumProvider
      * @param FilterProcessor $filterProcessor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        AclHelper $aclHelper,
+        WidgetProviderFilter $widgetProviderFilter,
         EnumValueProvider $enumProvider,
         FilterProcessor $filterProcessor,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
-        $this->doctrine        = $doctrine;
-        $this->aclHelper       = $aclHelper;
-        $this->enumProvider    = $enumProvider;
-        $this->filterProcessor = $filterProcessor;
-        $this->qbTransformer   = $qbTransformer;
+        $this->doctrine             = $doctrine;
+        $this->widgetProviderFilter = $widgetProviderFilter;
+        $this->enumProvider         = $enumProvider;
+        $this->filterProcessor      = $filterProcessor;
+        $this->qbTransformer        = $qbTransformer;
     }
 
     /**
-     * @param array          $ownerIds
+     * @param WidgetOptionBag $widgetOptions
      * @param \DateTime|null $start
      * @param \DateTime|null $end
      * @param \DateTime|null $moment
@@ -79,19 +79,20 @@ class ForecastProvider
      * @return array ['inProgressCount' => <int>, 'budgetAmount' => <double>, 'weightedForecast' => <double>]
      */
     public function getForecastData(
-        array $ownerIds,
+        WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
         \DateTime $end = null,
         \DateTime $moment = null,
         array $queryFilter = null
     ) {
+        $ownerIds = $this->widgetProviderFilter->getOwnerIds($widgetOptions);
         $filters = isset($queryFilter['definition']['filters'])
             ? $queryFilter['definition']['filters']
             : [];
         $key     = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
         if (!isset($this->data[$key])) {
             if (!$moment) {
-                $this->data[$key] = $this->getCurrentData($ownerIds, $start, $end, $filters);
+                $this->data[$key] = $this->getCurrentData($widgetOptions, $start, $end, $filters);
             } else {
                 $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end, $filters);
             }
@@ -101,7 +102,7 @@ class ForecastProvider
     }
 
     /**
-     * @param array     $ownerIds
+     * @param WidgetOptionBag $widgetOptions
      * @param \DateTime $start
      * @param \DateTime $end
      * @param array     $filters
@@ -109,7 +110,7 @@ class ForecastProvider
      * @return array
      */
     protected function getCurrentData(
-        array $ownerIds,
+        WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
         \DateTime $end = null,
         array $filters = []
@@ -122,13 +123,9 @@ class ForecastProvider
         $qb = $this->filterProcessor
             ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
-        if (!empty($ownerIds)) {
-            $qb->join('o.owner', 'owner');
-            QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
-        }
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
 
-        return $this->aclHelper->apply($qb)->getOneOrNullResult();
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult();
     }
 
     /**
@@ -152,64 +149,11 @@ class ForecastProvider
         $start  = $start ? clone $start : null;
         $end    = $end ? clone $end : null;
 
-        $qb = $this->getAuditRepository()->createQueryBuilder('a');
-        $qb
-            ->select(<<<SELECT
-(SELECT afps.newFloat FROM OroDataAuditBundle:AuditField afps WHERE afps.id = MAX(afp.id)) AS probability,
-(SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
-SELECT
-            )
-            ->leftJoin('a.fields', 'afca', Join::WITH, 'afca.field = :closedAtField')
-            ->leftJoin('a.fields', 'afc', Join::WITH, 'afc.field = :closeDateField')
-            ->leftJoin('a.fields', 'afp', Join::WITH, 'afp.field = :probabilityField')
-            ->leftJoin('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
-            ->where('a.objectClass = :objectClass AND a.loggedAt < :moment')
-            ->groupBy('a.objectId')
-            ->having(<<<HAVING
-NOT EXISTS(
-    SELECT
-        afcah.newDatetime
-    FROM OroDataAuditBundle:AuditField afcah
-    WHERE
-        afcah.id = MAX(afca.id)
-        AND afcah.newDatetime IS NOT NULL
-)
-AND EXISTS(
-    SELECT
-        afph.newFloat
-    FROM OroDataAuditBundle:AuditField afph
-    WHERE
-        afph.id = MAX(afp.id)
-)
-HAVING
-            )
-            ->setParameters([
-                'objectClass'           => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
-                'closedAtField'         => 'closedAt',
-                'closeDateField'        => 'closeDate',
-                'probabilityField'      => 'probability',
-                'budgetAmountField'     => 'budgetAmount',
-                'moment'                => $moment,
-            ]);
-
+        $qb = $this->getDataAuditQueryBuilder($moment);
         $this->applyHistoryDateFiltering($qb, $start, $end);
 
         if ($ownerIds) {
-            $qb
-                ->join('a.fields', 'afo', Join::WITH, 'afo.field = :ownerField')
-                ->andHaving(<<<HAVING
-EXISTS(
-    SELECT
-        afoh.newText
-    FROM OroDataAuditBundle:AuditField afoh
-    WHERE
-        afoh.id = MAX(afo.id)
-        AND afoh.newText IN (SELECT u.username FROM OroUserBundle:User u WHERE u.id IN (:ownerIds))
-)
-HAVING
-                )
-                ->setParameter('ownerField', 'owner')
-                ->setParameter('ownerIds', $ownerIds);
+            $this->addOwnersToDataAuditQB($qb, $ownerIds);
         }
         // need to join opportunity to properly apply acl permissions
         $qb->join('OroSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
@@ -218,19 +162,9 @@ HAVING
                 ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
-        $result = $this->aclHelper->apply($qb)->getArrayResult();
+        $result = $this->widgetProviderFilter->applyAcl($qb)->getArrayResult();
 
-        return array_reduce(
-            $result,
-            function ($result, $row) {
-                $result['inProgressCount']++;
-                $result['budgetAmount'] += $row['budgetAmount'];
-                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'];
-
-                return $result;
-            },
-            ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0]
-        );
+        return $this->getAggregatedResult($result);
     }
 
     /**
@@ -355,6 +289,95 @@ HAVING
                     'filters'  => $filters
                 ]
             )
+        );
+    }
+
+    /**
+     * @param \DateTime $moment
+     *
+     * @return QueryBuilder
+     */
+    protected function getDataAuditQueryBuilder(\DateTime $moment)
+    {
+        $qb = $this->getAuditRepository()->createQueryBuilder('a');
+        $qb
+            ->select(<<<SELECT
+(SELECT afps.newFloat FROM OroDataAuditBundle:AuditField afps WHERE afps.id = MAX(afp.id)) AS probability,
+(SELECT afpb.newFloat FROM OroDataAuditBundle:AuditField afpb WHERE afpb.id = MAX(afb.id)) AS budgetAmount
+SELECT
+            )
+            ->leftJoin('a.fields', 'afca', Join::WITH, 'afca.field = :closedAtField')
+            ->leftJoin('a.fields', 'afc', Join::WITH, 'afc.field = :closeDateField')
+            ->leftJoin('a.fields', 'afp', Join::WITH, 'afp.field = :probabilityField')
+            ->leftJoin('a.fields', 'afb', Join::WITH, 'afb.field = :budgetAmountField')
+            ->where('a.objectClass = :objectClass AND a.loggedAt < :moment')
+            ->groupBy('a.objectId')
+            ->having(<<<HAVING
+NOT EXISTS(
+    SELECT
+        afcah.newDatetime
+    FROM OroDataAuditBundle:AuditField afcah
+    WHERE
+        afcah.id = MAX(afca.id)
+        AND afcah.newDatetime IS NOT NULL
+)
+AND EXISTS(
+    SELECT
+        afph.newFloat
+    FROM OroDataAuditBundle:AuditField afph
+    WHERE
+        afph.id = MAX(afp.id)
+)
+HAVING
+            )
+            ->setParameters([
+                'objectClass'           => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
+                'closedAtField'         => 'closedAt',
+                'closeDateField'        => 'closeDate',
+                'probabilityField'      => 'probability',
+                'budgetAmountField'     => 'budgetAmount',
+                'moment'                => $moment,
+            ]);
+
+        return $qb;
+    }
+
+    protected function addOwnersToDataAuditQB(QueryBuilder $qb, $ownerIds)
+    {
+        $qb
+            ->join('a.fields', 'afo', Join::WITH, 'afo.field = :ownerField')
+            ->andHaving(<<<HAVING
+EXISTS(
+    SELECT
+        afoh.newText
+    FROM OroDataAuditBundle:AuditField afoh
+    WHERE
+        afoh.id = MAX(afo.id)
+        AND afoh.newText IN (SELECT u.username FROM OroUserBundle:User u WHERE u.id IN (:ownerIds))
+)
+HAVING
+            )
+            ->setParameter('ownerField', 'owner')
+            ->setParameter('ownerIds', $ownerIds);
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return mixed
+     */
+    protected function getAggregatedResult(array $result)
+    {
+        return array_reduce(
+            $result,
+            function ($result, $row) {
+                $result['inProgressCount']++;
+                $result['budgetAmount'] += $row['budgetAmount'];
+                $result['weightedForecast'] += $row['budgetAmount'] * $row['probability'];
+
+                return $result;
+            },
+            ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0]
         );
     }
 }

@@ -189,7 +189,6 @@ services:
             - '@oro_locale.formatter.date_time'
             - '@translator'
             - '@oro_dashboard.datetime.helper'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_sales.provider.opportunity.forecast'
             - '@oro_dashboard.widget_config_value.date_range.converter'
 
@@ -391,7 +390,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider
         arguments:
             - '@doctrine'
-            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.widget_provider_filter'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_currency.query.currency_transformer'
@@ -408,8 +407,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
         arguments:
             - '@doctrine'
-            - '@oro_security.acl_helper'
-            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.filter.widget_provider_filter'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
