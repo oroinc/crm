@@ -10,10 +10,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OrderControllerTest extends WebTestCase
 {
     public function setUp()

@@ -10,9 +10,6 @@ use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCatego
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-/**
- * @dbIsolation
- */
 class RFMBuilderTest extends WebTestCase
 {
     /**

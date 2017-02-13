@@ -8,9 +8,6 @@ use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
-/**
- * @dbIsolation
- */
 class RFMMetricStateManagerTest extends WebTestCase
 {
     protected function setUp()

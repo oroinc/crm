@@ -5,10 +5,6 @@ namespace Oro\Bundle\AccountBundle\Tests\Functional\API;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AccountBundle\Entity\Account;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestAccountTest extends WebTestCase
 {
     protected function setUp()

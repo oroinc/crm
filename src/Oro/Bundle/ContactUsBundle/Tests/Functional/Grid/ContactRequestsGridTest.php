@@ -3,12 +3,7 @@
 namespace Oro\Bundle\ContactUsBundle\Tests\Functional\Grid;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-use Oro\Bundle\ContactUsBundle\Tests\Functional\Fixtures\LoadContactUsBundleFixtures;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ContactRequestsGridTest extends AbstractDatagridTestCase
 {
     protected function setUp()

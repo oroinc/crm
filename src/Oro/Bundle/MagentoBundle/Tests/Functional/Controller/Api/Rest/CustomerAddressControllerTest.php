@@ -10,10 +10,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CustomerAddressControllerTest extends WebTestCase
 {
     const SOME_CUSTOMER_ID = 24234;

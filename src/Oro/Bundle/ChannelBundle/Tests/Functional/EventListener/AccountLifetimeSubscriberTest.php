@@ -12,9 +12,6 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @dbIsolation
- */
 class AccountLifetimeSubscriberTest extends WebTestCase
 {
     protected function setUp()

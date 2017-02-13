@@ -10,12 +10,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 
-/**
- * Class DashboardControllerTest
- * @package Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Dashboard
- *
- * @dbIsolation
- */
 class DashboardControllerTest extends WebTestCase
 {
     /** @var array */

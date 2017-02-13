@@ -9,9 +9,6 @@ use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider;
 use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider;
 use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider;
 
-/**
- * @dbIsolation
- */
 class CustomerRFMProviderTest extends WebTestCase
 {
     protected function setUp()

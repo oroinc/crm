@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\TrackingBundle\Entity\TrackingData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -204,6 +205,22 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
             ->setLoggedAt($eventDate)
         ;
 
+        $data = [
+            '_id' => $visit->getVisitorUid(),
+            'title' => $event->getName(),
+            'website' => $visit->getTrackingWebsite()->getName(),
+            'url' => $visit->getTrackingWebsite()->getUrl(),
+            'urlref' => 'http://magento.domain',
+            'userIdentifier' => $visit->getUserIdentifier(),
+            'loggedAt' => $eventDate->format(\DateTime::ISO8601),
+        ];
+
+        $trackingData = new TrackingData();
+        $trackingData->setEvent($trackingEvent);
+        $trackingData->setData(json_encode($data));
+        $trackingEvent->setEventData($trackingData);
+
+        $om->persist($trackingData);
         $om->persist($trackingEvent);
 
         $visitEvent = new TrackingVisitEvent();
@@ -214,6 +231,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
             ->addAssociationTarget($visit->getIdentifierTarget())
         ;
 
+        $trackingEvent->setParsed(true);
         $om->persist($visitEvent);
     }
 }

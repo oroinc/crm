@@ -13,7 +13,6 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @outputBuffering false
  * @dbIsolationPerTest
  */
 class AggregateLifetimeAverageProcessorTest extends WebTestCase

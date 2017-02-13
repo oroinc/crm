@@ -7,6 +7,33 @@ elements:
     selector: 'form[name="opportunity"]'
     class: Oro\Bundle\SalesBundle\Tests\Behat\Element\OpportunityProbabilitiesConfigForm
 
+  SalesB2bCustomerForm:
+    selector: 'form[name="oro_sales_b2bcustomer_form"]'
+    class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+
+  Develop Opportunity Form:
+    selector: 'form[name="oro_workflow_transition"]'
+    class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+    options:
+      mapping:
+        Budget Amount: 'oro_workflow_transition[budget_amount][value]'
+        Customer need: 'oro_workflow_transition[customer_need]'
+        Proposed solution: 'oro_workflow_transition[proposed_solution]'
+
+  Close As Won Opportunity Form:
+    selector: 'form[name="oro_workflow_transition"]'
+    class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+    options:
+      mapping:
+        Close Revenue: 'oro_workflow_transition[close_revenue][value]'
+
+  Close As Lost Opportunity Form:
+    selector: 'form[name="oro_workflow_transition"]'
+    class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+    options:
+      mapping:
+        Close reason: 'oro_workflow_transition[close_reason_name]'
+
 pages:
   Opportunity Index:
     route: 'oro_sales_opportunity_index'
@@ -15,3 +42,23 @@ pages:
   Opportunity Create:
     route: 'oro_sales_opportunity_create'
     class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityCreate
+
+  Opportunity View:
+    route: 'oro_sales_opportunity_view'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\OpportunityView
+
+  Lead Index:
+    route: 'oro_sales_lead_index'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex
+
+  Lead Create:
+    route: 'oro_sales_lead_create'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadCreate
+
+  Lead View:
+    route: 'oro_sales_lead_view'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadView
+
+  Lead Index:
+    route: 'oro_sales_lead_index'
+    class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex

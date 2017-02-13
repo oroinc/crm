@@ -66,7 +66,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendLead;
  *              "context"="sales-lead-for-context-grid"
  *          },
  *          "tag"={
- *              "enabled"=true
+ *              "enabled"=true,
+ *              "enableDefaultRendering"=false
  *          }
  *      }
  * )

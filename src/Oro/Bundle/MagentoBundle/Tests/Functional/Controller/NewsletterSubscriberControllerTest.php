@@ -7,7 +7,7 @@ use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class NewsletterSubscriberControllerTest extends AbstractController
 {
@@ -36,12 +36,9 @@ class NewsletterSubscriberControllerTest extends AbstractController
 
     protected function setUp()
     {
-        $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
+        $this->initClient([], $this->generateBasicAuthHeader());
 
-        $this->loadFixtures(
-            ['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData'],
-            true
-        );
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
 
         $this->subscriber = $this->getReference('newsletter_subscriber');
 
@@ -59,17 +56,10 @@ class NewsletterSubscriberControllerTest extends AbstractController
             ->willReturn($jobResult);
 
         $this->getContainer()->set('oro_importexport.job_executor', $jobExecutor);
-
-        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
     }
 
     protected function tearDown()
     {
-        // clear DB from separate connection, close to avoid connection limit and memory leak
-        $manager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $manager->rollback();
-        $manager->getConnection()->close();
-
         $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
         unset($this->transport, $this->baseJobExecutor);
 

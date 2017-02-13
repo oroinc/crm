@@ -7,10 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestContactEmailApiTest extends WebTestCase
 {
     protected function setUp()

@@ -4,10 +4,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestCustomerSearchTest extends WebTestCase
 {
     /** @var string */
