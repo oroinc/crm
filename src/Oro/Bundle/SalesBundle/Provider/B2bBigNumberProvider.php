@@ -51,9 +51,9 @@ class B2bBigNumberProvider
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Lead')
-            ->getNewLeadsCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
+        $qb = $this->doctrine->getRepository('OroSalesBundle:Lead')->getNewLeadsCountQB($start, $end);
+
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
@@ -66,9 +66,9 @@ class B2bBigNumberProvider
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Lead', 'createdAt');
 
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Lead')
-            ->getLeadsCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
+        $qb =  $this->doctrine->getRepository('OroSalesBundle:Lead')->getLeadsCountQB($start, $end);
+
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
@@ -79,9 +79,9 @@ class B2bBigNumberProvider
      */
     public function getOpenLeadsCount($dateRange, WidgetOptionBag $widgetOptions)
     {
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Lead')
-            ->getOpenLeadsCount($this->widgetProviderFilter, $widgetOptions);
+        $qb = $this->doctrine->getRepository('OroSalesBundle:Lead')->getOpenLeadsCountQB();
+
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
@@ -94,9 +94,9 @@ class B2bBigNumberProvider
     {
         list ($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Opportunity')
-            ->getNewOpportunitiesCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
+        $qb = $this->doctrine->getRepository('OroSalesBundle:Opportunity')->getNewOpportunitiesCountQB($start, $end);
+
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
@@ -109,9 +109,9 @@ class B2bBigNumberProvider
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
-        return $this->doctrine
-            ->getRepository('OroSalesBundle:Opportunity')
-            ->getOpportunitiesCount($this->widgetProviderFilter, $start, $end, $widgetOptions);
+        return $this->doctrine->getRepository('OroSalesBundle:Opportunity')->getOpportunitiesCountQB($start, $end);
+
+        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**

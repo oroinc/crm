@@ -354,41 +354,29 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getOpportunitiesCount(
-        WidgetProviderFilter $widgetProviderFilter,
+    public function getOpportunitiesCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        \DateTime $end = null
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end);
-
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        return $this->createOpportunitiesCountQb($start, $end);
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getNewOpportunitiesCount(
-        WidgetProviderFilter $widgetProviderFilter,
+    public function getNewOpportunitiesCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        \DateTime $end = null
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end);
-
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        return $this->createOpportunitiesCountQb($start, $end);
     }
 
     /**

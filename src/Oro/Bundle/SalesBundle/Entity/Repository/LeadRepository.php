@@ -5,8 +5,6 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -138,57 +136,42 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getLeadsCount(
-        WidgetProviderFilter $widgetProviderFilter,
+    public function getLeadsCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        \DateTime $end = null
     ) {
-        $qb = $this->createLeadsCountQb($start, $end)->innerJoin('l.opportunities', 'o');
-
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        return $this->createLeadsCountQb($start, $end)->innerJoin('l.opportunities', 'o');
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param WidgetOptionBag $widgetOptions
      *
      * @return int
      */
-    public function getNewLeadsCount(
-        WidgetProviderFilter $widgetProviderFilter,
+    public function getNewLeadsCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        \DateTime $end = null
     ) {
-        $qb = $this->createLeadsCountQb($start, $end);
-
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        return $this->createLeadsCountQb($start, $end);
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
-     * @param WidgetOptionBag $widgetOptions
-     *
      * @return int
      */
-    public function getOpenLeadsCount(WidgetProviderFilter $widgetProviderFilter, WidgetOptionBag $widgetOptions)
+    public function getOpenLeadsCountQB()
     {
         $qb = $this->createLeadsCountQb(null, null);
         $qb->andWhere(
             $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
         );
 
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        return $qb;
     }
 
     /**
