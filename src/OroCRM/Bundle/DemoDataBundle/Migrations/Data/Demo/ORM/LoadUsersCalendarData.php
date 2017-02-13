@@ -188,7 +188,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         // first user is admin, often
         /** @var \Oro\Bundle\UserBundle\Entity\User $admin */
-        $admin = $this->user->find(1);
+        $admin = $this->em->getRepository('OroUserBundle:User')
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->orderBy('u.id')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
         /** @var Calendar $calendarAdmin */
         $calendarAdmin = $this->calendar->findDefaultCalendar($admin->getId(), $admin->getOrganization()->getId());
 

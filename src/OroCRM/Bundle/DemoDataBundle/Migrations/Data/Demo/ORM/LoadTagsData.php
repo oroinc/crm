@@ -100,7 +100,13 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->organization = $this->getReference('default_organization');
 
         /** @var User $adminUser */
-        $adminUser    = $this->em->getRepository('OroUserBundle:User')->find(1);
+        $adminUser = $this->em->getRepository('OroUserBundle:User')
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->orderBy('u.id')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
         $token        = new UsernamePasswordOrganizationToken(
             $adminUser,
             $adminUser->getUsername(),
