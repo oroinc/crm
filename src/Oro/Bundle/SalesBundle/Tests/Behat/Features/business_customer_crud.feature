@@ -93,3 +93,14 @@ Feature: Managing business customer
       | Lifetime sales value  | $22.00                 |
       | Email                 | m3@ex.com              |
       | Phone number          | 33-33-333              |
+
+  Scenario: Import Business Customer
+    Given I go to Customers/ Business Customers
+    And I download "B2bCustomer" Data Template file
+    And I fill template with data:
+      | Channel Name      | Customer name | Lifetime sales value | Phones 1 Phone | Emails 1 Email    |
+      | Business Customers| Jerry Coleman | 55                   | 55-55-555      | imported@test.com |
+    When I import file
+    Then I should see "Import started successfully. You will receive email notification upon completion." flash message
+    And I reload the page
+    Then there are 2 records in grid
