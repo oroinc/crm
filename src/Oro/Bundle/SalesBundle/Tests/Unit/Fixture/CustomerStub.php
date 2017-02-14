@@ -10,6 +10,16 @@ class CustomerStub extends Customer
     protected $customerTarget;
 
     /**
+     * @inheritDoc
+     */
+    public function __construct($id = null)
+    {
+        parent::__construct();
+
+        $this->id = $id;
+    }
+
+    /**
      * @return object|null
      */
     public function getCustomerTarget()
