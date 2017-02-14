@@ -13,7 +13,7 @@
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
-                    $frame.load(function () {
+                    $frame.on('load', function() {
                         var offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
                         $frame.addClass('loaded').parent().css({'top': offset});
                         widgetManager.getWidgetInstance(
