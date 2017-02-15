@@ -15,7 +15,7 @@ Feature: Opportunity workflow
     And save and close form
     Then I should see "Opportunity saved" flash message
 
-  Scenario: Enable opportuniy workflow
+  Scenario: Enable opportunity workflow
     Given I go to Sales/ Opportunities
     And I click on Summer sales in grid
     And I should not see "Start Opportunity Management Flow"
@@ -27,7 +27,7 @@ Feature: Opportunity workflow
     And I click on Summer sales in grid
     Then I should see "Start Opportunity Management Flow"
 
-  Scenario: Defelop opportunity
+  Scenario: Develop opportunity
     Given I click "Start Opportunity Management Flow"
     And I click "Submit"
     When I click "Develop"
