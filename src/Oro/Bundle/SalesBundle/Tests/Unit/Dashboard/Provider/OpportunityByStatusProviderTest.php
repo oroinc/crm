@@ -12,7 +12,7 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 
 class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +20,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
     /** @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
-    /** @var WidgetProviderFilter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WidgetProviderFilterManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $widgetProviderFilter;
 
     /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
@@ -50,7 +50,8 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->widgetProviderFilter = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter')
+        $this->widgetProviderFilter = $this
+            ->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
