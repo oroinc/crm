@@ -17,11 +17,12 @@ class CustomerHandlerTest extends UpdateHandlerTest
         parent::setUp();
 
         $this->handler = new CustomerHandler(
-            $this->request,
+            $this->requestStack,
             $this->session,
             $this->router,
             $this->doctrineHelper,
-            $this->eventDispatcher
+            $this->eventDispatcher,
+            $this->formTemplateDataProviderRegistry
         );
         $this->handler->setStateHandler(new CustomerStateHandler(new StateManager($this->doctrineHelper)));
     }
