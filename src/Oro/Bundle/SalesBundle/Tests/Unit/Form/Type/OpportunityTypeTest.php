@@ -16,7 +16,7 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityType;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
-use Oro\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
+use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -205,11 +205,11 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
      * @param string|null $statusId
      * @param float|null $probability
      *
-     * @return Opportunity
+     * @return OpportunityStub
      */
     protected function getOpportunity($statusId = null, $probability = null)
     {
-        $opportunity = new Opportunity();
+        $opportunity = new OpportunityStub();
 
         if ($statusId) {
             $opportunity->setStatus($this->getOpportunityStatus($statusId));
