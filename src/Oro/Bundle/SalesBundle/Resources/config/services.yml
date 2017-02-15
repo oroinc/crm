@@ -201,7 +201,7 @@ services:
         class: %oro_sales.provider.b2b_statistics.class%
         arguments:
             - '@doctrine'
-            - '@oro_dashboard.filter.widget_provider_filter'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.provider.big_number.date_helper'
             - '@oro_currency.query.currency_transformer'
         tags:
@@ -299,7 +299,7 @@ services:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
         arguments:
             - '@doctrine'
-            - '@oro_dashboard.filter.widget_provider_filter'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_currency.query.currency_transformer'
 
@@ -390,10 +390,11 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider
         arguments:
             - '@doctrine'
-            - '@oro_dashboard.filter.widget_provider_filter'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_currency.query.currency_transformer'
+            - '@oro_user.dashboard.owner_helper'
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
@@ -407,7 +408,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
         arguments:
             - '@doctrine'
-            - '@oro_dashboard.filter.widget_provider_filter'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'

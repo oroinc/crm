@@ -2,26 +2,25 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-
+use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ForecastProvider
 {
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var WidgetProviderFilter */
+    /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
 
     /** @var EnumValueProvider */
@@ -39,6 +38,9 @@ class ForecastProvider
     /** @var CurrencyQueryBuilderTransformerInterface  */
     protected $qbTransformer;
 
+    /** @var OwnerHelper */
+    protected $ownerHelper;
+
     /** @var array */
     protected static $fieldsAuditMap = [
         'status'       => ['old' => 'oldText', 'new' => 'newText'],
@@ -50,23 +52,26 @@ class ForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param EnumValueProvider $enumProvider
      * @param FilterProcessor $filterProcessor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
+     * @param OwnerHelper $ownerHelper
      */
     public function __construct(
         RegistryInterface $doctrine,
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         EnumValueProvider $enumProvider,
         FilterProcessor $filterProcessor,
-        CurrencyQueryBuilderTransformerInterface $qbTransformer
+        CurrencyQueryBuilderTransformerInterface $qbTransformer,
+        OwnerHelper $ownerHelper
     ) {
         $this->doctrine             = $doctrine;
         $this->widgetProviderFilter = $widgetProviderFilter;
         $this->enumProvider         = $enumProvider;
         $this->filterProcessor      = $filterProcessor;
         $this->qbTransformer        = $qbTransformer;
+        $this->ownerHelper          = $ownerHelper;
     }
 
     /**
@@ -85,16 +90,17 @@ class ForecastProvider
         \DateTime $moment = null,
         array $queryFilter = null
     ) {
-        $ownerIds = $this->widgetProviderFilter->getOwnerIds($widgetOptions);
+        $ownerIds = $this->ownerHelper->getOwnerIds($widgetOptions);
         $filters = isset($queryFilter['definition']['filters'])
             ? $queryFilter['definition']['filters']
             : [];
-        $key     = $this->getDataHashKey($ownerIds, $start, $end, $moment, $filters);
+        $key = $this->getDataHashKey($widgetOptions);
+
         if (!isset($this->data[$key])) {
             if (!$moment) {
                 $this->data[$key] = $this->getCurrentData($widgetOptions, $start, $end, $filters);
             } else {
-                $this->data[$key] = $this->getMomentData($ownerIds, $moment, $start, $end, $filters);
+                $this->data[$key] = $this->getMomentData($widgetOptions, $ownerIds, $moment, $start, $end, $filters);
             }
         }
 
@@ -129,15 +135,17 @@ class ForecastProvider
     }
 
     /**
-     * @param array          $ownerIds
-     * @param \DateTime      $moment
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     * @param array          $filters
+     * @param WidgetOptionBag   $widgetOptions
+     * @param array             $ownerIds
+     * @param \DateTime         $moment
+     * @param \DateTime|null    $start
+     * @param \DateTime|null    $end
+     * @param array             $filters
      *
      * @return array
      */
     protected function getMomentData(
+        WidgetOptionBag $widgetOptions,
         array $ownerIds,
         \DateTime $moment,
         \DateTime $start = null,
@@ -149,7 +157,7 @@ class ForecastProvider
         $start  = $start ? clone $start : null;
         $end    = $end ? clone $end : null;
 
-        $qb = $this->getDataAuditQueryBuilder($moment);
+        $qb = $this->getDataAuditQueryBuilder($widgetOptions, $moment);
         $this->applyHistoryDateFiltering($qb, $start, $end);
 
         if ($ownerIds) {
@@ -162,7 +170,7 @@ class ForecastProvider
                 ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
         }
 
-        $result = $this->widgetProviderFilter->applyAcl($qb)->getArrayResult();
+        $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return $this->getAggregatedResult($result);
     }
@@ -264,40 +272,22 @@ class ForecastProvider
     }
 
     /**
-     * @param array          $ownerIds
-     * @param \DateTime|null $start
-     * @param \DateTime|null $end
-     * @param \DateTime|null $moment
-     * @param array          $filters
+     * @param  WidgetOptionBag $widgetOptions
      *
      * @return string
      */
-    protected function getDataHashKey(
-        array $ownerIds,
-        \DateTime $start = null,
-        \DateTime $end = null,
-        \DateTime $moment = null,
-        array $filters = []
-    ) {
-        return md5(
-            serialize(
-                [
-                    'ownerIds' => $ownerIds,
-                    'start'    => $start,
-                    'end'      => $end,
-                    'moment'   => $moment,
-                    'filters'  => $filters
-                ]
-            )
-        );
+    protected function getDataHashKey(WidgetOptionBag $widgetOptions)
+    {
+        return md5(serialize($widgetOptions));
     }
 
     /**
+     * @param WidgetOptionBag $widgetOptions
      * @param \DateTime $moment
      *
      * @return QueryBuilder
      */
-    protected function getDataAuditQueryBuilder(\DateTime $moment)
+    protected function getDataAuditQueryBuilder(WidgetOptionBag $widgetOptions, \DateTime $moment)
     {
         $qb = $this->getAuditRepository()->createQueryBuilder('a');
         $qb

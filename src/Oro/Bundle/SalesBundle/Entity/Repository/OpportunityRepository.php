@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -531,7 +531,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -540,7 +540,7 @@ class OpportunityRepository extends EntityRepository
      * @return double
      */
     public function getNewOpportunitiesAmount(
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
@@ -556,7 +556,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param \DateTime  $start
      * @param \DateTime  $end
      * @param WidgetOptionBag $widgetOptions
@@ -564,7 +564,7 @@ class OpportunityRepository extends EntityRepository
      * @return int
      */
     public function getWonOpportunitiesToDateCount(
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         \DateTime $start = null,
         \DateTime $end = null,
         WidgetOptionBag $widgetOptions
@@ -580,7 +580,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -589,7 +589,7 @@ class OpportunityRepository extends EntityRepository
      * @return double
      */
     public function getWonOpportunitiesToDateAmount(
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,

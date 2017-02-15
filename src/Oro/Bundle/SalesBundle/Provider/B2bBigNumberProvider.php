@@ -6,7 +6,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 
 class B2bBigNumberProvider
@@ -14,7 +14,7 @@ class B2bBigNumberProvider
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var WidgetProviderFilter */
+    /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
 
     /** @var BigNumberDateHelper */
@@ -25,13 +25,13 @@ class B2bBigNumberProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param BigNumberDateHelper $dateHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         BigNumberDateHelper $dateHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {

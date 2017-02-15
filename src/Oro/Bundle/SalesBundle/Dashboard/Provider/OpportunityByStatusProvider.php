@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
@@ -17,7 +17,7 @@ class OpportunityByStatusProvider
     /** @var RegistryInterface */
     protected $registry;
 
-    /** @var WidgetProviderFilter */
+    /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
 
     /** @var DateFilterProcessor */
@@ -28,13 +28,13 @@ class OpportunityByStatusProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param DateFilterProcessor $processor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         DateFilterProcessor $processor,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {

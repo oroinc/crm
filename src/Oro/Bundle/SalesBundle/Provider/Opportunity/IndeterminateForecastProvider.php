@@ -8,7 +8,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilter;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
@@ -18,7 +18,7 @@ class IndeterminateForecastProvider
     /** @var RegistryInterface */
     protected $doctrine;
 
-    /** @var WidgetProviderFilter */
+    /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
 
     /** @var FilterProcessor */
@@ -35,14 +35,14 @@ class IndeterminateForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
-     * @param WidgetProviderFilter $widgetProviderFilter
+     * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param FilterProcessor $filterProcessor
      * @param NumberFormatter $numberFormatter
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
-        WidgetProviderFilter $widgetProviderFilter,
+        WidgetProviderFilterManager $widgetProviderFilter,
         FilterProcessor $filterProcessor,
         NumberFormatter $numberFormatter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
@@ -131,8 +131,6 @@ class IndeterminateForecastProvider
      */
     protected function getCacheKey(WidgetOptionBag $widgetOptions)
     {
-        $ownerIds = $this->widgetProviderFilter->getOwnerIds($widgetOptions);
-
-        return md5(serialize([$ownerIds, $widgetOptions->get('queryFilter', [])]));
+        return md5(serialize($widgetOptions));
     }
 }
