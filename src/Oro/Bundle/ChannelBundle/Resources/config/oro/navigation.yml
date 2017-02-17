@@ -4,9 +4,9 @@ navigation:
             channels_list:
                 label: 'oro.channel.entity_plural_label'
                 route: 'oro_channel_index'
+                position: 55
                 extras:
                     routes: ['oro_channel_*']
-                    position: 55
         tree:
             application_menu:
                 children:
