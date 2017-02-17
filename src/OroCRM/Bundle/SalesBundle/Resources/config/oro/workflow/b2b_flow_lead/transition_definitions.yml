@@ -162,7 +162,7 @@ workflows:
                     - '@create_entity': # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
-                        flush: true
+                        flush: true # flush is required to build redirect URL later
                         data:
                             name:        $opportunity_name
                             contact:     $lead.contact
