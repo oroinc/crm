@@ -107,8 +107,6 @@ workflows:
                 transition_definition: close_lost_definition
                 form_options:
                     attribute_fields:
-                        close_revenue:
-                            form_type: oro_multicurrency
                         close_reason_name:
                             form_type: choice
                             options:
