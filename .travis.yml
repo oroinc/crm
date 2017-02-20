@@ -27,7 +27,7 @@ before_script:
   - composer require --no-update --dev "phpunit/phpunit:5.7.*"
   - composer require --no-update --dev "squizlabs/php_codesniffer:2.7.*"
   - composer require --no-update --dev "phpmd/phpmd:2.5.*"
-  - composer global show fxp/composer-asset-plugin 1.2.2 || composer global require fxp/composer-asset-plugin:1.2.2
+  - composer global require fxp/composer-asset-plugin
   - travis_wait composer update --prefer-dist --optimize-autoloader --no-interaction  --no-suggest --prefer-stable
   - set +e; DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$"); set -e;
 
