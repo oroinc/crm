@@ -49,7 +49,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
     {
         $fields = [];
 
-        $this->builder->expects($this->exactly(3))->method('add')
+        $this->builder->expects($this->exactly(4))->method('add')
             ->will(
                 $this->returnCallback(
                     function ($filedName, $fieldType) use (&$fields) {
@@ -64,7 +64,8 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             [
                 'name'             => 'text',
                 'entities'         => 'oro_channel_entities',
-                'channelType'      => 'genemu_jqueryselect2_choice'
+                'channelType'      => 'genemu_jqueryselect2_choice',
+                'status'           => 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
             ],
             $fields
         );
