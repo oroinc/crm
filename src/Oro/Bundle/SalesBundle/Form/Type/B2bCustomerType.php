@@ -83,7 +83,6 @@ class B2bCustomerType extends AbstractType
             'shippingAddress',
             'oro_address',
             [
-                'cascade_validation' => true,
                 'required'           => false
             ]
         );
@@ -91,7 +90,6 @@ class B2bCustomerType extends AbstractType
             'billingAddress',
             'oro_address',
             [
-                'cascade_validation' => true,
                 'required'           => false
             ]
         );

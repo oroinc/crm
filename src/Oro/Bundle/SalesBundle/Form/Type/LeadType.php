@@ -125,8 +125,7 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'         => 'Oro\Bundle\SalesBundle\Entity\Lead',
-                'cascade_validation' => true,
+                'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
             )
         );
     }

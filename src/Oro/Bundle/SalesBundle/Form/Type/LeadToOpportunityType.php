@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\Validator\Constraints\Valid;
 
 class LeadToOpportunityType extends AbstractType
 {
@@ -30,18 +31,6 @@ class LeadToOpportunityType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(
-            [
-                'cascade_validation' => true
-            ]
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
@@ -56,7 +45,13 @@ class LeadToOpportunityType extends AbstractType
         $entity = $event->getData();
         if ($entity instanceof Opportunity && !$entity->getLead()->getContact()) {
             $form->remove('contact');
-            $form->add('contact', 'oro_contact');
+            $form->add(
+                'contact',
+                'oro_contact',
+                [
+                    'constraints' => new Valid()
+                ]
+            );
             $this->useFullContactForm = true;
         }
     }

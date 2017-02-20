@@ -17,13 +17,16 @@ Oro\Bundle\ContactBundle\Entity\Contact:
                 value: now UTC
                 message: This value cannot be in the future.
         addresses:
+            - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the addresses must be set as primary.
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
         emails:
+            - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the emails must be set as primary.
         phones:
+            - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the phones must be set as primary.
 
