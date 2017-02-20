@@ -22,3 +22,9 @@ ChannelBundle
 -------------
 - Class `Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand`
     - changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
+
+SalesBundle
+---------
+- Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`
+    - removed method `isReportOrSegmentGrid`
+    - added UnsupportedGridPrefixesTrait
