@@ -93,3 +93,14 @@ Feature: Managing business customer
       | Lifetime sales value  | $22.00                 |
       | Email                 | m3@ex.com              |
       | Phone number          | 33-33-333              |
+
+  Scenario: Import Business Customer
+    Given I go to Customers/ Business Customers
+    And there are one record in grid
+    And I download "B2bCustomer" Data Template file
+    And I fill template with data:
+      | Channel Name       | Customer name | Lifetime sales value | Phones 1 Phone | Emails 1 Email    | Account Account name | Owner Username | Organization Name |
+      | Business Customers | Jerry Coleman | 8508                 | 55-55-555      | imported@test.com | Jerry Coleman        | admin          | OroCRM            |
+    When I import file
+    And I reload the page
+    Then there are 2 records in grid

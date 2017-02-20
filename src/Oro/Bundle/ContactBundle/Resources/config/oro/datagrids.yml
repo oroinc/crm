@@ -460,14 +460,12 @@ datagrids:
                             property: label
                             translatable_options: false
                 countryName:
-                    type: entity
+                    type: choice
                     data_name: address.country
                     enabled: false
                     options:
                         field_options:
-                            class: OroAddressBundle:Country
-                            property: name
-                            query_builder: "@oro_contact.contact.datagrid_helper->getCountryFilterQueryBuilder"
+                            choices: "@oro_address.provider.country->getCountriesNames"
                             translatable_options: false
                 regionLabel:
                     type: string

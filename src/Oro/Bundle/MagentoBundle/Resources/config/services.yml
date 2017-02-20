@@ -587,6 +587,13 @@ services:
         tags:
             - { name: oro_integration.delete_provider }
 
+    oro_magento.manager.customer_address_manager:
+        class: Oro\Bundle\MagentoBundle\Manager\CustomerAddressManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        calls:
+            - ['setLogger',  ["@logger"]]
+
     oro_magento.importexport.address_import_helper:
         class: %oro_magento.importexport.address_import_helper.class%
         arguments:
