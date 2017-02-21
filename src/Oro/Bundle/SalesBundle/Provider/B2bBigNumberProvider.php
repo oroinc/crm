@@ -109,7 +109,7 @@ class B2bBigNumberProvider
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroSalesBundle:Opportunity', 'createdAt');
 
-        return $this->doctrine->getRepository('OroSalesBundle:Opportunity')->getOpportunitiesCountQB($start, $end);
+        $qb = $this->doctrine->getRepository('OroSalesBundle:Opportunity')->getOpportunitiesCountQB($start, $end);
 
         return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
