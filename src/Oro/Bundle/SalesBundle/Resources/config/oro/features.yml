@@ -31,8 +31,8 @@ features:
             - campaigns_leads
             - campaigns_by_close_revenue
             - quick_launchpad.leads
-            - business_sales_channel_statistics.new_leads_count
-            - business_sales_channel_statistics.open_leads_count
+            - lead_statistics.new_leads_count
+            - lead_statistics.open_leads_count
         navigation_items:
             - application_menu.reports_tab.static_reports_tab.leads_report_tab.leads_by_date
 
@@ -72,10 +72,10 @@ features:
             - average_lifetime_sales_chart
             - campaigns_by_close_revenue
             - opportunities_list
-            - business_sales_channel_statistics.new_opportunities_count
-            - business_sales_channel_statistics.new_opportunities_amount
-            - business_sales_channel_statistics.won_opportunities_to_date_count
-            - business_sales_channel_statistics.won_opportunities_to_date_amount
+            - opportunity_statistics.new_opportunities_count
+            - opportunity_statistics.new_opportunities_amount
+            - opportunity_statistics.won_opportunities_to_date_count
+            - opportunity_statistics.won_opportunities_to_date_amount
         navigation_items:
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
             - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
