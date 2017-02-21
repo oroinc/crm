@@ -227,32 +227,32 @@ dashboards:
             applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
             data_items:
                 new_leads_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewLeadsCount, integer)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getNewLeadsCount, integer)"
                     label:         oro.dashboard.business_sales_channel_statistics.new_leads_count.label
                     acl:           oro_sales_lead_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 open_leads_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getOpenLeadsCount, integer, false, false, false)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getOpenLeadsCount, integer, false, false, false)"
                     label:         oro.dashboard.business_sales_channel_statistics.open_leads_count.label
                     acl:           oro_sales_lead_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_opportunities_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesCount, integer)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesCount, integer)"
                     label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_count.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_opportunities_amount:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesAmount, currency)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesAmount, currency)"
                     label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_amount.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 won_opportunities_to_date_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateCount, integer)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateCount, integer)"
                     label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_count.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 won_opportunities_to_date_amount:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateAmount, currency)"
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateAmount, currency)"
                     label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_amount.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
