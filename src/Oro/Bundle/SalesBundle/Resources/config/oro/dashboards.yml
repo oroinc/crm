@@ -267,6 +267,15 @@ dashboards:
                     converter_attributes:
                         dateRangeField: dateRange
                         default_checked: true
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: opportunity_statistics
+                        entity: 'Oro\Bundle\SalesBundle\Entity\Opportunity'
+                        collapsible: true
+                        expand_filled: true
                 subWidgets:
                     type: oro_type_widget_items
                     options:
