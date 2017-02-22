@@ -95,8 +95,7 @@ class ForecastProvider
         WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
         \DateTime $end = null,
-        \DateTime $moment = null,
-        array $queryFilter = null
+        \DateTime $moment = null
     ) {
         $ownerIds = $this->ownerHelper->getOwnerIds($widgetOptions);
         $filters = isset($queryFilter['definition']['filters'])
@@ -119,23 +118,19 @@ class ForecastProvider
      * @param WidgetOptionBag $widgetOptions
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param array     $filters
      *
      * @return array
      */
     protected function getCurrentData(
         WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
-        \DateTime $end = null,
-        array $filters = []
+        \DateTime $end = null
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
         $alias       = 'o';
         $qb          = $this->getOpportunityRepository()->getForecastQB($this->qbTransformer, $alias);
-
-        $qb = $this->filterProcessor
-            ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
+        $qb          = $this->filterProcessor->filter($qb, $widgetOptions);
 
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
 
