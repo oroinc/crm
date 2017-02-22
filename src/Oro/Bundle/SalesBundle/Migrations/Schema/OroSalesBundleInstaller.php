@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_31';
+        return 'v1_32';
     }
 
     /**
@@ -336,6 +336,7 @@ class OroSalesBundleInstaller implements
                 'datagrid' => [
                     'is_visible' => DatagridScope::IS_VISIBLE_FALSE,
                 ],
+                'merge' => ['inverse_display' => false],
             ]
         );
 
