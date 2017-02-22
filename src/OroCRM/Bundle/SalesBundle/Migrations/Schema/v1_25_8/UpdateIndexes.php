@@ -23,9 +23,11 @@ class UpdateIndexes implements Migration
             'budget_amount',
             'created_at'
         ];
-        if ($table->hasIndex($indexName) && $table->getIndex($indexName)->getColumns() !== $indexColumns) {
-            $table->dropIndex($indexName);
-            $table->addIndex($indexColumns, $indexName);
+        if ($table->hasIndex($indexName)) {
+            if ($table->getIndex($indexName)->getColumns() !== $indexColumns) {
+                $table->dropIndex($indexName);
+                $table->addIndex($indexColumns, $indexName);
+            }
         } else {
             $table->addIndex($indexColumns, $indexName);
         }

@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
+
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -178,5 +180,29 @@ class CustomerRepository extends ChannelAwareEntityRepository
         $this->applyActiveChannelLimitation($qb);
 
         return $qb;
+    }
+
+    /**
+     * @param int[]|null $customerIds
+     * @param int[]|null $integrationIds
+     *
+     * @return BufferedQueryResultIterator
+     */
+    public function getIteratorByIdsAndIntegrationIds($customerIds, $integrationIds)
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->orderBy('c.id');
+
+        if ($customerIds) {
+            $qb->andWhere('c.id in (:customerIds)')
+                ->setParameter('customerIds', $customerIds);
+        }
+
+        if ($integrationIds) {
+            $qb->andWhere('c.channel in (:integrationIds)')
+                ->setParameter('integrationIds', $integrationIds);
+        }
+
+        return new BufferedQueryResultIterator($qb->getQuery());
     }
 }
