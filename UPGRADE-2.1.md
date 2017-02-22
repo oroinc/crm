@@ -47,6 +47,11 @@ ChannelBundle
 - Class `Oro\Bundle\ChannelBundle\Twig\MetadataExtension`
     - the construction signature of was changed. Now the constructor has only `ContainerInterface $container` parameter
     - removed property `protected $metaDataProvider`
+- Class `Oro\Bundle\ChannelBundle\Entity\Repository`
+    - signature of `calculateAccountLifetime` method was changed. Now it takes following arguments:
+        - `array` $customerIdentities
+        - `Account` $account
+        - `Channel` $channel = null
 
 ContactBundle
 -------------
