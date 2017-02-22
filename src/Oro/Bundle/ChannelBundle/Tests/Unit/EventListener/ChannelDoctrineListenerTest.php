@@ -148,19 +148,17 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $account2 = clone $account;
 
         $queue = [
-            'Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer' => [
-                uniqid('accountId__channelId', true) => ['account' => $account, 'channel' => $channel],
-                uniqid('accountId__channelId', true) => ['account' => $account2, 'channel' => $channel],
-            ]
+            uniqid('accountId__channelId', true) => ['account' => $account, 'channel' => $channel],
+            uniqid('accountId__channelId', true) => ['account' => $account2, 'channel' => $channel],
         ];
 
         $this->lifetimeRepo->expects($this->exactly(2))->method('calculateAccountLifetime')
             ->with(
-                $this->equalTo('Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer'),
-                $this->equalTo('lifetime'),
+                ['Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer' => 'lifetime'],
                 $this->isInstanceOf('Oro\Bundle\AccountBundle\Entity\Account'),
                 $this->isInstanceOf('Oro\Bundle\ChannelBundle\Entity\Channel')
-            )->will($this->onConsecutiveCalls(100, 200));
+            )
+            ->will($this->onConsecutiveCalls(100, 200));
 
         $this->em->expects($this->exactly(2))->method('persist');
         $this->em->expects($this->once())->method('flush');
