@@ -59,6 +59,11 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
         $brokenAccountQb = $this->getBrokenAccountsQueryBuilder($customerIdentityClass, $lifetimeField, $lifetimeRepo);
         $brokenAccountsData = new BufferedQueryResultIterator($brokenAccountQb);
 
+        $customerIdentities = [];
+        foreach ($lifetimeSettings as $singleChannelTypeData) {
+            $customerIdentities[$singleChannelTypeData['entity']] = $singleChannelTypeData['field'];
+        }
+
         $toOutDate = [];
         foreach ($brokenAccountsData as $brokenDataRow) {
             /** @var Account $account */
@@ -66,7 +71,7 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
             /** @var Channel $channel */
             $channel = $manager->getReference($channelClass, $brokenDataRow['channel_id']);
             $lifetimeAmount = $lifetimeRepo
-                ->calculateAccountLifetime($customerIdentityClass, $lifetimeField, $account, $channel);
+                ->calculateAccountLifetime($customerIdentities, $account, $channel);
 
             $history = new LifetimeValueHistory();
             $history->setAmount($lifetimeAmount);

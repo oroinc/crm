@@ -2,53 +2,32 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Twig;
 
-use Oro\Bundle\ContactBundle\Twig\SocialUrlExtension;
+use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
+use Oro\Bundle\ContactBundle\Twig\ContactExtension;
 use Oro\Bundle\ContactBundle\Model\Social;
+use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
-class SocialUrlExtensionTest extends \PHPUnit_Framework_TestCase
+class ContactExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SocialUrlExtension
-     */
-    protected $twigExtension;
+    use TwigExtensionTestCaseTrait;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var ContactExtension */
+    protected $extension;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $urlFormatter;
 
     protected function setUp()
     {
-        $this->urlFormatter = $this->getMockBuilder('Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
-            ->setMethods(array('getSocialUrl'))
+        $this->urlFormatter = $this->getMockBuilder(SocialUrlFormatter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->twigExtension = new SocialUrlExtension($this->urlFormatter);
-    }
+        $container = self::getContainerBuilder()
+            ->add('oro_contact.social_url_formatter', $this->urlFormatter)
+            ->getContainer($this);
 
-    protected function tearDown()
-    {
-        unset($this->urlFormatter);
-        unset($this->twigExtension);
-    }
-
-    public function testGetFunctions()
-    {
-        $expectedFunctions = array(
-            'oro_social_url' => 'getSocialUrl',
-        );
-
-        $actualFunctions = array();
-        /** @var \Twig_SimpleFunction $function */
-        foreach ($this->twigExtension->getFunctions() as $function) {
-            $this->assertInstanceOf('\Twig_SimpleFunction', $function);
-            $callable = $function->getCallable();
-            $this->assertArrayHasKey(1, $callable);
-            $actualFunctions[$function->getName()] = $callable[1];
-        }
-
-        $this->assertEquals($expectedFunctions, $actualFunctions);
+        $this->extension = new ContactExtension($container);
     }
 
     /**
@@ -75,7 +54,10 @@ class SocialUrlExtensionTest extends \PHPUnit_Framework_TestCase
                 ->method('getSocialUrl');
         }
 
-        $this->assertEquals($expectedUrl, $this->twigExtension->getSocialUrl($socialType, $username));
+        $this->assertEquals(
+            $expectedUrl,
+            self::callTwigFunction($this->extension, 'oro_social_url', [$socialType, $username])
+        );
     }
 
     /**

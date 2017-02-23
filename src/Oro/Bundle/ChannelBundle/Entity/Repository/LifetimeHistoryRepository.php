@@ -3,46 +3,58 @@
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
     /**
      * Calculates lifetime value based on "customer identity" values, limited by channel if given
      *
-     * @param string  $identityFQCN
-     * @param string  $lifetimeField
+     * @param array $customerIdentities [customerClass => lifetimeField, ...]
      * @param Account $account
      * @param Channel $channel
      *
      * @return double
      */
-    public function calculateAccountLifetime($identityFQCN, $lifetimeField, Account $account, Channel $channel = null)
+    public function calculateAccountLifetime(array $customerIdentities, Account $account, Channel $channel = null)
     {
-        if ($identityFQCN !== 'Oro\Bundle\CustomerBundle\Entity\Customer') {
+        if (!$customerIdentities) {
             return 0.0;
         }
 
-        $field = AccountCustomerManager::getCustomerTargetField($identityFQCN);
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->from(CustomerAssociation::class, 'c')
+            ->where('c.account = :account')
+            ->setParameter('account', $account->getId());
 
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->from($identityFQCN, 'e');
-        $qb->join(CustomerAssociation::class, 'ca', 'WITH', sprintf('ca.%s = e', $field));
-        $qb->select(sprintf('SUM(e.%s)', $lifetimeField));
-        $qb->andWhere('ca.account = :account');
-        $qb->setParameter('account', $account);
+        $selectFields = [];
+        $channelConditions = [];
+        foreach ($customerIdentities as $customerClass => $customerLifetimeField) {
+            $customerAlias = QueryUtils::generateParameterName('customer');
+            $qb
+                ->leftJoin(
+                    sprintf('c.%s', AccountCustomerManager::getCustomerTargetField($customerClass)),
+                    $customerAlias
+                );
+            $selectFields[] = sprintf('COALESCE(SUM(%s.%s), 0)', $customerAlias, $customerLifetimeField);
 
-        if (null !== $channel) {
-            $qb->andWhere('e.dataChannel = :channel');
-            $qb->setParameter('channel', $channel);
+            $channelConditions[] = sprintf('%s.dataChannel = :channel', $customerAlias);
         }
 
-        return (float)$qb->getQuery()->getSingleScalarResult();
+        if ($channel) {
+            $qb
+                ->andWhere(call_user_func_array([$qb->expr(), 'orX'], $channelConditions))
+                ->setParameter('channel', $channel->getId());
+        }
+
+        $qb->select(sprintf('(%s)', implode(' + ', $selectFields)));
+
+        return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**

@@ -4,9 +4,12 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Twig;
 
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
 use Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension;
+use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
 class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    use TwigExtensionTestCaseTrait;
+
     /** @var AmountProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $provider;
 
@@ -15,10 +18,15 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider')
-            ->disableOriginalConstructor()->getMock();
+        $this->provider = $this->getMockBuilder(AmountProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->extension = new LifetimeValueExtension($this->provider);
+        $container = self::getContainerBuilder()
+            ->add('oro_channel.provider.lifetime.amount_provider', $this->provider)
+            ->getContainer($this);
+
+        $this->extension = new LifetimeValueExtension($container);
     }
 
     public function tearDown()
@@ -36,16 +44,14 @@ class LifetimeValueExtensionTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($account), $this->equalTo($channel))
             ->will($this->returnValue($expectedResult));
 
-        $this->assertSame($expectedResult, $this->extension->getLifetimeValue($account, $channel));
+        $this->assertSame(
+            $expectedResult,
+            self::callTwigFunction($this->extension, 'oro_channel_account_lifetime', [$account, $channel])
+        );
     }
 
     public function testGetName()
     {
         $this->assertEquals($this->extension->getName(), 'oro_channel_lifetime_value');
-    }
-
-    public function testGetFunctions()
-    {
-        $this->assertArrayHasKey('oro_channel_account_lifetime', $this->extension->getFunctions());
     }
 }

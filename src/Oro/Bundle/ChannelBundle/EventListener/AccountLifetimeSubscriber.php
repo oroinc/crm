@@ -3,9 +3,16 @@
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\Events;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
@@ -15,25 +22,21 @@ use Oro\Bundle\SalesBundle\Entity\Opportunity;
 
 class AccountLifetimeSubscriber implements EventSubscriber
 {
-    /** @var AccountCustomerManager */
-    protected $accountCustomerManager;
-
-    /** @var CurrencyQueryBuilderTransformerInterface $currencyQbTransformer */
-    protected $currencyQbTransformer;
+    /** @var ContainerInterface */
+    private $container;
 
     /** @var Account[] */
-    protected $accounts = [];
+    private $accounts = [];
+
+    /** @var array|null */
+    private $customerTargetFields;
 
     /**
-     * @param AccountCustomerManager $accountCustomerManager
-     * @param CurrencyQueryBuilderTransformerInterface $currencyQbTransformer
+     * @param ContainerInterface $container
      */
-    public function __construct(
-        AccountCustomerManager $accountCustomerManager,
-        CurrencyQueryBuilderTransformerInterface $currencyQbTransformer
-    ) {
-        $this->accountCustomerManager = $accountCustomerManager;
-        $this->currencyQbTransformer = $currencyQbTransformer;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -42,8 +45,9 @@ class AccountLifetimeSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            'onFlush',
-            'postFlush',
+            Events::onFlush,
+            Events::postFlush,
+            Events::onClear,
         ];
     }
 
@@ -54,19 +58,18 @@ class AccountLifetimeSubscriber implements EventSubscriber
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-        
+
         $entities = array_merge(
             $uow->getScheduledEntityInsertions(),
             $uow->getScheduledEntityUpdates(),
             $uow->getScheduledEntityDeletions()
         );
 
-        $customerTargetFields = $this->accountCustomerManager->getCustomerTargetFields();
         foreach ($entities as $entity) {
             if ($entity instanceof Opportunity) {
                 $this->scheduleOpportunityAccount($entity, $uow);
             } elseif ($entity instanceof Customer) {
-                $this->scheduleCustomerAccounts($entity, $uow, $customerTargetFields);
+                $this->scheduleCustomerAccounts($entity, $uow);
             }
         }
     }
@@ -81,33 +84,14 @@ class AccountLifetimeSubscriber implements EventSubscriber
         }
 
         $em = $args->getEntityManager();
-        $lifetimeRepository = $em->getRepository('OroChannelBundle:LifetimeValueHistory');
-        $noCustomerCondition = $this->createNoCustomerCondition('c');
+        $lifetimeRepository = $em->getRepository(LifetimeValueHistory::class);
+        $lifetimeAmountQb = $this->getLifetimeAmountQueryBuilder($em);
 
         $historyUpdates = [];
         foreach ($this->accounts as $account) {
-            $qb = $em->getRepository(Opportunity::class)
-                ->createQueryBuilder('o');
+            $lifetimeAmountQb->setParameter('account', $account->getId());
 
-            $closeRevenueSelect = $this->currencyQbTransformer->getTransformSelectQuery('closeRevenue', $qb, 'o');
-
-            $qb
-                ->select(sprintf('SUM(%s)', $closeRevenueSelect))
-                ->join('o.customerAssociation', 'c')
-                ->andWhere('c.account = :account')
-                ->andWhere('o.status = :status')
-                ->setParameters([
-                    'account' => $account->getId(),
-                    'status' => Opportunity::STATUS_WON,
-                ]);
-
-            if ($noCustomerCondition) {
-                $qb->andWhere($noCustomerCondition);
-            }
-
-            $lifetimeAmount = (double) $qb
-                ->getQuery()
-                ->getSingleScalarResult();
+            $lifetimeAmount = (double)$lifetimeAmountQb->getQuery()->getSingleScalarResult();
 
             $history = new LifetimeValueHistory();
             $history->setAmount($lifetimeAmount);
@@ -123,36 +107,44 @@ class AccountLifetimeSubscriber implements EventSubscriber
     }
 
     /**
+     * @param OnClearEventArgs $event
+     */
+    public function onClear(OnClearEventArgs $event)
+    {
+        $this->customerTargetFields = null;
+    }
+
+    /**
      * @param string $customerAlias
      *
      * @return string
      */
-    protected function createNoCustomerCondition($customerAlias)
+    private function createNoCustomerCondition($customerAlias)
     {
-        $customerTargetFields = $this->accountCustomerManager->getCustomerTargetFields();
-
         return implode(
             ' AND ',
             array_map(
                 function ($customerTargetField) use ($customerAlias) {
                     return sprintf('%s.%s IS NULL', $customerAlias, $customerTargetField);
                 },
-                $customerTargetFields
+                $this->getCustomerTargetFields()
             )
         );
     }
 
     /**
      * @param Opportunity $entity
-     * @param UnitOfWork $uow
+     * @param UnitOfWork  $uow
      */
-    protected function scheduleOpportunityAccount(Opportunity $entity, UnitOfWork $uow)
+    private function scheduleOpportunityAccount(Opportunity $entity, UnitOfWork $uow)
     {
-        if (!$customerAssociation = $entity->getCustomerAssociation()) {
+        $customerAssociation = $entity->getCustomerAssociation();
+        if (null === $customerAssociation) {
             return;
         }
 
-        if (!($account = $customerAssociation->getTarget()) instanceof Account) {
+        $account = $customerAssociation->getTarget();
+        if (!$account instanceof Account) {
             return;
         }
 
@@ -176,11 +168,10 @@ class AccountLifetimeSubscriber implements EventSubscriber
     }
 
     /**
-     * @param Customer $entity
+     * @param Customer   $entity
      * @param UnitOfWork $uow
-     * @param array $customerTargetFields
      */
-    protected function scheduleCustomerAccounts(Customer $entity, UnitOfWork $uow, array $customerTargetFields)
+    private function scheduleCustomerAccounts(Customer $entity, UnitOfWork $uow)
     {
         $changeSet = $uow->getEntityChangeSet($entity);
         if (isset($changeSet['account'])) {
@@ -191,22 +182,72 @@ class AccountLifetimeSubscriber implements EventSubscriber
             if ($newAccount && (!$oldAccount || $oldAccount->getId() !== $newAccount->getId())) {
                 $this->scheduleAccount($newAccount, $uow);
             }
-        } elseif (array_intersect($customerTargetFields, array_keys($changeSet))) {
+        } elseif (array_intersect($this->getCustomerTargetFields(), array_keys($changeSet))) {
             $account = $entity->getAccount();
             $this->scheduleAccount($account, $uow);
         }
     }
 
     /**
-     * @param Account $account
+     * @param Account    $account
      * @param UnitOfWork $uow
      */
-    protected function scheduleAccount(Account $account, UnitOfWork $uow)
+    private function scheduleAccount(Account $account, UnitOfWork $uow)
     {
         if ($uow->isScheduledForDelete($account)) {
             return;
         }
 
         $this->accounts[spl_object_hash($account)] = $account;
+    }
+
+    /**
+     * @param EntityManager $em
+     *
+     * @return QueryBuilder
+     */
+    private function getLifetimeAmountQueryBuilder(EntityManager $em)
+    {
+        $qb = $em->getRepository(Opportunity::class)->createQueryBuilder('o');
+        $qb
+            ->select(
+                sprintf(
+                    'SUM(%s)',
+                    $this->getCurrencyQueryBuilderTransformer()->getTransformSelectQuery('closeRevenue', $qb, 'o')
+                )
+            )
+            ->join('o.customerAssociation', 'c')
+            ->andWhere('c.account = :account')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', Opportunity::STATUS_WON);
+
+        $noCustomerCondition = $this->createNoCustomerCondition('c');
+        if ($noCustomerCondition) {
+            $qb->andWhere($noCustomerCondition);
+        }
+
+        return $qb;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCustomerTargetFields()
+    {
+        if (null === $this->customerTargetFields) {
+            /** @var AccountCustomerManager $customerManager */
+            $customerManager = $this->container->get('oro_sales.manager.account_customer');
+            $this->customerTargetFields = $customerManager->getCustomerTargetFields();
+        }
+
+        return $this->customerTargetFields;
+    }
+
+    /**
+     * @return CurrencyQueryBuilderTransformerInterface
+     */
+    private function getCurrencyQueryBuilderTransformer()
+    {
+        return $this->container->get('oro_currency.query.currency_transformer');
     }
 }
