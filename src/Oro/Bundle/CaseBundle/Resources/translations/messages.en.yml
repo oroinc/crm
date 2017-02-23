@@ -27,21 +27,47 @@ oro:
             #
             entity_label:                   Case
             entity_plural_label:            Cases
-            entity_description:             Represent case
-            subject.label:                  Subject
-            description.label:              Description
-            resolution.label:               Resolution
+            entity_description:             Issues that were reported by customers or found internally and are managed by users.
+            subject:
+                label:                      Subject
+                description:                The short title or description of the issue.
+            description:
+                label:                      Description
+                description:                The detailed description of the issue.
+            resolution:
+                label:                      Resolution
+                description:                The case resolution information in a free from.
             owner.label:                    Owner
-            assigned_to.label:              Assigned To
-            closed_at.label:                Closed On
-            reported_at.label:              Reported On
-            related_contact.label:          Related Contact
-            related_account.label:          Related Account
-            source.label:                   Source
-            status.label:                   Status
-            priority.label:                 Priority
-            comments.label:                 Comments
-            id.label:                       Id
+            assigned_to:
+                label:                      Assigned To
+                description:                The user that the case is assigned to.
+            closed_at:
+                label:                      Closed On
+                description:                The date and time when the case was closed.
+            reported_at:
+                label:                      Reported On
+                description:                The date and time when the case was reported.
+            related_contact:
+                label:                      Related Contact
+                description:                The contact that is related to the case.
+            related_account:
+                label:                      Related Account
+                description:                The account that is related to the case.
+            source:
+                label:                      Source
+                description:                How the information about the issue was recieved.
+            status:
+                label:                      Status
+                description:                The current phase of work on the case.
+            priority:
+                label:                      Priority
+                description:                The order in which the case should be managed.
+            comments:
+                label:                      Comments
+                description:                The comments made on the case.
+            id:
+                label:                      Id
+                description:                The unique identifier of the case record.
             organization.label:             Organization
 
         casecomment:
@@ -50,16 +76,30 @@ oro:
             #
             entity_label:                   Case Comment
             entity_plural_label:            Case Comments
-            entity_description:             Represent case comment
-            message.label:                  Message
-            public.label:                   Make Public
-            contact.label:                  Contact Author
-            case.label:                     Related case
-            updated_by.label:               Updated By
+            entity_description:             The comments made on the case.
+            message:
+                label:                      Message
+                description:                The case comment text.
+            public:
+                label:                      Make Public
+                description:                Defiens wether the comment must be public on Zendesk.
+            contact:
+                label:                      Contact Author
+                description:                The author of the case comment. If the value is not specified, the user who is the case comment owner is considered the case comment author.
+            case:
+                label:                      Related case
+                description:                The case that the comment was made on.
+            updated_by:
+                label:                      Updated By
+                description:                The user who last updated a specific case comment record.
             owner.label:                    Owner
-            id.label:                       Id
+            id:
+                label:                      Id
+                description:                The unique identifier of the case comment record.
             organization.label:             Organization
-            attachment.label:               Attachment
+            attachment:
+                label:                      Attachment
+                description:                The file that is attached to the case comment.
 
             action:
                 add: Add Comment
@@ -81,25 +121,41 @@ oro:
         casepriority:
             entity_label:                   Case Priority
             entity_plural_label:            Case Priorities
-            entity_description:             Represent case priority
-            name.label:                     Name
-            label.label:                    Label
-            order.label:                    Order
+            entity_description:             The case priority helps determine the order in which cases must be managed.
+            name:
+                label:                      Name
+                description:                The unique identifier of the case priority record.
+            label:
+                label:                      Label
+                description:                The label of the case priority ('High,' 'Normal,' or 'Low').
+            order:
+                label:                      Order
+                description:                The order in which case priorities appear in the list on the interface. The higher the number, the higher is the priority.
 
         casesource:
             entity_label:                   Case Source
             entity_plural_label:            Case Sources
-            entity_description:             Represent case source
-            name.label:                     Name
-            label.label:                    Label
+            entity_description:             How the information about the issue was recieved.
+            name:
+                label:                      Name
+                description:                The unique identifier of the case source record.
+            label:
+                label:                      Label
+                description:                The label of the case source ('Email,' 'Other,' 'Phone,' or 'Web').
 
         casestatus:
             entity_label:                   Case Status
             entity_plural_label:            Case Statuses
-            entity_description:             Represent case status
-            name.label:                     Name
-            label.label:                    Label
-            order.label:                    Order
+            entity_description:             The phase of work on the case.
+            name:
+                label:                      Name
+                description:                The unique identifier of the case status record.
+            label:
+                label:                      Label
+                description:                The label of the case status ('Open,' 'In Progress,' 'Resolved,' or 'Closed').
+            order:
+                label:                      Order
+                description:                The order in which case statuses are usually assigned to the case. The higher the number, the more advanced case management stage the case status represents.
 
         block:
             additional: Additional
