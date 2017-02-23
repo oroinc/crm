@@ -21,8 +21,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             $this->session,
             $this->router,
             $this->doctrineHelper,
-            $this->formHandler,
-            $this->formTemplateDataProviderRegistry
+            $this->formHandler
         );
         $this->handler->setStateHandler(new CustomerStateHandler(new StateManager($this->doctrineHelper)));
     }
