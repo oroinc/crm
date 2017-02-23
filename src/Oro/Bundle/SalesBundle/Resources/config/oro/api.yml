@@ -12,8 +12,51 @@ api:
             plural_alias: leadstatuses
 
     entities:
+        Extend\Entity\EV_Opportunity_Status:
+            fields:
+                name:
+                    description:  The name of the opportunity status.
+                default:
+                    description:  Determines whether a particular status is set as default for new opportunity records.
+                priority:
+                    description:  The order in which opportunity statuses are ranked. First appears the status with the higher priority.
+            actions:
+                get:
+                    documentation: Retrieve a specific opportunity status record. Opportunity status defines a deal's stage (Open, Closed Won, etc.)
+                get_list:
+                    documentation: Retrieve a collection of opportunity statuses. Opportunity status defines a deal's stage (Open, Closed Won, etc.)
+
+        Extend\Entity\EV_Lead_Status:
+            fields:
+                name:
+                    description:  The name of the lead status ('New,' 'Qualified,' or 'Disqualified').
+                default:
+                    description:  Determines whether a particular status is set as default for new lead records.
+                priority:
+                    description:  The order in which lead statuses are ranked. First appears the status with the higher priority.
+            actions:
+                get:
+                    documentation: Retrieve a specific lead status record. Lead status defines whether a lead is interested in your product.
+                get_list:
+                    documentation: Retrieve a collection of lead status records. Lead status defines whether a lead is interested in your product.
+
+        Extend\Entity\EV_Lead_Source:
+            fields:
+                default:
+                    description:  Determines whether a particular source is set as default for new lead records.
+                name:
+                    description:  The name of the lead source.
+                priority:
+                    description:  The order in which lead sources are ranked. First appears the source with the higher priority.
+            actions:
+                get:
+                    documentation:  Retrieve a specific lead source record. Lead source defines how the information about the lead was received.
+                get_list:
+                    documentation:  Retrieve a collection of lead source records. Lead source defines how the information about the lead was received.
+
         # deprecated since 1.10. Enum type is used instead
         Oro\Bundle\SalesBundle\Entity\OpportunityStatus: { exclude: true }
+
         # deprecated since 1.10. Enum type is used instead
         Oro\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
@@ -73,6 +116,7 @@ api:
             actions: false
 
         Oro\Bundle\SalesBundle\Entity\Lead:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
             fields:
                 address:
                     exclude: true
@@ -107,6 +151,8 @@ api:
                         target:
                             exclude: true
                             data_type: association:manyToOne:customer
+                        customer_f2bbc387:
+                            description: Test record.
             filters:
                 fields:
                     phones:
@@ -132,7 +178,8 @@ api:
                     customerAssociation:
                         exclude: true
 
-        Oro\Bundle\SalesBundle\Entity\LeadAddress: ~
+        Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity_close_reason.md'
 
         Oro\Bundle\SalesBundle\Entity\LeadPhone:
             # this entity does not have own Data API resource
@@ -148,6 +195,8 @@ api:
                 fields:
                     customerAssociation:
                         exclude: true
+
+
             fields:
                 closedAt:
                     exclude: true
@@ -169,4 +218,8 @@ api:
                 target:
                     data_type: association:manyToOne:customer
 
-        Oro\Bundle\SalesBundle\Entity\SalesFunnel: ~
+        Oro\Bundle\SalesBundle\Entity\SalesFunnel:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/sale_funnel.md'
+
+        Oro\Bundle\SalesBundle\Entity\LeadAddress:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/lead_address.md'
