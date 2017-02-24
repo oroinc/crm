@@ -148,61 +148,116 @@ oro:
             customer_group:
                 label: Customer Group Connector
         customer:
-            entity_label:        Magento Customer
-            entity_plural_label: Magento Customers
-            entity_description:  Represent Magento customer
-            create_order:        Create Order
-            register.label:      Register
-            sales.label:         Sales
-            id.label:            Id
-            owner.label:         Owner
-            origin_id.label:     Origin Id
-            name_prefix.label:   Name prefix
-            first_name.label:    First name
-            middle_name.label:   Middle name
-            last_name.label:     Last name
-            name_suffix.label:   Name suffix
-            gender.label:        Gender
-            birthday.label:      Birthday
-            email.label:         Email
-            is_active.label:     Is active
-            vat.label:           Tax/Vat
-            website.label:       Website
-            store.label:         Store
+            entity_label:         Magento Customer
+            entity_plural_label:  Magento Customers
+            entity_description:   Magento Customers represent clients of Magento-based stores.
+            create_order:         Create Order
+            register.label:       Register
+            sales.label:          Sales
+            id.label:             Id
+            owner.label:          Owner
+            origin_id:
+                label:            Origin Id
+                description:      The Magento customer ID specified on the Magento side.
+            name_prefix:
+                label:            Name prefix
+                description:      The name prefix speficied for a Magento customer.
+            first_name:
+                label:            First name
+                description:      The first name specified for a Magento customer.
+            middle_name:
+                label:            Middle name
+                description:      The middle name specified for Magento customer.
+            last_name:
+                label:            Last name
+                description:      The last name specified for a Magento customer.
+            name_suffix:
+                label:            Name suffix
+                description:      The name suffix specified for a Magento customer.
+            gender:
+                label:            Gender
+                description:      The gender specified for a Magento customer.
+            birthday:
+                label:            Birthday
+                description:      The birthdate of a Magento customer.
+            email:
+                label:            Email
+                description:      The email address assigned to a Magento customer.
+            is_active:
+                label:            Is active
+                description:      Defines whether a Magento customer is active or inactive.
+            vat:
+                label:            Tax/Vat
+                description:      A Magento customer TAX/VAT number.
+            website:
+                label:            Website
+                description:      The website via which information about a Magento customer is received.
+            store:
+                label:            Store
+                description:      The Magento store in which a Magento customer was created.
             guest:
-                label:           Is Guest
-                yes:             Yes
-                no:              No
-            group.label:         Customer Group
-            contact.label:       Contact
-            account.label:       Account
-            addresses.label:     Addresses
-            primary_addr.label:  Primary Address
-            carts.label:         Carts
-            channel.label:       Integration
-            data_channel.label:  Channel
-            name.label:          Name
-            orders.label:        Customer orders
-            lifetime.label:      Lifetime sales value
-            currency.label:      Currency
-            organization.label:  Organization
-            monetary.label:      Monetary
-            recency.label:       Recency
-            frequency.label:     Frequency
-            saved.message:       Customer saved
-            address_book.title:  Address Book
+                label:            Is Guest
+                yes:              Yes
+                no:               No
+                description:      Defines whether a Magento customer is a guest or a registered user.
+            group.label:          Customer Group
+            contact:
+                label:            Contact
+                description:      The contact that is specified for a Magento customer.
+            account:
+                label:            Account
+                description:      The account that a Magento customer is assigned to.
+            addresses:
+                label:            Addresses
+                description:      Collection of Magento customer addresses: mailing, business, home, billing, etc.
+            primary_addr.label:   Primary Address
+            carts.label:          Carts
+            channel.label:        Integration
+            data_channel:
+                label:            Channel
+                description:      The channel via which information about a Magento customer is received.
+            name.label:           Name
+            orders.label:         Customer orders
+            lifetime:
+                label:            Lifetime sales value
+                description:      The total amount of money received from a Magento customer.
+            currency:
+                label:            Currency
+                description:      The currency configured for a Magento customer.
+            organization.label:   Organization
+            monetary:
+                label:            Monetary
+                description:      The amount of money a Magento customer spent on orders.
+            recency:
+                label:            Recency
+                description:      How long ago a Magento customer made the last order.
+            frequency:
+                label:            Frequency
+                description:      The frequency of orders placed by a magento customer.
+            saved.message:        Customer saved
+            address_book.title:   Address Book
             password:
-                label:      Password
-                section:    Password Management
-                tooltip:    Password is set only when it is not empty
+                label:            Password
+                section:          Password Management
+                tooltip:          Password is set only when it is not empty
+                description:      The password configured for a Magento customer in Oro application.
             sync_state:
-                label: Sync State
-                info: Partially synced
+                label:            Sync State
+                info:             Partially synced
+                description:      Synchronization status.
+            confirmed:
+                label:            Confirmed
+                description:      Specifies whether a Magento customer has been confirmed.
+            created_in:
+                label:            Created In
+                description:      Specifies in which Magento store a Magento customer has been created.
+            imported_at:
+                label:            Imported At
+                description:      The date and time when the record was imported.
+            synced_at:
+                label:            Last Synced At
+                description:      The date and time of the last Magento customer synchronization.
             newsletter_subscribers.label: Newsletter Subscribers
-            confirmed.label: Confirmed
-            created_in.label: Created In
-            imported_at.label: Imported At
-            synced_at.label: Last Synced At
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -214,113 +269,255 @@ oro:
             placeholder:         Please, select group
 
         cart:
-            entity_label:         Magento Shopping Cart
-            entity_plural_label:  Magento Shopping Carts
-            entity_description:   Represent Magento shopping cart
+            entity_label:               Magento Shopping Cart
+            entity_plural_label:        Magento Shopping Carts
+            entity_description:         A Magento shopping cart stores items that a Magento customer wishes to purchase.
 
-            refresh_label:             Sync Data
+            refresh_label:              Sync Data
 
-            id.label:                  Cart Id
-            owner.label:               Owner
-            origin_id.label:           Origin Id
-            items_qty.label:           Items qty
-            items_count.label:         Items count
-            base_currency_code.label:  Base currency
-            store_currency_code.label: Store currency
-            quote_currency_code.label: Quote currency
-            store_to_base_rate.label:  Store to base rate
-            store_to_quote_rate.label: Store to quote rate
-            first_name.label:          First name
-            last_name.label:           Last name
-            email.label:               Email
-            related_emails.label:      Emails
-            gift_message.label:        Gift message
-            is_guest.label:            Is guest
-            payment_details.label:     Payment
+            id.label:                   Cart Id
+            owner.label:                Owner
+            origin_id:
+                label:                  Origin Id
+                description:            The Magento shopping cart ID on the Magento side.
+            items_qty:
+                label:                  Items qty
+                description:            The number of various items in a Magento shopping cart.
+            items_count:
+                label:                  Items count
+                description:            The quantity of each item in a Magento shopping cart.
+            base_currency_code:
+                label:                  Base currency
+                description:            The ISO code of the base currency in which the cart items are sold.
+            store_currency_code:
+                label:                  Store currency
+                description:            The ISO code of the store currency.
+            quote_currency_code:
+                label:                  Quote currency
+                description:            The ISO code of the quote currency.
+            store_to_base_rate:
+                label:                  Store to base rate
+                description:            The configured rate of store currency to base currency.
+            store_to_quote_rate:
+                label:                  Store to quote rate
+                description:            The configured rate of store currency to quote currency.
+            first_name:
+                label:                  First name
+                description:            The first name of a Magento customer who created a cart.
+            last_name:
+                label:                  Last name
+                description:            The last name of a Magento customer who created a cart.
+            email:
+                label:                  Email
+                description:            The email of a Magento customer who created a cart.
+            related_emails.label:       Emails
+            gift_message:
+                label:                  Gift message
+                description:            Defines whether a gift message is specified for a Magento shopping cart.
+            is_guest:
+                label:                  Is guest
+                description:            Defines whether a Magento customer who added items to a shopping cart is a guest or a registered user.
+            payment_details:
+                label:                  Payment
+                description:            Payment details specified for an order in a Magento shopping cart.
             status:
-                label:                 Status
-                active:                Active
-                converted:             Converted
-            sub_total.label:           Sub total
-            sub_total_amount.label:    Subtotal Amount
-            grand_total.label:         Grand total
-            tax_amount.label:          Tax
-            cart_items.label:          Cart Items
-            active_cart_items.label:   Active Items
-            deleted_cart_items.label:  Deleted Items
-            customer.label:            Customer
-            store.label:               Store
-            shipping_address.label:    Shipping address
-            billing_address.label:     Billing address
-            channel.label:             Integration
-            data_channel.label:        Channel
-            opportunity.label:         Opportunity
-            notes.label:               Additional comments
+                label:                  Status
+                active:                 Active
+                converted:              Converted
+                description:            The status of a Magento cart (Open, Purchased, Lost, Expired, Processing, Converted to Opportunity, etc).
+            sub_total:
+                label:                  Sub total
+                description:            The subtotal amount configured for the items in a Magento shopping cart.
+            sub_total_amount.label:     Subtotal Amount
+            grand_total:
+                label:                  Grand total
+                description:            The final total amount of all items in a Magento shopping cart.
+            tax_amount:
+                label:                  Tax
+                description:            The amount of tax applied to items in a Magento shoppin cart.
+            cart_items:
+                label:                  Cart Items
+                description:            The details of the items in a Magento shopping cart.
+            active_cart_items.label:    Active Items
+            deleted_cart_items.label:   Deleted Items
+            customer:
+                label:                  Customer
+                description:            The details of the customer who create a Magento shopping cart.
+            store:
+                label:                  Store
+                description:            The Magento store in which the cart has been created.
+            shipping_address:
+                label:                  Shipping address
+                description:            The shipping address specified for a Magento shopping cart.
+            billing_address:
+                label:                  Billing address
+                description:            The billing address specified for a Magento shopping cart.
+            channel.label:              Integration
+            data_channel:
+                label:                  Channel
+                description:            The channel via which information about a Magento shopping cart has been received.
+            opportunity:
+                label:                  Opportunity
+                description:            The opportunity to which a Magento shopping cart was converted.
+            notes:
+                label:                  Additional comments
+                description:            Additional information that a customer can leave for a Magento shopping cart.
+            related_calls.label:        Calls
+            website.label:              Website
+            status_message:
+                label:                  Status message
+                description:            The status message assigned to a specific Magento shopping cart.
+            organization.label:         Organization
+            imported_at:
+                label:                  Imported At
+                description:            The date and time when the record was imported.
+            synced_at:
+                label:                  Last Synced At
+                description:            The date and time of the last Magento shopping cart synchronization.
             b2c_flow_abandoned_shopping_cart.step.label: Step
-            related_calls.label:       Calls
-            website.label:             Website
-            status_message.label:      Status message
-            organization.label:        Organization
-            imported_at.label: Imported At
-            synced_at.label: Last Synced At
 
         cartitem:
-            entity_label:              Magento Shopping Cart Item
-            entity_plural_label:       Magento Shopping Cart items
-            custom_price.label:        Custom price
-            description.label:         Description
-            discount_amount.label:     Discount amount
-            free_shipping.label:       Free shipping
-            gift_message.label:        Gift message
-            id.label:                  Cart item id
-            is_virtual.label:          Is virtual
-            name.label:                Name
-            origin_id.label:           Origin cart id
-            parent_item_id.label:      Parent cart item id
-            price.label:               Price
-            price_incl_tax.label:      Price incl. tax
-            product_id.label:          Product id
-            product_type.label:        Product type
-            qty.label:                 Qty
-            row_total.label:           Row total
-            sku.label:                 Sku
-            tax_amount.label:          Tax amount
-            tax_class_id.label:        Tax class id
-            tax_percent.label:         Tax percent
-            weight.label:              Weight
-            cart.label:                Cart
-            product_image_url.label:   Product Image URL
-            product_url.label:         Product URL
-            channel.label:             Channel
-            removed.label:             Removed
-            owner.label:               Owner
+            entity_label:               Magento Shopping Cart Item
+            entity_plural_label:        Magento Shopping Cart items
+            entity_description:         The items added to the Magento cart.
+            custom_price:
+                label:                  Custom price
+                description:            The custom price amount specified for a Magento shopping cart item.
+            description:
+                label:                  Description
+                description:            Short description of a Magento shopping cart item.
+            discount_amount:
+                label:                  Discount amount
+                description:            The discount amount specified for a Magento shopping cart item.
+            free_shipping:
+                label:                  Free shipping
+                description:            Defines whether free shipping is applicable for a Magento shopping cart item.
+            gift_message:
+                label:                  Gift message
+                description:            Defines whether a gift message is specified for a Magento shopping cart item.
+            id.label:                   Cart item id
+            is_virtual:
+                label:                  Is virtual
+                description:            Defines whether the Magento cart item is virtual.
+            name:
+                label:                  Name
+                description:            The name specified for a Magento shopping cart item.
+            origin_id:
+                label:                  Origin cart id
+                description:            The Magento shopping cart item ID on the Magento side.
+            parent_item_id:
+                label:                  Parent cart item id
+                description:            The parent item ID associated with a Magento shopping cart item.
+            price:
+                label:                  Price
+                description:            The price specified for a Magento shopping cart item.
+            price_incl_tax:
+                label:                  Price incl. tax
+                description:            The price specified for a Magento shopping cart item, including tax amount.
+            product_id:
+                label:                  Product id
+                description:            The ID of the product in a Magento shopping cart.
+            product_type:
+                label:                  Product type
+                description:            The product type of a Magento shopping cart item.
+            qty:
+                label:                  Qty
+                description:            The quantity of the items in a Magento shopping cart.
+            row_total:
+                label:                  Row total
+                description:            The row total price amount for a Magento shopping cart item.
+            sku:
+                label:                  Sku
+                description:            A stock keeping unit represented by a unique identification code that allows to track a Magento shopping cart item.
+            tax_amount:
+                label:                  Tax amount
+                description:            The amount of tax applied to a Magento shopping cart item.
+            tax_class_id:
+                label:                  Tax class id
+                description:            The tax class ID configured for a Magento shopping cart item.
+            tax_percent:
+                label:                  Tax percent
+                description:            The percent of tax configured for a Magento shopping cart item.
+            weight:
+                label:                  Weight
+                description:            The value of weight specified for a Magento shopping cart item.
+            cart:
+                label:                  Cart
+                description:            The Magento shopping cart to which a Magento cart item belongs.
+            product_image_url:
+                label:                  Product Image URL
+                description:            The URL of the image configured for a Magento product.
+            product_url:
+                label:                  Product URL
+                description:            The product URL  of a Magento shopping cart item
+            channel.label:              Channel
+            removed:
+                label:                  Removed
+                description:            Defines whether the item was removed from the Magento shopping cart.
+            owner.label:                Owner
 
         cartstatus:
-            entity_label:        Magento Shopping Cart Status
-            entity_plural_label: Magento Shopping Cart Statuses
-            label.label:         Label
-            name.label:          Name
+            entity_label:         Magento Shopping Cart Status
+            entity_plural_label:  Magento Shopping Cart Statuses
+            entity_description:   The statuses of a Magento cart (Open, Purchased, Lost, Expired, Processing, Converted to Opportunity, etc).
+            label:
+                label:            Label
+                description:      The label specified for a Magento shopping cart status and is used to refer to the it on the interface.
+            name.label:           Name
 
         orderitem:
             entity_label:           Magento Order Item
             entity_plural_label:    Magento Order Items
-            discount_amount.label:  Discount amount
-            discount_percent.label: Discount percent
+            entity_description:     The items that a Magento order contains.
+            discount_amount:
+                label:              Discount amount
+                description:        The discount amount specified for a Magento order item.
+            discount_percent:
+                label:              Discount percent
+                description:        The discount percent specified for a Magento order item.
             id.label:               Cart item id
-            is_virtual.label:       Is virtual
-            name.label:             Name
-            order.label:            Order
-            origin_id.label:        Origin order item id
-            original_price.label:   Original price
-            price.label:            Price
-            product_options.label:  Product options
-            product_type.label:     Product type
-            qty.label:              Qty
-            row_total.label:        Row total
-            sku.label:              Sku
-            tax_amount.label:       Tax amount
-            tax_percent.label:      Tax percent
-            weight.label:           Weight
+            is_virtual:
+                label:              Is virtual
+                description:        Defines whether the Magento order item is virtual.
+            name:
+                label:              Name
+                description:        The name specified for a Magento order item.
+            order:
+                label:              Order
+                description:        The order to which a specific Magento order item belongs.
+            origin_id:
+                label:              Origin order item id
+                description:        The Magento order item ID on the Magento side.
+            original_price:
+                label:              Original price
+                description:        The original price of a Magento order item before any calculations (e.g. special prices).
+            price:
+                label:              Price
+                description:        The order item price including special prices but before calculating taxes.
+            product_options:
+                label:              Product options
+                description:        Product options configured for a Magento order item.
+            product_type:
+                label:              Product type
+                description:        The product type of a Magento order item.
+            qty:
+                label:              Qty
+                description:        The quantity of the order items in a Magento shopping cart.
+            row_total:
+                label:              Row total
+                description:        The row total price amount for a Magento order item.
+            sku:
+                label:              Sku
+                description:        A stock keeping unit represented by a unique identification code that allows to track a Magento order item.
+            tax_amount:
+                label:              Tax amount
+                description:        The amount of tax applied to a Magento order item.
+            tax_percent:
+                label:              Tax percent
+                description:        The percent of tax configured for a Magento order item.
+            weight:
+                label:              Weight
+                description:        The value of weight specified for a Magento order item.
             channel.label:          Channel
             owner.label:            Owner
 
@@ -352,192 +549,413 @@ oro:
                 outdated_brige: OroBridge v.%extension_version% is used—outdated version
 
         order:
-            entity_label:        Magento Order
-            entity_plural_label: Magento Orders
-            entity_description:  Respresent Magento Order
+            entity_label:           Magento Order
+            entity_plural_label:    Magento Orders
+            entity_description:     Magento orders represent purchases made by customers in a Magento store.
 
-            refresh_label:      Sync Data
-            id.label:           Id
-            owner.label:        Owner
-            increment_id.label: "Order #"
-            items_qty.label:    Items qty
-            gift_message.label: Gift message
-            remote_ip.label:    Remote address
-            store_name.label:   Website
-            total_paid_amount.label:     Total paid
-            total_invoiced_amount.label: Total invoiced
-            total_refunded_amount.label: Total refunded
-            total_canceled_amount.label: Total canceled
-            first_name.label:       First name
-            last_name.label:        Last name
-            currency.label:         Currency
-            payment_method.label:   Payment method
-            payment_details.label:  Payment details
-            subtotal_amount.label:  Subtotal amount
-            shipping_amount.label:  Shipping amount
-            shipping_method.label:  Shipping method
-            tax_amount.label:       Tax amount
-            discount_amount.label:  Discount amount
-            coupon_code.label:      Coupon code
-            discount_percent.label: Discount percent
-            total_amount.label:     Total amount
-            status.label:           Status
-            customer.label:         Customer
-            addresses.label:        Addresses
-            store.label:            Store
-            cart.label:             Cart
-            items.label:            Order items
-            is_virtual.label:       Is virtual
+            refresh_label:          Sync Data
+            id.label:               Id
+            owner.label:            Owner
+            increment_id:
+                label:              "Order #"
+                description:        The increment ID specified for a Magento order.
+            items_qty.label:        Items qty
+            gift_message:
+                label:              Gift message
+                description:        Defines whether a gift message is specified for a Magento order.
+            remote_ip:
+                label:              Remote address
+                description:        The remore IP address of a customer who created a Magento order.
+            store_name:
+                label:              Website
+                description:        The Magento store in which the order was created.
+            total_paid_amount:
+                label:              Total paid
+                description:        The total amount paid for a Magento order.
+            total_invoiced_amount:
+                label:              Total invoiced
+                description:        The total amount invoiced to a customer for a Magento order.
+            total_refunded_amount:
+                label:              Total refunded
+                description:        The total amount refunded for a Magento order.
+            total_canceled_amount:
+                label:              Total canceled
+                description:        The total number of items that were canceled in a Magento order.
+            first_name:
+                label:              First name
+                description:        The first name of a Magento customer that is specified in the Magento order.
+            last_name:
+                label:              Last name
+                description:        The last name of a Magento customer that is specified in the Magento order.
+            currency:
+                label:              Currency
+                description:        The currency configured for a Magento order.
+            payment_method:
+                label:              Payment method
+                description:        Payment method specified for a Magento order.
+            payment_details:
+                label:              Payment details
+                description:        Payment details specified for a Magento order.
+            subtotal_amount:
+                label:              Subtotal amount
+                description:        The subtotal amount configured for the items in a Magento order.
+            shipping_amount:
+                label:              Shipping amount
+                description:        The shipping price amount configured for a Magento order.
+            shipping_method:
+                label:              Shipping method
+                description:        The shipping method specified for a Magento order.
+            tax_amount:
+                label:              Tax amount
+                description:        The amount of tax applied to items in a Magento order.
+            discount_amount:
+                label:              Discount amount
+                description:        The discount amount specified for a Magento order.
+            coupon_code:
+                label:              Coupon code
+                description:        The coupon code added to a specific Magento order.
+            discount_percent:
+                label:              Discount percent
+                description:        The discount percent specified for a Magento order.
+            total_amount:
+                label:              Total amount
+                description:        The total amount configured for the items in a Magento order.
+            status:
+                label:              Status
+                description:        The status of a Magento order (Processing, Canceled, Completed).
+            customer:
+                label:              Customer
+                description:        The Magento customer who create a Magento order.
+            addresses:
+                label:              Addresses
+                description:        Collection of addresses specified for a Magento order.
+            store:
+                label:              Store
+                description:        A Magento store where a Magento order has been created.
+            cart:
+                label:              Cart
+                description:        The cart from which a Magento order was created.
+            items:
+                label:              Order items
+                description:        The items specified for a Magento order.
+            is_virtual:
+                label:              Is virtual
+                description:        Defines whether the Magento cart item is virtual.
             is_guest:
                 label:              Is Guest
                 yes:                Yes
                 no:                 No
+                description:        Defines whether a Magento customer who create an order is a guest or a registered user.
             channel.label:          Integration
-            data_channel.label:     Channel
-            notes.label:            Additional comments
-            feedback.label:         Feedback
-            b2c_flow_order_follow_up.step.label: Step
+            data_channel:
+                label:              Channel
+                description:        The channel via which information about a Magento order has been received.
+            notes:
+                label:              Additional comments
+                description:        Additional information that a customer can leave for a Magento order.
+            feedback:
+                label:              Feedback
+                description:        Feedback provided for a specific Magento order.
             related_emails.label:   Emails
-            customer_email.label:   Email
+            customer_email:
+                label:              Email
+                description:        The email address assigned to a Magento customer.
             related_calls.label:    Calls
             website.label:          Website
             organization.label:     Organization
             sync_state:
                 label: Sync State
                 info: Partially synced
-            imported_at.label: Imported At
-            synced_at.label: Last Synced At
+            imported_at:
+                label:              Imported At
+                description:        The date and time when the record was imported.
+            synced_at:
+                label:              Last Synced At
+                description:        The date and time of the last Magento order synchronization.
+            b2c_flow_order_follow_up.step.label: Step
 
         product:
             entity_label:         Magento Product
             entity_plural_label:  Magento Products
-            entity_description:   Represent Magento product
+            entity_description:   Magento products represent goods on the Magento side.
 
             id.label:             Id
-            origin_id.label:      Origin Id
-            name.label:           Name
-            sku.label:            Sku
-            type.label:           Product type
-            special_price.label:  Special price
-            price.label:          Price
-            cost.label:           Cost
-            websites.label:       Websites
+            origin_id:
+                label:            Origin Id
+                description:      The Magento oproduct ID on the Magento side.
+            name:
+                label:            Name
+                description:      The name specified for a Magento product.
+            sku:
+                label:            Sku
+                description:      A stock keeping unit represented by a unique identification code that allows to track a Magento product.
+            type:
+                label:            Product type
+                description:      The type of a Magento product.
+            special_price:
+                label:            Special price
+                description:      The special price specified for a Magento product.
+            price:
+                label:            Price
+                description:      The price specified for a Magento product.
+            cost:
+                label:            Cost
+                description:      The cost of a Magento product.
+            websites:
+                label:            Websites
+                description:      The websites via which information about a Magento product is received.
             channel.label:        Integration
 
         address:
-            entity_label:          Magento Customer Address
-            entity_plural_label:   Magento Customer Addresses
-            entity_description:    Represent Magento Customer Address
-            label.label:           Label
-            street.label:          Street
-            street2.label:         Street 2
-            city.label:            City
-            postal_code.label:     Zip/Postal code
-            region_text.label:     State
-            name_prefix.label:     Name prefix
-            first_name.label:      First name
-            middle_name.label:     Middle name
-            last_name.label:       Last name
-            name_suffix.label:     Name suffix
-            primary.label:         Primary
-            id.label:              Id
-            organization.label:    Organization
-            origin_id.label:       Origin id
-            owner.label:           Owner
-            types.label:           Types
-            country.label:         Country
-            region.label:          State
-            contact_address.label: Contact address
-            contact_phone.label:   Contact phone
-            phone.label:           Phone
-            sync_state.label:      Sync State
-            channel.label:         Channel
-            country_name.label:      Country name
-            country_iso2_code.label: Country ISO2 code
-            country_iso3_code.label: Country ISO3 code
-            region_name.label:       State name
-            region_code.label:       State ISO code
+            entity_label:             Magento Customer Address
+            entity_plural_label:      Magento Customer Addresses
+            entity_description:       The address configured for a Magento customer.
+            label:
+                label:                Label
+                description:          The label specified for the Magento customer address. The label is used to refer to the Magento customer address on the interface.
+            street:
+                label:                Street
+                description:          The first line of the street address. Usually contains the street name and the building number.
+            street2:
+                label:                Street 2
+                description:          The second line of the street address. May contain the apartment number, P.O. box, building name, etc.
+            city:
+                label:                City
+                description:          The city specified in the Magento customer address.
+            postal_code:
+                label:                Zip/Postal code
+                description:          The postal code specified in the Magento customer address.
+            region_text.label:        State
+            name_prefix:
+                label:                Name prefix
+                description:          The name prefix specified in the Magento customer address.
+            first_name:
+                label:                First name
+                description:          The first name that is specified in the Magento customer address.
+            middle_name:
+                label:                Middle name
+                description:          The middle name that is specified in the Magento customer address.
+            last_name:
+                label:                Last name
+                description:          The last name that is specified in the Magento customer address.
+            name_suffix:
+                label:                Name suffix
+                description:          The name suffix specified in the Magento customer address.
+            primary:
+                label:                Primary
+                description:          Defines whether the Magento customer address is primary.
+            id.label:                 Id
+            organization:
+                label:                Organization
+                description:          The organization that is specified in the Magento customer address.
+            origin_id:
+                label:                Origin id
+                description:          The address ID on the Magento side.
+            owner:
+                label:                Owner
+                description:          The Magento customer who is the owner of the Magento customer address.
+            types:
+                label:                Types
+                description:          The address types (whether it is a billing address, shipping address, or both) configured for the Magento customer address.
+            country:
+                label:                Country
+                description:          The country specified in the Magento customer address.
+            region:
+                label:                State
+                description:          The region specified in the Magento customer address.
+            contact_address:
+                label:                Contact address
+                description:          The contact address specified in the Magento customer address.
+            contact_phone.label:      Contact phone
+            phone:
+                label:                Phone
+                description:          The phone specified in the Magento customer address.
+            sync_state:
+                label:                Sync State
+                description:          Synchronization status.
+            channel.label:            Channel
+            country_name.label:       Country name
+            country_iso2_code.label:  Country ISO2 code
+            country_iso3_code.label:  Country ISO3 code
+            region_name.label:        State name
+            region_code.label:        State ISO code
+            created:
+                label:                Created at
+                description:          The date and time when the Magento customer address was created.
+            updated:
+                label:                Updated at
+                description:          The date and time when the Magento customer address was last updated.
 
         cartaddress:
-            entity_label:        Magento Cart Address
-            entity_plural_label: Magento Cart Addresses
-            entity_description:  Represent Magento Cart Address
-            id.label:            Id
-            label.label:         Label
-            street.label:        Street
-            street2.label:       Street 2
-            city.label:          City
-            postal_code.label:   Zip/Postal code
-            organization.label:  Organization
-            region_text.label:   State
-            name_prefix.label:   Name prefix
-            first_name.label:    First name
-            middle_name.label:   Middle name
-            last_name.label:     Last name
-            name_suffix.label:   Name suffix
-            origin_id.label:     Origin Id
-            country.label:       Country
-            region.label:        State
-            phone.label:         Phone
-            country_name.label:      Country
-            country_iso2_code.label: Country ISO2 Code
-            country_iso3_code.label: Country ISO3 Code
-            region_name.label:       Region
-            region_code.label:       Region ISO code
-            channel.label:       Integration
+            entity_label:             Magento Cart Address
+            entity_plural_label:      Magento Cart Addresses
+            entity_description:       The customer address specified for a Magento cart.
+            id.label:                 Id
+            label:
+                label:                Label
+                description:          The label specified for the Magento cart address. The label is used to refer to the Magento cart address on the interface.
+            street:
+                label:                Street
+                description:          The first line of the street address. Usually contains the street name and the building number.
+            street2:
+                label:                Street 2
+                description:          The second line of the street address. May contain the apartment number, P.O. box, building name, etc.
+            city:
+                label:                City
+                description:          The city specified in the Magento cart address.
+            postal_code:
+                label:                Zip/Postal code
+                description:          The postal code specified in the Magento cart address.
+            organization:
+                label:                Organization
+                description:          The organization specified in the Magento cart address.
+            region_text.label:        State
+            name_prefix:
+                label:                Name prefix
+                description:          The name prefix specified in the Magento cart address.
+            first_name:
+                label:                First name
+                description:          The first name that is specified in the Magento cart address.
+            middle_name:
+                label:                Middle name
+                description:          The middle name that is specified in the Magento cart address.
+            last_name:
+                label:                Last name
+                description:          The last name that is specified in the Magento cart address.
+            name_suffix:
+                label:                Name suffix
+                description:          The name suffix specified in the Magento cart address.
+            origin_id:
+                label:                Origin Id
+                description:          The cart address ID on the Magento side.
+            country:
+                label:                Country
+                description:          The country specified in the Magento cart address.
+            region:
+                label:                State
+                description:          The region specified in the Magento cart address.
+            phone:
+                label:                Phone
+                description:          The phone specified in the Magento cart address.
+            country_name.label:       Country
+            country_iso2_code.label:  Country ISO2 Code
+            country_iso3_code.label:  Country ISO3 Code
+            region_name.label:        Region
+            region_code.label:        Region ISO code
+            channel.label:            Integration
+            created:
+                label:                Created at
+                description:          The date and time when the Magento cart address was created.
+            updated:
+                label:                Updated at
+                description:          The date and time when the Magento cart address was last updated.
 
         orderaddress:
-            entity_label:        Magento Order Address
-            entity_plural_label: Magento Order Addresses
-            entity_description:  Represent Magento Order Address
-            id.label:            Id
-            city.label:          City
-            country.label:       Country
-            region.label:        State
-            region_text.label:   State
-            first_name.label:    First name
-            middle_name.label:   Middle name
-            last_name.label:     Last name
-            name_suffix.label:   Name suffix
-            postal_code.label:   Zip/Postal code
-            organization.label:  Organization
-            fax.label:           Fax
-            phone.label:         Phone
-            owner.label:         Owner
-            types.label:         Types
-            street.label:        Street
-            country_name.label:      Country
-            country_iso2_code.label: Country ISO2 Code
-            country_iso3_code.label: Country ISO3 Code
-            region_name.label:       Region
-            region_code.label:       Region ISO code
-            channel.label:           Channel
-            origin_id.label:         Origin Id
+            entity_label:             Magento Order Address
+            entity_plural_label:      Magento Order Addresses
+            entity_description:       The address specified for a Magento order.
+            id.label:                 Id
+            city:
+                label:                City
+                description:          The city specified in the Magento order address.
+            country:
+                label:                Country
+                description:          The country specified in the Magento order address.
+            region:
+                label:                State
+                description:          The region specified in the Magento order address.
+            region_text.label:        State
+            first_name:
+                label:                First name
+                description:          The first name that is specified in the Magento order address.
+            middle_name.label:        Middle name
+            last_name:
+                label:                Last name
+                description:          The last name that is specified in the Magento order address.
+            name_suffix.label:        Name suffix
+            postal_code:
+                label:                Zip/Postal code
+                description:          The postal code specified in the Magento order address.
+            organization:
+                label:                Organization
+                description:          The organization that is specified in the Magento order address.
+            fax:
+                label:                Fax
+                description:          The fax specified in the Magento order address.
+            phone:
+                label:                Phone
+                description:          The phone specified in the Magento order address.
+            owner:
+                label:                Owner
+                description:          The Magento order that is the owner of the Magento order address.
+            types:
+                label:                Types
+                description:          The address types (whether it is a billing address, shipping address, or both) configured for the Magento order address.
+            street:
+                label:                Street
+                description:          The street specified in the Magento order address.
+            country_name.label:       Country
+            country_iso2_code.label:  Country ISO2 Code
+            country_iso3_code.label:  Country ISO3 Code
+            region_name.label:        Region
+            region_code.label:        Region ISO code
+            channel.label:            Channel
+            origin_id:
+                label:                Origin Id
+                description:          The order address ID on the Magento side.
 
         store:
-            entity_label:        Magento Store
-            entity_plural_label: Magento Stores
-            entity_description:  Represent Magento Store
-            id.label:            Id
-            origin_id.label:     Origin Id
-            code.label:          Code
-            name.label:          Name
-            channel.label:       Integration
-            website.label:       Website
-            placeholder:         Please, select store
+            entity_label:         Magento Store
+            entity_plural_label:  Magento Stores
+            entity_description:   A Magento store represents a website by means of which goods are sold and bought by Magento customers.
+            id.label:             Id
+            origin_id:
+                label:            Origin Id
+                description:      The Magento store ID specified on the Magento side.
+            code:
+                label:            Code
+                description:      A code assigned to a Magento store.
+            name:
+                label:            Name
+                description:      A  name assigned to a Magento store.
+            channel.label:        Integration
+            website:
+                label:            Website
+                description:      The website assigned to a Magento store.
+            placeholder:          Please, select store
 
         website:
-            entity_label:        Magento Website
-            entity_plural_label: Magento Websites
-            entity_description:  Represent Magento Website
-            id.label:            Id
-            origin_id.label:     Origin Id
-            code.label:          Code
-            name.label:          Name
-            channel.label:       Integration
-            default.label:       Is default
-            default_group_id.label: Default Group
-            sort_order.label:       Sort Order
+            entity_label:         Magento Website
+            entity_plural_label:  Magento Websites
+            entity_description:   Magento websites through which goods are sold and bought by Magento customers.
+            id.label:             Id
+            origin_id:
+                label:            Origin Id
+                description:      The Magento website ID specified on the Magento side.
+            code:
+                label:            Code
+                description:      A code assigned to a Magento website.
+            name:
+                label:            Name
+                description:      A name assigned to a Magento website.
+            channel.label:        Integration
+            default:
+                label:            Is default
+                description:      Specifies whether a specific website is set as default.
+            default_group_id:
+                label:            Default Group
+                description:      The default group ID assigned to a Magento website.
+            sort_order:
+                label:            Sort Order
+                description:      The sort order that determines the sequence in which a Magento website is listed.
+
+        #regions:
+        #   entity_label:        Magento Region
+        #   entity_plural_label: Magento Regions
+        #   entity_description:  The regions specified for Magento orders by Magento customers.
+        #    code:
+        #        label:            Code
+        #        description:      The part of after hyphen of an ISO 3166-2 region code.
 
         website_activity:
             days_ago:   1 day ago|%count% days ago
