@@ -1,0 +1,22 @@
+oro_behat_extension:
+  elements:
+    Embedded Form:
+      selector: 'form[id^="embedded_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Title: 'embedded_form[title]'
+          Form Type: 'embedded_form[formType]'
+          CSS: 'embedded_form[css]'
+          Success Message: 'embedded_form[successMessage]'
+
+    Magento contact us form:
+      selector: 'div#page'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          First name: 'oro_magento_contactus_contact_request[firstName]'
+          Last name: 'oro_magento_contactus_contact_request[lastName]'
+          Preferred contact method: 'oro_magento_contactus_contact_request[preferredContactMethod]'
+          Email: 'oro_magento_contactus_contact_request[emailAddress]'
+          Comment: 'oro_magento_contactus_contact_request[comment]'

@@ -4,10 +4,14 @@ namespace Oro\Bundle\MagentoBundle\Tests\Behat\Context;
 
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
+
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
+use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -21,6 +25,7 @@ use Oro\Bundle\UIBundle\Tests\Behat\Element\ContextSelector;
 use Oro\Bundle\UIBundle\Tests\Behat\Element\UiDialog;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\SalesBundle\Tests\Behat\Context\SalesExtension;
+
 use Symfony\Component\Console\Exception\RuntimeException;
 
 class FeatureContext extends OroFeatureContext implements
@@ -124,5 +129,22 @@ class FeatureContext extends OroFeatureContext implements
         sort($accountsInGrid);
 
         self::assertEquals($ownAccounts, $accountsInGrid);
+    }
+
+    /**
+     * @Given I am on Submit Magento contact us form page
+     */
+    public function iAmOnSubmitMagentoContactUsFormPage()
+    {
+        /** @var EntityManager $em */
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $repository = $em->getRepository('OroEmbeddedFormBundle:EmbeddedForm');
+        /** @var EmbeddedForm $contactUsForm */
+        $contactUsForm = $repository->findOneBy(['title' => 'Magento contact us form']);
+        $uri = $this->getContainer()->get('router')->generate(
+            'oro_embedded_form_submit',
+            ['id' => $contactUsForm->getId()]
+        );
+        $this->visitPath($uri);
     }
 }
