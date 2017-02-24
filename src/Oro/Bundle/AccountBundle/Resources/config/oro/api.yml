@@ -1,3 +1,4 @@
 api:
     entities:
-        Oro\Bundle\AccountBundle\Entity\Account: ~
+        Oro\Bundle\AccountBundle\Entity\Account:
+            documentation_resource: '@OroAccountBundle/Resources/doc/api/account.md'

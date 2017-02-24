@@ -34,19 +34,29 @@ oro:
         #
         entity_label:               Account
         entity_plural_label:        Accounts
-        entity_description:         Represent account
-        id.label:                   Id
-        name.label:                 Account name
+        entity_description:         Accounts represent a person, a company or a group of people. Account aggregates details of all the customer identities assigned to it, providing for a 360-degree view of the customer activity.
+        id:
+            label:                  Id
+            description:            The unique identifier of an account record.
+        name:
+            label:                  Account name
+            description:            Unique name that identifies an account record.
         owner.label:                Owner
-        contacts.label:             Contacts
-        default_contact.label:      Default Contact
+        contacts:
+            label:                  Contacts
+            description:            The collection of contacts related to an account.
+        default_contact:
+            label:                  Default Contact
+            description:            The default contact details for an account.
         phone.label:                Phone
         email.label:                Email
         assigned.label:             Assigned
-        referred_by.label:          Referred By
-
-        extend_description.label:   Description
-
+        referred_by:
+            label:                  Referred By
+            description:            A link to a different account. ***The parameter is currently deprecated.***
+        extend_description:
+            label:                  Description
+            description:            Details or a short description of an account record.
         lifetime_value.label:       Lifetime sales value
 
         contact:

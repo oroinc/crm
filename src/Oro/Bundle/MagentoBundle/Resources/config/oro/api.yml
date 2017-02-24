@@ -1,10 +1,17 @@
 api:
     entities:
-        Oro\Bundle\MagentoBundle\Entity\Address: ~
-        Oro\Bundle\MagentoBundle\Entity\Cart: ~
-        Oro\Bundle\MagentoBundle\Entity\CartAddress: ~
-        Oro\Bundle\MagentoBundle\Entity\CartItem: ~
+        Oro\Bundle\MagentoBundle\Entity\Address:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/address.md'
+        Oro\Bundle\MagentoBundle\Entity\Cart:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
+        Oro\Bundle\MagentoBundle\Entity\CartAddress:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_address.md'
+        Oro\Bundle\MagentoBundle\Entity\CartItem:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_item.md'
+        Oro\Bundle\MagentoBundle\Entity\CartStatus:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_status.md'
         Oro\Bundle\MagentoBundle\Entity\Customer:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/customer.md'
             fields:
                 orders:
                     exclude: true
@@ -25,13 +32,31 @@ api:
 #        Oro\Bundle\MagentoBundle\Entity\CustomerGroup: ~
 #        Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
 #        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
-        Oro\Bundle\MagentoBundle\Entity\Order: ~
-        Oro\Bundle\MagentoBundle\Entity\OrderAddress: ~
-        Oro\Bundle\MagentoBundle\Entity\OrderItem: ~
-        Oro\Bundle\MagentoBundle\Entity\Product: ~
-        Oro\Bundle\MagentoBundle\Entity\Region: ~
-        Oro\Bundle\MagentoBundle\Entity\Store: ~
-        Oro\Bundle\MagentoBundle\Entity\Website: ~
+        Oro\Bundle\MagentoBundle\Entity\Order:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order.md'
+        Oro\Bundle\MagentoBundle\Entity\OrderAddress:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_address.md'
+        Oro\Bundle\MagentoBundle\Entity\OrderItem:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_item.md'
+        Oro\Bundle\MagentoBundle\Entity\Product:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/product.md'
+        Oro\Bundle\MagentoBundle\Entity\Region:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/region.md'
+            fields:
+                code:
+                    description:    The part of after hyphen of an ISO 3166-2 region code.
+                combinedCode:
+                    description:    The identifier of an entity. The region (country subdivision) code according to ISO 3166-2.
+                countryCode:
+                    description:    The country code specified for a region. The part before hyphen of an ISO 3166-2 region code.
+                name:
+                    description:    The name used to refer to a region on the interface.
+                regionId:
+                    description:    The region ID assigned to a Magento region.
+        Oro\Bundle\MagentoBundle\Entity\Store:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/store.md'
+        Oro\Bundle\MagentoBundle\Entity\Website:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/website.md'
 
         # remove this exclusion when NewsletterSubscriber entity will be enabled for Data API
         Extend\Entity\EV_Mage_Subscr_Status: { exclude: true}
