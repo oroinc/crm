@@ -63,7 +63,6 @@ Feature: Managing workflows
       | System          | No                     |
       | Priority        | 0                      |
 
-
   Scenario: Workflow edit
     Given I click Edit Test workflow in grid
     And I fill form with:
@@ -93,7 +92,8 @@ Feature: Managing workflows
     Given I sort grid by Related Entity
     And I click Clone Glorious workflow in grid
     When I save and close form
-    Then I should see "Workflow saved." flash message
+    Then I should see "Translation cache update is required. Click here to update" flash message
+    And I should see "Workflow saved." flash message
     When I go to System/ Workflows
     Then I should see Copy of Glorious workflow in grid with following data:
       | Name            | Copy of Glorious workflow  |
