@@ -5,17 +5,18 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 
-use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 
 /**
  * @dbIsolationPerTest
  */
-class LeadStatistics extends BaseStatistics
+class OpportunityStatistics extends BaseStatistics
 {
     protected $metrics = [
-        'open_leads_count' => 'Open Leads',
-        'new_leads_count' => 'New Leads'
+        'new_opportunities_count'          => 'New Opportunities count',
+        'new_opportunities_amount'         => 'New Opportunities amount',
+        'won_opportunities_to_date_count'  => 'Won Opportunities to date count',
+        'won_opportunities_to_date_amount' => 'Won Opportunities to date amount'
     ];
 
     public function setUp()
@@ -25,7 +26,7 @@ class LeadStatistics extends BaseStatistics
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadStatisticsWidgetFixture'
+            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatisticsWidgetFixture'
         ]);
     }
 
@@ -49,7 +50,7 @@ class LeadStatistics extends BaseStatistics
         $form = $crawler->selectButton('Save')->form();
         $this->createAndSetDateRangeFormElements($form, ['type' => AbstractDateFilterType::TYPE_ALL_TIME]);
         $this->createMetricsElements($form);
-        $form['lead_statistics[usePreviousInterval]'] = 1;
+        $form['opportunity_statistics[usePreviousInterval]'] = 1;
         $this->client->submit($form);
 
         $response = $this->client->getResponse();
@@ -60,7 +61,7 @@ class LeadStatistics extends BaseStatistics
             $this->getUrl(
                 'oro_dashboard_itemized_data_widget',
                 [
-                    'widget' => 'lead_statistics',
+                    'widget' => 'opportunity_statistics',
                     'bundle' => 'OroDashboardBundle',
                     'name' => 'bigNumbers',
                     '_widgetId' => $this->getWidget()->getId()
@@ -72,25 +73,48 @@ class LeadStatistics extends BaseStatistics
         $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
         $this->assertNotEmpty($crawler->html());
 
-        $openLeadsMetric = $crawler->filterXPath(
+        $newOpportunityCountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
-                $this->metrics['open_leads_count']
+                $this->metrics['new_opportunities_count']
             )
         );
         $this->assertEquals(
-            $openLeadsMetric->text(),
-            1,
-            '"Open Leads" metric doesn\'t much expected value !'
+            $newOpportunityCountMetric->text(),
+            2,
+            '"New Opportunities Count" metric doesn\'t much expected value !'
         );
-        $newLeadsMetric = $crawler->filterXPath(
+
+        $newOpportunityAmountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
-                $this->metrics['new_leads_count']
+                $this->metrics['new_opportunities_amount']
             )
         );
         $this->assertEquals(
-            $newLeadsMetric->getNode(0)->nodeValue,
+            $newOpportunityAmountMetric->getNode(0)->nodeValue,
+            '$60,000.00',
+            '"New Opportunities Amount" metric doesn\'t much expected value !'
+        );
+
+        $newOpportunityCountMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['won_opportunities_to_date_count']
+            )
+        );
+        $this->assertEquals(
+            $newOpportunityCountMetric->text(),
             1,
-            '"New Leads" metric doesn\'t much expected value !'
+            '"Won Opportunities Count" metric doesn\'t much expected value !'
+        );
+
+        $newOpportunityCountMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['won_opportunities_to_date_amount']
+            )
+        );
+        $this->assertEquals(
+            $newOpportunityCountMetric->text(),
+            '$10,000.00',
+            '"Won Opportunities Count" metric doesn\'t much expected value !'
         );
     }
 
@@ -113,7 +137,7 @@ class LeadStatistics extends BaseStatistics
          */
         $crawler = $this->client->getCrawler();
         $form = $crawler->selectButton('Save')->form();
-        $form['lead_statistics[owners][users]'] = $owners;
+        $form['opportunity_statistics[owners][users]'] = $owners;
         $this->createMetricsElements($form);
         $this->setComparePrevious($form, $comparePrevious);
         $this->setAdvancedFilters($form, $advancedFilters);
@@ -135,7 +159,7 @@ class LeadStatistics extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -153,10 +177,17 @@ class LeadStatistics extends BaseStatistics
 
                 ],
                 'widgetItemResult' => [
-                    'open_leads_count' => 0,
-                    'new_leads_count' => 0
+                    'new_opportunities_count' => 0,
+                    'new_opportunities_amount' => '$0.00',
+                    'won_opportunities_to_date_count' => 0,
+                    'won_opportunities_to_date_amount' => '$0.00',
                 ],
-                'widgetItemPreviousResult' => ['new_leads_count' => 'No changes']
+                'widgetItemPreviousResult' => [
+                    'new_opportunities_count' => 'No changes',
+                    'new_opportunities_count' => 'No changes',
+                    'new_opportunities_count' => 'No changes',
+                    'new_opportunities_count' => 'No changes'
+                ]
             ],
             'Apply "All time" date range filter' => [
                 'owners' => '',
@@ -164,8 +195,10 @@ class LeadStatistics extends BaseStatistics
                 'comparePrevious' => true,
                 'advancedFilters' => [],
                 'widgetItemResult' => [
-                    'open_leads_count' => 1,
-                    'new_leads_count' => 1
+                    'new_opportunities_count' => 2,
+                    'new_opportunities_amount' => '$60,000.00',
+                    'won_opportunities_to_date_count' => 1,
+                    'won_opportunities_to_date_amount' => '$10,000.00',
                 ],
                 'widgetItemPreviousResult' => []
             ],
@@ -175,10 +208,17 @@ class LeadStatistics extends BaseStatistics
                 'comparePrevious' => true,
                 'advancedFilters' => [],
                 'widgetItemResult' => [
-                    'open_leads_count' => 1,
-                    'new_leads_count' => 1
+                    'new_opportunities_count' => 2,
+                    'new_opportunities_amount' => '$60,000.00',
+                    'won_opportunities_to_date_count' => 1,
+                    'won_opportunities_to_date_amount' => '$10,000.00',
                 ],
-                'widgetItemPreviousResult' => ['new_leads_count' => '+1']
+                'widgetItemPreviousResult' => [
+                    'new_opportunities_count' => '+2',
+                    'new_opportunities_amount' => '+$60,000.00',
+                    'won_opportunities_to_date_count' => '+1',
+                    'won_opportunities_to_date_amount' => '+$10,000.00',
+                ]
             ],
             'Apply "Custom" date range filter' => [
                 'owners' => '',
@@ -189,15 +229,25 @@ class LeadStatistics extends BaseStatistics
                 ],
                 'comparePrevious' => true,
                 'advancedFilters' => [],
-                'widgetItemResult' => ['open_leads_count' => 1, 'new_leads_count' => 1],
-                'widgetItemPreviousResult' => ['new_leads_count' => '+1']
+                'widgetItemResult' => [
+                    'new_opportunities_count' => 2,
+                    'new_opportunities_amount' => '$60,000.00',
+                    'won_opportunities_to_date_count' => 1,
+                    'won_opportunities_to_date_amount' => '$10,000.00',
+                ],
+                'widgetItemPreviousResult' => [
+                    'new_opportunities_count' => '+2',
+                    'new_opportunities_amount' => '+$60,000.00',
+                    'won_opportunities_to_date_count' => 'No changes',
+                    'won_opportunities_to_date_amount' => '+$0.00'
+                ]
             ],
             'Apply advanced filters with owner filter' => [
                 'owners' => '1',
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => false,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     'filters' => [
                         'columnName' => 'updatedAt',
                         'criterion' => [
@@ -215,8 +265,10 @@ class LeadStatistics extends BaseStatistics
 
                 ],
                 'widgetItemResult' => [
-                    'open_leads_count' => 0,
-                    'new_leads_count' => 0
+                    'new_opportunities_count' => 0,
+                    'new_opportunities_amount' => '$0.00',
+                    'won_opportunities_to_date_count' => 0,
+                    'won_opportunities_to_date_amount' => '$0.00',
                 ],
                 'widgetItemPreviousResult' => []
             ],
@@ -225,7 +277,7 @@ class LeadStatistics extends BaseStatistics
                 'dateRange' => ['type' => AbstractDateFilterType::TYPE_TODAY],
                 'comparePrevious' => true,
                 'advancedFilters' => [
-                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Lead',
+                    'entity' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
                     'filters' => [
                         'columnName' => 'createdAt',
                         'criterion' => [
@@ -243,10 +295,17 @@ class LeadStatistics extends BaseStatistics
 
                 ],
                 'widgetItemResult' => [
-                    'open_leads_count' => 1,
-                    'new_leads_count' => 1
+                    'new_opportunities_count' => 2,
+                    'new_opportunities_amount' => '$60,000.00',
+                    'won_opportunities_to_date_count' => 1,
+                    'won_opportunities_to_date_amount' => '$10,000.00',
                 ],
-                'widgetItemPreviousResult' => ['new_leads_count' => '+1']
+                'widgetItemPreviousResult' => [
+                    'new_opportunities_count' => '+2',
+                    'new_opportunities_amount' => '+$60,000.00',
+                    'won_opportunities_to_date_count' => 'No changes',
+                    'won_opportunities_to_date_amount' => 'No changes'
+                ]
             ],
         ];
     }
@@ -256,7 +315,7 @@ class LeadStatistics extends BaseStatistics
      */
     protected function getWidget()
     {
-        return $this->getReference('widget_lead_statistics');
+        return $this->getReference('widget_opportunity_statistics');
     }
 
     /**
@@ -273,7 +332,7 @@ class LeadStatistics extends BaseStatistics
             $this->getUrl(
                 'oro_dashboard_itemized_data_widget',
                 [
-                    'widget' => 'lead_statistics',
+                    'widget' => 'opportunity_statistics',
                     'bundle' => 'OroDashboardBundle',
                     'name' => 'bigNumbers',
                     '_widgetId' => $this->getWidget()->getId()
@@ -282,42 +341,63 @@ class LeadStatistics extends BaseStatistics
         );
 
         $response = $this->client->getResponse();
-
         $this->assertEquals($response->getStatusCode(), 200, "Failed in gettting widget view !");
         $this->assertNotEmpty($crawler->html());
 
-        $openLeadsMetric = $crawler->filterXPath(
+        $newOpportunityCountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
-                $this->metrics['open_leads_count']
+                $this->metrics['new_opportunities_count']
             )
         );
         $this->assertEquals(
-            $openLeadsMetric->text(),
-            $result['open_leads_count'],
-            '"Open Leads" metric doesn\'t much expected value !'
+            $newOpportunityCountMetric->text(),
+            $result['new_opportunities_count'],
+            '"New Opportunities Count" metric doesn\'t much expected value !'
         );
 
-        $newLeadsMetric = $crawler->filterXPath(
+        $newOpportunityAmountMetric = $crawler->filterXPath(
             $this->getMetricValueByLabel(
-                $this->metrics['new_leads_count']
+                $this->metrics['new_opportunities_amount']
             )
         );
         $this->assertEquals(
-            $newLeadsMetric->text(),
-            $result['new_leads_count'],
-            '"New Leads" metric doesn\'t much expected value !'
+            $newOpportunityAmountMetric->getNode(0)->nodeValue,
+            $result['new_opportunities_amount'],
+            '"New Opportunities Amount" metric doesn\'t much expected value !'
+        );
+
+        $newOpportunityCountMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['won_opportunities_to_date_count']
+            )
+        );
+        $this->assertEquals(
+            $newOpportunityCountMetric->text(),
+            $result['won_opportunities_to_date_count'],
+            '"Won Opportunities Count" metric doesn\'t much expected value !'
+        );
+
+        $newOpportunityCountMetric = $crawler->filterXPath(
+            $this->getMetricValueByLabel(
+                $this->metrics['won_opportunities_to_date_amount']
+            )
+        );
+        $this->assertEquals(
+            $newOpportunityCountMetric->text(),
+            $result['won_opportunities_to_date_amount'],
+            '"Won Opportunities Count" metric doesn\'t much expected value !'
         );
 
         $deviationMetric = $crawler->filterXPath(
             $this->getMetricPreviousIntervalValueByLabel(
-                $this->metrics['new_leads_count']
+                $this->metrics['new_opportunities_count']
             )
         );
 
         if (!empty($previousResult)) {
             $this->assertEquals(
                 trim($deviationMetric->text()),
-                $previousResult['new_leads_count'],
+                $previousResult['new_opportunities_count'],
                 '"New Leads" previous period metric doesn\'t much expected value !'
             );
         } else {

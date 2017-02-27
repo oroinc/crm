@@ -48,22 +48,22 @@ class LoadLeadStatisticsWidgetFixture extends AbstractFixture
         $this->em = $manager;
         $this->createLead($manager);
 
-        $dasboard = new Dashboard();
-        $dasboard->setName('dashboard');
+        $dashboard = new Dashboard();
+        $dashboard->setName('dashboard');
 
         $leadStaticsWidget = new Widget();
         $leadStaticsWidget
-            ->setDashboard($dasboard)
+            ->setDashboard($dashboard)
             ->setName('lead_statistics')
             ->setLayoutPosition([1, 1]);
 
-        $dasboard->addWidget($leadStaticsWidget);
+        $dashboard->addWidget($leadStaticsWidget);
 
         if (!$this->hasReference('widget_lead_statistics')) {
             $this->setReference('widget_lead_statistics', $leadStaticsWidget);
         }
 
-        $manager->persist($dasboard);
+        $manager->persist($dashboard);
         $manager->flush();
     }
 }
