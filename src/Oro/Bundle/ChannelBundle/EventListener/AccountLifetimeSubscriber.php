@@ -54,20 +54,31 @@ class AccountLifetimeSubscriber implements EventSubscriber
     {
         $em = $args->getEntityManager();
         $uow = $em->getUnitOfWork();
-        
-        $entities = array_merge(
-            $uow->getScheduledEntityInsertions(),
-            $uow->getScheduledEntityUpdates(),
-            $uow->getScheduledEntityDeletions()
-        );
 
         $customerTargetFields = $this->accountCustomerManager->getCustomerTargetFields();
-        foreach ($entities as $entity) {
+        foreach ($this->getChangedEntities($uow) as $entity) {
             if ($entity instanceof Opportunity) {
                 $this->scheduleOpportunityAccount($entity, $uow);
             } elseif ($entity instanceof Customer) {
                 $this->scheduleCustomerAccounts($entity, $uow, $customerTargetFields);
             }
+        }
+    }
+
+    /**
+     * @param UnitOfWork $uow
+     * @return \Generator
+     */
+    protected function getChangedEntities(UnitOfWork $uow)
+    {
+        foreach ($uow->getScheduledEntityInsertions() as $entity) {
+            yield $entity;
+        }
+        foreach ($uow->getScheduledEntityUpdates() as $entity) {
+            yield $entity;
+        }
+        foreach ($uow->getScheduledEntityDeletions() as $entity) {
+            yield $entity;
         }
     }
 
