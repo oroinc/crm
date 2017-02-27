@@ -31,7 +31,6 @@ class OrderGridListener
     const COUNTRY_NAME_COLUMN = 'countryName';
     const REGION_NAME_COLUMN  = 'regionName';
 
-    const SELECT_PATH  = '[source][query][select]';
     const FILTERS_PATH = '[filters][columns]';
 
     /**
@@ -173,39 +172,37 @@ class OrderGridListener
      */
     protected function replaceAddressSelects(DatagridConfiguration $config)
     {
-        $select           = $config->offsetGetByPath(self::SELECT_PATH, []);
-        $countryColumn    = array_filter($select, function ($val) {
+        $query = $config->getOrmQuery();
+        $select = $query->getSelect();
+        $countryColumn = array_filter($select, function ($val) {
             return strpos($val, ' as countryName') !== false;
         });
-        $regionColumn     = array_filter($select, function ($val) {
+        $regionColumn = array_filter($select, function ($val) {
             return strpos($val, ' as regionName') !== false;
         });
         $countryColumnPos = key($countryColumn);
-        $regionColumnPos  = key($regionColumn);
-        $addJoins         = false;
+        $regionColumnPos = key($regionColumn);
+        $addJoins = false;
         if ($countryColumnPos) {
-            $addJoins                  = true;
+            $addJoins = true;
             $select[$countryColumnPos] = 'country.name as countryName';
         }
         if ($regionColumnPos) {
-            $addJoins                 = true;
+            $addJoins = true;
             $select[$regionColumnPos] = 'CONCAT(CASE WHEN address.regionText IS NOT NULL ' .
                 'THEN address.regionText ELSE region.name END, \'\') as regionName';
         }
         if ($addJoins) {
-            $addressJoins = [
-                [
-                    'join'          => 'o.addresses',
-                    'alias'         => 'address',
-                    'conditionType' => 'WITH',
-                    'condition'     => 'address.id IN (SELECT oa.id FROM OroMagentoBundle:OrderAddress oa '
-                        . 'LEFT JOIN oa.types type WHERE type.name = \'billing\' OR type.name IS NULL)'
-                ],
-                ['join' => 'address.country', 'alias' => 'country'],
-                ['join' => 'address.region', 'alias' => 'region']
-            ];
-            $config->offsetAddToArrayByPath('[source][query][join][left]', $addressJoins);
+            $query->addLeftJoin(
+                'o.addresses',
+                'address',
+                'WITH',
+                'address.id IN (SELECT oa.id FROM OroMagentoBundle:OrderAddress oa '
+                . 'LEFT JOIN oa.types type WHERE type.name = \'billing\' OR type.name IS NULL)'
+            );
+            $query->addLeftJoin('address.country', 'country');
+            $query->addLeftJoin('address.region', 'region');
         }
-        $config->offsetSetByPath(self::SELECT_PATH, $select);
+        $query->setSelect($select);
     }
 }

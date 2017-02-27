@@ -10,7 +10,6 @@ use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 
 /**
- * @outputBuffering false
  * @dbIsolationPerTest
  */
 class LifetimeAverageAggregateCommandTest extends WebTestCase

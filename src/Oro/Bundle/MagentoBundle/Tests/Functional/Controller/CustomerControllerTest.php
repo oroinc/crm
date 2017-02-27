@@ -2,26 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CustomerControllerTest extends AbstractController
 {
-    /** @var \Oro\Bundle\MagentoBundle\Entity\Customer */
-    public static $customer;
-
-    protected function postFixtureLoad()
-    {
-        parent::postFixtureLoad();
-
-        self::$customer = $this->getReference('customer');
-    }
-
     /** @return int */
     protected function getMainEntityId()
     {
-        return self::$customer->getId();
+        return $this->getReference('customer')->getId();
     }
 
     public function testView()

@@ -8,8 +8,6 @@ Oro\Bundle\SalesBundle\Entity\Opportunity:
             - Range:
                 min: 0
                 max: 100
-        organization:
-            - NotBlank: ~
         status:
             - NotBlank: ~
 
@@ -28,8 +26,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the emails must be set as primary.
-        organization:
-            - NotBlank: ~
         status:
             - NotBlank: ~
 
@@ -42,8 +38,6 @@ Oro\Bundle\SalesBundle\Entity\SalesFunnel:
         startDate:
             - NotBlank: ~
             - Date: ~
-        organization:
-            - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\B2bCustomer:
     properties:
@@ -52,8 +46,6 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             - Length:
                 max: 255
         dataChannel:
-            - NotBlank: ~
-        organization:
             - NotBlank: ~
 
 Oro\Bundle\SalesBundle\Entity\Customer:

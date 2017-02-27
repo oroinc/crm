@@ -10,9 +10,6 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy;
 
-/**
- * @dbIsolation
- */
 class AddressDiscoveryStrategyTest extends WebTestCase
 {
     /**

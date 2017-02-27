@@ -4,11 +4,6 @@ namespace Oro\Bundle\ReportCRMBundle\Tests\Functional;
 
 use Oro\Bundle\ReportBundle\Tests\Functional\ControllersTest as BaseControllersTest;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- * @dbReindex
- */
 class ControllersCrmTest extends BaseControllersTest
 {
     protected function setUp()

@@ -3,6 +3,7 @@
 {% import 'OroChannelBundle::macros.html.twig' as channel %}
 {% import 'OroCurrencyBundle::macros.html.twig' as currency %}
 {% import 'OroSalesBundle::macros.html.twig' as sales %}
+{% import 'OroTagBundle::macros.html.twig' as Tag %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -36,15 +37,16 @@
             {{ currency.convert_to_base_currency(entity.budgetAmount, '', entity, 'budgetAmount') }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
+            {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, Tag.renderView(entity)) }}
         </div>
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_reason.label'|trans, entity.closeReason, entity, 'closeReason') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue.value|length ? entity.closeRevenue.value|oro_format_currency({'currency': entity.closeRevenue.currency}) : '', entity, 'closeRevenue') }}
             {{ currency.convert_to_base_currency(entity.closeRevenue, '', entity, 'closeRevenue') }}
             {{ ui.renderProperty('oro.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '', entity, 'closeDate') }}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
         </div>
     </div>
 </div>

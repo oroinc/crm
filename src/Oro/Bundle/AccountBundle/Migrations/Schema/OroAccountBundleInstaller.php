@@ -66,7 +66,7 @@ class OroAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_12';
+        return 'v1_13';
     }
 
     /**
@@ -142,7 +142,7 @@ class OroAccountBundleInstaller implements
         $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9', []);
         $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE', []);
         $table->addIndex(['default_contact_id'], 'IDX_7166D371AF827129', []);
-        $table->addIndex(['name'], 'account_name_idx', []);
+        $table->addIndex(['name', 'id'], 'account_name_idx', []);
 
         $queries->addPostQuery(new AccountNameExprIndexQuery());
     }

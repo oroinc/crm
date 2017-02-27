@@ -32,6 +32,14 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     }
 
     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return ($this->getIntegrationRepository()->countActiveIntegrations(ChannelType::TYPE) > 0);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configure()
@@ -54,8 +62,7 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     {
         $logger    = new OutputLogger($output);
 
-        /** @var IntegrationRepository $repository */
-        $repository = $this->getDoctrine()->getRepository(Integration::class);
+        $repository = $this->getIntegrationRepository();
 
         $integrationId = $input->getOption('channel-id');
         if ($integrationId) {
@@ -99,5 +106,13 @@ class SyncCartExpirationCommand extends Command implements CronCommandInterface,
     private function getMessageProducer()
     {
         return $this->container->get('oro_message_queue.message_producer');
+    }
+
+    /**
+     * @return IntegrationRepository
+     */
+    private function getIntegrationRepository()
+    {
+        return $this->getDoctrine()->getRepository(Integration::class);
     }
 }

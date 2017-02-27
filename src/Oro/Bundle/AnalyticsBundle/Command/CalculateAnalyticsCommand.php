@@ -24,6 +24,14 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
     }
 
     /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()

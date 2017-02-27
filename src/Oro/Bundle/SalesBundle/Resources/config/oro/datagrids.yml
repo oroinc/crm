@@ -23,22 +23,24 @@ datagrids:
                     - o.closeRevenueValue  as closeRevenue
                     - o.budgetAmountCurrency as budgetAmountCurrency
                     - o.closeRevenueCurrency as closeRevenueCurrency
-                    - s.id as status
+                    - IDENTITY(o.status) as status
                     - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - own.id as owner
                     - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+                    - account.name as accountName
                 from:
                     - { table: %oro_sales.opportunity.class%, alias: o }
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.owner, alias: own }
+                        - { join: o.customerAssociation, alias: customer }
+                        - { join: customer.account, alias: account }
         inline_editing:
             enable: true
         columns:
@@ -68,7 +70,6 @@ datagrids:
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
                     original_field: closeRevenue
                     value_field: closeRevenueValue
                     currency_field: closeRevenueCurrency
@@ -87,7 +88,6 @@ datagrids:
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
@@ -97,9 +97,10 @@ datagrids:
                 label:         oro.sales.opportunity.probability.label
                 frontend_type: percent
             status:
-                frontend_type: select
+                context:
+                    enum_code: opportunity_status
+                frontend_type: enum
                 label:         oro.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         oro.contact.email.label
             ownerName:
@@ -113,6 +114,9 @@ datagrids:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: Oro_Bundle_SalesBundle_Entity_Opportunity
+            accountName:
+                label: oro.sales.b2bcustomer.datagrid.columns.account_name.label
+                renderable: false
         fields_acl:
             columns:
                 name:
@@ -327,8 +331,8 @@ datagrids:
                     - l.numberOfEmployees
                     - l.twitter
                     - l.linkedIn
-                    - source.name as sourceName
-                    - s.id as status
+                    - IDENTITY(l.source) as source
+                    - IDENTITY(l.status) as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -347,7 +351,6 @@ datagrids:
                     - { table: %oro_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: s }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: l.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                         - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
@@ -355,7 +358,6 @@ datagrids:
                         - { join: address.region, alias: region }
                         - { join: l.owner, alias: own }
                         - { join: l.contact, alias: c }
-                        - { join: l.source, alias: source }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -364,9 +366,10 @@ datagrids:
             name:
                 label:         oro.sales.lead.name.label
             status:
-                frontend_type: select
+                context:
+                    enum_code: lead_status
+                frontend_type: enum
                 label:         oro.sales.lead.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         oro.sales.lead.first_name.label
             lastName:
@@ -394,7 +397,10 @@ datagrids:
                 label:         oro.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
                 renderable: false
-            sourceName:
+            source:
+                context:
+                    enum_code: lead_source
+                frontend_type: enum
                 label:         oro.sales.lead.source.label
                 renderable: false
             email:
@@ -511,8 +517,8 @@ datagrids:
                     data_name: l.website
                 numberOfEmployees:
                     data_name: l.numberOfEmployees
-                sourceName:
-                    data_name: source.name
+                source:
+                    data_name: source
                 email:
                     data_name: email.email
                 phone:
@@ -600,11 +606,10 @@ datagrids:
                     type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
-                sourceName:
+                source:
                     type: enum
                     enum_code: lead_source
-                    data_name: source.id
-                    enabled: false
+                    data_name: source
                     enabled: false
                 email:
                     type: string
@@ -711,7 +716,7 @@ datagrids:
                     value: budgetAmount
                     currency: budgetAmountCurrency
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
+                    base_currency_label: oro.sales.opportunity.base_budget_amount_value.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
@@ -1362,7 +1367,7 @@ datagrids:
                 icon:          trash
                 link:          delete_link
 
-    orocrm-sales-b2bcustomers-select-grid:
+    oro-sales-b2bcustomers-select-grid:
         extends: base-sales-b2bcustomers-grid
         source:
             query:
@@ -1738,6 +1743,7 @@ datagrids:
                 select:
                     - l.id
                     - l.name
+                    - l.createdAt
                     - l.firstName
                     - l.lastName
                     - email.email
@@ -1765,6 +1771,9 @@ datagrids:
                 label:         oro.sales.lead.last_name.label
             email:
                 label:         oro.sales.lead.email.label
+            createdAt:
+                renderable:     false
+                frontend_type:  datetime
         sorters:
             columns:
                 name:
@@ -1777,6 +1786,8 @@ datagrids:
                     data_name: l.lastName
                 email:
                     data_name: email.email
+                createdAt:
+                    data_name: l.createdAt
             default:
                 createdAt:  DESC
         filters:
@@ -1814,6 +1825,7 @@ datagrids:
                 select:
                     - o.id
                     - o.name
+                    - o.createdAt
                     - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - s.id as status
                     - email.email as primaryEmail
@@ -1839,6 +1851,9 @@ datagrids:
                 label:         oro.contact.email.label
             ownerName:
                 label:         oro.sales.opportunity.owner.label
+            createdAt:
+                renderable: false
+                frontend_type: datetime
         fields_acl:
             columns:
                 name:
@@ -1859,6 +1874,8 @@ datagrids:
                     data_name: email.email
                 ownerName:
                     data_name: ownerName
+                createdAt:
+                    data_name: o.createdAt
             default:
                 createdAt: DESC
         filters:

@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
@@ -175,7 +175,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param Channel $channel
      * @param string $status
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return \Iterator
      */
     public function getCartsByChannelIdsIterator(Channel $channel, $status = 'open')
     {
@@ -187,7 +187,7 @@ class CartRepository extends ChannelAwareEntityRepository
             ->setParameter('channel', $channel)
             ->setParameter('statusName', $status);
 
-        return new BufferedQueryResultIterator($qb);
+        return new BufferedIdentityQueryResultIterator($qb);
     }
 
     /**

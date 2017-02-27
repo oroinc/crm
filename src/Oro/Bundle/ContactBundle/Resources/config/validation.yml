@@ -13,8 +13,9 @@ Oro\Bundle\ContactBundle\Entity\Contact:
                 choices: [male, female]
         birthday:
             - Date: ~
-        organization:
-            - NotBlank: ~
+            - LessThanOrEqual:
+                value: now UTC
+                message: This value cannot be in the future.
         addresses:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the addresses must be set as primary.
@@ -35,8 +36,6 @@ Oro\Bundle\ContactBundle\Entity\Group:
             - Length:
                 min: 3
                 max: 255
-        organization:
-            - NotBlank: ~
 
 # Prevent required values for all child of AbstractAddress
 Oro\Bundle\ContactBundle\Entity\ContactAddress:

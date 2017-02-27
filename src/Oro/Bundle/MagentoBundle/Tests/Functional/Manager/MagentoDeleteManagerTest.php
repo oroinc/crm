@@ -6,10 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class MagentoDeleteManagerTest extends WebTestCase
 {
     /** @var int */
@@ -67,7 +63,7 @@ class MagentoDeleteManagerTest extends WebTestCase
     protected function getRecordsCount($repository, $channel)
     {
         $result = $this->em->createQueryBuilder()
-            ->select('count(e)')
+            ->select('COUNT(e)')
             ->from($repository, 'e')
             ->where('e.channel = :channel')
             ->setParameter('channel', $channel)

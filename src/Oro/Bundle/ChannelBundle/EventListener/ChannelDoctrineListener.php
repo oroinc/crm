@@ -63,13 +63,11 @@ class ChannelDoctrineListener
         $entities = $this->getChangedTrackedEntities();
 
         foreach ($entities as $entity) {
-            $className = ClassUtils::getClass($entity);
             if ($this->uow->isScheduledForUpdate($entity)) {
                 $this->checkAndUpdate($entity, $this->uow->getEntityChangeSet($entity));
             } else {
                 $account = $this->getAccount($entity);
                 $this->scheduleUpdate(
-                    $className,
                     $account,
                     $entity->getDataChannel()
                 );
@@ -91,23 +89,21 @@ class ChannelDoctrineListener
         if (count($this->queued) > 0) {
             $toOutDate = [];
 
-            foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
-                foreach ($groupedByEntityUpdates as $data) {
-                    /** @var Account $account */
-                    $account = is_object($data['account'])
-                        ? $data['account']
-                        : $this->em->getReference('OroAccountBundle:Account', $data['account']);
+            foreach ($this->queued as $data) {
+                /** @var Account $account */
+                $account = is_object($data['account'])
+                    ? $data['account']
+                    : $this->em->getReference('OroAccountBundle:Account', $data['account']);
 
-                    /** @var Channel $channel */
-                    $channel = is_object($data['channel'])
-                        ? $data['channel']
-                        : $this->em->getReference('OroChannelBundle:Channel', $data['channel']);
+                /** @var Channel $channel */
+                $channel = is_object($data['channel'])
+                    ? $data['channel']
+                    : $this->em->getReference('OroChannelBundle:Channel', $data['channel']);
 
-                    $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
-                    $toOutDate[] = [$account, $channel, $entity];
+                $entity      = $this->createHistoryEntry($account, $channel);
+                $toOutDate[] = [$account, $channel, $entity];
 
-                    $this->em->persist($entity);
-                }
+                $this->em->persist($entity);
             }
 
             $this->isInProgress = true;
@@ -134,9 +130,7 @@ class ChannelDoctrineListener
             throw new \RuntimeException('UOW is missing, listener is not initialized');
         }
 
-        $customerIdentity = ClassUtils::getClass($customerIdentityEntity);
-
-        $this->scheduleUpdate($customerIdentity, $account, $channel);
+        $this->scheduleUpdate($account, $channel);
     }
 
     /**
@@ -188,12 +182,12 @@ class ChannelDoctrineListener
         if ($this->isUpdateRequired($className, $changeSet)) {
             $account = $this->getAccount($entity);
             $channel = $entity->getDataChannel();
-            $this->scheduleUpdate($className, $account, $channel);
+            $this->scheduleUpdate($account, $channel);
 
             $oldChannel = $this->getOldValue($changeSet, 'dataChannel');
             $oldAccount = $this->getOldValue($changeSet, 'account');
             if ($oldChannel || $oldAccount) {
-                $this->scheduleUpdate($className, $oldAccount ? : $account, $oldChannel ? : $channel);
+                $this->scheduleUpdate($oldAccount ? : $account, $oldChannel ? : $channel);
             }
         }
     }
@@ -211,11 +205,10 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param string  $customerIdentity
      * @param Account $account
      * @param Channel $channel
      */
-    protected function scheduleUpdate($customerIdentity, Account $account = null, Channel $channel = null)
+    protected function scheduleUpdate(Account $account = null, Channel $channel = null)
     {
         if ($account && $channel) {
             // skip removal, history items will be flushed by FK constraints
@@ -225,7 +218,7 @@ class ChannelDoctrineListener
 
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
-            $this->queued[$customerIdentity][$key] = [
+            $this->queued[$key] = [
                 'account' => $account->getId() ? : $account,
                 'channel' => $channel->getId() ? : $channel
             ];
@@ -246,17 +239,15 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param string  $customerIdentity
      * @param Account $account
      * @param Channel $channel
      *
      * @return LifetimeValueHistory
      */
-    protected function createHistoryEntry($customerIdentity, Account $account, Channel $channel)
+    protected function createHistoryEntry(Account $account, Channel $channel)
     {
         $lifetimeAmount = $this->getLifetimeRepository()->calculateAccountLifetime(
-            $customerIdentity,
-            $this->customerIdentities[$customerIdentity],
+            $this->customerIdentities,
             $account,
             $channel
         );

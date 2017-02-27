@@ -22,11 +22,6 @@ class LoadTest extends WebTestCase
         $this->initClient(array("debug" => false), $this->generateBasicAuthHeader());
     }
 
-    protected function tearDown()
-    {
-        unset($this->client);
-    }
-
     public function testLoad()
     {
         /** @var Kernel $kernel */

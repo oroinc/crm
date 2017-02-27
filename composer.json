@@ -10,9 +10,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Oro": "src/"
-         }
+        "psr-4": {"": "src/"},
+        "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
         "php": ">=5.6",

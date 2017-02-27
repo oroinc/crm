@@ -13,7 +13,7 @@
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
-                    $frame.load(function () {
+                    $frame.on('load', function() {
                         var offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
                         $frame.addClass('loaded').parent().css({'top': offset});
                         widgetManager.getWidgetInstance(
@@ -81,12 +81,7 @@
                                         mediator.trigger('datagrid:doReset:magento-customer-orders-widget-grid');
                                         chooseMessage(data);
                                     },
-                                    error: function() {
-                                        messenger.notificationFlashMessage(
-                                                'error',
-                                                __('oro.magento.external_error')
-                                        );
-                                    }
+                                    errorHandlerMessage: __('oro.magento.external_error')
                                 }).always(function () {
                                     performMessage.close();
                                 });

@@ -19,8 +19,14 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")
  * @ORM\Table(
- *      name="orocrm_sales_opportunity",
- *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
+ *  name="orocrm_sales_opportunity",
+ *  indexes={
+ *    @ORM\Index(name="opportunity_created_idx",columns={"created_at", "id"}),
+ *    @ORM\Index(
+ *      name="opportunities_by_status_idx",
+ *      columns={"organization_id","status_id","close_revenue_value","budget_amount_value","created_at"}
+ *    )
+ *  }
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -56,7 +62,8 @@ use Oro\Bundle\SalesBundle\Model\ExtendOpportunity;
  *              "context"="sales-opportunity-for-context-grid"
  *          },
  *          "tag"={
- *              "enabled"=true
+ *              "enabled"=true,
+ *              "enableDefaultRendering"=false
  *          }
  *     }
  * )
@@ -235,6 +242,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=55
+     *      },
+     *      "multicurrency"={
+     *          "target"="budgetAmount"
      *      }
      *  }
      * )
@@ -259,9 +269,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "importexport"={
      *          "order"=50
      *      },
-     *     "multicurrency"={
-     *          "target" = "budgetAmount",
-     *          "virtual_field" = "budgetAmountBaseCurrency"
+     *      "multicurrency"={
+     *          "target"="budgetAmount",
+     *          "virtual_field"="budgetAmountBaseCurrency"
      *      }
      *  }
      * )
@@ -279,6 +289,9 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=56
+     *      },
+     *      "multicurrency"={
+     *          "target"="budgetAmount"
      *      }
      *  }
      * )
@@ -287,9 +300,9 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * Changes to this value object wont affect entity change set
-     * To change persisted price value you should create and set new Multicurrency
+     * To change persisted price value you should create and set new MultiCurrency
      *
-     * @var Multicurrency
+     * @var MultiCurrency
      */
     protected $closeRevenue;
 
@@ -302,6 +315,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "dataaudit"={"auditable"=true, "immutable"=true},
      *      "importexport"={
      *          "order"=65
+     *      },
+     *      "multicurrency"={
+     *          "target"="closeRevenue"
      *      }
      *  }
      * )
@@ -327,8 +343,8 @@ class Opportunity extends ExtendOpportunity implements
      *          "order"=60
      *      },
      *      "multicurrency"={
-     *          "target" = "closeRevenue",
-     *          "virtual_field" = "closeRevenueBaseCurrency"
+     *          "target"="closeRevenue",
+     *          "virtual_field"="closeRevenueBaseCurrency"
      *      }
      *  }
      * )
@@ -346,6 +362,9 @@ class Opportunity extends ExtendOpportunity implements
      *      },
      *      "importexport"={
      *          "order"=66
+     *      },
+     *      "multicurrency"={
+     *          "target"="closeRevenue"
      *      }
      *  }
      * )

@@ -30,9 +30,7 @@ define(function(require) {
                         }
                     }
                 },
-                error: function() {
-                    messenger.notificationMessage('error', __('oro.integration.error'));
-                },
+                errorHandlerMessage: __('oro.integration.error'),
                 dataType: 'json'
             }).always(function() {
                 mediator.execute('hideLoading');

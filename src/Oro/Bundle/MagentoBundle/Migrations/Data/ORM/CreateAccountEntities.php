@@ -8,9 +8,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
+use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -37,19 +39,17 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
             ->leftJoin(CustomerAssociation::class, 'ca', 'WITH', sprintf('ca.%s = c', $field))
             ->where('ca.id IS NULL');
 
-        $iterator = new BufferedQueryResultIterator($qb);
+        $iterator = new BufferedIdentityQueryResultIterator($qb);
         $iterator->setBufferSize(self::BATCH_SIZE);
-        $objects = [];
-        $iteration = 0;
+        $iterationCount = 0;
+
         foreach ($iterator as $entity) {
-            $iteration++;
+            $iterationCount++;
             $account = $entity->getAccount();
             if (!$account) {
                 $account = $this->createAccount($entity);
                 $entity->setAccount($account);
 
-                $objects[] = $account;
-                $objects[] = $entity;
                 $manager->persist($account);
                 $manager->persist($entity);
             }
@@ -58,17 +58,16 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
             $customerAssociation->setTarget($account, $entity);
             $manager->persist($customerAssociation);
 
-            $objects[] = $customerAssociation;
-            if (0 === $iteration % self::BATCH_SIZE) {
-                $manager->flush($objects);
+            if ($iterationCount % self::BATCH_SIZE === 0) {
+                $manager->flush();
                 $this->clear($manager);
-                $objects = [];
             }
         }
-        if ($objects) {
-            $manager->flush($objects);
+
+        if ($iterationCount > 0) {
+            $manager->flush();
+            $manager->clear();
         }
-        $this->clear($manager);
     }
 
     /**
@@ -100,5 +99,8 @@ class CreateAccountEntities extends AbstractFixture implements ContainerAwareInt
     {
         $manager->clear(CustomerAssociation::class);
         $manager->clear(Customer::class);
+        $manager->clear(Contact::class);
+        $manager->clear(Account::class);
+        $manager->clear(LifetimeValueHistory::class);
     }
 }

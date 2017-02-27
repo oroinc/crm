@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
-
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 
@@ -11,11 +9,6 @@ use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- * @dbReindex
- */
 class ImportExportTest extends WebTestCase
 {
     use MessageQueueExtension;
@@ -28,35 +21,6 @@ class ImportExportTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-    }
-
-    /**
-     * Delete data required because there is commit to job repository in import/export controller action
-     * Please use
-     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
-     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->rollback();
-     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->getConnection()->clear();
-     * if you don't use controller
-     */
-    protected function tearDown()
-    {
-        // clear DB from separate connection, close to avoid connection limit and memory leak
-        $batchJobManager = $this->getBatchJobManager();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
-
-        parent::tearDown();
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getBatchJobManager()
-    {
-        /** @var BatchJobRepository $batchJobRepository */
-        $batchJobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
-        return $batchJobRepository->getJobManager();
     }
 
     public function strategyDataProvider()
@@ -210,7 +174,7 @@ class ImportExportTest extends WebTestCase
         $this->assertCollectionData($expected, $actual, ['Emails 2 Email', 'Emails 3 Email']);
         $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
         $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
-        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/postal code', 'Addresses 3 Zip/postal code']);
+        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/Postal Code', 'Addresses 3 Zip/Postal Code']);
         $this->assertArrayData($expected, $actual, 'Tags');
 
         $this->assertEquals($expected, $actual);

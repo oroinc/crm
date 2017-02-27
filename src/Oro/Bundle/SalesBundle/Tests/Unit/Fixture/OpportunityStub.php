@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Fixture;
 
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 
 class OpportunityStub extends Opportunity
 {
@@ -11,6 +12,19 @@ class OpportunityStub extends Opportunity
 
     /** @var object|null */
     protected $dataChannel;
+
+    /** @var AbstractEnumValue $status */
+    private $status;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct($id = null)
+    {
+        parent::__construct();
+
+        $this->id = $id;
+    }
 
     /**
      * @return object|null
@@ -42,5 +56,21 @@ class OpportunityStub extends Opportunity
     public function setDataChannel($dataChannel)
     {
         $this->dataChannel = $dataChannel;
+    }
+
+    /**
+     * @param AbstractEnumValue $status
+     */
+    public function setStatus(AbstractEnumValue $status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return AbstractEnumValue
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

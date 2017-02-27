@@ -101,7 +101,7 @@ class AccountCustomerManager
             }
             $customer       = $customerRepo->getAccountCustomer($target, $customerFields);
             if (!$customer) {
-                $customer = self::createCustomer($target);
+                $customer = static::createCustomer($target);
             }
         } else {
             $targetClassName = ClassUtils::getClass($target);
@@ -129,7 +129,7 @@ class AccountCustomerManager
     /**
      * @return array
      */
-    protected function getCustomerTargetFields()
+    public function getCustomerTargetFields()
     {
         $customerFields = [];
         foreach ($this->provider->getCustomerClasses() as $customerClass) {

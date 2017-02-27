@@ -3,8 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
 class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
 {
@@ -13,7 +13,9 @@ class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
      */
     public function isApplicable(DatagridConfiguration $config)
     {
-        return $this->parameters->get('opportunity_id') && parent::isApplicable($config);
+        return
+            $this->parameters->get('opportunity_id')
+            && parent::isApplicable($config);
     }
 
     /**
@@ -21,7 +23,7 @@ class RelevantOpportunitiesExtension extends AccountRelatedEntitiesExtension
      */
     public function visitDatasource(DatagridConfiguration $config, DatasourceInterface $datasource)
     {
-        /** @var $datasource OrmDataSource */
+        /** @var OrmDatasource $datasource */
         $opportunityId      = $this->parameters->get('opportunity_id');
         $queryBuilder       = $datasource->getQueryBuilder();
         $opportunityAlias   = $this->getEntityAlias($queryBuilder);

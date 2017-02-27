@@ -11,9 +11,6 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy;
 
-/**
- * @dbIsolation
- */
 class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
 {
     /**

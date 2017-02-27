@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TaskBundle\Entity\Task;
@@ -124,6 +125,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
         }
         $accounts = $om->getRepository('OroAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroContactBundle:Contact')->findAll();
+        $status = $om->getRepository(ExtendHelper::buildEnumValueClassName('task_status'))->find('open');
 
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
             /** @var User $assignedTo */
@@ -145,6 +147,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
+            $task->setStatus($status);
 
             $randomPath = rand(1, 10);
 

@@ -13,7 +13,7 @@ class ConfigProvider
     protected $configManager;
 
     /**
-     * @param ConfigManager    $configManager
+     * @param ConfigManager $configManager
      */
     public function __construct(ConfigManager $configManager)
     {
@@ -31,9 +31,11 @@ class ConfigProvider
             return false;
         }
 
-        $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
+        if (is_object($objectOrClass)) {
+            $objectOrClass = ClassUtils::getClass($objectOrClass);
+        }
 
-        return in_array($class, $this->getAssociatedCustomerClasses(), true);
+        return in_array($objectOrClass, $this->getAssociatedCustomerClasses(), true);
     }
 
     public function getCustomerClasses()
@@ -57,14 +59,12 @@ class ConfigProvider
 
         $customerClasses = $this->getCustomerClasses();
         foreach ($customerClasses as $class) {
-            $routeCreate = $this->getRouteCreate($class);
-            $defaultGrid = $this->getDefaultGrid($class);
-            $result[]    = [
-                'className'       => $class,
-                'label'           => $this->getLabel($class),
-                'icon'            => $this->getIcon($class),
-                'gridName'        => $defaultGrid,
-                'routeCreate'     => $routeCreate,
+            $result[] = [
+                'className'   => $class,
+                'label'       => $this->getLabel($class),
+                'icon'        => $this->getIcon($class),
+                'gridName'    => $this->getGrid($class),
+                'routeCreate' => $this->getRouteCreate($class),
             ];
         }
 
@@ -78,7 +78,7 @@ class ConfigProvider
      */
     public function getLabel($entityClass)
     {
-        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('label');
+        return $this->configManager->getEntityConfig('entity', $entityClass)->get('label');
     }
 
     /**
@@ -86,11 +86,9 @@ class ConfigProvider
      *
      * @return string|null
      */
-    public function getDefaultGrid($entityClass)
+    public function getGrid($entityClass)
     {
-        $config = $this->configManager->getProvider('grid')->getConfig($entityClass);
-
-        return $config->get('default');
+        return $this->configManager->getEntityConfig('grid', $entityClass)->get('context');
     }
 
     /**
@@ -100,7 +98,7 @@ class ConfigProvider
      */
     protected function getIcon($entityClass)
     {
-        return $this->configManager->getProvider('entity')->getConfig($entityClass)->get('icon');
+        return $this->configManager->getEntityConfig('entity', $entityClass)->get('icon');
     }
 
     /**
@@ -125,7 +123,7 @@ class ConfigProvider
     {
         $classes = [];
         /** @var Config[] $configs */
-        $configs = $this->configManager->getProvider('customer')->getConfigs();
+        $configs = $this->configManager->getConfigs('customer');
         foreach ($configs as $config) {
             if ($config->is('enabled')) {
                 $classes[] = $config->getId()->getClassName();

@@ -47,9 +47,13 @@ datagrids:
                 frontend_type: html
                 template: OroCaseBundle:Case:Datagrid/Property/assignedTo.html.twig
             reportedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.reported_on.label
                 frontend_type: datetime
             closedAt:
+                inline_editing:
+                    enable: false
                 label: oro.case.datagrid.closed_on.label
                 frontend_type: datetime
             statusLabel:
@@ -241,6 +245,7 @@ datagrids:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
+                    - caseEntity.reportedAt
                     - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
                     - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
                     - relatedAccount.name as relatedAccountName
@@ -275,6 +280,9 @@ datagrids:
                 label: oro.case.datagrid.status.label
             priorityLabel:
                 label: oro.case.datagrid.priority.label
+            reportedAt:
+                renderable: false
+                frontend_type: datetime
         sorters:
             columns:
                 subject:
@@ -285,6 +293,8 @@ datagrids:
                     data_name: status.order
                 priorityLabel:
                     data_name: priority.order
+                reportedAt:
+                    data_name: caseEntity.reportedAt
             default:
                 reportedAt: DESC
         filters:

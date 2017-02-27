@@ -5,10 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OrderItemControllerTest extends WebTestCase
 {
     public function setUp()

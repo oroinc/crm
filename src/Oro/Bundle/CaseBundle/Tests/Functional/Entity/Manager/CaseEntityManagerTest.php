@@ -9,11 +9,6 @@ use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
 use Oro\Bundle\CaseBundle\Model\CaseEntityManager;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- * @dbReindex
- */
 class CaseEntityManagerTest extends WebTestCase
 {
     /**
