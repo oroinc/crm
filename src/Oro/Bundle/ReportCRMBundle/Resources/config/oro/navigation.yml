@@ -110,4 +110,4 @@ navigation:
                                             total_forecast: ~
 
     titles:
-        oro_reportcrm_index: '%%reportName%% - %%reportGroup%%'
+        oro_reportcrm_index: '%reportName% - %reportGroup%'
