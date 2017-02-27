@@ -40,13 +40,9 @@ class CustomerAccountChangeSubscriber implements EventSubscriber
     public function onFlush(OnFlushEventArgs $args)
     {
         $uow = $args->getEntityManager()->getUnitOfWork();
-        $this->prepareChangedCustomers(
-            $uow,
-            array_merge(
-                $uow->getScheduledEntityInsertions(),
-                $uow->getScheduledEntityUpdates()
-            )
-        );
+
+        $this->prepareChangedCustomers($uow, $uow->getScheduledEntityInsertions());
+        $this->prepareChangedCustomers($uow, $uow->getScheduledEntityUpdates());
     }
 
     /**
