@@ -33,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v1_13';
+        return 'v1_14';
     }
 
     /**
