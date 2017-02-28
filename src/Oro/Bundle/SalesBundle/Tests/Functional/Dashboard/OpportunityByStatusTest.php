@@ -106,7 +106,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
                         'opportunities_by_state[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME,
                         'opportunities_by_state[useQuantityAsData]' => 1
                     ],
-                    'expectedResultCount' => 5
+                    'expectedResultCount' => 4
                 ],
             ],
         ];
