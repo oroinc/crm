@@ -94,7 +94,7 @@ class ForecastProvider
         $filters = isset($queryFilter['definition']['filters'])
             ? $queryFilter['definition']['filters']
             : [];
-        $key = $this->getDataHashKey($widgetOptions);
+        $key = $this->getDataHashKey($widgetOptions, $moment);
 
         if (!isset($this->data[$key])) {
             if (!$moment) {
@@ -274,11 +274,12 @@ class ForecastProvider
     /**
      * @param  WidgetOptionBag $widgetOptions
      *
+     * @param \DateTime $moment
      * @return string
      */
-    protected function getDataHashKey(WidgetOptionBag $widgetOptions)
+    protected function getDataHashKey(WidgetOptionBag $widgetOptions, \DateTime $moment = null)
     {
-        return md5(serialize($widgetOptions));
+        return md5(serialize([$widgetOptions, $moment]));
     }
 
     /**
