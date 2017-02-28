@@ -139,7 +139,7 @@ class LeadRepository extends EntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getLeadsCountQB(
         \DateTime $start = null,
@@ -152,7 +152,7 @@ class LeadRepository extends EntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getNewLeadsCountQB(
         \DateTime $start = null,
