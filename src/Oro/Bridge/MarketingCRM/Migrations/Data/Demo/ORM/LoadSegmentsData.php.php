@@ -27,8 +27,8 @@ class LoadSegmentsData extends AbstractFixture implements DependentFixtureInterf
     {
         $segment = new Segment();
         $definition['columns'][] = [
-            'name'    => 'email',
-            'label'   => 'email',
+            'name'    => 'primaryEmail',
+            'label'   => 'primaryEmail',
             'sorting' => '',
             'func'    => null,
         ];

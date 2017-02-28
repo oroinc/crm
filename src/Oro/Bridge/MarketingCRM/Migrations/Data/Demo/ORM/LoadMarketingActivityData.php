@@ -11,7 +11,6 @@ use Oro\Bundle\CampaignBundle\Entity\Campaign;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MarketingActivityBundle\Entity\MarketingActivity;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LoadMarketingActivityData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -36,10 +35,8 @@ class LoadMarketingActivityData extends AbstractFixture implements DependentFixt
     {
         /** @var Organization[] $organization */
         $organization = $this->getReference('default_organization');
-        /** @var Lead[] $leads */
-        $leads = $manager->getRepository('OroSalesBundle:Lead')->findAll();
-        $contacts = $manager->getRepository('OroContactBundle:Contact')->findAll();
-        $entities = array_merge($leads, $contacts);
+        /** @var array $entities */
+        $entities = $manager->getRepository('OroContactBundle:Contact')->findAll();
         /** @var Campaign[] $campaigns */
         $campaigns = $manager->getRepository('OroCampaignBundle:Campaign')->findAll();
         /** @var EmailCampaign[] $emailCampaigns */
@@ -58,15 +55,17 @@ class LoadMarketingActivityData extends AbstractFixture implements DependentFixt
         for ($i = 0; $i < self::MARKETING_ACTIVITIES_COUNT; $i++) {
             $marketingActivity = new MarketingActivity();
             $entity = $entities[mt_rand(0, $entitiesMax)];
+            $type = $types[mt_rand(0, $typesMax)];
+            $details = $type->getId() == 'click' ? "http://example.com/test{$i}.html" : '';
             $marketingActivity->setOwner($organization)
-                ->setDetails('')
+                ->setDetails($details)
                 ->setActionDate(date_create('-' . (mt_rand(0, 32535)) . 'seconds', $timezoneUTC))
                 ->setCampaign($campaigns[mt_rand(0, $campaignsMax)])
                 ->setEntityClass(get_class($entity))
                 ->setEntityId($entity->getId())
                 ->setRelatedCampaignClass(EmailCampaign::class)
                 ->setRelatedCampaignId($emailCampaign->getId())
-                ->setType($types[mt_rand(0, $typesMax)]);
+                ->setType($type);
 
             $manager->persist($marketingActivity);
         }

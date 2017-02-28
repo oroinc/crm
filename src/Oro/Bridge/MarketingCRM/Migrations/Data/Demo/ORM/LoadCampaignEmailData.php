@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
-use Oro\Bundle\MailChimpBundle\Entity\MailChimpTransportSettings;
+use Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings;
 
 class LoadCampaignEmailData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -32,7 +32,7 @@ class LoadCampaignEmailData extends AbstractFixture implements DependentFixtureI
         $defaultUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
         $marketingListsMax = count($marketingLists) - 1;
         $emailCampaign     = new EmailCampaign();
-        $transportSettings = new MailChimpTransportSettings();
+        $transportSettings = new InternalTransportSettings();
         $emailCampaign->setTransportSettings($transportSettings)
             ->setOwner($defaultUser)
             ->setOrganization($this->getReference('default_organization'))
