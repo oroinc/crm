@@ -84,3 +84,6 @@ Feature: Import opportunity feature
     When I try import file
     Then I should see validation message "Error in row #1. Opportunity name: This value should not be blank."
     And I should see validation message "Error in row #1. Status Id: This value should not be blank."
+
+    Scenario: af adf a
+      Given I login as Administrator

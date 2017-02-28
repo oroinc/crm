@@ -1,0 +1,350 @@
+# Oro\Bundle\MagentoBundle\Entity\CartItem
+
+## ACTIONS  
+
+### get
+
+Retrieve a specific Magento shopping cart item record.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve a collection records that represent Magento shopping cart items.
+
+{@inheritdoc}
+
+### create
+
+Create a new Magento shopping cart item record.
+The created record is returned in the response.
+
+{@inheritdoc}
+
+{@request:json_api}
+Example:
+
+`</api/magentocartitems>`
+
+```JSON
+{  
+   "data":{  
+      "type":"magentocartitems",
+      "attributes":{  
+         "productId":72,
+         "freeShipping":"1",
+         "description":"Item from cart",
+         "isVirtual":false,
+         "priceInclTax":"128.7988",
+         "rowTotal":"128.7988",
+         "taxAmount":"9.9588",
+         "productType":"simple",
+         "removed":false,
+         "sku":"sku-chair",
+         "name":"Chair",
+         "qty":1,
+         "price":"118.8400",
+         "discountAmount":"0.0000",
+         "taxPercent":0.0838,
+         "createdAt":"2017-02-15T15:42:19Z",
+         "updatedAt":"2017-02-15T15:42:19Z"
+      },
+      "relationships":{  
+         "cart":{  
+            "data":{  
+               "type":"magentocarts",
+               "id":"1"
+            }
+         },
+         "owner":{  
+            "data":{  
+               "type":"organizations",
+               "id":"1"
+            }
+         }
+      }
+   }
+}
+```
+{@/request}
+
+### update
+
+Edit a specific Magento shopping cart item record.
+
+{@inheritdoc}
+
+{@request:json_api}
+Example:
+
+`</api/magentocartitems/1>`
+
+```JSON
+{  
+   "data":{  
+      "type":"magentocartitems",
+      "id":"1",
+      "attributes":{  
+         "productId":72,
+         "freeShipping":"1",
+         "description":"Item from cart",
+         "isVirtual":false,
+         "priceInclTax":"128.7988",
+         "rowTotal":"128.7988",
+         "taxAmount":"9.9588",
+         "productType":"simple",
+         "removed":false,
+         "sku":"sku-chair",
+         "name":"Chair",
+         "qty":1,
+         "price":"118.8400",
+         "discountAmount":"0.0000",
+         "taxPercent":0.0838,
+         "createdAt":"2017-02-15T15:42:19Z",
+         "updatedAt":"2017-02-15T15:42:19Z"
+      },
+      "relationships":{  
+         "cart":{  
+            "data":{  
+               "type":"magentocarts",
+               "id":"1"
+            }
+         },
+         "owner":{  
+            "data":{  
+               "type":"organizations",
+               "id":"1"
+            }
+         }
+      }
+   }
+}
+```
+{@/request}
+
+### delete
+
+Delete a specific Magento shopping cart item record.
+
+{@inheritdoc}
+
+### delete_list
+
+Delete a collection of Magento shopping cart items records.
+The list of records that will be deleted, could be limited by filters.
+
+{@inheritdoc}
+
+## FIELDS
+
+### id
+
+#### update
+
+{@inheritdoc}
+
+**The required field**
+
+### productId
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### freeShipping
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### isVirtual
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### rowTotal
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### taxAmount
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### productType
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### name
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### qty
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+### price
+
+#### create
+
+{@inheritdoc}
+
+**The required field**
+
+#### update
+
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** and must remain defined.*
+
+## SUBRESOURCES
+
+### cart
+
+#### get_subresource
+
+Retrieve the Magento cart record configured for a specific Magento shopping cart item record.
+
+#### get_relationship
+
+Retrieve the ID of the Magento cart record configured for a specific Magento shopping cart item record.
+
+#### update_relationship
+
+Replace the Magento cart record configured for a specific Magento shopping cart item record.
+
+{@request:json_api}
+Example:
+
+`</api/magentocartitems/1/relationships/cart>`
+
+```JSON
+{
+  "data": {
+    "type": "magentocarts",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
+### owner
+
+#### get_subresource
+
+Retrieve the record of the organization that is the owner of a specific Magento shopping cart item record.
+
+#### get_relationship
+
+Retrieve the ID of the organization that is the owner of a specific Magento shopping cart item record.
+
+#### update_relationship
+
+Replace the owner of a specific Magento shopping cart item record.
+
+{@request:json_api}
+Example:
+
+`</api/magentocartitems/1/relationships/owner>`
+
+```JSON
+{
+  "data": {
+    "type": "organizations",
+    "id": "1"
+  }
+}
+```
+{@/request}

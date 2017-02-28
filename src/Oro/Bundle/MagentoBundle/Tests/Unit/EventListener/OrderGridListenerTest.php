@@ -38,6 +38,10 @@ class OrderGridListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $event->getDatagrid()->getConfig()->toArray());
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function onBuildBeforeDataProvider()
     {
         return [

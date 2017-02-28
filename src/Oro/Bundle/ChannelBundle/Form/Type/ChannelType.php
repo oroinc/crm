@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -59,6 +60,11 @@ class ChannelType extends AbstractType
                 'configs'  => ['placeholder' => 'oro.channel.form.select_channel_type.label'],
                 'empty_value'     => '',
             ]
+        );
+        $builder->add(
+            'status',
+            HiddenType::class,
+            ['data' => Channel::STATUS_ACTIVE]
         );
     }
 
