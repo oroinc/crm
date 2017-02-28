@@ -2,21 +2,31 @@
 
 namespace Oro\Bundle\ChannelBundle\Twig;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
 
 class MetadataExtension extends \Twig_Extension
 {
     const EXTENSION_NAME = 'oro_channel_metadata';
 
-    /** @var MetadataProviderInterface */
-    protected $metaDataProvider;
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
-     * @param MetadataProviderInterface $provider
+     * @param ContainerInterface $container
      */
-    public function __construct(MetadataProviderInterface $provider)
+    public function __construct(ContainerInterface $container)
     {
-        $this->metaDataProvider = $provider;
+        $this->container = $container;
+    }
+
+    /**
+     * @return MetadataProviderInterface
+     */
+    protected function getMetadataProvider()
+    {
+        return $this->container->get('oro_channel.provider.metadata_provider');
     }
 
     /**
@@ -24,24 +34,9 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        $entitiesMetadataFunction    = new \Twig_SimpleFunction(
-            'oro_channel_entities_metadata',
-            [
-                $this,
-                'getEntitiesMetadata'
-            ]
-        );
-        $channelTypeMetadataFunction = new \Twig_SimpleFunction(
-            'oro_channel_type_metadata',
-            [
-                $this,
-                'getChannelTypeMetadata'
-            ]
-        );
-
         return [
-            $entitiesMetadataFunction->getName()    => $entitiesMetadataFunction,
-            $channelTypeMetadataFunction->getName() => $channelTypeMetadataFunction
+            new \Twig_SimpleFunction('oro_channel_entities_metadata', [$this, 'getEntitiesMetadata']),
+            new \Twig_SimpleFunction('oro_channel_type_metadata', [$this, 'getChannelTypeMetadata'])
         ];
     }
 
@@ -50,7 +45,7 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getEntitiesMetadata()
     {
-        return $this->metaDataProvider->getEntitiesMetadata();
+        return $this->getMetadataProvider()->getEntitiesMetadata();
     }
 
     /**
@@ -58,7 +53,7 @@ class MetadataExtension extends \Twig_Extension
      */
     public function getChannelTypeMetadata()
     {
-        return $this->metaDataProvider->getChannelTypeMetadata();
+        return $this->getMetadataProvider()->getChannelTypeMetadata();
     }
 
     /**

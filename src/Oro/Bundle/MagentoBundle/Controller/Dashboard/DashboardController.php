@@ -245,7 +245,7 @@ class DashboardController extends Controller
     /**
      * @return PurchaseDataProvider
      */
-    public function getPurchaseDataProvider()
+    protected function getPurchaseDataProvider()
     {
         return $this->get('oro_magento.dashboard.data_provider.purchase');
     }

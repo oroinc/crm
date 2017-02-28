@@ -24,6 +24,8 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
     }
 
     /**
+     * @deprecated Since 2.0.3. Will be removed in 2.1. Must be refactored at BAP-13973
+     *
      * @return bool
      */
     public function isActive()
