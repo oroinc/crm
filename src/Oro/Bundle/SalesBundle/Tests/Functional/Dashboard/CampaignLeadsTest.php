@@ -103,7 +103,7 @@ class CampaignLeadsTest extends AbstractWidgetTestCase
                         'campaigns_leads[dateRange][part]'   => 'value',
                         'campaigns_leads[dateRange][type]'   => AbstractDateFilterType::TYPE_ALL_TIME
                     ],
-                    'expectedResultCount' => 5
+                    'expectedResultCount' => 4
                 ],
             ],
         ];

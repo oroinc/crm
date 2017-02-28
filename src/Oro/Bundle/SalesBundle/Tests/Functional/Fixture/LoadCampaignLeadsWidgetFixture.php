@@ -30,8 +30,6 @@ class LoadCampaignLeadsWidgetFixture extends AbstractFixture
         //insert one lead for previous months
         $createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->createLead($createdAt, ++$i);
-        $createdAt->sub(new \DateInterval('P2M'));
-        $this->createLead($createdAt, ++$i);
     }
 
     public function createLead($createdAt, $id)
