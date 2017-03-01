@@ -61,3 +61,9 @@ ContactBundle
 - Class `Oro\Bundle\ContactBundle\Twig\SocialUrlExtension` was renamed to `Oro\Bundle\ContactBundle\Twig\ContactExtension` and the following changes were made:
     - the construction signature of was changed. Now the constructor has only `ContainerInterface $container` parameter
     - removed property `protected $socialUrlFormatter`
+
+SalesBundle
+---------
+- Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`
+    - removed method `isReportOrSegmentGrid`
+    - added UnsupportedGridPrefixesTrait
