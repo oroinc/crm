@@ -30,8 +30,6 @@ class LoadOpportunityByStatusWidgetFixture extends AbstractFixture
         //insert one opportunity for previous months
         $createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->createOpportunity($createdAt, ++$i);
-        $createdAt->sub(new \DateInterval('P2M'));
-        $this->createOpportunity($createdAt, ++$i);
     }
 
     public function createOpportunity($createdAt, $id)
