@@ -86,12 +86,12 @@ class IndeterminateForecastProvider
         $cacheKey = $this->getCacheKey($widgetOptions);
 
         if (!isset($this->data[$cacheKey])) {
-            $qb = $this->getForcastQueryBuilder($widgetOptions->get('queryFilter', []));
-            $qb =$this->aclHelper->apply($qb);
+            $qb = $this->getForecastQueryBuilder($widgetOptions->get('queryFilter', []));
 
-            $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult()
+            $qb = $this->widgetProviderFilter->filter($qb, $widgetOptions);
+
+            $result = $this->aclHelper->apply($qb)->getOneOrNullResult()
                 ?: ['budgetAmount' => 0, 'weightedForecast' => 0];
-    
             $this->data[$cacheKey] = [
                 'totalIndeterminate'    => $result['budgetAmount'],
                 'weightedIndeterminate' => $result['weightedForecast'],
@@ -114,7 +114,7 @@ class IndeterminateForecastProvider
      *
      * @return QueryBuilder
      */
-    protected function getForcastQueryBuilder($queryFilter = null)
+    protected function getForecastQueryBuilder($queryFilter = null)
     {
         $filters = isset($queryFilter['definition']['filters'])
             ? $queryFilter['definition']['filters']

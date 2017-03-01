@@ -357,7 +357,7 @@ class OpportunityRepository extends EntityRepository
      * @param \DateTime  $start
      * @param \DateTime  $end
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getOpportunitiesCountQB(
         \DateTime $start = null,
@@ -370,7 +370,7 @@ class OpportunityRepository extends EntityRepository
      * @param \DateTime  $start
      * @param \DateTime  $end
      *
-     * @return int
+     * @return QueryBuilder
      */
     public function getNewOpportunitiesCountQB(
         \DateTime $start = null,
@@ -531,75 +531,112 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @deprecated since 2.1. Method "getOpportunitiesByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param WidgetOptionBag $widgetOptions
      *
      * @return double
      */
     public function getNewOpportunitiesAmount(
-        WidgetProviderFilterManager $widgetProviderFilter,
         AclHelper $aclHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
         $baTransformedQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
         $qb->select(sprintf('SUM(%s)', $baTransformedQuery));
-        $this->setCreationPeriod($qb, $start, $end);
-        $qb = $aclHelper->apply($qb);
 
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        $this->setCreationPeriod($qb, $start, $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+    /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $this->setCreationPeriod($qb, $start, $end);
+
+        return $qb;
     }
 
     /**
-     * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @deprecated since 2.1. Method "getWonOpportunitiesCountByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param WidgetOptionBag $widgetOptions
+     * @param int[]     $owners
      *
      * @return int
      */
     public function getWonOpportunitiesToDateCount(
-        WidgetProviderFilterManager $widgetProviderFilter,
         AclHelper $aclHelper,
         \DateTime $start = null,
         \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)')
             ->andWhere('o.status = :status')
             ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
-        $this->setClosedPeriod($qb, $start, $end);
-        $qb = $aclHelper->apply($qb);
 
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        $this->setClosedPeriod($qb, $start, $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
-     * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getWonOpportunitiesCountByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $qb->select('COUNT(o.id)')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+        $this->setClosedPeriod($qb, $start, $end);
+
+        return $qb;
+    }
+
+    /**
+     * @deprecated since 2.1. Method "getWonOpportunitiesByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param WidgetOptionBag $widgetOptions
+     * @param int[]     $owners
      *
      * @return double
      */
     public function getWonOpportunitiesToDateAmount(
-        WidgetProviderFilterManager $widgetProviderFilter,
         AclHelper $aclHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
-        WidgetOptionBag $widgetOptions
+        $owners = []
     ) {
         $qb = $this->createQueryBuilder('o');
         $crTransformedQuery = $qbTransformer->getTransformSelectQuery('closeRevenue', $qb);
@@ -608,9 +645,29 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
 
         $this->setClosedPeriod($qb, $start, $end);
-        $qb = $aclHelper->apply($qb);
 
-        return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getWonOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+
+        $this->setClosedPeriod($qb, $start, $end);
+
+        return $qb;
     }
 
     /**

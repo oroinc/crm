@@ -162,7 +162,7 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @return int
+     * @return QueryBuilder
      */
     public function getOpenLeadsCountQB()
     {

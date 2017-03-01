@@ -411,6 +411,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider
         arguments:
             - '@doctrine'
+            - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'

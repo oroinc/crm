@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
@@ -137,9 +138,8 @@ class ForecastProvider
             ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
-        $qb = $this->aclHelper->apply($qb);
 
-        return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult();
+        return $this->processDataQueryBuilder($qb, $widgetOptions)->getOneOrNullResult();
     }
 
     /**
@@ -352,7 +352,7 @@ EXISTS(
     FROM OroDataAuditBundle:AuditField afoh
     WHERE
         afoh.id = MAX(afo.id)
-        AND afoh.newText IN (SELECT u.username FROM OroUserBundle:User u WHERE u.id IN (:ownerIds))
+        AND afoh.newText IN (SELECT afohu.username FROM OroUserBundle:User afohu WHERE afohu.id IN (:ownerIds))
 )
 HAVING
             )
@@ -378,5 +378,20 @@ HAVING
             },
             ['inProgressCount' => 0, 'budgetAmount' => 0, 'weightedForecast' => 0]
         );
+    }
+
+    /**
+     * Processes data and ACL filters
+     *
+     * @param QueryBuilder    $queryBuilder
+     * @param WidgetOptionBag $widgetOptions
+     *
+     * @return Query
+     */
+    protected function processDataQueryBuilder(QueryBuilder $queryBuilder, WidgetOptionBag $widgetOptions)
+    {
+        $this->widgetProviderFilter->filter($queryBuilder, $widgetOptions);
+
+        return $this->aclHelper->apply($queryBuilder);
     }
 }
