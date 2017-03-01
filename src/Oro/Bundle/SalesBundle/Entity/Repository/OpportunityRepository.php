@@ -532,6 +532,7 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -541,6 +542,7 @@ class OpportunityRepository extends EntityRepository
      */
     public function getNewOpportunitiesAmount(
         WidgetProviderFilterManager $widgetProviderFilter,
+        AclHelper $aclHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
@@ -549,14 +551,15 @@ class OpportunityRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o');
         $baTransformedQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb);
         $qb->select(sprintf('SUM(%s)', $baTransformedQuery));
-
         $this->setCreationPeriod($qb, $start, $end);
+        $qb = $aclHelper->apply($qb);
 
         return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
      * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
      * @param WidgetOptionBag $widgetOptions
@@ -565,6 +568,7 @@ class OpportunityRepository extends EntityRepository
      */
     public function getWonOpportunitiesToDateCount(
         WidgetProviderFilterManager $widgetProviderFilter,
+        AclHelper $aclHelper,
         \DateTime $start = null,
         \DateTime $end = null,
         WidgetOptionBag $widgetOptions
@@ -573,14 +577,15 @@ class OpportunityRepository extends EntityRepository
         $qb->select('COUNT(o.id)')
             ->andWhere('o.status = :status')
             ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
-
         $this->setClosedPeriod($qb, $start, $end);
+        $qb = $aclHelper->apply($qb);
 
         return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }
 
     /**
      * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -590,6 +595,7 @@ class OpportunityRepository extends EntityRepository
      */
     public function getWonOpportunitiesToDateAmount(
         WidgetProviderFilterManager $widgetProviderFilter,
+        AclHelper $aclHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer,
         \DateTime $start = null,
         \DateTime $end = null,
@@ -602,6 +608,7 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
 
         $this->setClosedPeriod($qb, $start, $end);
+        $qb = $aclHelper->apply($qb);
 
         return $widgetProviderFilter->filter($qb, $widgetOptions)->getSingleScalarResult();
     }

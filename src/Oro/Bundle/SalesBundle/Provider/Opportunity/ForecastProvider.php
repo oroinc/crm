@@ -9,6 +9,7 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
@@ -19,6 +20,9 @@ class ForecastProvider
 {
     /** @var RegistryInterface */
     protected $doctrine;
+
+    /** @var AclHelper */
+    protected $aclHelper;
 
     /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
@@ -52,6 +56,7 @@ class ForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param EnumValueProvider $enumProvider
      * @param FilterProcessor $filterProcessor
@@ -60,6 +65,7 @@ class ForecastProvider
      */
     public function __construct(
         RegistryInterface $doctrine,
+        AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         EnumValueProvider $enumProvider,
         FilterProcessor $filterProcessor,
@@ -67,6 +73,7 @@ class ForecastProvider
         OwnerHelper $ownerHelper
     ) {
         $this->doctrine             = $doctrine;
+        $this->aclHelper            = $aclHelper;
         $this->widgetProviderFilter = $widgetProviderFilter;
         $this->enumProvider         = $enumProvider;
         $this->filterProcessor      = $filterProcessor;
@@ -130,6 +137,7 @@ class ForecastProvider
             ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
 
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
+        $qb = $this->aclHelper->apply($qb);
 
         return $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult();
     }

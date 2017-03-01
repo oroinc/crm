@@ -201,6 +201,7 @@ services:
         class: %oro_sales.provider.b2b_statistics.class%
         arguments:
             - '@doctrine'
+            - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.provider.big_number.date_helper'
             - '@oro_currency.query.currency_transformer'
@@ -299,6 +300,7 @@ services:
         class: Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
         arguments:
             - '@doctrine'
+            - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_currency.query.currency_transformer'
@@ -390,6 +392,7 @@ services:
         class: Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider
         arguments:
             - '@doctrine'
+            - '@oro_security.acl_helper'
             - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'

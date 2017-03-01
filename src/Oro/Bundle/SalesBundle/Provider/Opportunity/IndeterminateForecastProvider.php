@@ -11,12 +11,16 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class IndeterminateForecastProvider
 {
     /** @var RegistryInterface */
     protected $doctrine;
+
+    /** @var AclHelper */
+    protected $aclHelper;
 
     /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
@@ -35,6 +39,7 @@ class IndeterminateForecastProvider
 
     /**
      * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param FilterProcessor $filterProcessor
      * @param NumberFormatter $numberFormatter
@@ -42,12 +47,14 @@ class IndeterminateForecastProvider
      */
     public function __construct(
         RegistryInterface $doctrine,
+        AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         FilterProcessor $filterProcessor,
         NumberFormatter $numberFormatter,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->doctrine = $doctrine;
+        $this->aclHelper = $aclHelper;
         $this->widgetProviderFilter = $widgetProviderFilter;
         $this->filterProcessor = $filterProcessor;
         $this->numberFormatter = $numberFormatter;
@@ -80,6 +87,7 @@ class IndeterminateForecastProvider
 
         if (!isset($this->data[$cacheKey])) {
             $qb = $this->getForcastQueryBuilder($widgetOptions->get('queryFilter', []));
+            $qb =$this->aclHelper->apply($qb);
 
             $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getOneOrNullResult()
                 ?: ['budgetAmount' => 0, 'weightedForecast' => 0];

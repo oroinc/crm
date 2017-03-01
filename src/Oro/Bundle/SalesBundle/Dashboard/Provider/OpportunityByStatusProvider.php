@@ -10,12 +10,16 @@ use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class OpportunityByStatusProvider
 {
     /** @var RegistryInterface */
     protected $registry;
+
+    /** @var AclHelper */
+    protected $aclHelper;
 
     /** @var WidgetProviderFilterManager */
     protected $widgetProviderFilter;
@@ -28,20 +32,23 @@ class OpportunityByStatusProvider
 
     /**
      * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
      * @param WidgetProviderFilterManager $widgetProviderFilter
      * @param DateFilterProcessor $processor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
+        AclHelper $aclHelper,
         WidgetProviderFilterManager $widgetProviderFilter,
         DateFilterProcessor $processor,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
         $this->registry             = $doctrine;
+        $this->aclHelper            = $aclHelper;
         $this->widgetProviderFilter = $widgetProviderFilter;
         $this->dateFilterProcessor  = $processor;
-        $this->qbTransformer        = $qbTransformer;
+        $this->qbTransformer        = $qbTransformer;                                                              
     }
 
     /**
@@ -87,8 +94,8 @@ class OpportunityByStatusProvider
         }
 
         $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'o.createdAt');
-
-        $result = $this->widgetProviderFilter->filter($qb, $widgetOptions)->getArrayResult();
+        $qb = $this->widgetProviderFilter->filter($qb, $widgetOptions);
+        $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return $this->formatResult($result, $excludedStatuses, $orderBy);
     }
