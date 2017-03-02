@@ -2,22 +2,22 @@ oro:
     activity_contact:
         ac_last_contact_date:
             label: Last contact datetime
-            description: Represents last contact attempt datetime
+            description: Date and time of the last contact attempt (email sent, call logged, or other contact activity). Marketing emails are not counted.
         ac_last_contact_date_in:
             label: Last incoming contact datetime
-            description: Represents last incoming contact attempt datetime
+            description: Date and time of the last incoming contact attempt (email received, incoming call logged, or other contact activity). Marketing emails are not counted.
         ac_last_contact_date_out:
             label: Last outgoing contact datetime
-            description: Represents last outgoing contact attempt datetime
+            description: Date and time of the last outgoing contact attempt (email sent, outgoing call logged, or other contact activity). Marketing emails are not counted.
         ac_contact_count:
             label: Total times contacted
-            description: Represents total number of all contact attempts
+            description: The total number of all contact attempts (emails sent, calls logged, and other contact activities). Marketing emails are not counted.
         ac_contact_count_in:
             label: Total number of incoming contact attempts
-            description: Represents total number of incoming contact attempts
+            description: The total number of all incoming contact attempts (emails sent, calls logged, and other contact activities). Marketing emails are not counted.
         ac_contact_count_out:
             label: Total number of outgoing contact attempts
-            description: Represents total number of outgoing contact attempts
+            description: The total number of all outgoing contact attempts (emails sent, outgoing calls logged, and other contact activities). Marketing emails are not counted.
 
         days_since_last_contact:
             label: Days since the last contact
