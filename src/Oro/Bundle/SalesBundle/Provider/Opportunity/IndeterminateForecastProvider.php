@@ -88,7 +88,7 @@ class IndeterminateForecastProvider
         if (!isset($this->data[$cacheKey])) {
             $qb = $this->getForecastQueryBuilder($widgetOptions->get('queryFilter', []));
 
-            $qb = $this->widgetProviderFilter->filter($qb, $widgetOptions);
+            $this->widgetProviderFilter->filter($qb, $widgetOptions);
 
             $result = $this->aclHelper->apply($qb)->getOneOrNullResult()
                 ?: ['budgetAmount' => 0, 'weightedForecast' => 0];

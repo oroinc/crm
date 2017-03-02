@@ -48,7 +48,7 @@ class OpportunityByStatusProvider
         $this->aclHelper            = $aclHelper;
         $this->widgetProviderFilter = $widgetProviderFilter;
         $this->dateFilterProcessor  = $processor;
-        $this->qbTransformer        = $qbTransformer;                                                              
+        $this->qbTransformer        = $qbTransformer;
     }
 
     /**
@@ -94,7 +94,7 @@ class OpportunityByStatusProvider
         }
 
         $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'o.createdAt');
-        $qb = $this->widgetProviderFilter->filter($qb, $widgetOptions);
+        $this->widgetProviderFilter->filter($qb, $widgetOptions);
         $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return $this->formatResult($result, $excludedStatuses, $orderBy);

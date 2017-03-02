@@ -12,13 +12,18 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
+
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 
 class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var RegistryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
+
+    /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject */
+    protected $aclHelper;
 
     /** @var WidgetProviderFilterManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $widgetProviderFilter;
@@ -50,6 +55,9 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->registry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->widgetProviderFilter = $this
             ->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager')
             ->disableOriginalConstructor()
@@ -63,6 +71,7 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->provider = new OpportunityByStatusProvider(
             $this->registry,
+            $this->aclHelper,
             $this->widgetProviderFilter,
             $this->dateFilterProcessor,
             $this->qbTransformer
@@ -113,8 +122,8 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $self = $this;
-        $this->widgetProviderFilter->expects($this->once())
-            ->method('filter')
+        $this->aclHelper->expects($this->once())
+            ->method('apply')
             ->with(
                 $this->callback(function ($query) use ($self, $expectation) {
                     /** @var Query $query */
@@ -228,8 +237,8 @@ DQL
             ->method('getArrayResult')
             ->willReturn($result);
 
-        $this->widgetProviderFilter->expects($this->once())
-            ->method('filter')
+        $this->aclHelper->expects($this->once())
+            ->method('apply')
             ->willReturn($mockResult);
 
         $data = $this->provider->getOpportunitiesGroupedByStatus($widgetOptions);
