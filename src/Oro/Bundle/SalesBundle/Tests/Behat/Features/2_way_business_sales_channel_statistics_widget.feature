@@ -106,21 +106,3 @@ Feature: Break Business Sales Channel statistics widget into two
       | New Opportunities budget amount         | 134000 |
       | Won Opportunities to date count         | 5      |
       | Won Opportunities to date budget amount | 77000  |
-
-  Scenario: SalesMan limits both widgets with territory filter
-    Given I click on "Configure" related to "Lead Statistics"
-    When I fill in "Territory" with "L Europe"
-    And I save setting
-    Then I should see the following data:
-      | New Leads       | 5 |
-      | Qualified Leads | 1 |
-      | Converted Leads | 1 |
-      | Open Leads      | 2 |
-    But I click on "Configure" related to "Opportunity Statistics"
-    When I fill in "Territory" with "L Europe Old"
-    And I save setting
-    Then I should see the following data:
-      | New Opportunities count                 | 4     |
-      | New Opportunities budget amount         | 55000 |
-      | Won Opportunities to date count         | 2     |
-      | Won Opportunities to date budget amount | 31000 |
