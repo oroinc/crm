@@ -63,13 +63,13 @@ class LoadForecastWidgetFixtures extends AbstractFixture
             ],
             [
                 'status' => 'in_progress',
-                'close_date' => new \DateTime('now'),
+                'close_date' => new \DateTime('now', new \DateTimeZone('UTC')),
                 'probability' => 10, //percents
                 'budget_amount' => 100, //USD
             ],
             [
                 'status' => 'in_progress',
-                'close_date' => new \DateTime('now'),
+                'close_date' => new \DateTime('now', new \DateTimeZone('UTC')),
                 'probability' => 100, //percents
                 'budget_amount' => 100, //USD
             ],
