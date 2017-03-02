@@ -147,4 +147,13 @@ class FeatureContext extends OroFeatureContext implements
         );
         $this->visitPath($uri);
     }
+
+    /**
+     * @Given I am on Contact Requests page
+     */
+    public function iAmContactRequestsPage()
+    {
+        $uri = $this->getContainer()->get('router')->generate('oro_contactus_request_index');
+        $this->visitPath($uri);
+    }
 }

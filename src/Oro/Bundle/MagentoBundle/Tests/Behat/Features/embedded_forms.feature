@@ -25,8 +25,7 @@ Feature: Embedded form
     Then I should see "Form has been submitted successfully"
 
   Scenario: Checking submitted data in linked channel
-    Given I login as administrator
-    And I go to Activities/Contact Requests
+    Given I am on Contact Requests page
     And I should see John in grid with following data:
       | LAST NAME | Doe                  |
       | EMAIL     | john-doe@example.com |
