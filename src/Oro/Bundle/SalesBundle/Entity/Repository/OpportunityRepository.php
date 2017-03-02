@@ -535,8 +535,9 @@ class OpportunityRepository extends EntityRepository
      *
      * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     * @param \DateTime  $start
-     * @param \DateTime  $end
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param array $owners
      *
      * @return double
      */

@@ -67,3 +67,44 @@ SalesBundle
 - Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`
     - removed method `isReportOrSegmentGrid`
     - added UnsupportedGridPrefixesTrait
+- Class `Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider`
+    - construction signature was changed. The parameter `OwnerHelper $ownerHelper` was replaced by `WidgetProviderFilterManager $widgetProviderFilter`
+    - property `protected $ownerHelper` was replaced by `protected $widgetProviderFilter`
+- Class `Oro\Bundle\SalesBundle\Entity\Repository\LeadRepository`
+    - removed method `getLeadsCount`
+    - removed method `getNewLeadsCount`
+    - removed method `getOpenLeadsCount`
+    - added method `getLeadsCountQB` which returns an instance of `Doctrine\ORM\QueryBuilder`
+    - added method `getNewLeadsCountQB` which returns an instance of `Doctrine\ORM\QueryBuilder`
+    - added method `getOpenLeadsCountQB` which returns an instance of `Doctrine\ORM\QueryBuilder`
+- Class `Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository`
+    - removed method `getOpportunitiesCount`
+    - removed method `getNewOpportunitiesCount`
+    - added method `getOpportunitiesCountQB` which returns an instance of `Doctrine\ORM\QueryBuilder`
+    - added method `getNewOpportunitiesCountQB` which returns an instance of `Doctrine\ORM\QueryBuilder`
+    - changed signature of method `createOpportunitiesCountQb` removed parameter `$owners`
+    - Method `getNewOpportunitiesAmount` was marked as deprecated. Method `getOpportunitiesByPeriodQB` should be used instead
+    - Method `getWonOpportunitiesToDateCount` was marked as deprecated. Method `getWonOpportunitiesCountByPeriodQB` should be used instead
+- Class `Oro\Bundle\SalesBundle\Provider\B2bBigNumberProvider`
+    - construction signature of was changed. New parameter `WidgetProviderFilterManager $widgetProviderFilter` was added
+    - added property `protected $widgetProviderFilter`
+    - added property `protected $leadRepository`
+    - added property `protected $opportunityRepository`
+    - changed signature of method `getLeadsCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getNewLeadsCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getOpenLeadsCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getOpportunitiesCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getNewOpportunitiesCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getNewOpportunitiesAmount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getWonOpportunitiesToDateCount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+    - changed signature of method `getWonOpportunitiesToDateAmount`. The parameter `$owners` was replaced by `WidgetOptionBag $widgetOptions`
+- Class `Oro\Bundle\SalesBundle\Provider\ForecastOfOpportunities`
+    - construction signature was changed. The parameter `OwnerHelper $ownerHelper` was removed
+    - removed property `protected $ownerHelper`
+- Class `Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider`
+    - construction signature was changed. New parameter `WidgetProviderFilterManager $widgetProviderFilter` was added
+    - added property `protected $widgetProviderFilter`
+    - changed signature of method `getForecastData`. The parameter `$ownerIds` was replaced by `WidgetOptionBag $widgetOptions`
+- Class `Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider.php`
+    - construction signature was changed. The parameter `OwnerHelper $ownerHelper` was replaced by `WidgetProviderFilterManager $widgetProviderFilter`
+    - property `protected $ownerHelper` was replaced by `protected $widgetProviderFilter`
