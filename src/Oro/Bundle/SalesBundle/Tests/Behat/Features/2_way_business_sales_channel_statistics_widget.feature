@@ -54,8 +54,10 @@ Feature: Break Business Sales Channel statistics widget into two
     And I close ui dialog
     Then I should see "Lead Statistics" widget on the dashboard
     And I should see the following data:
-      | New Leads | Qualified Leads | Converted Leads | Open Leads |
-      | 9         | 4               | 0               | 2          |
+      | New Leads       | 9 |
+      | Qualified Leads | 4 |
+      | Converted Leads | 0 |
+      | Open Leads      | 2 |
 
   Scenario: SalesMan adds new Opportunities widgets to the dashboard
     Given I click "Add Widget"
@@ -64,21 +66,33 @@ Feature: Break Business Sales Channel statistics widget into two
     And I close ui dialog
     Then I should see "Opportunity Statistics" widget on the dashboard
     And I should see the following data:
-      | New Opportunities count | New Opportunities budget amount | Won Opportunities to date count | Won Opportunities to date budget amount |
-      | 10                      | 124000                          | 4                               | 57000                                   |
+      | New Opportunities count                 | 10     |
+      | New Opportunities budget amount         | 124000 |
+      | Won Opportunities to date count         | 4      |
+      | Won Opportunities to date budget amount | 57000  |
+
 
   Scenario: SalesMan converts Lead to Opportunity
     Given I go to Sales/Leads
     And I open Europe Lead 4 page
     And I click "Convert to Opportunity"
     And I fill in the following:
-      | Opportunity Name     | Account   | Status | Budget Amount | Territory |
-      | Europe Opportunity 4 | AllEurope | Open   | 10000         | O Europe  |
+      | Opportunity Name | Europe Opportunity 4 |
+      | Account          | AllEurope            |
+      | Status           | Open                 |
+      | Budget Amount    | 10000                |
+      | Territory        | O Europe             |
     And I save setting
     When I go to Dashboard
     Then I should see the following data:
-      | New Leads | Qualified Leads | Converted Leads | Open Leads | New Opportunities count | New Opportunities budget amount | Won Opportunities to date count | Won Opportunities to date budget amount |
-      | 8         | 4               | 1               | 1          | 11                      | 134000                          | 4                               | 57000                                   |
+      | New Leads 							    | 8      |
+      | Qualified Leads 					    | 4      |
+      | Converted Leads 					    | 1      |
+      | Open Leads 							    | 1      |
+      | New Opportunities count 			    | 11     |
+      | New Opportunities budget amount 	    | 134000 |
+      | Won Opportunities to date count 		| 4      |
+      | Won Opportunities to date budget amount | 57000  |
 
   Scenario: SalesMan closes as one newly created Opportunity
     Given I go to Sales/Opportunities
@@ -88,19 +102,25 @@ Feature: Break Business Sales Channel statistics widget into two
     And I submit form
     And I go to Dashboard
     Then I should see the following data:
-      | New Opportunities count | New Opportunities budget amount | Won Opportunities to date count | Won Opportunities to date budget amount |
-      | 11                      | 134000                          | 5                               | 77000                                   |
+      | New Opportunities count                 | 11     |
+      | New Opportunities budget amount         | 134000 |
+      | Won Opportunities to date count         | 5      |
+      | Won Opportunities to date budget amount | 77000  |
 
   Scenario: SalesMan limits both widgets with territory filter
     Given I click on "Configure" related to "Lead Statistics"
     When I fill in "Territory" with "L Europe"
     And I save setting
     Then I should see the following data:
-      | New Leads | Qualified Leads | Converted Leads | Open Leads |
-      | 5         | 1               | 1               | 2          |
+      | New Leads       | 5 |
+      | Qualified Leads | 1 |
+      | Converted Leads | 1 |
+      | Open Leads      | 2 |
     But I click on "Configure" related to "Opportunity Statistics"
     When I fill in "Territory" with "L Europe Old"
     And I save setting
     Then I should see the following data:
-      | New Opportunities count | New Opportunities budget amount | Won Opportunities to date count | Won Opportunities to date budget amount |
-      | 4                       | 55000                           | 2                               | 31000                                   |
+      | New Opportunities count                 | 4     |
+      | New Opportunities budget amount         | 55000 |
+      | Won Opportunities to date count         | 2     |
+      | Won Opportunities to date budget amount | 31000 |
