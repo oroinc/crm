@@ -281,6 +281,8 @@ dashboards:
                     type: oro_type_widget_items
                     options:
                        label: oro.dashboard.widget.big_number.choose_metrics
+                       attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
                        item_label: oro.dashboard.widget.big_number.metricName
                        required: false
                        widget_name: business_sales_channel_statistics
