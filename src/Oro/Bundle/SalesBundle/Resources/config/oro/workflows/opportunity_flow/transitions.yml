@@ -95,6 +95,9 @@ workflows:
                         - '@create_date':
                             parameters:
                                 attribute: $close_date
+                        - '@clone_object':
+                            target: $budget_amount
+                            attribute: $close_revenue
             close_lost:
                 step_to: lost
                 is_unavailable_hidden: true
@@ -104,8 +107,6 @@ workflows:
                 transition_definition: close_lost_definition
                 form_options:
                     attribute_fields:
-                        close_revenue:
-                            form_type: oro_multicurrency
                         close_reason_name:
                             form_type: choice
                             options:

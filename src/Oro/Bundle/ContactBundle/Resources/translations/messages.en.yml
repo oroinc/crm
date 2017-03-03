@@ -13,11 +13,11 @@ oro:
             contact_group_list.description:         List of contact groups
             contact_list.description:               List of contacts
             shortcut_list_contacts.description:     List of contacts
-            shortcut_list_contacts.label:           Show contacts list
+            shortcut_list_contacts.label:           Show Contacts list
             shortcut_new_contact.description:       Create new contact instance
-            shortcut_new_contact.label:             Create new contact
+            shortcut_new_contact.label:             Create new Contact
             shortcut_new_contact_group.description: Create new contact group instance
-            shortcut_new_contact_group.label:       Create new contact group
+            shortcut_new_contact_group.label:       Create new Contact Group
         controller:
             contact_group.saved.message: Contact Group saved
             contact.saved.message:       Contact saved
@@ -41,75 +41,159 @@ oro:
         #
         # Entity Oro\Bundle\ContactBundle\Entity\Contact
         #
-        entity_description:  Represent contact
+        entity_description:  Personal information of people with whom a user gets in touch during the business activities.
         entity_label:        Contact
         entity_plural_label: Contacts
 
         import: Import Contacts
 
-        accounts.label:      Accounts
+        accounts:
+            label:           Accounts
+            description:     A collection of accounts the contact is related to. Might indicate employment or other close relations.
         add_entity:          Add contact
-        addresses.label:     Addresses
-        assigned_to.label:   Assigned to
-        birthday.label:      Birthday
-        created_by.label:    Created By
-        description.label:   Description
+        addresses:
+            label:           Addresses
+            description:     Collection of Contact addresses: mailing, business, home, billing, etc.
+        assigned_to:
+            label:           Assigned to
+            description:     OroCRM user who is responsible for managing relations with the contact.
+        birthday:
+            label:           Birthday
+            description:     Date of contact's birthday.
+        created_by:
+            label:           Created By
+            description:     OroCRM user who has created the record.
+        description:
+            label:           Description
+            description:     Extended description of the contact.
         email.label:         Email
         emails.label:        Emails
-        facebook.label:      Facebook
-        fax.label:           Fax
-        first_name.label:    First name
-        gender.label:        Gender
-        google_plus.label:   Google+
-        groups.label:        Groups
+        facebook:
+            label:           Facebook
+            description:     Facebook profile of the contact.
+        fax:
+            label:           Fax
+            description:     Fax number of the contact.
+        first_name:
+            label:           First name
+            description:     First name of the contact person.
+        gender:
+            label:           Gender
+            description:     Gender of the contact person.
+        google_plus:
+            label:           Google+
+            description:     Google+ profile of the contact.
+        groups:
+            label:           Groups
+            description:     Contact groups the contact belongs to.
         id.label:            Id
-        linked_in.label:     LinkedIn
-        job_title.label:     Job Title
-        last_name.label:     Last name
-        method.label:        Contact Method
-        middle_name.label:   Middle name
-        name_prefix.label:   Name prefix
-        name_suffix.label:   Name suffix
+        linked_in:
+            label:           LinkedIn
+            description:     LinkedIn profile of the contact.
+        job_title:
+            label:           Job Title
+            description:     Job title of the contact person within their organization.
+        last_name:
+            label:           Last name
+            description:     Last name of the contact person.
+        middle_name:
+            label:           Middle name
+            description:     Middle name of the contact person.
+        name_prefix:
+            label:           Name prefix
+            description:     Name prefix or honorific of the contact person (Mr./Ms., Dr., Prof., etc.)
+        name_suffix:
+            label:           Name suffix
+            description:     Name suffix of the contact person (Sr./Jr., M.D., OBE, etc.)
         owner.label:         Owner
-        reports_to.label:    Reports to
+        reports_to:
+            label:           Reports to
+            description:     A contact who serves as direct supervisor of the contact within their organization.
         phones.label:        Phones
         primary_email.label: Primary Email
         primary_phone.label: Primary Phone
-        primary_addr.label:  Primary Address
-        skype.label:         Skype
+        skype:
+            label:           Skype
+            description:     Skype profile of the contact.
         social.label:        Social
-        source.label:        Source
-        twitter.label:       Twitter
-        updated_by.label:    Updated By
-        picture.label:       Picture
+        twitter:
+            label:           Twitter
+            description:     Twitter profile of the contact.
+        updated_by:
+            label:           Updated By
+            description:     OroCRM user who had last updated the record.
+        picture:
+            label:           Picture
+            description:     Photo or other identifying image of the contact.
         organization.label:  Organization
-        default_in_accounts.label: Accounts Default Contact
+        default_in_accounts:
+            label:           Accounts Default Contact
+            description:     A collection of accounts where the contact is set as default.
 
         #
         # Entity Oro\Bundle\ContactBundle\Entity\ContactAddress
         #
         contactaddress:
-            city.label:          City
-            country.label:       Country
-            entity_description:  Represent contact's address
+            city:
+                label:           City
+                description:     The city specified in the contact address.
+            country:
+                label:           Country
+                description:     The country specified in the contact address.
+            entity_description:  The address configured for the contact.
             entity_label:        Contact Address
             entity_plural_label: Contact Addresses
-            first_name.label:    First name
+            first_name:
+                label:           First name
+                description:     The first name that is specified in the contact address.
             id.label:            Id
-            label.label:         Label
-            last_name.label:     Last name
-            middle_name.label:   Middle name
-            name_prefix.label:   Name prefix
-            name_suffix.label:   Name suffix
-            organization.label:  Organization
-            owner.label:         Owner
-            postal_code.label:   Zip/Postal Code
-            primary.label:       Primary
-            region.label:        State
+            label:
+                label:           Label
+                description:     The label specified for the contact address. The label is used to refer to the contact address on the interface.
+            last_name:
+                label:           Last name
+                description:     The last name that is specified in the contact address.
+            middle_name:
+                label:           Middle name
+                description:     The middle name that is specified in the contact address.
+
+            name_prefix:
+                label:           Name prefix
+                description:     The name prefix specified in the contact address.
+            name_suffix:
+                label:           Name suffix
+                description:     The name suffix specified in the contact address.
+            organization:
+                label:           Organization
+                description:     The organization that is specified in the contact address.
+            owner:
+                label:           Owner
+                description:     The contact who is the owner of the contact address. The contact address is displayed on the view page of this contact.
+            postal_code:
+                label:           Zip/Postal Code
+                description:     The postal code specified in the contact address.
+            primary:
+                label:           Primary
+                description:     Defines whether the contact address is a primary contact address.
+            region:
+                label:           State
+                description:     The region specified in the contact address.
             region_text.label:   State
-            street.label:        Street
-            street2.label:       Street 2
-            types.label:         Types
+            street:
+                label:           Street
+                description:     The first line of the street address. Usually contains the street name and the building number.
+            street2:
+                label:           Street 2
+                description:     The second line of the street address. May contain the appartment number, P.O. box, building name, etc.
+            types:
+                label:           Types
+                description:     The address types (whether it is a billing address, shipping address, or both) configured for the contact address.
+            created:
+                label:           Created at
+                description:     The date and time when the contact address was created.
+            updated:
+                label:           Updated at
+                description:     The date and time when the contact address was last updated.
 
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code
@@ -145,11 +229,13 @@ oro:
         # Entity Oro\Bundle\ContactBundle\Entity\Group
         #
         group:
-            entity_description:  Represent contact's group
+            entity_description:  The set of contacts classed together by some common factor. Contact groups are mainly used to simplify the configuration of filters and segments.
             entity_label:        Contact Group
             entity_plural_label: Contact Groups
             id.label:            Id
-            label.label:         Label
+            label:
+                label:           Label
+                description:     The name used to refer to the contact group on the interface.
             manage:              Manage groups
             owner.label:         Owner
             organization.label:  Organization
@@ -159,23 +245,37 @@ oro:
         # Entity Oro\Bundle\ContactBundle\Entity\Method
         #
         method:
-            entity_description:  Represent contact's method
+            entity_description:  The mean of communications with the contact.
             entity_label:        Contact Method
             entity_plural_label: Contact Methods
-            label.label:         Label
             name.label:          Name
+
+            description:         Preferred way of communication for this contact.
+            label:               Contact Method
+            method:
+                description:     Source of the contact.
+                label:           Source
+            label.label:         Label
+            label.description:   The label of the contact method ('Email,' 'Mail,' or ' Phone').
 
         #
         # Entity Oro\Bundle\ContactBundle\Entity\Source
         #
         source:
-            entity_description:  Represent contact's source
+            entity_description:  How the information about the contact was recieved.
             entity_label:        Contact Source
             entity_plural_label: Contact Sources
-            label.label:         Label
             name.label:          Name
+            description:             Source of the contact.
+            label:                   Source
+            source:
+                description:      Source of the contact.
+                label:            Source
+            label.label:       Source
+            label.description: The label of the contact source ('Phone Call,' 'Other Source,' TV,' or 'Website').
+
         widgets:
-            account_contacts: Contacts
+            account_contacts:    Contacts
 
         account:
             no_contacts_exist: No contacts exist

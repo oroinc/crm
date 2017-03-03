@@ -14,7 +14,7 @@ use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class ChannelOwnerSetListenerTest extends WebTestCase
 {
@@ -22,14 +22,14 @@ class ChannelOwnerSetListenerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]), true);
+        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
         $fixtures = [
             self::FIXTURE_NS . 'LoadMagentoChannel',
             self::FIXTURE_NS . 'LoadCustomerContact',
             self::FIXTURE_NS . 'LoadNotAssociatedEntities',
             self::FIXTURE_NS . 'LoadOwnerUser',
         ];
-        $this->loadFixtures($fixtures, true);
+        $this->loadFixtures($fixtures);
     }
 
     /**

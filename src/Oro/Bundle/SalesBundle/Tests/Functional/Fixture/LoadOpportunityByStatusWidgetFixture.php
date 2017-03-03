@@ -30,8 +30,6 @@ class LoadOpportunityByStatusWidgetFixture extends AbstractFixture
         //insert one opportunity for previous months
         $createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->createOpportunity($createdAt, ++$i);
-        $createdAt->sub(new \DateInterval('P2M'));
-        $this->createOpportunity($createdAt, ++$i);
     }
 
     public function createOpportunity($createdAt, $id)
@@ -39,7 +37,6 @@ class LoadOpportunityByStatusWidgetFixture extends AbstractFixture
         $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $openStatus = $this->em->getRepository($className)->find(ExtendHelper::buildEnumValueId('in_progress'));
         $opportunity = new Opportunity();
-        $opportunity->setName('Opportunity name');
         $opportunity->setName('name '.$id);
         $opportunity->setStatus($openStatus);
         $opportunity->setOrganization($this->organization);

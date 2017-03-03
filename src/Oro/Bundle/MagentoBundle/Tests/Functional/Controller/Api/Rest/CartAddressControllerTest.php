@@ -5,10 +5,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CartAddressControllerTest extends WebTestCase
 {
     public function setUp()

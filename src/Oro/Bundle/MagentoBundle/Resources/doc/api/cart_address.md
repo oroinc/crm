@@ -1,0 +1,193 @@
+# Oro\Bundle\MagentoBundle\Entity\CartAddress
+
+## ACTIONS  
+
+### get
+
+Retrieve a specific Magento cart address record.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve a collection of records represented by Magento cart addresses.
+
+{@inheritdoc}
+
+### create
+
+Create a new Magento cart address record.
+The created record is returned in the response.
+
+{@inheritdoc}
+
+{@request:json_api}
+Example:
+
+`</api/magentocartaddresses>`
+
+```JSON
+{  
+   "data":{  
+      "type":"magentocartaddresses"
+   },
+   "attributes":{  
+      "street":"Lake",
+      "city":"Gurdiff",
+      "postalCode":"05246",
+      "namePrefix":"Dr.",
+      "firstName":"Yougin",
+      "middleName":"Albert",
+      "lastName":"Martin",
+      "phone":"+14569453",
+      "primary":true,
+      "organization":"Sales Corp",
+      "originId":"1245"
+   },
+   "relationships":{  
+      "country":{  
+         "data":{  
+            "type":"countries",
+            "id":"US"
+         }
+      },
+      "region":{  
+         "data":{  
+            "type":"regions",
+            "id":"US-MI"
+         }
+      }
+   }
+}
+```
+{@/request}
+
+### update
+
+Edit a specific Magento cart address record.
+
+{@inheritdoc}
+
+{@request:json_api}
+Example:
+
+`</api/magentocartaddresses/4>`
+
+```JSON
+{  
+   "data":{  
+      "type":"magentocartaddresses",
+      "id":"4",
+      "attributes":{  
+         "street":"Lake",
+         "city":"Gurdiff",
+         "postalCode":"05246",
+         "namePrefix":"Dr.",
+         "firstName":"Yougin",
+         "middleName":"Albert",
+         "lastName":"Martin",
+         "phone":"+14569453",
+         "organization":"Sales Corp",
+         "originId":"1245"
+      },
+      "relationships":{  
+         "country":{  
+            "data":{  
+               "type":"countries",
+               "id":"US"
+            }
+         },
+         "region":{  
+            "data":{  
+               "type":"regions",
+               "id":"US-MI"
+            }
+         }
+      }
+   }
+}
+```
+{@/request}
+
+### delete
+
+Delete a specific Magento cart address record.
+
+{@inheritdoc}
+
+### delete_list
+
+Delete a collection of Magento cart addresses records.
+The list of records that will be deleted, could be limited by filters.
+
+{@inheritdoc}
+
+## FIELDS
+
+### id
+
+#### update
+
+{@inheritdoc}
+
+**The required field**
+
+## SUBRESOURCES
+
+### country
+
+#### get_subresource
+
+Retrieve the record of the country configured for a specific Magento cart address record.
+
+#### get_relationship
+
+Retrieve the ID of the country configured for a specific Magento cart address record.
+
+#### update_relationship
+
+Replace the country configured for a specific Magento cart address record.
+
+{@request:json_api}
+Example:
+
+`</api/magentocartaddresses/1/relationships/country>`
+
+```JSON
+{
+  "data": {
+    "type": "countries",
+    "id": "US"
+  }
+}
+```
+{@/request}
+
+### region
+
+#### get_subresource
+
+Retrieve the record of the region configured for a specific Magento cart address record.
+
+#### get_relationship
+
+Retrieve the ID of the region configured for a specific Magento cart address record.
+
+#### update_relationship
+
+Replace the region configured for a specific Magento cart address record.
+
+{@request:json_api}
+Example:
+
+`</api/magentocartaddresses/1/relationships/region>`
+
+```JSON
+{
+  "data": {
+    "type": "regions",
+    "id": "US-MI"
+  }
+}
+```
+{@/request}

@@ -10,10 +10,6 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CartControllerTest extends WebTestCase
 {
     public function setUp()

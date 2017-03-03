@@ -23,18 +23,6 @@ abstract class AbstractExportWriterTest extends WebTestCase
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
         $this->transport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
-
-        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
-    }
-
-    protected function tearDown()
-    {
-        // clear DB from separate connection, close to avoid connection limit and memory leak
-        $manager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $manager->rollback();
-        $manager->getConnection()->close();
-
-        parent::tearDown();
     }
 
     /**

@@ -5,10 +5,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ForecastWidgetTest extends AbstractWidgetTestCase
 {
     protected function setUp()

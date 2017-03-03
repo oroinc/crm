@@ -7,10 +7,6 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class LeadAddressControllersTest extends WebTestCase
 {
     protected function setUp()

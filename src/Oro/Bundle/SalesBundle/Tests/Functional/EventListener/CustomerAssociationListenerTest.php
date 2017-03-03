@@ -10,9 +10,6 @@ use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkCRMBundle\Entity\TestCustomer1;
 use Oro\Bundle\TestFrameworkCRMBundle\Entity\TestCustomer2;
 
-/**
- * @dbIsolation
- */
 class CustomerAssociationListenerTest extends WebTestCase
 {
     public function setUp()

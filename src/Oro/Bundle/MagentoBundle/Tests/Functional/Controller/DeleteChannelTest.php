@@ -7,10 +7,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class DeleteChannelTest extends WebTestCase
 {
     /** @var Channel */

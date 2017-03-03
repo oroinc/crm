@@ -32,7 +32,7 @@ class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwar
      */
     public function load(ObjectManager $manager)
     {
-        $workflowAwareManager = new WorkflowAwareManager($this->container->get('oro_workflow.manager'));
+        $workflowAwareManager = new WorkflowAwareManager($this->container->get('oro_workflow.manager.system'));
 
         $workflowAwareManager->setWorkflowName('b2c_flow_abandoned_shopping_cart');
         $shoppingCarts = $manager->getRepository(Cart::class)->findAll();

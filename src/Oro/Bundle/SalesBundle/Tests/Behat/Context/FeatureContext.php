@@ -27,16 +27,6 @@ class FeatureContext extends OroFeatureContext implements
     use FixtureLoaderDictionary, PageObjectDictionary, KernelDictionary;
 
     /**
-     * Load "second_sales_channel.yml" alice fixture file
-     *
-     * @Given CRM has second sales channel with Accounts and Business Customers
-     */
-    public function crmHasSecondSalesChannel()
-    {
-        $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
-    }
-
-    /**
      * This is change the current page context
      * Go to 'Customers/ Business Customers' and assert row with given content
      * Example: Then "Absolute new account" Customer was created
@@ -122,21 +112,6 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * Assert that given string is not present in "Account" field suggestions
-     * Example: But should not see "Non Existent Account (Add new)" account
-     *
-     * @Then should not see :text account
-     */
-    public function shouldNotSeeAccount($text)
-    {
-        /** @var Select2Entity $accountField */
-        $accountField = $this->createElement('OroForm')->findField('Account');
-        $actualCustomers = $accountField->getSuggestedValues();
-
-        self::assertNotContains($text, $actualCustomers);
-    }
-
-    /**
      * @param string $channelName
      * @param string $username
      * @return array
@@ -163,7 +138,7 @@ class FeatureContext extends OroFeatureContext implements
         return $customers;
     }
 
-    /*
+    /**
      * Open Opportunity index page
      *
      * @Given /^(?:|I )go to Opportunity Index page$/
@@ -244,5 +219,35 @@ class FeatureContext extends OroFeatureContext implements
             $this->waitForAjax();
             self::assertEquals($item['Probability'], $form->findField('Probability')->getValue());
         }
+    }
+
+    /**
+     * Press entity add button from plus dropdown
+     * Example: Then I add new Business Customer for Account field
+     *
+     * @param $entityButtonName
+     * @param $fieldName
+     * @Then /^I add new (?P<entityName>[\w\s]+) for (?P<fieldName>[\w\s]+) field$/
+     */
+    public function iAddNewEntityForField($entityButtonName, $fieldName)
+    {
+        /** @var Select2Entity $field */
+        $field = $this->createElement('OroForm')->findField($fieldName);
+        $field->openFromPlusButtonDropDown($entityButtonName);
+    }
+
+    /**
+     * Submit provided form.
+     * Used when few forms present on page
+     * Example: When I submit "Sales B2b Customer Form"
+     *
+     * @When /^(?:|I )submit "(?P<formName>(?:[^"]|\\")*)"$/
+     * @param string $formName
+     */
+    public function iSubmitForm($formName = "OroForm")
+    {
+        $formName = str_replace(' ', '', $formName);
+        $form = $this->createElement($formName);
+        $form->submit();
     }
 }

@@ -8,10 +8,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestContactPhoneApiTest extends WebTestCase
 {
     protected function setUp()

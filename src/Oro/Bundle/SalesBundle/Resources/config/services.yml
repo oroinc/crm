@@ -494,6 +494,9 @@ services:
         arguments:
             - '@oro_sales.customer.config_provider'
             - '@oro_entity.orm.entity_class_resolver'
+        calls:
+            - [addUnsupportedGridPrefix, ['oro_report']]
+            - [addUnsupportedGridPrefix, ['oro_segment']]
         tags:
             - { name: oro_datagrid.extension }
 

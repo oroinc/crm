@@ -5,7 +5,7 @@ namespace Oro\Bundle\AnalyticsBundle\Builder;
 use Doctrine\Common\Collections\Criteria;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
@@ -155,7 +155,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
     /**
      * @param Channel $channel
      * @param array $ids
-     * @return \ArrayIterator|BufferedQueryResultIterator
+     * @return \Iterator
      */
     protected function getEntityIdsByChannel(Channel $channel, array $ids = [])
     {
@@ -187,7 +187,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 ->setParameter('ids', $ids);
         }
 
-        return (new BufferedQueryResultIterator($qb))->setBufferSize(self::BATCH_SIZE);
+        return (new BufferedIdentityQueryResultIterator($qb))->setBufferSize(self::BATCH_SIZE);
     }
 
     /**

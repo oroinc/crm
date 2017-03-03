@@ -57,7 +57,7 @@ class UpdateCallAccessLevels extends AbstractFixture implements DependentFixture
             $role = $manager->getRepository('OroUserBundle:Role')
                             ->findOneBy(['role' => $roleConfigData['bap_role']]);
 
-            if ($aclManager->isAclEnabled()) {
+            if ($role && $aclManager->isAclEnabled()) {
                 $sid = $aclManager->getSid($role);
                 foreach ($roleConfigData['permissions'] as $permission => $acls) {
                     $this->processPermission($aclManager, $sid, $permission, $acls);

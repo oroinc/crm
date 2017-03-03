@@ -4,15 +4,15 @@ navigation:
             customers_tab:
                 label: 'oro.account.menu.customers_tab.label'
                 uri: '#'
+                position: 10
                 extras:
                     icon: fa-users
-                    position: 10
 
             account_list:
                 label: 'oro.account.entity_plural_label'
                 route: 'oro_account_index'
+                position: 5
                 extras:
-                    position: 5
                     routes: ['oro_account_*']
                     description: 'oro.account.menu.account_list.description'
 

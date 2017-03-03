@@ -6,10 +6,6 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OrderAddressControllerTest extends WebTestCase
 {
     public function setUp()
