@@ -132,28 +132,18 @@ class FeatureContext extends OroFeatureContext implements
     }
 
     /**
-     * @Given I am on Submit Magento contact us form page
+     * @Given /^(?:|I )press "(?P<button>[\w\s]*)" in "(?P<embeddedForm>[\w\s]*)"$/
      */
-    public function iAmOnSubmitMagentoContactUsFormPage()
+    public function iClickButtonInEmbed($button, $embeddedForm)
     {
-        /** @var EntityManager $em */
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $repository = $em->getRepository('OroEmbeddedFormBundle:EmbeddedForm');
-        /** @var EmbeddedForm $contactUsForm */
-        $contactUsForm = $repository->findOneBy(['title' => 'Magento contact us form']);
-        $uri = $this->getContainer()->get('router')->generate(
-            'oro_embedded_form_submit',
-            ['id' => $contactUsForm->getId()]
-        );
-        $this->visitPath($uri);
-    }
+        $embeddedFormId = $this->elementFactory->createElement($embeddedForm)->getOption('embedded-id');
 
-    /**
-     * @Given I am on Contact Requests page
-     */
-    public function iAmContactRequestsPage()
-    {
-        $uri = $this->getContainer()->get('router')->generate('oro_contactus_request_index');
-        $this->visitPath($uri);
+        if (!$embeddedFormId) {
+            throw new \RuntimeException(sprintf('Element "%s" has not embedded-id option'));
+        }
+
+        $this->getDriver()->switchToIFrame($embeddedFormId);
+        $this->getSession()->getPage()->pressButton($button);
+        $this->getDriver()->switchToWindow();
     }
 }
