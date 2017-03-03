@@ -14,6 +14,7 @@ oro_behat_extension:
       selector: 'div#page'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
+        embedded-id: embedded-form
         mapping:
           First name: 'oro_magento_contactus_contact_request[firstName]'
           Last name: 'oro_magento_contactus_contact_request[lastName]'
