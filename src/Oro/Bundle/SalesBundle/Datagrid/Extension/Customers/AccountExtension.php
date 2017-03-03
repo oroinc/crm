@@ -2,18 +2,21 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
+use Oro\Bundle\DataGridBundle\Extension\UnsupportedGridPrefixesTrait;
 use Oro\Bundle\EntityBundle\ORM\EntityClassResolver;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountExtension extends AbstractExtension
 {
+    use UnsupportedGridPrefixesTrait;
+
     const COLUMN_NAME = 'associatedAccountName';
     const FULL_COLUMN_NAME = 'associatedAccount.name';
 
@@ -48,25 +51,9 @@ class AccountExtension extends AbstractExtension
         return
             $config->isOrmDatasource()
             && !$this->isDisabled()
-            && !$this->isReportOrSegmentGrid($config)
+            && !$this->isUnsupportedGridPrefix($config)
             && $config->getOrmQuery()->getRootAlias()
             && $this->customerConfigProvider->isCustomerClass($this->getEntity($config));
-    }
-
-    /**
-     * Checks if configuration is for report or segment grid
-     *
-     * @param DatagridConfiguration $config
-     *
-     * @return bool
-     */
-    protected function isReportOrSegmentGrid(DatagridConfiguration $config)
-    {
-        $gridName = $config->getName();
-
-        return
-            0 === strpos($gridName, 'oro_report')
-            || 0 === strpos($gridName, 'oro_segment');
     }
 
     /**
