@@ -98,25 +98,25 @@ navigation:
 
     titles:
         oro_sales_opportunity_index: ~
-        oro_sales_opportunity_view: '%%opportunity.name%%'
+        oro_sales_opportunity_view: '%opportunity.name%'
         oro_sales_opportunity_create: 'Create Opportunity'
-        oro_sales_opportunity_update: '%%opportunity.name%% - Edit'
+        oro_sales_opportunity_update: '%opportunity.name% - Edit'
 
         oro_sales_lead_index: ~
-        oro_sales_lead_view: '%%lead.name%%'
+        oro_sales_lead_view: '%lead.name%'
         oro_sales_lead_create: 'Create Lead'
-        oro_sales_lead_update: '%%lead.name%% - Edit'
-        oro_sales_lead_convert_to_opportunity: '%%lead.name%% - Convert To Opportunity'
+        oro_sales_lead_update: '%lead.name% - Edit'
+        oro_sales_lead_convert_to_opportunity: '%lead.name% - Convert To Opportunity'
 
         oro_sales_salesfunnel_index: ~
-        oro_sales_salesfunnel_view: '%%sales_funnel%%'
+        oro_sales_salesfunnel_view: '%sales_funnel%'
         oro_sales_salesfunnel_create: 'Create Sales Activity'
-        oro_sales_salesfunnel_update: '%%sales_funnel%% - Edit'
+        oro_sales_salesfunnel_update: '%sales_funnel% - Edit'
 
         oro_sales_b2bcustomer_index: ~
-        oro_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
+        oro_sales_b2bcustomer_view:   '%b2bcustomer.name%'
         oro_sales_b2bcustomer_create: 'Create Business Customer'
-        oro_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
+        oro_sales_b2bcustomer_update: '%b2bcustomer.name% - Edit'
 
     navigation_elements:
         pinButton:

@@ -17,5 +17,5 @@ navigation:
     titles:
         oro_channel_index:   ~
         oro_channel_create: 'Create Channel'
-        oro_channel_update: '%%channel.name%% - Edit'
-        oro_channel_view: '%%channel.name%%'
+        oro_channel_update: '%channel.name% - Edit'
+        oro_channel_view: '%channel.name%'

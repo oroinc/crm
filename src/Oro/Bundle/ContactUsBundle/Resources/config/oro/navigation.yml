@@ -17,6 +17,6 @@ navigation:
 
     titles:
         oro_contactus_request_index:  ~
-        oro_contactus_request_view:   '%%request.clientName%%'
+        oro_contactus_request_view:   '%request.clientName%'
         oro_contactus_request_create: 'Create contact request'
-        oro_contactus_request_update: '%%request.clientName%% - Edit'
+        oro_contactus_request_update: '%request.clientName% - Edit'
