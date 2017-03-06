@@ -9,14 +9,14 @@ use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
+use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProviderInterface;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class LeadToOpportunityHandler extends OpportunityHandler
 {
-    /** @var LeadToOpportunityProvider */
+    /** @var LeadToOpportunityProviderInterface */
     protected $leadToOpportunityProvider;
 
     /** @var callable */
@@ -27,7 +27,7 @@ class LeadToOpportunityHandler extends OpportunityHandler
         Request $request,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
-        LeadToOpportunityProvider $leadToOpportunityProvider,
+        LeadToOpportunityProviderInterface $leadToOpportunityProvider,
         LoggerInterface $logger
     ) {
         $this->leadToOpportunityProvider = $leadToOpportunityProvider;

@@ -43,6 +43,6 @@ navigation:
 
     titles:
         oro_account_index: ~
-        oro_account_view: '%%account.name%%'
+        oro_account_view: '%account.name%'
         oro_account_create: 'Create Account'
-        oro_account_update: '%%account.name%% - Edit'
+        oro_account_update: '%account.name% - Edit'
