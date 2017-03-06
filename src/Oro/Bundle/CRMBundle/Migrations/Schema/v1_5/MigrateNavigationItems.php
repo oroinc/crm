@@ -14,6 +14,10 @@ class MigrateNavigationItems implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        if (!$schema->hasTable('oro_navigation_item')) {
+            return;
+        }
+
         $queries->addQuery(new UpdateTableFieldQuery(
             'oro_navigation_item',
             'title',
