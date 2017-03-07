@@ -149,6 +149,8 @@ class OpportunityStatistics extends BaseStatistics
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * @return array
      */
     public function widgetProvider()

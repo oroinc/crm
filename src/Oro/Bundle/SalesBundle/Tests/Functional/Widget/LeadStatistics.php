@@ -125,6 +125,8 @@ class LeadStatistics extends BaseStatistics
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * @return array
      */
     public function widgetProvider()
