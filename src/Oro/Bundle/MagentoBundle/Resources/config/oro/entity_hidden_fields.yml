@@ -1,0 +1,4 @@
+# todo 'password' field is hidden here until it's removed in CRM-7490
+oro_entity_hidden_fields:
+    Oro\Bundle\MagentoBundle\Entity\Customer:
+        password: true
