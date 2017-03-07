@@ -9,7 +9,6 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 
-
 abstract class BaseStatistics extends WebTestCase
 {
     /**
@@ -49,7 +48,7 @@ abstract class BaseStatistics extends WebTestCase
     protected function createMetricsElements(Form $form)
     {
         $fieldName = array_keys($form->all())[0];
-        $formName = substr($fieldName, 0, strpos($fieldName,'['));
+        $formName = substr($fieldName, 0, strpos($fieldName, '['));
 
         $doc = new \DOMDocument("1.0");
         $metricsKeys = array_keys($this->metrics);
@@ -86,7 +85,7 @@ abstract class BaseStatistics extends WebTestCase
     protected function createAndSetDateRangeFormElements(Form $form, $data = null)
     {
         $fieldName = array_keys($form->all())[0];
-        $formName = substr($fieldName, 0, strpos($fieldName,'['));
+        $formName = substr($fieldName, 0, strpos($fieldName, '['));
 
         $doc = new \DOMDocument("1.0");
         $inputs = '<input type="text" name="'.$formName.'[dateRange][type]" value="" />';
@@ -120,7 +119,7 @@ abstract class BaseStatistics extends WebTestCase
     protected function setAdvancedFilters(Form $form, array $advancedFilters)
     {
         $fieldName = array_keys($form->all())[0];
-        $formName = substr($fieldName, 0, strpos($fieldName,'['));
+        $formName = substr($fieldName, 0, strpos($fieldName, '['));
 
         if (!empty($advancedFilters)) {
             $filters = json_encode($advancedFilters['filters']);
@@ -136,13 +135,14 @@ abstract class BaseStatistics extends WebTestCase
     protected function setComparePrevious(Form $form, $comparePrevious)
     {
         $fieldName = array_keys($form->all())[0];
-        $formName = substr($fieldName, 0, strpos($fieldName,'['));
+        $formName = substr($fieldName, 0, strpos($fieldName, '['));
 
-        $form->remove($formName.'[usePreviousInterval]');
+        $form->remove($formName . '[usePreviousInterval]');
         if ($comparePrevious) {
-
             $doc = new \DOMDocument("1.0");
-            $doc->loadHTML('<input type="text" name="'.$formName.'[usePreviousInterval]" value="1" checked="checked"/>');
+            $doc->loadHTML(
+                '<input type="text" name="' . $formName . '[usePreviousInterval]" value="1" checked="checked"/>'
+            );
             $compareToPreviousField = new InputFormField($doc->getElementsByTagName('input')->item(0));
             $form->set($compareToPreviousField);
             $form[$formName.'[usePreviousInterval]'] = 1;
@@ -173,5 +173,5 @@ abstract class BaseStatistics extends WebTestCase
     /**
      * @return Widget
      */
-    protected abstract function getWidget();
+    abstract protected function getWidget();
 }
