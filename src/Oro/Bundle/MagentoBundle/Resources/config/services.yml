@@ -46,6 +46,7 @@ parameters:
     oro_magento.form.type.customer.class:                                Oro\Bundle\MagentoBundle\Form\Type\CustomerType
     oro_magento.form.type.customer_group_selector.class:                 Oro\Bundle\MagentoBundle\Form\Type\CustomerGroupSelectType
     oro_magento.form.type.store_selector.class:                          Oro\Bundle\MagentoBundle\Form\Type\StoreSelectType
+    oro_magento.form.handler.customer.class:                             Oro\Bundle\MagentoBundle\Form\Handler\CustomerHandler
     oro_magento.form.type.customer_address.class:                        Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressType
     oro_magento.form.type.customer_channel_selector.class:               Oro\Bundle\MagentoBundle\Form\Type\CustomerChannelSelectType
     oro_magento.form.type.cart.api.class:                                Oro\Bundle\MagentoBundle\Form\Type\CartApiType
@@ -296,7 +297,7 @@ services:
             - { name: form.type, alias: oro_magento_customer_channel_select }
 
     oro_magento.form.handler.customer:
-        class: 'Oro\Bundle\MagentoBundle\Form\Handler\CustomerHandler'
+        class: %oro_magento.form.handler.customer.class%
         parent: oro_form.model.update_handler
         calls:
             - [setStateHandler,  ["@oro_magento.customer_state_handler"]]
