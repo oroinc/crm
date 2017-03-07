@@ -24,6 +24,12 @@ features:
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
             - Oro\Bundle\SalesBundle\Entity\LeadStatus
+        entities:
+            - Oro\Bundle\SalesBundle\Entity\Lead
+            - Oro\Bundle\SalesBundle\Entity\LeadAddress
+            - Oro\Bundle\SalesBundle\Entity\LeadEmail
+            - Oro\Bundle\SalesBundle\Entity\LeadPhone
+            - Oro\Bundle\SalesBundle\Entity\LeadStatus
         placeholder_items:
             - leads_launchpad
         dashboard_widgets:
@@ -52,6 +58,10 @@ features:
         workflows:
             - opportunity_flow
         api_resources:
+            - Oro\Bundle\SalesBundle\Entity\Opportunity
+            - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+            - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
+        entities:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
             - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
@@ -106,6 +116,8 @@ features:
         workflows:
             - b2b_flow_sales_funnel
         api_resources:
+            - Oro\Bundle\SalesBundle\Entity\SalesFunnel
+        entities:
             - Oro\Bundle\SalesBundle\Entity\SalesFunnel
         dashboard_widgets:
             - my_sales_flow_b2b_chart

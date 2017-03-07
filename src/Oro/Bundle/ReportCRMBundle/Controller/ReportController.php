@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
@@ -25,7 +26,16 @@ class ReportController extends Controller
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['oro_reportcrm', $reportGroupName, $reportName]);
-        $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
+        $gridConfig = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName);
+        $pageTitle = $gridConfig['pageTitle'];
+
+        $requiredFeatures = isset($gridConfig['requiredFeatures']) ? $gridConfig['requiredFeatures'] : [];
+        $featureChecker = $this->getFeatureChecker();
+        foreach ($requiredFeatures as $requiredFeature) {
+            if (!$featureChecker->isFeatureEnabled($requiredFeature)) {
+                throw $this->createNotFoundException();
+            }
+        }
 
         return [
             'pageTitle' => $this->get('translator')->trans($pageTitle),
@@ -35,5 +45,13 @@ class ReportController extends Controller
                 'reportName'      => $reportName
             ]
         ];
+    }
+
+    /**
+     * @return FeatureChecker
+     */
+    protected function getFeatureChecker()
+    {
+        return $this->get('oro_featuretoggle.checker.feature_checker');
     }
 }
