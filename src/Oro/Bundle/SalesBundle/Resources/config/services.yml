@@ -189,7 +189,6 @@ services:
             - '@oro_locale.formatter.date_time'
             - '@translator'
             - '@oro_dashboard.datetime.helper'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_sales.provider.opportunity.forecast'
             - '@oro_dashboard.widget_config_value.date_range.converter'
 
@@ -203,6 +202,7 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.provider.big_number.date_helper'
             - '@oro_currency.query.currency_transformer'
         tags:
@@ -301,8 +301,8 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.filter.date_filter_processor'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_currency.query.currency_transformer'
 
     oro_sales.handler.opportunity_api:
@@ -393,9 +393,11 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_currency.query.currency_transformer'
+            - '@oro_user.dashboard.owner_helper'
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
@@ -410,7 +412,7 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
-            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'

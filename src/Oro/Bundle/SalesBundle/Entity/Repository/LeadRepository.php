@@ -136,64 +136,53 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
      *
-     * @return int
+     * @return QueryBuilder
      */
-    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this
-            ->createLeadsCountQb($start, $end, $owners)
-            ->innerJoin('l.opportunities', 'o');
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+    public function getLeadsCountQB(
+        \DateTime $start = null,
+        \DateTime $end = null
+    ) {
+        return $this->createLeadsCountQb($start, $end)->innerJoin('l.opportunities', 'o');
     }
 
     /**
-     * @param AclHelper $aclHelper
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
      *
-     * @return int
+     * @return QueryBuilder
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
-    {
-        $qb = $this->createLeadsCountQb($start, $end, $owners);
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+    public function getNewLeadsCountQB(
+        \DateTime $start = null,
+        \DateTime $end = null
+    ) {
+        return $this->createLeadsCountQb($start, $end);
     }
 
     /**
-     * @param AclHelper $aclHelper
-     * @param int[] $owners
-     *
-     * @return int
+     * @return QueryBuilder
      */
-    public function getOpenLeadsCount(AclHelper $aclHelper, $owners = [])
+    public function getOpenLeadsCountQB()
     {
-        $qb = $this->createLeadsCountQb(null, null, $owners);
+        $qb = $this->createLeadsCountQb(null, null);
         $qb->andWhere(
             $qb->expr()->notIn('l.status', ['qualified', 'canceled'])
         );
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $qb;
     }
 
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[] $owners
      *
      * @return QueryBuilder
      */
     protected function createLeadsCountQb(
         \DateTime $start = null,
-        \DateTime $end = null,
-        $owners = []
+        \DateTime $end = null
     ) {
         $qb = $this
             ->createQueryBuilder('l')
@@ -208,10 +197,6 @@ class LeadRepository extends EntityRepository
             $qb
                 ->andWhere('l.createdAt <= :end')
                 ->setParameter('end', $end);
-        }
-
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'l.owner', $owners);
         }
 
         return $qb;

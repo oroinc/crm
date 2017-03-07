@@ -4,16 +4,14 @@ namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 
 class OpportunityByStatusProvider
 {
@@ -23,34 +21,34 @@ class OpportunityByStatusProvider
     /** @var AclHelper */
     protected $aclHelper;
 
+    /** @var WidgetProviderFilterManager */
+    protected $widgetProviderFilter;
+
     /** @var DateFilterProcessor */
     protected $dateFilterProcessor;
-
-    /** @var OwnerHelper */
-    protected $ownerHelper;
 
     /** @var  CurrencyQueryBuilderTransformerInterface */
     protected $qbTransformer;
 
     /**
-     * @param RegistryInterface                        $doctrine
-     * @param AclHelper                                $aclHelper
-     * @param DateFilterProcessor                      $processor
-     * @param OwnerHelper                              $ownerHelper
+     * @param RegistryInterface $doctrine
+     * @param AclHelper $aclHelper
+     * @param WidgetProviderFilterManager $widgetProviderFilter
+     * @param DateFilterProcessor $processor
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
+        WidgetProviderFilterManager $widgetProviderFilter,
         DateFilterProcessor $processor,
-        OwnerHelper $ownerHelper,
         CurrencyQueryBuilderTransformerInterface $qbTransformer
     ) {
-        $this->registry            = $doctrine;
-        $this->aclHelper           = $aclHelper;
-        $this->dateFilterProcessor = $processor;
-        $this->ownerHelper         = $ownerHelper;
-        $this->qbTransformer       = $qbTransformer;
+        $this->registry             = $doctrine;
+        $this->aclHelper            = $aclHelper;
+        $this->widgetProviderFilter = $widgetProviderFilter;
+        $this->dateFilterProcessor  = $processor;
+        $this->qbTransformer        = $qbTransformer;
     }
 
     /**
@@ -61,7 +59,7 @@ class OpportunityByStatusProvider
     public function getOpportunitiesGroupedByStatus(WidgetOptionBag $widgetOptions)
     {
         $dateRange        = $widgetOptions->get('dateRange');
-        $owners           = $this->ownerHelper->getOwnerIds($widgetOptions);
+        
         /**
          * Excluded statuses will be filtered from result in method `formatResult` below.
          * Due to performance issues with `NOT IN` clause in database.
@@ -96,11 +94,7 @@ class OpportunityByStatusProvider
         }
 
         $this->dateFilterProcessor->applyDateRangeFilterToQuery($qb, $dateRange, 'o.createdAt');
-
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
-
+        $this->widgetProviderFilter->filter($qb, $widgetOptions);
         $result = $this->aclHelper->apply($qb)->getArrayResult();
 
         return $this->formatResult($result, $excludedStatuses, $orderBy);
