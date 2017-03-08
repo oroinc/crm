@@ -1,3 +1,4 @@
+@not-automated
 Feature: Break Business Sales Channel statistics widget into two
   In order to check the performance of any lead/opportunity pipeline
   As a Sales rep
