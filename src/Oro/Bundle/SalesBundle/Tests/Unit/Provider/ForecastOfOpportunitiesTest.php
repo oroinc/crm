@@ -107,7 +107,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
         $this->forecastProvider->expects($this->exactly(3))
             ->method('getForecastData')
-            ->with($widgetOptions, null, null, null, [])
+            ->with($widgetOptions, null, null)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 
         $result = $this->provider

@@ -83,9 +83,8 @@ class ForecastOfOpportunities
         $compareToDate   = $widgetOptions->get('compareToDate');
         $usePrevious     = !empty($compareToDate['useDate']);
         $dateData        = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
-        $queryFilter     = $widgetOptions->get('queryFilter', []);
         $value           = $this->provider
-            ->getForecastData($widgetOptions, $dateData['start'], $dateData['end'], null, $queryFilter);
+            ->getForecastData($widgetOptions, $dateData['start'], $dateData['end'], null);
         $result['value'] = $this->formatValue($value[$dataKey], $dataType);
         if (!empty($dateData['prev_start'])
             && !empty($dateData['prev_end'])
@@ -95,8 +94,7 @@ class ForecastOfOpportunities
                 $widgetOptions,
                 $dateData['prev_start'],
                 $dateData['prev_end'],
-                $dateData['prev_moment'],
-                $queryFilter
+                $dateData['prev_moment']
             );
             $result['deviation']     = $this->translator
                 ->trans('oro.sales.dashboard.forecast_of_opportunities.no_changes');

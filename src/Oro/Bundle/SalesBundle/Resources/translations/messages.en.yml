@@ -4,15 +4,18 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
-        business_sales_channel_statistics:
-            title: Business sales channel statistics
-            description: This widget displays a set of metrics that indicate performance of your B2B channels.
-            new_leads_count.label: New Leads
-            open_leads_count.label: Open Leads
+        opportunity_statistics:
+            title: Opportunity statistics
+            description: This widget displays a set of metrics that indicate performance of opportunity pipeline.
             new_opportunities_count.label: New Opportunities count
             new_opportunities_amount.label: New Opportunities amount
             won_opportunities_to_date_count.label: Won Opportunities to date count
             won_opportunities_to_date_amount.label: Won Opportunities to date amount
+        lead_statistics:
+            title: Lead statistics
+            description: This widget displays a set of metrics that indicate performance of lead pipeline.
+            new_leads_count.label: New Leads
+            open_leads_count.label: Open Leads
     entityextend:
         enums:
             lead_source:

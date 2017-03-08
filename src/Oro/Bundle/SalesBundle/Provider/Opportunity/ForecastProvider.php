@@ -48,11 +48,11 @@ class ForecastProvider
 
     /** @var array */
     protected static $fieldsAuditMap = [
-        'status'       => ['old' => 'oldText', 'new' => 'newText'],
-        'owner'        => ['old' => 'oldText', 'new' => 'newText'],
-        'closeDate'    => ['old' => 'oldDatetime', 'new' => 'newDatetime'],
-        'probability'  => ['old' => 'oldFloat', 'new' => 'newFloat'],
-        'budgetAmount' => ['old' => 'oldFloat', 'new' => 'newFloat'],
+        'status'       => ['old' => 'oldText',       'new' => 'newText'    ],
+        'owner'        => ['old' => 'oldText',       'new' => 'newText'    ],
+        'closeDate'    => ['old' => 'oldDatetime',   'new' => 'newDatetime'],
+        'probability'  => ['old' => 'oldFloat',      'new' => 'newFloat'   ],
+        'budgetAmount' => ['old' => 'oldFloat',      'new' => 'newFloat'   ],
     ];
 
     /**
@@ -87,7 +87,6 @@ class ForecastProvider
      * @param \DateTime|null $start
      * @param \DateTime|null $end
      * @param \DateTime|null $moment
-     * @param array|null     $queryFilter
      *
      * @return array ['inProgressCount' => <int>, 'budgetAmount' => <double>, 'weightedForecast' => <double>]
      */
@@ -95,20 +94,15 @@ class ForecastProvider
         WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
         \DateTime $end = null,
-        \DateTime $moment = null,
-        array $queryFilter = null
+        \DateTime $moment = null
     ) {
-        $ownerIds = $this->ownerHelper->getOwnerIds($widgetOptions);
-        $filters = isset($queryFilter['definition']['filters'])
-            ? $queryFilter['definition']['filters']
-            : [];
         $key = $this->getDataHashKey($widgetOptions, $moment);
 
         if (!isset($this->data[$key])) {
             if (!$moment) {
-                $this->data[$key] = $this->getCurrentData($widgetOptions, $start, $end, $filters);
+                $this->data[$key] = $this->getCurrentData($widgetOptions, $start, $end);
             } else {
-                $this->data[$key] = $this->getMomentData($widgetOptions, $ownerIds, $moment, $start, $end, $filters);
+                $this->data[$key] = $this->getMomentData($widgetOptions, $moment, $start, $end);
             }
         }
 
@@ -119,24 +113,18 @@ class ForecastProvider
      * @param WidgetOptionBag $widgetOptions
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param array     $filters
      *
      * @return array
      */
     protected function getCurrentData(
         WidgetOptionBag $widgetOptions,
         \DateTime $start = null,
-        \DateTime $end = null,
-        array $filters = []
+        \DateTime $end = null
     ) {
         $clonedStart = $start ? clone $start : null;
         $clonedEnd   = $end ? clone $end : null;
         $alias       = 'o';
         $qb          = $this->getOpportunityRepository()->getForecastQB($this->qbTransformer, $alias);
-
-        $qb = $this->filterProcessor
-            ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, $alias);
-
         $this->applyDateFiltering($qb, 'o.closeDate', $clonedStart, $clonedEnd);
 
         return $this->processDataQueryBuilder($qb, $widgetOptions)->getOneOrNullResult();
@@ -144,21 +132,17 @@ class ForecastProvider
 
     /**
      * @param WidgetOptionBag   $widgetOptions
-     * @param array             $ownerIds
      * @param \DateTime         $moment
      * @param \DateTime|null    $start
      * @param \DateTime|null    $end
-     * @param array             $filters
      *
      * @return array
      */
     protected function getMomentData(
         WidgetOptionBag $widgetOptions,
-        array $ownerIds,
         \DateTime $moment,
         \DateTime $start = null,
-        \DateTime $end = null,
-        array $filters = []
+        \DateTime $end = null
     ) {
         // clone datetimes as doctrine modifies their timezone which breaks stuff
         $moment = clone $moment;
@@ -167,16 +151,14 @@ class ForecastProvider
 
         $qb = $this->getDataAuditQueryBuilder($widgetOptions, $moment);
         $this->applyHistoryDateFiltering($qb, $start, $end);
-
+        $ownerIds = $this->ownerHelper->getOwnerIds($widgetOptions);
         if ($ownerIds) {
             $this->addOwnersToDataAuditQB($qb, $ownerIds);
         }
         // need to join opportunity to properly apply acl permissions
         $qb->join('OroSalesBundle:Opportunity', 'o', Join::WITH, 'a.objectId = o.id');
-        if ($filters) {
-            $this->filterProcessor
-                ->process($qb, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
-        }
+
+        $this->applyQueryFilter($qb, $widgetOptions);
 
         $result = $this->aclHelper->apply($qb)->getArrayResult();
 
@@ -393,5 +375,21 @@ HAVING
         $this->widgetProviderFilter->filter($queryBuilder, $widgetOptions);
 
         return $this->aclHelper->apply($queryBuilder);
+    }
+
+    /**
+     * @param QueryBuilder    $queryBuilder
+     * @param WidgetOptionBag $widgetOptions
+     */
+    protected function applyQueryFilter(QueryBuilder $queryBuilder, WidgetOptionBag $widgetOptions)
+    {
+        $queryFilter = $widgetOptions->get('queryFilter', []);
+        $filters     = isset($queryFilter['definition']['filters'])
+            ? $queryFilter['definition']['filters']
+            : [];
+        if ($filters) {
+            $this->filterProcessor
+                ->process($queryBuilder, 'Oro\Bundle\SalesBundle\Entity\Opportunity', $filters, 'o');
+        }
     }
 }

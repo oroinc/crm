@@ -50,7 +50,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), "Failed in getting widget view !");
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
