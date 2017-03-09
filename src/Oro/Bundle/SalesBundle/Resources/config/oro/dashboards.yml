@@ -217,43 +217,33 @@ dashboards:
                         item_label: oro.sales.opportunity.datagrid.columns.metric_name
                         required: false
                         widget_name: forecast_of_opportunities
-        business_sales_channel_statistics:
-            label:       oro.dashboard.business_sales_channel_statistics.title
+        opportunity_statistics:
+            label:       oro.dashboard.opportunity_statistics.title
             route:       oro_dashboard_itemized_data_widget
             route_parameters: { bundle: OroDashboardBundle, name: bigNumbers }
             acl:         oro_sales_b2bcustomer_view
-            description: oro.dashboard.business_sales_channel_statistics.description
+            description: oro.dashboard.opportunity_statistics.description
             icon:        bundles/orosales/img/icon-big_numbers.png
             applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
             data_items:
-                new_leads_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewLeadsCount, integer)"
-                    label:         oro.dashboard.business_sales_channel_statistics.new_leads_count.label
-                    acl:           oro_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                open_leads_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getOpenLeadsCount, integer, false, false, false)"
-                    label:         oro.dashboard.business_sales_channel_statistics.open_leads_count.label
-                    acl:           oro_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_opportunities_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesCount, integer)"
-                    label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_count.label
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesCount, integer)"
+                    label:         oro.dashboard.opportunity_statistics.new_opportunities_count.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_opportunities_amount:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getNewOpportunitiesAmount, currency)"
-                    label:         oro.dashboard.business_sales_channel_statistics.new_opportunities_amount.label
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getNewOpportunitiesAmount, currency)"
+                    label:         oro.dashboard.opportunity_statistics.new_opportunities_amount.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 won_opportunities_to_date_count:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateCount, integer)"
-                    label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_count.label
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateCount, integer)"
+                    label:         oro.dashboard.opportunity_statistics.won_opportunities_to_date_count.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 won_opportunities_to_date_amount:
-                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, b2b, getWonOpportunitiesToDateAmount, currency)"
-                    label:         oro.dashboard.business_sales_channel_statistics.won_opportunities_to_date_amount.label
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, opportunity_stats, getWonOpportunitiesToDateAmount, currency)"
+                    label:         oro.dashboard.opportunity_statistics.won_opportunities_to_date_amount.label
                     acl:           oro_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
@@ -277,6 +267,15 @@ dashboards:
                     converter_attributes:
                         dateRangeField: dateRange
                         default_checked: true
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: opportunity_statistics
+                        entity: 'Oro\Bundle\SalesBundle\Entity\Opportunity'
+                        collapsible: true
+                        expand_filled: true
                 subWidgets:
                     type: oro_type_widget_items
                     options:
@@ -285,7 +284,65 @@ dashboards:
                             placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
                        item_label: oro.dashboard.widget.big_number.metricName
                        required: false
-                       widget_name: business_sales_channel_statistics
+                       widget_name: opportunity_statistics
+        lead_statistics:
+            label:       oro.dashboard.lead_statistics.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: OroDashboardBundle, name: bigNumbers }
+            acl:         oro_sales_lead_view
+            description: oro.dashboard.lead_statistics.description
+            icon:        bundles/orosales/img/icon-big_numbers.png
+            applicable:  "@oro_sales.provider.enitity_state->isEntityB2bCustomerEnabled()"
+            data_items:
+                open_leads_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getOpenLeadsCount, integer, false, false, false)"
+                    label:         oro.dashboard.lead_statistics.open_leads_count.label
+                    acl:           oro_sales_lead_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+                new_leads_count:
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, lead_stats, getNewLeadsCount, integer)"
+                    label:         oro.dashboard.lead_statistics.new_leads_count.label
+                    acl:           oro_sales_lead_view
+                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                usePreviousInterval:
+                    type: oro_type_widget_previous_date_range
+                    options:
+                       label: oro.dashboard.previous_date_range.label
+                       required: false
+                    converter_attributes:
+                        dateRangeField: dateRange
+                        default_checked: true
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: lead_statistics
+                        entity: 'Oro\Bundle\SalesBundle\Entity\Lead'
+                        collapsible: true
+                        expand_filled: true
+                subWidgets:
+                    type: oro_type_widget_items
+                    options:
+                       label: oro.dashboard.widget.big_number.choose_metrics
+                       attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                       item_label: oro.dashboard.widget.big_number.metricName
+                       required: false
+                       widget_name: lead_statistics
         average_lifetime_sales_chart:
             label:       oro.channel.dashboard.average_lifetime_sales_chart.title
             route:       oro_channel_dashboard_average_lifetime_sales_chart
