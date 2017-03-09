@@ -69,13 +69,9 @@ class B2bCustomerLifetimeListener
 
         foreach ($entities as $entity) {
             $b2bCustomer = null;
-            $needRecompute = false;
             if (!$entity->getId() && $this->isValuable($entity)) {
-                // handle creation, just add to prev lifetime value and recalculate change set
+                // handle creation
                 $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
-                $closeRevenueValue = $this->rateConverter->getBaseCurrencyAmount($entity->getCloseRevenue());
-                $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $closeRevenueValue);
-                $needRecompute = true;
             } elseif ($this->uow->isScheduledForDelete($entity) && $this->isValuable($entity)) {
                 $b2bCustomer       = $entity->getCustomerAssociation()->getTarget();
             } elseif ($this->uow->isScheduledForUpdate($entity)) {
@@ -102,9 +98,6 @@ class B2bCustomerLifetimeListener
             if (null !== $b2bCustomer) {
                 /** @var B2bCustomer $b2bCustomer */
                 $this->scheduleUpdate($b2bCustomer);
-                if ($needRecompute) {
-                    $this->uow->computeChangeSet($this->em->getClassMetadata(B2bCustomer::class), $b2bCustomer);
-                }
             }
         }
     }
