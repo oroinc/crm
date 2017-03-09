@@ -80,6 +80,11 @@ oro:
             message:
                 label:                      Message
                 description:                The case comment text.
+                saved:                      Comment Saved
+                removed:                    Comment Removed
+                no_records:                 There are no comments.
+                delete_confirmation:        Are you sure you want to delete this comment?
+                updated_by:                 Updated by {{ user }} at {{ date }}
             public:
                 label:                      Make Public
                 description:                Defiens wether the comment must be public on Zendesk.
@@ -100,7 +105,6 @@ oro:
             attachment:
                 label:                      Attachment
                 description:                The file that is attached to the case comment.
-
             action:
                 add: Add Comment
                 edit: Edit Comment
@@ -108,12 +112,6 @@ oro:
             dialog:
                 add: Add Comment
                 edit: Edit Comment
-            message:
-                saved: Comment Saved
-                removed: Comment Removed
-                no_records: There are no comments.
-                delete_confirmation: Are you sure you want to delete this comment?
-                updated_by: Updated by {{ user }} at {{ date }}
             error:
                 load: Sorry, comments were not loaded correctly.
                 delete: Sorry, comment deleting failed.
