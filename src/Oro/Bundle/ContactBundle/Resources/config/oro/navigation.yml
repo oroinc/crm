@@ -51,10 +51,10 @@ navigation:
 
     titles:
         oro_contact_index: ~
-        oro_contact_view: '%%contact.name%%'
+        oro_contact_view: '%contact.name%'
         oro_contact_create: 'Create Contact'
-        oro_contact_update: '%%contact.name%% - Edit'
+        oro_contact_update: '%contact.name% - Edit'
 
         oro_contact_group_index: ~
         oro_contact_group_create: 'Create Contact Group'
-        oro_contact_group_update: '%%group.label%% - Edit'
+        oro_contact_group_update: '%group.label% - Edit'

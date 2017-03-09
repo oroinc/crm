@@ -86,6 +86,9 @@ class CustomerAssociationAccountExtension extends AbstractTypeExtension
                 $target  = $event->getData();
                 $account = $event->getForm()->get('customer_association_account')->getData();
                 if (!$this->doctrineHelper->isNewEntity($target)) {
+                    if (!$account) {
+                        return;
+                    }
                     $customer = $this->manager->getAccountCustomerByTarget($target);
                     $customer->setTarget($account, $target);
                 } else {

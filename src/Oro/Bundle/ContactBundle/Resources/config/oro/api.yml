@@ -49,7 +49,8 @@ api:
                         options:
                             data_field: email
 
-        Oro\Bundle\ContactBundle\Entity\ContactAddress: ~
+        Oro\Bundle\ContactBundle\Entity\ContactAddress:
+            documentation_resource: '@OroContactBundle/Resources/doc/api/contact_address.md'
 
         Oro\Bundle\ContactBundle\Entity\ContactEmail:
             # this entity does not have own Data API resource
@@ -59,4 +60,9 @@ api:
             # this entity does not have own Data API resource
             actions: false
 
-        Oro\Bundle\ContactBundle\Entity\Group: ~
+        Oro\Bundle\ContactBundle\Entity\Group:
+            documentation_resource: '@OroContactBundle/Resources/doc/api/group.md'
+        Oro\Bundle\ContactBundle\Entity\Method:
+            documentation_resource: '@OroContactBundle/Resources/doc/api/method.md'
+        Oro\Bundle\ContactBundle\Entity\Source:
+            documentation_resource: '@OroContactBundle/Resources/doc/api/source.md'

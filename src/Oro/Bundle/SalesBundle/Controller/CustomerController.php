@@ -85,7 +85,7 @@ class CustomerController extends Controller
     /**
      * @return array
      */
-    public function getCustomersData()
+    protected function getCustomersData()
     {
         $customerData   = $this->getCustomerConfigProvider()->getCustomersData();
         $securityFacade = $this->get('oro_security.security_facade');
