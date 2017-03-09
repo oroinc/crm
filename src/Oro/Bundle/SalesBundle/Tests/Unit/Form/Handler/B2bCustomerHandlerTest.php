@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Handler;
 
-use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
+use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler;
 
 class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
 {
