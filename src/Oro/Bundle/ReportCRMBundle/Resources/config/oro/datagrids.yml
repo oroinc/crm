@@ -70,6 +70,8 @@ datagrids:
 
     oro_reportcrm-accounts-by_opportunities:
         pageTitle: oro.reportcrm.accounts_by_opportunities
+        requiredFeatures:
+            - sales_opportunity
         acl_resource: oro_report_view
         source:
             type: orm
@@ -136,6 +138,8 @@ datagrids:
 
     oro_reportcrm-leads-by_date:
         pageTitle: oro.reportcrm.leads_by_date
+        requiredFeatures:
+            - sales_lead
         acl_resource: oro_report_view
         source:
             type: orm
@@ -178,6 +182,8 @@ datagrids:
 
     oro_reportcrm-opportunities-by_status:
         pageTitle: oro.reportcrm.opportunities_by_status
+        requiredFeatures:
+            - sales_opportunity
         acl_resource: oro_report_view
         source:
             type: orm
@@ -275,6 +281,8 @@ datagrids:
 
     oro_reportcrm-opportunities-won_by_period:
         pageTitle: oro.reportcrm.opportunities_won_by_period
+        requiredFeatures:
+            - sales_opportunity
         acl_resource: oro_report_view
         source:
             type: orm
@@ -369,6 +377,8 @@ datagrids:
 
     oro_reportcrm-opportunities-total_forecast:
         pageTitle: oro.reportcrm.opportunities.total_forecast
+        requiredFeatures:
+            - sales_opportunity
         acl_resource: oro_report_view
         source:
             type: orm

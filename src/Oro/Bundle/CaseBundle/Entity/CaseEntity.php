@@ -610,7 +610,7 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
         $this->closedAt = $closedAt;
 
         if ($this->closedAt) {
-            unset($this->updateClosedAt);
+            $this->updateClosedAt = null;
         }
 
         return $this;

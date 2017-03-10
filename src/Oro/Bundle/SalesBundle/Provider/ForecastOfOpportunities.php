@@ -9,7 +9,6 @@ use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\ForecastProvider;
 
 /**
@@ -45,7 +44,6 @@ class ForecastOfOpportunities
      * @param DateTimeFormatter        $dateTimeFormatter
      * @param TranslatorInterface      $translator
      * @param DateHelper               $dateHelper
-     * @param OwnerHelper              $ownerHelper
      * @param ForecastProvider         $provider
      * @param FilterDateRangeConverter $filterDateRangeConverter
      */
@@ -54,7 +52,6 @@ class ForecastOfOpportunities
         DateTimeFormatter $dateTimeFormatter,
         TranslatorInterface $translator,
         DateHelper $dateHelper,
-        OwnerHelper $ownerHelper,
         ForecastProvider $provider,
         FilterDateRangeConverter $filterDateRangeConverter
     ) {
@@ -62,7 +59,6 @@ class ForecastOfOpportunities
         $this->dateTimeFormatter        = $dateTimeFormatter;
         $this->translator               = $translator;
         $this->dateHelper               = $dateHelper;
-        $this->ownerHelper              = $ownerHelper;
         $this->provider                 = $provider;
         $this->filterDateRangeConverter = $filterDateRangeConverter;
     }
@@ -84,24 +80,21 @@ class ForecastOfOpportunities
         $lessIsBetter = (bool)$lessIsBetter;
         $result       = [];
 
-        $ownerIds        = $this->ownerHelper->getOwnerIds($widgetOptions);
         $compareToDate   = $widgetOptions->get('compareToDate');
         $usePrevious     = !empty($compareToDate['useDate']);
         $dateData        = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
-        $queryFilter     = $widgetOptions->get('queryFilter', []);
         $value           = $this->provider
-            ->getForecastData($ownerIds, $dateData['start'], $dateData['end'], null, $queryFilter);
+            ->getForecastData($widgetOptions, $dateData['start'], $dateData['end'], null);
         $result['value'] = $this->formatValue($value[$dataKey], $dataType);
         if (!empty($dateData['prev_start'])
             && !empty($dateData['prev_end'])
             && !empty($dateData['prev_moment'])
         ) {
             $pastResult              = $this->provider->getForecastData(
-                $ownerIds,
+                $widgetOptions,
                 $dateData['prev_start'],
                 $dateData['prev_end'],
-                $dateData['prev_moment'],
-                $queryFilter
+                $dateData['prev_moment']
             );
             $result['deviation']     = $this->translator
                 ->trans('oro.sales.dashboard.forecast_of_opportunities.no_changes');

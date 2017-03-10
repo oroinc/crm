@@ -13,7 +13,7 @@ use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 
 use Oro\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider;
 
@@ -25,11 +25,11 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
     /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject */
     protected $aclHelper;
 
+    /** @var WidgetProviderFilterManager|\PHPUnit_Framework_MockObject_MockObject */
+    protected $widgetProviderFilter;
+
     /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $dateFilterProcessor;
-
-    /** @var OwnerHelper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $ownerHelper;
 
     /** @var  CurrencyQueryBuilderTransformerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $qbTransformer;
@@ -58,10 +58,11 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
+        $this->widgetProviderFilter = $this
+            ->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ownerHelper = $this->getMockBuilder('Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
+        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
             ->disableOriginalConstructor()
             ->getMock();
         $this->qbTransformer = $this->getMockForAbstractClass(
@@ -71,8 +72,8 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider = new OpportunityByStatusProvider(
             $this->registry,
             $this->aclHelper,
+            $this->widgetProviderFilter,
             $this->dateFilterProcessor,
-            $this->ownerHelper,
             $this->qbTransformer
         );
     }
@@ -85,10 +86,6 @@ class OpportunityByStatusProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOpportunitiesGroupedByStatusDQL($widgetOptions, $expectation)
     {
-        $this->ownerHelper->expects($this->once())
-            ->method('getOwnerIds')
-            ->willReturn([]);
-
         $opportunityQB = new QueryBuilder($this->getMockForAbstractClass('Doctrine\ORM\EntityManagerInterface'));
         $opportunityQB
             ->from('Oro\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
@@ -205,10 +202,6 @@ DQL
      */
     public function testGetOpportunitiesGroupedByStatusResultFormatter($widgetOptions, $result, $expected)
     {
-        $this->ownerHelper->expects($this->once())
-            ->method('getOwnerIds')
-            ->willReturn([]);
-
         $opportunityQB = new QueryBuilder($this->createMock('Doctrine\ORM\EntityManagerInterface'));
         $opportunityQB
             ->from('Oro\Bundle\SalesBundle\Entity\Opportunity', 'o', null);
