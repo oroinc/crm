@@ -108,3 +108,14 @@ SalesBundle
 - Class `Oro\Bundle\SalesBundle\Provider\Opportunity\IndeterminateForecastProvider.php`
     - construction signature was changed. The parameter `OwnerHelper $ownerHelper` was replaced by `WidgetProviderFilterManager $widgetProviderFilter`
     - property `protected $ownerHelper` was replaced by `protected $widgetProviderFilter`
+- Class `Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationCustomizeLoadedData`
+    - construction signature was changed now it takes next arguments:
+        - `ConfigProvider` $configProvider,
+        - `DoctrineHelper` $doctrineHelper,
+        - $customerAssociationField
+- Class `Oro\Bundle\SalesBundle\Form\Type\CustomerApiType`
+    - construction signature was changed now it takes next arguments:
+        - `AccountCustomerManager` $accountCustomerManager
+- `opportunity` and `lead` apis changed
+    - `customerAssociation` relation replaced by `customer` and `account` relations
+

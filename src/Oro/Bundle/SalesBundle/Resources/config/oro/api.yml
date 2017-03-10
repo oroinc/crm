@@ -141,16 +141,32 @@ api:
                         constraints:
                             - Email: ~
                     property_path: _
+                account:
+                    property_path: customerAssociation.account
+                    depends_on:
+                        - customerAssociation.account
+                customer:
+                    exclusion_policy: all
+                    property_path: customerAssociation.target
+                    depends_on:
+                        - customerAssociation.target
                 customerAssociation:
                     target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
                     target_type: to-one
                     exclude: false
                     fields:
                         account:
-                            exclude: true
+                            exclusion_policy: all
+                            fields:
+                                id:
+                                    exclude: false
                         target:
+                            exclusion_policy: all
                             exclude: true
                             data_type: association:manyToOne:customer
+                            fields:
+                                id:
+                                    exclude: false
                         customer_f2bbc387:
                             description: Test record.
             filters:
@@ -200,16 +216,32 @@ api:
             fields:
                 closedAt:
                     exclude: true
+                account:
+                    property_path: customerAssociation.account
+                    depends_on:
+                        - customerAssociation.account
+                customer:
+                    exclusion_policy: all
+                    property_path: customerAssociation.target
+                    depends_on:
+                        - customerAssociation.target
                 customerAssociation:
                     target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
                     target_type: to-one
                     exclude: false
                     fields:
                         account:
-                            exclude: true
+                            exclusion_policy: all
+                            fields:
+                                id:
+                                    exclude: false
                         target:
+                            exclusion_policy: all
                             exclude: true
                             data_type: association:manyToOne:customer
+                            fields:
+                                id:
+                                    exclude: false
 
         Oro\Bundle\SalesBundle\Entity\Customer:
             actions: false
