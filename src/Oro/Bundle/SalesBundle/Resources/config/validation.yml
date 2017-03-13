@@ -24,10 +24,15 @@ Oro\Bundle\SalesBundle\Entity\Lead:
             - Length:
                 max: 255
         emails:
+            - Valid: ~
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of the emails must be set as primary.
         status:
             - NotBlank: ~
+        addresses:
+            - Valid: ~
+        phones:
+            - Valid: ~
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
@@ -47,6 +52,14 @@ Oro\Bundle\SalesBundle\Entity\B2bCustomer:
                 max: 255
         dataChannel:
             - NotBlank: ~
+        shippingAddress:
+            - Valid: ~
+        billingAddress:
+            - Valid: ~
+        phones:
+            - Valid: ~
+        emails:
+            - Valid: ~
 
 Oro\Bundle\SalesBundle\Entity\Customer:
     properties:
