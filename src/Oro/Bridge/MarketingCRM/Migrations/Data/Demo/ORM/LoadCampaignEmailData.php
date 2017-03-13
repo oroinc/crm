@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\CampaignBundle\Entity\EmailCampaign;
 use Oro\Bundle\CampaignBundle\Entity\InternalTransportSettings;
+use Oro\Bundle\CampaignBundle\Transport\EmailTransport;
 
 class LoadCampaignEmailData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -17,6 +18,7 @@ class LoadCampaignEmailData extends AbstractFixture implements DependentFixtureI
     public function getDependencies()
     {
         return [
+            'Oro\Bridge\MarketingCRM\Migrations\Data\Demo\ORM\LoadCampaignData',
             'Oro\Bridge\MarketingCRM\Migrations\Data\Demo\ORM\LoadMarketingListData',
         ];
     }
@@ -28,24 +30,30 @@ class LoadCampaignEmailData extends AbstractFixture implements DependentFixtureI
     {
         $manager->getClassMetadata('Oro\Bundle\CampaignBundle\Entity\EmailCampaign')->setLifecycleCallbacks([]);
 
-        $marketingLists = $manager->getRepository('OroMarketingListBundle:MarketingList')->findAll();
+        $marketingList = $manager->getRepository('OroMarketingListBundle:MarketingList')->findOneBy([
+            'entity' => 'Oro\Bundle\ContactBundle\Entity\Contact'
+        ]);
+        $campaigns = $manager->getRepository('OroCampaignBundle:Campaign')->findAll();
+        $campaignsMax = count($campaigns) - 1;
+
         $defaultUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
-        $marketingListsMax = count($marketingLists) - 1;
         $emailCampaign     = new EmailCampaign();
         $transportSettings = new InternalTransportSettings();
         $emailCampaign->setTransportSettings($transportSettings)
             ->setOwner($defaultUser)
             ->setOrganization($this->getReference('default_organization'))
-            ->setMarketingList($marketingLists[mt_rand(0, $marketingListsMax)])
-            ->setName('Contact list campaign')
+            ->setMarketingList($marketingList)
+            ->setName('Special Sale')
             ->setSent(1)
-            ->setTransport('mailchimp')
+            ->setCampaign($campaigns[mt_rand(0, $campaignsMax)])
+            ->setTransport(EmailTransport::NAME)
             ->setSchedule('manual')
             ->setSenderEmail('magento.shop@magento-oro.com')
             ->setSenderName('Magento Shop')
             ->setCreatedAt(date_create('-' . (mt_rand(3600, 32535)) . 'seconds', new \DateTimeZone('UTC')));
         $emailCampaign->setUpdatedAt($emailCampaign->getCreatedAt());
         $emailCampaign->setSentAt($emailCampaign->getUpdatedAt());
+        $this->addReference('marketing_activity_campaign', $emailCampaign);
 
         $manager->persist($emailCampaign);
         $manager->flush();
