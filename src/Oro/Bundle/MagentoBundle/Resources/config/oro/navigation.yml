@@ -53,18 +53,18 @@ navigation:
 
     titles:
         oro_magento_customer_index: ~
-        oro_magento_customer_view:  %%customer.name%%
-        oro_magento_customer_update: %%customer.name%% - oro.ui.edit
-        oro_magento_customer_create: oro.ui.create_entity
+        oro_magento_customer_view:  '%customer.name%'
+        oro_magento_customer_update: '%customer.name% - oro.ui.edit'
+        oro_magento_customer_create: 'oro.ui.create_entity'
 
         oro_magento_cart_index:     ~
-        oro_magento_cart_view:      'Cart #%%cart.id%%'
+        oro_magento_cart_view:      'Cart #%cart.id%'
 
         oro_magento_order_index:    ~
-        oro_magento_order_view:     'Order #%%order.incrementId%%'
+        oro_magento_order_view:     'Order #%order.incrementId%'
 
         oro_magento_product_index:  'oro.magento.product.entity_plural_label'
-        oro_magento_product_view:   %%product.name%%
+        oro_magento_product_view:   '%product.name%'
 
         oro_magento_newsletter_subscriber_index:  'oro.magento.newslettersubscriber.entity_plural_label'
-        oro_magento_newsletter_subscriber_view:   %%newsletter_subscriber.email%%
+        oro_magento_newsletter_subscriber_view:   '%newsletter_subscriber.email%'

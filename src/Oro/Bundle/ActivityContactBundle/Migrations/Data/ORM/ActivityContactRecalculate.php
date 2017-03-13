@@ -34,7 +34,7 @@ class ActivityContactRecalculate extends AbstractFixture implements ContainerAwa
         $producer = $this->container->get('oro_message_queue.client.message_producer');
         $producer->send(Topics::RUN_COMMAND, [
             'command' => ActivityContactRecalculateCommand::COMMAND_NAME,
-            'arguments' => ['-v']
+            'arguments' => ['-v', '--disabled-listeners=all']
         ]);
     }
 }

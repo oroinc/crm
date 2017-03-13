@@ -1315,11 +1315,11 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @param Customer $customer
+     * @param Customer|null $customer
      *
      * @return $this
      */
-    public function setCustomerAssociation(Customer $customer)
+    public function setCustomerAssociation(Customer $customer = null)
     {
         $this->customerAssociation = $customer;
 
