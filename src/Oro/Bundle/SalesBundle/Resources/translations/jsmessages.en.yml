@@ -2,6 +2,7 @@ oro:
     sales:
         form:
             add_new_customer: Add new {{ account }}
+            new_customer: New
         email:
             error:
                 delete.more_one: Email address was not deleted, the lead has more than one email addresses, can't set the new primary.
