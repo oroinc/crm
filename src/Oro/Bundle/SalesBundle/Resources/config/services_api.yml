@@ -63,8 +63,6 @@ services:
             - '@oro_sales.customer.config_provider'
             - '@oro_entity.doctrine_helper'
             - 'customerAssociation'
-            - 'account'
-            - 'target'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\Opportunity }
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
@@ -78,10 +76,16 @@ services:
             - { name: oro.api.processor, action: get_metadata, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: -110 }
             - { name: oro.api.processor, action: get_metadata, class: Oro\Bundle\SalesBundle\Entity\Lead, priority: -110 }
 
+    oro_sales.api.get_metadata.get_config:
+        class: Oro\Bundle\SalesBundle\Api\Processor\GetConfig
+        tags:
+            - { name: oro.api.processor, action: get_config, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: -110 }
+            - { name: oro.api.processor, action: get_config, class: Oro\Bundle\SalesBundle\Entity\Lead, priority: -110 }
+
     oro_sales.api.load_data.customer_association:
         class: Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationFinalize
         arguments:
-            - 'customerAssociation'
+            - 'customer'
         tags:
             - { name: oro.api.processor, action: get_list, group: finalize, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: -254 }
             - { name: oro.api.processor, action: get, group: finalize, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: -254 }
@@ -92,7 +96,17 @@ services:
         class: Oro\Bundle\SalesBundle\Api\Processor\InitializeCustomerTypeGuesser
         arguments:
             - '@oro_sales.form.guesser.customer_guesser'
-            - 'customerAssociation'
+            - 'customer'
+        tags:
+            - { name: oro.api.processor, action: update, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: 240 }
+            - { name: oro.api.processor, action: create, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: 240 }
+            - { name: oro.api.processor, action: update, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Lead, priority: 240 }
+            - { name: oro.api.processor, action: create, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Lead, priority: 240 }
+
+    oro_sales.api.opportunity.initialize_customer_account_type_guesser:
+        class: Oro\Bundle\SalesBundle\Api\Processor\InitializeCustomerAccountTypeGuesser
+        arguments:
+            - '@oro_sales.form.guesser.customer_account_guesser'
         tags:
             - { name: oro.api.processor, action: update, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: 240 }
             - { name: oro.api.processor, action: create, group: transform_data, class: Oro\Bundle\SalesBundle\Entity\Opportunity, priority: 240 }
@@ -102,12 +116,23 @@ services:
     oro_sales.form.type.customer_api:
         class: Oro\Bundle\SalesBundle\Form\Type\CustomerApiType
         arguments:
-            - '@doctrine'
             - '@oro_sales.manager.account_customer'
         tags:
             - { name: oro.api.form.type, alias: oro_sales_customer_api }
 
+    oro_sales.form.type.customer_account_api:
+        class: Oro\Bundle\SalesBundle\Form\Type\CustomerAccountApiType
+        arguments:
+            - '@oro_sales.manager.account_customer'
+        tags:
+            - { name: oro.api.form.type, alias: oro_sales_customer_account_api }
+
     oro_sales.form.guesser.customer_guesser:
         class: Oro\Bundle\SalesBundle\Form\Guesser\CustomerApiTypeGuesser
+        tags:
+            - { name: oro.api.form.type_guesser, priority: 20 }
+
+    oro_sales.form.guesser.customer_account_guesser:
+        class: Oro\Bundle\SalesBundle\Form\Guesser\CustomerAccountApiTypeGuesser
         tags:
             - { name: oro.api.form.type_guesser, priority: 20 }

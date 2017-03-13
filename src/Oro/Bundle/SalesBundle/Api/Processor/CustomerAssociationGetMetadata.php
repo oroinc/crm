@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Processor;
 
-use Oro\Component\ChainProcessor\ContextInterface;
-use Oro\Component\ChainProcessor\ProcessorInterface;
-
+use Oro\Bundle\ApiBundle\Model\EntityIdentifier;
 use Oro\Bundle\ApiBundle\Processor\GetMetadata\MetadataContext;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Component\ChainProcessor\ContextInterface;
+use Oro\Component\ChainProcessor\ProcessorInterface;
 
 class CustomerAssociationGetMetadata implements ProcessorInterface
 {
@@ -57,5 +57,15 @@ class CustomerAssociationGetMetadata implements ProcessorInterface
         }
 
         $targetEntityMetadata->setInheritedType(true);
+
+        $entityMetadata->removeAssociation($this->customerAssociationField);
+        $targetAssociationMetadata->setName('customer');
+        $targetAssociationMetadata->setTargetClassName(EntityIdentifier::class);
+        $entityMetadata->addAssociation($targetAssociationMetadata);
+
+        // account field needs to be after customer field because of form listeners
+        $accountAssociation = $entityMetadata->getAssociation('account');
+        $entityMetadata->removeAssociation('account');
+        $entityMetadata->addAssociation($accountAssociation);
     }
 }

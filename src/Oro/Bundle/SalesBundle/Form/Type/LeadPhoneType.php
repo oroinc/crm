@@ -29,7 +29,6 @@ class LeadPhoneType extends AbstractType
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\LeadPhone',
                 'intention' => 'lead',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'cascade_validation' => true,
                 'csrf_protection' => false,
             )
         );

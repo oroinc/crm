@@ -54,6 +54,18 @@ Example:
                "id":"1"
             }
          },
+         "customer":{
+            "data":{
+               "type":"b2bcustomers",
+               "id":"9"
+            }
+         },
+         "account":{
+            "data":{
+               "type":"accounts",
+               "id":"3"
+            }
+         },
          "status":{  
             "data":{  
                "type":"leadstatuses",
@@ -114,6 +126,18 @@ Example:
                   "id":"6"
                }
             ]
+         },
+         "customer":{
+            "data":{
+               "type":"b2bcustomers",
+               "id":"9"
+            }
+         },
+         "account":{
+            "data":{
+               "type":"accounts",
+               "id":"3"
+            }
          },
          "status":{  
             "data":{  
@@ -250,6 +274,22 @@ The phone number that should be set as the primary one.
  
 *The primary phone number will be added to **phones** collection if it does not contain it yet.*
 
+### customer
+
+The customer the lead is assigned to.
+
+#### create
+
+The customer the opportunity is assigned to (**required** if no account is specified).
+
+### account
+
+The account the lead is assigned to.
+
+#### create
+
+The account the opportunity is assigned to (**required** if no customer is specified, taken from customer if it is). If customer field is specified, this account have to relate to the customer.
+
 ## SUBRESOURCES
 
 ###addresses
@@ -341,30 +381,29 @@ Example:
 
 #### get_subresource
 
-Retrieve a business customer record assigned to a specific lead record.
+Get full information about a customer the opportunity is created for.
 
 #### get_relationship
 
-Retrieve the ID of a customer record assigned to a specific lead record.
+Get a customer the opportunity is created for.
 
 #### update_relationship
 
-Replace the ID of a customer record assigned to a specific lead record.
+Update a customer the opportunity is created for.
 
-{@request:json_api}
-Example:
+### account
 
-`</api/leads/5/relationships/customer>`
+#### get_subresource
 
-```JSON
-{
-  "data": {
-    "type": "b2bcustomers",
-    "id": "7"
-  }
-}
-```
-{@/request}
+Get full information about an account the opportunity is created for.
+
+#### get_relationship
+
+Get an account the opportunity is created for.
+
+#### update_relationship
+
+Update an account the opportunity is created for.
 
 ### dataChannel
 

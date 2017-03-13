@@ -106,7 +106,6 @@ class CaseEntityType extends AbstractType
             [
                 'data_class'         => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseEntity',
                 'intention'          => 'oro_case_entity',
-                'cascade_validation' => true
             ]
         );
     }

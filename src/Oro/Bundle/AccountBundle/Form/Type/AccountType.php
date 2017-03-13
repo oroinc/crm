@@ -146,7 +146,6 @@ class AccountType extends AbstractType
                 'data_class' => 'Oro\Bundle\AccountBundle\Entity\Account',
                 'intention' => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'cascade_validation' => true
             )
         );
     }
