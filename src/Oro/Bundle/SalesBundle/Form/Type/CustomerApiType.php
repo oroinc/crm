@@ -2,51 +2,63 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Oro\Bundle\ApiBundle\Collection\IncludedEntityCollection;
-use Oro\Bundle\ApiBundle\Form\DataTransformer\EntityToIdTransformer;
-use Oro\Bundle\ApiBundle\Metadata\AssociationMetadata;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SalesBundle\Form\DataTransformer\CustomerApiTransformer;
 
 class CustomerApiType extends AbstractType
 {
-    /** @var ManagerRegistry */
-    protected $doctrine;
-
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
     /**
-     * @param ManagerRegistry        $doctrine
-     * @param AccountCustomerManager $manager
+     * @param AccountCustomerManager $accountCustomerManager
      */
-    public function __construct(ManagerRegistry $doctrine, AccountCustomerManager $manager)
+    public function __construct(AccountCustomerManager $accountCustomerManager)
     {
-        $this->doctrine               = $doctrine;
-        $this->accountCustomerManager = $manager;
+        $this->accountCustomerManager = $accountCustomerManager;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var AssociationMetadata $metadata */
-        $metadata = $options['metadata'];
-        /** @var IncludedEntityCollection|null $includedEntities */
-        $includedEntities = $options['included_entities'];
-        $builder->addViewTransformer(
-            new CustomerApiTransformer(
-                new EntityToIdTransformer($this->doctrine, $metadata, $includedEntities),
-                $this->accountCustomerManager
-            )
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                $parentForm = $event->getForm()->getParent();
+
+                if ($parentForm->has('account') && $parentForm->get('account')->isSubmitted()) {
+                    throw new \LogicException('"customer" field has to be submitted before "account" field');
+                }
+
+                $customer = $parentForm->has('customer') && $parentForm->get('customer')->isSubmitted()
+                    ? $parentForm->get('customer')->getData()
+                    : null;
+
+                if (!$customer) {
+                    $parentForm->getData()->setCustomerAssociation(null);
+                    return;
+                }
+
+                $customerAssociation = $this->accountCustomerManager->getAccountCustomerByTarget(
+                    $customer,
+                    false
+                );
+                if (!$customerAssociation) {
+                    $customerAssociation = AccountCustomerManager::createCustomer(
+                        $this->accountCustomerManager->createAccountForTarget($customer),
+                        $customer
+                    );
+                }
+
+                $parentForm->getData()->setCustomerAssociation($customerAssociation);
+            }
         );
     }
 
@@ -55,11 +67,17 @@ class CustomerApiType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver
-            ->setDefaults(['compound' => false, 'included_entities' => null])
-            ->setRequired(['metadata'])
-            ->setAllowedTypes('metadata', [AssociationMetadata::class])
-            ->setAllowedTypes('included_entities', ['null', IncludedEntityCollection::class]);
+        $resolver->setDefaults([
+            'mapped' => false,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'oro_api_entity';
     }
 
     /**

@@ -54,10 +54,16 @@ Example:
                "id":"1"
             }
          },
-         "customerAssociation":{  
+         "customer":{
             "data":{  
                "type":"b2bcustomers",
                "id":"9"
+            }
+         },
+         "account":{
+            "data":{
+               "type":"accounts",
+               "id":"3"
             }
          },
          "status":{  
@@ -113,10 +119,16 @@ Example:
                "id":"1"
             }
          },
-         "customerAssociation":{  
+         "customer":{
             "data":{  
                "type":"b2bcustomers",
                "id":"9"
+            }
+         },
+         "account":{
+            "data":{
+               "type":"accounts",
+               "id":"3"
             }
          },
          "status":{  
@@ -162,13 +174,21 @@ The list of records that will be deleted, could be limited by filters.
 
 *This field is **required** and must remain defined.*
 
-### customerAssociation
+### customer
+
+The customer the opportunity is assigned to.
 
 #### create
 
-{@inheritdoc}
+The customer the opportunity is assigned to (**required** if no account is specified).
 
-**The required field**
+### account
+
+The account the opportunity is assigned to.
+
+#### create
+
+The account the opportunity is assigned to (**required** if no customer is specified, taken from customer if it is). If customer field is specified, this account have to relate to the customer.
 
 ### status
 
@@ -238,25 +258,33 @@ Example:
 ```
 {@/request}
 
-### customerAssociation
+### customer
 
 #### get_subresource
 
-Get full information about a B2B customer the opportunity is created for.
-
-**The method is planned for refactor.**
+Get full information about a customer the opportunity is created for.
 
 #### get_relationship
 
-Get a B2B customer the opportunity is created for.
-
-**The method is planned for refactor.**
+Get a customer the opportunity is created for.
 
 #### update_relationship
 
-Update a B2B customer the opportunity is created for.
+Update a customer the opportunity is created for.
 
-**The method is planned for refactor.**
+### account
+
+#### get_subresource
+
+Get full information about an account the opportunity is created for.
+
+#### get_relationship
+
+Get an account the opportunity is created for.
+
+#### update_relationship
+
+Update an account the opportunity is created for.
 
 ### lead
 
