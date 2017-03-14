@@ -5,10 +5,6 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
 {
     public function testViewDeletedEntity()

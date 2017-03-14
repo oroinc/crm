@@ -8,10 +8,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerPhoneData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestB2bCustomerPhoneApiTest extends WebTestCase
 {
     protected function setUp()

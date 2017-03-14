@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
@@ -124,7 +124,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         $lifetimeFieldName = $lifetimeFields[$customerIdentity];
         $accountRepo       = $this->em->getRepository('OroAccountBundle:Account');
 
-        $accountIterator = new BufferedQueryResultIterator(
+        $accountIterator = new BufferedIdentityQueryResultIterator(
             $accountRepo->createQueryBuilder('a')->select('a.id')
         );
         $accountIterator->setBufferSize(self::UPDATE_LIFETIME_READ_BATCH_SIZE);

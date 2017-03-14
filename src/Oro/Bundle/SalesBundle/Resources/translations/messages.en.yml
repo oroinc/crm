@@ -4,15 +4,18 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
-        business_sales_channel_statistics:
-            title: Business sales channel statistics
-            description: This widget displays a set of metrics that indicate performance of your B2B channels.
-            new_leads_count.label: New Leads
-            open_leads_count.label: Open Leads
+        opportunity_statistics:
+            title: Opportunity statistics
+            description: This widget displays a set of metrics that indicate performance of opportunity pipeline.
             new_opportunities_count.label: New Opportunities count
             new_opportunities_amount.label: New Opportunities amount
             won_opportunities_to_date_count.label: Won Opportunities to date count
             won_opportunities_to_date_amount.label: Won Opportunities to date amount
+        lead_statistics:
+            title: Lead statistics
+            description: This widget displays a set of metrics that indicate performance of lead pipeline.
+            new_leads_count.label: New Leads
+            open_leads_count.label: Open Leads
     entityextend:
         enums:
             lead_source:
@@ -136,14 +139,16 @@ oro:
             name.label:           Name
             label.label:          Label
         #
-        # Oro/Bundle/SalesBundle/Entity/OpportunityStatus.php
+        # Oro/Bundle/SalesBundle/Entity/OpportunityStatus.php //deprecated since 1.10. Enum type is used instead
+        # Extend/Entity/EV_Opportunity_Status.php
         #
         opportunitystatus:
             entity_label:         Opportunity Status
             entity_plural_label:  Opportunity Statuses
-            entity_description:   Represent opportunity status
+            entity_description:   A deal's stage (Open, Closed Won, etc.)
             name.label:           Name
             label.label:          Label
+
         #
         # Oro/Bundle/SalesBundle/Entity/Opportunity.php
         #
@@ -154,61 +159,61 @@ oro:
             id.label:             Id
             name:
                 label:            Opportunity name
-                description:      The name used to refer to the opportunity in the system
+                description:      The name used to refer to the opportunity in the system.
             close_date:
                 label:            Expected close date
-                description:      The expected close date for open opportunity, and actual close date for the closed one
+                description:      The expected close date for open opportunity, and actual close date for the closed one.
             probability:
                 label:            Probability
-                description:      The perceived probability of opportunity being successfully closed
+                description:      The perceived probability of opportunity being successfully closed.
             budget_amount:
                 label:            Budget amount
-                description:      The expected revenue of the opportunity
+                description:      The expected revenue of the opportunity.
             budget_amount_value:
                 label:            Budget Amount
+                description:      Defines the budget value amount for an opportunity.
             budget_amount_currency:
                 label:            Budget Amount Currency
+                description:      The currency specified for the budget amount value.
             budget_amount_base_currency:
                 label:            Budget Amount (%sign%)
             base_budget_amount_value:
-                label:            Budget Amount (%sign%)
+                label:            Budget Amount In Base Currency
             close_revenue:
                 label:            Close revenue
-                description:      The actual revenue received from the opportunity after it's been closed
+                description:      The actual revenue received from the opportunity after it's been closed.
             close_revenue_value:
                 label:            Close revenue
+                description:      Defines the close revenue value for an opportunity.
             close_revenue_currency:
                 label:            Close revenue Currency
+                description:      The currency specified for the close renevue value.
             base_close_revenue_value:
-                label:            Close Revenue (%sign%)
-            close_revenue_base_currency:
-                label:            Close Revenue (%sign%)
+                label:            Close Revenue In Base Currency
             customer_need:
                 label:            Customer need
-                description:      The detailed description of customers' needs that constitute the business opportunity
+                description:      The detailed description of customers' needs that constitute the business opportunity.
             proposed_solution:
                 label:            Proposed solution
-                description:      The detailed description of the solution proposed to the customer by the sales representative
+                description:      The detailed description of the solution proposed to the customer by the sales representative.
             status:
                 label:            Status
-                description:      A stage in the process of a sale
+                description:      A stage in the process of a sale.
             close_reason:
                 label:            Close reason
-                description:      The reason for opportunity closure (both won and lost)
+                description:      The reason for opportunity closure (both won and lost).
             contact:
                 label:            Contact
-                description:      The person on the customer side who is directly related to the opportunity
+                description:      The person on the customer side who is directly related to the opportunity.
             owner.label:          Owner
             notes:
                 label:            Additional comments
-                description:      Any additional notes made by the sales representative
+                description:      Any additional notes made by the sales representative.
             lead:
                 label:            Lead
-                description:      The sale prospect that has been successfully qualified into this opportunity
+                description:      The sale prospect that has been successfully qualified into this opportunity.
             organization.label:   Organization
-            customer:
-                label:            Account
-                description:      A customer or an account the opportunity is created for
+            customer.label:       Account
             data_channel:
                 label:            Channel
                 description:      One of active channels, from which the application will get information on this opportunity.
@@ -217,8 +222,8 @@ oro:
             updated_at.label:     Updated At
             closed_at.label:      Closed At
             customer_association:
-                label :           Customer
-                description:      A customer or an account the opportunity is created for
+                label:            Customer
+                description:      A customer or an account the opportunity is created for.
 
             add_entity:           Add opportunity
 
@@ -246,66 +251,130 @@ oro:
         opportunityclosereason:
             entity_label:         Opportunity Close Reason
             entity_plural_label:  Opportunity Close Reasons
-            entity_description:   Represent opportunity close reason
+            entity_description:   The reason for closing an opportunity.
             name.label:           Name
-            label.label:          Label
+            label:
+                label:            Label
+                description:      The label of the opportunity close reason record.
         #
         # Oro/Bundle/SalesBundle/Entity/Lead.php
         #
         lead:
             entity_label:         Lead
             entity_plural_label:  Leads
-            entity_description:   Represent lead
+            entity_description:   Leads are prospects or potential sales in a form of contact data. Lead records represent commercial activity with people or businesses that have authority, budget and interest to purchase goods and/or services.
             add_entity:           Add lead
             id.label:             Id
-            name.label:           Lead name
-            name_prefix.label:    Name prefix
-            first_name.label:     First name
-            middle_name.label:    Middle name
-            last_name.label:      Last name
-            name_suffix.label:    Name suffix
-            job_title.label:      Job title
-            phone_number.label:   Phone number
-            phones.label:         Phones
-            email.label:          Email
-            emails.label:         Emails
-            company_name.label:   Company name
-            website.label:        Website
-            number_of_employees.label: Number of employees
-            industry.label:       Industry
-            status.label:         Status
-            contact.label:        Contact
+            name:
+                label:            Lead name
+                description:      Unique name that identifies the lead record.
+            name_prefix:
+                label:            Name prefix
+                description:      Name prefix or honorific of the lead person (Mr./Ms., Dr., Prof., etc.)
+            first_name:
+                label:            First name
+                description:      First name of the lead person.
+            middle_name:
+                label:            Middle name
+                description:      Middle name of the lead person.
+            last_name:
+                label:            Last name
+                description:      Last name of the lead person.
+            name_suffix:
+                label:            Name suffix
+                description:      Name suffix of the lead person (Sr./Jr., M.D., OBE, etc.)
+            job_title:
+                label:            Job title
+                description:      Job title of the lead person within the company.
+            phone_number:
+                label:            Phone number
+                description:
+            phones:
+                label:            Phones
+                description:      Collection of lead phone numbers.
+            email:
+                label:            Email
+            emails:
+                label:            Emails
+                description:      Collection of lead email addresses.
+            company_name:
+                label:            Company name
+                description:      Name of the company or organization the lead represents or belongs to.
+            website:
+                label:            Website
+                description:      Personal or corporate website of the lead.
+            number_of_employees:
+                label:            Number of employees
+                description:      Number of employees within the lead's company.
+            industry:
+                label:            Industry
+                description:      Industry where the lead's company is operating.
+            status:
+                label:                  Status
+                description:            Current status of the lead.
+                change_error_message:   Unable to change lead status.
+            contact:
+                label:            Contact
+                description:      A contact the lead was converted into.
             owner.label:          Owner
-            address.label:        Address
-            addresses.label:      Address
-            add_address.label:    Add Address
-            details.label:        Lead Details
-            source.label:         Source
-            notes.label:          Additional comments
-            twitter.label:        Twitter
-            linked_in.label:      LinkedIn
-            opportunities.label:  Opportunities
-            information:          Lead Information
-            contact_information:  Contact Information
-            campaign.label:       Campaign
-            organization.label:   Organization
-            customer.label:       Account
-            data_channel.label:   Channel
-            assigned.label:       Assigned
-            primary_phone.label:  Primary Phone
-            primary_email.label:  Primary Email
-            primary_addr.label:   Primary Address
-            customer_association.label : Customer
+            address:
+                label:            Address
+                description:
+            addresses:
+                label:            Address
+                description:      Collection of lead addresses: mailing, business, home, billing, etc.
+            add_address:
+                label:            Add Address
+                description:
+            details:
+                label:            Lead Details
+                description:
             source:
+                label:            Source
+                description:      Source of the lead.
                 unclassified:     No source
                 others:           Others
                 none:             None
-            status:
-                change_error_message:  Unable to change lead status.
+            notes:
+                label:            Additional comments
+                description:      Additional notes made to the lead record.
+            twitter:
+                label:            Twitter
+                description:      Twitter profile of the lead person or company.
+            linked_in:
+                label:            LinkedIn
+                description:      LinkedIn profile of the lead person or company.
+            opportunities:
+                label:            Opportunities
+                description:      A collection of opportunities to which the lead was converted.
+            information:          Lead Information
+            contact_information:  Contact Information
+            campaign:
+                label:            Campaign
+                description:
+            organization.label:   Organization
+            customer.label:       Account
+            data_channel:
+                label:            Channel
+                description:      Sales channel within OroCRM to which the lead belongs. **(Will be removed in 2.0;)**
+            assigned:
+                label:            Assigned
+                description:
+            primary_phone:
+                label:            Primary Phone
+                description:
+            primary_email:
+                label:            Primary Email
+                description:
+
+
             convert:
                  error:           Unable to convert lead to opportunity
             feature.label:        Lead
             feature.description:  Enables Lead entity
+            customer_association:
+                label:            Customer
+                description:      A customer or an account the lead is created for.
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -324,31 +393,68 @@ oro:
         # Entity Oro\Bundle\SalesBundle\Entity\LeadAddress
         #
         leadaddress:
-            city.label:          City
-            country.label:       Country
-            entity_description:  Represent lead's address
+            city:
+                label:           City
+                description:     The city specified in the lead address.
+            country:
+                label:           Country
+                description:     The region specified in the lead address.
+            entity_description:  The address configured for a lead.
             entity_label:        Lead Address
             entity_plural_label: Lead Addresses
-            first_name.label:    First name
-            id.label:            Id
-            label.label:         Label
-            last_name.label:     Last name
-            middle_name.label:   Middle name
-            name_prefix.label:   Name prefix
-            name_suffix.label:   Name suffix
-            organization.label:  Organization
-            owner.label:         Owner
-            postal_code.label:   Zip/Postal Code
-            primary.label:       Primary
-            region.label:        State
+            first_name:
+                label:           First name
+                description:     The first name that is specified in the lead address.
+            id:
+                label:           Id
+            label:
+                label:           Label
+                description:     The label specified for the lead address. The label is used to refer to the lead address on the interface.
+            last_name:
+                label:           Last name
+                description:     The last name that is specified in the lead address.
+            middle_name:
+                label:           Middle name
+                description:     The middle name that is specified in the lead address.
+            name_prefix:
+                label:           Name prefix
+                description:     The name prefix specified in the lead address.
+            name_suffix:
+                label:           Name suffix
+                description:     The name suffix specified in the lead address.
+            organization:
+                label:           Organization
+                description:     The organization that is specified in the lead address.
+            owner:
+                label:           Owner
+                description:     The lead who is the owner of the lead address. The lead address is displayed on the view page of this lead.
+            postal_code:
+                label:           Zip/Postal Code
+                description:     The postal code specified in the lead address.
+            primary:
+                label:           Primary
+                description:     Defines whether the lead address is a primary lead address.
+            region:
+                label:           State
+                description:     The region specified in the lead address.
             region_text.label:   State
-            street.label:        Street
-            street2.label:       Street 2
+            street:
+                label:           Street
+                description:     The first line of the street address. Usually contains the street name and the building number.
+            street2:
+                label:           Street 2
+                description:     The second line of the street address. May contain the appartment number, P.O. box, building name, etc.
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code
             country_iso3_code.label: Country ISO3 code
             region_name.label:       State name
             region_code.label:       State ISO code
+            created:
+                label:           Created at
+                description:     The date and time when the lead address was created.
+            updated:
+                label:           Created at
+                description:     The date and time when the lead address was last updated.
 
         #
         # Entity Oro/Bundle/SalesBundle/Entity/LeadPhone.php
@@ -377,11 +483,18 @@ oro:
         salesfunnel:
             entity_label:         Sales Process
             entity_plural_label:  Sales Processes
+            entity_description:   Sales funnel is a sales process that involves a series of steps which enable sales force to close deals (Currently deprecated).
             new_entity:           New Sales Process
             id.label:             'Sales #'
-            start_date.label:     Start Date
-            lead.label:           Lead
-            opportunity.label:    Opportunity
+            start_date:
+                label:            Start Date
+                description:      The date of the sales process initiation.
+            lead:
+                label:            Lead
+                description:      The lead that forms a part of a sales process.
+            opportunity:
+                label:            Opportunity
+                description:      The opportunity that forms a part of a sales process.
             owner.label:          Owner
             data_channel.label:   Channel
             organization.label:   Organization
@@ -400,32 +513,63 @@ oro:
         b2bcustomer:
             entity_label:               Business Customer
             entity_plural_label:        Business Customers
-            entity_description:         Represent business customer
+            entity_description:         Customer identity that represents customers involved in business-to-business activities.
             id.label:                   Id
-            name.label:                 Customer name
-            lifetime.label:             Lifetime sales value
-            shipping_address.label:     Shipping Address
-            billing_address.label:      Billing Address
-            account.label:              Account
-            contact.label:              Contact
-            data_channel.label:         Channel
-            leads.label:                Leads
-            opportunities.label:        Opportunities
+            name:
+                label:                  Customer name
+                description:            The name of the business customer.
+            lifetime:
+                label:                  Lifetime sales value
+                description:            The lifetime sales value associated with the business customer.
+            shipping_address:
+                label:                  Shipping Address
+                description:            The shipping address configured for the business customer.
+            billing_address:
+                label:                  Billing Address
+                description:            The billing address configured for the business customer.
+            account:
+                label:                  Account
+                description:            The account that a business customer is assigned to.
+            contact:
+                label:                  Contact
+                description:            The contact that is specified for the business customer.
+            data_channel:
+                label:                  Channel
+                description:            The channel via which information about the business customer is received.
+            leads:
+                label:                  Leads
+                description:            The leads that a business customer is assigned to.
+            opportunities:
+                label:                  Opportunities
+                description:            The opportunities that a business customer is assigned to.
             owner.label:                Owner
             tags.label:                 Tags
-            ownership.label:            Ownership
-            emails.label:               Emails
+            ownership:
+                label:                  Ownership
+                description:            The type of legal ownership of the business customer.
             phones.label:               Phones
-            rating.label:               Rating
-            ticker_symbol.label:        Ticker symbol
-            website.label:              Website
+            rating:
+                label:                  Rating
+                description:            The rating of the business customer.
+            ticker_symbol:
+                label:                  Ticker symbol
+                description:            The ticker symbol of the business customer.
+            website:
+                label:                  Website
+                description:            The address of the business customer's website.
             phones.label:               Phones
             emails.label:               Emails
-            employees.label:            Employees
             email.label:                Email
+            employees:
+                label:                  Employees
+                description:            The number of employees of the business customer.
             organization.label:         Organization
-            opportunities.select:       Select opportunities
-            leads.select:               Select leads
+            opportunities:
+                select:                 Select opportunities
+                description:
+            leads:
+                select:                 Select leads
+                description:            asd
             primary_phone.label:        Primary Phone
             primary_email.label:        Primary Email
             datagrid:
@@ -471,6 +615,7 @@ oro:
             owner.label:         Owner
             primary.label:       Primary
 
+
         #
         # Entity Oro\Bundle\SalesBundle\Entity\Customer
         #
@@ -479,10 +624,10 @@ oro:
             entity_plural_label:        Customers
             id.label:                   Id
             account.label:              Account
-            customer_association_label: Customer
             importexport.empty_account: 'Customer Account must not be empty.'
             importexport.multiple_association: 'Association with multiple Customers is not allowed.'
             importexport.not_matched_account: 'Customer does not match the Account.'
+            label:            Account
 
         widgets:
             b2bcustomer_information: Business Customer Information

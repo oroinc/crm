@@ -5,10 +5,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ForecastWidgetTest extends AbstractWidgetTestCase
 {
     protected function setUp()
@@ -27,7 +23,6 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
      */
     public function testCloseDateFilterSuccess($dateRangeType, $inProgressCount)
     {
-        $this->markTestSkipped('Skipped until CRM-7567 gets resolved');
         $widget = $this->getReference('widget_forecast');
 
         $this->configureWidget($widget, [

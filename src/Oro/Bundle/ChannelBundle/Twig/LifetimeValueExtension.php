@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Twig;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
@@ -10,16 +12,23 @@ class LifetimeValueExtension extends \Twig_Extension
 {
     const EXTENSION_NAME = 'oro_channel_lifetime_value';
 
-    /** @var AmountProvider */
-    protected $amountProvider;
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
-     * @param AmountProvider $amountProvider
+     * @param ContainerInterface $container
      */
-    public function __construct(
-        AmountProvider $amountProvider
-    ) {
-        $this->amountProvider = $amountProvider;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return AmountProvider
+     */
+    protected function getAmountProvider()
+    {
+        return $this->container->get('oro_channel.provider.lifetime.amount_provider');
     }
 
     /**
@@ -27,10 +36,8 @@ class LifetimeValueExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        $lifetimeValue = new \Twig_SimpleFunction('oro_channel_account_lifetime', [$this, 'getLifetimeValue']);
-
         return [
-            $lifetimeValue->getName() => $lifetimeValue
+            new \Twig_SimpleFunction('oro_channel_account_lifetime', [$this, 'getLifetimeValue'])
         ];
     }
 
@@ -42,7 +49,7 @@ class LifetimeValueExtension extends \Twig_Extension
      */
     public function getLifetimeValue(Account $account, Channel $channel = null)
     {
-        return $this->amountProvider->getAccountLifeTimeValue($account, $channel);
+        return $this->getAmountProvider()->getAccountLifeTimeValue($account, $channel);
     }
 
     /**

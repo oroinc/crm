@@ -4,10 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class CustomerSearchControllerTest extends WebTestCase
 {
     /** @var string */

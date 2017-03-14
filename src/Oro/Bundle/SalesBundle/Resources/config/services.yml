@@ -189,7 +189,6 @@ services:
             - '@oro_locale.formatter.date_time'
             - '@translator'
             - '@oro_dashboard.datetime.helper'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_sales.provider.opportunity.forecast'
             - '@oro_dashboard.widget_config_value.date_range.converter'
 
@@ -200,13 +199,26 @@ services:
 
     oro_sales.provider.b2b_statistics:
         class: %oro_sales.provider.b2b_statistics.class%
+        abstract: true
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.provider.big_number.date_helper'
-            - '@oro_currency.query.currency_transformer'
+
+    oro_sales_provider.lead_statistics:
+        class: Oro\Bundle\SalesBundle\Provider\LeadStatisticsProvider
+        parent: oro_sales.provider.b2b_statistics
         tags:
-            - { name: oro_dashboard.big_number.provider, alias: b2b }
+            - { name: oro_dashboard.big_number.provider, alias: lead_stats }
+
+    oro_sales_provider.opportunity_statistics:
+        class: Oro\Bundle\SalesBundle\Provider\Opportunity\OpportunityStatisticsProvider
+        parent: oro_sales.provider.b2b_statistics
+        calls:
+             - [setCurrencyQBTransformer, ["@oro_currency.query.currency_transformer"]]
+        tags:
+            - { name: oro_dashboard.big_number.provider, alias: opportunity_stats }
 
     oro_sales.provider.lead_entity_name:
         class: Oro\Bundle\SalesBundle\Provider\LeadEntityNameProvider
@@ -301,8 +313,8 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_dashboard.filter.date_filter_processor'
-            - '@oro_user.dashboard.owner_helper'
             - '@oro_currency.query.currency_transformer'
 
     oro_sales.handler.opportunity_api:
@@ -393,9 +405,11 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_entity_extend.enum_value_provider'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_currency.query.currency_transformer'
+            - '@oro_user.dashboard.owner_helper'
 
     oro_sales.entity.event_litener.opportunity:
         class: Oro\Bundle\SalesBundle\Entity\EventListener\OpportunityListener
@@ -410,7 +424,7 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
-            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_provider.filter_manager'
             - '@oro_query_designer.query_designer.filter_processor'
             - '@oro_locale.formatter.number'
             - '@oro_currency.query.currency_transformer'
@@ -494,6 +508,9 @@ services:
         arguments:
             - '@oro_sales.customer.config_provider'
             - '@oro_entity.orm.entity_class_resolver'
+        calls:
+            - [addUnsupportedGridPrefix, ['oro_report']]
+            - [addUnsupportedGridPrefix, ['oro_segment']]
         tags:
             - { name: oro_datagrid.extension }
 

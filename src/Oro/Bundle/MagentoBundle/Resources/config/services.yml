@@ -299,7 +299,6 @@ services:
     oro_magento.form.handler.customer:
         class: %oro_magento.form.handler.customer.class%
         parent: oro_form.model.update_handler
-        scope: request
         calls:
             - [setStateHandler,  ["@oro_magento.customer_state_handler"]]
 
@@ -588,6 +587,13 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: oro_integration.delete_provider }
+
+    oro_magento.manager.customer_address_manager:
+        class: Oro\Bundle\MagentoBundle\Manager\CustomerAddressManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        calls:
+            - ['setLogger',  ["@logger"]]
 
     oro_magento.importexport.address_import_helper:
         class: %oro_magento.importexport.address_import_helper.class%

@@ -60,7 +60,7 @@ Scenario: Assert values at Contact view page
 
 Scenario: Cancel edit
   Given I'm edit entity
-  And I delete all addresses
+  And I delete all "addresses"
   And fill form with:
     | First name | No name          |
     | Last name  | No name          |

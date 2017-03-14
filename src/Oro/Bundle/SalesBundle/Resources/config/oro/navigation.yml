@@ -4,31 +4,31 @@ navigation:
             sales_tab:
                 label: 'oro.sales.menu.sales_tab.label'
                 uri:   '#'
+                position: 20
                 extras:
                     icon: fa-shopping-cart
-                    position: 20
 
             lead_list:
                 label: 'oro.sales.lead.entity_plural_label'
                 route: 'oro_sales_lead_index'
+                position: 20
                 extras:
-                    position:    20
                     routes:      ['/^oro_sales_lead/']
                     description: 'oro.sales.menu.lead_list.description'
 
             opportunity_list:
                 label: 'oro.sales.opportunity.entity_plural_label'
                 route: 'oro_sales_opportunity_index'
+                position: 30
                 extras:
-                    position:    30
                     routes:      ['/^oro_sales_opportunity/']
                     description: 'oro.sales.menu.opportunity_list.description'
 
             sales_salesfunnel_list:
                 label: 'oro.sales.salesfunnel.entity_plural_label'
                 route: 'oro_sales_salesfunnel_index'
+                position: 10
                 extras:
-                    position:    10
                     routes:      ['/^oro_sales_salesfunnel/']
                     description: 'oro.sales.menu.sales_salesfunnel_list.description'
 
@@ -36,8 +36,8 @@ navigation:
                 label: 'oro.sales.b2bcustomer.entity_plural_label'
                 route: 'oro_sales_b2bcustomer_index'
                 display: false
+                position: 70
                 extras:
-                    position:    70
                     routes:      ['oro_sales_b2bcustomer_*']
                     description: 'oro.sales.menu.b2bcustomer_list.description'
 
@@ -98,25 +98,25 @@ navigation:
 
     titles:
         oro_sales_opportunity_index: ~
-        oro_sales_opportunity_view: '%%opportunity.name%%'
+        oro_sales_opportunity_view: '%opportunity.name%'
         oro_sales_opportunity_create: 'Create Opportunity'
-        oro_sales_opportunity_update: '%%opportunity.name%% - Edit'
+        oro_sales_opportunity_update: '%opportunity.name% - Edit'
 
         oro_sales_lead_index: ~
-        oro_sales_lead_view: '%%lead.name%%'
+        oro_sales_lead_view: '%lead.name%'
         oro_sales_lead_create: 'Create Lead'
-        oro_sales_lead_update: '%%lead.name%% - Edit'
-        oro_sales_lead_convert_to_opportunity: '%%lead.name%% - Convert To Opportunity'
+        oro_sales_lead_update: '%lead.name% - Edit'
+        oro_sales_lead_convert_to_opportunity: '%lead.name% - Convert To Opportunity'
 
         oro_sales_salesfunnel_index: ~
-        oro_sales_salesfunnel_view: '%%sales_funnel%%'
+        oro_sales_salesfunnel_view: '%sales_funnel%'
         oro_sales_salesfunnel_create: 'Create Sales Activity'
-        oro_sales_salesfunnel_update: '%%sales_funnel%% - Edit'
+        oro_sales_salesfunnel_update: '%sales_funnel% - Edit'
 
         oro_sales_b2bcustomer_index: ~
-        oro_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
+        oro_sales_b2bcustomer_view:   '%b2bcustomer.name%'
         oro_sales_b2bcustomer_create: 'Create Business Customer'
-        oro_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
+        oro_sales_b2bcustomer_update: '%b2bcustomer.name% - Edit'
 
     navigation_elements:
         pinButton:

@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Processor;
 
-use Oro\Component\ChainProcessor\ContextInterface;
-use Oro\Component\ChainProcessor\ProcessorInterface;
-
 use Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\CustomizeLoadedDataContext;
 use Oro\Bundle\ApiBundle\Util\ConfigUtil;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Component\ChainProcessor\ContextInterface;
+use Oro\Component\ChainProcessor\ProcessorInterface;
 
 class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
 {
@@ -25,12 +23,6 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
     /** @var string */
     protected $customerAssociationField;
 
-    /** @var string */
-    protected $targetField;
-
-    /** @var string */
-    protected $accountField;
-
     /** @var array [$customerField => [__class__ => $customerClass, 'id_field' => $classIdentifier], ...] */
     protected $customersDataMap;
 
@@ -38,21 +30,15 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
      * @param ConfigProvider $configProvider
      * @param DoctrineHelper $doctrineHelper
      * @param string         $customerAssociationField
-     * @param string         $accountField
-     * @param string         $targetField
      */
     public function __construct(
         ConfigProvider $configProvider,
         DoctrineHelper $doctrineHelper,
-        $customerAssociationField,
-        $accountField = 'account',
-        $targetField = 'target'
+        $customerAssociationField
     ) {
         $this->configProvider           = $configProvider;
         $this->doctrineHelper           = $doctrineHelper;
         $this->customerAssociationField = $customerAssociationField;
-        $this->accountField             = $accountField;
-        $this->targetField              = $targetField;
     }
 
     /**
@@ -68,7 +54,10 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
             return;
         }
         if (isset($data[$this->customerAssociationField])) {
-            $data[$this->customerAssociationField] = $this->getTargetCustomer($data[$this->customerAssociationField]);
+            $data[$this->customerAssociationField]['target'] = $this->getTargetCustomer(
+                $data[$this->customerAssociationField]
+            );
+            $data['customer'] = $data[$this->customerAssociationField]['target'];
 
             $context->setResult($data);
         }
@@ -85,7 +74,7 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
     protected function getTargetCustomer(array $data)
     {
         $customersDataMap = $this->getCustomersDataMap();
-        foreach ($customersDataMap['targets'] as $field => $customerData) {
+        foreach ($customersDataMap as $field => $customerData) {
             if (!empty($data[$field][$customerData[self::ID_FIELD_KEY]])) {
                 return [
                     ConfigUtil::CLASS_NAME            => $customerData[ConfigUtil::CLASS_NAME],
@@ -94,11 +83,7 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
             }
         }
 
-        return [
-            ConfigUtil::CLASS_NAME                           => Account::class,
-            $customersDataMap['account'][self::ID_FIELD_KEY] =>
-                $data[$customersDataMap['account'][self::ID_FIELD_KEY]],
-        ];
+        return null;
     }
 
     /**
@@ -107,15 +92,9 @@ class CustomerAssociationCustomizeLoadedData implements ProcessorInterface
     protected function getCustomersDataMap()
     {
         if (null === $this->customersDataMap) {
-            $this->customersDataMap = [
-                'targets' => [],
-                'account' => [
-                    ConfigUtil::CLASS_NAME => Account::class,
-                    self::ID_FIELD_KEY     => $this->doctrineHelper->getSingleEntityIdentifierFieldName(Account::class)
-                ]
-            ];
+            $this->customersDataMap = [];
             foreach ($this->configProvider->getCustomerClasses() as $class) {
-                $this->customersDataMap['targets']
+                $this->customersDataMap
                 [AccountCustomerManager::getCustomerTargetField($class)] = [
                     ConfigUtil::CLASS_NAME => $class,
                     self::ID_FIELD_KEY     => $this->doctrineHelper->getSingleEntityIdentifierFieldName($class)

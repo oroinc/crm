@@ -7,9 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
-/**
- * @dbIsolation
- */
 class NewsletterSubscriberManagerTest extends WebTestCase
 {
     protected function setUp()

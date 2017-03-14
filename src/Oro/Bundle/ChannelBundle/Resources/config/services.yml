@@ -54,10 +54,6 @@ parameters:
     oro_channel.event_listener.job_execution.class:                 Oro\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
     oro_channel.event_listener.transitions_attribute.class:         Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
 
-    #twig
-    oro_channel.twig.metadata_extension.class:                      Oro\Bundle\ChannelBundle\Twig\MetadataExtension
-    oro_channel.twig.lifetime_value_extension.class:                Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
-
     #validators
     oro_channel.validators.channel_integration_validator.class:     Oro\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
 
@@ -310,10 +306,10 @@ services:
 
     #twig
     oro_channel.twig.metadata_extension:
-        class: %oro_channel.twig.metadata_extension.class%
+        class: Oro\Bundle\ChannelBundle\Twig\MetadataExtension
+        public: false
         arguments:
-            - "@oro_channel.provider.metadata_provider"
-            - "@oro_channel.provider.settings_provider"
+            - "@service_container"
         tags:
             - { name: twig.extension }
 
@@ -330,9 +326,10 @@ services:
             - { name: form.type_extension, alias: embedded_form }
 
     oro_channel.twig.lifetime_value_extension:
-        class: %oro_channel.twig.lifetime_value_extension.class%
+        class: Oro\Bundle\ChannelBundle\Twig\LifetimeValueExtension
+        public: false
         arguments:
-            - '@oro_channel.provider.lifetime.amount_provider'
+            - '@service_container'
         tags:
             - { name: twig.extension }
 
@@ -415,7 +412,6 @@ services:
     oro_channel.account_lifetime_subscriber:
         class: Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber
         arguments:
-            - '@oro_sales.manager.account_customer'
-            - '@oro_currency.query.currency_transformer'
+            - '@service_container'
         tags:
             - { name: doctrine.event_subscriber }

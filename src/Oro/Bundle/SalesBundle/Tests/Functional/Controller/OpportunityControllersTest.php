@@ -8,10 +8,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OpportunityControllersTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */

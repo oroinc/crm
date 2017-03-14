@@ -4,15 +4,15 @@ navigation:
             contact_list:
                 label: 'oro.contact.entity_plural_label'
                 route: 'oro_contact_index'
+                position: 10
                 extras:
-                    position: 10
                     routes: ['/^oro_contact_(?!group\w+|group\w+)\w+$/']
                     description: 'oro.contact.menu.contact_list.description'
             contact_group_list:
                 label: 'oro.contact.group.entity_plural_label'
                 route: 'oro_contact_group_index'
+                position: 30
                 extras:
-                    position:    30
                     routes:      ['oro_contact_group_*']
                     description: 'oro.contact.menu.contact_group_list.description'
 
@@ -51,10 +51,10 @@ navigation:
 
     titles:
         oro_contact_index: ~
-        oro_contact_view: '%%contact.name%%'
+        oro_contact_view: '%contact.name%'
         oro_contact_create: 'Create Contact'
-        oro_contact_update: '%%contact.name%% - Edit'
+        oro_contact_update: '%contact.name% - Edit'
 
         oro_contact_group_index: ~
         oro_contact_group_create: 'Create Contact Group'
-        oro_contact_group_update: '%%group.label%% - Edit'
+        oro_contact_group_update: '%group.label% - Edit'

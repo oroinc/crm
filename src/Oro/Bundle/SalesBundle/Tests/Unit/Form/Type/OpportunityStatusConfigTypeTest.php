@@ -14,6 +14,7 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigCache;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\EntityConfigBundle\Tests\Unit\ConfigProviderBagMock;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
 
@@ -162,7 +163,9 @@ class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
             $configCache
         );
 
-        $entityConfigManager->addProvider($configProvider);
+        $configProviderBag = new ConfigProviderBagMock();
+        $configProviderBag->addProvider($configProvider);
+        $entityConfigManager->setProviderBag($configProviderBag);
 
         /** @var EntityConfigManager $entityConfigManager */
         return $entityConfigManager;

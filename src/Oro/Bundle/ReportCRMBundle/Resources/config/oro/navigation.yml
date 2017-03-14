@@ -4,28 +4,27 @@ navigation:
             static_reports_tab:
                 label: 'oro.reportcrm.menu.static_reports_tab.label'
                 uri: '#'
-                extras:
-                    position: 5
+                position: 5
 
             accounts_report_tab:
                 label: 'oro.reportcrm.menu.accounts_report_tab.label'
                 uri: '#'
+                position: 10
                 extras:
-                    position: 10
                     skipBreadcrumbs: true
 
             leads_report_tab:
                 label: 'oro.reportcrm.menu.leads_report_tab.label'
                 uri: '#'
+                position: 20
                 extras:
-                    position: 20
                     skipBreadcrumbs: true
 
             opportunities_report_tab:
                 label: 'oro.reportcrm.menu.opportunities_report_tab.label'
                 uri: '#'
+                position: 30
                 extras:
-                    position: 30
                     skipBreadcrumbs: true
 
             accounts_life_time_value:
@@ -111,4 +110,4 @@ navigation:
                                             total_forecast: ~
 
     titles:
-        oro_reportcrm_index: '%%reportName%% - %%reportGroup%%'
+        oro_reportcrm_index: '%reportName% - %reportGroup%'

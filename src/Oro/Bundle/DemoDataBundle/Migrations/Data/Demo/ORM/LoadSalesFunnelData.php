@@ -19,6 +19,7 @@ use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Model\Filter\WorkflowDefinitionFilters;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
@@ -138,6 +139,10 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
     protected function loadFlows()
     {
+        /* @var $filters WorkflowDefinitionFilters */
+        $filters = $this->container->get('oro_workflow.registry.definition_filters');
+        $filters->setEnabled(false); // disable filters, because some workflows disabled by `features` by default
+
         $randomUser = count($this->users) - 1;
 
         foreach ($this->leads as $lead) {
@@ -153,6 +158,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $this->loadSalesFlows($opportunity, $user);
         }
         $this->flush($this->em);
+
+        $filters->setEnabled(true);
     }
 
     /**

@@ -4,8 +4,8 @@ navigation:
             oro_contactus_requests:
                 label: 'oro.contactus.contactrequest.entity_plural_label'
                 route: 'oro_contactus_request_index'
+                position: 30
                 extras:
-                    position: 30
                     routes: ['oro_contactus_request_*']
                 display: true
         tree:
@@ -17,6 +17,6 @@ navigation:
 
     titles:
         oro_contactus_request_index:  ~
-        oro_contactus_request_view:   '%%request.clientName%%'
+        oro_contactus_request_view:   '%request.clientName%'
         oro_contactus_request_create: 'Create contact request'
-        oro_contactus_request_update: '%%request.clientName%% - Edit'
+        oro_contactus_request_update: '%request.clientName% - Edit'

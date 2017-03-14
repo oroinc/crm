@@ -4,8 +4,8 @@ navigation:
             oro_case_index:
                 label: 'oro.case.menu.index.label'
                 route: 'oro_case_index'
+                position: 30
                 extras:
-                    position: 30
                     routes: ['oro_case_update', 'oro_case_create', 'oro_case_view']
         tree:
             application_menu:
@@ -15,6 +15,6 @@ navigation:
                             oro_case_index: ~
     titles:
         oro_case_index: ~
-        oro_case_view: '%%entity.subject%%'
-        oro_case_create: oro.ui.create_entity
-        oro_case_update: '%%entity.subject%% - Edit'
+        oro_case_view: '%entity.subject%'
+        oro_case_create: 'oro.ui.create_entity'
+        oro_case_update: '%entity.subject% - Edit'

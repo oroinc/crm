@@ -5,10 +5,6 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityStatusBoardFixtures;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class OpportunityStatusBoardTest extends AbstractDatagridTestCase
 {
     /** @var bool */

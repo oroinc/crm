@@ -7,10 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEmailData;
 use Oro\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadB2bCustomerEntitiesData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestB2bCustomerEmailApiTest extends WebTestCase
 {
     protected function setUp()

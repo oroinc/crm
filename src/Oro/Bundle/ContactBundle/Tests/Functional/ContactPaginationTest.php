@@ -6,10 +6,6 @@ use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesDa
 
 use Symfony\Component\DomCrawler\Crawler;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class ContactPaginationTest extends AbstractContactPaginationTestCase
 {
     public function testView()

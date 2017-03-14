@@ -7,10 +7,6 @@ use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadLeadPhoneData;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestLeadPhoneApiTest extends WebTestCase
 {
     protected function setUp()

@@ -1,0 +1,29 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+  charlieAccount:
+    name: Charlie
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+  Bruce:
+    owner: @admin
+    name: Bruce
+    firstName: Bruce
+    lastName: Willis
+    status: 'new'
+    organization: '@organization'
+
+# new lead owner
+Oro\Bundle\UserBundle\Entity\User:
+  charlie:
+    firstName: Marge
+    lastName: Marge Simpson
+    username (unique): marge228
+    organization: '@organization'
+    organizations: ['@organization']
+    roles: ['@userRole']
+    owner: '@business_unit'
+    businessUnits: ['@business_unit']
+    email (unique): marge@example.com
+    password: 3X+qGs+/6Ic/iL+5/t6C5C3C0hYEbhYLtZ/nwJDn5QUYArHkBy90HT220LVErWvKyVH7XoId15dv/uF2+pExiQ==
+    salt: eexx2a8mtsg8o4c8k4w08wo04ccsw8

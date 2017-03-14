@@ -7,6 +7,8 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -352,51 +354,38 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
      *
-     * @return int
+     * @return QueryBuilder
      */
-    public function getOpportunitiesCount(
-        AclHelper $aclHelper,
+    public function getOpportunitiesCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        $owners = []
+        \DateTime $end = null
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $this->createOpportunitiesCountQb($start, $end);
     }
 
     /**
-     * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
-     * @param int[]     $owners
      *
-     * @return int
+     * @return QueryBuilder
      */
-    public function getNewOpportunitiesCount(
-        AclHelper $aclHelper,
+    public function getNewOpportunitiesCountQB(
         \DateTime $start = null,
-        \DateTime $end = null,
-        $owners = []
+        \DateTime $end = null
     ) {
-        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
-
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return $this->createOpportunitiesCountQb($start, $end);
     }
 
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param int[]    $owners
      *
      * @return QueryBuilder
      */
-    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
+    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)');
@@ -409,10 +398,6 @@ class OpportunityRepository extends EntityRepository
             $qb
                 ->andWhere('o.createdAt <= :end')
                 ->setParameter('end', $end);
-        }
-
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $qb;
@@ -546,11 +531,13 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated since 2.1. Method "getOpportunitiesByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
-     * @param \DateTime  $start
-     * @param \DateTime  $end
-     * @param int[]     $owners
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param array $owners
      *
      * @return double
      */
@@ -573,8 +560,23 @@ class OpportunityRepository extends EntityRepository
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
+    /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $this->setCreationPeriod($qb, $start, $end);
+
+        return $qb;
+    }
 
     /**
+     * @deprecated since 2.1. Method "getWonOpportunitiesCountByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -603,6 +605,25 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getWonOpportunitiesCountByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $qb->select('COUNT(o.id)')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+        $this->setClosedPeriod($qb, $start, $end);
+
+        return $qb;
+    }
+
+    /**
+     * @deprecated since 2.1. Method "getWonOpportunitiesByPeriodQB" should be used instead
+     *
      * @param AclHelper $aclHelper
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param \DateTime  $start
@@ -631,6 +652,23 @@ class OpportunityRepository extends EntityRepository
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param \DateTime|null $start
+     * @param \DateTime|null $end
+     *
+     * @return QueryBuilder
+     */
+    public function getWonOpportunitiesByPeriodQB(\DateTime $start = null, \DateTime $end = null)
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', self::OPPORTUNITY_STATUS_CLOSED_WON_CODE);
+
+        $this->setClosedPeriod($qb, $start, $end);
+
+        return $qb;
     }
 
     /**

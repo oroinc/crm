@@ -4,10 +4,6 @@ namespace Oro\Bundle\ContactBundle\Tests\Functional\API;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class RestContactGroupsApiTest extends WebTestCase
 {
     protected function setUp()

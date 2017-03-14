@@ -3,12 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Grid;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
-use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 class SalesFunnelGridTest extends AbstractDatagridTestCase
 {
     protected function setUp()

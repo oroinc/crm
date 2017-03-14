@@ -118,7 +118,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      *
      * @return ApiEntityManager
      */
-    public function getLeadManager()
+    protected function getLeadManager()
     {
         return $this->get('oro_sales.lead.manager.api');
     }

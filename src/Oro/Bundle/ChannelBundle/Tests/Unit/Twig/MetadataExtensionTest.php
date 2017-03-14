@@ -2,12 +2,15 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Twig;
 
+use Oro\Bundle\ChannelBundle\Provider\MetadataProvider;
 use Oro\Bundle\ChannelBundle\Twig\MetadataExtension;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Component\Testing\Unit\TwigExtensionTestCaseTrait;
 
 class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
+    use TwigExtensionTestCaseTrait;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $provider;
 
     /** @var MetadataExtension */
@@ -15,10 +18,15 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = $this->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\MetadataProvider')
-            ->disableOriginalConstructor()->getMock();
+        $this->provider = $this->getMockBuilder(MetadataProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->extension = new MetadataExtension($this->provider);
+        $container = self::getContainerBuilder()
+            ->add('oro_channel.provider.metadata_provider', $this->provider)
+            ->getContainer($this);
+
+        $this->extension = new MetadataExtension($container);
     }
 
     public function tearDown()
@@ -34,7 +42,10 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntitiesMetadata')
             ->will($this->returnValue($expectedResult));
 
-        $this->assertSame($expectedResult, $this->extension->getEntitiesMetadata());
+        $this->assertSame(
+            $expectedResult,
+            self::callTwigFunction($this->extension, 'oro_channel_entities_metadata', [])
+        );
     }
 
     public function testGetChannelTypeMetadata()
@@ -45,19 +56,14 @@ class MetadataExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getChannelTypeMetadata')
             ->will($this->returnValue($expectedResult));
 
-        $this->assertSame($expectedResult, $this->extension->getChannelTypeMetadata());
+        $this->assertSame(
+            $expectedResult,
+            self::callTwigFunction($this->extension, 'oro_channel_type_metadata', [])
+        );
     }
 
     public function testGetName()
     {
         $this->assertEquals($this->extension->getName(), 'oro_channel_metadata');
-    }
-
-    public function testGetFunctions()
-    {
-        $result = $this->extension->getFunctions();
-
-        $this->assertArrayHasKey('oro_channel_entities_metadata', $result);
-        $this->assertArrayHasKey('oro_channel_type_metadata', $result);
     }
 }

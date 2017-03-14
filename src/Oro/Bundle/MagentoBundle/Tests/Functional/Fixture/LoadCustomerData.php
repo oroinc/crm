@@ -13,7 +13,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class LoadCustomerData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

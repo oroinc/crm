@@ -69,11 +69,6 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
         );
     }
 
-    protected function tearDown()
-    {
-        unset($this->strategy, $this->context, $this->stepExecution);
-    }
-
     public function testUpdateAddress()
     {
         $address = new Address();

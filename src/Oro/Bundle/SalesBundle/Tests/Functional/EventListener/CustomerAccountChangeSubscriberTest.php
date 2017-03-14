@@ -9,9 +9,6 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
-/**
- * @dbIsolation
- */
 class CustomerAccountChangeSubscriberTest extends WebTestCase
 {
     public function setUp()
@@ -45,8 +42,6 @@ class CustomerAccountChangeSubscriberTest extends WebTestCase
      * @depends testSyncOnCreateCustomer
      *
      * @param array $customers
-     *
-     * @return array
      */
     public function testChangeCustomerAccount(array $customers)
     {
@@ -72,9 +67,8 @@ class CustomerAccountChangeSubscriberTest extends WebTestCase
 
     /**
      * @param object $entity
-     * @param object $_
      */
-    protected function flushAndRefresh($entity, $_ = null)
+    protected function flushAndRefresh($entity)
     {
         $em       = $this->getEntityManager();
         $entities = func_get_args();

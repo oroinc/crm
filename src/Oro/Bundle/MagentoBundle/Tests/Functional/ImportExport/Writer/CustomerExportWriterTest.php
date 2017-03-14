@@ -9,9 +9,6 @@ use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\StateManager;
 
-/**
- * @dbIsolation
- */
 class CustomerExportWriterTest extends AbstractExportWriterTest
 {
     protected function setUp()
