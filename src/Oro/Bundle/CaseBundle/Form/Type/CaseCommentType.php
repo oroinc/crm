@@ -60,7 +60,6 @@ class CaseCommentType extends AbstractType
                 'data_class'            => 'Oro\\Bundle\\CaseBundle\\Entity\\CaseComment',
                 'intention'             => 'oro_case_comment',
                 'ownership_disabled'    => true,
-                'cascade_validation'    => true,
             ]
         );
     }

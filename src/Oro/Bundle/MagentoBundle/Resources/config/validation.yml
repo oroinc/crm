@@ -85,18 +85,10 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
             - DateTime: ~
         updatedAt:
             - DateTime: ~
-        website:
-            - Valid: ~
         store:
             - NotBlank: { groups: ['form'] }
-            - Valid: ~
         group:
             - NotBlank: { groups: ['form'] }
-            - Valid: ~
-        contact:
-            - Valid: ~
-        account:
-            - Valid: ~
         addresses:
             - Valid: ~
         dataChannel:

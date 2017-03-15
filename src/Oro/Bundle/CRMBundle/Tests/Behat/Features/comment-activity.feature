@@ -28,10 +28,10 @@ Feature: Comment activity feature
     Given collapse "Contact with Charlie" in activity list
     When I add activity comment with:
       | Message    | Ask how his mood |
-      | Attachment | cat.jpg          |
+      | Attachment | cat0.jpg          |
     Then I should see Ask how his mood text in activity
     And  I should see Comments (1) text in activity
-    When I click "cat.jpg"
+    When I click "cat0.jpg"
     Then should see large image
     And I close large image preview
     And I collapse "Ask how his mood" in activity list

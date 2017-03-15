@@ -29,7 +29,6 @@ class B2bCustomerPhoneType extends AbstractType
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone',
                 'intention' => 'b2bcustomer',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'cascade_validation' => true,
                 'csrf_protection' => false,
             )
         );

@@ -124,7 +124,6 @@ class CustomerType extends AbstractType
             [
                 'data_class' => $this->customerClassName,
                 'intention' => 'magento_customer',
-                'cascade_validation' => true,
                 'validation_groups' => [Constraint::DEFAULT_GROUP, 'form']
             ]
         );
