@@ -949,6 +949,86 @@ oro:
                 label:            Sort Order
                 description:      The sort order that determines the sequence in which a Magento website is listed.
 
+        creditmemo:
+            entity_label:                         Credit Memo
+            entity_plural_label:                  Credit Memos
+            entity_description:                   Allows you to operate with credit memos for orders.
+            id.label:                             ID
+            channel.label:                        Integration
+            addresses.label:                      Addresses
+            adjustment.label:                     Adjustment
+            updated_at.label:                     Date of updating
+            created_at.label:                     Date of creation
+            increment_id.label:                   Increment ID
+            transaction_id.label:                 Transaction ID
+            global_currency_code.label:           Global currency code
+            base_currency_code.label:             Base currency code
+            order_currency_code.label:            Order currency code
+            store_currency_code.label:            Store currency code
+            cybersource_token.label:              Cybersource token
+            invoice_id.label:                     ID of the invoice for which the credit memo was created
+            state.label:                          State
+            status.label:                         Credit memo status
+            email_sent.label:                     Defines whether the email is sent
+            order.label:                          ID of the order for which the credit memo was created
+            tax_amount.label:                     Tax amount
+            shipping_tax_amount.label:            Shipping tax amount
+            base_tax_amount.label:                Base tax amount
+            base_adjustment_positive.label:       Adjustment refund amount (using base currency)
+            base_grand_total.label:               Base grand total
+            adjustment.label:                     Adjustment
+            subtotal.label:                       Subtotal
+            discount_amount.label:                Discount amount
+            base_subtotal.label:                  Base subtotal
+            base_adjustment.label:                Base adjustment
+            base_to_global_rate.label:            Base to global rate
+            store_to_base_rate.label:             Store to base rate
+            base_shipping_amount.label:           Base shipping amount
+            adjustment_negative.label:            Adjustment fee amount
+            subtotal_incl_tax.label:              Subtotal including tax
+            shipping_amount.label:                Shipping amount
+            base_subtotal_incl_tax.label:         Base subtotal including tax
+            base_adjustment_negative.label:       Adjustment fee amount (using base currency)
+            grand_total.label:                    Grand total
+            base_discount_amount.label:           Base discount amount
+            base_to_order_rate.label:             Base to order rate
+            store_to_order_rate.label:            Store to order rate
+            base_shipping_tax_amount.label:       Base shipping tax amount
+            adjustment_positive.label:            Adjustment refund amount
+            store.label:                          Store ID
+            hidden_tax_amount.label:              Hidden tax amount
+            base_hidden_tax_amount.label:         Base hidden tax amount
+            shipping_hidden_tax_amount.label:     Shipping hidden tax amount
+            base_shipping_hidden_tax_amnt.label:  Base shipping hidden tax amount
+            shipping_incl_tax.label:              Shipping including tax
+            base_shipping_incl_tax.label:         Base shipping including tax
+            base_customer_balance_amount.label:   Base customer balance amount
+            customer_balance_amount.label:        Customer balance amount
+            bs_customer_bal_total_refunded.label: Refunded base customer balance amount
+            customer_bal_total_refunded.label:    Customer balance total refunded
+            base_gift_cards_amount.label:         Base gift cards amount
+            gift_cards_amount.label:              Gift cards amount
+            gw_base_price.label:                  Gift wrapping price refunded amount (using base currency)
+            gw_price.label:                       Gift wrapping price refunded amount
+            gw_items_base_price.label:            Gift wrapping items base price
+            gw_items_price.label:                 Gift wrapping items price
+            gw_card_base_price.label:             Gift wrapping card base price
+            gw_card_price.label:                  Gift wrapping card price
+            gw_base_tax_amount.label:             Gift wrapping tax amount refunded (using base currency)
+            gw_tax_amount.label:                  Gift wrapping tax amount refunded
+            gw_items_base_tax_amount.label:       Gift wrapping items base tax amount
+            gw_items_tax_amount.label:            Gift wrapping items tax amount
+            gw_card_base_tax_amount.label:        Gift wrapping card base tax amount
+            gw_card_tax_amount.label:             Gift wrapping card tax amount
+            base_reward_currency_amount.label:    Base reward currency amount
+            reward_currency_amount.label:         Reward currency amount
+            reward_points_balance.label:          Reward points balance
+            reward_points_balance_refund.label:   Reward points balance refund
+            creditmemo_id.label:                  Credit memo ID
+            items.label:                          Array of salesOrderCreditmemoItemEntity
+            organization.label:                   Organization
+            owner.label:                          Owner
+
         #regions:
         #   entity_label:        Magento Region
         #   entity_plural_label: Magento Regions

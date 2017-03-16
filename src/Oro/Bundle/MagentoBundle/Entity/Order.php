@@ -111,6 +111,22 @@ class Order extends ExtendOrder implements
     protected $addresses;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="CreditMemo",
+     *     mappedBy="order", cascade={"all"}
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $creditMemos;
+
+    /**
      * @var Store
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\MagentoBundle\Entity\Store")
@@ -264,6 +280,15 @@ class Order extends ExtendOrder implements
      * @ORM\Column(type="datetime", name="synced_at", nullable=true)
      */
     protected $syncedAt;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->creditMemos = new ArrayCollection();
+    }
 
     /**
      * @param string $incrementId
@@ -709,6 +734,68 @@ class Order extends ExtendOrder implements
         $this->importedAt = $importedAt;
 
         return $this;
+    }
+
+    /**
+     * @param ArrayCollection|CreditMemo[] $creditMemos
+     *
+     * @return Order
+     */
+    public function resetCreditMemos($creditMemos)
+    {
+        $this->creditMemos->clear();
+
+        foreach ($creditMemos as $creditMemo) {
+            $this->addCreditMemo($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return Order
+     */
+    public function addCreditMemo(CreditMemo $creditMemo)
+    {
+        if (!$this->creditMemos->contains($creditMemo)) {
+            $this->creditMemos->add($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return Order
+     */
+    public function removeCreditMemo(CreditMemo $creditMemo)
+    {
+        if ($this->creditMemos->contains($creditMemo)) {
+            $this->creditMemos->removeElement($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|CreditMemo[]
+     */
+    public function getCreditMemos()
+    {
+        return $this->creditMemos;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return bool
+     */
+    public function hasCreditMemo(CreditMemo $creditMemo)
+    {
+        return $this->getCreditMemos()->contains($creditMemo);
     }
 
     /**

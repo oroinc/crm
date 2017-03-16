@@ -55,6 +55,14 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
     protected $owner;
 
     /**
+     * @var CreditMemo
+     *
+     * @ORM\ManyToOne(targetEntity="CreditMemo", inversedBy="addresses")
+     * @ORM\JoinColumn(name="credit_memo_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $creditMemo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
@@ -136,6 +144,26 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return OrderAddress
+     */
+    public function setCreditMemo(CreditMemo $creditMemo)
+    {
+        $this->creditMemo = $creditMemo;
+
+        return $this;
+    }
+
+    /**
+     * @return CreditMemo
+     */
+    public function getCreditMemo()
+    {
+        return $this->creditMemo;
     }
 
     /**
