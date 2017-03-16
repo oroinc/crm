@@ -19,7 +19,7 @@ oro:
             description:         Determines entity that will be used as customer identifier for channels that are based on the current type
         status:
             label:               Status
-            description:         Determines the record status. Possible values: True(Activated) or False(Inactivated).
+            description:         "Determines the record status. Possible values: True(Activated) or False(Inactivated)."
         active.label:            Active
         inactive.label:          Inactive
         data.label:              Additional Data
