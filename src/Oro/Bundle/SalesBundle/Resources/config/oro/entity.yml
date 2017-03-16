@@ -2,6 +2,8 @@ oro_entity:
     exclusions:
         - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseBudgetAmountValue }
         - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: baseCloseRevenueValue }
+        - { entity: Oro\Bundle\SalesBundle\Entity\Opportunity, field: customerAssociation }
+        - { entity: Oro\Bundle\SalesBundle\Entity\Lead, field: customerAssociation }
     virtual_fields:
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             primaryEmail:
@@ -40,6 +42,16 @@ oro_entity:
 
     virtual_relations:
         Oro\Bundle\SalesBundle\Entity\Lead:
+            account:
+                relation_type: oneToMany
+                related_entity_name: Oro\Bundle\AccountBundle\Entity\Account
+                label: oro.account.entity_label
+                target_join_alias: lead_account
+                query:
+                    join:
+                        left:
+                            - { join: entity.customerAssociation, alias: lead_ca }
+                            - { join: lead_ca.account, alias: lead_account }
             primaryAddr:
                 relation_type: oneToOne
                 related_entity_name: Oro\Bundle\SalesBundle\Entity\LeadAddress
@@ -48,6 +60,18 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+
+        Oro\Bundle\SalesBundle\Entity\Opportunity:
+            account:
+                relation_type: oneToMany
+                related_entity_name: Oro\Bundle\AccountBundle\Entity\Account
+                label: oro.account.entity_label
+                target_join_alias: opportunity_account
+                query:
+                    join:
+                        left:
+                            - { join: entity.customerAssociation, alias: opportunity_ca }
+                            - { join: opportunity_ca.account, alias: opportunity_account }
 
     entity_aliases:
         Oro\Bundle\SalesBundle\Entity\Customer:
