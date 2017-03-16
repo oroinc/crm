@@ -72,7 +72,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_46';
+        return 'v1_47';
     }
 
     /**
@@ -864,7 +864,7 @@ class OroMagentoBundleInstaller implements
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            []
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
