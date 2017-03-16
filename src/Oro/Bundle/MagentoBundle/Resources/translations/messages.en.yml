@@ -209,7 +209,7 @@ oro:
                 description:      The account that a Magento customer is assigned to.
             addresses:
                 label:            Addresses
-                description:      Collection of Magento customer addresses: mailing, business, home, billing, etc.
+                description:      "Collection of Magento customer addresses: mailing, business, home, billing, etc."
             primary_addr.label:   Primary Address
             carts.label:          Carts
             channel.label:        Integration

@@ -322,7 +322,7 @@ oro:
                 description:
             addresses:
                 label:            Address
-                description:      Collection of lead addresses: mailing, business, home, billing, etc.
+                description:      "Collection of lead addresses: mailing, business, home, billing, etc."
             add_address:
                 label:            Add Address
                 description:
