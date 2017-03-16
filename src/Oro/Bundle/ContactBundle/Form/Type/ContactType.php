@@ -210,7 +210,6 @@ class ContactType extends AbstractType
             array(
                 'data_class'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
                 'intention'            => 'contact',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
             )
         );
     }

@@ -28,7 +28,6 @@ class ContactEmailType extends AbstractType
             array(
                 'data_class' => 'Oro\Bundle\ContactBundle\Entity\ContactEmail',
                 'intention' => 'contact',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection' => false
             )
         );

@@ -27,7 +27,6 @@ class B2bCustomerApiType extends B2bCustomerType
             [
                 'data_class'           => 'Oro\Bundle\SalesBundle\Entity\B2bCustomer',
                 'intention'            => 'b2bcustomer',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false
             ]
         );

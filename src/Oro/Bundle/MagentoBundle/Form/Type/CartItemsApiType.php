@@ -52,7 +52,6 @@ class CartItemsApiType extends AbstractType
             [
                 'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartItem',
                 'intention'            => 'items',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'single_form'          => true,
                 'csrf_protection'      => false
             ]
