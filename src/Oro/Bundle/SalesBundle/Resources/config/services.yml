@@ -639,3 +639,26 @@ services:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber
         tags:
             - { name: kernel.event_subscriber }
+
+    oro_sales.customer_virtual_relations.provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider
+        abstract: true
+        arguments:
+            - '@oro_entity_extend.association_manager'
+            - '@oro_entity_config.provider.entity'
+
+    oro_sales.customer_virtual_relations.provider.lead:
+        parent: oro_sales.customer_virtual_relations.provider
+        public: false
+        tags:
+           - { name: oro_entity.virtual_relation_provider, priority: 150 }
+        calls:
+           - [setSourceClass, [%oro_sales.lead.entity.class%]]
+
+    oro_sales.customer_virtual_relations.provider.opportunity:
+       parent: oro_sales.customer_virtual_relations.provider
+       public: false
+       tags:
+          - { name: oro_entity.virtual_relation_provider, priority: 150 }
+       calls:
+          - [setSourceClass, [%oro_sales.opportunity.class%]]

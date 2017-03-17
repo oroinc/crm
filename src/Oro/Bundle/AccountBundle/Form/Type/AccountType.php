@@ -52,6 +52,9 @@ class AccountType extends AbstractType
         $this->canViewContact     = $this->securityFacade->isGranted('oro_contact_view');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // name
@@ -145,7 +148,6 @@ class AccountType extends AbstractType
             array(
                 'data_class' => 'Oro\Bundle\AccountBundle\Entity\Account',
                 'intention' => 'account',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
             )
         );
     }
