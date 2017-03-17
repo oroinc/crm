@@ -955,6 +955,7 @@ oro:
             entity_description:                   Allows you to operate with credit memos for orders.
             id.label:                             ID
             channel.label:                        Integration
+            data_channel.label:                   Channel
             addresses.label:                      Addresses
             adjustment.label:                     Adjustment
             updated_at.label:                     Date of updating
@@ -1024,7 +1025,7 @@ oro:
             reward_currency_amount.label:         Reward currency amount
             reward_points_balance.label:          Reward points balance
             reward_points_balance_refund.label:   Reward points balance refund
-            creditmemo_id.label:                  Credit memo ID
+            credit_memo_id.label:                 Credit memo ID
             items.label:                          Array of salesOrderCreditmemoItemEntity
             organization.label:                   Organization
             owner.label:                          Owner
