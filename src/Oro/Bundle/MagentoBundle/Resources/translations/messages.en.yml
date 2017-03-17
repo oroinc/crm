@@ -970,7 +970,7 @@ oro:
             state.label:                          State
             status.label:                         Credit memo status
             email_sent.label:                     Defines whether the email is sent
-            order.label:                          ID of the order for which the credit memo was created
+            order.label:                          The order for which the credit memo was created
             tax_amount.label:                     Tax amount
             shipping_tax_amount.label:            Shipping tax amount
             base_tax_amount.label:                Base tax amount
@@ -995,7 +995,7 @@ oro:
             store_to_order_rate.label:            Store to order rate
             base_shipping_tax_amount.label:       Base shipping tax amount
             adjustment_positive.label:            Adjustment refund amount
-            store.label:                          Store ID
+            store.label:                          Store
             hidden_tax_amount.label:              Hidden tax amount
             base_hidden_tax_amount.label:         Base hidden tax amount
             shipping_hidden_tax_amount.label:     Shipping hidden tax amount
@@ -1028,6 +1028,48 @@ oro:
             items.label:                          Array of salesOrderCreditmemoItemEntity
             organization.label:                   Organization
             owner.label:                          Owner
+            items.label:                          Credit Memo items
+
+        creditmemoitem:
+            entity_label:                           Credit Memo Item
+            entity_plural_label:                    Credit Memo Items
+            entity_description:                     Allows you to operate with credit memos items.
+            id.label:                               ID
+            channel.label:                          Integration
+            item_id.label:                          Credit memo item ID
+            parent.label:                           Credit memo
+            weee_tax_applied_row_amount.label:      Applied fixed product tax row amount
+            base_price.label:                       Base price
+            base_weee_tax_row_disposition.label:    Fixed product tax row disposition (in base currency)
+            tax_amount.label:                       Tax amount
+            base_weee_tax_applied_amount.label:     Applied fixed product tax amount (in base currency)
+            weee_tax_row_disposition.label:         Fixed product tax row disposition
+            base_row_total.label:                   Base row total
+            discount_amount.label:                  Discount amount
+            row_total.label:                        Row total
+            weee_tax_applied_amount.label:          Applied fixed product tax amount
+            base_discount_amount.label:             Base discount amount
+            base_weee_tax_disposition.label:        Fixed product tax disposition (in base currency)
+            price_incl_tax.label:                   Price including tax
+            base_tax_amount.label:                  Base tax amount
+            weee_tax_disposition.label:             Fixed product tax disposition
+            base_price_incl_tax.label:              Base price including tax
+            qty.label:                              Quantity
+            base_cost.label:                        Base cost
+            base_weee_tax_applied_row_amount.label: Applied fixed product tax row amount (in base currency)
+            price.label:                            Price
+            base_row_total_incl_tax.label:          Base row total including tax
+            row_total_incl_tax.label:               Row total including tax
+            product.label:                          Product
+            order_item.label:                       Order item
+            additional_data.label:                  Additional data
+            description.label:                      Description
+            weee_tax_applied.label:                 Applied fixed product tax
+            sku.label:                              Item SKU
+            name.label:                             Name
+            hidden_tax_amount.label:                Hidden tax amount
+            base_hidden_tax_amount.label:           Base hidden tax amount
+            owner.label:                            Owner
 
         #regions:
         #   entity_label:        Magento Region

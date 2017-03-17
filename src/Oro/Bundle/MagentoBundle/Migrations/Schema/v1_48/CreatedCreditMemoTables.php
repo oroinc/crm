@@ -27,21 +27,21 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->createCreditMemoTable($schema, $this->activityExtension);
+        $this->createCreditMemoTable($schema);
         $this->addCreditMemoForeignKeys($schema);
         $this->addCreditMemoActivities($schema);
         $this->updateOrderAddressTable($schema);
+
         $this->createCreditMemoItemTable($schema);
+        $this->addCreditMemoItemForeignKeys($schema);
     }
 
     /**
      * @param Schema $schema
-     *
-     * @param ActivityExtension $activityExtension
      */
-    protected function createCreditMemoTable(Schema $schema, ActivityExtension $activityExtension)
+    protected function createCreditMemoTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_magento_credit_memo');
+        $table = $schema->createTable('oro_magento_credit_memo');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -334,7 +334,7 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
      */
     protected function addCreditMemoForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_magento_credit_memo');
+        $table = $schema->getTable('oro_magento_credit_memo');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
@@ -378,7 +378,7 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
      */
     protected function addCreditMemoActivities(Schema $schema)
     {
-        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'orocrm_magento_credit_memo');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'oro_magento_credit_memo');
     }
 
     /**
@@ -389,7 +389,7 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
         $table = $schema->getTable('orocrm_magento_order_address');
         $table->addColumn('credit_memo_id', 'integer', ['notnull' => false]);
         $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_credit_memo'),
+            $schema->getTable('oro_magento_credit_memo'),
             ['credit_memo_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
@@ -401,6 +401,179 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
      */
     protected function createCreditMemoItemTable(Schema $schema)
     {
-        // @TODO: Implement in SHOE-9.
+        $table = $schema->createTable('oro_magento_credit_memo_item');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('item_id', 'string', ['length' => 60]);
+        $table->addColumn('parent_id', 'integer', ['notnull' => false]);
+        $table->addColumn('product_id', 'integer', ['notnull' => false]);
+        $table->addColumn('order_item_id', 'integer', ['notnull' => false]);
+        $table->addColumn(
+            'weee_tax_applied_row_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_price',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_weee_tax_row_disposition',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'tax_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_weee_tax_applied_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'weee_tax_row_disposition',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_row_total',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'discount_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'row_total',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'weee_tax_applied_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_discount_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_weee_tax_disposition',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'price_incl_tax',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_tax_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'weee_tax_disposition',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_price_incl_tax',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn('qty', 'float', ['precision' => 0]);
+        $table->addColumn(
+            'base_cost',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_weee_tax_app_row_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'price',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_row_total_incl_tax',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'row_total_incl_tax',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn('additional_data', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('description', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn(
+            'weee_tax_applied',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
+        $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0, 'notnull' => false]);
+        $table->addColumn(
+            'hidden_tax_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn(
+            'base_hidden_tax_amount',
+            'money',
+            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['item_id'], 'magecreditmemoitem_item_id_idx');
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addCreditMemoItemForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('oro_magento_credit_memo_item');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_magento_credit_memo'),
+            ['parent_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_magento_product'),
+            ['product_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_magento_order_items'),
+            ['order_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 }

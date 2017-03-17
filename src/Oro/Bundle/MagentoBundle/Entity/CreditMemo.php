@@ -16,9 +16,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="orocrm_magento_credit_memo",
+ *     name="oro_magento_credit_memo",
  *     indexes={
- *          @ORM\Index(name="magecreditmemo_created_idx",columns={"created_at", "id"})
+ *          @ORM\Index(name="magecreditmemo_created_idx", columns={"created_at", "id"})
  *     },
  *     uniqueConstraints={
  *          @ORM\UniqueConstraint(name="unq_mcm_increment_id_channel_id", columns={"increment_id", "channel_id"})
@@ -120,6 +120,29 @@ class CreditMemo extends ExtendCreditMemo implements
     protected $store;
 
     /**
+     * @var Collection|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OrderAddress",
+     *     mappedBy="creditMemo"
+     * )
+     */
+    protected $addresses;
+
+    /**
+     * @var CreditMemoItem[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="CreditMemoItem", mappedBy="parent", cascade={"all"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $items;
+
+    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
@@ -182,15 +205,6 @@ class CreditMemo extends ExtendCreditMemo implements
      * @ORM\Column(name="cybersource_token", type="string", length=255, nullable=true)
      */
     protected $cybersourceToken;
-
-    /**
-     * @var Collection|ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="OrderAddress",
-     *     mappedBy="creditMemo"
-     * )
-     */
-    protected $addresses;
 
     /**
      * @var string
