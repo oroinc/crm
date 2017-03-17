@@ -6,13 +6,21 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterface
+class CreatedCreditMemoTables implements
+    Migration,
+    ActivityExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
 
     /**
      * {@inheritdoc}
@@ -20,6 +28,14 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
     }
 
     /**
@@ -379,6 +395,7 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
     protected function addCreditMemoActivities(Schema $schema)
     {
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'oro_magento_credit_memo');
+        $this->activityListExtension->addActivityListAssociation($schema, 'oro_magento_credit_memo');
     }
 
     /**
