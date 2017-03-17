@@ -4,6 +4,7 @@ parameters:
     oro_magento.region.entity.class:                                         Oro\Bundle\MagentoBundle\Entity\Region
     oro_magento.cart.entity.class:                                           Oro\Bundle\MagentoBundle\Entity\Cart
     oro_magento.order.entity.class:                                          Oro\Bundle\MagentoBundle\Entity\Order
+    oro_magento.credit_memo.entity.class:                                    Oro\Bundle\MagentoBundle\Entity\CreditMemo
 
     # converter
     oro_magento.importexport.data_converter.cart.class:                      Oro\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
@@ -30,6 +31,7 @@ parameters:
     oro_magento.mage.customer_connector.class:                               Oro\Bundle\MagentoBundle\Provider\CustomerConnector
     oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\CartConnector
     oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\OrderConnector
+    oro_magento.mage.credit_memo_connector.class:                            Oro\Bundle\MagentoBundle\Provider\CreditMemoConnector
     oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector
 
     oro_magento.mage.order_connector_initial.class:                          Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
@@ -232,6 +234,13 @@ services:
         parent: oro_magento.connector.abstract
         tags:
             - { name: oro_integration.connector, type: order, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.credit_memo_connector:
+        class: %oro_magento.mage.credit_memo_connector.class%
+        parent: oro_magento.connector.abstract
+        tags:
+            - { name: oro_integration.connector, type: credit_memo, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.region_connector:

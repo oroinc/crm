@@ -138,6 +138,8 @@ oro:
             order:
                 label: Order connector
                 initial.label: Initial Order connector
+            credit_memo:
+                label: Credit Memo connector
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
@@ -1026,7 +1028,6 @@ oro:
             reward_points_balance.label:          Reward points balance
             reward_points_balance_refund.label:   Reward points balance refund
             credit_memo_id.label:                 Credit memo ID
-            items.label:                          Array of salesOrderCreditmemoItemEntity
             organization.label:                   Organization
             owner.label:                          Owner
             items.label:                          Credit Memo items
@@ -1159,6 +1160,7 @@ oro:
         ping_site_error: Unable to load form
 
         order_information: Order Information
+        credit_memo_information: Credit Memo Information
         customer_information: Customer Information
         general_info: General Info
         general_information: General Information

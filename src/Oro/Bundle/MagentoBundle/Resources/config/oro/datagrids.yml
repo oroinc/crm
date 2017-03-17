@@ -1924,3 +1924,64 @@ datagrids:
         # Source config field is modified in TrackingEventsDataGridListener to change
         # the source table and add filter by customer identifiers
         # source: ~
+
+    magento-credit-memo-grid:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemo
+        acl_resource: oro_magento_credit_memo_view
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.incrementId
+                    - c.createdAt
+                    - c.updatedAt
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
+        columns:
+            incrementId:
+                label:            oro.magento.creditmemo.increment_id.label
+            createdAt:
+                label:            oro.ui.created_at
+                frontend_type:    datetime
+            updatedAt:
+                label:            oro.ui.updated_at
+                frontend_type:    datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: oro_magento_credit_memo_view
+                params: [ id ]
+        sorters:
+            columns:
+                incrementId:            { data_name: c.incrementId }
+                createdAt:              { data_name: c.createdAt }
+                updatedAt:              { data_name: c.updatedAt }
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                incrementId:
+                    type:             string
+                    data_name:        c.incrementId
+                createdAt:
+                    type:             datetime
+                    data_name:        c.createdAt
+                    enabled:          false
+                updatedAt:
+                    type:             datetime
+                    data_name:        c.updatedAt
+                    enabled:          false
+        actions:
+            view:
+                type:         navigate
+                label:        oro.grid.action.view
+                link:         view_link
+                icon:         eye
+                acl_resource: oro_magento_credit_memo_view
+                rowAction:    true
+        options:
+            entityHint: order
+            export: true
+            entity_pagination: true

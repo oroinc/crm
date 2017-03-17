@@ -1,0 +1,18 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroChannelBundle::macros.html.twig' as channel %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ channel.renderChannelProperty(entity, 'oro.magento.creditmemo.data_channel.label') }}
+            {{ ui.renderProperty('oro.magento.creditmemo.grand_total.label'|trans, entity.grandTotal|oro_format_currency({'currency': entity.baseCurrencyCode})) }}
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ ui.renderProperty('oro.magento.creditmemo.increment_id.label'|trans, entity.incrementId|trans|capitalize) }}
+            {{ ui.renderHtmlProperty('oro.magento.creditmemo.store.label'|trans, entity.store.name|escape|nl2br) }}
+        </div>
+    </div>
+</div>

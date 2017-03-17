@@ -143,7 +143,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
 
         $integration = new Integration();
         $integration->setType('magento');
-        $integration->setConnectors(['customer', 'cart', 'order', 'newsletter_subscriber']);
+        $integration->setConnectors(['customer', 'cart', 'order', 'newsletter_subscriber', 'credit_memo']);
         $integration->setName($integrationName);
         $integration->setTransport($transport);
         $integration->setOrganization($organization);
