@@ -950,8 +950,8 @@ oro:
                 description:      The sort order that determines the sequence in which a Magento website is listed.
 
         creditmemo:
-            entity_label:                         Credit Memo
-            entity_plural_label:                  Credit Memos
+            entity_label:                         Magento Credit Memo
+            entity_plural_label:                  Magento Credit Memos
             entity_description:                   Allows you to operate with credit memos for orders.
             id.label:                             ID
             channel.label:                        Integration
@@ -1031,8 +1031,8 @@ oro:
             items.label:                          Credit Memo items
 
         creditmemoitem:
-            entity_label:                           Credit Memo Item
-            entity_plural_label:                    Credit Memo Items
+            entity_label:                           Magento Credit Memo Item
+            entity_plural_label:                    Magento Credit Memo Items
             entity_description:                     Allows you to operate with credit memos items.
             id.label:                               ID
             channel.label:                          Integration
