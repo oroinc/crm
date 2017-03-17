@@ -13,6 +13,9 @@ use Oro\Bundle\CRMBundle\Migrations\Schema\v1_1\MigrateRelations;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_2\MigrateGridViews;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3\EmbededFormType;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3\TaggingEntityName;
+use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3_1\WorkflowItemEntityClass;
+use Oro\Bundle\CRMBundle\Migrations\Schema\v1_4\NotificationEntityName;
+use Oro\Bundle\CRMBundle\Migrations\Schema\v1_6\ReminderEntityName;
 
 class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
 {
@@ -23,7 +26,7 @@ class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_6';
     }
 
     /**
@@ -36,6 +39,9 @@ class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
             MigrateGridViews::updateGridViews($queries);
             EmbededFormType::updateEmbededFormType($queries);
             TaggingEntityName::updateTaggingEntityName($queries);
+            WorkflowItemEntityClass::updateWorkflowItemEntityClass($queries);
+            NotificationEntityName::updateTaggingEntityName($queries);
+            ReminderEntityName::updateRelatedEntityClassName($queries);
         }
     }
 }

@@ -307,8 +307,9 @@ oro:
                 label:            Industry
                 description:      Industry where the lead's company is operating.
             status:
-                label:            Status
-                description:      Current status of the lead.
+                label:                  Status
+                description:            Current status of the lead.
+                change_error_message:   Unable to change lead status.
             contact:
                 label:            Contact
                 description:      A contact the lead was converted into.
@@ -328,6 +329,9 @@ oro:
             source:
                 label:            Source
                 description:      Source of the lead.
+                unclassified:     No source
+                others:           Others
+                none:             None
             notes:
                 label:            Additional comments
                 description:      Additional notes made to the lead record.
@@ -359,12 +363,8 @@ oro:
             primary_email:
                 label:            Primary Email
                 description:
-            source:
-                unclassified:     No source
-                others:           Others
-                none:             None
-            status:
-                change_error_message:  Unable to change lead status.
+
+
             convert:
                  error:           Unable to convert lead to opportunity
             feature.label:        Lead

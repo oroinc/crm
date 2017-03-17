@@ -192,6 +192,7 @@ class Order extends ExtendOrder implements
 
     /**
      * @ORM\ManyToOne(targetEntity="Cart")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $cart;
 
