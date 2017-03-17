@@ -54,7 +54,7 @@ class CreditMemoItemTest extends \PHPUnit_Framework_TestCase
             ['baseRowTotal', 0.07],
             ['discountAmount', 0.08],
             ['rowTotal', 0.09],
-            ['weeeRaxAppliedAmount', 0.10],
+            ['weeeTaxAppliedAmount', 0.10],
             ['baseDiscountAmount', 0.11],
             ['baseWeeeTaxDisposition', 0.12],
             ['priceInclTax', 0.13],

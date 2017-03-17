@@ -571,7 +571,7 @@ class CreatedCreditMemoTables implements Migration, ActivityExtensionAwareInterf
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
-            ['organization_id'],
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
