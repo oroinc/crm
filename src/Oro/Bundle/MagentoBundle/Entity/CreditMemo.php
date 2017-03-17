@@ -129,7 +129,7 @@ class CreditMemo extends ExtendCreditMemo implements
     protected $addresses;
 
     /**
-     * @var CreditMemoItem[]|Collection
+     * @var Collection|CreditMemoItem[]
      *
      * @ORM\OneToMany(targetEntity="CreditMemoItem", mappedBy="parent", cascade={"all"})
      * @ConfigField(
@@ -616,6 +616,7 @@ class CreditMemo extends ExtendCreditMemo implements
     {
         parent::__construct();
         $this->addresses = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -942,6 +943,26 @@ class CreditMemo extends ExtendCreditMemo implements
     public function setAddresses(Collection $addresses)
     {
         $this->addresses = $addresses;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CreditMemoItem[]
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param Collection|CreditMemoItem[] $items
+     *
+     * @return $this
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
 
         return $this;
     }
