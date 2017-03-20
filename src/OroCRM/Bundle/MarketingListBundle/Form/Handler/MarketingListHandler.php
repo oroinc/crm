@@ -129,8 +129,12 @@ class MarketingListHandler
             ->setEntity($marketingList->getEntity())
             ->setType($this->getSegmentTypeByMarketingListType($marketingList->getType()))
             ->setDefinition($requestData['definition'])
-            ->setOwner($marketingList->getOwner()->getOwner())
             ->setOrganization($marketingList->getOrganization());
+
+        $owner = $marketingList->getOwner()->getOwner();
+        if (null !== $owner) {
+            $segment->setOwner($owner);
+        }
 
         $marketingList->setSegment($segment);
     }

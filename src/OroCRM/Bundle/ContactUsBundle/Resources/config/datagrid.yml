@@ -109,5 +109,5 @@ datagrid:
                 icon:         trash
                 link:         delete_link
         options:
-            entityHint: contact request
+            entityHint: contact requests
             entity_pagination: true

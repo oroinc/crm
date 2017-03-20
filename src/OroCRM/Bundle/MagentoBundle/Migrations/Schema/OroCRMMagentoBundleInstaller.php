@@ -110,7 +110,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_41_4';
+        return 'v1_41_5';
     }
 
     /**
@@ -911,7 +911,7 @@ class OroCRMMagentoBundleInstaller implements
             $schema->getTable('orocrm_magento_cart'),
             ['cart_id'],
             ['id'],
-            []
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
