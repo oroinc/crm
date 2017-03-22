@@ -259,8 +259,9 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $synchronizationSettings = ConfigObject::create(['isTwoWaySyncEnabled' => true]);
         $integration->setSynchronizationSettings($synchronizationSettings);
-
         $this->em->persist($integration);
+
+        $this->setReference('default_integration_channel', $integration);
         $this->integration = $integration;
 
         return $this;
