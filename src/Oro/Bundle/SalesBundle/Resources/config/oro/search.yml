@@ -52,6 +52,14 @@ search:
                         name:          id
                         target_type:   integer
                         target_fields: [dataChannelId]
+            -
+                name: phones
+                relation_type: one-to-many
+                relation_fields:
+                    -
+                        name: phone
+                        target_type: text
+                        target_fields: [phone]
 
     Oro\Bundle\SalesBundle\Entity\Opportunity:
         alias:                          oro_sales_opportunity
