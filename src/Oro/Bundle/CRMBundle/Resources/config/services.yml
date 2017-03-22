@@ -2,7 +2,9 @@ parameters:
 
 services:
     oro_crm.extension.transtation_packages_provider:
-        class: 'Oro\Bundle\CRMBundle\Provider\TranslationPackagesProviderExtension'
+        parent: oro_translation.extension.transtation_packages_provider.abstract
+        calls:
+            - ['addPackage', ['OroCRM', 'oro/crm', '/src']]
         tags:
             - {name: oro_translation.extension.packages_provider}
 

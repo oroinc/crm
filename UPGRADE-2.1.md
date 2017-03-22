@@ -119,3 +119,9 @@ SalesBundle
 - `opportunity` and `lead` apis changed
     - `customerAssociation` relation replaced by `customer` and `account` relations
 
+CRMBundle
+---------
+- Class `Oro\Bundle\CRMBundle\Provider\TranslationPackagesProviderExtension` removed
+- Updated service definition for `oro_crm.extension.transtation_packages_provider`
+    - changed class to `Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension`
+    - changed publicity to `false`
