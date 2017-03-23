@@ -582,6 +582,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $item->setName($orderItem->getName());
             $item->setOwner($orderItem->getOwner());
             $item->setPrice($orderItem->getPrice());
+            $item->setBaseDiscountAmount($orderItem->getDiscountAmount());
+            $item->setBaseTaxAmount($orderItem->getTaxAmount());
+            $item->setRowTotal($orderItem->getRowTotal());
             $items[] = $item;
             $om->persist($item);
         }

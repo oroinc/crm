@@ -24,6 +24,17 @@
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [creditMemoInformationWidget] }]) %}
 
+    {% if entity.order and resource_granted('oro_magento_order_view') %}
+        {% set orderInformationWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_magento_order_widget_info', {id: entity.order.id}),
+                'title': 'oro.magento.order_information'|trans
+            }) }}
+        {% endset %}
+        {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
+    {% endif %}
+
     {% set dataBlocks = [
         {
             'title': 'oro.magento.general_information'|trans,
@@ -31,6 +42,22 @@
             'subblocks': generalSubblocks
         }
     ] %}
+
+    {% set creditMemoItemsWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('oro_magento_credit_memo_widget_items', {id: entity.id})
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'oro.magento.creditmemo.items.label'|trans,
+            'subblocks': [
+                {'data' : [creditMemoItemsWidget] }
+            ]
+        }
+    ]) %}
 
     {% set id = 'magentoCreditMemoView' %}
     {% set data = {'dataBlocks': dataBlocks} %}

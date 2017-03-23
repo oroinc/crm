@@ -25,6 +25,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *     }
  * )
  * @Config(
+ *     routeView="oro_magento_credit_memo_view",
  *     defaultValues={
  *          "entity"={
  *              "icon"="fa-list-alt"

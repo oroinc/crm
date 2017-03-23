@@ -1994,3 +1994,77 @@ datagrids:
             entityHint: order
             export: true
             entity_pagination: true
+
+    magento-credit-memo-item-grid:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem
+        acl_resource: oro_magento_credit_memo_view
+        source:
+            type: orm
+            query:
+                select:
+                    - cmi.id
+                    - cmi.sku
+                    - cmi.name
+                    - cmi.qty
+                    - cmi.price
+                    - cmi.baseDiscountAmount
+                    - cmi.baseTaxAmount
+                    - cmi.rowTotal
+                    - p.orderCurrencyCode
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem , alias: cmi }
+                join:
+                    left:
+                        - { join: cmi.parent, alias: p }
+                where:
+                    and:
+                        - cmi.parent = :id
+            bind_parameters:
+                - id
+        columns:
+            sku:
+                label: oro.magento.datagrid.columns.sku
+            name:
+                label: oro.magento.datagrid.columns.name
+            qty:
+                label: oro.magento.datagrid.columns.qty
+                frontend_type: number
+            price:
+                label: oro.magento.datagrid.columns.price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            baseDiscountAmount:
+                label: oro.magento.datagrid.columns.discountAmount
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            baseTaxAmount:
+                label: oro.magento.datagrid.columns.taxAmount
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            rowTotal:
+                label: oro.magento.datagrid.columns.rowTotal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+        sorters:
+            columns:
+                sku:                 { data_name: cmi.sku }
+                name:                { data_name: cmi.name }
+                qty:                 { data_name: cmi.qty }
+                price:               { data_name: cmi.price }
+                baseDiscountAmount:  { data_name: cmi.baseDiscountAmount }
+                baseTaxAmount:       { data_name: cmi.baseTaxAmount }
+                rowTotal:            { data_name: cmi.rowTotal }
+        options:
+            entityHint: credit memo item
+            toolbarOptions:
+                hide: true
+                pagination:
+                    hide: true
