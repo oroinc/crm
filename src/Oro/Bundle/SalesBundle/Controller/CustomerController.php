@@ -2,14 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+use Oro\Bundle\DataGridBundle\Provider\MultiGridProvider;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * @Route("/customer")
@@ -18,7 +16,7 @@ class CustomerController extends Controller
 {
     /**
      * @Route("/customer/grid-dialog/{entityClass}", name="oro_sales_customer_grid_dialog")
-     * @Template("OroSalesBundle:Customer/dialog:grid.html.twig")
+     * @Template("OroDataGridBundle:Grid/dialog:multi.html.twig")
      *
      * @param string $entityClass
      *
@@ -29,40 +27,14 @@ class CustomerController extends Controller
         $resolvedClass    = $this->getRoutingHelper()->resolveEntityClass($entityClass);
         $entityClassAlias = $this->get('oro_entity.entity_alias_resolver')
             ->getPluralAlias($resolvedClass);
-        $entityTargets    = $this->getCustomersData();
 
         return [
+            'gridWidgetName'         => 'customer-multi-grid-widget',
+            'dialogWidgetName'       => 'customer-dialog',
             'sourceEntityClassAlias' => $entityClassAlias,
-            'entityTargets'          => $entityTargets,
-            'params'                 => [
-                'grid_path' => $this->generateUrl(
-                    'oro_sales_customer_grid',
-                    [],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                )
-            ]
-        ];
-    }
-
-    /**
-     * @Route("/customer/grid/{entityClass}", name="oro_sales_customer_grid")
-     * @Template("OroDataGridBundle:Grid:dialog/widget.html.twig")
-     *
-     * @param string $entityClass
-     *
-     * @return array
-     */
-    public function customerGridAction($entityClass = null)
-    {
-        $resolvedClass = $this->getRoutingHelper()->resolveEntityClass($entityClass);
-
-        return [
-            'gridName'     => $this->getCustomerConfigProvider()->getGrid($resolvedClass),
-            'multiselect'  => false,
-            'params'       => [
-                'class_name' => $resolvedClass,
-            ],
-            'renderParams' => [],
+            'entityTargets'          => $this->getMultiGridProvider()->getEntitiesData(
+                $this->getCustomerConfigProvider()->getCustomerClasses()
+            ),
         ];
     }
 
@@ -83,29 +55,10 @@ class CustomerController extends Controller
     }
 
     /**
-     * @return array
+     * @return MultiGridProvider
      */
-    protected function getCustomersData()
+    protected function getMultiGridProvider()
     {
-        $customerData   = $this->getCustomerConfigProvider()->getCustomersData();
-        $securityFacade = $this->get('oro_security.security_facade');
-        $gridManager    = $this->get('oro_datagrid.datagrid.manager');
-        $allowed        = [];
-        $isFirstSet     = false;
-
-        foreach ($customerData as $customer) {
-            $gridConfig      = $gridManager->getConfigurationForGrid($customer['gridName']);
-            $gridAclResource = $gridConfig ? $gridConfig->getAclResource() : null;
-            $isAllowed       = $securityFacade->isGranted($gridAclResource);
-            if ($isAllowed) {
-                $customer['first'] = !$isFirstSet;
-                if (!$isFirstSet) {
-                    $isFirstSet = true;
-                }
-                $allowed[] = $customer;
-            }
-        }
-
-        return $allowed;
+        return $this->get('oro_datagrid.multi_grid_provider');
     }
 }

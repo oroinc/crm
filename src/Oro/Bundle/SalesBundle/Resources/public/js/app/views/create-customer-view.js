@@ -36,7 +36,7 @@ define(function(require) {
                 this.dialogWidget = null;
 
                 mediator.trigger(
-                    'sales:customer:select',
+                    'customer-dialog:select',
                     JSON.stringify({'entityClass': customer.className,  'entityId': id})
                 );
             }, this));

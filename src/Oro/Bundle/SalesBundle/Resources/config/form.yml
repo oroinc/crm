@@ -445,6 +445,7 @@ services:
             - '@oro_security.security_facade'
             - '@oro_datagrid.datagrid.manager'
             - '@oro_entity.entity_name_resolver'
+            - '@oro_datagrid.multi_grid_provider'
         tags:
             - { name: form.type, alias: oro_sales_customer }
 
