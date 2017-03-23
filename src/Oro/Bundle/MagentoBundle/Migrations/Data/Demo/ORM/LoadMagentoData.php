@@ -546,9 +546,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $memo->setDataChannel($order->getDataChannel());
         $memo->setOrder($order);
         $memo->setIncrementId(++$origin);
-        $memo->setCreditMemoId($origin);
+        $memo->setOriginId($origin);
         $memo->setStore($order->getStore());
-        $memo->setAddresses($order->getAddresses());
         $memo->setOwner($order->getOwner());
         $memo->setOrganization($order->getOrganization());
         $memo->setCreatedAt(new \DateTime('now'));
@@ -571,19 +570,19 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $items = [];
 
         $orderItems = $order->getItems();
+        $originId = 0;
         foreach ($orderItems as $orderItem) {
+            $originId++;
             $item = new CreditMemoItem();
             $item->setChannel($creditMemo->getChannel());
-            $item->setOrderItem($orderItem);
+            $item->setOrderItemId($orderItem->getId());
             $item->setParent($creditMemo);
-            $item->setItemId($orderItem->getOriginId());
+            $item->setOriginId($originId);
             $item->setQty($orderItem->getQty());
             $item->setSku($orderItem->getSku());
             $item->setName($orderItem->getName());
             $item->setOwner($orderItem->getOwner());
             $item->setPrice($orderItem->getPrice());
-            $item->setBaseDiscountAmount($orderItem->getDiscountAmount());
-            $item->setBaseTaxAmount($orderItem->getTaxAmount());
             $item->setRowTotal($orderItem->getRowTotal());
             $items[] = $item;
             $om->persist($item);

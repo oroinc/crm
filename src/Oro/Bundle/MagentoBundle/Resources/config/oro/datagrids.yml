@@ -1933,29 +1933,45 @@ datagrids:
             query:
                 select:
                     - c.id
-                    - c.creditMemoId
                     - c.createdAt
-                    - o.incrementId
-                    - o.createdAt
+                    - c.updatedAt
+                    - c.incrementId
+                    - o.incrementId as orderNumber
+                    - o.createdAt as orderCreatedAt
                     - CONCAT(address.firstName, ' ', address.lastName) as billToName
                     - c.status
-                    - c.bsCustomerBalTotalRefunded as refunded
+                    - c.grandTotal as refunded
                 from:
                     - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
                 join:
                     left:
                         - { join: c.order, alias: o }
-                        - { join: c.addresses, alias: address }
+                        - { join: o.addresses, alias: address }
                         - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
         columns:
-            creditMemoId:
-                label:            oro.magento.creditmemo.credit_memo_id.label
+            incrementId:
+                label:            oro.magento.creditmemo.increment_id.label
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
+            orderNumber:
+                label:            oro.magento.datagrid.columns.increment_id
+            orderCreatedAt:
+                label:            oro.magento.datagrid.columns.orderCreatedAt
+                frontend_type:    datetime
+            billToName:
+                label:            oro.magento.datagrid.columns.billing_name
+            status:
+                label:            oro.magento.creditmemo.status.label
+            refunded:
+                label:  oro.magento.datagrid.columns.refunded
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
         properties:
             id: ~
             view_link:
@@ -1964,24 +1980,26 @@ datagrids:
                 params: [ id ]
         sorters:
             columns:
-                creditMemoId:            { data_name: c.creditMemoId }
                 createdAt:              { data_name: c.createdAt }
                 updatedAt:              { data_name: c.updatedAt }
             default:
                 createdAt:  DESC
         filters:
             columns:
-                creditMemoId:
-                    type:             string
-                    data_name:        c.creditMemoId
                 createdAt:
                     type:             datetime
                     data_name:        c.createdAt
-                    enabled:          false
                 updatedAt:
                     type:             datetime
                     data_name:        c.updatedAt
                     enabled:          false
+                orderCreatedAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                    enabled:          false
+                grandTotal:
+                    type: currency
+                    data_name: c.grandTotal
         actions:
             view:
                 type:         navigate
@@ -1991,7 +2009,7 @@ datagrids:
                 acl_resource: oro_magento_credit_memo_view
                 rowAction:    true
         options:
-            entityHint: order
+            entityHint: credit memo
             export: true
             entity_pagination: true
 
@@ -2007,10 +2025,7 @@ datagrids:
                     - cmi.name
                     - cmi.qty
                     - cmi.price
-                    - cmi.baseDiscountAmount
-                    - cmi.baseTaxAmount
                     - cmi.rowTotal
-                    - p.orderCurrencyCode
                 from:
                     - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem , alias: cmi }
                 join:
@@ -2018,9 +2033,9 @@ datagrids:
                         - { join: cmi.parent, alias: p }
                 where:
                     and:
-                        - cmi.parent = :id
+                        - cmi.parent = :creditMemoId
             bind_parameters:
-                - id
+                - creditMemoId
         columns:
             sku:
                 label: oro.magento.datagrid.columns.sku
@@ -2031,18 +2046,6 @@ datagrids:
                 frontend_type: number
             price:
                 label: oro.magento.datagrid.columns.price
-                type:   localized_number
-                method: formatCurrency
-                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align: right
-            baseDiscountAmount:
-                label: oro.magento.datagrid.columns.discountAmount
-                type:   localized_number
-                method: formatCurrency
-                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align: right
-            baseTaxAmount:
-                label: oro.magento.datagrid.columns.taxAmount
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
@@ -2059,8 +2062,6 @@ datagrids:
                 name:                { data_name: cmi.name }
                 qty:                 { data_name: cmi.qty }
                 price:               { data_name: cmi.price }
-                baseDiscountAmount:  { data_name: cmi.baseDiscountAmount }
-                baseTaxAmount:       { data_name: cmi.baseTaxAmount }
                 rowTotal:            { data_name: cmi.rowTotal }
         options:
             entityHint: credit memo item

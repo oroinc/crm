@@ -6,13 +6,22 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ channel.renderChannelProperty(entity, 'oro.magento.creditmemo.data_channel.label') }}
-            {{ ui.renderProperty('oro.magento.creditmemo.grand_total.label'|trans, entity.grandTotal|oro_format_currency({'currency': entity.baseCurrencyCode})) }}
+            {{ ui.renderHtmlProperty('oro.magento.creditmemo.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.increment_id.label'|trans, entity.incrementId) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.status.label'|trans, entity.status) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.transaction_id.label'|trans, entity.transactionId) }}
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
 
         <div class="responsive-block">
-            {{ ui.renderProperty('oro.magento.creditmemo.increment_id.label'|trans, entity.incrementId|trans|capitalize) }}
-            {{ ui.renderHtmlProperty('oro.magento.creditmemo.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.grand_total.label'|trans, entity.grandTotal|oro_format_currency({'currency': entity.order.currency})) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.subtotal.label'|trans, entity.subtotal|oro_format_currency({'currency': entity.order.currency})) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.adjustment_negative.label'|trans, entity.adjustmentNegative|oro_format_currency({'currency': entity.order.currency})) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.adjustment_positive.label'|trans, entity.adjustmentPositive|oro_format_currency({'currency': entity.order.currency})) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.shipping_amount.label'|trans, entity.shippingAmount|oro_format_currency({'currency': entity.order.currency})) }}
+            {{ ui.renderProperty('oro.magento.creditmemo.reward_points_balance_refund.label'|trans, entity.rewardPointsBalanceRefund) }}
         </div>
     </div>
 </div>
