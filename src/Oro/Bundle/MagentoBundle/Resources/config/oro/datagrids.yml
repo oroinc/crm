@@ -1933,14 +1933,23 @@ datagrids:
             query:
                 select:
                     - c.id
-                    - c.incrementId
+                    - c.creditMemoId
                     - c.createdAt
-                    - c.updatedAt
+                    - o.incrementId
+                    - o.createdAt
+                    - CONCAT(address.firstName, ' ', address.lastName) as billToName
+                    - c.status
+                    - c.bsCustomerBalTotalRefunded as refunded
                 from:
                     - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
+                join:
+                    left:
+                        - { join: c.order, alias: o }
+                        - { join: c.addresses, alias: address }
+                        - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
         columns:
-            incrementId:
-                label:            oro.magento.creditmemo.increment_id.label
+            creditMemoId:
+                label:            oro.magento.creditmemo.credit_memo_id.label
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -1955,16 +1964,16 @@ datagrids:
                 params: [ id ]
         sorters:
             columns:
-                incrementId:            { data_name: c.incrementId }
+                creditMemoId:            { data_name: c.creditMemoId }
                 createdAt:              { data_name: c.createdAt }
                 updatedAt:              { data_name: c.updatedAt }
             default:
                 createdAt:  DESC
         filters:
             columns:
-                incrementId:
+                creditMemoId:
                     type:             string
-                    data_name:        c.incrementId
+                    data_name:        c.creditMemoId
                 createdAt:
                     type:             datetime
                     data_name:        c.createdAt
