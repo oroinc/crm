@@ -545,7 +545,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $memo->setChannel($order->getChannel());
         $memo->setDataChannel($order->getDataChannel());
         $memo->setOrder($order);
-        $memo->setIncrementId($origin);
+        $memo->setIncrementId(++$origin);
+        $memo->setCreditMemoId($origin);
         $memo->setStore($order->getStore());
         $memo->setAddresses($order->getAddresses());
         $memo->setOwner($order->getOwner());

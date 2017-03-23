@@ -74,7 +74,7 @@ navigation:
         oro_magento_order_view:     'Order #%order.incrementId%'
 
         oro_magento_credit_memo_index:    ~
-        oro_magento_credit_memo_view:     'Credit Memo #%creditMemo.incrementId%'
+        oro_magento_credit_memo_view:     'Credit Memo #%creditMemo.creditMemoId%'
 
         oro_magento_product_index:  'oro.magento.product.entity_plural_label'
         oro_magento_product_view:   '%product.name%'
