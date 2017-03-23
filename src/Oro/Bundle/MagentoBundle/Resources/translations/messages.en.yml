@@ -106,6 +106,7 @@ oro:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
+                billing_name:     Billing Name
                 customer_is_guest:
                     label: Is Guest
                 order_is_guest:
@@ -119,6 +120,8 @@ oro:
                 discount_amount: Discount amount
                 discount_percent: Discount percent
                 coupon_code: Coupon code
+                refunded:   Refunded
+                orderCreatedAt: Order Date
         channel_type:
             label:  Magento
         transport:
@@ -674,6 +677,9 @@ oro:
             synced_at:
                 label:              Last Synced At
                 description:        The date and time of the last Magento order synchronization.
+            credit_memos:
+                label:              Credit Memos
+                description:        Collection of Credit Memos for a Magento order.
             b2c_flow_order_follow_up.step.label: Step
 
         product:
@@ -955,79 +961,31 @@ oro:
             entity_label:                         Magento Credit Memo
             entity_plural_label:                  Magento Credit Memos
             entity_description:                   Allows you to operate with credit memos for orders.
-            id.label:                             ID
+            id.label:                             Id
             channel.label:                        Integration
             data_channel.label:                   Channel
-            addresses.label:                      Addresses
             adjustment.label:                     Adjustment
-            updated_at.label:                     Date of updating
-            created_at.label:                     Date of creation
-            increment_id.label:                   Increment ID
-            transaction_id.label:                 Transaction ID
-            global_currency_code.label:           Global currency code
-            base_currency_code.label:             Base currency code
-            order_currency_code.label:            Order currency code
-            store_currency_code.label:            Store currency code
-            cybersource_token.label:              Cybersource token
-            invoice_id.label:                     ID of the invoice for which the credit memo was created
+            updated_at.label:                     Updated At
+            created_at.label:                     Created At
+            imported_at.label:                    Imported At
+            synced_at.label:                      Last Synced At
+            increment_id.label:                   "Credit Memo #"
+            transaction_id.label:                 "Transaction #"
+            invoice_id.label:                     Invoice Id
             state.label:                          State
             status.label:                         Credit memo status
-            email_sent.label:                     Defines whether the email is sent
-            order.label:                          The order for which the credit memo was created
-            tax_amount.label:                     Tax amount
-            shipping_tax_amount.label:            Shipping tax amount
-            base_tax_amount.label:                Base tax amount
-            base_adjustment_positive.label:       Adjustment refund amount (using base currency)
-            base_grand_total.label:               Base grand total
+            email_sent.label:                     Email Sent
+            order.label:                          Order
             adjustment.label:                     Adjustment
             subtotal.label:                       Subtotal
-            discount_amount.label:                Discount amount
-            base_subtotal.label:                  Base subtotal
-            base_adjustment.label:                Base adjustment
-            base_to_global_rate.label:            Base to global rate
-            store_to_base_rate.label:             Store to base rate
-            base_shipping_amount.label:           Base shipping amount
             adjustment_negative.label:            Adjustment fee amount
-            subtotal_incl_tax.label:              Subtotal including tax
             shipping_amount.label:                Shipping amount
-            base_subtotal_incl_tax.label:         Base subtotal including tax
-            base_adjustment_negative.label:       Adjustment fee amount (using base currency)
             grand_total.label:                    Grand total
-            base_discount_amount.label:           Base discount amount
-            base_to_order_rate.label:             Base to order rate
-            store_to_order_rate.label:            Store to order rate
-            base_shipping_tax_amount.label:       Base shipping tax amount
             adjustment_positive.label:            Adjustment refund amount
             store.label:                          Store
-            hidden_tax_amount.label:              Hidden tax amount
-            base_hidden_tax_amount.label:         Base hidden tax amount
-            shipping_hidden_tax_amount.label:     Shipping hidden tax amount
-            base_shipping_hidden_tax_amnt.label:  Base shipping hidden tax amount
-            shipping_incl_tax.label:              Shipping including tax
-            base_shipping_incl_tax.label:         Base shipping including tax
-            base_customer_balance_amount.label:   Base customer balance amount
-            customer_balance_amount.label:        Customer balance amount
-            bs_customer_bal_total_refunded.label: Refunded base customer balance amount
             customer_bal_total_refunded.label:    Customer balance total refunded
-            base_gift_cards_amount.label:         Base gift cards amount
-            gift_cards_amount.label:              Gift cards amount
-            gw_base_price.label:                  Gift wrapping price refunded amount (using base currency)
-            gw_price.label:                       Gift wrapping price refunded amount
-            gw_items_base_price.label:            Gift wrapping items base price
-            gw_items_price.label:                 Gift wrapping items price
-            gw_card_base_price.label:             Gift wrapping card base price
-            gw_card_price.label:                  Gift wrapping card price
-            gw_base_tax_amount.label:             Gift wrapping tax amount refunded (using base currency)
-            gw_tax_amount.label:                  Gift wrapping tax amount refunded
-            gw_items_base_tax_amount.label:       Gift wrapping items base tax amount
-            gw_items_tax_amount.label:            Gift wrapping items tax amount
-            gw_card_base_tax_amount.label:        Gift wrapping card base tax amount
-            gw_card_tax_amount.label:             Gift wrapping card tax amount
-            base_reward_currency_amount.label:    Base reward currency amount
-            reward_currency_amount.label:         Reward currency amount
-            reward_points_balance.label:          Reward points balance
             reward_points_balance_refund.label:   Reward points balance refund
-            credit_memo_id.label:                 Credit memo ID
+            origin_id.label:                      Credit memo ID
             organization.label:                   Organization
             owner.label:                          Owner
             items.label:                          Credit Memo items
@@ -1036,41 +994,20 @@ oro:
             entity_label:                           Magento Credit Memo Item
             entity_plural_label:                    Magento Credit Memo Items
             entity_description:                     Allows you to operate with credit memos items.
-            id.label:                               ID
+            id.label:                               Id
             channel.label:                          Integration
-            item_id.label:                          Credit memo item ID
-            parent.label:                           Credit memo
-            weee_tax_applied_row_amount.label:      Applied fixed product tax row amount
-            base_price.label:                       Base price
-            base_weee_tax_row_disposition.label:    Fixed product tax row disposition (in base currency)
-            tax_amount.label:                       Tax amount
-            base_weee_tax_applied_amount.label:     Applied fixed product tax amount (in base currency)
-            weee_tax_row_disposition.label:         Fixed product tax row disposition
-            base_row_total.label:                   Base row total
+            origin_id.label:                        Origin Id
+            parent.label:                           Credit Memo
             discount_amount.label:                  Discount amount
+            tax_amount.label:                       Tax amount
             row_total.label:                        Row total
-            weee_tax_applied_amount.label:          Applied fixed product tax amount
-            base_discount_amount.label:             Base discount amount
-            base_weee_tax_disposition.label:        Fixed product tax disposition (in base currency)
-            price_incl_tax.label:                   Price including tax
-            base_tax_amount.label:                  Base tax amount
-            weee_tax_disposition.label:             Fixed product tax disposition
-            base_price_incl_tax.label:              Base price including tax
             qty.label:                              Quantity
-            base_cost.label:                        Base cost
-            base_weee_tax_applied_row_amount.label: Applied fixed product tax row amount (in base currency)
             price.label:                            Price
-            base_row_total_incl_tax.label:          Base row total including tax
-            row_total_incl_tax.label:               Row total including tax
-            product.label:                          Product
-            order_item.label:                       Order item
+            order_item_id.label:                    Order Item Id
             additional_data.label:                  Additional data
             description.label:                      Description
-            weee_tax_applied.label:                 Applied fixed product tax
             sku.label:                              Item SKU
             name.label:                             Name
-            hidden_tax_amount.label:                Hidden tax amount
-            base_hidden_tax_amount.label:           Base hidden tax amount
             owner.label:                            Owner
 
         #regions:

@@ -119,7 +119,7 @@ class Order extends ExtendOrder implements
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "full"=true
+     *              "full"=false
      *          }
      *      }
      * )
