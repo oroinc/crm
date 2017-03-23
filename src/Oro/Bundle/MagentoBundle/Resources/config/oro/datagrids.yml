@@ -1925,7 +1925,7 @@ datagrids:
         # the source table and add filter by customer identifiers
         # source: ~
 
-    magento-credit-memo-grid:
+    magento-credit-memo-grid-base:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemo
         acl_resource: oro_magento_credit_memo_view
         source:
@@ -1938,7 +1938,6 @@ datagrids:
                     - c.incrementId
                     - o.incrementId as orderNumber
                     - o.createdAt as orderCreatedAt
-                    - CONCAT(address.firstName, ' ', address.lastName) as billToName
                     - c.status
                     - c.grandTotal as refunded
                 from:
@@ -1946,8 +1945,6 @@ datagrids:
                 join:
                     left:
                         - { join: c.order, alias: o }
-                        - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
         columns:
             incrementId:
                 label:            oro.magento.creditmemo.increment_id.label
@@ -1962,8 +1959,6 @@ datagrids:
             orderCreatedAt:
                 label:            oro.magento.datagrid.columns.orderCreatedAt
                 frontend_type:    datetime
-            billToName:
-                label:            oro.magento.datagrid.columns.billing_name
             status:
                 label:            oro.magento.creditmemo.status.label
             refunded:
@@ -1997,9 +1992,18 @@ datagrids:
                     type:             datetime
                     data_name:        o.createdAt
                     enabled:          false
-                grandTotal:
+                refunded:
                     type: currency
                     data_name: c.grandTotal
+                status:
+                    type:             string
+                    data_name:        c.status
+                incrementId:
+                    type:             string
+                    data_name:        c.incrementId
+                orderNumber:
+                    type:             string
+                    data_name:        o.incrementId
         actions:
             view:
                 type:         navigate
@@ -2012,6 +2016,32 @@ datagrids:
             entityHint: credit memo
             export: true
             entity_pagination: true
+
+    magento-credit-memo-grid:
+        extends:  magento-credit-memo-grid-base
+        source:
+            query:
+                select:
+                    - CONCAT(address.firstName, ' ', address.lastName) as billToName
+                join:
+                    left:
+                        - { join: o.addresses, alias: address }
+                        - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
+        columns:
+            billToName:
+                label:            oro.magento.datagrid.columns.billing_name
+
+    magento-customer-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId AND o.channel = :channelId
+            bind_parameters:
+                - customerId
+                - channelId
+
 
     magento-credit-memo-item-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem

@@ -3,12 +3,15 @@
 namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 
 /**
  * @Route("/credit-memo")
@@ -68,5 +71,24 @@ class CreditMemoController extends Controller
     public function itemsAction(CreditMemo $entity)
     {
         return ['entity' => $entity];
+    }
+
+    /**
+     * @Route(
+     *        "/widget/customer_credit_memo/{customerId}/{channelId}",
+     *         name="oro_magento_customer_credit_memo_widget",
+     *         requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_credit_memo_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id" = "customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerCreditMemosWidgetAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
     }
 }
