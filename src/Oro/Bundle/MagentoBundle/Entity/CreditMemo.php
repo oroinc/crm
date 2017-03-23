@@ -485,6 +485,35 @@ class CreditMemo extends ExtendCreditMemo implements
     }
 
     /**
+     * @param CreditMemoItem $item
+     *
+     * @return $this
+     */
+    public function addItem(CreditMemoItem $item)
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setParent($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CreditMemoItem $item
+     *
+     * @return $this
+     */
+    public function removeItem(CreditMemoItem $item)
+    {
+        if ($this->items->contains($item)) {
+            $this->items->removeElement($item);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getState()
