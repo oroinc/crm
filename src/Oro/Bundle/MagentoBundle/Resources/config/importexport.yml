@@ -32,6 +32,7 @@ parameters:
     oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\CartConnector
     oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\OrderConnector
     oro_magento.mage.credit_memo_connector.class:                            Oro\Bundle\MagentoBundle\Provider\CreditMemoConnector
+    oro_magento.mage.credit_memo_connector_initial.class:                    Oro\Bundle\MagentoBundle\Provider\Connector\InitialCreditMemoConnector
     oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector
 
     oro_magento.mage.order_connector_initial.class:                          Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
@@ -79,6 +80,7 @@ parameters:
     oro_magento.reader.context.class:                                        Oro\Bundle\MagentoBundle\Provider\Reader\ContextReader
     oro_magento.reader.order_info.class:                                     Oro\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
     oro_magento.reader.customer_info.class:                                  Oro\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
+    oro_magento.reader.credit_memo_info.class:                               Oro\Bundle\MagentoBundle\Provider\Reader\CreditMemoInfoReader
     oro_magento.reader.context_cart.order.class:                             Oro\Bundle\MagentoBundle\Provider\Reader\ContextCartReader
     oro_magento.importexport.reader.entity.class:                            Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader
 
@@ -242,6 +244,15 @@ services:
         tags:
             - { name: oro_integration.connector, type: credit_memo, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.credit_memo_connector_initial:
+        class: %oro_magento.mage.credit_memo_connector_initial.class%
+        parent: oro_magento.mage.order_connector
+        calls:
+            - [setClassName, [%oro_magento.credit_memo.entity.class%]]
+#        tags:
+#            - { name: oro_integration.connector, type: credit_memo_initial, channel_type: magento }
+#            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.region_connector:
         class: %oro_magento.mage.region_connector.class%
@@ -681,6 +692,15 @@ services:
 
     oro_magento.reader.customer_info:
         class: %oro_magento.reader.customer_info.class%
+        arguments:
+            - "@oro_importexport.context_registry"
+            - "@oro_integration.logger.strategy"
+            - "@oro_integration.provider.connector_context_mediator"
+        calls:
+            - [setContextKey, ['postProcessCustomerIds']]
+
+    oro_magento.reader.credit_memo_info:
+        class: %oro_magento.reader.credit_memo_info.class%
         arguments:
             - "@oro_importexport.context_registry"
             - "@oro_integration.logger.strategy"

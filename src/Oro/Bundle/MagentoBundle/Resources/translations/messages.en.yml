@@ -143,6 +143,7 @@ oro:
                 initial.label: Initial Order connector
             credit_memo:
                 label: Credit Memo connector
+                initial.label: Initial Credit Memo connector
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector

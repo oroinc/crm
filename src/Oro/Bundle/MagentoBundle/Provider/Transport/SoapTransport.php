@@ -12,6 +12,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
@@ -50,6 +51,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_STORE_LIST = 'storeList';
     const ACTION_ORDER_LIST = 'salesOrderList';
     const ACTION_ORDER_INFO = 'salesOrderInfo';
+    const ACTION_CREDIT_MEMO_LIST = 'salesOrderCreditmemoList';
+    const ACTION_CREDIT_MEMO_INFO = 'salesOrderCreditmemoInfo';
     const ACTION_CART_INFO = 'shoppingCartInfo';
     const ACTION_COUNTRY_LIST = 'directoryCountryList';
     const ACTION_REGION_LIST = 'directoryRegionList';
@@ -393,6 +396,24 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         return $this->call($endpoint, ['orderIncrementId' => $incrementId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreditMemos()
+    {
+        $settings = $this->settings->all();
+
+        return new CreditMemoSoapIterator($this, $settings);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreditMemoInfo($incrementId)
+    {
+        return $this->call(self::ACTION_CREDIT_MEMO_INFO, ['incrementId' => $incrementId]);
     }
 
     /**
