@@ -1974,6 +1974,26 @@ datagrids:
                 updatedAt:              { data_name: c.updatedAt }
             default:
                 createdAt:  DESC
+        actions:
+            view:
+                type:         navigate
+                label:        oro.grid.action.view
+                link:         view_link
+                icon:         eye
+                acl_resource: oro_magento_credit_memo_view
+                rowAction:    true
+        options:
+            entityHint: credit memo
+
+    magento-credit-memo-order-info-mixin:
+        columns:
+            orderNumber:
+                label:            oro.magento.datagrid.columns.increment_id
+            orderCreatedAt:
+                label:            oro.magento.datagrid.columns.orderCreatedAt
+                frontend_type:    datetime
+
+    magento-credit-memo-filters-mixin:
         filters:
             columns:
                 createdAt:
@@ -1992,40 +2012,12 @@ datagrids:
                 incrementId:
                     type:             string
                     data_name:        c.incrementId
-        actions:
-            view:
-                type:         navigate
-                label:        oro.grid.action.view
-                link:         view_link
-                icon:         eye
-                acl_resource: oro_magento_credit_memo_view
-                rowAction:    true
-        options:
-            entityHint: credit memo
-            export: true
-            entity_pagination: true
-
-    magento-credit-memo-order-info-mixin:
-        columns:
-            orderNumber:
-                label:            oro.magento.datagrid.columns.increment_id
-            orderCreatedAt:
-                label:            oro.magento.datagrid.columns.orderCreatedAt
-                frontend_type:    datetime
-        filters:
-            columns:
-                orderCreatedAt:
-                    type:             datetime
-                    data_name:        o.createdAt
-                    enabled:          false
-                orderNumber:
-                    type:             string
-                    data_name:        o.incrementId
 
     magento-credit-memo-grid:
         extends:  magento-credit-memo-grid-base
         mixins:
             - magento-credit-memo-order-info-mixin
+            - magento-credit-memo-filters-mixin
         source:
             query:
                 select:
@@ -2037,8 +2029,25 @@ datagrids:
         columns:
             billToName:
                 label:            oro.magento.datagrid.columns.billing_name
+        options:
+            export: true
+            entity_pagination: true
 
     magento-customer-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
+            - magento-credit-memo-filters-mixin
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId AND o.channel = :channelId
+            bind_parameters:
+                - customerId
+                - channelId
+
+    magento-account-customer-credit-memo-widget-grid:
         extends:  magento-credit-memo-grid-base
         mixins:
             - magento-credit-memo-order-info-mixin

@@ -189,10 +189,11 @@ class CustomerController extends Controller
     public function customerInfoAction(Customer $customer, Channel $channel)
     {
         return [
-            'customer'       => $customer,
-            'channel'        => $channel,
-            'orderClassName' => $this->container->getParameter('oro_magento.entity.order.class'),
-            'cartClassName'  => $this->container->getParameter('oro_magento.entity.cart.class'),
+            'customer'            => $customer,
+            'channel'             => $channel,
+            'orderClassName'      => $this->container->getParameter('oro_magento.entity.order.class'),
+            'cartClassName'       => $this->container->getParameter('oro_magento.entity.cart.class'),
+            'creditMemoClassName' => $this->container->getParameter('oro_magento.entity.credit_memo.class')
         ];
     }
 

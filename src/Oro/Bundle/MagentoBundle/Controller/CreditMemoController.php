@@ -76,6 +76,25 @@ class CreditMemoController extends Controller
 
     /**
      * @Route(
+     *        "/account-widget/customer_credit_memo/{customerId}/{channelId}",
+     *         name="oro_magento_widget_customer_credit_memo",
+     *         requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_credit_memo_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id" = "customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerCreditMemosAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
      *        "/widget/customer_credit_memo/{customerId}/{channelId}",
      *         name="oro_magento_customer_credit_memo_widget",
      *         requirements={"customerId"="\d+", "channelId"="\d+"}
