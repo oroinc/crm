@@ -91,7 +91,7 @@ class LeadPhoneController extends RestController implements ClassResourceInterfa
     /**
      * {@inheritdoc}
      */
-    public function getDeleteHandler()
+    protected function getDeleteHandler()
     {
         return $this->get('oro_sales.form.type.lead_phone.handler');
     }
