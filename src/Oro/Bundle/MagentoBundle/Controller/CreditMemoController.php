@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -90,5 +91,22 @@ class CreditMemoController extends Controller
     public function customerCreditMemosWidgetAction(Customer $customer, Channel $channel)
     {
         return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
+     *        "/widget/order_credit_memo/{orderId}",
+     *         name="oro_magento_order_credit_memo_widget",
+     *         requirements={"orderId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_credit_memo_view")
+     * @ParamConverter("order", class="OroMagentoBundle:Order", options={"id" = "orderId"})
+     * @Template
+     * @param Order $order
+     * @return array
+     */
+    public function orderCreditMemosWidgetAction($order)
+    {
+        return ['order' => $order];
     }
 }

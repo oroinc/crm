@@ -1954,11 +1954,6 @@ datagrids:
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
-            orderNumber:
-                label:            oro.magento.datagrid.columns.increment_id
-            orderCreatedAt:
-                label:            oro.magento.datagrid.columns.orderCreatedAt
-                frontend_type:    datetime
             status:
                 label:            oro.magento.creditmemo.status.label
             refunded:
@@ -1988,10 +1983,6 @@ datagrids:
                     type:             datetime
                     data_name:        c.updatedAt
                     enabled:          false
-                orderCreatedAt:
-                    type:             datetime
-                    data_name:        o.createdAt
-                    enabled:          false
                 refunded:
                     type: currency
                     data_name: c.grandTotal
@@ -2001,9 +1992,6 @@ datagrids:
                 incrementId:
                     type:             string
                     data_name:        c.incrementId
-                orderNumber:
-                    type:             string
-                    data_name:        o.incrementId
         actions:
             view:
                 type:         navigate
@@ -2017,8 +2005,27 @@ datagrids:
             export: true
             entity_pagination: true
 
+    magento-credit-memo-order-info-mixin:
+        columns:
+            orderNumber:
+                label:            oro.magento.datagrid.columns.increment_id
+            orderCreatedAt:
+                label:            oro.magento.datagrid.columns.orderCreatedAt
+                frontend_type:    datetime
+        filters:
+            columns:
+                orderCreatedAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                    enabled:          false
+                orderNumber:
+                    type:             string
+                    data_name:        o.incrementId
+
     magento-credit-memo-grid:
         extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
         source:
             query:
                 select:
@@ -2033,6 +2040,8 @@ datagrids:
 
     magento-customer-credit-memo-widget-grid:
         extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
         source:
             query:
                 where:
@@ -2042,6 +2051,15 @@ datagrids:
                 - customerId
                 - channelId
 
+    magento-order-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        source:
+            query:
+                where:
+                    and:
+                        - c.order = :orderId
+            bind_parameters:
+                - orderId
 
     magento-credit-memo-item-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem
