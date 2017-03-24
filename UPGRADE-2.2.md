@@ -20,3 +20,7 @@ SalesBundle
         - `ManagerInterface` $gridManager
         - `EntityNameResolver` $entityNameResolver
         - `MultiGridProvider` $multiGridProvider
+
+MagentoBundle
+-----------
+- Classes `Oro\Bundle\MagentoBundle\Form\Extension\CustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\Form\Extension\OpportunityCustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\EventListener\Customer\CustomerAssociationListener` were removed. They are no longer used.
