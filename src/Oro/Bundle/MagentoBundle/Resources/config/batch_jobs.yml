@@ -207,21 +207,21 @@ connector:
                     class:      Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    oro_magento.mage.credit_memo_connector
-                        processor: oro_importexport.processor.import_delegate
+                        processor: oro_magento.importexport.processor.import_credit_memo
                         writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
                         context_shared_keys: postProcessCreditMemoIds
-                import_credit_memo_info:
-                    title:      import
-                    class:      Oro\Bundle\BatchBundle\Step\ItemStep
-                    services:
-                        reader:    oro_magento.reader.credit_memo_info
-                        processor: oro_importexport.processor.import_delegate
-                        writer:    oro_magento.writer.proxy_entity_writer
-                    parameters:
-                        batch_size: 25
+#                import_credit_memo_info:
+#                    title:      import
+#                    class:      Oro\Bundle\BatchBundle\Step\ItemStep
+#                    services:
+#                        reader:    oro_magento.reader.credit_memo_info
+#                        processor: oro_magento.importexport.processor.import_credit_memo
+#                        writer:    oro_magento.writer.proxy_entity_writer
+#                    parameters:
+#                        batch_size: 25
 
         mage_cart_import:
             title: "Cart(quote) import from Magento"

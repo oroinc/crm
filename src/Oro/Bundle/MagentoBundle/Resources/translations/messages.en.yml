@@ -989,7 +989,7 @@ oro:
             origin_id.label:                      Credit memo ID
             organization.label:                   Organization
             owner.label:                          Owner
-            items.label:                          Credit Memo items
+            items.label:                          Credit Memo Items
 
         creditmemoitem:
             entity_label:                           Magento Credit Memo Item

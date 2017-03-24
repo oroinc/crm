@@ -20,6 +20,7 @@ parameters:
     oro_magento.importexport.data_converter.store.class:                     Oro\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
     oro_magento.importexport.data_converter.customer_group.class:            Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerGroupDataConverter
     oro_magento.importexport.data_converter.newsletter_subscriber.class:     Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter
+    oro_magento.importexport.data_converter.credit_memo.class:               Oro\Bundle\MagentoBundle\ImportExport\Converter\CreditMemoDataConverter
 
     # connectors
     oro_magento.mage.abstract.class:                                         Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector
@@ -60,6 +61,7 @@ parameters:
     oro_magento.import.strategy.customer_address.add_or_update.class:        Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
     oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy
     oro_magento.import_strategy.default_magento_import.class:                Oro\Bundle\MagentoBundle\ImportExport\Strategy\DefaultMagentoImportStrategy
+    oro_magento.import_strategy.credit_memo.add_or_update.class:             Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy
 
     # processors
     oro_magento.provider.initial_processor.class:                            Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -143,6 +145,9 @@ services:
 
     oro_magento.importexport.data_converter.guest_customer:
         class: %oro_magento.importexport.data_converter.guest_customer.class%
+
+    oro_magento.importexport.data_converter.credit_memo:
+        class: %oro_magento.importexport.data_converter.credit_memo.class%
 
     # Connectors
     oro_magento.connector.abstract:
@@ -306,6 +311,14 @@ services:
         tags:
             - { name: oro_importexport.normalizer, priority: -200 }
 
+    oro_magento.importexport.denormalizer.credit_memo:
+        class: %oro_magento.importexport.normalizer.payment_details.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        calls:
+            - [setSupportedClass, [%oro_magento.credit_memo.entity.class%]]
+        tags:
+            - { name: oro_importexport.normalizer }
+
     # Strategies
     oro_magento.import_strategy.default_magento_import:
         class: %oro_magento.import_strategy.default_magento_import.class%
@@ -375,6 +388,10 @@ services:
 
     oro_magento.import.strategy.customer_address.add_or_update:
         class: %oro_magento.import.strategy.customer_address.add_or_update.class%
+        parent: oro_magento.import.strategy.abstract
+
+    oro_magento.import.strategy.credit_memo.add_or_update:
+        class: %oro_magento.import_strategy.credit_memo.add_or_update.class%
         parent: oro_magento.import.strategy.abstract
 
     # Processors
@@ -549,6 +566,15 @@ services:
             - [setEntityName, [%oro_magento.entity.customer_group.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.customer_group.class%, alias: oro_magento.customer_group }
+
+    oro_magento.importexport.processor.import_credit_memo:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.credit_memo"]]
+            - [setStrategy, ["@oro_magento.import.strategy.credit_memo.add_or_update"]]
+            - [setEntityName, [%oro_magento.credit_memo.entity.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.credit_memo.entity.class%, alias: oro_magento.add_or_update_credit_memo }
 
     # Export processor
     oro_magento.importexport.processor.customer_export:
