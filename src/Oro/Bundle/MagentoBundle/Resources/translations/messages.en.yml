@@ -120,7 +120,6 @@ oro:
                 discount_amount: Discount amount
                 discount_percent: Discount percent
                 coupon_code: Coupon code
-                refunded:   Refunded
                 orderCreatedAt: Order Date
         channel_type:
             label:  Magento
@@ -979,8 +978,8 @@ oro:
             adjustment.label:                     Adjustment
             subtotal.label:                       Subtotal
             adjustment_negative.label:            Adjustment fee amount
-            shipping_amount.label:                Shipping amount
-            grand_total.label:                    Grand total
+            shipping_amount.label:                Refunded shipping amount
+            grand_total.label:                    Refunded
             adjustment_positive.label:            Adjustment refund amount
             store.label:                          Store
             customer_bal_total_refunded.label:    Customer balance total refunded

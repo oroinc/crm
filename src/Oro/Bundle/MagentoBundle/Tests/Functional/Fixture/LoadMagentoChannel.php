@@ -25,6 +25,8 @@ use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
@@ -117,10 +119,13 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $order = $this->createOrder($cart, $customer);
 
+        $creditMemo = $this->createCreditMemo($order);
+
         $this->setReference('customer', $customer);
         $this->setReference('integration', $this->integration);
         $this->setReference('cart', $cart);
         $this->setReference('order', $order);
+        $this->setReference('creditMemo', $creditMemo);
 
         $baseOrderItem = $this->createBaseOrderItem($order);
         $order->setItems([$baseOrderItem]);
@@ -663,6 +668,55 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $this->em->persist($orderItem);
 
         return $orderItem;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return CreditMemo
+     */
+    protected function createCreditMemo(Order $order)
+    {
+        $creditMemo = new CreditMemo();
+        $creditMemo->setChannel($this->integration);
+        $creditMemo->setDataChannel($this->channel);
+        $creditMemo->setStatus('refunded');
+        $creditMemo->setOrder($order);
+        $creditMemo->setIncrementId('100000307');
+        $creditMemo->setCreatedAt(new \DateTime('now'));
+        $creditMemo->setUpdatedAt(new \DateTime('now'));
+        $creditMemo->setStore($this->store);
+        $creditMemo->setShippingAmount(5);
+        $creditMemo->setGrandTotal(120.50);
+        $creditMemo->setOwner($this->getUser());
+        $creditMemo->setOrganization($this->organization);
+        $creditMemoItem = $this->createCreditMemoItem($creditMemo);
+        $creditMemo->addItem($creditMemoItem);
+
+        $this->em->persist($creditMemo);
+
+        return $creditMemo;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     * @return CreditMemoItem
+     */
+    protected function createCreditMemoItem(CreditMemo $creditMemo)
+    {
+        $item = new CreditMemoItem();
+        $item->setChannel($creditMemo->getChannel());
+        $item->setOriginId('15263');
+        $item->setQty(2);
+        $item->setSku('some sku');
+        $item->setName('some name');
+        $item->setOwner($creditMemo->getOrganization());
+        $item->setPrice(12.12);
+        $item->setRowTotal(400.44);
+
+        $this->em->persist($item);
+
+        return $item;
     }
 
     /**

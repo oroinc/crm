@@ -1948,20 +1948,25 @@ datagrids:
         columns:
             incrementId:
                 label:            oro.magento.creditmemo.increment_id.label
+                order: 30
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
+                order: 40
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
+                order: 50
             status:
                 label:            oro.magento.creditmemo.status.label
+                order: 60
             refunded:
-                label:  oro.magento.datagrid.columns.refunded
+                label:  oro.magento.creditmemo.grand_total.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align: right
+                order: 70
         properties:
             id: ~
             view_link:
@@ -1989,9 +1994,11 @@ datagrids:
         columns:
             orderNumber:
                 label:            oro.magento.datagrid.columns.increment_id
+                order: 65
             orderCreatedAt:
                 label:            oro.magento.datagrid.columns.orderCreatedAt
                 frontend_type:    datetime
+                order: 66
 
     magento-credit-memo-filters-mixin:
         filters:
@@ -2022,13 +2029,44 @@ datagrids:
             query:
                 select:
                     - CONCAT(address.firstName, ' ', address.lastName) as billToName
+                    - channel.name as channelName
+                    - cw.name as websiteName
                 join:
                     left:
                         - { join: o.addresses, alias: address }
                         - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
+                        - { join: o.dataChannel, alias: channel }
+                        - { join: o.store, alias: cs }
+                        - { join: cs.website, alias: cw }
         columns:
+            channelName:
+                label: oro.magento.creditmemo.data_channel.label
+                order: 10
+            websiteName:
+                label: oro.magento.order.website.label
+                order: 20
             billToName:
-                label:            oro.magento.datagrid.columns.billing_name
+                label: oro.magento.datagrid.columns.billing_name
+                order: 35
+        filters:
+            columns:
+                channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                websiteName:
+                    type: entity
+                    data_name: cw.id
+                    options:
+                        field_options:
+                            class: OroMagentoBundle:Website
+                            property: name
+                            translatable_options: false
+                    enabled:   false
         options:
             export: true
             entity_pagination: true
