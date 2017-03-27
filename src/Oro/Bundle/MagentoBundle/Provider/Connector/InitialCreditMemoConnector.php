@@ -1,25 +1,18 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-class CreditMemoConnector extends AbstractMagentoConnector
+use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\CreditMemoConnector;
+
+class InitialCreditMemoConnector extends AbstractMagentoConnector implements InitialConnectorInterface
 {
-    const IMPORT_JOB_NAME = 'mage_credit_memo_import';
-
     /**
      * {@inheritdoc}
      */
     public function getLabel()
     {
-        return 'oro.magento.connector.credit_memo.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::CREDIT_MEMO_TYPE;
+        return 'oro.magento.connector.credit_memo.initial.label';
     }
 
     /**
@@ -27,7 +20,7 @@ class CreditMemoConnector extends AbstractMagentoConnector
      */
     public function getImportJobName()
     {
-        return self::IMPORT_JOB_NAME;
+        return CreditMemoConnector::IMPORT_JOB_NAME;
     }
 
     /**
@@ -35,7 +28,7 @@ class CreditMemoConnector extends AbstractMagentoConnector
      */
     public function getType()
     {
-        return 'credit_memo';
+        return 'credit_memo_initial';
     }
 
     /**

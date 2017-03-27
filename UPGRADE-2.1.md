@@ -61,6 +61,11 @@ ContactBundle
 - Class `Oro\Bundle\ContactBundle\Twig\SocialUrlExtension` was renamed to `Oro\Bundle\ContactBundle\Twig\ContactExtension` and the following changes were made:
     - the construction signature of was changed. Now the constructor has only `ContainerInterface $container` parameter
     - removed property `protected $socialUrlFormatter`
+    
+MagentoBundle
+-------------
+- `OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface` was updated. Added `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.
+- `OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport` updated according to `OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface` changes.
 
 SalesBundle
 ---------
@@ -118,4 +123,3 @@ SalesBundle
         - `AccountCustomerManager` $accountCustomerManager
 - `opportunity` and `lead` apis changed
     - `customerAssociation` relation replaced by `customer` and `account` relations
-

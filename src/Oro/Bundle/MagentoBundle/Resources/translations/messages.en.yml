@@ -142,6 +142,7 @@ oro:
                 initial.label: Initial Order connector
             credit_memo:
                 label: Credit Memo connector
+                initial.label: Initial Credit Memo connector
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
@@ -987,7 +988,7 @@ oro:
             origin_id.label:                      Credit memo ID
             organization.label:                   Organization
             owner.label:                          Owner
-            items.label:                          Credit Memo items
+            items.label:                          Credit Memo Items
 
         creditmemoitem:
             entity_label:                           Magento Credit Memo Item

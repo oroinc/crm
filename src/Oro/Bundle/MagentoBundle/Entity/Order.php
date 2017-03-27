@@ -65,12 +65,13 @@ class Order extends ExtendOrder implements
     ChannelAwareInterface,
     FirstNameInterface,
     LastNameInterface,
-    IntegrationAwareInterface
+    IntegrationAwareInterface,
+    OriginAwareInterface
 {
     const STATUS_CANCELED  = 'canceled';
     const STATUS_COMPLETED = 'completed';
 
-    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait, OriginTrait; //@todo migration for origin_id.
 
     /**
      * @var string
