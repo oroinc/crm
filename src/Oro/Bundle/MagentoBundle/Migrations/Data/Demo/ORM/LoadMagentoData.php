@@ -552,6 +552,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $memo->setOrganization($order->getOrganization());
         $memo->setCreatedAt(new \DateTime('now'));
         $memo->setUpdatedAt(new \DateTime('now'));
+        $memo->setSubtotal($order->getTotalAmount());
         $memo->setGrandTotal($order->getTotalAmount());
         $om->persist($memo);
 

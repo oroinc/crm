@@ -1975,8 +1975,9 @@ datagrids:
                 params: [ id ]
         sorters:
             columns:
-                createdAt:              { data_name: c.createdAt }
-                updatedAt:              { data_name: c.updatedAt }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+                incrementId: { data_name: c.incrementId }
             default:
                 createdAt:  DESC
         actions:
@@ -2028,13 +2029,12 @@ datagrids:
         source:
             query:
                 select:
-                    - CONCAT(address.firstName, ' ', address.lastName) as billToName
+                    - o.firstName
+                    - o.lastName
                     - channel.name as channelName
                     - cw.name as websiteName
                 join:
                     left:
-                        - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: address_type, conditionType: WITH, condition: "address_type.name = 'billing'" }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
@@ -2045,9 +2045,12 @@ datagrids:
             websiteName:
                 label: oro.magento.order.website.label
                 order: 20
-            billToName:
-                label: oro.magento.datagrid.columns.billing_name
+            firstName:
+                label: oro.magento.datagrid.columns.first_name
                 order: 35
+            lastName:
+                label: oro.magento.datagrid.columns.last_name
+                order: 36
         filters:
             columns:
                 channelName:
@@ -2067,6 +2070,12 @@ datagrids:
                             property: name
                             translatable_options: false
                     enabled:   false
+                firstName:
+                    type:             string
+                    data_name:        o.firstName
+                lastName:
+                    type:             string
+                    data_name:        o.lastName
         options:
             export: true
             entity_pagination: true

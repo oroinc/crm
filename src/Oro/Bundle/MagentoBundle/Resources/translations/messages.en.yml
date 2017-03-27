@@ -106,7 +106,6 @@ oro:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
-                billing_name:     Billing Name
                 customer_is_guest:
                     label: Is Guest
                 order_is_guest:
@@ -973,7 +972,7 @@ oro:
             transaction_id.label:                 "Transaction #"
             invoice_id.label:                     Invoice Id
             state.label:                          State
-            status.label:                         Credit memo status
+            status.label:                         Status
             email_sent.label:                     Email Sent
             order.label:                          Order
             adjustment.label:                     Adjustment
