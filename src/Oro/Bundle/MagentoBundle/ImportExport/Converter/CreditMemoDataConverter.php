@@ -16,7 +16,7 @@ class CreditMemoDataConverter extends AbstractTreeDataConverter
             'increment_id' => 'incrementId',
             'order_id' => 'order:originId',
             'store_id' => 'store:originId',
-            'creditmemo_status' => 'status',
+            'state' => 'status',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
             'invoice_id' => 'invoiceId',

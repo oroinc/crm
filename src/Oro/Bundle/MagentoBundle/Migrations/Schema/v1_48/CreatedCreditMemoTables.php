@@ -8,19 +8,27 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class CreatedCreditMemoTables implements
     Migration,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    ExtendExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
+
+     /** @var ExtendExtension */
+    protected $extendExtension;
 
     /**
      * {@inheritdoc}
@@ -36,6 +44,14 @@ class CreatedCreditMemoTables implements
     public function setActivityListExtension(ActivityListExtension $activityListExtension)
     {
         $this->activityListExtension = $activityListExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
     }
 
     /**
@@ -68,9 +84,7 @@ class CreatedCreditMemoTables implements
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('status', 'string', ['length' => 32, 'notnull' => false]);
         $table->addColumn('is_email_sent', 'boolean', ['notnull' => false]);
-        $table->addColumn('state', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn(
             'shipping_amount',
             'money',
@@ -115,6 +129,19 @@ class CreatedCreditMemoTables implements
         $table->addColumn('synced_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
+
+        $this->extendExtension->addEnumField(
+            $schema,
+            'orocrm_magento_credit_memo',
+            'status',
+            'creditmemo_status',
+            false,
+            true,
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+            ]
+        );
 
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_mcm_increment_id_channel_id');

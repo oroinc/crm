@@ -2,6 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Model;
 
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+
+/**
+ * @method AbstractEnumValue       getStatus()
+ * @method ExtendCreditMemo setStatus(AbstractEnumValue $enumValue)
+ */
 class ExtendCreditMemo
 {
     /**

@@ -18,6 +18,7 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
@@ -541,10 +542,13 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     protected function generateCreditMemo(ObjectManager $om, Order $order, $origin)
     {
+        $className = ExtendHelper::buildEnumValueClassName(CreditMemo::STATUS_ENUM_CODE);
+        $status = $om->getRepository($className)->find(CreditMemo::STATUS_REFUNDED);
         $memo = new CreditMemo();
         $memo->setChannel($order->getChannel());
         $memo->setDataChannel($order->getDataChannel());
         $memo->setOrder($order);
+        $memo->setStatus($status);
         $memo->setIncrementId(++$origin);
         $memo->setOriginId($origin);
         $memo->setStore($order->getStore());

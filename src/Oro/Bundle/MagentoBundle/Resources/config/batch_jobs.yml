@@ -127,7 +127,7 @@ connector:
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
-                        post_processing_jobs: mage_order_import_post_process_customers_and_info,mage_credit_memo_import
+                        post_processing_jobs: mage_order_import_post_process_customers_and_info
                         context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
 
         mage_order_import_post_process_customers_and_info:

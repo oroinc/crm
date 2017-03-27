@@ -47,7 +47,6 @@ class CreditMemoControllerTest extends AbstractController
                     'asserts' => [
                         [
                             'channelName' => 'Magento channel',
-                            'status'      => 'refunded',
                             'refunded'    => '$120.50',
                         ],
                     ],
@@ -64,7 +63,6 @@ class CreditMemoControllerTest extends AbstractController
                     ],
                     'assert'              => [
                          'channelName' => 'Magento channel',
-                         'status'      => 'refunded',
                          'refunded'    => '$120.50',
                     ],
                     'expectedResultCount' => 1

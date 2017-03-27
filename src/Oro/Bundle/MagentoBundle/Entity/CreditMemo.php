@@ -55,6 +55,13 @@ class CreditMemo extends ExtendCreditMemo implements
 {
     use IntegrationEntityTrait, ChannelEntityTrait, OriginTrait;
 
+    const STATUS_ENUM_CODE = 'creditmemo_status';
+
+    /** constant for enum creditmemo_type */
+    const STATUS_OPEN      = 1;
+    const STATUS_REFUNDED  = 2;
+    const STATUS_CANCELED  = 3;
+
     /**
      * @var int
      *
@@ -145,25 +152,11 @@ class CreditMemo extends ExtendCreditMemo implements
     protected $organization;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="status", type="string", length=32, nullable=true)
-     */
-    protected $status;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="is_email_sent", type="boolean", nullable=true)
      */
     protected $emailSent;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="state", type="string", length=255, nullable=true)
-     */
-    protected $state;
 
     /**
      * @var float
@@ -425,26 +418,6 @@ class CreditMemo extends ExtendCreditMemo implements
     }
 
     /**
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param string $status
-     *
-     * @return $this
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isEmailSent()
@@ -509,26 +482,6 @@ class CreditMemo extends ExtendCreditMemo implements
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param string $state
-     *
-     * @return $this
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
 
         return $this;
     }

@@ -1938,7 +1938,6 @@ datagrids:
                     - c.incrementId
                     - o.incrementId as orderNumber
                     - o.createdAt as orderCreatedAt
-                    - c.status
                     - c.grandTotal as refunded
                 from:
                     - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
@@ -1957,9 +1956,6 @@ datagrids:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
                 order: 50
-            status:
-                label:            oro.magento.creditmemo.status.label
-                order: 60
             refunded:
                 label:  oro.magento.creditmemo.grand_total.label
                 type:   localized_number
@@ -2014,9 +2010,6 @@ datagrids:
                 refunded:
                     type: currency
                     data_name: c.grandTotal
-                status:
-                    type:             string
-                    data_name:        c.status
                 incrementId:
                     type:             string
                     data_name:        c.incrementId

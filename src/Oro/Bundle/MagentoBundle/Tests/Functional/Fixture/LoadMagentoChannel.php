@@ -18,6 +18,7 @@ use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
@@ -680,7 +681,11 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $creditMemo = new CreditMemo();
         $creditMemo->setChannel($this->integration);
         $creditMemo->setDataChannel($this->channel);
-        $creditMemo->setStatus('refunded');
+
+        $className = ExtendHelper::buildEnumValueClassName(CreditMemo::STATUS_ENUM_CODE);
+        $status = $this->em->getRepository($className)->find(CreditMemo::STATUS_REFUNDED);
+        $creditMemo->setStatus($status);
+
         $creditMemo->setOrder($order);
         $creditMemo->setIncrementId('100000307');
         $creditMemo->setCreatedAt(new \DateTime('now'));
