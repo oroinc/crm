@@ -215,6 +215,7 @@ class OroMagentoBundleInstaller implements
     {
         $table = $schema->createTable('orocrm_magento_order');
         $table->addColumn('id', 'integer', ['precision' => 0, 'autoincrement' => true]);
+        $table->addColumn('origin_id', 'integer', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
@@ -299,6 +300,7 @@ class OroMagentoBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['created_at', 'id'], 'mageorder_created_idx', []);
         $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_increment_id_channel_id');
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_origin_id_channel_id');
     }
 
     
@@ -1436,7 +1438,7 @@ class OroMagentoBundleInstaller implements
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'SET NULL']
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_store'),

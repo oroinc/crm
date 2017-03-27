@@ -156,7 +156,7 @@ class CreatedCreditMemoTables implements
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'SET NULL']
+            ['onDelete' => 'CASCADE']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_store'),

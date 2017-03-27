@@ -96,7 +96,7 @@ class CreditMemo extends ExtendCreditMemo implements
      * @var Order
      *
      * @ORM\ManyToOne(targetEntity="Order", inversedBy="creditMemos", cascade={"persist"})
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $order;
 
