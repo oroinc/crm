@@ -13,7 +13,6 @@ class OrderDataConverter extends AbstractTreeDataConverter
     {
         return [
             'increment_id'        => 'incrementId',
-            'order_id'            => 'originId',
             'store_id'            => 'store:originId',
             'customer_id'         => 'customer:originId',
             'is_virtual'          => 'isVirtual',

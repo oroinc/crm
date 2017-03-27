@@ -80,22 +80,28 @@ search:
                 name:                   incrementId
                 target_type:            text
                 target_fields:          [incrementId]
+
             -
-                name:                   grandTotal
-                target_type:            decimal
-                target_fields:          [grandTotal]
-            -
-                name:                   subtotal
-                target_type:            decimal
-                target_fields:          [subtotal]
-            -
-                name:                  dataChannel
-                relation_type:         many-to-one
+                name:                   dataChannel
+                relation_type:          many-to-one
                 relation_fields:
                     -
                         name:          id
                         target_type:   integer
                         target_fields: [dataChannelId]
+            -
+                name:                   order
+                relation_type:          many-to-one
+                relation_fields:
+                    -
+                        name:                   firstName
+                        target_type:            text
+                        target_fields:          [firstName]
+                    -
+                        name:                   lastName
+                        target_type:            text
+                        target_fields:          [lastName]
+
 
     Oro\Bundle\MagentoBundle\Entity\Cart:
         alias:                          oro_magento_cart
