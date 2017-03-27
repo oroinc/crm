@@ -14,16 +14,16 @@
         "exclude-from-classmap": ["/Tests/"]
     },
     "require": {
-        "php": ">=5.6",
-        "oro/platform": "1.x-dev",
-        "oro/crm-task-bundle": "1.x-dev",
-        "oro/crm-call-bundle": "1.x-dev",
-        "oro/calendar-bundle": "1.x-dev",
-        "oro/marketing": "1.x-dev"
+        "php": ">=7.0",
+        "oro/platform": "2.x-dev",
+        "oro/crm-task-bundle": "2.x-dev",
+        "oro/crm-call-bundle": "2.x-dev",
+        "oro/calendar-bundle": "2.x-dev",
+        "oro/marketing": "2.x-dev"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-master": "2.x-dev"
         }
     }
 }
