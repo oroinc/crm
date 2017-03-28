@@ -1,6 +1,26 @@
 UPGRADE FROM 2.1 to 2.2
 ========================
 
+MagentoBundle
+-------------
+- Class `Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor`
+    - construction signature was changed now it takes next arguments:
+        - `DoctrineHelper` $doctrineHelper,
+        - `InitialSyncProcessor` $initialSyncProcessor,
+        - `OptionalListenerManager` $optionalListenerManager,
+        - `CalculateAnalyticsScheduler` $calculateAnalyticsScheduler,
+        - `JobRunner` $jobRunner,
+        - `IndexerInterface` $indexer,
+        - `TokenStorageInterface` $tokenStorage,
+        - `LoggerInterface` $logger
+- Class `Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor`
+    - construction signature was changed now it takes next arguments:
+        `RegistryInterface` $doctrine,
+        `CartExpirationProcessor` $cartExpirationProcessor,
+        `JobRunner` $jobRunner,
+        `TokenStorageInterface` $tokenStorage,
+        `LoggerInterface` $logger
+
 SalesBundle
 -----------
 - Class `Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider`
