@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Customer\AssociationChecker;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 
 /**
- * @TODO This listener should be removed after CRM-7178 will be fixed
+ * @deprecated since 2.0. This class will not be used.
  */
 class CustomerAssociationListener
 {

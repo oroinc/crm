@@ -134,8 +134,6 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
             // Disable search listeners to increase the performance
-            // Disable Customer Association Listener due to incorrect behaviour of the import functionality
-            // @TODO should be removed after CRM-7178 will be fixed
             $this->disableOptionalListeners();
 
             $result = $this->initialSyncProcessor->process(
@@ -168,7 +166,6 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $disabledOptionalListeners = [
             'oro_search.index_listener',
             'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            'oro_sales.customers.customer_association_listener'
         ];
 
         $knownListeners  = $this->optionalListenerManager->getListeners();

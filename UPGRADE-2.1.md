@@ -135,3 +135,8 @@ CRMBundle
 - Updated service definition for `oro_crm.extension.transtation_packages_provider`
     - changed class to `Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension`
     - changed publicity to `false`
+
+MagentoBundle
+-------------
+
+- Classes `Oro\Bundle\MagentoBundle\Form\Extension\CustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\Form\Extension\OpportunityCustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\EventListener\Customer\CustomerAssociationListener` were deprecated. They are no longer used.
