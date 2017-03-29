@@ -16,7 +16,7 @@ class CreditMemoDataConverter extends AbstractTreeDataConverter
             'increment_id' => 'incrementId',
             'order_id' => 'order:originId',
             'store_id' => 'store:originId',
-            'state' => 'status',
+            'state' => 'status:id',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
             'invoice_id' => 'invoiceId',
@@ -29,6 +29,22 @@ class CreditMemoDataConverter extends AbstractTreeDataConverter
             'customer_bal_total_refunded' => 'customerBalTotalRefunded',
             'reward_points_balance_refund' => 'rewardPointsBalanceRefund',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        if ($this->context && $this->context->hasOption('channel')) {
+            $importedRecord['store:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['order:channel:id'] = $this->context->getOption('channel');
+        }
+
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+
+        return $importedRecord;
     }
 
     /**

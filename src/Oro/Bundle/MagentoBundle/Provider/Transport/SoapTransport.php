@@ -413,7 +413,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCreditMemoInfo($incrementId)
     {
-        return $this->call(self::ACTION_CREDIT_MEMO_INFO, ['incrementId' => $incrementId]);
+        return $this->call(self::ACTION_CREDIT_MEMO_INFO, ['creditmemoIncrementId' => $incrementId]);
     }
 
     /**

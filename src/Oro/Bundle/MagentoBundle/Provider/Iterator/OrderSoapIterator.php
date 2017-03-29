@@ -44,6 +44,15 @@ class OrderSoapIterator extends AbstractPageableSoapIterator implements Predefin
         }
         $filters = $this->getBatchFilter($this->lastSyncDate, [], $stores);
 
+        return $this->loadByFilters($filters);
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_ORDER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
@@ -80,7 +89,9 @@ class OrderSoapIterator extends AbstractPageableSoapIterator implements Predefin
      */
     protected function getEntity($id)
     {
-        $id = $id->{$this->getIdFieldName()};
+        if (is_object($id)) {
+            $id = $id->{$this->getIdFieldName()};
+        }
 
         if (!array_key_exists($id, $this->entityBuffer)) {
             $this->logger->warning(sprintf('Entity with id "%s" was not found', $id));
@@ -91,6 +102,34 @@ class OrderSoapIterator extends AbstractPageableSoapIterator implements Predefin
         $result = $this->entityBuffer[$id];
 
         return ConverterUtils::objectToArray($result);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $filters->addWebsiteFilter([$this->websiteId]);
+        }
+
+        $this->loadByFilters($filters->getAppliedFilters());
     }
 
     /**

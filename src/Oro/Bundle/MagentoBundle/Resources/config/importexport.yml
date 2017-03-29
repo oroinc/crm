@@ -20,7 +20,6 @@ parameters:
     oro_magento.importexport.data_converter.store.class:                     Oro\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
     oro_magento.importexport.data_converter.customer_group.class:            Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerGroupDataConverter
     oro_magento.importexport.data_converter.newsletter_subscriber.class:     Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter
-    oro_magento.importexport.data_converter.credit_memo.class:               Oro\Bundle\MagentoBundle\ImportExport\Converter\CreditMemoDataConverter
 
     # connectors
     oro_magento.mage.abstract.class:                                         Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector
@@ -33,7 +32,6 @@ parameters:
     oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\CartConnector
     oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\OrderConnector
     oro_magento.mage.credit_memo_connector.class:                            Oro\Bundle\MagentoBundle\Provider\CreditMemoConnector
-    oro_magento.mage.credit_memo_connector_initial.class:                    Oro\Bundle\MagentoBundle\Provider\Connector\InitialCreditMemoConnector
     oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector
 
     oro_magento.mage.order_connector_initial.class:                          Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
@@ -82,7 +80,6 @@ parameters:
     oro_magento.reader.context.class:                                        Oro\Bundle\MagentoBundle\Provider\Reader\ContextReader
     oro_magento.reader.order_info.class:                                     Oro\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
     oro_magento.reader.customer_info.class:                                  Oro\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
-    oro_magento.reader.credit_memo_info.class:                               Oro\Bundle\MagentoBundle\Provider\Reader\CreditMemoInfoReader
     oro_magento.reader.context_cart.order.class:                             Oro\Bundle\MagentoBundle\Provider\Reader\ContextCartReader
     oro_magento.importexport.reader.entity.class:                            Oro\Bundle\MagentoBundle\Provider\Reader\ContextOptionReader
 
@@ -146,8 +143,13 @@ services:
     oro_magento.importexport.data_converter.guest_customer:
         class: %oro_magento.importexport.data_converter.guest_customer.class%
 
+    oro_magento.importexport.data_converter.credit_memo_item:
+        class: 'Oro\Bundle\MagentoBundle\ImportExport\Converter\CreditMemoItemDataConverter'
+
     oro_magento.importexport.data_converter.credit_memo:
-        class: %oro_magento.importexport.data_converter.credit_memo.class%
+        class: 'Oro\Bundle\MagentoBundle\ImportExport\Converter\CreditMemoDataConverter'
+        calls:
+            - [addNodeDataConverter, ['items', "@oro_magento.importexport.data_converter.credit_memo_item", true]]
 
     # Connectors
     oro_magento.connector.abstract:
@@ -251,13 +253,13 @@ services:
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.credit_memo_connector_initial:
-        class: %oro_magento.mage.credit_memo_connector_initial.class%
-        parent: oro_magento.mage.order_connector
+        class: 'Oro\Bundle\MagentoBundle\Provider\Connector\InitialCreditMemoConnector'
+        parent: oro_magento.mage.credit_memo_connector
         calls:
             - [setClassName, [%oro_magento.credit_memo.entity.class%]]
-#        tags:
-#            - { name: oro_integration.connector, type: credit_memo_initial, channel_type: magento }
-#            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+        tags:
+            - { name: oro_integration.connector, type: credit_memo_initial, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.region_connector:
         class: %oro_magento.mage.region_connector.class%
@@ -529,6 +531,7 @@ services:
         parent: oro_magento.importexport.processor.context
         calls:
             - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
+            - [setEntityName, [%oro_magento.entity.order.class%]]
 
     oro_magento.importexport.processor.context_cart:
         parent: oro_magento.importexport.processor.context
@@ -666,6 +669,12 @@ services:
         tags:
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
+    oro_magento.reader.context_order.credit_memo:
+        class: 'Oro\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader'
+        parent: oro_magento.mage.order_connector
+        tags:
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
     oro_magento.reader.context:
         class: %oro_magento.reader.context.class%
         abstract: true
@@ -681,6 +690,11 @@ services:
         parent: oro_magento.reader.context
         calls:
             - [setContextKey, ['postProcessOrders']]
+
+    oro_magento.reader.context_credit_memo:
+        parent: oro_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCreditMemos']]
 
     oro_magento.reader.context_customer_export:
         parent: oro_magento.reader.context
@@ -726,13 +740,13 @@ services:
             - [setContextKey, ['postProcessCustomerIds']]
 
     oro_magento.reader.credit_memo_info:
-        class: %oro_magento.reader.credit_memo_info.class%
+        class: 'Oro\Bundle\MagentoBundle\Provider\Reader\CreditMemoInfoReader'
         arguments:
             - "@oro_importexport.context_registry"
             - "@oro_integration.logger.strategy"
             - "@oro_integration.provider.connector_context_mediator"
         calls:
-            - [setContextKey, ['postProcessCustomerIds']]
+            - [setContextKey, ['postProcessCreditMemoIds']]
 
     # strategy
     oro_magento.provider.strategy.two_way_sync.customer:
@@ -748,3 +762,7 @@ services:
             - "@oro_magento.importexport.processor.import_customer_address"
             - "@oro_magento.importexport.processor.customer_address_export"
             - "@oro_entity.doctrine_helper"
+    # utils
+    oro_magento.post_job_executor:
+        class: 'Oro\Bundle\MagentoBundle\ImportExport\Job\PostJobExecutor'
+        parent: oro_importexport.job_executor

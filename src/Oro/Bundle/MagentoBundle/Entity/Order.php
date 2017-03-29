@@ -74,6 +74,16 @@ class Order extends ExtendOrder implements
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait, OriginTrait;
 
     /**
+     * Mage entity origin id
+     * Should not be used as identity because incrementId is already used
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true}, nullable=true)
+     */
+    protected $originId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="increment_id", type="string", length=60, nullable=false)

@@ -193,15 +193,6 @@ connector:
             title: "Import Credit Memos"
             type:  import
             steps:
-#                import_credit_memo_initial:
-#                    title:      import
-#                    class:      Oro\Bundle\BatchBundle\Step\ItemStep
-#                    services:
-#                        reader:    oro_magento.mage.credit_memo_connector_initial
-#                        processor: oro_importexport.processor.import_delegate
-#                        writer:    oro_magento.writer.proxy_entity_writer
-#                    parameters:
-#                        batch_size: 25
                 import_credit_memo:
                     title:      import
                     class:      Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
@@ -209,19 +200,46 @@ connector:
                         reader:    oro_magento.mage.credit_memo_connector
                         processor: oro_magento.importexport.processor.import_credit_memo
                         writer:    oro_magento.writer.proxy_entity_writer
+                        job_executor: oro_magento.post_job_executor
+                    parameters:
+                        batch_size: 25
+                        post_processing_jobs: mage_credit_memo_import_post_process_orders_and_info
+                        context_shared_keys: postProcessContextOrderIds,postProcessCreditMemos,postProcessCreditMemoIds
+
+        mage_credit_memo_import_post_process_orders_and_info:
+            title: "Import orders and postponded credit memos"
+            type:  import
+            steps:
+                import_orders_with_existing_customers:
+                    title:     import
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
+                    services:
+                        reader:    oro_magento.reader.context_order.credit_memo
+                        processor: oro_magento.importexport.processor.import_order_with_customer
+                        writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
-                        context_shared_keys: postProcessCreditMemoIds
-#                import_credit_memo_info:
-#                    title:      import
-#                    class:      Oro\Bundle\BatchBundle\Step\ItemStep
-#                    services:
-#                        reader:    oro_magento.reader.credit_memo_info
-#                        processor: oro_magento.importexport.processor.import_credit_memo
-#                        writer:    oro_magento.writer.proxy_entity_writer
-#                    parameters:
-#                        batch_size: 25
+                        post_processing_jobs: mage_order_import_post_process_customers_and_info
+                        context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
+                import_with_new_order:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_magento.reader.context_credit_memo
+                        processor: oro_magento.importexport.processor.import_credit_memo
+                        writer:    oro_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                load_credit_memo_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_magento.reader.credit_memo_info
+                        processor: oro_magento.importexport.processor.import_credit_memo
+                        writer:    oro_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
 
         mage_cart_import:
             title: "Cart(quote) import from Magento"
