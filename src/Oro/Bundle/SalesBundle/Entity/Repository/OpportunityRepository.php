@@ -7,8 +7,6 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DataAuditBundle\Entity\AbstractAudit;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -26,6 +24,7 @@ class OpportunityRepository extends EntityRepository
     const OPPORTUNITY_STATUS_CLOSED_WON_CODE = 'won';
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * Get opportunities by state by current quarter
      *
      * @param           $aclHelper AclHelper
@@ -72,6 +71,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param string $alias
      * @param CurrencyQueryBuilderTransformerInterface $qbTransformer
      * @param string $orderBy
@@ -117,6 +117,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param  AclHelper $aclHelper
      * @param            $dateStart
      * @param            $dateEnd
@@ -169,6 +170,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array       $ownerIds
      * @param \DateTime    $date
      * @param AclHelper   $aclHelper
@@ -188,6 +190,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array       $ownerIds
      * @param AclHelper   $aclHelper
      * @param string|null $start
@@ -231,6 +234,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array     $ownerIds
      * @param \DateTime $date
      * @param AclHelper $aclHelper
@@ -278,6 +282,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param mixed  $opportunityHistory
      * @param string $field
      *
@@ -298,6 +303,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array       $opportunityHistory
      * @param Opportunity $opportunity
      *
@@ -315,6 +321,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array       $ownerIds
      * @param array       $opportunityHistory
      * @param Opportunity $opportunity
@@ -334,6 +341,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param array       $result
      * @param array       $opportunityHistory
      * @param Opportunity $opportunity
@@ -363,30 +371,6 @@ class OpportunityRepository extends EntityRepository
         \DateTime $start = null,
         \DateTime $end = null
     ) {
-        return $this->createOpportunitiesCountQb($start, $end);
-    }
-
-    /**
-     * @param \DateTime  $start
-     * @param \DateTime  $end
-     *
-     * @return QueryBuilder
-     */
-    public function getNewOpportunitiesCountQB(
-        \DateTime $start = null,
-        \DateTime $end = null
-    ) {
-        return $this->createOpportunitiesCountQb($start, $end);
-    }
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     *
-     * @return QueryBuilder
-     */
-    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null)
-    {
         $qb = $this->createQueryBuilder('o');
         $qb->select('COUNT(o.id)');
         if ($start) {
@@ -404,6 +388,33 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3. Use getOpportunitiesCountQB instead (CRM-8037)
+     * @param \DateTime  $start
+     * @param \DateTime  $end
+     *
+     * @return QueryBuilder
+     */
+    public function getNewOpportunitiesCountQB(
+        \DateTime $start = null,
+        \DateTime $end = null
+    ) {
+        return $this->getOpportunitiesCountQB($start, $end);
+    }
+
+    /**
+     * @deprecated Since 2.2 Will be removed in 2.3. Use getOpportunitiesCountQB instead (CRM-8037)
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return QueryBuilder
+     */
+    public function createOpportunitiesCountQb(\DateTime $start = null, \DateTime $end = null)
+    {
+        return $this->getOpportunitiesCountQB($start, $end);
+    }
+
+    /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -443,6 +454,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -475,6 +487,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
@@ -501,6 +514,7 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @deprecated Since 2.2 Will be removed in 2.3 (CRM-8037)
      * @param AclHelper $aclHelper
      * @param \DateTime  $start
      * @param \DateTime  $end
