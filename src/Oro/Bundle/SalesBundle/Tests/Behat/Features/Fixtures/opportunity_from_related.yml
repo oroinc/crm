@@ -1,0 +1,49 @@
+Oro\Bundle\ChannelBundle\Entity\Channel:
+  salesChannel:
+    owner: '@organization'
+    name: Business Customers
+    channelType: b2b
+    status: 1
+    customerIdentity: Oro\Bundle\SalesBundle\Entity\B2bCustomer
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+  salesEntityName:
+    __construct: [Oro\Bundle\SalesBundle\Entity\B2bCustomer]
+    channel: '@salesChannel'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  skyNet:
+    name: SkyNet
+    organization: '@organization'
+  testAccount:
+    name: TestAccount
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\B2bCustomer:
+  customer20:
+    name: BusSkyNet
+    owner: '@johnConnor'
+    organization: '@organization'
+    account: '@skyNet'
+    dataChannel: '@salesChannel'
+
+Oro\Bundle\UserBundle\Entity\User:
+  johnConnor:
+    firstName: John
+    lastName: Connor
+    username: Johnconnor8
+    organization: '@organization'
+    organizations: ['@organization']
+#    owner: '@business_unit'
+#    businessUnits: ['@business_unit']
+    email (unique): john@example.com
+    password: ocINyrtG+M0qn76WdvdD945WYGYD6VS8+Wrlgfarc9QkERva9zW0yU1+nnJPOb76ophDg60Wgzpj0VzZVW4tXg==
+    salt: budomlxfmrs4k4c44o0co4skgwk88s
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contactCharlie:
+    firstName: Mister
+    lastName: Robot
+    email: robot@skynet.com
+    owner: '@johnConnor'
+    organization: '@organization'
