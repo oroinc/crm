@@ -995,3 +995,19 @@ services:
         class: OroCRM\Bundle\MagentoBundle\Datagrid\CartViewList
         arguments:
             - '@translator'
+
+    orocrm_magento.provider.tracking_visit.precalculated:
+        class: OroCRM\Bundle\MagentoBundle\Provider\PrecalculatedTrackingVisitProvider
+        parent: orocrm_magento.provider.tracking_visit
+        decorates: orocrm_magento.provider.tracking_visit
+        public: false
+        calls:
+            - ['setConfigManager', ['@oro_config.global']]
+
+    orocrm_magento.provider.big_number.precalculated:
+        class: OroCRM\Bundle\MagentoBundle\Provider\PrecalculatedMagentoBigNumberProvider
+        parent: orocrm_magento.provider.big_number
+        decorates: orocrm_magento.provider.big_number
+        public: false
+        calls:
+            - ['setConfigManager', ['@oro_config.global']]
