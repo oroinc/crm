@@ -101,7 +101,6 @@ processes:
                                     flush: true
                                     data:
                                         owner:          $.mailbox.processSettings.owner
-                                        dataChannel:    $.mailbox.processSettings.channel
                                         source:         $.leadSource
                                         organization:   $.mailbox.organization
                                         name:           $.leadName
@@ -120,3 +119,10 @@ processes:
                                 - '@add_email_activity_target':
                                     email:              $.email
                                     target_entity:      $.leadEntity
+                                - '@tree':
+                                    conditions:
+                                        '@has_property': [$.leadEntity, 'dataChannel']
+                                    actions:
+                                        - '@assign_value':
+                                            attribute: $.leadEntity.dataChannel
+                                            value: $.mailbox.processSettings.channel
