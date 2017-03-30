@@ -192,10 +192,17 @@ datagrids:
                     - status.priority as statusPriority
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
-                      SUM(
-                        CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(opportunity.closeRevenueValue, 0) ELSE 0 END
-                      ) as closeRevenue
-                    - SUM(COALESCE(opportunity.budgetAmountValue, 0)) as budgetAmount
+                        SUM(
+                            CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(
+                                @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, opportunity), 0
+                            ) ELSE 0 END
+                        ) as closeRevenue
+                    - >
+                        SUM(
+                            COALESCE(
+                                @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, opportunity), 0
+                            )
+                        ) as budgetAmount
                 groupBy: statusLabel
         totals:
             total:
@@ -212,10 +219,10 @@ datagrids:
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
-                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenueValue ELSE 0 END)
+                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, opportunity) ELSE 0 END)
                         formatter: currency
                     budgetAmount:
-                        expr: SUM(COALESCE(opportunity.budgetAmountValue, 0))
+                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, opportunity), 0))
                         formatter: currency
         columns:
             statusPriority:        { label: statusPriority, renderable: false, manageable: false }
@@ -287,7 +294,10 @@ datagrids:
                     - MAX(o.closeDate) as quarterPeriodSorting
 
                     - YEAR(o.closeDate) as yearPeriod
-                    - SUM(o.closeRevenueValue) as value
+                    - >
+                        SUM(
+                            @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, o)
+                        ) as value
                     - COUNT(o.id) as cnt
                 from:
                     - { table: OroSalesBundle:Opportunity, alias: o }
@@ -318,7 +328,7 @@ datagrids:
                     cnt:
                         expr: COUNT( o.id )
                     value:
-                        expr: SUM( o.closeRevenueValue )
+                        expr: SUM( @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(closeRevenue, o) )
                         formatter: currency
 
         columns:
@@ -376,8 +386,14 @@ datagrids:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
                     - COUNT( o.id ) as inProgressCount
-                    - SUM( o.budgetAmountValue ) as budgetAmount
-                    - SUM( o.budgetAmountValue * o.probability ) as weightedForecast
+                    - >
+                        SUM(
+                            @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, o)
+                        ) as budgetAmount
+                    - >
+                        SUM(
+                            @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, o) * o.probability
+                        ) as weightedForecast
                 from:
                     - { table: OroSalesBundle:Opportunity, alias: o }
                 join:
@@ -403,10 +419,10 @@ datagrids:
                     inProgressCount:
                         expr: COUNT( o.id )
                     budgetAmount:
-                        expr: SUM( o.budgetAmountValue )
+                        expr: SUM( @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, o) )
                         formatter: currency
                     weightedForecast:
-                        expr: SUM( o.budgetAmountValue * o.probability )
+                        expr: SUM( @oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(budgetAmount, o) * o.probability )
                         formatter: currency
         columns:
             ownerName:        { label: oro.reportcrm.datagrid.columns.ownerName,        frontend_type: string }
