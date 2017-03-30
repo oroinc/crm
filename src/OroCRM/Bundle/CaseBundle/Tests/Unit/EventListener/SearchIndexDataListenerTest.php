@@ -20,7 +20,7 @@ class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mapper = $this->getMockBuilder(ObjectMapper::class)
             ->disableOriginalConstructor()
-            ->setMethodsExcept(['buildAllDataField'])
+            ->setMethods(null)
             ->getMock();
 
         $this->listener = new SearchIndexDataListener($this->mapper);
