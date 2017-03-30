@@ -211,7 +211,7 @@ connector:
             type:  import
             steps:
                 import_orders_with_existing_customers:
-                    title:     import
+                    title:     import orders with existing customers
                     class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    oro_magento.reader.context_order.credit_memo
@@ -223,7 +223,7 @@ connector:
                         post_processing_jobs: mage_order_import_post_process_customers_and_info
                         context_shared_keys: postProcessGuestCustomers,postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
                 import_with_new_order:
-                    title:     import
+                    title:     import credit memos from new orders
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_magento.reader.context_credit_memo
@@ -232,7 +232,7 @@ connector:
                     parameters:
                         batch_size: 25
                 load_credit_memo_info:
-                    title:     import
+                    title:     import credit memo info
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_magento.reader.credit_memo_info
