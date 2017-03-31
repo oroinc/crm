@@ -40,6 +40,11 @@ SalesBundle
         - `ManagerInterface` $gridManager
         - `EntityNameResolver` $entityNameResolver
         - `MultiGridProvider` $multiGridProvider
+- Class `Oro\Bundle\SalesBundle\Entity\LeadStatus` removed
+- Class `Oro\Bundle\SalesBundle\Entity\OpportunityStatus` removed
+- Class `Oro\Bundle\SalesBundle\Entity\Lead`
+    - field `address` removed
+    - methods `hasAddress`, `setAddress` removed
 
 MagentoBundle
 -----------
