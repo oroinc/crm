@@ -159,6 +159,8 @@ datagrids:
                     data_name: a.createdAt
                 updatedAt:
                     data_name: a.updatedAt
+            default:
+                name: ASC
         filters:
             columns:
                 name:
