@@ -52,7 +52,7 @@ datagrids:
                 contactPhone:
                     data_name: a.defaultContact
         options:
-            entityHint: account
+            entityHint: accounts
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -159,6 +159,8 @@ datagrids:
                     data_name: a.createdAt
                 updatedAt:
                     data_name: a.updatedAt
+            default:
+                name: ASC
         filters:
             columns:
                 name:
@@ -226,7 +228,7 @@ datagrids:
                 entity_name: %oro_account.entity.account.class%
                 data_identifier: a.id
         options:
-            entityHint: account
+            entityHint: accounts
             export: true
             entity_pagination: true
         views_list: '@oro_account.accounts_view_list'
@@ -277,7 +279,7 @@ datagrids:
             default:
                 last_name: ASC
         options:
-            entityHint: contact
+            entityHint: contacts
 
     account-contacts-update-grid:
         extends: base-account-contacts-grid
@@ -455,7 +457,7 @@ datagrids:
                     data_name: a.owner
                     className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         options:
-            entityHint: account
+            entityHint: accounts
 
     accounts-for-context-grid:
         extended_entity_name: %oro_account.entity.account.class%
@@ -541,7 +543,7 @@ datagrids:
                             property: fullName
                             translatable_options: false
         options:
-            entityHint: account
+            entityHint: accounts
             entity_pagination: true
             toolbarOptions:
                 pageSize:

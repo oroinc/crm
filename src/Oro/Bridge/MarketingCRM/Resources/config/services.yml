@@ -22,3 +22,31 @@ services:
         class: %oro_channel.listener.channel_repository_subscriber.class%
         tags:
             - { name: doctrine.event_subscriber }
+
+    oro_magento.provider.tracking_visit_precalculated.abstract:
+        class: Oro\Bridge\MarketingCRM\Provider\AbstractPrecalculatedVisitProvider
+        abstract: true
+        arguments:
+            - '@doctrine'
+            - '@oro_config.global'
+            - '@oro_security.acl_helper'
+
+    oro_magento.provider.tracking_visit.precalculated:
+        class: Oro\Bridge\MarketingCRM\Provider\PrecalculatedTrackingVisitProvider
+        parent: oro_magento.provider.tracking_visit_precalculated.abstract
+        decorates: oro_magento.provider.tracking_visit
+        public: false
+        calls:
+            - ['setVisitProvider', ['@oro_magento.provider.tracking_visit.precalculated.inner']]
+        tags:
+            - { name: oro_featuretogle.feature, feature: 'tracking' }
+
+    oro_magento.provider.website_visit.precalculated:
+        class: Oro\Bridge\MarketingCRM\Provider\PrecalculatedWebsiteVisitProvider
+        parent: oro_magento.provider.tracking_visit_precalculated.abstract
+        decorates: oro_magento.provider.website_visit
+        public: false
+        calls:
+            - ['setVisitProvider', ['@oro_magento.provider.website_visit.precalculated.inner']]
+        tags:
+            - { name: oro_featuretogle.feature, feature: 'tracking' }

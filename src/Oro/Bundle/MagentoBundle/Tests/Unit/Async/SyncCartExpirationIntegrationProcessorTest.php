@@ -1,13 +1,17 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Async;
 
+use Psr\Log\LoggerInterface;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
-
 use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Test\JobRunner;
@@ -15,8 +19,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +48,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
     }
@@ -66,6 +69,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -84,6 +88,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $this->createRegistryStub(),
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -112,6 +117,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $registryStub,
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -143,6 +149,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $registryStub,
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -180,6 +187,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $registryStub,
             $this->createSyncProcessorMock(),
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -193,6 +201,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $integration = new Integration();
         $integration->setEnabled(true);
         $integration->setConnectors(['cart']);
+        $integration->setOrganization(new Organization());
 
         $repositoryMock = $this->createIntegrationRepositoryStub($integration);
         $registryStub = $this->createRegistryStub($repositoryMock);
@@ -208,6 +217,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $registryStub,
             $syncProcessorMock,
             new JobRunner(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -264,5 +274,13 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
     private function createLoggerMock()
     {
         return $this->createMock(LoggerInterface::class);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | TokenStorageInterface
+     */
+    private function createTokenStorageMock()
+    {
+        return $this->createMock(TokenStorageInterface::class);
     }
 }

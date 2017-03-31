@@ -93,7 +93,7 @@ class B2bCustomerEmailController extends RestController implements ClassResource
     /**
      * {@inheritdoc}
      */
-    public function getDeleteHandler()
+    protected function getDeleteHandler()
     {
         return $this->get('oro_sales.form.type.b2bcustomer_email.handler');
     }

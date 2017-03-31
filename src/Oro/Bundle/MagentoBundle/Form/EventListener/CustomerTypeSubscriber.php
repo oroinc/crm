@@ -16,7 +16,8 @@ class CustomerTypeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SUBMIT  => 'preSubmit'
+            FormEvents::PRE_SUBMIT  => 'preSubmit',
+            FormEvents::SUBMIT  => 'onSubmit'
         ];
     }
 
@@ -34,5 +35,19 @@ class CustomerTypeSubscriber implements EventSubscriberInterface
         }
 
         $entity->setUpdatedAt($date);
+    }
+
+    /**
+     * @param FormEvent $formEvent
+     */
+    public function onSubmit(FormEvent $formEvent)
+    {
+        /** @var Customer $entity */
+        $entity = $formEvent->getForm()->getData();
+
+        $dataChannel = $entity->getDataChannel();
+        if ($dataChannel) {
+            $entity->setChannel($dataChannel->getDataSource());
+        }
     }
 }

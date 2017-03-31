@@ -1,10 +1,14 @@
 <?php
 namespace Oro\Bundle\MagentoBundle\Async;
 
+use Psr\Log\LoggerInterface;
+
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
+use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
-
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -12,11 +16,11 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
+    use IntegrationTokenAwareTrait;
+
     /**
      * @var CartExpirationProcessor
      */
@@ -41,17 +45,20 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
      * @param RegistryInterface $doctrine
      * @param CartExpirationProcessor $cartExpirationProcessor
      * @param JobRunner $jobRunner
+     * @param TokenStorageInterface $tokenStorage
      * @param LoggerInterface $logger
      */
     public function __construct(
         RegistryInterface $doctrine,
         CartExpirationProcessor $cartExpirationProcessor,
         JobRunner $jobRunner,
+        TokenStorageInterface $tokenStorage,
         LoggerInterface $logger
     ) {
         $this->doctrine = $doctrine;
         $this->cartExpirationProcessor = $cartExpirationProcessor;
         $this->jobRunner = $jobRunner;
+        $this->tokenStorage = $tokenStorage;
         $this->logger = $logger;
     }
 
@@ -108,8 +115,8 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($integration) {
+            $this->setTemporaryIntegrationToken($integration);
             $this->cartExpirationProcessor->process($integration);
-
             return true;
         });
 

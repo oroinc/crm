@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -84,7 +84,7 @@ class CustomerController extends Controller
     public function createAction()
     {
         if (!$this->getSecurityFacade()->isGranted('oro_integration_assign')) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         return $this->update(new Customer());

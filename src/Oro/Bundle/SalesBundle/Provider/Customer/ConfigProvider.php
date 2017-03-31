@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
-
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
@@ -31,44 +30,17 @@ class ConfigProvider
             return false;
         }
 
-        if (is_object($objectOrClass)) {
-            $objectOrClass = ClassUtils::getClass($objectOrClass);
-        }
+        $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
 
-        return in_array($objectOrClass, $this->getAssociatedCustomerClasses(), true);
-    }
-
-    public function getCustomerClasses()
-    {
-        return $this->getAssociatedCustomerClasses();
+        return in_array($class, $this->getAssociatedCustomerClasses(), true);
     }
 
     /**
-     * @return array
-     * [
-     *     className   => customer class with _ instead of \,
-     *     label       => entity label,
-     *     icon        => entity icon,
-     *     gridName    => customer grid name
-     *     routeCreate => route to create entity
-     * ]
+     * @return string[]
      */
-    public function getCustomersData()
+    public function getCustomerClasses()
     {
-        $result = [];
-
-        $customerClasses = $this->getCustomerClasses();
-        foreach ($customerClasses as $class) {
-            $result[] = [
-                'className'   => $class,
-                'label'       => $this->getLabel($class),
-                'icon'        => $this->getIcon($class),
-                'gridName'    => $this->getGrid($class),
-                'routeCreate' => $this->getRouteCreate($class),
-            ];
-        }
-
-        return $result;
+        return $this->getAssociatedCustomerClasses();
     }
 
     /**
@@ -96,7 +68,7 @@ class ConfigProvider
      *
      * @return string|null
      */
-    protected function getIcon($entityClass)
+    public function getIcon($entityClass)
     {
         return $this->configManager->getEntityConfig('entity', $entityClass)->get('icon');
     }
@@ -106,7 +78,7 @@ class ConfigProvider
      *
      * @return string|null
      */
-    protected function getRouteCreate($entityClass)
+    public function getRouteCreate($entityClass)
     {
         $metadata = $this->configManager->getEntityMetadata($entityClass);
         if ($metadata && $metadata->routeCreate) {

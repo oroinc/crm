@@ -1017,6 +1017,7 @@ services:
             - '@doctrine'
             - '@oro_magento.provider.cart_expiration_processor'
             - '@oro_message_queue.job.runner'
+            - '@security.token_storage'
             - '@logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
@@ -1030,6 +1031,7 @@ services:
             - '@oro_analytics.calculate_analytics_scheduler'
             - '@oro_message_queue.job.runner'
             - '@oro_search.async.indexer'
+            - '@security.token_storage'
             - '@logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
@@ -1067,29 +1069,6 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: onClear }
-
-    oro_magento.form.extension.customer_association:
-        class: Oro\Bundle\MagentoBundle\Form\Extension\CustomerAssociationExtension
-        arguments:
-            - '@oro_entity.doctrine_helper'
-            - '@oro_magento.customer.association_checker'
-        tags:
-            - { name: form.type_extension, alias: oro_magento_customer }
-
-    oro_magento.form.extension.opportunity_customer_association:
-        class: Oro\Bundle\MagentoBundle\Form\Extension\OpportunityCustomerAssociationExtension
-        arguments:
-            - '@oro_entity.doctrine_helper'
-            - '@oro_magento.customer.association_checker'
-        tags:
-            - { name: form.type_extension, alias: oro_sales_opportunity }
-
-    oro_magento.customer.customer_association_listener:
-        class: Oro\Bundle\MagentoBundle\EventListener\Customer\CustomerAssociationListener
-        arguments:
-            - '@oro_magento.customer.association_checker'
-        tags:
-            - { name: kernel.event_listener, event: entity_view.render.before, method: checkCustomer, priority: 10 }
 
     oro_magento.customer.association_checker:
         class: Oro\Bundle\MagentoBundle\Customer\AssociationChecker

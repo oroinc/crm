@@ -171,7 +171,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     /**
      * {@inheritdoc}
      */
-    public function getDeleteHandler()
+    protected function getDeleteHandler()
     {
         return $this->get('oro_contact.form.type.contact_phone.handler');
     }

@@ -27,7 +27,7 @@ define(function(require) {
             this.inputSelector = options.inputSelector;
             this.$el = options._sourceElement;
 
-            mediator.on('sales:customer:select', this.onCustomerSelect, this);
+            mediator.on('customer-dialog:select', this.onCustomerSelect, this);
 
             var $customers = this.$el.find(options.customerSelector);
             _.each($customers, function(customer) {
@@ -48,7 +48,7 @@ define(function(require) {
                 return;
             }
 
-            mediator.off('sales:customer:select', this.onCustomerSelect, this);
+            mediator.off('customer-dialog:select', this.onCustomerSelect, this);
 
             CustomerComponent.__super__.dispose.apply(this, arguments);
         }

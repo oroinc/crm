@@ -20,8 +20,9 @@ use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
-use Oro\Bundle\SalesBundle\Entity\Customer as AccountCustomer;
+use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -50,6 +51,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
+    /** @var  TokenStorage */
+    protected $securityToken;
+
     /**
      * {@inheritDoc}
      */
@@ -57,6 +61,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     {
         $this->factory = $container->get('oro_channel.builder.factory');
         $this->accountCustomerManager = $container->get('oro_sales.manager.account_customer');
+        $this->securityToken = $container->get('security.token_storage');
     }
 
     /**
@@ -66,6 +71,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     {
         $this->em = $manager;
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->securityToken->setToken(new OrganizationToken($this->organization));
 
         $this->createChannel();
         $this->createAccount();
