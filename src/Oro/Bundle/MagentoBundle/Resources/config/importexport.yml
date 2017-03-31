@@ -59,7 +59,6 @@ parameters:
     oro_magento.import.strategy.customer_address.add_or_update.class:        Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
     oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy
     oro_magento.import_strategy.default_magento_import.class:                Oro\Bundle\MagentoBundle\ImportExport\Strategy\DefaultMagentoImportStrategy
-    oro_magento.import_strategy.credit_memo.add_or_update.class:             Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy
 
     # processors
     oro_magento.provider.initial_processor.class:                            Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -393,7 +392,7 @@ services:
         parent: oro_magento.import.strategy.abstract
 
     oro_magento.import.strategy.credit_memo.add_or_update:
-        class: %oro_magento.import_strategy.credit_memo.add_or_update.class%
+        class: 'Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy'
         parent: oro_magento.import.strategy.abstract
 
     # Processors

@@ -582,6 +582,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setChannel($this->integration);
         $order->setDataChannel($this->channel);
         $order->setStatus('open');
+        $order->setOriginId(1);
         $order->setIncrementId('100000307');
         $order->setCreatedAt(new \DateTime('now'));
         $order->setUpdatedAt(new \DateTime('now'));

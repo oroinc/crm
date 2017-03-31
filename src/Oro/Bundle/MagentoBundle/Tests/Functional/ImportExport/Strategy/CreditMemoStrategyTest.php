@@ -1,0 +1,99 @@
+<?php
+
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
+
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
+use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
+use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy;
+use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader;
+
+class CreditMemoStrategyTest extends WebTestCase
+{
+    /**
+     * @var CreditMemoStrategy
+     */
+    protected $strategy;
+
+    /**
+     * @var Channel
+     */
+    protected $channel;
+
+    /**
+     * @var StepExecutionProxyContext
+     */
+    protected $context;
+
+    /**
+     * @var StepExecution
+     */
+    protected $stepExecution;
+
+    protected function setUp()
+    {
+        $this->initClient();
+
+        $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
+
+        $this->strategy = $this->getContainer()
+            ->get('oro_magento.import.strategy.credit_memo.add_or_update');
+
+        $this->channel = $this->getReference('integration');
+        $jobInstance = new JobInstance();
+        $jobInstance->setRawConfiguration(['channel' => $this->channel->getId()]);
+        $jobExecution = new JobExecution();
+        $jobExecution->setJobInstance($jobInstance);
+        $this->stepExecution = new StepExecution('step', $jobExecution);
+        $this->context = new StepExecutionProxyContext($this->stepExecution);
+        $this->strategy->setImportExportContext($this->context);
+        $this->strategy->setStepExecution($this->stepExecution);
+    }
+
+    public function testProcessWithExistingOrder()
+    {
+        $creditMemo = new CreditMemo();
+        $creditMemo->setChannel($this->channel);
+        $order = new Order();
+        $order->setOriginId(1);
+        $creditMemo->setOrder($order);
+        $item = new CreditMemoItem();
+        $creditMemo->setItems([$item]);
+
+        $this->strategy->setEntityName(CreditMemo::class);
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->assertSame($creditMemo, $this->strategy->process($creditMemo));
+        $this->assertGreaterThanOrEqual($now, $creditMemo->getImportedAt());
+        $this->assertGreaterThanOrEqual($now, $creditMemo->getSyncedAt());
+
+        $this->assertSame($creditMemo, $item->getParent());
+        $this->assertSame($creditMemo->getOrganization(), $item->getOwner());
+    }
+
+    public function testProcessWithNonExistingOrder()
+    {
+        $creditMemo = new CreditMemo();
+        $creditMemo->setChannel($this->channel);
+        $order = new Order();
+        $order->setOriginId(123123);
+        $creditMemo->setOrder($order);
+
+        $this->strategy->setEntityName(CreditMemo::class);
+
+        $context = $this->stepExecution->getJobExecution()->getExecutionContext();
+        $this->assertNull($this->strategy->process($creditMemo));
+        $this->assertEquals(
+            [123123],
+            $context->get(ContextOrderReader::CONTEXT_POST_PROCESS_ORDERS)
+        );
+        $keys = $context->getKeys();
+        $this->assertContains(CreditMemoStrategy::CONTEXT_CREDIT_MEMO_POST_PROCESS, $keys);
+    }
+}
