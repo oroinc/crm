@@ -23,7 +23,7 @@ class CreditMemoControllerTest extends AbstractController
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('Credit Memo items', $result->getContent());
+        $this->assertContains('Credit Memo Items', $result->getContent());
         $this->assertContains('100000307', $result->getContent());
         $this->assertContains('refunded', $result->getContent());
         $this->assertContains('$5.00', $result->getContent());

@@ -37,6 +37,7 @@ class OrderControllerTest extends WebTestCase
 
         $request = [
             'incrementId'         => mt_rand(0, 10000000),
+            'originId'            => mt_rand(0, 1000),
             'isVirtual'           => true,
             'isGuest'             => false,
             'giftMessage'         => 'some message',
