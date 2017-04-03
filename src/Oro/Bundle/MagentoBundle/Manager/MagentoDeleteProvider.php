@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\EntityBundle\ORM\DatabaseDriverInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -100,7 +101,13 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-        $subQuery = $this->em->createQueryBuilder()->select('o.id')->from($entityClassName, 'o');
+
+        $identifier = 'o.id';
+        if ($this->em->getConnection()->getDriver()->getName() === DatabaseDriverInterface::DRIVER_POSTGRESQL) {
+            $identifier = sprintf('CAST(%s as string)', $identifier);
+        }
+
+        $subQuery = $this->em->createQueryBuilder()->select($identifier)->from($entityClassName, 'o');
         $subQuery->where($subQuery->expr()->eq('o.channel', ':channel'));
 
         $qbDel = $this->em->createQueryBuilder()->delete(WorkflowItem::class, 'w');
