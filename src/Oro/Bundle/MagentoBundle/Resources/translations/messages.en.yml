@@ -770,6 +770,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento customer address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento customer address.
@@ -841,6 +842,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento cart address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento cart address.
@@ -871,6 +873,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento order address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento order address.

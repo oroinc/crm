@@ -103,7 +103,7 @@ class OroSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_36';
+        return 'v1_37';
     }
 
     /**
@@ -113,9 +113,7 @@ class OroSalesBundleInstaller implements
     {
         /** Tables generation **/
         $this->createOrocrmSalesOpportunityTable($schema);
-        $this->createOrocrmSalesLeadStatusTable($schema);
         $this->createOrocrmSalesFunnelTable($schema);
-        $this->createOrocrmSalesOpportStatusTable($schema);
         $this->createOrocrmSalesOpportCloseRsnTable($schema);
         $this->createOrocrmSalesLeadTable($schema);
         $this->createOrocrmSalesB2bCustomerTable($schema);
@@ -300,7 +298,6 @@ class OroSalesBundleInstaller implements
     {
         $table = $schema->createTable('orocrm_sales_lead');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('address_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -347,7 +344,6 @@ class OroSalesBundleInstaller implements
         $table->addIndex(['createdat', 'id'], 'lead_created_idx', []);
         $table->addIndex(['contact_id'], 'idx_73db4633e7a1254a', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['address_id'], 'idx_73db4633f5b7af75', []);
         $table->addIndex(['customer_association_id'], 'IDX_73DB463376D4FC6F', []);
     }
 
@@ -584,12 +580,6 @@ class OroSalesBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_campaign'),
             ['campaign_id'],
-            ['id'],
-            ['onUpdate' => null, 'onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_address'),
-            ['address_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );

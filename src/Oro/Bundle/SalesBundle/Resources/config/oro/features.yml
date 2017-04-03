@@ -23,13 +23,11 @@ features:
             - Oro\Bundle\SalesBundle\Entity\LeadAddress
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
-            - Oro\Bundle\SalesBundle\Entity\LeadStatus
         entities:
             - Oro\Bundle\SalesBundle\Entity\Lead
             - Oro\Bundle\SalesBundle\Entity\LeadAddress
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
-            - Oro\Bundle\SalesBundle\Entity\LeadStatus
         placeholder_items:
             - leads_launchpad
         dashboard_widgets:
@@ -60,11 +58,9 @@ features:
         api_resources:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
-            - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
         entities:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
-            - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
         configuration:
             - opportunity_status_probabilities
             - display_settings

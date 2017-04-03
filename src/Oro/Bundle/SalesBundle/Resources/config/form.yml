@@ -355,17 +355,6 @@ services:
         tags:
             - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_opportunity_status_select' }
 
-    oro_sales.widget_config_value.widget_lead_status.converter:
-        class: Oro\Bundle\SalesBundle\Dashboard\Converters\WidgetLeadStatusSelectConverter
-        arguments:
-            - '@oro_security.acl_helper'
-            - '@oro_entity.entity_name_resolver'
-            - '@oro_entity.doctrine_helper'
-            - '@doctrine.orm.entity_manager'
-            - 'Oro\Bundle\SalesBundle\Entity\LeadStatus'
-        tags:
-            - { name: oro_dashboard.value.converter, alias: 'oro_type_widget_lead_status_select' }
-
     oro_sales.form.type.lead_phone.type:
         class: %oro_sales.lead_phone.form.type.class%
         tags:
