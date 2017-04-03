@@ -30,7 +30,8 @@ class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'phone' => 'text'
+            'phone' => 'text',
+            'countryText' => 'text'
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))
