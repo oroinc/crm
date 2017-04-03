@@ -26,7 +26,6 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
 
-    {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {% if resource_granted('orocrm_contactus_request_edit') %}
         {{ UI.editButton({
             'path': path('orocrm_contactus_request_update', {'id': entity.id}),
