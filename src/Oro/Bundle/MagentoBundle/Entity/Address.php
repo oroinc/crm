@@ -36,7 +36,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     const SYNC_TO_MAGENTO = 1;
     const MAGENTO_REMOVED = 2;
 
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait, OriginTrait, CountryTextTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer address fields

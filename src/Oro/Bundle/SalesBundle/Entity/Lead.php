@@ -320,20 +320,6 @@ class Lead extends ExtendLead implements
     protected $industry;
 
     /**
-     * @deprecated since 1.10. Use $addresses collection field instead
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $address;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Oro\Bundle\SalesBundle\Entity\LeadAddress",
@@ -849,27 +835,6 @@ class Lead extends ExtendLead implements
             $this->addresses->removeElement($address);
         }
 
-        return $this;
-    }
-
-    /**
-     * @deprecated since 1.10
-     *
-     * @return bool
-     */
-    public function hasAddress()
-    {
-        return false;
-    }
-
-    /**
-     * @deprecated since 1.10
-     *
-     * @param $address
-     * @return $this
-     */
-    public function setAddress($address)
-    {
         return $this;
     }
 

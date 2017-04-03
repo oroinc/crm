@@ -310,7 +310,7 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'shippingAddress' => $this->getAddress('US')
+                        'shippingAddress' => $this->getAddress('US')->setCountryText(null)
                     ]
                 ),
                 'entity' => $this->getEntity(
@@ -433,6 +433,7 @@ class CartStrategyTest extends AbstractStrategyTest
     {
         $address = new CartAddress();
 
+        $address->setCountryText('Test');
         if ($countryCode) {
             $address->setCountry(new Country($countryCode));
         }

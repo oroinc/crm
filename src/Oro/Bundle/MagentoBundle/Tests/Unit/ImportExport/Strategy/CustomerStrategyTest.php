@@ -271,6 +271,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
             ->setRegion($region)
             ->setPostalCode('Zip Code')
             ->setCountry($country);
+        $address->setCountryText('Test');
 
         return $address;
     }
