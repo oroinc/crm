@@ -1,0 +1,18 @@
+data:
+    type: magentocreditmemoitems
+    attributes:
+        originId: 141
+        qty: 1
+        sku: 'sku'
+        name: 'product name'
+        price: '10.1000'
+        rowTotal: '20.2000'
+    relationships:
+        parent:
+            data:
+                type: magentocreditmemos
+                id: '<toString(@creditMemo->id)>'
+        owner:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'

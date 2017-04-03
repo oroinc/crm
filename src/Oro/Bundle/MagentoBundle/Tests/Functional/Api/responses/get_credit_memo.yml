@@ -1,0 +1,33 @@
+data:
+    type: magentocreditmemos
+    id: '<toString(@creditMemo->id)>'
+    attributes:
+        incrementId: '100000307'
+        grandTotal: '120.5000'
+        shippingAmount: '5.0000'
+    relationships:
+        order:
+            data:
+                type: magentoorders
+                id: '<toString(@order->id)>'
+        store:
+            data:
+                type: magentostores
+                id: '<toString(@store->id)>'
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        dataChannel:
+            data:
+                type: channels
+                id: '<toString(@default_channel->id)>'
+        items:
+            data:
+                -
+                  type: magentocreditmemoitems
+                  id: '<toString(@creditMemoItem->id)>'

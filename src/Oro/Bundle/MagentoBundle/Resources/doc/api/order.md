@@ -32,6 +32,7 @@ Example:
       "type":"magentoorders",
       "attributes":{  
          "incrementId":"0",
+         "originId":1,
          "isVirtual":false,
          "isGuest":false,
          "storeName":"Admin",

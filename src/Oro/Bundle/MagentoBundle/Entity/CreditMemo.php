@@ -203,14 +203,14 @@ class CreditMemo extends ExtendCreditMemo implements
     /**
      * @var float
      *
-     * @ORM\Column(name="customer_bal_total_refunded", type="money", nullable=true)
+     * @ORM\Column(name="customer_bal_total_refunded", type="float", nullable=true)
      */
     protected $customerBalTotalRefunded;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="reward_points_balance_refund", type="money", nullable=true)
+     * @ORM\Column(name="reward_points_balance_refund", type="float", nullable=true)
      */
     protected $rewardPointsBalanceRefund;
 

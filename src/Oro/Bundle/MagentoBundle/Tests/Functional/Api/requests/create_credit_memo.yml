@@ -1,0 +1,36 @@
+data:
+    type: magentocreditmemos
+    attributes:
+        incrementId: '100000002'
+        originId: 2
+        invoiceId: 2
+        subtotal: '215.6600'
+        grandTotal: '220.6600'
+        shippingAmount: '5.0000'
+        createdAt: "2017-02-15T15:42:19Z"
+        updatedAt: "2017-02-15T15:42:19Z"
+    relationships:
+        order:
+            data:
+                type: magentoorders
+                id: '<toString(@guestOrder->id)>'
+        store:
+            data:
+                type: magentostores
+                id: '<toString(@store->id)>'
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        dataChannel:
+            data:
+                type: channels
+                id: '<toString(@default_channel->id)>'
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        status:
+            data:
+                type: magentocreditmemostatuses
+                id: '2'

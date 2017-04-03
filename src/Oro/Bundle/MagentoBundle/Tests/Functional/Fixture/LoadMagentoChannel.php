@@ -124,6 +124,9 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $this->setReference('customer', $customer);
         $this->setReference('integration', $this->integration);
+        $this->setReference('store', $this->store);
+        $this->setReference('organization', $this->organization);
+        $this->setReference('user', $this->getUser());
         $this->setReference('cart', $cart);
         $this->setReference('order', $order);
         $this->setReference('creditMemo', $creditMemo);
@@ -700,6 +703,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $creditMemo->setOrganization($this->organization);
         $creditMemoItem = $this->createCreditMemoItem($creditMemo);
         $creditMemo->addItem($creditMemoItem);
+        $this->addReference('creditMemoItem', $creditMemoItem);
 
         $this->em->persist($creditMemo);
 

@@ -38,6 +38,23 @@ api:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_address.md'
         Oro\Bundle\MagentoBundle\Entity\OrderItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_item.md'
+        Oro\Bundle\MagentoBundle\Entity\CreditMemo:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
+        Extend\Entity\EV_Creditmemo_Status:
+            fields:
+                name:
+                    description:  The name of the credit memo status ('Pending', 'Refunded' or 'Canceled', corresponding to ids 1,2 and 3 in Magento).
+                default:
+                    description:  Determines whether a particular status is set as default for new credit memo record.
+                priority:
+                    description:  The order in which credit memo statuses are ranked. First appears the status with the higher priority.
+            actions:
+                get:
+                    documentation: Retrieve a specific credit memo status record.
+                get_list:
+                    documentation: Retrieve a collection of credit memo status records.
+        Oro\Bundle\MagentoBundle\Entity\CreditMemoItem:
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo_item.md'
         Oro\Bundle\MagentoBundle\Entity\Product:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/product.md'
         Oro\Bundle\MagentoBundle\Entity\Region:
