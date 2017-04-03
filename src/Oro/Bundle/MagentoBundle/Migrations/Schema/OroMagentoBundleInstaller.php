@@ -871,13 +871,13 @@ class OroMagentoBundleInstaller implements
         );
         $table->addColumn(
             'customer_bal_total_refunded',
-            'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            'float',
+            ['notnull' => false, 'precision' => 0]
         );
         $table->addColumn(
             'reward_points_balance_refund',
-            'money',
-            ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']
+            'float',
+            ['notnull' => false, 'precision' => 0]
         );
         $table->addColumn('imported_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('synced_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
