@@ -563,6 +563,9 @@ oro:
             increment_id:
                 label:              "Order #"
                 description:        The increment ID specified for a Magento order.
+            origin_id:
+                label:              Order origin id
+                description:        Order ID on the Magento side.
             items_qty.label:        Items qty
             gift_message:
                 label:              Gift message

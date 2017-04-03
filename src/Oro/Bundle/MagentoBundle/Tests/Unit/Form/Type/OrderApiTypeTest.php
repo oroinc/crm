@@ -31,6 +31,7 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $expectedFields = [
             'incrementId'         => 'text',
+            'originId'            => 'text',
             'isVirtual'           => 'checkbox',
             'isGuest'             => 'checkbox',
             'giftMessage'         => 'text',

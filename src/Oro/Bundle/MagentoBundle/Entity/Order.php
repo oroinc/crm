@@ -28,7 +28,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          @ORM\Index(name="mageorder_created_idx",columns={"created_at", "id"})
  *     },
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})
+ *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"}),
+ *          @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
  *     }
  * )
  * @Config(
