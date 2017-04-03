@@ -4,15 +4,13 @@ namespace Oro\Bundle\MagentoBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\EntityBundle\ORM\DatabaseDriverInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
-    use WorkflowQueryTrait;
-
     /** @var EntityManager */
     protected $em;
 
@@ -82,7 +80,7 @@ class MagentoDeleteProvider implements DeleteProviderInterface
         );
         $this->em->getConnection()->executeQuery(
             sprintf(
-                'Delete FROM %s WHERE id IN (%s) OR id IN (%s)',
+                'DELETE FROM %s WHERE id IN (%s) OR id IN (%s)',
                 $this->em->getClassMetadata('OroMagentoBundle:CartAddress')->getTableName(),
                 $shippingAddresses,
                 $billingAddresses
@@ -103,26 +101,23 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-        $subQuery = $this->em->createQueryBuilder()->select('workflowItem.id')->from($entityClassName, 'o');
-        $this->joinWorkflowItem($subQuery, 'workflowItem');
-        $subQuery
-            ->where('o.channel=:channel')
-            ->setParameter('channel', $this->channel);
 
-        $ids = array_filter(
-            array_map(
-                function (array $record) {
-                    return $record['id'];
-                },
-                $subQuery->getQuery()->getResult()
-            )
-        );
-        if (0 === count($ids)) {
-            return $this;
+        $identifier = 'o.id';
+        if ($this->em->getConnection()->getDriver()->getName() === DatabaseDriverInterface::DRIVER_POSTGRESQL) {
+            $identifier = sprintf('CAST(%s as string)', $identifier);
         }
 
-        $qbDel = $this->em->createQueryBuilder()->delete()->from(WorkflowItem::class, 'wi');
-        $qbDel->where($qbDel->expr()->in('wi.id', $ids));
+        $subQuery = $this->em->createQueryBuilder()->select($identifier)->from($entityClassName, 'o');
+        $subQuery->where($subQuery->expr()->eq('o.channel', ':channel'));
+
+        $qbDel = $this->em->createQueryBuilder()->delete(WorkflowItem::class, 'w');
+        $qbDel
+            ->where($qbDel->expr()->eq('w.entityClass', ':entityClass'))
+            ->andWhere($qbDel->expr()->in('w.entityId', $subQuery->getDQL()))
+            ->setParameters([
+                'entityClass' => $this->em->getClassMetadata($entityClassName)->getName(),
+                'channel' => $this->channel,
+            ]);
 
         $qbDel->getQuery()->execute();
 
