@@ -44,6 +44,7 @@ class CustomerAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             'phone'        => 'text',
             'primary'      => 'checkbox',
             'country'      => 'translatable_entity',
+            'countryText'  => 'text',
             'region'       => 'translatable_entity',
             'owner'        => 'oro_customer_select',
             'types'        => 'translatable_entity'

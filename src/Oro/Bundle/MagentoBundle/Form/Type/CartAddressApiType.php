@@ -18,6 +18,7 @@ class CartAddressApiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('phone', 'text', ['required' => false]);
+        $builder->add('countryText', 'text', ['required' => false]);
         $builder->remove('organization');
 
         $builder->addEventSubscriber(new PatchSubscriber());

@@ -148,6 +148,9 @@ class OrderStrategy extends AbstractImportStrategy
     {
         /** @var OrderAddress $address */
         foreach ($order->getAddresses() as $address) {
+            if ($address->getCountry()) {
+                $address->setCountryText(null);
+            }
             $address->setOwner($order);
         }
 

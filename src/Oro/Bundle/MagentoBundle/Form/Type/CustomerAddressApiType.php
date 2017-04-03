@@ -40,6 +40,7 @@ class CustomerAddressApiType extends AbstractType
                 'required' => true,
             ]
         );
+        $builder->add('countryText', 'text', ['required' => false]);
 
         $builder->add(
             'region',
