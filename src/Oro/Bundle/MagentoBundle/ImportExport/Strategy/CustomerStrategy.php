@@ -88,6 +88,9 @@ class CustomerStrategy extends AbstractImportStrategy
                         }
                     }
                 }
+                if ($address->getCountry()) {
+                    $address->setCountryText(null);
+                }
                 $address->setOwner($entity);
             }
         }

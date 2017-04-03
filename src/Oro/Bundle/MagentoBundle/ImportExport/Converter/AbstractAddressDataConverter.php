@@ -36,6 +36,9 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
+        if (!empty($importedRecord['country_id'])) {
+            $importedRecord['countryText'] = $importedRecord['country_id'];
+        }
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
 
         if (!empty($importedRecord['street'])) {

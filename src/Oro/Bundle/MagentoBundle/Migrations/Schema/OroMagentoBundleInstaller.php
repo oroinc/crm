@@ -72,7 +72,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_46';
+        return 'v1_46_1';
     }
 
     /**
@@ -187,6 +187,7 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('country_text', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -460,6 +461,7 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('country_text', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -515,6 +517,7 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('country_text', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
