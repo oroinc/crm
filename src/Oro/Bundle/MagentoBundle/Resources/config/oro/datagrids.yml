@@ -1939,6 +1939,7 @@ datagrids:
                     - o.incrementId as orderNumber
                     - o.createdAt as orderCreatedAt
                     - c.grandTotal as refunded
+                    - o.currency
                 from:
                     - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
                 join:
@@ -2123,11 +2124,13 @@ datagrids:
                     - cmi.qty
                     - cmi.price
                     - cmi.rowTotal
+                    - o.currency
                 from:
-                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem , alias: cmi }
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem, alias: cmi }
                 join:
                     left:
-                        - { join: cmi.parent, alias: p }
+                        - { join: cmi.parent, alias: cm }
+                        - { join: cm.order, alias: o }
                 where:
                     and:
                         - cmi.parent = :creditMemoId

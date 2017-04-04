@@ -52,7 +52,6 @@ class CreditMemoDataConverter extends AbstractTreeDataConverter
      */
     protected function getBackendHeader()
     {
-        // will be implemented for bidirectional sync
         throw new \Exception('Normalization is not implemented!');
     }
 }

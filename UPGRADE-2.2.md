@@ -20,6 +20,10 @@ MagentoBundle
         `JobRunner` $jobRunner,
         `TokenStorageInterface` $tokenStorage,
         `LoggerInterface` $logger
+- Class `OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
+    - Added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.
+- Class `OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport` 
+    - Updated according to `OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface` changes.
 
 SalesBundle
 -----------
