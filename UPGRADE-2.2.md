@@ -49,6 +49,7 @@ SalesBundle
 MagentoBundle
 -----------
 - Classes `Oro\Bundle\MagentoBundle\Form\Extension\CustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\Form\Extension\OpportunityCustomerAssociationExtension`, `Oro\Bundle\MagentoBundle\EventListener\Customer\CustomerAssociationListener` were removed. They are no longer used.
+- Added setter `setIso2CodeProvider` for `Oro\Bundle\MagentoBundle\ImportExport\Converter\AbstractAddressDataConverter`
 
 CaseBundle
 ------------
