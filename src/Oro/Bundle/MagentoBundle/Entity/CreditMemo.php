@@ -42,6 +42,9 @@ use Oro\Bundle\UserBundle\Entity\User;
  *              "type"="ACL",
  *              "group_name"="",
  *              "category"="sales_data"
+ *          },
+ *          "grid"={
+ *              "default"="magento-credit-memo-grid",
  *          }
  *     }
  * )
