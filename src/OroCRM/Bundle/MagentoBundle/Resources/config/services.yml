@@ -1011,3 +1011,8 @@ services:
         public: false
         calls:
             - ['setConfigManager', ['@oro_config.global']]
+
+    orocrm_magento.provider.iso2_code:
+        class: OroCRM\Bundle\MagentoBundle\Provider\Iso2CodeProvider
+        arguments:
+            - '@doctrine'
