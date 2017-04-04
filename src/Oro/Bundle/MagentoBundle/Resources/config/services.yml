@@ -1080,3 +1080,8 @@ services:
 
     oro_magento.converter.cart_subtotal_to_multicurrency:
         class: Oro\Bundle\MagentoBundle\Converter\CartSubtotalToMultiCurrency
+
+    oro_magento.provider.iso2_code:
+        class: Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider
+        arguments:
+            - '@doctrine'
