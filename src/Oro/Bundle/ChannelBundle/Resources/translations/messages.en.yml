@@ -10,7 +10,9 @@ oro:
         entities:
             label:               Entities
             description:         Determines which fields will be defined in entities field after channel type has been selected
-        data_source.label:       Integration
+        data_source:
+            label:               Integration
+            description:         Integration
         channel_type:
             label:               Channel type
             description:         Defines a set of default rules and settings used for the channel
