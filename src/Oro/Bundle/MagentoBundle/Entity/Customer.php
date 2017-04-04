@@ -478,7 +478,7 @@ class Customer extends ExtendCustomer implements
      *
      * @return Customer
      */
-    public function setWebsite(Website $website)
+    public function setWebsite(Website $website = null)
     {
         $this->website = $website;
 
@@ -506,7 +506,7 @@ class Customer extends ExtendCustomer implements
      *
      * @return Customer
      */
-    public function setStore(Store $store)
+    public function setStore(Store $store = null)
     {
         $this->store = $store;
 
