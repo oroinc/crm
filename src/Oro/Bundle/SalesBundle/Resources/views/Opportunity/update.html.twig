@@ -109,7 +109,7 @@
 
     {% set formFields = [] %}
     {% if form.owner is defined %}
-        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+        {% set formFields = formFields|merge([form_row(form.owner, {attr: {class: 'control-group-justified'}})]) %}
     {% endif %}
 
     {% set formFields = formFields|merge([
