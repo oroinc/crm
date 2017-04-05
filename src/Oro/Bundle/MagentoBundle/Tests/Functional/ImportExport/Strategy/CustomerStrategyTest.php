@@ -12,6 +12,9 @@ use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadWebsitesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+/**
+ * @dbIsolationPerTest
+ */
 class CustomerStrategyTest extends WebTestCase
 {
     /**
@@ -68,5 +71,22 @@ class CustomerStrategyTest extends WebTestCase
         $this->assertInstanceOf(Customer::class, $processedCustomer);
         $this->assertNotEmpty($processedCustomer->getId());
         $this->assertSame($newWebsite, $processedCustomer->getWebsite());
+    }
+
+    public function testProcessWhenNewCustomerWithDuplicateEmailIsProcessed()
+    {
+        /** @var Customer $originalCustomer */
+        $originalCustomer = $this->getReference('customer');
+
+        $duplicateEmailCustomer = new Customer();
+        $uniqueOriginId = 123456789;
+        $duplicateEmailCustomer->setOriginId($uniqueOriginId);
+        $duplicateEmailCustomer->setChannel($originalCustomer->getChannel());
+        $duplicateEmailCustomer->setEmail($originalCustomer->getEmail());
+        $duplicateEmailCustomer->setWebsite($originalCustomer->getWebsite());
+
+        /** @var Customer $duplicateEmailCustomer */
+        $resultCustomer = $this->strategy->process($duplicateEmailCustomer);
+        $this->assertSame($duplicateEmailCustomer, $resultCustomer);
     }
 }
