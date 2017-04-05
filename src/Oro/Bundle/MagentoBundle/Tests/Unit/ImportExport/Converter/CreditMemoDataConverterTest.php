@@ -27,7 +27,11 @@ class CreditMemoDataConverterTest extends \PHPUnit_Framework_TestCase
             [
                 'creditmemo_id' => '1',
                 'increment_id' => '123',
-                'order_id' => '2'
+                'order_id' => '2',
+                'items' => [
+                    'item_id' => 1,
+                    'price' => 100
+                ]
             ]
         );
 
@@ -39,5 +43,15 @@ class CreditMemoDataConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result['incrementId'], '123');
         $this->assertEquals($result['order']['originId'], '2');
         $this->assertEquals($result['store']['channel']['id'], 1);
+
+        $this->assertEquals(
+            [
+                [
+                    'item_id' => 1,
+                    'price' => 100
+                ]
+            ],
+            $result['items']
+        );
     }
 }

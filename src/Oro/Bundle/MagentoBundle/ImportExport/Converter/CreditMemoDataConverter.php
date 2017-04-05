@@ -41,6 +41,19 @@ class CreditMemoDataConverter extends AbstractTreeDataConverter
             $importedRecord['order:channel:id'] = $this->context->getOption('channel');
         }
 
+        // normalize credit memo items if single is passed
+        if (!empty($importedRecord['items'])) {
+            /** @var array $items */
+            $items = $importedRecord['items'];
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    $importedRecord['items'] = [$items];
+
+                    break;
+                }
+            }
+        }
+
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
         $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
 
