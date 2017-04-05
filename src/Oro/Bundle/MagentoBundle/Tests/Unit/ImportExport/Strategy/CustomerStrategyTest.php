@@ -211,7 +211,9 @@ class CustomerStrategyTest extends AbstractStrategyTest
                             [
                                 'email' => $email,
                                 'channel' => $channel,
-                                'website' => $website
+                                'website' => $website,
+                                'originId' => null
+
                             ],
                             $guestCustomer
                         ]
