@@ -21,7 +21,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $provider;
 
-    private static  function getLeadFields()
+    private static function getLeadFields()
     {
         return [
             [
@@ -129,19 +129,21 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
 
         $entityFieldProvider
             ->method('getFields')
-            ->will( self::returnCallback(function($obj)
-            {
-               if($obj === 'OroContactBundle:Contact')
-                   return LeadToOpportunityProviderTest::getContactFields();
-               if($obj === 'OroSalesBundle:Lead')
-                   return LeadToOpportunityProviderTest::getLeadFields();
-               return null;
+            ->will(self::returnCallback(function ($obj) {
+                if ($obj === 'OroContactBundle:Contact') {
+                    return LeadToOpportunityProviderTest::getContactFields();
+                }
+                if ($obj === 'OroSalesBundle:Lead') {
+                    return LeadToOpportunityProviderTest::getLeadFields();
+                }
+                return null;
             }));
 
         $this->provider = $this->getMockBuilder('Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider')
             ->setConstructorArgs([$entityFieldProvider, $changeLeadStatus])
             ->setMethods(['createOpportunity'])
             ->getMock();
+
         $this->provider->expects($this->any())
             ->method('createOpportunity')
             ->will($this->returnCallback(function () {

@@ -115,36 +115,37 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         $leadFields = $this->prepareEntityFields('OroSalesBundle:Lead');
         $contactFields = $this->prepareEntityFields('OroContactBundle:Contact');
 
-        foreach ($contactFields  as $propertyName => $field) {
-
-            if(in_array($propertyName , $this->contactFields['excluded_proprieties']))
+        foreach ($contactFields as $propertyName => $field) {
+            if (in_array($propertyName, $this->contactFields['excluded_proprieties'])) {
                 continue;
+            }
 
-            if (! array_key_exists($propertyName, $leadFields))
+            if (! array_key_exists($propertyName, $leadFields)) {
                 continue;
+            }
 
-            if( $leadFields[$propertyName]['type'] !== $contactFields[$propertyName]['type'])
+            if ($leadFields[$propertyName]['type'] !== $contactFields[$propertyName]['type']) {
                 continue;
+            }
 
-            if(in_array($leadFields[$propertyName]['type'] , [
+            if (in_array($leadFields[$propertyName]['type'], [
                 'ref-one', 'ref-many',
                 'manyToOne', 'oneToMany',
                 'oneToOne', 'ManyToMany',])) {
-
-                if( $leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type'])
+                if ($leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type']) {
                     continue;
-
-                if ($leadFields[$propertyName]['related_entity_name'] !== $contactFields[$propertyName]['related_entity_name'])
+                }
+                if ($leadFields[$propertyName]['related_entity_name'] !==
+                    $contactFields[$propertyName]['related_entity_name']) {
                     continue;
+                }
             }
 
-            if(in_array($leadFields[$propertyName]['type'] , [ 'enum', 'multiEnum' ])) {
-
-                if( $leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type'])
+            if (in_array($leadFields[$propertyName]['type'], [ 'enum', 'multiEnum' ])) {
+                if ($leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type']) {
                     continue;
-
-                    // @todo check if enum value exists in both types
-
+                }
+                // @todo check if enum value exists in both types
             }
 
             $this->contactFields['properties'][$propertyName] = $propertyName;
@@ -159,18 +160,14 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     protected function fillEntityProperties($filledEntity, array $properties, $sourceEntity)
     {
         foreach ($properties as $key => $value) {
-
-            try
-            {
+            try {
                 $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
 
                 if ($propertyValue) {
                     $this->accessor->setValue($filledEntity, $key, $propertyValue);
                 }
             } catch (AccessException $e) {
-
             }
-
         }
     }
 
@@ -181,7 +178,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
      */
     protected function prepareContactToOpportunity(Lead $lead)
     {
-        if(empty($this->contactFields['properties'])) {
+        if (empty($this->contactFields['properties'])) {
             $this->validateContactFields();
         }
 
