@@ -39,7 +39,7 @@ class CustomerStrategyTest extends WebTestCase
             LoadMagentoChannel::class
         ]);
 
-        $this->strategy = $this->getContainer()->get('oro_magento.import.strategy.customer.add_or_update');
+        $this->strategy = $this->getContainer()->get('orocrm_magento.import.strategy.customer.add_or_update');
         $this->strategy->setEntityName(Customer::class);
 
         $jobInstance = new JobInstance();

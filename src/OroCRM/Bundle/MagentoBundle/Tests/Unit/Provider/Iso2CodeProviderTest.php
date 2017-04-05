@@ -21,7 +21,7 @@ class Iso2CodeProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->createMock(RegistryInterface::class);
+        $this->registry = $this->getMockBuilder(RegistryInterface::class)->getMock();
         $this->provider = new Iso2CodeProvider($this->registry);
     }
 
