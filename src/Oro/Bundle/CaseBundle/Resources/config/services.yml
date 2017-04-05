@@ -8,6 +8,7 @@ parameters:
     oro_case.provider.phone.case.class: Oro\Bundle\CaseBundle\Provider\CasePhoneProvider
     oro_case.provider.mailbox_process.case.class: Oro\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
     oro_case.event_listener.mailbox_saved_listener.class: Oro\Bundle\CaseBundle\EventListener\MailboxSavedListener
+    oro_case.event_listener.search_index_data_listener.class: Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener
 
 services:
     oro_case.manager:
@@ -57,3 +58,12 @@ services:
             - "@oro_tag.tag.manager"
         tags:
             - { name: kernel.event_listener, event: oro_email.mailbox_saved, method: onMailboxSave }
+
+    oro_case.event_listener.search_index_data_listener:
+        class: '%oro_case.event_listener.search_index_data_listener.class%'
+        arguments:
+            - '@oro_search.mapper'
+        calls:
+            - [setShortenedFields, [{ 'description' : 255, 'resolution' : 255, 'message' : 255 }]]
+        tags:
+            - { name: kernel.event_listener, event: oro_search.prepare_entity_map, method: onPrepareEntityMap }

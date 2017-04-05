@@ -92,6 +92,7 @@ services:
 
     oro_magento.importexport.data_converter.cart_address:
         class: %oro_magento.importexport.data_converter.cart_address.class%
+        parent: oro_magento.importexport.data_converter.abstract_address
 
     oro_magento.importexport.data_converter.cart:
         class: %oro_magento.importexport.data_converter.cart.class%
@@ -102,6 +103,7 @@ services:
 
     oro_magento.importexport.data_converter.order_address:
         class: %oro_magento.importexport.data_converter.order_address.class%
+        parent: oro_magento.importexport.data_converter.abstract_address
 
     oro_magento.importexport.data_converter.order_item:
         class: %oro_magento.importexport.data_converter.order_item.class%
@@ -115,6 +117,7 @@ services:
 
     oro_magento.importexport.data_converter.customer_address:
         class: %oro_magento.importexport.data_converter.customer_address.class%
+        parent: oro_magento.importexport.data_converter.abstract_address
 
     oro_magento.importexport.data_converter.website:
         class: %oro_magento.importexport.data_converter.website.class%
@@ -778,6 +781,13 @@ services:
             - "@oro_magento.importexport.processor.import_customer_address"
             - "@oro_magento.importexport.processor.customer_address_export"
             - "@oro_entity.doctrine_helper"
+
+    oro_magento.importexport.data_converter.abstract_address:
+        abstract: true
+        class: Oro\Bundle\MagentoBundle\ImportExport\Converter\AbstractAddressDataConverter
+        calls:
+            - [setIso2CodeProvider, ['@oro_magento.provider.iso2_code']]
+
     # utils
     oro_magento.post_job_executor:
         class: 'Oro\Bundle\MagentoBundle\ImportExport\Job\PostJobExecutor'
