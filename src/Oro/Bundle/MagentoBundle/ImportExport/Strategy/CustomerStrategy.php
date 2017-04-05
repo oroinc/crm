@@ -124,7 +124,8 @@ class CustomerStrategy extends AbstractImportStrategy
                     [
                         'email' => $entity->getEmail(),
                         'channel' => $entity->getChannel(),
-                        'website' => $website
+                        'website' => $website,
+                        'originId' => null
                     ]
                 );
                 if ($existingEntity && $existingEntity->getId()) {
