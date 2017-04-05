@@ -32,7 +32,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  */
 class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterface, OriginAwareInterface
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait, OriginTrait, CountryTextTrait;
 
     /**
      * @var ArrayCollection

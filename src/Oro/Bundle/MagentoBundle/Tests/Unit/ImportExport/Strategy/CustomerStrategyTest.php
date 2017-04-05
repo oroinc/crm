@@ -212,7 +212,9 @@ class CustomerStrategyTest extends AbstractStrategyTest
                             [
                                 'email' => $email,
                                 'channel' => $channel,
-                                'website' => $website
+                                'website' => $website,
+                                'originId' => null
+
                             ],
                             $guestCustomer
                         ]
@@ -271,6 +273,7 @@ class CustomerStrategyTest extends AbstractStrategyTest
             ->setRegion($region)
             ->setPostalCode('Zip Code')
             ->setCountry($country);
+        $address->setCountryText('Test');
 
         return $address;
     }

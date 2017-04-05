@@ -41,7 +41,7 @@ datagrids:
                 label: oro.contact.contactphone.phone.label
                 frontend_type: phone
         options:
-            entityHint: contact
+            entityHint: contacts
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -96,7 +96,7 @@ datagrids:
                 icon:          trash
                 link:          delete_link
         options:
-            entityHint: group
+            entityHint: groups
             entity_pagination: true
 
     # contacts assigned to group, shown on oro_contact_group_update route
@@ -155,7 +155,7 @@ datagrids:
                     data_name: c.lastName
             default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         options:
-            entityHint: contact
+            entityHint: contacts
             rowSelection:
                 dataField: id
                 columnName: hasGroup
@@ -543,7 +543,7 @@ datagrids:
                 entity_name: %oro_contact.entity.class%
                 data_identifier: c.id
         options:
-            entityHint: contact
+            entityHint: contacts
             export: true
             entity_pagination: true
         views_list: '@oro_contact.contacts_view_list'
@@ -662,7 +662,7 @@ datagrids:
         properties:
             id: ~
         options:
-            entityHint: account
+            entityHint: accounts
             rowSelection:
                 dataField: id
                 columnName: hasContact
@@ -782,7 +782,7 @@ datagrids:
         properties:
             id: ~
         options:
-            entityHint: contact
+            entityHint: contacts
 
     # contacts grid for context
     contacts-for-context-grid:
@@ -892,7 +892,7 @@ datagrids:
                     data_name: addressPostalCode
                     enabled: false
         options:
-            entityHint: contact
+            entityHint: contacts
             entity_pagination: true
             toolbarOptions:
                 pageSize:

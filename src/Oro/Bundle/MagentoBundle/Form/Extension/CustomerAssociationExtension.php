@@ -13,7 +13,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\MagentoBundle\Customer\AssociationChecker;
 
 /**
- * @TODO This extension should be removed after CRM-7178 will be fixed
+ * @deprecated since 2.0. This class will not be used.
  */
 class CustomerAssociationExtension extends AbstractTypeExtension
 {

@@ -101,6 +101,8 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
             - Valid: ~
         dataChannel:
             - NotBlank: ~
+        channel:
+            - NotBlank: ~
         organization:
             - NotBlank: ~
 

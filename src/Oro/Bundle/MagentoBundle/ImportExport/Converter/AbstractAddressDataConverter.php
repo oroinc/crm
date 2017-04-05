@@ -3,9 +3,23 @@
 namespace Oro\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\IntegrationAwareDataConverter;
+use Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider;
 
 abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverter
 {
+    /**
+     * @var Iso2CodeProvider
+     */
+    protected $iso2CodeProvider;
+
+    /**
+     * @param Iso2CodeProvider $iso2CodeProvider
+     */
+    public function setIso2CodeProvider(Iso2CodeProvider $iso2CodeProvider)
+    {
+        $this->iso2CodeProvider = $iso2CodeProvider;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -36,6 +50,9 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
+        if (!empty($importedRecord['country_id'])) {
+            $importedRecord['countryText'] = $importedRecord['country_id'];
+        }
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
 
         if (!empty($importedRecord['street'])) {
@@ -48,6 +65,7 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
             }
         }
         $importedRecord = $this->convertImportedRegion($importedRecord);
+        $importedRecord = $this->convertImportedCountry($importedRecord);
 
         return $importedRecord;
     }
@@ -97,5 +115,25 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
         }
 
         return $exportedRecord;
+    }
+
+    /**
+     * @param array $importedRecord
+     * @return array
+     */
+    private function convertImportedCountry(array $importedRecord)
+    {
+        if ($this->iso2CodeProvider && !empty($importedRecord['country']['iso2Code'])) {
+            $foundCode = $this
+                ->iso2CodeProvider
+                ->getIso2CodeByCountryId($importedRecord['country']['iso2Code']);
+            if ($foundCode) {
+                $importedRecord['country']['iso2Code'] = $foundCode;
+            } else {
+                $importedRecord['country'] = null;
+            }
+        }
+
+        return $importedRecord;
     }
 }
