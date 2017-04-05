@@ -10,10 +10,11 @@ use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
+class LeadToOpportunityProvider
 {
     /** @var PropertyAccessor */
     protected $accessor;
@@ -52,19 +53,25 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
      */
     protected $contactFields = [
         'properties' => [
-            'firstName' => 'firstName',
-            'jobTitle' => 'jobTitle',
-            'lastName' => 'lastName',
-            'middleName' => 'middleName',
-            'namePrefix' => 'namePrefix',
-            'nameSuffix' => 'nameSuffix',
-            'twitter' => 'twitter',
-            'linkedIn' => 'linkedIn',
-            'owner' => 'owner',
-            'source' => 'source'
         ],
-        'extended_properties' => [
-            'source' => 'enum'
+        'excluded_proprieties' => [
+            'id',
+            'primaryEmail',
+            'primaryAddr',
+            'primaryPhone',
+            'emails',
+            'addresses',
+            'phones',
+            'owner_id',
+            'method',
+            'tags' ,
+            'tag_field',
+            'tags_virtual' ,
+            'updated_by_id',
+            'updatedBy',
+            'updatedAt',
+            'createdBy',
+            'createdAt',
         ]
     ];
 
@@ -81,12 +88,13 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     }
 
     /**
+     *
      * @return array
      */
-    protected function prepareEntityFields()
+    protected function prepareEntityFields($entityName)
     {
         $rawFields = $this->entityFieldProvider->getFields(
-            'OroSalesBundle:Lead',
+            $entityName,
             true,
             true,
             false,
@@ -94,9 +102,10 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
             true,
             true
         );
+
         $fields = [];
         foreach ($rawFields as $field) {
-            $fields[$field['name']] = $field['type'];
+            $fields[$field['name']] = $field;
         }
 
         return $fields;
@@ -104,16 +113,42 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
 
     protected function validateContactFields()
     {
-        $fields = $this->prepareEntityFields();
-        foreach ($this->contactFields['extended_properties'] as $propertyName => $type) {
-            $fieldValid = false;
-            if (key_exists($propertyName, $fields) && $fields[$propertyName] !== $type) {
-                $fieldValid = true;
+        $leadFields = $this->prepareEntityFields('OroSalesBundle:Lead');
+        $contactFields = $this->prepareEntityFields('OroContactBundle:Contact');
+
+        foreach ($contactFields  as $propertyName => $field) {
+
+            if(in_array($propertyName , $this->contactFields['excluded_proprieties']))
+                continue;
+
+            if (! array_key_exists($propertyName, $leadFields))
+                continue;
+
+            if( $leadFields[$propertyName]['type'] !== $contactFields[$propertyName]['type'])
+                continue;
+
+            if(in_array($leadFields[$propertyName]['type'] , [
+                'ref-one', 'ref-many',
+                'manyToOne', 'oneToMany',
+                'oneToOne', 'ManyToMany',])) {
+
+                if( $leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type'])
+                    continue;
+
+                if ($leadFields[$propertyName]['related_entity_name'] !== $contactFields[$propertyName]['related_entity_name'])
+                    continue;
             }
 
-            if (!$fieldValid) {
-                unset($this->contactFields['properties'][$propertyName]);
+            if(in_array($leadFields[$propertyName]['type'] , [ 'enum', 'multiEnum' ])) {
+
+                if( $leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type'])
+                    continue;
+
+                    // @todo check if enum value exists in both types
+
             }
+
+            $this->contactFields['properties'][$propertyName] = $propertyName;
         }
     }
 
@@ -125,10 +160,19 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     protected function fillEntityProperties($filledEntity, array $properties, $sourceEntity)
     {
         foreach ($properties as $key => $value) {
-            $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
-            if ($propertyValue) {
-                $this->accessor->setValue($filledEntity, $key, $propertyValue);
+
+            try
+            {
+                $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
+
+                if ($propertyValue)
+                {
+                    $this->accessor->setValue($filledEntity, $key, $propertyValue);
+                }
+            } catch (AccessException $e) {
+
             }
+
         }
     }
 
@@ -181,7 +225,10 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Lead $lead
+     * @param bool $isGetRequest
+     *
+     * @return Opportunity
      */
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
@@ -206,7 +253,10 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param Opportunity $opportunity
+     * @param callable    $errorMessageCallback
+     *
+     * @return bool
      */
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
