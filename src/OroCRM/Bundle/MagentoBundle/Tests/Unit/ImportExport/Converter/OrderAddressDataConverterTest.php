@@ -26,7 +26,7 @@ class OrderAddressDataConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider importDataProviderWith2CodeProvider
+     * @dataProvider importDataProviderWithCodeProvider
      * @param array $import
      * @param array $expected
      * @param string $foundCode
