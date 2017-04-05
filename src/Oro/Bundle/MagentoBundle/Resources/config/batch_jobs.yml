@@ -198,7 +198,7 @@ connector:
                     class:      Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    oro_magento.mage.credit_memo_connector
-                        processor: oro_magento.importexport.processor.import_credit_memo
+                        processor: oro_magento.importexport.processor.import_credit_memo_with_existing_order
                         writer:    oro_magento.writer.proxy_entity_writer
                         job_executor: oro_magento.post_job_executor
                     parameters:
@@ -227,7 +227,7 @@ connector:
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_magento.reader.context_credit_memo
-                        processor: oro_magento.importexport.processor.import_credit_memo
+                        processor: oro_magento.importexport.processor.context_credit_memo
                         writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

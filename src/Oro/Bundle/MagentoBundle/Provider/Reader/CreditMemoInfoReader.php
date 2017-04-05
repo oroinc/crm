@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 class CreditMemoInfoReader extends AbstractInfoReader

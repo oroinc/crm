@@ -12,13 +12,13 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Order;
-use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoStrategy;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoWithExistingOrderStrategy;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader;
 
 class CreditMemoStrategyTest extends WebTestCase
 {
     /**
-     * @var CreditMemoStrategy
+     * @var CreditMemoWithExistingOrderStrategy
      */
     protected $strategy;
 
@@ -44,7 +44,7 @@ class CreditMemoStrategyTest extends WebTestCase
         $this->loadFixtures(['Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
         $this->strategy = $this->getContainer()
-            ->get('oro_magento.import.strategy.credit_memo.add_or_update');
+            ->get('oro_magento.import.strategy.credit_memo_with_order.add_or_update');
 
         $this->channel = $this->getReference('integration');
         $jobInstance = new JobInstance();
@@ -94,6 +94,6 @@ class CreditMemoStrategyTest extends WebTestCase
             $context->get(ContextOrderReader::CONTEXT_POST_PROCESS_ORDERS)
         );
         $keys = $context->getKeys();
-        $this->assertContains(CreditMemoStrategy::CONTEXT_CREDIT_MEMO_POST_PROCESS, $keys);
+        $this->assertContains(CreditMemoWithExistingOrderStrategy::CONTEXT_CREDIT_MEMO_POST_PROCESS, $keys);
     }
 }
