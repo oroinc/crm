@@ -84,7 +84,6 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
         $this->accessor = PropertyAccess::createPropertyAccessor();
         $this->entityFieldProvider = $entityFieldProvider;
         $this->changeLeadStatus = $changeLeadStatus;
-        $this->validateContactFields();
     }
 
     /**
@@ -165,8 +164,9 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
             {
                 $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
 
-                if ($propertyValue)
+                if ($propertyValue) {
                     $this->accessor->setValue($filledEntity, $key, $propertyValue);
+                }
             } catch (AccessException $e) {
 
             }
@@ -181,6 +181,10 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
      */
     protected function prepareContactToOpportunity(Lead $lead)
     {
+        if(empty($this->contactFields['properties'])) {
+            $this->validateContactFields();
+        }
+
         $contact = $lead->getContact();
 
         if (!$contact instanceof Contact) {
@@ -223,10 +227,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     }
 
     /**
-     * @param Lead $lead
-     * @param bool $isGetRequest
-     *
-     * @return Opportunity
+     * {@inheritdoc}
      */
     public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
@@ -251,10 +252,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
     }
 
     /**
-     * @param Opportunity $opportunity
-     * @param callable    $errorMessageCallback
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {

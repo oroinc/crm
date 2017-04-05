@@ -21,6 +21,99 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $provider;
 
+    private static  function getLeadFields()
+    {
+        return [
+            [
+                'name'  => 'firstName',
+                'type'  => 'string',
+                'label' => 'First name',
+            ],
+            [
+                'name'  => 'jobTitle',
+                'type'  => 'string',
+                'label' => 'Job title',
+            ],
+            [
+                'name'  => 'lastName',
+                'type'  => 'string',
+                'label' => 'Last name',
+            ],
+            [
+                'name'  => 'name',
+                'type'  => 'string',
+                'label' => 'Lead name',
+            ],
+            [
+                'name'  => 'middleName',
+                'type'  => 'string',
+                'label' => 'Middle name',
+            ],
+            [
+                'name'  => 'namePrefix',
+                'type'  => 'string',
+                'label' => 'Name prefix',
+            ],
+            [
+                'name'  => 'nameSuffix',
+                'type'  => 'string',
+                'label' => 'Name suffix',
+            ],
+            [
+                'name'                => 'owner',
+                'type'                => 'ref-one',
+                'label'               => 'Owner',
+                'relation_type'       => 'ref-one',
+                'related_entity_name' => 'Oro\\Bundle\\UserBundle\\Entity\\User',
+            ],
+        ];
+    }
+
+    private static function getContactFields()
+    {
+        return [
+            [
+                'name'  => 'firstName',
+                'type'  => 'string',
+                'label' => 'First name',
+            ],
+            [
+                'name'  => 'jobTitle',
+                'type'  => 'string',
+                'label' => 'Job Title',
+            ],
+            [
+                'name'  => 'lastName',
+                'type'  => 'string',
+                'label' => 'Last name',
+            ],
+            [
+                'name'  => 'middleName',
+                'type'  => 'string',
+                'label' => 'Middle name',
+            ],
+            [
+                'name'  => 'namePrefix',
+                'type'  => 'string',
+                'label' => 'Name prefix',
+            ],
+
+            [
+                'name'  => 'nameSuffix',
+                'type'  => 'string',
+                'label' => 'Name suffix',
+            ],
+            [
+                'name'                => 'owner',
+                'type'                => 'ref-one',
+                'label'               => 'Owner',
+                'relation_type'       => 'ref-one',
+                'related_entity_name' => 'Oro\\Bundle\\UserBundle\\Entity\\User',
+            ],
+        ];
+    }
+
+
     public function setUp()
     {
         $entityFieldProvider = $this
@@ -34,7 +127,16 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entityFieldProvider->method('getFields')->willReturn([]);
+        $entityFieldProvider
+            ->method('getFields')
+            ->will( self::returnCallback(function($obj)
+            {
+               if($obj === 'OroContactBundle:Contact')
+                   return LeadToOpportunityProviderTest::getContactFields();
+               if($obj === 'OroSalesBundle:Lead')
+                   return LeadToOpportunityProviderTest::getLeadFields();
+               return null;
+            }));
 
         $this->provider = $this->getMockBuilder('Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProvider')
             ->setConstructorArgs([$entityFieldProvider, $changeLeadStatus])
@@ -73,7 +175,7 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
     public function testPrepareOpportunityForFormWithoutContact(Lead $lead, Opportunity $expectedOpportunity)
     {
         $preparedOpportunity = $this->provider->prepareOpportunityForForm($lead, true);
-        $this->assertEquals($preparedOpportunity, $expectedOpportunity);
+        self::assertEquals($expectedOpportunity, $preparedOpportunity);
     }
 
     public function leadProvider()
