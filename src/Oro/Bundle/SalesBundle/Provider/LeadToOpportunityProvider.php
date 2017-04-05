@@ -14,7 +14,7 @@ use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-class LeadToOpportunityProvider
+class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
 {
     /** @var PropertyAccessor */
     protected $accessor;
@@ -166,9 +166,7 @@ class LeadToOpportunityProvider
                 $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
 
                 if ($propertyValue)
-                {
                     $this->accessor->setValue($filledEntity, $key, $propertyValue);
-                }
             } catch (AccessException $e) {
 
             }
