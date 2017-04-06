@@ -35,6 +35,28 @@ oro_behat_extension:
         mapping:
           Close reason: 'oro_workflow_transition[close_reason_name]'
 
+    Quotes Grid:
+      selector: '[id^="grid-opportunity-quotes-grid"]'
+      class: Oro\Bundle\SalesBundle\Tests\Behat\Element\QuotesGrid
+
+    Quote Line Items:
+      selector: '.quote-lineitems'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Product:
+            type: 'css'
+            locator: '.quote-lineitem-product-select .select2-offscreen[type="text"]'
+          Unit Price: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]'
+
+    Frontend Grid:
+      selector: '.grid-container'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendGrid
+
+    Frontend Table Grid:
+      selector: '.oro-grid-table'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
@@ -63,3 +85,18 @@ oro_behat_extension:
     Lead Index:
       route: 'oro_sales_lead_index'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex
+
+    Customer Quotes List:
+      route: 'oro_sale_frontend_quote'
+      class: Oro\Bundle\SalesBundle\Tests\Behat\Page\CustomerQuotes
+
+  suites:
+    OroSalesBundle:
+      contexts:
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
+        - OroDataGridBundle::GridContext
+        - OroApplicationBundle::CommerceMainContext
+        - Oro\Bundle\SalesBundle\Tests\Behat\Context\FeatureContext
+      paths:
+        - '@OroSalesBundle/Tests/Behat/Features'

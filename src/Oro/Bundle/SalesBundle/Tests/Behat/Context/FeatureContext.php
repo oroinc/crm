@@ -250,4 +250,32 @@ class FeatureContext extends OroFeatureContext implements
         $form = $this->createElement($formName);
         $form->submit();
     }
+
+    /**
+     * Press agree in quote saving pop-up
+     *
+     * @Given /^(?:|I )agree that shipping cost may have changed$/
+     */
+    public function iAgreeThatShippingCostMayHaveChanged()
+    {
+        $saveLink = $this->getPage()->find('css', '.oro-modal-normal .ok.btn-primary');
+        self::assertNotNull($saveLink, "Can't find modal window or 'Save' button");
+        $saveLink->click();
+    }
+
+    /**
+     * Assert link existing on current page
+     *
+     * @Then /^I should see following buttons:$/
+     */
+    public function iShouldSeeFollowingButtons(TableNode $table)
+    {
+        foreach ($table->getRows() as $item) {
+            $item = reset($item);
+            self::assertNotNull(
+                $this->getPage()->findLink($item),
+                "Button with name $item not found (link selector, actually)"
+            );
+        }
+    }
 }
