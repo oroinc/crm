@@ -203,10 +203,10 @@ connector:
                         job_executor: oro_magento.post_job_executor
                     parameters:
                         batch_size: 25
-                        post_processing_jobs: mage_credit_memo_import_post_process_orders_and_info
+                        post_processing_jobs: mage_credit_memo_post_process_orders_and_info
                         context_shared_keys: postProcessContextOrderIds,postProcessCreditMemos,postProcessCreditMemoIds
 
-        mage_credit_memo_import_post_process_orders_and_info:
+        mage_credit_memo_post_process_orders_and_info:
             title: "Import orders and postponded credit memos"
             type:  import
             steps:
