@@ -1077,6 +1077,8 @@ datagrids:
             lifetime:
                 label:          oro.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
+                inline_editing:
+                    enable: false
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime
