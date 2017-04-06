@@ -1,16 +1,4 @@
 api:
-    entity_aliases:
-        # move this to "entity.yml" after the Oro\Bundle\SalesBundle\Entity\OpportunityStatus entity will be removed
-        # so, the alias for "Extend\Entity\EV_Opportunity_Status" should be "opportunitystatus", not "salesopportunitystatus"
-        Extend\Entity\EV_Opportunity_Status:
-            alias:        opportunitystatus
-            plural_alias: opportunitystatuses
-        # move this to "entity.yml" after the Oro\Bundle\SalesBundle\Entity\LeadStatus entity will be removed
-        # so, the alias for "Extend\Entity\EV_Lead_Status" should be "leadstatus", not "salesleadstatus"
-        Extend\Entity\EV_Lead_Status:
-            alias:        leadstatus
-            plural_alias: leadstatuses
-
     entities:
         Extend\Entity\EV_Opportunity_Status:
             fields:
@@ -53,12 +41,6 @@ api:
                     documentation:  Retrieve a specific lead source record. Lead source defines how the information about the lead was received.
                 get_list:
                     documentation:  Retrieve a collection of lead source records. Lead source defines how the information about the lead was received.
-
-        # deprecated since 1.10. Enum type is used instead
-        Oro\Bundle\SalesBundle\Entity\OpportunityStatus: { exclude: true }
-
-        # deprecated since 1.10. Enum type is used instead
-        Oro\Bundle\SalesBundle\Entity\LeadStatus: { exclude: true }
 
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/b2b_customer.md'
@@ -118,8 +100,6 @@ api:
         Oro\Bundle\SalesBundle\Entity\Lead:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
             fields:
-                address:
-                    exclude: true
                 phones:
                     data_type: array
                     exclusion_policy: all

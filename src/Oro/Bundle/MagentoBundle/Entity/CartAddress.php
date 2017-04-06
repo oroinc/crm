@@ -31,7 +31,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendCartAddress;
  */
 class CartAddress extends ExtendCartAddress implements OriginAwareInterface
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait, OriginTrait, CountryTextTrait;
 
     /**
      * @var string

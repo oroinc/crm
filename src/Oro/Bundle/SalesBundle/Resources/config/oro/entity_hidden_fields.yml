@@ -1,4 +1,0 @@
-# todo 'address' field is hidden here until it's removed in CRM-5877
-oro_entity_hidden_fields:
-    Oro\Bundle\SalesBundle\Entity\Lead:
-        address: true

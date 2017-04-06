@@ -24,10 +24,22 @@ oro:
             transition:
                 qualify:
                     label: Qualify
+                    warning_message: ''
+                    attribute:
+                        company_name:
+                            label: 'Company name'
+                        opportunity_name:
+                            label: 'Opportunity name'
+                        customer_association:
+                            label: 'Account'
+                        notes:
+                            label: 'Additional comments'
                 cancel:
                     label: Disqualify
+                    warning_message: ''
                 reactivate:
                     label: Reactivate
+                    warning_message: ''
             label: 'Unqualified Sales Lead'
         b2b_flow_sales_funnel:
             step:
@@ -64,25 +76,116 @@ oro:
                     label: 'Budget Amount'
                 close_revenue:
                     label: 'Close Revenue'
+                close_reason:
+                    label: ''
+                contact:
+                    label: ''
+                customer_need:
+                    label: ''
+                lead:
+                    label: ''
+                lead_notes:
+                    label: ''
+                opportunity:
+                    label: ''
+                opportunity_name:
+                    label: ''
+                opportunity_notes:
+                    label: ''
+                probability:
+                    label: ''
+                proposed_solution:
+                    label: ''
+                sales_funnel_owner:
+                    label: ''
+                sales_funnel_start_date:
+                    label: ''
             transition:
                 start_from_lead:
                     label: 'Start from Lead'
+                    warning_message: ''
+                    attribute:
+                        lead:
+                            label: 'Lead'
+                        sales_funnel_owner:
+                            label: 'Owner'
+                        sales_funnel_start_date:
+                            label: 'Start Date'
                 start_from_opportunity:
                     label: 'Start from Opportunity'
+                    warning_message: ''
+                    attribute:
+                        opportunity:
+                            label: 'Opportunity'
+                        sales_funnel_owner:
+                            label: 'Owner'
+                        sales_funnel_start_date:
+                            label: 'Start Date'
                 disqualify:
                     label: Disqualify
+                    warning_message: ''
+                    attribute:
+                        new_company_name:
+                            label: 'Company name'
+                        new_customer_association:
+                            label: 'Account'
+                        new_notes:
+                            label: 'Additional comments'
+                        new_opportunity_name:
+                            label: 'Opportunity name'
                 follow_up:
                     label: 'Follow up'
+                    warning_message: ''
+                    attribute:
+                        lead_notes:
+                            label: 'Additional comments'
                 reactivate:
                     label: Reactivate
+                    warning_message: ''
                 qualify:
                     label: Qualify
+                    warning_message: ''
+                    attribute:
+                        new_company_name:
+                            label: 'Company name'
+                        new_customer_association:
+                            label: 'Account'
+                        new_notes:
+                            label: 'Additional comments'
+                        new_opportunity_name:
+                            label: 'Opportunity name'
                 develop:
                     label: Develop
+                    warning_message: ''
+                    attribute:
+                        budget_amount:
+                            label: 'Budget Amount'
+                        contact:
+                            label: 'Contact'
+                        customer_need:
+                            label: 'Customer need'
+                        new_customer_association:
+                            label: 'Account'
+                        probability:
+                            label: 'Probability'
+                        proposed_solution:
+                            label: 'Proposed solution'
                 close_as_won:
                     label: 'Close as Won'
+                    warning_message: ''
+                    attribute:
+                        close_date:
+                            label: 'Close date'
+                        close_revenue:
+                            label: 'Close Revenue'
                 close_as_lost:
                     label: 'Close as Lost'
+                    warning_message: ''
+                    attribute:
+                        close_date:
+                            label: 'Close date'
+                        close_reason_name:
+                            label: 'Close reason'
                 reopen:
                     label: Reopen
                     warning_message: "This action will reset the opportunity data and will bring the Sales Activity workflow back to the New Opportunity step.\n\nDo you want to proceed?\n"
@@ -106,15 +209,81 @@ oro:
                     label: 'Budget Amount'
                 close_revenue:
                     label: 'Close Revenue'
+                close_reason:
+                    label: ''
+                contact:
+                    label: ''
+                customer_need:
+                    label: ''
+                notes:
+                    label: ''
+                opportunity_name:
+                    label: ''
+                probability:
+                    label: 'Probability'
+                proposed_solution:
+                    label: ''
             transition:
                 __start__:
                     label: 'Start Opportunity Management Flow'
+                    warning_message: ''
+                    attribute:
+                        probability:
+                            label: 'Probability'
+                        status:
+                            label: 'Status'
                 develop:
                     label: Develop
+                    warning_message: ''
+                    attribute:
+                        budget_amount:
+                            label: 'Budget Amount'
+                        close_date:
+                            label: 'Expected close date'
+                        contact:
+                            label: 'Contact'
+                        customer_need:
+                            label: 'Customer need'
+                        probability:
+                            label: 'Probability'
+                        proposed_solution:
+                            label: 'Proposed solution'
+                        status:
+                            label: 'Status'
                 close_won:
                     label: 'Close as Won'
+                    warning_message: ''
+                    attribute:
+                        close_date:
+                            label: 'Expected close date'
+                        close_revenue:
+                            label: 'Close Revenue'
                 close_lost:
                     label: 'Close as Lost'
+                    warning_message: ''
+                    attribute:
+                        close_date:
+                            label: 'Expected close date'
+                        close_reason_name:
+                            label: 'Close reason'
                 reopen:
                     label: Reopen
+                    warning_message: ''
+                    attribute:
+                        budget_amount:
+                            label: 'Budget Amount'
+                        close_date:
+                            label: 'Expected close date'
+                        contact:
+                            label: 'Contact'
+                        customer_need:
+                            label: 'Customer need'
+                        notes:
+                            label: 'Additional comments'
+                        probability:
+                            label: 'Probability'
+                        proposed_solution:
+                            label: 'Proposed solution'
+                        status:
+                            label: 'Status'
             label: 'Opportunity Management Flow'

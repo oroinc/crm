@@ -212,7 +212,9 @@ oro:
                 description:      "Collection of Magento customer addresses: mailing, business, home, billing, etc."
             primary_addr.label:   Primary Address
             carts.label:          Carts
-            channel.label:        Integration
+            channel:
+                label:            Integration
+                description:      The integration via which information about a Magento customer is received.
             data_channel:
                 label:            Channel
                 description:      The channel via which information about a Magento customer is received.
@@ -760,6 +762,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento customer address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento customer address.
@@ -831,6 +834,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento cart address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento cart address.
@@ -861,6 +865,7 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento order address.
+            country_text.label:       Country (Text)
             region:
                 label:                State
                 description:          The region specified in the Magento order address.

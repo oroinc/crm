@@ -243,6 +243,7 @@ class CartStrategy extends AbstractImportStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if ($address->getCountry()) {
+                $address->setCountryText(null);
                 $this->getPropertyAccessor()->setValue($entity, $addressName, $address);
             } else {
                 $this->getPropertyAccessor()->setValue($entity, $addressName, null);

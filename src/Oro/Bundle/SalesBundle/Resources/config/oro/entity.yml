@@ -78,8 +78,8 @@ oro_entity:
             alias:        salescustomer
             plural_alias: salescustomers
         Extend\Entity\EV_Opportunity_Status:
-            alias:        salesopportunitystatus
-            plural_alias: salesopportunitystatuses
+            alias:        opportunitystatus
+            plural_alias: opportunitystatuses
         Extend\Entity\EV_Lead_Status:
-            alias:        salesleadstatus
-            plural_alias: salesleadstatuses
+            alias:        leadstatus
+            plural_alias: leadstatuses
