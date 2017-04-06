@@ -46,7 +46,7 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
     protected function doExecute(LoggerInterface $logger, $dryRun = false)
     {
         $query = 'INSERT INTO orocrm_sales_customer (account_id, ' . $this->customerColumnName . ') '
-            . ' SELECT account_id, id FROM orocrm_sales_b2bcustomer';
+            . ' SELECT account_id, id FROM orocrm_sales_b2bcustomer WHERE account_id IS NOT NULL';
 
         $this->logQuery($logger, $query, [], []);
         if (!$dryRun) {
