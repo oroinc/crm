@@ -12,6 +12,9 @@ class ConfigProvider
     /** @var ConfigManager */
     protected $configManager;
 
+    /** @var string */
+    private $customerClasses;
+
     /**
      * @param ConfigManager $configManager
      */
@@ -35,18 +38,25 @@ class ConfigProvider
             $objectOrClass = ClassUtils::getClass($objectOrClass);
         }
 
-        return in_array($objectOrClass, $this->getAssociatedCustomerClasses(), true);
+        return in_array($objectOrClass, $this->getCustomerClasses(), true);
     }
 
+    /**
+     * @return string[]
+     */
     public function getCustomerClasses()
     {
-        return $this->getAssociatedCustomerClasses();
+        if (null === $this->customerClasses) {
+            $this->customerClasses = $this->getAssociatedCustomerClasses();
+        }
+
+        return $this->customerClasses;
     }
 
     /**
      * @return array
      * [
-     *     className   => customer class with _ instead of \,
+     *     className   => FQCN of a customer,
      *     label       => entity label,
      *     icon        => entity icon,
      *     gridName    => customer grid name
@@ -117,7 +127,7 @@ class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     protected function getAssociatedCustomerClasses()
     {
