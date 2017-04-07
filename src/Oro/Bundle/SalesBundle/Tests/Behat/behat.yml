@@ -49,11 +49,11 @@ oro_behat_extension:
             locator: '.quote-lineitem-product-select .select2-offscreen[type="text"]'
           Unit Price: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]'
 
-    Frontend Grid:
+    Customer Quotes Grid:
       selector: '.grid-container'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendGrid
 
-    Frontend Table Grid:
+    Quote View Grid:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
@@ -99,6 +99,10 @@ oro_behat_extension:
         - OroDataGridBundle::GridContext
         - OroApplicationBundle::CommerceMainContext
         - OroSecurityBundle::ACLContext
+        - OroImportExportBundle::ImportExportContext:
+          - '@oro_entity.entity_alias_resolver'
+          - '@oro_importexport.processor.registry'
+        - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
       paths:

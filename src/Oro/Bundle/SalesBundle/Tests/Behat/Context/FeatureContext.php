@@ -278,4 +278,20 @@ class FeatureContext extends OroFeatureContext implements
             );
         }
     }
+
+    /**
+     * Assert that links are not present on current page
+     *
+     * @Then /^I should not see following buttons:$/
+     */
+    public function iShouldNotSeeFollowingButtons(TableNode $table)
+    {
+        foreach ($table->getRows() as $item) {
+            $item = reset($item);
+            self::assertNull(
+                $this->getPage()->findLink($item),
+                "Button with name $item still present on page (link selector, actually)"
+            );
+        }
+    }
 }
