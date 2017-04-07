@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Provider\Customer;
 
 use Doctrine\Common\Util\ClassUtils;
+
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
@@ -10,6 +11,9 @@ class ConfigProvider
 {
     /** @var ConfigManager */
     protected $configManager;
+
+    /** @var string */
+    private $customerClasses;
 
     /**
      * @param ConfigManager $configManager
@@ -30,17 +34,30 @@ class ConfigProvider
             return false;
         }
 
-        $class = is_object($objectOrClass) ? ClassUtils::getClass($objectOrClass) : $objectOrClass;
+        if (is_object($objectOrClass)) {
+            $objectOrClass = ClassUtils::getClass($objectOrClass);
+        }
 
-        return in_array($class, $this->getAssociatedCustomerClasses(), true);
+        return in_array($objectOrClass, $this->getCustomerClasses(), true);
     }
 
     /**
      * @return string[]
+     * [
+     *     className   => FQCN of a customer,
+     *     label       => entity label,
+     *     icon        => entity icon,
+     *     gridName    => customer grid name
+     *     routeCreate => route to create entity
+     * ]
      */
     public function getCustomerClasses()
     {
-        return $this->getAssociatedCustomerClasses();
+        if (null === $this->customerClasses) {
+            $this->customerClasses = $this->getAssociatedCustomerClasses();
+        }
+
+        return $this->customerClasses;
     }
 
     /**
@@ -89,7 +106,7 @@ class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     protected function getAssociatedCustomerClasses()
     {
