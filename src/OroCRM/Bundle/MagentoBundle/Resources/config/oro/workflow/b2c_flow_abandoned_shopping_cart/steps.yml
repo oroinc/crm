@@ -16,7 +16,7 @@ workflows:
                     - reopen
                 is_final: true
             converted_to_opportunity:
-                label: 'Converted to opportunity'
+                label: 'Converted to Opportunity'
                 order: 30
                 allowed_transitions:
                     - reopen
