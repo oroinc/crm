@@ -94,9 +94,12 @@ oro_behat_extension:
     OroSalesBundle:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
-        - Oro\Bundle\ConfigBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - OroConfigBundle::FeatureContext
         - OroDataGridBundle::GridContext
         - OroApplicationBundle::CommerceMainContext
-        - Oro\Bundle\SalesBundle\Tests\Behat\Context\FeatureContext
+        - OroSecurityBundle::ACLContext
+        - OroSalesBundle::SalesContext
+        - OroSalesBundle::FeatureContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
