@@ -278,9 +278,6 @@ datagrids:
                 label:            oro.magento.datagrid.columns.billing_region
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1068,9 +1065,6 @@ datagrids:
                 frontend_type:    datetime
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1271,9 +1265,6 @@ datagrids:
                 align:            right
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1841,9 +1832,6 @@ datagrids:
                 frontend_type:    datetime
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
