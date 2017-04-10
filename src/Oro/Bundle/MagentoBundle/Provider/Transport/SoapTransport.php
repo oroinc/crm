@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
@@ -32,7 +33,10 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  * @package Oro\Bundle\MagentoBundle
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
+class SoapTransport extends BaseSOAPTransport implements
+    MagentoTransportInterface,
+    ServerTimeAwareInterface,
+    PingableInterface
 {
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
@@ -316,6 +320,14 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         return $this->isExtensionInstalled()
             && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function ping()
+    {
+        return $this->isExtensionInstalled();
     }
 
     /**

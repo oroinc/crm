@@ -8,8 +8,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class UpdateIntegrationEntitiesData extends AbstractFixture
+class UpdateIntegrationEntitiesData extends AbstractFixture implements
+    VersionedFixtureInterface
 {
     /**
      * {@inheritDoc}
@@ -97,7 +99,7 @@ QUERY;
 
         if ($platformName === DatabasePlatformInterface::DATABASE_MYSQL) {
             $query = $mySqlQuery;
-        } elseif ($platformName === DatabasePlatformInterface::DATABASE_POSTGRESQL) {
+        } elseif ($platformName === DatabasePlatformInterface::DATABASE_PLATFORM_POSTGRESQL) {
             $query = $postgreSqlQuery;
         } else {
             return;
@@ -110,5 +112,13 @@ QUERY;
         } catch (\Exception $e) {
             $conn->rollBack();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.1';
     }
 }
