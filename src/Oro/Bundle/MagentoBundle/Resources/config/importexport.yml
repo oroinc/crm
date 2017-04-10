@@ -315,7 +315,6 @@ services:
             - { name: oro_importexport.normalizer, priority: -200 }
 
     oro_magento.importexport.denormalizer.credit_memo:
-        class: %oro_magento.importexport.normalizer.payment_details.class%
         parent: oro_importexport.serializer.configurable_entity_normalizer
         calls:
             - [setSupportedClass, [%oro_magento.credit_memo.entity.class%]]
