@@ -585,6 +585,22 @@ services:
         class: OroCRM\Bundle\MagentoBundle\Manager\CustomerAddressManager
         arguments:
             - "@doctrine.orm.entity_manager"
+            - '@orocrm_magento.manager.customer_address.convert_address_to_contact_address'
+        calls:
+            - ['setLogger',  ["@logger"]]
+
+    orocrm_magento.manager.customer_address.convert_address_to_contact_address:
+        class: OroCRM\Bundle\MagentoBundle\Manager\CustomerAddress\ConvertAddressToContactAdress
+
+    oro_magento.manager.customer_info_manager:
+        class: OroCRM\Bundle\MagentoBundle\Manager\CustomerInfoManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_magento.transport.soap_transport"
+            - "@orocrm_magento.importexport.data_converter.customer_address"
+            - "@orocrm_magento.import.strategy.customer_address.add_or_update"
+            - "@orocrm_magento.importexport.processor.context"
+            - '@orocrm_magento.manager.customer_address.convert_address_to_contact_address'
         calls:
             - ['setLogger',  ["@logger"]]
 
