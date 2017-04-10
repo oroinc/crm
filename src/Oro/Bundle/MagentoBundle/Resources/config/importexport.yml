@@ -539,6 +539,8 @@ services:
         calls:
             - [setStrategy, ["@oro_magento.import.strategy.order.add_or_update"]]
             - [setEntityName, [%oro_magento.entity.order.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.order.class%, alias: oro_magento.order_context }
 
     oro_magento.importexport.processor.context_cart:
         parent: oro_magento.importexport.processor.context
@@ -549,6 +551,8 @@ services:
         parent: oro_magento.importexport.processor.context
         calls:
             - [setStrategy, ["@oro_magento.import.strategy.credit_memo.add_or_update"]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.credit_memo.class%, alias: oro_magento.credit_memo_context }
 
     oro_magento.importexport.processor.context_newsletter_subscriber:
         parent: oro_magento.importexport.processor.context
@@ -597,6 +601,8 @@ services:
             - [setDataConverter, ["@oro_magento.importexport.data_converter.credit_memo"]]
             - [setStrategy, ["@oro_magento.import.strategy.credit_memo_with_order.add_or_update"]]
             - [setEntityName, [%oro_magento.credit_memo.entity.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %oro_magento.credit_memo.entity.class%, alias: oro_magento.add_or_update_credit_memo_with_existing_order }
 
     # Export processor
     oro_magento.importexport.processor.customer_export:

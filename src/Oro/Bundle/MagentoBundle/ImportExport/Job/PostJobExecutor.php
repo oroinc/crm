@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\ImportExport\Job;
 use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
+use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 
 class PostJobExecutor extends JobExecutor
 {
@@ -16,10 +17,13 @@ class PostJobExecutor extends JobExecutor
         $jobExecution = parent::createJobExecution($configuration, $jobInstance);
 
         /**
-         * Channel should be added to the execution context to be available in post processing jobs
+         * Channel and processor alias should be added to the execution context to be available in post processing jobs
          */
-        if (isset($configuration['channel'])) {
-            $jobExecution->getExecutionContext()->put('channel', $configuration['channel']);
+        $shareKeys = ['channel', Serializer::PROCESSOR_ALIAS_KEY];
+        foreach ($shareKeys as $key) {
+            if (isset($configuration[$key])) {
+                $jobExecution->getExecutionContext()->put($key, $configuration[$key]);
+            }
         }
 
         return $jobExecution;
