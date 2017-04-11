@@ -49,17 +49,17 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
             'FROM orocrm_sales_b2bcustomer WHERE account_id IS NULL';
         $customersWithoutAccount = $this->connection->fetchAll($query);
         foreach ($customersWithoutAccount as $customer) {
-            $query = 'INSERT INTO orocrm_account SET user_owner_id = :user_owner_id, '.
-                'organization_id = :organization_id, name = :name, createdAt = :createdAt, '.
-                'updatedAt = :updatedAt, serialized_data = :serialized_data';
+            $query = 'INSERT INTO orocrm_account '.
+                '(user_owner_id, organization_id, name, createdAt, updatedAt, serialized_data) '.
+                'VALUES(:user_owner_id, :organization_id, :name, :createdAt, :updatedAt, :serialized_data)';
             $this->connection->executeQuery(
                 $query,
                 [
                     'user_owner_id' => $customer['user_owner_id'],
                     'organization_id' => $customer['organization_id'],
                     'name' => $customer['name'],
-                    'createdAt' => $customer['createdAt'],
-                    'updatedAt' => $customer['updatedAt'],
+                    'createdAt' => isset($customer['createdAt']) ? $customer['createdAt'] : $customer['createdat'],
+                    'updatedAt' => isset($customer['updatedAt']) ? $customer['updatedAt'] : $customer['updatedat'],
                     'serialized_data' => base64_encode(serialize(null)),
                 ],
                 [
