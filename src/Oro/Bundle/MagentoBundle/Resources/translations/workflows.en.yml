@@ -7,7 +7,7 @@ oro:
                 abandoned:
                     label: Abandoned
                 converted_to_opportunity:
-                    label: 'Converted to opportunity'
+                    label: 'Converted to Opportunity'
                 converted:
                     label: Converted
             attribute:
@@ -29,7 +29,7 @@ oro:
                 place_order:
                     label: 'Place an order'
                 convert_to_opportunity:
-                    label: 'Convert to opportunity'
+                    label: 'Convert to Opportunity'
                 abandon:
                     label: Abandon
                     warning_message: 'You are going to abandon this shopping cart.'
