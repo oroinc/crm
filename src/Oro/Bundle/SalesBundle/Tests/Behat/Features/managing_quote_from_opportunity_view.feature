@@ -128,6 +128,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
 
   Scenario: Expire Quote from Quote Section on Opportunity view
     When I click "Expire"
+    And click "Mark as Expired"
     Then I should see Quote with:
       | Internal Status | Expired |
     And I should see following buttons:
