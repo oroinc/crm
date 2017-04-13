@@ -13,6 +13,7 @@ use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\AccountAutocomplete\ChainAccountAutocompleteProvider;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 
 class CustomerSearchHandler extends ContextSearchHandler
@@ -376,8 +377,8 @@ class CustomerSearchHandler extends ContextSearchHandler
         if (!empty($item['searchItem'])) {
             /** @var Item $searchItem */
             $searchItem = $item['searchItem'];
+            $this->dispatcher->dispatch(PrepareResultItemEvent::EVENT_NAME, new PrepareResultItemEvent($searchItem));
 
-            /** @var Item $item */
             $text = $searchItem->getRecordTitle();
             $className = $searchItem->getEntityName();
             $identifier = $searchItem->getRecordId();
