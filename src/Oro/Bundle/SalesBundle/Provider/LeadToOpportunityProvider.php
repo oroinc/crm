@@ -142,10 +142,7 @@ class LeadToOpportunityProvider implements LeadToOpportunityProviderInterface
             }
 
             if (in_array($leadFields[$propertyName]['type'], [ 'enum', 'multiEnum' ])) {
-                if ($leadFields[$propertyName]['relation_type'] !== $contactFields[$propertyName]['relation_type']) {
-                    continue;
-                }
-                // @todo check if enum value exists in both types
+                continue;  // Enums are not copied from Lead to Contact
             }
 
             $this->contactFields['properties'][$propertyName] = $propertyName;
