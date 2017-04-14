@@ -4,14 +4,27 @@ namespace Oro\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressSameTransformer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 
 class B2bCustomerType extends AbstractType
 {
+    /** @var PropertyAccessor */
+    private $propertyAccessor;
+
     /**
-     * @return string
+     * @param PropertyAccessor $propertyAccessor
+     */
+    public function __construct(PropertyAccessor $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -27,8 +40,7 @@ class B2bCustomerType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -51,22 +63,22 @@ class B2bCustomerType extends AbstractType
         $builder->add(
             'emails',
             'oro_email_collection',
-            array(
+            [
                 'label'    => 'oro.sales.b2bcustomer.emails.label',
                 'type'     => 'oro_email',
                 'required' => false,
-                'options'  => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail')
-            )
+                'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail']
+            ]
         );
         $builder->add(
             'phones',
             'oro_phone_collection',
-            array(
+            [
                 'label'    => 'oro.sales.b2bcustomer.phones.label',
                 'type'     => 'oro_phone',
                 'required' => false,
-                'options'  => array('data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone')
-            )
+                'options'  => ['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone']
+            ]
         );
         $builder->add(
             'dataChannel',
@@ -95,12 +107,17 @@ class B2bCustomerType extends AbstractType
                 'required'           => false
             ]
         );
+
+        $builder->addModelTransformer(new AddressSameTransformer(
+            $this->propertyAccessor,
+            ['billing_address', 'shipping_address']
+        ));
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class' => 'Oro\Bundle\SalesBundle\Entity\B2bCustomer']);
     }
