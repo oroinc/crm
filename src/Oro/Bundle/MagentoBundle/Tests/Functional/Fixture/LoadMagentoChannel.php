@@ -96,6 +96,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
             ->createIntegration()
             ->createChannel()
             ->createWebSite()
+            ->createWebSite2()
             ->createCustomerGroup()
             ->createGuestCustomerGroup()
             ->createStore();
@@ -444,6 +445,23 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $this->setReference('website', $website);
         $this->em->persist($website);
         $this->website = $website;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function createWebSite2()
+    {
+        $website = new Website();
+        $website->setName('web site 2');
+        $website->setOriginId(2);
+        $website->setCode('web site 2 code');
+        $website->setChannel($this->integration);
+
+        $this->setReference('website_2', $website);
+        $this->em->persist($website);
 
         return $this;
     }
