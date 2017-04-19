@@ -294,6 +294,9 @@ class B2bCustomer extends ExtendB2bCustomer implements
      */
     protected $emails;
 
+    /**
+     * {@inheritdoc}
+     */
     public function __construct()
     {
         parent::__construct();
@@ -340,10 +343,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param float $lifetime
+     *
+     * @return $this
      */
     public function setLifetime($lifetime)
     {
         $this->lifetime = $lifetime;
+
+        return $this;
     }
 
     /**
@@ -356,10 +363,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param Address|null $shippingAddress
+     *
+     * @return $this
      */
     public function setShippingAddress(Address $shippingAddress = null)
     {
         $this->shippingAddress = $shippingAddress;
+
+        return $this;
     }
 
     /**
@@ -372,10 +383,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param Address|null $billingAddress
+     *
+     * @return $this
      */
     public function setBillingAddress(Address $billingAddress = null)
     {
         $this->billingAddress = $billingAddress;
+
+        return $this;
     }
 
     /**
@@ -408,10 +423,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param Contact|null $contact
+     *
+     * @return $this
      */
     public function setContact(Contact $contact = null)
     {
         $this->contact = $contact;
+
+        return $this;
     }
 
     /**
@@ -424,10 +443,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param User $owner
+     *
+     * @return $this
      */
     public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
+
+        return $this;
     }
 
     /**
@@ -440,10 +463,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param \DateTime|null $createdAt
+     *
+     * @return $this
      */
     public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -456,10 +483,14 @@ class B2bCustomer extends ExtendB2bCustomer implements
 
     /**
      * @param \DateTime|null $updatedAt
+     *
+     * @return $this
      */
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
@@ -528,8 +559,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
         foreach ($phones as $phone) {
             $this->addPhone($phone);
         }
+
         return $this;
     }
+
     /**
      * Add phone
      *
@@ -543,8 +576,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
             $this->phones->add($phone);
             $phone->setOwner($this);
         }
+
         return $this;
     }
+
     /**
      * Remove phone
      *
@@ -557,8 +592,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
         if ($this->phones->contains($phone)) {
             $this->phones->removeElement($phone);
         }
+
         return $this;
     }
+
     /**
      * Get phones
      *
@@ -568,6 +605,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         return $this->phones;
     }
+
     /**
      * @param B2bCustomerPhone $phone
      *
@@ -577,6 +615,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         return $this->getPhones()->contains($phone);
     }
+
     /**
      * Gets primary phone if it's available.
      *
@@ -591,8 +630,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
                 break;
             }
         }
+
         return $result;
     }
+
     /**
      * @param B2bCustomerPhone $phone
      *
@@ -608,6 +649,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
                 }
             }
         }
+
         return $this;
     }
 
@@ -626,8 +668,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
         foreach ($emails as $email) {
             $this->addEmail($email);
         }
+
         return $this;
     }
+
     /**
      * Add email
      *
@@ -641,8 +685,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
             $this->emails->add($email);
             $email->setOwner($this);
         }
+
         return $this;
     }
+
     /**
      * Remove email
      *
@@ -655,8 +701,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
         if ($this->emails->contains($email)) {
             $this->emails->removeElement($email);
         }
+
         return $this;
     }
+
     /**
      * Get emails
      *
@@ -666,6 +714,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         return $this->emails;
     }
+
     /**
      * @param B2bCustomerEmail $email
      *
@@ -675,6 +724,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     {
         return $this->getEmails()->contains($email);
     }
+
     /**
      * Gets primary email if it's available.
      *
@@ -689,6 +739,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
                 break;
             }
         }
+
         return $result;
     }
 
@@ -707,6 +758,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
                 }
             }
         }
+
         return $this;
     }
 }
