@@ -103,6 +103,7 @@ oro_behat_extension:
           - '@oro_importexport.processor.registry'
         - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
+        - OroApplicationBundle::CommerceMainContext
         - OroSalesBundle::FeatureContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
