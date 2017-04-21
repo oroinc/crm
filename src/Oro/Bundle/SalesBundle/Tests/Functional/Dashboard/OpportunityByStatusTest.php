@@ -1,9 +1,12 @@
 <?php
-namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
+namespace Oro\Bundle\SalesBundle\Tests\Functional\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\DashboardBundle\Tests\Functional\AbstractWidgetTestCase;
+use Oro\Bundle\EntityBundle\Tests\Functional\DataFixtures\LoadBusinessUnitData;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidgetFixture;
 
 /**
  * @dbIsolationPerTest
@@ -20,14 +23,24 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
         $this->loadFixtures([
-            'Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadOpportunityByStatusWidgetFixture'
+            LoadOpportunityByStatusWidgetFixture::class,
+            LoadBusinessUnitData::class
         ]);
 
         $this->widget = $this->getReference('widget_opportunity_by_status');
     }
+
     public function testGetWidgetConfigureDialog()
     {
-        $this->getConfigureDialog();
+        $this->client->request(
+            'GET',
+            $this->getUrl(
+                'oro_dashboard_configure',
+                ['id' => $this->widget->getId(), '_widgetContainer' => 'dialog']
+            )
+        );
+        $response = $this->client->getResponse();
+        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window !');
     }
 
     /**
@@ -50,7 +63,7 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
             )
         );
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, "Failed in getting widget view !");
+        $this->assertEquals(200, $response->getStatusCode(), "Failed in getting widget view !");
         $this->assertNotEmpty($crawler->html());
 
         $data = $this->getChartData($crawler);
@@ -58,17 +71,34 @@ class OpportunityByStatusTest extends AbstractWidgetTestCase
         $this->assertEquals($requestData['expectedResultCount'], $data[0]->value);
     }
 
-    protected function getConfigureDialog()
+    public function testBusinessUnitFiltersRendering()
     {
-        $this->client->request(
+        /** @var BusinessUnit $businessUnit */
+        $businessUnit = $this->getReference('TestBusinessUnit');
+        $this->configureWidget($this->widget, [
+            'opportunities_by_state[owners][businessUnits]' => $businessUnit->getId()
+        ]);
+
+        $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'oro_dashboard_configure',
-                ['id' => $this->widget->getId(), '_widgetContainer' => 'dialog']
+                'oro_sales_dashboard_opportunity_by_state_chart',
+                [
+                    'widget' => 'opportunities_by_state',
+                    '_widgetId' => $this->widget->getId()
+                ]
             )
         );
+
         $response = $this->client->getResponse();
-        $this->assertEquals($response->getStatusCode(), 200, 'Failed in getting configure widget dialog window !');
+        $this->assertEquals(200, $response->getStatusCode(), "Failed in getting widget view !");
+        $this->assertNotEmpty($crawler->html());
+
+        $this->assertEquals(
+            'Business Unit: TestBusinessUnit',
+            $crawler->filter('.widget-config-data')->text(),
+            'Widget filters section is incorrect, please check BusinessUnitEntityNameProvider'
+        );
     }
 
     /**
