@@ -4,6 +4,13 @@ Feature: Managing business customer
   As an Administrator
   I want to be able to business customer entity
 
+  Scenario: Update Sales Channel
+    Given I login as administrator
+    And I go to System/Channels
+    And click edit Business Customers in grid
+    When I press "Save and Close"
+    Then I should see "Channel saved" flash message
+
   Scenario: Business customer create
     Given I login as administrator
     Then I go to Customers/ Business Customers
@@ -20,9 +27,9 @@ Feature: Managing business customer
       | State           | California             |
     When I save and close form
     Then I should see Business Customer in grid with:
-      | Account         | Marge Simpson                |
-      | Customer Name   | SimpsonCustomer              |
-      | Channel         | Business Customers           |
+      | Account         | Marge Simpson          |
+      | Customer Name   | SimpsonCustomer        |
+      | Channel         | Business Customers     |
       | Phone           | [11-11-11, 22-22-22]   |
       | Email           | [m1@ex.com]            |
 
@@ -84,13 +91,11 @@ Feature: Managing business customer
   Scenario: Inline edit Business Customer
     Given I edit first record from grid:
       | Customer Name         | editedName             |
-      | Lifetime sales value  | 22                     |
       | Email                 | m3@ex.com              |
       | Phone number          | 33-33-333              |
     Then I should see editedName in grid with following data:
       | Account               | Marge Simpson          |
       | Channel               | Business Customers     |
-      | Lifetime sales value  | $22.00                 |
       | Email                 | m3@ex.com              |
       | Phone number          | 33-33-333              |
 
