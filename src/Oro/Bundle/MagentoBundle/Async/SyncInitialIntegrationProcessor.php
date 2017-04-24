@@ -8,8 +8,10 @@ use Psr\Log\LoggerInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -210,7 +212,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      */
     private function scheduleSearchReindex()
     {
-        $entities = [Order::class, Cart::class, Customer::class];
+        $entities = [Order::class, Cart::class, Customer::class, Account::class, Contact::class];
 
         $this->indexer->reindex($entities);
     }
