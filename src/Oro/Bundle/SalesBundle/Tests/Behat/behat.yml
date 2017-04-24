@@ -97,13 +97,13 @@ oro_behat_extension:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
         - OroConfigBundle::FeatureContext
         - OroDataGridBundle::GridContext
+        - OroApplicationBundle::CommerceMainContext
         - OroSecurityBundle::ACLContext
         - OroImportExportBundle::ImportExportContext:
           - '@oro_entity.entity_alias_resolver'
           - '@oro_importexport.processor.registry'
         - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
-        - OroApplicationBundle::CommerceMainContext
         - OroSalesBundle::FeatureContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
