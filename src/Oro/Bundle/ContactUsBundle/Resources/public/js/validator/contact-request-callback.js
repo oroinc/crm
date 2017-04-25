@@ -5,14 +5,24 @@ define(['jquery', 'underscore'], function($, _) {
         return $('[name*="[' + name + ']"]');
     }
 
-    function toggleFieldValidationStatus(element, status) {
+    function resetFieldStatus(fields) {
+        _.each(fields, function(field) {
+            getField(field).addClass('ignored').valid();
+        });
+    }
+
+    function toggleFieldValidationStatus(element) {
         if (_.isArray(element)) {
             _.each(element, function(e) {
-                getField(e).toggleClass('ignored', !status).valid();
+                getField(e).removeClass('ignored').valid();
             });
         } else {
-            getField(element).toggleClass('ignored', !status).valid();
+            getField(element).removeClass('ignored').valid();
         }
+    }
+
+    function resolveFields(list) {
+        return _.uniq(_.flatten(_.values(list)));
     }
 
     return [
@@ -20,8 +30,11 @@ define(['jquery', 'underscore'], function($, _) {
         function(value, element, params) {
             var targetValue = getField(params.target).val();
 
-            _.each(params.deps, function(val, key) {
-                toggleFieldValidationStatus(val, key === targetValue);
+            _.each(params.deps, function(val, key, list) {
+                if (key === targetValue) {
+                    resetFieldStatus(resolveFields(list), key);
+                    toggleFieldValidationStatus(val);
+                }
             });
 
             return true;
