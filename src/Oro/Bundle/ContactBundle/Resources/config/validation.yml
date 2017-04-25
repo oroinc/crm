@@ -15,14 +15,14 @@ Oro\Bundle\ContactBundle\Entity\Contact:
             - Date: ~
         addresses:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of the addresses must be set as primary.
+                message: oro.contact.validators.addresses.contains_primary
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
         emails:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of the emails must be set as primary.
+                message: oro.contact.validators.emails.contains_primary
         phones:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
-                message: One of the phones must be set as primary.
+                message: oro.contact.validators.phones.contains_primary
 
 Oro\Bundle\ContactBundle\Entity\Group:
     constraints:

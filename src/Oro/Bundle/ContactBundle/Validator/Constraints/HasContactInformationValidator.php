@@ -40,22 +40,12 @@ class HasContactInformationValidator extends ConstraintValidator
         if ($value->getFirstName() ||
             $value->getLastName() ||
             $value->getEmails()->count() > 0 ||
-            $value->getPhones()->count() > 0
-        ) {
+            $value->getPhones()->count() > 0) {
             return;
         }
 
         $this->context->addViolation(
-            $constraint->message,
-            [
-                '%fields%' => sprintf(
-                    '%s, %s, %s or %s',
-                    $this->translator->trans('oro.contact.first_name.label'),
-                    $this->translator->trans('oro.contact.last_name.label'),
-                    $this->translator->trans('oro.contact.emails.label'),
-                    $this->translator->trans('oro.contact.phones.label')
-                ),
-            ]
+            $this->translator->trans('oro.contact.validators.contact.has_information')
         );
     }
 }

@@ -13,6 +13,7 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
     const FIRST_ENTITY_NAME  = 'test1@test.test';
     const SECOND_ENTITY_NAME = 'test2@test.test';
     const THIRD_ENTITY_NAME  = 'test3@test.test';
+    const FOURTH_ENTITY_NAME  = 'test4@test.test';
 
     public function getDependencies()
     {
@@ -63,6 +64,13 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
         $this->setReference('ContactEmail_Single_' . $this->contactEmailData[0]['email'], $contactEmail);
         $manager->persist($contactEmail);
 
+        $contact3 = $this->getReference('Contact_' . LoadContactEntitiesData::FOURTH_ENTITY_NAME);
+        $contactEmail = new ContactEmail();
+        $contactEmail->setPrimary(true);
+        $contactEmail->setOwner($contact3);
+        $contactEmail->setEmail(self::FOURTH_ENTITY_NAME);
+        $this->setReference('ContactEmail_Single_' . self::FOURTH_ENTITY_NAME, $contactEmail);
+        $manager->persist($contactEmail);
 
         $manager->flush();
     }
