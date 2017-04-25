@@ -1,12 +1,21 @@
 define(['jquery', 'underscore'], function($, _) {
     'use strict';
 
+    var defaultValidations = {
+        NotBlank: {
+            'message': 'This value should not be blank.',
+            'payload': null
+        }
+    };
+
     function getField(name) {
         return $('[name*="[' + name + ']"]');
     }
 
     function resetFieldStatus(fields) {
         _.each(fields, function(field) {
+            var validationData = getField(field).data('validation');
+            getField(field).data('validation', _.extend({}, validationData, defaultValidations));
             getField(field).addClass('ignored').valid();
         });
     }

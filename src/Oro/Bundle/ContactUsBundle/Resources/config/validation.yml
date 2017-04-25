@@ -10,9 +10,6 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
                 max: 100
         emailAddress:
             - Email:    ~
-            - NotBlank: ~
-        phone:
-            - NotBlank: ~
         comment:
             - NotBlank: ~
         preferredContactMethod:
