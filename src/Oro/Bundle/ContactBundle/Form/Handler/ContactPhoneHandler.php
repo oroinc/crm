@@ -113,8 +113,6 @@ class ContactPhoneHandler
             $em = $manager->getObjectManager();
             $em->remove($contactPhone);
             $em->flush();
-        } else {
-            throw new \Exception("oro.contact.phone.error.delete.more_one", 500);
         }
     }
 

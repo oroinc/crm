@@ -277,9 +277,13 @@ services:
 
     oro_contact.validator.contact_email_delete:
         class: %oro_contact.validator.contact_email_delete.class%
+        arguments:
+            - '@translator'
 
     oro_contact.validator.contact_phone_delete:
         class: %oro_contact.validator.contact_phone_delete.class%
+        arguments:
+            - '@translator'
 
     oro_contact.validator.has_contact_information:
         class:  '%oro_contact.validator.has_contact_information.class%'
