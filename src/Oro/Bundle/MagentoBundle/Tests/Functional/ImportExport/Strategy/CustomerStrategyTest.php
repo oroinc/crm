@@ -5,12 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadWebsitesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -69,5 +68,22 @@ class CustomerStrategyTest extends WebTestCase
         /** @var Customer $duplicateEmailCustomer */
         $resultCustomer = $this->strategy->process($duplicateEmailCustomer);
         $this->assertSame($duplicateEmailCustomer, $resultCustomer);
+    }
+
+    public function testProcessWhenExistedCustomerWithNewEmailAndWebsiteIsProcessed()
+    {
+        /** @var Customer $originalCustomer */
+        $originalCustomer = $this->getReference('customer');
+
+        $newCustomer = new Customer();
+        $newCustomer->setOriginId($originalCustomer->getOriginId());
+        $newCustomer->setChannel($originalCustomer->getChannel());
+        $newCustomer->setEmail('new_email@test.com');
+        $newCustomer->setWebsite($this->getReference('website_2'));
+
+        $resultCustomer = $this->strategy->process($newCustomer);
+        $this->assertSame($newCustomer->getId(), $resultCustomer->getId());
+        $this->assertSame($newCustomer->getEmail(), $resultCustomer->getEmail());
+        $this->assertSame($newCustomer->getWebsite(), $resultCustomer->getWebsite());
     }
 }
