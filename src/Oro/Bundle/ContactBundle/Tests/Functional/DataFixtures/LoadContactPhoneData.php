@@ -37,10 +37,6 @@ class LoadContactPhoneData extends AbstractFixture implements DependentFixtureIn
         [
             'phone' => self::THIRD_ENTITY_NAME,
             'primary'  => false,
-        ],
-        [
-            'phone' => self::FOURTH_ENTITY_NAME,
-            'primary'  => true,
         ]
     ];
 
@@ -53,8 +49,8 @@ class LoadContactPhoneData extends AbstractFixture implements DependentFixtureIn
         foreach ($this->contactPhoneData as $contactPhoneData) {
             $contactPhone = new ContactPhone();
             $contactPhone->setPrimary($contactPhoneData['primary']);
-            $contactPhone->setOwner($contact);
             $contactPhone->setPhone($contactPhoneData['phone']);
+            $contact->addPhone($contactPhone);
 
             $this->setReference('ContactPhone_Several_' . $contactPhoneData['phone'], $contactPhone);
             $manager->persist($contactPhone);
@@ -63,17 +59,17 @@ class LoadContactPhoneData extends AbstractFixture implements DependentFixtureIn
         $contact2 = $this->getReference('Contact_' . LoadContactEntitiesData::SECOND_ENTITY_NAME);
         $contactPhone = new ContactPhone();
         $contactPhone->setPrimary($this->contactPhoneData[0]['primary']);
-        $contactPhone->setOwner($contact2);
         $contactPhone->setPhone($this->contactPhoneData[0]['phone']);
+        $contact2->addPhone($contactPhone);
         $this->setReference('ContactPhone_Single_' . $this->contactPhoneData[0]['phone'], $contactPhone);
         $manager->persist($contactPhone);
 
         $contact3 = $this->getReference('Contact_' . LoadContactEntitiesData::FOURTH_ENTITY_NAME);
         $contactPhone = new ContactPhone();
-        $contactPhone->setPrimary($this->contactPhoneData[3]['primary']);
-        $contactPhone->setOwner($contact3);
-        $contactPhone->setPhone($this->contactPhoneData[3]['phone']);
-        $this->setReference('ContactPhone_Single_' . $this->contactPhoneData[3]['phone'], $contactPhone);
+        $contactPhone->setPrimary(true);
+        $contactPhone->setPhone(self::FOURTH_ENTITY_NAME);
+        $contact3->addPhone($contactPhone);
+        $this->setReference('ContactPhone_Single_' . self::FOURTH_ENTITY_NAME, $contactPhone);
         $manager->persist($contactPhone);
 
         $manager->flush();
