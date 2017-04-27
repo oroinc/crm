@@ -35,6 +35,7 @@ abstract class AbstractApiAddressType extends AbstractType
                 'required' => true
             ]
         );
+        $builder->add('countryText', 'text', ['required' => false]);
 
         $builder->add(
             'region',

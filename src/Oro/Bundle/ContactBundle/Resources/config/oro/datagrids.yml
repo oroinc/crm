@@ -41,7 +41,7 @@ datagrids:
                 label: oro.contact.contactphone.phone.label
                 frontend_type: phone
         options:
-            entityHint: contact
+            entityHint: contacts
             toolbarOptions:
                 hide: true
                 pageSize:
@@ -96,7 +96,7 @@ datagrids:
                 icon:          trash
                 link:          delete_link
         options:
-            entityHint: group
+            entityHint: groups
             entity_pagination: true
 
     # contacts assigned to group, shown on oro_contact_group_update route
@@ -155,7 +155,7 @@ datagrids:
                     data_name: c.lastName
             default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         options:
-            entityHint: contact
+            entityHint: contacts
             rowSelection:
                 dataField: id
                 columnName: hasGroup
@@ -245,10 +245,7 @@ datagrids:
                             name: oro_api_post_contact_email
                             http_method: POST
                         route_delete_entity:
-                            name: oro_rest_api_delete_relationship
-                            entityId: emailId
-                            entity: contacts
-                            association: emails
+                            name: oro_api_delete_contact_email
                             http_method: DELETE
                         default_route_parameters:
                             className: Oro_Bundle_ContactBundle_Entity_ContactEmail
@@ -267,10 +264,7 @@ datagrids:
                             name: oro_api_post_contact_phone
                             http_method: POST
                         route_delete_entity:
-                            name: oro_rest_api_delete_relationship
-                            entityId: phoneId
-                            entity: contacts
-                            association: phones
+                            name: oro_api_delete_contact_phone
                             http_method: DELETE
                         default_route_parameters:
                             className: Oro_Bundle_ContactBundle_Entity_ContactPhone
@@ -547,7 +541,7 @@ datagrids:
                 entity_name: %oro_contact.entity.class%
                 data_identifier: c.id
         options:
-            entityHint: contact
+            entityHint: contacts
             export: true
             entity_pagination: true
         views_list: '@oro_contact.contacts_view_list'
@@ -666,7 +660,7 @@ datagrids:
         properties:
             id: ~
         options:
-            entityHint: account
+            entityHint: accounts
             rowSelection:
                 dataField: id
                 columnName: hasContact
@@ -786,7 +780,7 @@ datagrids:
         properties:
             id: ~
         options:
-            entityHint: contact
+            entityHint: contacts
 
     # contacts grid for context
     contacts-for-context-grid:
@@ -896,7 +890,7 @@ datagrids:
                     data_name: addressPostalCode
                     enabled: false
         options:
-            entityHint: contact
+            entityHint: contacts
             entity_pagination: true
             toolbarOptions:
                 pageSize:

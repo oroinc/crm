@@ -1,3 +1,5 @@
+@ticket-CRM-7462
+@automatically-ticket-tagged
 @not-automated
 @draft
 Feature: In order send the customer detailed proposal while negotiating a deal

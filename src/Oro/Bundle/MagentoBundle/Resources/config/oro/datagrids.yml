@@ -207,7 +207,7 @@ datagrids:
 
         action_configuration: [ "@oro_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
         options:
-            entityHint: customer
+            entityHint: customers
             export: true
             entity_pagination: true
 
@@ -278,9 +278,6 @@ datagrids:
                 label:            oro.magento.datagrid.columns.billing_region
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -379,7 +376,7 @@ datagrids:
                 acl_resource: oro_magento_cart_view
                 rowAction:    true
         options:
-            entityHint: cart
+            entityHint: carts
             export: true
             entity_pagination: true
         views_list : '@oro_magento.datagrid.cart_view_list'
@@ -434,7 +431,7 @@ datagrids:
             default:
                 createdAt:  DESC
         options:
-            entityHint: cart item
+            entityHint: cart items
             toolbarOptions:
                 hide: true
                 pagination:
@@ -653,7 +650,7 @@ datagrids:
                 acl_resource: oro_magento_product_view
                 rowAction:    true
         options:
-            entityHint: magento product
+            entityHint: magento products
 
     magento-order-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\Order
@@ -850,7 +847,7 @@ datagrids:
                 acl_resource: oro_magento_order_view
                 rowAction:    true
         options:
-            entityHint: order
+            entityHint: orders
             export: true
             entity_pagination: true
 
@@ -949,7 +946,7 @@ datagrids:
                 taxAmount:           { data_name: oi.taxAmount }
                 rowTotal:            { data_name: oi.rowTotal }
         options:
-            entityHint: order item
+            entityHint: order items
             toolbarOptions:
                 hide: true
                 pagination:
@@ -1068,9 +1065,6 @@ datagrids:
                 frontend_type:    datetime
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1271,9 +1265,6 @@ datagrids:
                 align:            right
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1544,7 +1535,7 @@ datagrids:
                     error:           oro.magento.newslettersubscriber.action.error.unsubscribe
         action_configuration: [ "@oro_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
         options:
-            entityHint: newsletter subscriber
+            entityHint: newsletter subscribers
             export: true
             entity_pagination: true
 
@@ -1627,7 +1618,7 @@ datagrids:
                     type: string
                     data_name: c.email
         options:
-            entityHint: customer
+            entityHint: customers
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1777,7 +1768,7 @@ datagrids:
                     data_name:        o.updatedAt
                     enabled:          false
         options:
-            entityHint: order
+            entityHint: orders
             entity_pagination: true
             toolbarOptions:
                 pageSize:
@@ -1841,9 +1832,6 @@ datagrids:
                 frontend_type:    datetime
             statusLabel:
                 label:            oro.magento.datagrid.columns.status
-                frontend_type:    html
-                type:             twig
-                template:         OroMagentoBundle:Datagrid:Column/status.html.twig
         properties:
             id: ~
             view_link:
@@ -1910,7 +1898,7 @@ datagrids:
                     data_name: c.updatedAt
                     enabled: false
         options:
-            entityHint: cart
+            entityHint: carts
             entity_pagination: true
             toolbarOptions:
                 pageSize:

@@ -2,25 +2,24 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class DeleteChannelTest extends WebTestCase
 {
-    /** @var Channel */
+    /**
+     * @var Channel
+     */
     protected $channel;
 
     public function setUp()
     {
-        $this->initClient(array('debug' => false), $this->generateWsseAuthHeader());
+        $this->initClient([], $this->generateBasicAuthHeader());
 
-        $this->loadFixtures(
-            array(
-                'Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel',
-            )
-        );
+        $this->loadFixtures([LoadMagentoChannel::class]);
     }
 
     protected function postFixtureLoad()
@@ -80,17 +79,26 @@ class DeleteChannelTest extends WebTestCase
 
     public function testDeleteChannel()
     {
-        $oldChannel = clone($this->channel);
-
         $this->client->request(
-            'DELETE',
-            $this->getUrl('oro_api_delete_integration', ['id' => $this->channel->getId()])
+            'GET',
+            $this->getUrl(
+                'oro_action_operation_execute',
+                [
+                    'operationName' => 'oro_integration_delete',
+                    'entityId[id]' => $this->channel->getId(),
+                    'entityClass' => get_class($this->channel),
+                ]
+            ),
+            [],
+            [],
+            ['HTTP_X_REQUESTED_WITH' => 'XMLHttpRequest']
         );
-        $result = $this->client->getResponse();
-        $this->assertEmptyResponseStatusCodeEquals($result, 204);
+
+        $this->assertJsonResponseStatusCodeEquals($this->client->getResponse(), 200);
+
         $this->assertNull($this->getChannel());
-        $this->assertNull($this->getCartByChannel($oldChannel));
-        $this->assertNull($this->getOrderByChannel($oldChannel));
-        $this->assertNull($this->getCustomerByChannel($oldChannel));
+        $this->assertNull($this->getCartByChannel($this->channel));
+        $this->assertNull($this->getOrderByChannel($this->channel));
+        $this->assertNull($this->getCustomerByChannel($this->channel));
     }
 }

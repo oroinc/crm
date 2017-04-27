@@ -172,7 +172,7 @@ class B2bCustomerPhoneController extends RestController implements ClassResource
     /**
      * {@inheritdoc}
      */
-    public function getDeleteHandler()
+    protected function getDeleteHandler()
     {
         return $this->get('oro_sales.form.type.b2bcustomer_phone.handler');
     }

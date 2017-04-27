@@ -72,7 +72,6 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'data_class' => 'Oro\Bundle\SalesBundle\Entity\Lead',
-                    'cascade_validation' => true,
                 ]
             );
 

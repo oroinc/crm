@@ -5,7 +5,6 @@ config:
         orosales/js/app/views/update-page-view: 'bundles/orosales/js/app/views/update-page-view.js'
         orosales/js/app/views/create-customr-view: 'bundles/orosales/js/app/views/create-customer-view.js'
         orosales/js/app/components/customer-component: 'bundles/orosales/js/app/components/customer-component.js'
-        orosales/js/app/components/customer-grid-component: 'bundles/orosales/js/app/components/customer-grid-component.js'
         orosales/js/app/views/account-multicustomer-view: 'bundles/orosales/js/app/views/account-multicustomer-view.js'
         oro/select2-sales-customer-component: 'bundles/orosales/js/app/components/select2-sales-customer-component.js'
         oro/customer-info-widget: 'bundles/orosales/js/widget/customer-info-widget.js'

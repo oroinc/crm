@@ -4,10 +4,16 @@ namespace Oro\Bundle\MagentoBundle\Async;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Psr\Log\LoggerInterface;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -21,10 +27,11 @@ use Oro\Component\MessageQueue\Job\JobRunner;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
 use Oro\Component\MessageQueue\Util\JSON;
-use Psr\Log\LoggerInterface;
 
 class SyncInitialIntegrationProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
+    use IntegrationTokenAwareTrait;
+
     /**
      * @var DoctrineHelper
      */
@@ -67,6 +74,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      * @param CalculateAnalyticsScheduler $calculateAnalyticsScheduler
      * @param JobRunner $jobRunner
      * @param IndexerInterface $indexer
+     * @param TokenStorageInterface $tokenStorage
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -76,6 +84,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         CalculateAnalyticsScheduler $calculateAnalyticsScheduler,
         JobRunner $jobRunner,
         IndexerInterface $indexer,
+        TokenStorageInterface $tokenStorage,
         LoggerInterface $logger
     ) {
         $this->doctrineHelper = $doctrineHelper;
@@ -84,6 +93,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $this->calculateAnalyticsScheduler = $calculateAnalyticsScheduler;
         $this->jobRunner = $jobRunner;
         $this->indexer = $indexer;
+        $this->tokenStorage = $tokenStorage;
         $this->logger = $logger;
         $this->initialSyncProcessor->getLoggerStrategy()->setLogger($this->logger);
     }
@@ -134,9 +144,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
             // Disable search listeners to increase the performance
-            // Disable Customer Association Listener due to incorrect behaviour of the import functionality
-            // @TODO should be removed after CRM-7178 will be fixed
             $this->disableOptionalListeners();
+            $this->setTemporaryIntegrationToken($integration);
 
             $result = $this->initialSyncProcessor->process(
                 $integration,
@@ -168,7 +177,6 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $disabledOptionalListeners = [
             'oro_search.index_listener',
             'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            'oro_sales.customers.customer_association_listener'
         ];
 
         $knownListeners  = $this->optionalListenerManager->getListeners();
@@ -204,7 +212,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
      */
     private function scheduleSearchReindex()
     {
-        $entities = [Order::class, Cart::class, Customer::class];
+        $entities = [Order::class, Cart::class, Customer::class, Account::class, Contact::class];
 
         $this->indexer->reindex($entities);
     }

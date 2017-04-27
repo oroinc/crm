@@ -12,6 +12,9 @@ class ConfigProvider
     /** @var ConfigManager */
     protected $configManager;
 
+    /** @var string */
+    private $customerClasses;
+
     /**
      * @param ConfigManager $configManager
      */
@@ -35,40 +38,26 @@ class ConfigProvider
             $objectOrClass = ClassUtils::getClass($objectOrClass);
         }
 
-        return in_array($objectOrClass, $this->getAssociatedCustomerClasses(), true);
-    }
-
-    public function getCustomerClasses()
-    {
-        return $this->getAssociatedCustomerClasses();
+        return in_array($objectOrClass, $this->getCustomerClasses(), true);
     }
 
     /**
-     * @return array
+     * @return string[]
      * [
-     *     className   => customer class with _ instead of \,
+     *     className   => FQCN of a customer,
      *     label       => entity label,
      *     icon        => entity icon,
      *     gridName    => customer grid name
      *     routeCreate => route to create entity
      * ]
      */
-    public function getCustomersData()
+    public function getCustomerClasses()
     {
-        $result = [];
-
-        $customerClasses = $this->getCustomerClasses();
-        foreach ($customerClasses as $class) {
-            $result[] = [
-                'className'   => $class,
-                'label'       => $this->getLabel($class),
-                'icon'        => $this->getIcon($class),
-                'gridName'    => $this->getGrid($class),
-                'routeCreate' => $this->getRouteCreate($class),
-            ];
+        if (null === $this->customerClasses) {
+            $this->customerClasses = $this->getAssociatedCustomerClasses();
         }
 
-        return $result;
+        return $this->customerClasses;
     }
 
     /**
@@ -96,7 +85,7 @@ class ConfigProvider
      *
      * @return string|null
      */
-    protected function getIcon($entityClass)
+    public function getIcon($entityClass)
     {
         return $this->configManager->getEntityConfig('entity', $entityClass)->get('icon');
     }
@@ -106,7 +95,7 @@ class ConfigProvider
      *
      * @return string|null
      */
-    protected function getRouteCreate($entityClass)
+    public function getRouteCreate($entityClass)
     {
         $metadata = $this->configManager->getEntityMetadata($entityClass);
         if ($metadata && $metadata->routeCreate) {
@@ -117,7 +106,7 @@ class ConfigProvider
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     protected function getAssociatedCustomerClasses()
     {

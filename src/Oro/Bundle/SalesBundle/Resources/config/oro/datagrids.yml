@@ -716,7 +716,6 @@ datagrids:
                     value: budgetAmount
                     currency: budgetAmountCurrency
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.base_budget_amount_value.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
@@ -730,7 +729,6 @@ datagrids:
                     value: closeRevenue
                     currency: closeRevenueCurrency
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.close_revenue_base_currency.label
                     original_field: closeRevenue
                     value_field: closeRevenueValue
                     currency_field: closeRevenueCurrency
@@ -1077,6 +1075,8 @@ datagrids:
             lifetime:
                 label:          oro.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
+                inline_editing:
+                    enable: false
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime
@@ -1695,7 +1695,6 @@ datagrids:
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
@@ -1989,7 +1988,6 @@ datagrids:
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency
@@ -2170,7 +2168,6 @@ datagrids:
                 type:          callback
                 callable:      ['@oro_currency.converter.currency_to_string', 'convert']
                 multicurrency_config:
-                    base_currency_label: oro.sales.opportunity.budget_amount_base_currency.label
                     original_field: budgetAmount
                     value_field: budgetAmountValue
                     currency_field: budgetAmountCurrency

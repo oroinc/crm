@@ -53,6 +53,10 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         }
 
         parent::importExistingEntity($entity, $existingEntity, $itemData, $excludedFields);
+
+        if ($existingEntity instanceof Contact) {
+            $this->fixDuplicateEntities($existingEntity);
+        }
     }
 
     /**
@@ -113,5 +117,25 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         }
 
         return parent::findEntityByIdentityValues($entityName, $identityValues);
+    }
+
+    /**
+     * @param Contact $existingEntity
+     */
+    private function fixDuplicateEntities(Contact $existingEntity)
+    {
+        // need to remove duplicated entities, because Account and Contact add* related methods calls each other
+        // eg. Contact::addAccount also calls Account::addContact
+        foreach ($existingEntity->getAccounts() as $account) {
+            foreach ($account->getContacts() as $contact) {
+                $contactExistCallback = function ($key, Contact $value) use ($contact) {
+                    return $contact !== $value && (int)$contact->getId() === (int)$value->getId();
+                };
+
+                if ($contact->getId() !== null && $account->getContacts()->exists($contactExistCallback)) {
+                    $account->removeContact($contact);
+                }
+            }
+        }
     }
 }

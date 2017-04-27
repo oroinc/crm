@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Converter;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter;

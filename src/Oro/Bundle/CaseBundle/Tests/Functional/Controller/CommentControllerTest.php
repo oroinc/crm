@@ -126,6 +126,9 @@ class CommentControllerTest extends WebTestCase
         $comment = $this->getContainer()->get('doctrine.orm.entity_manager')
             ->getRepository('OroCaseBundle:CaseComment')
             ->find($id);
+        $userAvatar =  $this->getContainer()
+                ->get('oro_attachment.manager')
+                ->getFilteredImageUrl($comment->getOwner()->getAvatar(), 'avatar_xsmall');
 
         $this->getContainer()->get('doctrine.orm.entity_manager')->refresh($comment);
 
@@ -150,7 +153,7 @@ class CommentControllerTest extends WebTestCase
                     'url'           => $this->getContainer()->get('router')
                         ->generate('oro_user_view', array('id' => self::$adminUserId)),
                     'fullName'      => 'John Doe',
-                    'avatar'        => null,
+                    'avatar'        => $userAvatar,
                     'permissions'   => array(
                         'view'          => true,
                     ),

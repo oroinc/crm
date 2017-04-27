@@ -1,3 +1,5 @@
+@ticket-CRM-5308
+@automatically-ticket-tagged
 @fixture-lead.yml
 Feature: Quickly create Lead in a single form
   In order to decrease time for Lead creation

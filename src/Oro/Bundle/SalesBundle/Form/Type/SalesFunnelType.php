@@ -33,7 +33,6 @@ class SalesFunnelType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'Oro\Bundle\SalesBundle\Entity\SalesFunnel',
-                'cascade_validation' => false,
             )
         );
     }

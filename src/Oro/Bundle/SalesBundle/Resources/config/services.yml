@@ -466,6 +466,8 @@ services:
         public: false
         arguments:
             - '@oro_entity_config.config_manager'
+            - '@oro_datagrid.multi_grid_provider.link'
+            - '@oro_security.security_facade.link'
 
     oro_sales.customer.account_config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider
@@ -639,3 +641,26 @@ services:
         class: Oro\Bundle\SalesBundle\ImportExport\EventListener\OpportunityProbabilitySubscriber
         tags:
             - { name: kernel.event_subscriber }
+
+    oro_sales.customer_virtual_relations.provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerVirtualRelationProvider
+        abstract: true
+        arguments:
+            - '@oro_entity_extend.association_manager'
+            - '@oro_entity_config.provider.entity'
+
+    oro_sales.customer_virtual_relations.provider.lead:
+        parent: oro_sales.customer_virtual_relations.provider
+        public: false
+        tags:
+           - { name: oro_entity.virtual_relation_provider, priority: 150 }
+        calls:
+           - [setSourceClass, [%oro_sales.lead.entity.class%]]
+
+    oro_sales.customer_virtual_relations.provider.opportunity:
+       parent: oro_sales.customer_virtual_relations.provider
+       public: false
+       tags:
+          - { name: oro_entity.virtual_relation_provider, priority: 150 }
+       calls:
+          - [setSourceClass, [%oro_sales.opportunity.class%]]

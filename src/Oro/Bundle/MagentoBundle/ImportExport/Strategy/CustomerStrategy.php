@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CustomerStrategy extends AbstractImportStrategy
@@ -88,6 +89,9 @@ class CustomerStrategy extends AbstractImportStrategy
                         }
                     }
                 }
+                if ($address->getCountry()) {
+                    $address->setCountryText(null);
+                }
                 $address->setOwner($entity);
             }
         }
@@ -101,27 +105,24 @@ class CustomerStrategy extends AbstractImportStrategy
         $existingEntity = null;
 
         if ($entity instanceof Customer) {
-            $website = $this->databaseHelper->findOneBy(
-                'Oro\Bundle\MagentoBundle\Entity\Website',
-                [
-                    'originId' => $entity->getWebsite()->getOriginId(),
-                    'channel' => $entity->getChannel()
-                ]
-            );
-
-            if ($website) {
-                $searchContext['website'] = $website;
-            }
             /** @var Customer $existingEntity */
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
             if (!$existingEntity) {
+                $website = $this->databaseHelper->findOneBy(
+                    Website::class,
+                    [
+                        'originId' => $entity->getWebsite()->getOriginId(),
+                        'channel' => $entity->getChannel()
+                    ]
+                );
                 $existingEntity = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\MagentoBundle\Entity\Customer',
+                    Customer::class,
                     [
                         'email' => $entity->getEmail(),
                         'channel' => $entity->getChannel(),
-                        'website' => $website
+                        'website' => $website,
+                        'originId' => null
                     ]
                 );
                 if ($existingEntity && $existingEntity->getId()) {

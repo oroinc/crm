@@ -45,13 +45,6 @@ define(function(require) {
                 body.primary = true;
             }
 
-            if (this.isActiveDeleteEntityRoute()) {
-                var routeOptions = this.initialOptions.route_delete_entity;
-                body = {data: [urlParameters[routeOptions.entityId]]};
-                urlParameters.entity = routeOptions.entity;
-                urlParameters.association = routeOptions.association;
-            }
-
             return ContactApiAccessor.__super__.send.call(this, urlParameters, body, headers, options);
         },
 
@@ -110,14 +103,6 @@ define(function(require) {
         /** @returns {boolean} */
         isActiveDeleteEntityRoute: function() {
             return this.route.get('routeName') === this.initialOptions.route_delete_entity.name;
-        },
-
-        prepareUrlParameters: function(urlParameters) {
-            if (this.isActiveDeleteEntityRoute()) {
-                return urlParameters;
-            }
-
-            return ContactApiAccessor.__super__.prepareUrlParameters.apply(this, arguments);
         }
     });
 

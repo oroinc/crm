@@ -30,7 +30,8 @@ class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $expectedFields = [
-            'phone' => 'text'
+            'phone' => 'text',
+            'countryText' => 'text'
         ];
 
         $builder->expects($this->exactly(count($expectedFields)))
@@ -56,7 +57,6 @@ class CartAddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'data_class'           => 'Oro\Bundle\MagentoBundle\Entity\CartAddress',
-                    'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                     'single_form'          => true,
                     'csrf_protection'      => false
                 ]

@@ -45,7 +45,7 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
         }
         $newAccountKey = 'magentocustomer_%s_account';
         if ($targetCustomer->getAccount()) {
-            // get account from direct relation if it is already set in b2b customer
+            // get account from direct relation if it is already set in Magento customer
             $account = $targetCustomer->getAccount();
         } else {
             // try to find similar customer and get its account
@@ -65,12 +65,14 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
                 }
             }
 
-            // create new Account
+            // create new Account from customer data
             $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
                 ? 'N/A'
                 : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
 
             $account = (new Account())->setName($accountName);
+            $account->setOwner($targetCustomer->getOwner());
+            $account->setOrganization($targetCustomer->getOrganization());
         }
 
         if ($targetCustomer->getId()) {

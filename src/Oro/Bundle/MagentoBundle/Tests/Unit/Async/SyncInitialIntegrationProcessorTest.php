@@ -6,8 +6,11 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Psr\Log\LoggerInterface;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -15,6 +18,7 @@ use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\MagentoBundle\Async\SyncInitialIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
@@ -24,7 +28,6 @@ use Oro\Component\MessageQueue\Transport\Null\NullMessage;
 use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
-use Psr\Log\LoggerInterface;
 
 /**
  * @dbIsolationPerTest
@@ -57,6 +60,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
     }
@@ -80,6 +84,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -101,6 +106,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -131,6 +137,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -163,6 +170,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             new JobRunner(),
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $logger
         );
 
@@ -175,6 +183,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $integration = new Integration();
         $integration->setEnabled(true);
+        $integration->setOrganization(new Organization());
 
         $channel = new Channel();
 
@@ -200,6 +209,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -220,6 +230,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $integration = new Integration();
         $integration->setEnabled(true);
+        $integration->setOrganization(new Organization());
 
         $channel = new Channel();
 
@@ -245,6 +256,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -265,6 +277,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $integration = new Integration();
         $integration->setEnabled(true);
+        $integration->setOrganization(new Organization());
 
         $channel = new Channel();
 
@@ -278,6 +291,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             $this->createCalculateAnalyticsSchedulerMock(),
             $jobRunner,
             $this->createIndexerInterfaceMock(),
+            $this->createTokenStorageMock(),
             $this->createLoggerMock()
         );
 
@@ -406,5 +420,13 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
     private function createLoggerMock()
     {
         return $this->createMock(LoggerInterface::class);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject | TokenStorageInterface
+     */
+    private function createTokenStorageMock()
+    {
+        return $this->createMock(TokenStorageInterface::class);
     }
 }

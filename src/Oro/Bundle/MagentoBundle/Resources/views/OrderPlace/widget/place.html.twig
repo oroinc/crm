@@ -49,26 +49,28 @@
                         var performMessage = messenger.notificationFlashMessage('warning', __('oro.magento.performing_synchronization'));
 
                         widgetManager.getWidgetInstanceByAlias(modalWidgetAlias, function (widget) {
-
                             widget.trigger('formSave');
                             {% if cartId is defined %}
-                            $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
                                 {% set syncURL = path('oro_magento_orderplace_new_cart_order_sync', {id: cartId}) %}
                                 $.ajax({
                                     dataType: 'json',
                                     url: {{ syncURL|json_encode|raw}},
+                                    beforeSend: function() {
+                                        widget.remove();
+                                        mediator.execute('showLoading');
+                                    },
                                     success: function(data) {
                                         if (mediator.execute('isInAction')) {
                                             mediator.once('page:afterChange', function() {showMessage(data)});
                                         } else {
                                             mediator.trigger('datagrid:doReset:magento-customer-orders-widget-grid');
                                             showMessage(data);
+                                            mediator.execute('refreshPage');
                                         }
                                     }
                                 }).always(function () {
                                     performMessage.close();
                                 });
-                            });
                             {% elseif customerId is defined %}
                                 {% set syncURL = path('oro_magento_orderplace_new_customer_order_sync', {id: customerId}) %}
                                 $.ajax({

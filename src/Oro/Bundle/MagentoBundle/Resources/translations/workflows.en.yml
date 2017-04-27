@@ -7,7 +7,7 @@ oro:
                 abandoned:
                     label: Abandoned
                 converted_to_opportunity:
-                    label: 'Converted to opportunity'
+                    label: 'Converted to Opportunity'
                 converted:
                     label: Converted
             attribute:
@@ -23,18 +23,42 @@ oro:
                     label: Account
                 contact:
                     label: Contact
+                cart_id:
+                    label: ''
             transition:
                 convert:
                     label: Convert
+                    warning_message: ''
                 place_order:
                     label: 'Place an order'
+                    warning_message: ''
+                    attribute:
+                        cart_id:
+                            label: ''
                 convert_to_opportunity:
-                    label: 'Convert to opportunity'
+                    label: 'Convert to Opportunity'
+                    warning_message: ''
+                    attribute:
+                        notes:
+                            label: 'Notes'
+                        opportunity_budget:
+                            label: 'Budget amount'
+                        opportunity_name:
+                            label: 'Opportunity name'
+                        opportunity_owner:
+                            label: 'Owner'
                 abandon:
                     label: Abandon
                     warning_message: 'You are going to abandon this shopping cart.'
+                    attribute:
+                        notes:
+                            label: 'Notes'
                 reopen:
                     label: Reopen
+                    warning_message: ''
+                    attribute:
+                        notes:
+                            label: 'Notes'
             label: 'Abandoned Shopping Cart'
         b2c_flow_order_follow_up:
             step:
@@ -54,4 +78,10 @@ oro:
             transition:
                 record_feedback:
                     label: 'Record feedback'
+                    warning_message: ''
+                    attribute:
+                        feedback:
+                            label: 'Feedback'
+                        notes:
+                            label: 'Notes'
             label: 'Order Follow Up'

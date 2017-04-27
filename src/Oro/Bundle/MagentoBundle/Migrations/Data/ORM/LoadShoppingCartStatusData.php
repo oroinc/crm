@@ -20,7 +20,7 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
     protected $dataV0 = array(
         'open'                     => 'Open',
         'lost'                     => 'Lost',
-        'converted_to_opportunity' => 'Converted to opportunity',
+        'converted_to_opportunity' => 'Converted to Opportunity',
     );
 
     /** @var array */

@@ -87,7 +87,13 @@ Example:
                "type":"channels",
                "id":"2"
             }
-         }
+         },
+          "channel":{  
+             "data":{  
+                "type":"integrationchannels",
+                "id":"2"
+             }
+          }
       }
    }
 }
@@ -159,6 +165,12 @@ Example:
          "dataChannel":{  
             "data":{  
                "type":"channels",
+               "id":"2"
+            }
+         },
+         "channel":{  
+            "data":{  
+               "type":"integrationchannels",
                "id":"2"
             }
          }

@@ -1,5 +1,12 @@
-"One of the addresses must be set as primary.": "One of the addresses must be set as primary."
-"One of the emails must be set as primary.": "One of the emails must be set as primary."
-"One of the phones must be set as primary.": "One of the phones must be set as primary."
-"At least one of the fields First name, Last name, email, phone or address must be defined.": "At least one of the fields First name, Last name, email, phone or address must be defined."
 "This value cannot be in the future.": "This value cannot be in the future."
+oro:
+    contact:
+        validators:
+            contact:
+                has_information: "At least one of the fields First name, Last name, Emails or Phones must be defined."
+            emails:
+                contains_primary: "One of the emails must be set as primary."
+            phones:
+                contains_primary: "One of the phones must be set as primary."
+            addresses:
+                contains_primary: "One of the addresses must be set as primary."

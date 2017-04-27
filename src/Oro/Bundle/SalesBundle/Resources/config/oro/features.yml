@@ -23,13 +23,11 @@ features:
             - Oro\Bundle\SalesBundle\Entity\LeadAddress
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
-            - Oro\Bundle\SalesBundle\Entity\LeadStatus
         entities:
             - Oro\Bundle\SalesBundle\Entity\Lead
             - Oro\Bundle\SalesBundle\Entity\LeadAddress
             - Oro\Bundle\SalesBundle\Entity\LeadEmail
             - Oro\Bundle\SalesBundle\Entity\LeadPhone
-            - Oro\Bundle\SalesBundle\Entity\LeadStatus
         placeholder_items:
             - leads_launchpad
         dashboard_widgets:
@@ -60,11 +58,9 @@ features:
         api_resources:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
-            - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
         entities:
             - Oro\Bundle\SalesBundle\Entity\Opportunity
             - Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
-            - Oro\Bundle\SalesBundle\Entity\OpportunityStatus
         configuration:
             - opportunity_status_probabilities
             - display_settings
@@ -92,6 +88,8 @@ features:
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
             - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
+        commands:
+            - oro:b2b:lifetime:recalculate
 
     salesfunnel:
         label: oro.sales.salesfunnel.feature.label

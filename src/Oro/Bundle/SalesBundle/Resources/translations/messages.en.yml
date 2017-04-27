@@ -130,26 +130,6 @@ oro:
                 account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
 
         #
-        # Oro/Bundle/SalesBundle/Entity/LeadStatus.php
-        #
-        leadstatus:
-            entity_label:         Lead Status
-            entity_plural_label:  Lead Statuses
-            entity_description:   Represent lead status
-            name.label:           Name
-            label.label:          Label
-        #
-        # Oro/Bundle/SalesBundle/Entity/OpportunityStatus.php //deprecated since 1.10. Enum type is used instead
-        # Extend/Entity/EV_Opportunity_Status.php
-        #
-        opportunitystatus:
-            entity_label:         Opportunity Status
-            entity_plural_label:  Opportunity Statuses
-            entity_description:   A deal's stage (Open, Closed Won, etc.)
-            name.label:           Name
-            label.label:          Label
-
-        #
         # Oro/Bundle/SalesBundle/Entity/Opportunity.php
         #
         opportunity:
@@ -322,7 +302,7 @@ oro:
                 description:
             addresses:
                 label:            Address
-                description:      Collection of lead addresses: mailing, business, home, billing, etc.
+                description:      "Collection of lead addresses: mailing, business, home, billing, etc."
             add_address:
                 label:            Add Address
                 description:
@@ -366,6 +346,8 @@ oro:
             primary_email:
                 label:            Primary Email
                 description:
+            primary_addr:
+                label:            Primary Address
 
 
             convert:

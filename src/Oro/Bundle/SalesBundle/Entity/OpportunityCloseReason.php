@@ -60,7 +60,7 @@ class OpportunityCloseReason
      * Set address type label
      *
      * @param  string            $label
-     * @return OpportunityStatus
+     * @return OpportunityCloseReason
      */
     public function setLabel($label)
     {

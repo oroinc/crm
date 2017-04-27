@@ -2,6 +2,18 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
+use Oro\Bundle\DataGridBundle\Provider\MultiGridProvider;
+use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
+use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
+use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,20 +22,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatorInterface;
-
-use Doctrine\Common\Util\ClassUtils;
-
-use Oro\Component\PhpUtils\ArrayUtil;
-
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\DataGridBundle\Datagrid\ManagerInterface;
-use Oro\Bundle\EntityBundle\ORM\EntityAliasResolver;
-use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
-use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
-use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 
 class CustomerType extends AbstractType
 {
@@ -51,6 +49,9 @@ class CustomerType extends AbstractType
     /** @var EntityNameResolver */
     protected $entityNameResolver;
 
+    /** @var MultiGridProvider */
+    protected $multiGridProvider;
+
     /**
      * @param DataTransformerInterface      $transformer
      * @param ConfigProvider                $customerConfigProvider
@@ -60,6 +61,7 @@ class CustomerType extends AbstractType
      * @param SecurityFacade                $securityFacade
      * @param ManagerInterface              $gridManager
      * @param EntityNameResolver            $entityNameResolver
+     * @param MultiGridProvider             $multiGridProvider
      */
     public function __construct(
         DataTransformerInterface $transformer,
@@ -69,7 +71,8 @@ class CustomerType extends AbstractType
         TranslatorInterface $translator,
         SecurityFacade $securityFacade,
         ManagerInterface $gridManager,
-        EntityNameResolver $entityNameResolver
+        EntityNameResolver $entityNameResolver,
+        MultiGridProvider $multiGridProvider
     ) {
         $this->transformer = $transformer;
         $this->customerConfigProvider = $customerConfigProvider;
@@ -79,6 +82,7 @@ class CustomerType extends AbstractType
         $this->securityFacade = $securityFacade;
         $this->gridManager = $gridManager;
         $this->entityNameResolver = $entityNameResolver;
+        $this->multiGridProvider = $multiGridProvider;
     }
 
     /**
@@ -86,27 +90,12 @@ class CustomerType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $customersData = $this->customerConfigProvider->getCustomersData();
-        $hasGridData = false;
-        $createCustomersData = [];
-        foreach ($customersData as $customer) {
-            if ($customer['gridName'] &&
-                $this->securityFacade->isGranted($this->getGridAclResource($customer['gridName']))
-            ) {
-                $hasGridData = true;
-                unset($customer['gridName']);
-            }
-
-            if ($this->securityFacade->isGranted('CREATE', sprintf('entity:%s', $customer['className']))) {
-                $createCustomersData[] = $customer;
-            }
-        }
+        $view->vars = array_merge(
+            $view->vars,
+            $this->getCreateCustomersData()
+        );
 
         $view->vars['parentClass']         = $options['parent_class'];
-        $view->vars['hasGridData']         = $hasGridData;
-        $view->vars['createCustomersData'] = $createCustomersData;
-
-
         $view->vars['configs']['allowCreateNew'] = ArrayUtil::some(
             function (array $customer) {
                 return $customer['className'] === Account::class;
@@ -214,5 +203,46 @@ class CustomerType extends AbstractType
         $gridConfig = $this->gridManager->getConfigurationForGrid($gridName);
 
         return $gridConfig ? $gridConfig->getAclResource() : null;
+    }
+
+    /**
+     * @return array
+     * [
+     *     hasGridData => bool,
+     *     createCustomersData => [
+     *         [
+     *             className   => customer class,
+     *             label       => entity label,
+     *             icon        => entity icon,
+     *             routeCreate => route to create entity
+     *         ],
+     *         ...
+     *     ],
+     * ]
+     */
+    protected function getCreateCustomersData()
+    {
+        $customerClasses = $this->customerConfigProvider->getCustomerClasses();
+
+        $result = [
+            'createCustomersData' => [],
+            'hasGridData' => (bool) $this->multiGridProvider->getEntitiesData($customerClasses),
+        ];
+
+        foreach ($customerClasses as $class) {
+            if (!$this->securityFacade->isGranted('CREATE', sprintf('entity:%s', $class))) {
+                continue;
+            }
+
+            $routeCreate = $this->customerConfigProvider->getRouteCreate($class);
+            $result['createCustomersData'][] = [
+                'className'       => $class,
+                'label'           => $this->customerConfigProvider->getLabel($class),
+                'icon'            => $this->customerConfigProvider->getIcon($class),
+                'routeCreate'     => $routeCreate,
+            ];
+        }
+
+        return $result;
     }
 }
