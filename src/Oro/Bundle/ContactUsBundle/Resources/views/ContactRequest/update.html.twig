@@ -14,8 +14,8 @@
                 "oro.contactus.contactrequest.method.email": "emailAddress"
             }
         }
-    }|json_encode}
-%}
+    }
+} %}
 
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('oro_contactus_request_delete') %}

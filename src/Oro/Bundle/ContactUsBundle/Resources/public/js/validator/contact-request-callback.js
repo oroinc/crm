@@ -1,50 +1,53 @@
 define(['jquery', 'underscore'], function($, _) {
     'use strict';
 
-    var defaultValidations = {
-        NotBlank: {
-            'message': 'This value should not be blank.',
-            'payload': null
-        }
+    var NotBlank = {
+        'message': 'This value should not be blank.',
+        'payload': null
     };
 
-    function getField(name) {
+    var getField = function(name) {
         return $('[name*="[' + name + ']"]');
-    }
+    };
 
-    function resetFieldStatus(fields) {
-        _.each(fields, function(field) {
-            var validationData = getField(field).data('validation');
-            getField(field).data('validation', _.extend({}, validationData, defaultValidations));
-            getField(field).addClass('ignored').valid();
+    var resetFieldStatus = function(allFields, requiredFields) {
+        var isArray = _.isArray(requiredFields);
+
+        _.each(allFields, function(field) {
+            var $field = getField(field);
+
+            var validationData = $field.data('validation') || {};
+            var isRequired = isArray ? _.indexOf(requiredFields, field) !== -1 : field === requiredFields;
+            if (isRequired) {
+                validationData.NotBlank = NotBlank;
+            } else {
+                delete validationData.NotBlank;
+            }
+
+            $field.data('validation', validationData).valid();
         });
-    }
+    };
 
-    function toggleFieldValidationStatus(element) {
-        if (_.isArray(element)) {
-            _.each(element, function(e) {
-                getField(e).removeClass('ignored').valid();
-            });
-        } else {
-            getField(element).removeClass('ignored').valid();
-        }
-    }
-
-    function resolveFields(list) {
+    var resolveFields = function(list) {
         return _.uniq(_.flatten(_.values(list)));
-    }
+    };
+
+    var validate = function($field, params) {
+        var requiredFields = params.deps[$field.val()];
+        var allFields = resolveFields(params.deps);
+
+        resetFieldStatus(allFields, requiredFields);
+    };
 
     return [
         'Oro\\Bundle\\ContactUsBundle\\Validator\\ContactRequestCallbackValidator',
         function(value, element, params) {
-            var targetValue = getField(params.target).val();
-
-            _.each(params.deps, function(val, key, list) {
-                if (key === targetValue) {
-                    resetFieldStatus(resolveFields(list), key);
-                    toggleFieldValidationStatus(val);
-                }
+            var event = 'change.ContactRequestCallbackValidator';
+            var $field = getField(params.target);
+            $field.off(event).on(event, function() {
+                validate($field, params);
             });
+            validate($field, params);
 
             return true;
         }
