@@ -1,3 +1,5 @@
+@ticket-OEE-1208
+@automatically-ticket-tagged
 @not-automated
 Feature: In order to ensure base currency amount for closed transactions is not adjusted according to going rates
   As an Administrator

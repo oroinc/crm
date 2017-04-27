@@ -1,3 +1,5 @@
+@ticket-BAP-13174
+@automatically-ticket-tagged
 Feature: Embedded form
   In order to embedded forms
   As an OroCRM admin

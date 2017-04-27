@@ -1,3 +1,5 @@
+@ticket-CRM-6685
+@automatically-ticket-tagged
 @not-automated
 Feature: Managing Currency Rates
   In order to use other currencies in the application
