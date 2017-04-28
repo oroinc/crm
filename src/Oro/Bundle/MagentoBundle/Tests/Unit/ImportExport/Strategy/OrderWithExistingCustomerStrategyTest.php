@@ -9,7 +9,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 
 class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
@@ -20,7 +20,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransport $transport
+     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransport $transport
      */
     protected $transport;
 
@@ -41,7 +41,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $this->context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
             ->getMock();
 
-        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
             ->disableOriginalConstructor()
             ->getMock();
 

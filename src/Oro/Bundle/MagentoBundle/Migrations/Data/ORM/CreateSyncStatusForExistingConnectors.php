@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
@@ -58,7 +58,7 @@ class CreateSyncStatusForExistingConnectors extends AbstractFixture
      */
     protected function addInitialStatus(ChannelRepository $repository, Channel $integration, $connector)
     {
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $syncStartDate = $transport->getSyncStartDate();
         $now = new \DateTime('now', new \DateTimeZone('UTC'));

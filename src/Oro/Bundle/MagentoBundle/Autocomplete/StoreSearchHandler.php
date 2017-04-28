@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 
@@ -30,7 +30,7 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
 
             // Limit stores to website selected in integration settings
             $transport = $dataChannel->getDataSource()->getTransport();
-            if ($transport instanceof MagentoSoapTransport) {
+            if ($transport instanceof MagentoTransport) {
                 $websiteId = $transport->getSettingsBag()->get('website_id');
                 if ($websiteId !== StoresSoapIterator::ALL_WEBSITES) {
                     $queryBuilder->andWhere('w.originId = :id')->setParameter('id', $websiteId);

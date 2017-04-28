@@ -36,7 +36,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
@@ -43,7 +43,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
     public function testOnChannelSaveWithExtension($isExtensionInstalled, array $expectedConnectors)
     {
         $this->entity->setChannelType(ChannelType::TYPE);
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
@@ -98,7 +98,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
     public function testCartConnectorNotRelyOnVersion($isExtensionInstalled, $version, array $expectedConnectors)
     {
         $this->entity->setChannelType(ChannelType::TYPE);
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion($version);
         $this->integration->setTransport($transport);
@@ -167,7 +167,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
     public function testOnChannelSave()
     {
         $this->entity->setChannelType(ChannelType::TYPE);
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         $transport->setIsExtensionInstalled(false);
         $this->integration->setTransport($transport);
 

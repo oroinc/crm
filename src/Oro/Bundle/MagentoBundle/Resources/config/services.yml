@@ -20,8 +20,6 @@ parameters:
 
     oro_magento.entity.newsletter_subscriber.class:                      Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
 
-    oro_magento.entity.soap_transport.class:                             Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport
-
     # transport
     oro_magento.transport.soap_transport.class:                          Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
@@ -172,6 +170,12 @@ services:
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
+    oro_magento.transport.rest_transport:
+        class: Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport
+        parent: oro_integration.transport.rest.abstract_transport
+        arguments:
+            - '@oro_magento.provider.rest_token_provider'
+
     # Providers
     oro_magento.provider.channel_type:
         class: %oro_magento.provider.channel_type.class%
@@ -216,6 +220,9 @@ services:
     oro_magento.provider.website_channel_chart:
         class: %oro_magento.provider.website_channel_chart.class%
         parent: oro_magento.provider.website_chart
+
+    oro_magento.provider.rest_token_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
 
     # forms
     oro_magento.form.subscriber.soap_transport_setting:

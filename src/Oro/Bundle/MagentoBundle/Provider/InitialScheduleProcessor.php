@@ -12,7 +12,7 @@ use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 /**
@@ -65,7 +65,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $integration = $this->reloadEntity($integration);
         $this->scheduleInitialSyncIfRequired($integration);
 
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         // Run incremental sync
         $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $transport->getInitialSyncStartDate();
@@ -144,7 +144,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     protected function scheduleInitialSyncIfRequired(Integration $integration)
     {
         $this->saveInitialSyncStartDate($integration);
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         if ($this->isInitialSyncRequired(
             $integration,
@@ -174,7 +174,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     protected function saveInitialSyncStartDate(Integration $integration)
     {
         if (!$this->isInitialSyncStarted($integration)) {
-            /** @var MagentoSoapTransport $transport */
+            /** @var MagentoTransport $transport */
             $transport = $integration->getTransport();
             $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
             $transport->setInitialSyncStartDate($initialSyncStartDate);
@@ -210,7 +210,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
             }
         }
 
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $transport->setInitialSyncStartDate(null);
         $this->saveEntity($transport);

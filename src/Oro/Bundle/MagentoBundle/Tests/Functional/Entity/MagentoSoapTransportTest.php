@@ -7,7 +7,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 
 /**
@@ -28,11 +28,11 @@ class MagentoSoapTransportTest extends WebTestCase
         /** @var Channel $integration */
         $integration = $this->getReference('integration');
 
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
 
         //guard
-        self::assertInstanceOf(MagentoSoapTransport::class, $transport);
+        self::assertInstanceOf(MagentoTransport::class, $transport);
 
         $transport->setSyncStartDate(new \DateTime('2010-01-01'));
 

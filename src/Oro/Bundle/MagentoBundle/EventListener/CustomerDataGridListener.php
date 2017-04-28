@@ -59,7 +59,7 @@ class CustomerDataGridListener
             );
             $query->addLeftJoin('c.channel', 'channel');
             $query->addLeftJoin(
-                'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+                'Oro\Bundle\MagentoBundle\Entity\MagentoTransport',
                 'transport',
                 'WITH',
                 'channel.transport = transport'

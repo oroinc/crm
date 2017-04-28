@@ -10,19 +10,26 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 /**
- * Class MagentoSoapTransport
+ * Class MagentoTransport
  *
  * @package Oro\Bundle\MagentoBundle\Entity
- * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository")
  */
-class MagentoSoapTransport extends Transport
+class MagentoTransport extends Transport
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=false)
+     * @ORM\Column(name="api_token", type="string", length=255, nullable=false)
      */
-    protected $wsdlUrl;
+    protected $apiToken;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="api_url", type="string", length=255, nullable=false)
+     */
+    protected $apiUrl;
 
     /**
      * @var string
@@ -97,13 +104,6 @@ class MagentoSoapTransport extends Transport
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_wsi_mode", type="boolean")
-     */
-    protected $isWsiMode = false;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="guest_customer_sync", type="boolean")
      */
     protected $guestCustomerSync = true;
@@ -123,6 +123,13 @@ class MagentoSoapTransport extends Transport
     protected $newsletterSubscriberSyncedToId;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_wsi_mode", type="boolean")
+     */
+    protected $isWsiMode = false;
+
+    /**
      * @var string
      */
     protected $wsdlCachePath;
@@ -138,13 +145,13 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
-     * @param string $wsdlUrl
+     * @param string $apiUrl
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
-    public function setWsdlUrl($wsdlUrl)
+    public function setApiUrl($apiUrl)
     {
-        $this->wsdlUrl = $wsdlUrl;
+        $this->apiUrl = $apiUrl;
 
         return $this;
     }
@@ -152,15 +159,15 @@ class MagentoSoapTransport extends Transport
     /**
      * @return string
      */
-    public function getWsdlUrl()
+    public function getApiUrl()
     {
-        return $this->wsdlUrl;
+        return $this->apiUrl;
     }
 
     /**
      * @param string $apiUser
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setApiUser($apiUser)
     {
@@ -178,9 +185,29 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param string $apiToken
+     *
+     * @return MagentoTransport
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    /**
      * @param string $apiKey
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setApiKey($apiKey)
     {
@@ -200,7 +227,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param \DateTime $syncStartDate
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setSyncStartDate(\DateTime $syncStartDate = null)
     {
@@ -220,7 +247,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param \DateInterval $syncRange
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setSyncRange($syncRange)
     {
@@ -240,7 +267,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param int $websiteId
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setWebsiteId($websiteId)
     {
@@ -260,7 +287,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param array $websites
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setWebsites(array $websites)
     {
@@ -280,7 +307,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param boolean $isExtensionInstalled
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setIsExtensionInstalled($isExtensionInstalled)
     {
@@ -307,7 +334,7 @@ class MagentoSoapTransport extends Transport
 
     /**
      * @param string $extensionVersion
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setExtensionVersion($extensionVersion)
     {
@@ -317,6 +344,7 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * TODO: move required version to another class
      * @return bool
      */
     public function isSupportedExtensionVersion()
@@ -335,7 +363,7 @@ class MagentoSoapTransport extends Transport
 
     /**
      * @param string $magentoVersion
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setMagentoVersion($magentoVersion)
     {
@@ -345,29 +373,9 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
-     * @param boolean $isWsiMode
-     *
-     * @return MagentoSoapTransport
-     */
-    public function setIsWsiMode($isWsiMode)
-    {
-        $this->isWsiMode = $isWsiMode;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getIsWsiMode()
-    {
-        return $this->isWsiMode;
-    }
-
-    /**
      * @param boolean $guestCustomerSync
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setGuestCustomerSync($guestCustomerSync)
     {
@@ -394,16 +402,18 @@ class MagentoSoapTransport extends Transport
                 [
                     'api_user' => $this->getApiUser(),
                     'api_key' => $this->getApiKey(),
-                    'wsdl_url' => $this->getWsdlPath(),
+                    'api_url' => $this->getApiUrl(),
                     'sync_range' => $this->getSyncRange(),
-                    'wsi_mode' => $this->getIsWsiMode(),
                     'guest_customer_sync' => $this->getGuestCustomerSync(),
                     'website_id' => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
                     'initial_sync_start_date' => $this->getInitialSyncStartDate(),
                     'extension_version' => $this->getExtensionVersion(),
                     'magento_version' => $this->getMagentoVersion(),
-                    'newsletter_subscriber_synced_to_id' => $this->getNewsletterSubscriberSyncedToId()
+                    'newsletter_subscriber_synced_to_id' => $this->getNewsletterSubscriberSyncedToId(),
+                    'wsdl_url' => $this->getWsdlPath(),
+                    'wsi_mode' => $this->getIsWsiMode(),
+                    'api_token' => $this->getApiToken(),
                 ]
             );
         }
@@ -414,7 +424,7 @@ class MagentoSoapTransport extends Transport
     /**
      * @param string $adminUrl
      *
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setAdminUrl($adminUrl)
     {
@@ -441,35 +451,11 @@ class MagentoSoapTransport extends Transport
 
     /**
      * @param \DateTime $initialSyncStartDate
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setInitialSyncStartDate($initialSyncStartDate)
     {
         $this->initialSyncStartDate = $initialSyncStartDate;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getWsdlPath()
-    {
-        if ($this->wsdlCachePath) {
-            return $this->wsdlCachePath;
-        }
-
-        return $this->getWsdlUrl();
-    }
-
-    /**
-     * @param string $wsdlCachePath
-     * @return MagentoSoapTransport
-     */
-    public function setWsdlCachePath($wsdlCachePath)
-    {
-        $this->wsdlCachePath = $wsdlCachePath;
-        $this->settings = null;
 
         return $this;
     }
@@ -484,12 +470,77 @@ class MagentoSoapTransport extends Transport
 
     /**
      * @param int $newsletterSubscriberSyncedToId
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     public function setNewsletterSubscriberSyncedToId($newsletterSubscriberSyncedToId)
     {
         $this->newsletterSubscriberSyncedToId = $newsletterSubscriberSyncedToId;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getWsdlPath()
+    {
+        if ($this->wsdlCachePath) {
+            return $this->wsdlCachePath;
+        }
+
+        return $this->getApiUrl();
+    }
+
+    /**
+     * @deprecated since 2.3 version. Use getApiUrl() instead
+     * @return string
+     */
+    public function getWsdlUrl()
+    {
+        return $this->apiUrl;
+    }
+
+    /**
+     * @deprecated since 2.3 version. Use setApiUrl() instead
+     * @param $wsdlUrl
+     * @return MagentoTransport
+     */
+    public function setWsdlUrl($wsdlUrl)
+    {
+        $this->apiUrl = $wsdlUrl;
+
+        return $this;
+    }
+
+    /**
+     * @param string $wsdlCachePath
+     * @return MagentoTransport
+     */
+    public function setWsdlCachePath($wsdlCachePath)
+    {
+        $this->wsdlCachePath = $wsdlCachePath;
+        $this->settings = null;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $isWsiMode
+     *
+     * @return MagentoTransport
+     */
+    public function setIsWsiMode($isWsiMode)
+    {
+        $this->isWsiMode = $isWsiMode;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsWsiMode()
+    {
+        return $this->isWsiMode;
     }
 }

@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
@@ -56,7 +56,7 @@ class StoreGridListener
                 $dataChannel = $this->getDataChannelById($channelIds);
                 if ($dataChannel) {
                     $transport = $dataChannel->getDataSource()->getTransport();
-                    if ($transport instanceof MagentoSoapTransport) {
+                    if ($transport instanceof MagentoTransport) {
                         $websiteId = $transport->getSettingsBag()->get('website_id');
                         if ($websiteId !== StoresSoapIterator::ALL_WEBSITES) {
                             $datasource

@@ -6,7 +6,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
@@ -25,7 +25,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     protected $typeRegistry;
 
     /**
-     * @var MagentoSoapTransport
+     * @var MagentoTransport
      */
     protected $transportEntity;
 
@@ -45,7 +45,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
         $channel = $event->getChannel();
 
         if ($channel->getChannelType() === ChannelType::TYPE
-            && $channel->getDataSource()->getTransport() instanceof MagentoSoapTransport
+            && $channel->getDataSource()->getTransport() instanceof MagentoTransport
         ) {
             $this->transportEntity = $channel->getDataSource()->getTransport();
 

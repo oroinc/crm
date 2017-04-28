@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
@@ -89,7 +89,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $connector = 'testConnector_initial';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, $syncStartDate);
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $transport->setInitialSyncStartDate($initialStartDate);
 
@@ -143,7 +143,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $connector = 'testConnector_initial';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, $syncStartDate);
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $transport->setInitialSyncStartDate($initialStartDate);
 
@@ -198,7 +198,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, $syncStartDate);
 
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $transport->setInitialSyncStartDate($initialStartDate);
 
@@ -255,7 +255,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->will($this->returnValue('test job'));
         $integration = $this->getIntegration($connectors, $syncStartDate, $connectorInstance);
 
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
         $transport->setInitialSyncStartDate($initialStartDate);
 

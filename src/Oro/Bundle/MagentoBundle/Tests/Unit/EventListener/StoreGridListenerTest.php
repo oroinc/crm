@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener\Datagrid;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 
 use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
@@ -98,7 +98,7 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getParameters')
             ->will($this->returnValue($this->createParameterBag(['channelIds' => 100 ])));
 
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         $integration = new Integration();
         $transport->setWebsiteId(1);
         $integration->setTransport($transport);

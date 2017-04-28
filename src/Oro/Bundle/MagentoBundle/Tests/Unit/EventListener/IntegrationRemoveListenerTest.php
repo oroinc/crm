@@ -71,7 +71,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getEntity($url = null)
     {
-        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+        $entity = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->atLeastOnce())

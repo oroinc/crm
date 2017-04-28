@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 
 /**
@@ -31,7 +31,7 @@ class IntegrationRemoveListener
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if ($entity instanceof MagentoSoapTransport && $entity->getWsdlUrl()) {
+        if ($entity instanceof MagentoTransport && $entity->getWsdlUrl()) {
             $this->wsdlManager->clearCacheForUrl($entity->getWsdlUrl());
         }
     }

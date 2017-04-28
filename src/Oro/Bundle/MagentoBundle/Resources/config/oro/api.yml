@@ -30,7 +30,7 @@ api:
                         delete_relationship: false
 
 #        Oro\Bundle\MagentoBundle\Entity\CustomerGroup: ~
-#        Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
+#        Oro\Bundle\MagentoBundle\Entity\MagentoTransport: ~
 #        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
         Oro\Bundle\MagentoBundle\Entity\Order:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order.md'

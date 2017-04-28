@@ -23,7 +23,7 @@ use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
@@ -127,7 +127,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     {
         static $i = 0;
 
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         $transport->setApiUser('api_user');
         $transport->setApiKey('api_key');
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);

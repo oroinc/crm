@@ -128,7 +128,7 @@ class CustomerDataGridListenerTest extends \PHPUnit_Framework_TestCase
                                     'alias' => 'channel'
                                 ],
                                 [
-                                    'join'          => 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport',
+                                    'join'          => 'Oro\Bundle\MagentoBundle\Entity\MagentoTransport',
                                     'alias'         => 'transport',
                                     'conditionType' => 'WITH',
                                     'condition'     => 'channel.transport = transport'

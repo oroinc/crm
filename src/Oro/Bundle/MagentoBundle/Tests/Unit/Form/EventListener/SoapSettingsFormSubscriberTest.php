@@ -12,7 +12,7 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\SoapTransportSettingFormTypeStub;
 use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
 {
@@ -61,7 +61,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
     public function testPreSetWebsites($websites, $expected)
     {
         $data = $this
-            ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+            ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
             ->disableOriginalConstructor()
             ->getMock();
 

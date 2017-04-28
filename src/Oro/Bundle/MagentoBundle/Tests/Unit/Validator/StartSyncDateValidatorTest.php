@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 use Oro\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
 
@@ -79,17 +79,17 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
             [new \stdClass(), $this->getIntegration()],
             [new \DateTime(), new \stdClass()],
             [new \DateTime(), $this->getIntegration('Oro\Bundle\IntegrationBundle\Entity\Transport')],
-            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')],
-            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1)],
+            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')],
+            [new \DateTime(), $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoTransport', 1)],
             [
                 new \DateTime(),
-                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
+                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoTransport', 1),
                 '2014-12-12',
                 true,
             ],
             [
                 new \DateTime('2014-12-01'),
-                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport', 1),
+                $this->getIntegration('Oro\Bundle\MagentoBundle\Entity\MagentoTransport', 1),
                 '2014-12-12',
             ],
         ];
@@ -111,7 +111,7 @@ class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
         $integration = new $integrationClass();
 
         if ($transportClass) {
-            /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransport $transport */
+            /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransport $transport */
             $transport = $this->createMock($transportClass);
             if ($transportId) {
                 $transport->expects($this->any())->method('getId')->willReturn($transportId);

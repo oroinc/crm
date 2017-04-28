@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -15,6 +14,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 class MagentoSyncProcessor extends SyncProcessor
 {
@@ -189,7 +189,7 @@ class MagentoSyncProcessor extends SyncProcessor
     protected function getInitialSyncStartDate(Integration $integration)
     {
         if ($this->isInitialSyncStarted($integration)) {
-            /** @var MagentoSoapTransport $transport */
+            /** @var MagentoTransport $transport */
             $transport = $integration->getTransport();
 
             return $transport->getInitialSyncStartDate();
@@ -204,7 +204,7 @@ class MagentoSyncProcessor extends SyncProcessor
      */
     protected function isInitialSyncStarted(Integration $integration)
     {
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $transport = $integration->getTransport();
 
         return (bool)$transport->getInitialSyncStartDate();

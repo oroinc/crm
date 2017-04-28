@@ -288,7 +288,7 @@ processes:
         magento_schedule_integration:
             label:   'Shedule integration'
             enabled: true
-            entity:  Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+            entity:  Oro\Bundle\MagentoBundle\Entity\MagentoTransport
             order:   10
             actions_configuration:
                 - '@find_entity':

@@ -10,7 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
@@ -88,7 +88,7 @@ class CartStrategy extends AbstractImportStrategy
             if (!$customer && !$customerOriginId) {
                 /** @var Channel $channel */
                 $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
-                /** @var MagentoSoapTransport $transport */
+                /** @var MagentoTransport $transport */
                 $transport = $channel->getTransport();
                 if ($transport->getGuestCustomerSync()) {
                     $this->appendDataToContext(

@@ -15,7 +15,7 @@ class DropTransportConfigurable implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $className = 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport';
+        $className = 'Oro\Bundle\MagentoBundle\Entity\MagentoTransport';
 
         $dropFieldsSql = 'DELETE FROM oro_entity_config_field'
             . ' WHERE entity_id IN ('

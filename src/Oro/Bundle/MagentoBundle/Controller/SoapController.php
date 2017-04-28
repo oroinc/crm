@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
@@ -149,7 +149,7 @@ class SoapController extends Controller
      *
      * @param Request $request
      * @param TransportInterface $transport
-     * @return MagentoSoapTransport
+     * @return MagentoTransport
      */
     protected function getTransportEntity(Request $request, $transport)
     {

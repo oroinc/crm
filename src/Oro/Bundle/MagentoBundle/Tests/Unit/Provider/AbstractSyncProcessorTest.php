@@ -17,7 +17,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -212,7 +212,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getType')
             ->will($this->returnValue('testChannelType'));
 
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoTransport();
         if ($syncStartDate) {
             $transport->setSyncStartDate($syncStartDate);
         }

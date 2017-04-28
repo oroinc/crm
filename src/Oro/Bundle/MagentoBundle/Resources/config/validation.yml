@@ -3,12 +3,12 @@ Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
         email:
             - NotBlank: ~
 
-Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+Oro\Bundle\MagentoBundle\Entity\MagentoTransport:
     constraints:
         - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
-              fields:     [ websiteId, wsdlUrl ]
+              fields:     [ websiteId, apiUrl ]
     properties:
-        wsdlUrl:
+        apiUrl:
           - NotBlank: ~
         apiUser:
           - NotBlank: ~

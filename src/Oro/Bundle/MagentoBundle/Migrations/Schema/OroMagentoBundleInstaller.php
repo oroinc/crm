@@ -13,7 +13,6 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroMagentoBundle as IntegrationUpdate;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use Oro\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 
@@ -72,7 +71,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_48';
+        return 'v1_49';
     }
 
     /**
@@ -140,14 +139,23 @@ class OroMagentoBundleInstaller implements
      */
     protected function updateIntegrationTransportTable(Schema $schema)
     {
-        IntegrationUpdate::updateOroIntegrationTransportTable($schema);
         $table = $schema->getTable('oro_integration_transport');
+        $table->addColumn('api_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('api_user', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('api_key', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('sync_start_date', 'date', ['notnull' => false]);
+        $table->addColumn('sync_range', 'string', ['notnull' => false, 'length' => 50]);
+        $table->addColumn('website_id', 'integer', ['notnull' => false]);
+        $table->addColumn('websites', 'array', ['notnull' => false, 'comment' => '(DC2Type:array)']);
+        $table->addColumn('is_extension_installed', 'boolean', ['notnull' => false]);
+        $table->addColumn('is_wsi_mode', 'boolean', ['notnull' => false]);
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
         $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
+        $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
     }
 
     /**
