@@ -92,7 +92,7 @@ class UpdateOpportunityCurrency implements
                   SET budget_amount_currency = :currency, close_revenue_currency = :currency';
 
         if (!empty($currencies)) {
-            $query .= sprintf('WHERE organization_id 
+            $query .= sprintf(' WHERE organization_id 
                           NOT IN (%s)', implode(array_keys($currencies), ','));
         }
         $migrationQuery = new ParametrizedSqlMigrationQuery();
