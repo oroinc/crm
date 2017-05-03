@@ -397,3 +397,12 @@ services:
             - '@oro_action.context_accessor'
         tags:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }
+
+    oro_channel.entity.repository.channel:
+        class: 'OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository'
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - %orocrm_channel.entity.class%
+        calls:
+            - [setConfigManager, ['@oro_config.manager']]
+        lazy: true

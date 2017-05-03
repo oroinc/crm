@@ -870,6 +870,7 @@ services:
             - "@doctrine"
             - "@oro_security.acl_helper"
             - "@oro_dashboard.provider.big_number.date_helper"
+            - "@oro_channel.entity.repository.channel"
         tags:
             - { name: oro_dashboard.big_number.provider, alias: magento }
 
