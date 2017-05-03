@@ -157,6 +157,8 @@ oro:
                 description:      The currency specified for the budget amount value.
             budget_amount_base_currency:
                 label:            Budget Amount (%sign%)
+            budget_base_currency:
+                label:            Base Currency
             base_budget_amount_value:
                 label:            Budget Amount In Base Currency
             close_revenue:

@@ -67,8 +67,7 @@
     {% set opportunityInfoWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('oro_sales_opportunity_info', { id: entity.id }),
-            'title': 'Opportunity Information'
+            'url': path('oro_sales_opportunity_info', { id: entity.id })
         }) }}
     {% endset %}
 
