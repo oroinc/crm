@@ -6,6 +6,7 @@ use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
+use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -81,8 +82,9 @@ class SalesContext extends OroFeatureContext implements
             $rowsForDelete[] = $row;
         }
 
+        /** @var GridRow $row */
         foreach ($rowsForDelete as $row) {
-            $grid->getActionLink('Delete', $row)->click();
+            $row->getActionLink('Delete')->click();
         }
 
         $entitySelector = $this->elementFactory->findElementContains('EntitySelector', 'Please select entity');

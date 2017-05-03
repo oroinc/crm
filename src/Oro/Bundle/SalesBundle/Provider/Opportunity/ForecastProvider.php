@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Provider\Opportunity;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -196,6 +197,9 @@ class ForecastProvider
      * @param string         $field
      * @param \DateTime|null $start
      * @param \DateTime|null $end
+     *
+     * Known issue with `start` and `end` date modification on +/- 1 day after moving to UTC timezone
+     * will be fixed in BAP-14469
      */
     protected function applyDateFiltering(
         QueryBuilder $qb,
@@ -206,12 +210,12 @@ class ForecastProvider
         if ($start) {
             $qb
                 ->andWhere(sprintf('%s >= :start', $field))
-                ->setParameter('start', $start);
+                ->setParameter('start', $start, Type::DATE);
         }
         if ($end) {
             $qb
                 ->andWhere(sprintf('%s <= :end', $field))
-                ->setParameter('end', $end);
+                ->setParameter('end', $end, Type::DATE);
         }
     }
 

@@ -1,3 +1,5 @@
+@ticket-CRM-6601
+@automatically-ticket-tagged
 @not-automated
 # @todo: Should be moved to the Commerce and CRM integration
 Feature: In order to indicate the end point of a sale within an account

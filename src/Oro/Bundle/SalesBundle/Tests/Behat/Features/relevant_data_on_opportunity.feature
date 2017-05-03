@@ -1,3 +1,5 @@
+@ticket-CRM-6913
+@automatically-ticket-tagged
 @not-automated
 Feature: Display relevant data on Opportunity view
   In order to have 360-degree account view

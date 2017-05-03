@@ -1,3 +1,5 @@
+@ticket-CRM-7077
+@automatically-ticket-tagged
 @not-automated
 @draft
 

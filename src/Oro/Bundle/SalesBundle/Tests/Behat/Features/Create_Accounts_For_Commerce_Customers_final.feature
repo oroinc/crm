@@ -1,3 +1,5 @@
+@ticket-CRM-6601
+@automatically-ticket-tagged
 @not-automated
 @draft
 # @todo: Should be moved to the Commerce and CRM integration
