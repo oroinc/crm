@@ -528,6 +528,14 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
+    oro_magento.event_listener.delayed_search_reindex:
+        class: 'Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener'
+        parent: oro_search.index_listener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: onClear }
+
     oro_magento.service.magento_url_generator:
         class: %oro_magento.magento_url_generator.class%
         arguments:
