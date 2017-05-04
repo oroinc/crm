@@ -57,7 +57,7 @@ class ContactRequestType extends AbstractType implements EmbeddedFormInterface
         $builder->add(
             'emailAddress',
             'text',
-            ['required' => true, 'label' => 'oro.contactus.contactrequest.email_address.label']
+            ['required' => false, 'label' => 'oro.contactus.contactrequest.email_address.label']
         );
         $builder->add('phone', 'text', ['required' => false, 'label' => 'oro.contactus.contactrequest.phone.label']);
         $builder->add('comment', 'textarea', ['label' => 'oro.contactus.contactrequest.comment.label']);
