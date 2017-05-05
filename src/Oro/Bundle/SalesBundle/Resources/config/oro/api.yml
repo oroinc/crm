@@ -123,32 +123,8 @@ api:
                     property_path: _
                 account:
                     property_path: customerAssociation.account
-                    depends_on:
-                        - customerAssociation.account
                 customer:
-                    exclusion_policy: all
                     property_path: customerAssociation.target
-                    depends_on:
-                        - customerAssociation.target
-                customerAssociation:
-                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
-                    target_type: to-one
-                    exclude: false
-                    fields:
-                        account:
-                            exclusion_policy: all
-                            fields:
-                                id:
-                                    exclude: false
-                        target:
-                            exclusion_policy: all
-                            exclude: true
-                            data_type: association:manyToOne:customer
-                            fields:
-                                id:
-                                    exclude: false
-                        customer_f2bbc387:
-                            description: Test record.
             filters:
                 fields:
                     phones:
@@ -171,8 +147,6 @@ api:
                         type: primaryField
                         options:
                             data_field: email
-                    customerAssociation:
-                        exclude: true
 
         Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity_close_reason.md'
@@ -187,48 +161,20 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
-            filters:
-                fields:
-                    customerAssociation:
-                        exclude: true
-
-
             fields:
                 closedAt:
                     exclude: true
                 account:
                     property_path: customerAssociation.account
-                    depends_on:
-                        - customerAssociation.account
                 customer:
-                    exclusion_policy: all
                     property_path: customerAssociation.target
-                    depends_on:
-                        - customerAssociation.target
-                customerAssociation:
-                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
-                    target_type: to-one
-                    exclude: false
-                    fields:
-                        account:
-                            exclusion_policy: all
-                            fields:
-                                id:
-                                    exclude: false
-                        target:
-                            exclusion_policy: all
-                            exclude: true
-                            data_type: association:manyToOne:customer
-                            fields:
-                                id:
-                                    exclude: false
 
         Oro\Bundle\SalesBundle\Entity\Customer:
-            actions: false
             fields:
-                account: ~
                 target:
                     data_type: association:manyToOne:customer
+            # this entity does not have own Data API resource
+            actions: false
 
         Oro\Bundle\SalesBundle\Entity\SalesFunnel:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/sale_funnel.md'
