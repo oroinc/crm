@@ -67,6 +67,42 @@ class RestTransportTest extends WebTestCase
         $transport->init($this->getTransportEntity());
     }
 
+    public function testPingSuccess()
+    {
+        $this->loadRestFixture('ping');
+
+        /** @var RestTransport $transport */
+        $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
+        $transport->init($this->getTransportEntity());
+
+        $this->assertTrue($transport->ping());
+    }
+
+    public function testExtensionDetection()
+    {
+        $this->loadRestFixture('ping');
+
+        /** @var RestTransport $transport */
+        $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
+        $transport->init($this->getTransportEntity());
+
+        $this->assertTrue($transport->isExtensionInstalled());
+        $this->assertEquals("http://localhost/admin", $transport->getAdminUrl());
+        $this->assertEquals("1.0.0", $transport->getExtensionVersion());
+        $this->assertEquals("2.1.4", $transport->getMagentoVersion());
+    }
+
+    public function testNoOroExtension()
+    {
+        $this->loadRestFixture('ping_no_extension');
+
+        /** @var RestTransport $transport */
+        $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
+        $transport->init($this->getTransportEntity());
+
+        $this->assertFalse($transport->isExtensionInstalled());
+    }
+
     /**
      * Creates transport entity
      *

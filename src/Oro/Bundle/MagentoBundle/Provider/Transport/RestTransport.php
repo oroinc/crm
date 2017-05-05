@@ -16,6 +16,7 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
+use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
 
 class RestTransport implements
@@ -59,15 +60,23 @@ class RestTransport implements
     protected $restTokenProvider;
 
     /**
+     * @var RestPingProvider
+     */
+    protected $pingProvider;
+
+    /**
      * @param BridgeRestClientFactory $clientFactory
      * @param RestTokenProvider       $restTokenProvider
      */
     public function __construct(
         BridgeRestClientFactory $clientFactory,
-        RestTokenProvider $restTokenProvider
+        RestTokenProvider $restTokenProvider,
+        RestPingProvider $pingProvider
+
     ) {
         $this->clientFactory = $clientFactory;
         $this->restTokenProvider = $restTokenProvider;
+        $this->pingProvider = $pingProvider;
     }
 
     /**
@@ -83,6 +92,9 @@ class RestTransport implements
             $token = $this->refreshToken();
         }
         $this->updateTokenHeaderParam($token);
+
+        $this->pingProvider->setClient($this->client);
+        $this->pingProvider->setHeaders($this->headers);
     }
 
     /**
@@ -135,7 +147,11 @@ class RestTransport implements
      */
     public function isExtensionInstalled()
     {
-
+        try {
+            return $this->pingProvider->isExtensionInstalled();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'isExtensionInstalled');
+        }
     }
 
     /**
@@ -143,7 +159,11 @@ class RestTransport implements
      */
     public function getAdminUrl()
     {
-        // TODO: Implement getAdminUrl() method.
+        try {
+            return $this->pingProvider->getAdminUrl();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'getAdminUrl');
+        }
     }
 
     /**
@@ -312,7 +332,11 @@ class RestTransport implements
      */
     public function getExtensionVersion()
     {
-        // TODO: Implement getExtensionVersion() method.
+        try {
+            return $this->pingProvider->getBridgeVersion();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'getExtensionVersion');
+        }
     }
 
     /**
@@ -320,7 +344,11 @@ class RestTransport implements
      */
     public function getMagentoVersion()
     {
-        // TODO: Implement getMagentoVersion() method.
+        try {
+            return $this->pingProvider->getMagentoVersion();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'getMagentoVersion');
+        }
     }
 
     /**
@@ -360,15 +388,7 @@ class RestTransport implements
      */
     public function ping()
     {
-        try {
-
-            /**
-             * @todo Implement request to client
-             */
-
-        } catch (RestException $exception) {
-            return $this->handleException($exception, 'ping');
-        }
+        return $this->pingProvider->ping();
     }
 
     /**

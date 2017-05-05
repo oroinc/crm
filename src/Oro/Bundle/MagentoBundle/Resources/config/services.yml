@@ -181,6 +181,7 @@ services:
         arguments:
             - '@oro_magento.transport.rest_client_factory'
             - '@oro_magento.provider.rest_token_provider'
+            - '@oro_magento.provider.rest_ping_provider'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -232,6 +233,11 @@ services:
     oro_magento.provider.rest_token_provider:
         class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
         arguments: ['@doctrine']
+        calls:
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+
+    oro_magento.provider.rest_ping_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\RestPingProvider
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
