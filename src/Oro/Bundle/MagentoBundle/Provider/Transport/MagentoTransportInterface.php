@@ -18,14 +18,6 @@ interface MagentoTransportInterface extends TransportInterface
     const TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST = 102;
 
     /**
-     * @param string       $action
-     * @param object|array $params
-     *
-     * @return mixed
-     */
-    public function call($action, $params = []);
-
-    /**
      * Return true if oro bridge extension installed on remote instance
      *
      * @return bool

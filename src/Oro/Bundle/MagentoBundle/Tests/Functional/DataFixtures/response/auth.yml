@@ -1,0 +1,4 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: fake_token

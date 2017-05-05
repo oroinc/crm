@@ -2,19 +2,24 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
+use FOS\RestBundle\Util\Codes;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Transport\AbstractRestTransport;
+use Oro\Bundle\IntegrationBundle\Exception\RuntimeException;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 
-class RestTransport extends AbstractRestTransport implements
+class RestTransport implements
+    TransportInterface,
     MagentoTransportInterface,
     ServerTimeAwareInterface,
     PingableInterface,
@@ -28,16 +33,40 @@ class RestTransport extends AbstractRestTransport implements
     const TOKEN_HEADER_KEY = 'Authorization';
     const TOKEN_MASK = 'Bearer %s';
 
-    const UNAUTHORIZED_STATUS_CODE = '401';
-
+    /**
+     * @var array
+     */
     protected $headers = [];
+
+    /**
+     * @var Transport
+     */
+    protected $transportEntity;
+
+    /**
+     * @var RestClientInterface
+     */
+    protected $client;
+
+    /**
+     * @var BridgeRestClientFactory
+     */
+    protected $clientFactory;
+
+    /**
+     * @var RestTokenProvider
+     */
     protected $restTokenProvider;
 
     /**
-     * @param RestTokenProvider $restTokenProvider
+     * @param BridgeRestClientFactory $clientFactory
+     * @param RestTokenProvider       $restTokenProvider
      */
-    public function __construct(RestTokenProvider $restTokenProvider)
-    {
+    public function __construct(
+        BridgeRestClientFactory $clientFactory,
+        RestTokenProvider $restTokenProvider
+    ) {
+        $this->clientFactory = $clientFactory;
         $this->restTokenProvider = $restTokenProvider;
     }
 
@@ -46,13 +75,33 @@ class RestTransport extends AbstractRestTransport implements
      */
     public function init(Transport $transportEntity)
     {
-        parent::init($transportEntity);
+        $this->transportEntity = $transportEntity;
+        $this->client = $this->clientFactory->createRestClient($transportEntity);
         $settings = $transportEntity->getSettingsBag();
         $token = $settings->get(static::TOKEN_KEY, false);
-        if (false !== $token) {
+        if (false === $token) {
             $token = $this->refreshToken();
         }
         $this->updateTokenHeaderParam($token);
+    }
+
+    /**
+     * @param RestException $exception
+     *
+     * @return bool
+     */
+    protected function isUnauthorizedException(RestException $exception)
+    {
+        return $exception->getResponse()->getStatusCode() === Codes::HTTP_UNAUTHORIZED;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isAllowToProcessUnauthorizedResponse()
+    {
+        $lastResponse = $this->client->getLastResponse();
+        return null === $lastResponse || $lastResponse->getStatusCode() !== Codes::HTTP_UNAUTHORIZED;
     }
 
     /**
@@ -68,27 +117,7 @@ class RestTransport extends AbstractRestTransport implements
      */
     protected function refreshToken()
     {
-        return $this->restTokenProvider->getToken($this->settings, $this->getClient());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getClientBaseUrl(ParameterBag $parameterBag)
-    {
-        return rtrim($parameterBag->get('api_url'), '/') . '/' . ltrim(static::API_URL_PREFIX, '/');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getClientOptions(ParameterBag $parameterBag)
-    {
-        return [
-            'headers' => [
-                'Content-Type' => 'application/json'
-            ]
-        ];
+        return $this->restTokenProvider->getToken($this->transportEntity, $this->client);
     }
 
     /**
@@ -104,55 +133,9 @@ class RestTransport extends AbstractRestTransport implements
     /**
      * @inheritDoc
      */
-    public function call($action, $params = [], $method = 'get')
-    {
-        /**
-         * @todo Create Magento client that will extends Guzzle and implements
-         *       multi-attempts functionality
-         */
-        $allowedHttpRequests = ['get', 'post', 'delete', 'put'];
-        if ($this->logger) {
-            $this->logger->debug(
-                sprintf(
-                    '[%.1fMB/%.1fMB] Call %s action with http method %s with %s parameters',
-                    memory_get_usage() / 1024 / 1024,
-                    memory_get_peak_usage() / 1024 / 1024,
-                    $action,
-                    $method,
-                    json_encode($params)
-                )
-            );
-        }
-
-        /**
-         * @todo Make list extandable
-         */
-        if (!in_array($method, $allowedHttpRequests)) {
-            throw new \Exception('Not supported http method !');
-        }
-
-        $response = $this->getClient()->{$method}();
-        if (!$response instanceof RestResponseInterface) {
-            throw new \Exception('Not supported http method !');
-        }
-
-        $lastResponse = $this->getClient()->getLastResponse();
-
-        if (401 === $response->getStatusCode() && (null === $lastResponse || 401 !== $lastResponse->getStatusCode())) {
-            $token = $this->refreshToken();
-            $this->updateTokenHeaderParam($token);
-            return $this->call($action, $params, $method);
-        }
-
-        return $response->json();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function isExtensionInstalled()
     {
-        // TODO: Implement isExtensionInstalled() method.
+
     }
 
     /**
@@ -377,6 +360,43 @@ class RestTransport extends AbstractRestTransport implements
      */
     public function ping()
     {
-        // TODO: Implement ping() method.
+        try {
+
+            /**
+             * @todo Implement request to client
+             */
+
+        } catch (RestException $exception) {
+            return $this->handleException($exception, 'ping');
+        }
+    }
+
+    /**
+     * @param RestException $exception
+     * @param string        $methodName
+     * @param array         $arguments
+     *
+     * @return mixed
+     */
+    protected function handleException(RestException $exception, $methodName, $arguments = [])
+    {
+        if ($exception->getResponse() instanceof RestResponseInterface &&
+            $this->isUnauthorizedException($exception) &&
+            $this->isAllowToProcessUnauthorizedResponse()
+        ) {
+            /**
+             * Update token and do request one more time
+             */
+            $token = $this->refreshToken();
+            $this->updateTokenHeaderParam($token);
+            return call_user_func_array([$this, $methodName], $arguments);
+        }
+
+        throw new RuntimeException(
+            sprintf(
+                'Server returned unexpected response. Response code %s',
+                $exception->getCode()
+            )
+        );
     }
 }

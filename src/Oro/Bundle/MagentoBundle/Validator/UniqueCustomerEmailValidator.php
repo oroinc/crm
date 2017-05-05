@@ -98,6 +98,9 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
         $filters = $filter->getAppliedFilters();
 
         try {
+            /**
+             * @todo Replace method `call`. Will be done in CRM-8188
+             */
             $customers = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
         } catch (\RuntimeException $e) {
             $this->context->addViolationAt('email', $constraint->transportMessage);

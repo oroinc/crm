@@ -2,17 +2,27 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use FOS\RestBundle\Util\Codes;
+
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerAwareInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
+use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
+use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 
-class RestTokenProvider
+class RestTokenProvider implements LoggerAwareInterface
 {
-    const USER_KEY = 'api_key';
-    const PASSWORD_KEY = 'api_user';
+    use LoggerAwareTrait;
+
+    const USER_KEY = 'api_user';
+    const PASSWORD_KEY = 'api_key';
 
     const USER_API_PARAM = 'username';
     const PASSWORD_API_PARAM = 'password';
@@ -20,19 +30,35 @@ class RestTokenProvider
     const TOKEN_RETRIEVAL_URL = 'integration/admin/token';
 
     /**
-     * @param ParameterBag        $parameterBag
+     * @var RegistryInterface
+     */
+    protected $doctrine;
+
+    /**
+     * @param RegistryInterface $doctrine
+     */
+    public function __construct(RegistryInterface $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
+    /**
+     * @param Transport           $transportEntity
      * @param RestClientInterface $client
      *
-     * @return array
+     * @return string
      */
-    public function getToken(ParameterBag $parameterBag, RestClientInterface $client)
+    public function getToken(Transport $transportEntity, RestClientInterface $client)
     {
-        $tokenRequestParams = $this->getTokenRequestParams($parameterBag);
+        $this->logger->info('Do request to get new `token`');
+
+        $settings = $transportEntity->getSettingsBag();
+        $tokenRequestParams = $this->getTokenRequestParams($settings);
         $token = $this->doTokenRequest($client, $tokenRequestParams);
 
-        /**
-         * @todo Save token to database
-         */
+        $this->logger->info('Request on new `token` is done');
+
+        $this->updateToken($transportEntity, $token);
 
         return $token;
     }
@@ -42,17 +68,15 @@ class RestTokenProvider
      * @param array               $params
      *
      * @return string
+     * @throws RestException
      */
     protected function doTokenRequest(RestClientInterface $client, array $params)
     {
         try {
-            $response = $client->get(static::TOKEN_RETRIEVAL_URL, $params);
-            $this->validateStatusCodes($response->getStatusCode());
-            return $response->getBodyAsString();
-        } catch (RestException $exception) {
-            /**
-             * @todo throw custom exception
-             */
+            $response = $client->post(static::TOKEN_RETRIEVAL_URL, $params);
+            return $response->json();
+        } catch (RestException $e) {
+            $this->validateStatusCodes($e->getResponse());
         }
     }
 
@@ -64,37 +88,29 @@ class RestTokenProvider
     protected function validateStatusCodes(RestResponseInterface $response)
     {
         $statusCode = $response->getStatusCode();
-        if (200 === $statusCode) {
-            return;
-        }
-
-        if (401 === $statusCode) {
+        if (Codes::HTTP_UNAUTHORIZED === $statusCode) {
             throw new InvalidConfigurationException(
-                'Magento REST transport require \'api_key\' and \'api_user\' settings to be defined.'
+                "Can't get token by defined 'api_key' and 'api_user'. Please check credentials !"
             );
         }
 
-        /**
-         * @todo throw custom exception
-         */
-        throw new \Exception('Server does\'t response !');
+        throw new RuntimeException(sprintf('Server returned unexpected response. Response code %s', $statusCode));
     }
 
     /**
      * @param ParameterBag $parameterBag
      *
      * @return array
+     * @throws InvalidConfigurationException
      */
     protected function getTokenRequestParams(ParameterBag $parameterBag)
     {
         $username = $parameterBag->get(static::USER_KEY, false);
         $password = $parameterBag->get(static::PASSWORD_KEY, false);
-        /**
-         * @todo Implement checking of MagentoRestTransportInterface
-         */
+
         if (!$username || !$password) {
             throw new InvalidConfigurationException(
-                'Magento REST transport require \'api_key\' and \'api_user\' settings to be defined.'
+                "Magento REST transport require 'api_key' and 'api_user' settings to be defined."
             );
         }
 
@@ -102,5 +118,17 @@ class RestTokenProvider
             static::USER_API_PARAM => $username,
             static::PASSWORD_API_PARAM => $password
         ];
+    }
+
+    /**
+     * @param Transport $transportEntity
+     * @param string    $token
+     */
+    protected function updateToken(Transport $transportEntity, $token)
+    {
+        $em = $this->doctrine->getEntityManagerForClass(Transport::class);
+        $transportEntity->setApiToken($token);
+        $em->persist($transportEntity);
+        $em->flush($transportEntity);
     }
 }
