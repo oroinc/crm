@@ -10,7 +10,7 @@ define(['jquery', 'underscore'], function($, _) {
         return $('[name*="[' + name + ']"]');
     };
 
-    var resetFieldStatus = function(allFields, requiredFields) {
+    var resetFieldStatus = function(allFields, requiredFields, silent) {
         var isArray = _.isArray(requiredFields);
 
         _.each(allFields, function(field) {
@@ -24,7 +24,11 @@ define(['jquery', 'underscore'], function($, _) {
                 delete validationData.NotBlank;
             }
 
-            $field.data('validation', validationData).valid();
+            $field.data('validation', validationData);
+
+            if (!silent) {
+                $field.valid();
+            }
         });
     };
 
@@ -32,11 +36,11 @@ define(['jquery', 'underscore'], function($, _) {
         return _.uniq(_.flatten(_.values(list)));
     };
 
-    var validate = function($field, params) {
+    var validate = function($field, params, silent) {
         var requiredFields = params.deps[$field.val()];
         var allFields = resolveFields(params.deps);
 
-        resetFieldStatus(allFields, requiredFields);
+        resetFieldStatus(allFields, requiredFields, silent);
     };
 
     return [
@@ -47,7 +51,7 @@ define(['jquery', 'underscore'], function($, _) {
             $field.off(event).on(event, function() {
                 validate($field, params);
             });
-            validate($field, params);
+            validate($field, params, true);
 
             return true;
         }
