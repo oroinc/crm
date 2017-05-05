@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 class WebsiteConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface

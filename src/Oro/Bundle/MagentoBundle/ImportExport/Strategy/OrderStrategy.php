@@ -7,7 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
-use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends AbstractImportStrategy

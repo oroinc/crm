@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 

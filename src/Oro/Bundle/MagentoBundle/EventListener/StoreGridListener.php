@@ -8,7 +8,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**

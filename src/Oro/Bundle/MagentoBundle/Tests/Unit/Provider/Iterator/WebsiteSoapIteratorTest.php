@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 
 class WebsiteSoapIteratorTest extends BaseIteratorTestCase
 {

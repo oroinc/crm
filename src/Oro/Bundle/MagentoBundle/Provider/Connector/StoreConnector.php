@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-
 class StoreConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
     const TYPE = 'store_dictionary';

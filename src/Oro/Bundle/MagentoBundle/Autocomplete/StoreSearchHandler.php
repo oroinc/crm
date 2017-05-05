@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Store;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 
 class StoreSearchHandler extends IntegrationAwareSearchHandler
 {

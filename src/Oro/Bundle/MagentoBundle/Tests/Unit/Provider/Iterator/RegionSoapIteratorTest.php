@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
 
 class RegionSoapIteratorTest extends BaseIteratorTestCase
 {

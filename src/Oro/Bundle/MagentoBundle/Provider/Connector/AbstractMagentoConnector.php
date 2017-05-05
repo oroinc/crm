@@ -1,11 +1,14 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Psr\Log\LoggerAwareInterface;
 
+use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
+use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;

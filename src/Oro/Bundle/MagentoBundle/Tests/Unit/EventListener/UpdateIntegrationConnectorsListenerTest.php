@@ -48,11 +48,11 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
 
-        $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\OrderConnector')
+        $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cartConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\CartConnector')
+        $cartConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\CartConnector')
             ->disableOriginalConstructor()
             ->getMock();
 

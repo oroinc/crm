@@ -1,6 +1,8 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
+
+use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class CartConnector extends AbstractMagentoConnector implements ExtensionAwareInterface
 {

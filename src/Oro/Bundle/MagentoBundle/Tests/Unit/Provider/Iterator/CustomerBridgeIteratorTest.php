@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 
 class CustomerBridgeIteratorTest extends BaseIteratorTestCase
 {

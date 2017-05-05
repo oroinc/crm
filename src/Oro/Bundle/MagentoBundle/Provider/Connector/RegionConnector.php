@@ -1,8 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
-
-use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 class RegionConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {

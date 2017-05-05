@@ -3,7 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 
 class MagentoTransportRepository extends EntityRepository
 {

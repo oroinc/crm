@@ -19,7 +19,7 @@ use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase

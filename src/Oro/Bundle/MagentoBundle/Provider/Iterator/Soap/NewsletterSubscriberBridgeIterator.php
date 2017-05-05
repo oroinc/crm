@@ -1,13 +1,15 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIteratorInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
+class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator implements
+    NewsletterSubscriberBridgeIteratorInterface
 {
     /**
      * @var int
@@ -15,8 +17,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
     protected $initialId;
 
     /**
-     * @param int $initialId
-     * @return NewsletterSubscriberBridgeIterator
+     * {@inheritdoc}
      */
     public function setInitialId($initialId)
     {

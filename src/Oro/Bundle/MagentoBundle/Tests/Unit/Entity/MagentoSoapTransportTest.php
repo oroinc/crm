@@ -64,7 +64,9 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'initial_sync_start_date' => new \DateTime('now'),
             'extension_version' => '1.1.0',
             'magento_version' => '1.8.0.0',
-            'newsletter_subscriber_synced_to_id' => 10
+            'newsletter_subscriber_synced_to_id' => 10,
+            'api_url' => 'http://test.url/',
+            'api_token' => null
         ];
 
         $this->entity

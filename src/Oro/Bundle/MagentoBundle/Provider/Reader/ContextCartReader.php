@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\MagentoBundle\Provider\CartConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\CartConnector;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCartReader extends CartConnector

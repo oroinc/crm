@@ -21,16 +21,16 @@ parameters:
     oro_magento.importexport.data_converter.newsletter_subscriber.class:     Oro\Bundle\MagentoBundle\ImportExport\Converter\NewsletterSubscriberDataConverter
 
     # connectors
-    oro_magento.mage.abstract.class:                                         Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector
+    oro_magento.mage.abstract.class:                                         Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector
     oro_magento.mage.store.class:                                            Oro\Bundle\MagentoBundle\Provider\Connector\StoreConnector
     oro_magento.mage.website.class:                                          Oro\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector
     oro_magento.mage.customer_group.class:                                   Oro\Bundle\MagentoBundle\Provider\Connector\CustomerGroupConnector
 
-    oro_magento.mage.region_connector.class:                                 Oro\Bundle\MagentoBundle\Provider\RegionConnector
-    oro_magento.mage.customer_connector.class:                               Oro\Bundle\MagentoBundle\Provider\CustomerConnector
-    oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\CartConnector
-    oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\OrderConnector
-    oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector
+    oro_magento.mage.region_connector.class:                                 Oro\Bundle\MagentoBundle\Provider\Connector\RegionConnector
+    oro_magento.mage.customer_connector.class:                               Oro\Bundle\MagentoBundle\Provider\Connector\CustomerConnector
+    oro_magento.mage.cart_connector.class:                                   Oro\Bundle\MagentoBundle\Provider\Connector\CartConnector
+    oro_magento.mage.order_connector.class:                                  Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector
+    oro_magento.mage.newsletter_subscriber_connector.class:                  Oro\Bundle\MagentoBundle\Provider\Connector\NewsletterSubscriberConnector
 
     oro_magento.mage.order_connector_initial.class:                          Oro\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
     oro_magento.mage.cart_connector_initial.class:                           Oro\Bundle\MagentoBundle\Provider\Connector\InitialCartConnector

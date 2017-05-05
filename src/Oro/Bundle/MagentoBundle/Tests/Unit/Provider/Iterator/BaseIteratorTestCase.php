@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 {
-    /** @var AbstractBridgeIterator */
+    /** @var AbstractBridgeSoapIterator */
     protected $iterator;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */

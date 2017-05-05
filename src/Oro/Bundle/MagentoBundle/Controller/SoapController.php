@@ -15,7 +15,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 

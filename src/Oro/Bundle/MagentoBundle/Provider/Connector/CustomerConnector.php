@@ -1,17 +1,19 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-class OrderConnector extends AbstractMagentoConnector
+use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
+
+class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncConnectorInterface
 {
-    const IMPORT_JOB_NAME = 'mage_order_import';
+    const IMPORT_JOB_NAME = 'mage_customer_import';
 
     /**
      * {@inheritdoc}
      */
     public function getLabel()
     {
-        return 'oro.magento.connector.order.label';
+        return 'oro.magento.connector.customer.label';
     }
 
     /**
@@ -19,7 +21,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     public function getImportEntityFQCN()
     {
-        return self::ORDER_TYPE;
+        return self::CUSTOMER_TYPE;
     }
 
     /**
@@ -33,9 +35,17 @@ class OrderConnector extends AbstractMagentoConnector
     /**
      * {@inheritdoc}
      */
+    public function getExportJobName()
+    {
+        return 'magento_customer_export';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getType()
     {
-        return 'order';
+        return 'customer';
     }
 
     /**
@@ -43,7 +53,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     protected function getConnectorSource()
     {
-        return $this->transport->getOrders();
+        return $this->transport->getCustomers();
     }
 
     /**

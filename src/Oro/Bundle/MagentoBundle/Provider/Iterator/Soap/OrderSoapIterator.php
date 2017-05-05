@@ -1,9 +1,10 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
+namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderSoapIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface

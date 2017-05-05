@@ -8,7 +8,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MagentoBundle\Async\Topics;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
 use Oro\Component\MessageQueue\Client\Message;

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class NewsletterSubscriberBridgeIteratorTest extends BaseIteratorTestCase
 {

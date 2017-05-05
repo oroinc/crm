@@ -1,20 +1,19 @@
 <?php
-
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
-use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
+abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -35,7 +34,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \DateInterval */
     protected $syncRange;
 
-    /** @var SoapTransport */
+    /** @var MagentoTransportInterface */
     protected $transport;
 
     /** @var BatchFilterBag */
@@ -67,10 +66,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     protected $storesByWebsite = [];
 
     /**
-     * @param SoapTransport $transport
+     * @param MagentoTransportInterface $transport
      * @param array $settings
      */
-    public function __construct(SoapTransport $transport, array $settings)
+    public function __construct(MagentoTransportInterface $transport, array $settings)
     {
         $this->transport = $transport;
         $this->websiteId = $settings['website_id'];
@@ -222,6 +221,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
+     * @TODO refactor class to remove empty methods. According to CRM-8211
      * @param array $ids
      */
     protected function loadEntities(array $ids)
@@ -315,25 +315,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         }
 
         return $stores;
-    }
-
-    /**
-     * @param mixed $response
-     *
-     * @return array
-     */
-    protected function processCollectionResponse($response)
-    {
-        return WSIUtils::processCollectionResponse($response);
-    }
-
-    /**
-     * @param array $response
-     * @return array
-     */
-    protected function convertResponseToMultiArray($response)
-    {
-        return WSIUtils::convertResponseToMultiArray($response);
     }
 
     /**
@@ -445,6 +426,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
+     * @TODO refactor class to remove empty methods. According to CRM-8211
      * Modify filters before applying.
      */
     protected function modifyFilters()

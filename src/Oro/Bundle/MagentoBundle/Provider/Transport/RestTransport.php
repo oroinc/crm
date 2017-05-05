@@ -2,17 +2,17 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Transport\AbstractRestTransport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 
 class RestTransport extends AbstractRestTransport implements
     MagentoTransportInterface,
@@ -184,7 +184,8 @@ class RestTransport extends AbstractRestTransport implements
      */
     public function getCustomers()
     {
-        // TODO: Implement getCustomers() method.
+        //TODO: Implement CustomerRestIterator
+        return new BaseMagentoRestIterator($this);
     }
 
     /**
