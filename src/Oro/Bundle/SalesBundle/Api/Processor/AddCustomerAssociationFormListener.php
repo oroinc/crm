@@ -44,9 +44,6 @@ class AddCustomerAssociationFormListener implements ProcessorInterface
             return;
         }
 
-        $formBuilder->get(self::ACCOUNT_FIELD_NAME)->setMapped(false);
-        $formBuilder->get(self::CUSTOMER_FIELD_NAME)->setMapped(false);
-
         $formBuilder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'onPostSubmit']);
     }
 

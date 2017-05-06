@@ -40,8 +40,6 @@ class AddCustomerAssociationAccountFormListener implements ProcessorInterface
         }
 
         $associationName = $context->getAssociationName();
-        $formBuilder->get($associationName)->setMapped(false);
-
         $formBuilder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($associationName) {
