@@ -605,3 +605,37 @@ Example:
 }
 ```
 {@/request}
+
+
+# Extend\Entity\EV_Lead_Status
+
+## ACTIONS
+
+### get
+
+Retrieve a specific lead status record.
+
+Lead status defines whether a lead is interested in your product (New, Qualified, Disqualified, etc.).
+
+### get_list
+
+Retrieve a collection of lead status records.
+
+Lead status defines whether a lead is interested in your product (New, Qualified, Disqualified, etc.).
+
+
+# Extend\Entity\EV_Lead_Source
+
+## ACTIONS
+
+### get
+
+Retrieve a specific lead source record.
+
+Lead source defines how the information about the lead was received.
+
+### get_list
+
+Retrieve a collection of lead source records.
+
+Lead source defines how the information about the lead was received.
