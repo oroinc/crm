@@ -222,3 +222,32 @@ Example:
 }
 ```
 {@/request}
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento order item is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento order item is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento order item is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentoorderitems/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}
