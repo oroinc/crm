@@ -1,47 +1,5 @@
 api:
     entities:
-        Extend\Entity\EV_Opportunity_Status:
-            fields:
-                name:
-                    description:  The name of the opportunity status.
-                default:
-                    description:  Determines whether a particular status is set as default for new opportunity records.
-                priority:
-                    description:  The order in which opportunity statuses are ranked. First appears the status with the higher priority.
-            actions:
-                get:
-                    documentation: Retrieve a specific opportunity status record. Opportunity status defines a deal's stage (Open, Closed Won, etc.)
-                get_list:
-                    documentation: Retrieve a collection of opportunity statuses. Opportunity status defines a deal's stage (Open, Closed Won, etc.)
-
-        Extend\Entity\EV_Lead_Status:
-            fields:
-                name:
-                    description:  The name of the lead status ('New,' 'Qualified,' or 'Disqualified').
-                default:
-                    description:  Determines whether a particular status is set as default for new lead records.
-                priority:
-                    description:  The order in which lead statuses are ranked. First appears the status with the higher priority.
-            actions:
-                get:
-                    documentation: Retrieve a specific lead status record. Lead status defines whether a lead is interested in your product.
-                get_list:
-                    documentation: Retrieve a collection of lead status records. Lead status defines whether a lead is interested in your product.
-
-        Extend\Entity\EV_Lead_Source:
-            fields:
-                default:
-                    description:  Determines whether a particular source is set as default for new lead records.
-                name:
-                    description:  The name of the lead source.
-                priority:
-                    description:  The order in which lead sources are ranked. First appears the source with the higher priority.
-            actions:
-                get:
-                    documentation:  Retrieve a specific lead source record. Lead source defines how the information about the lead was received.
-                get_list:
-                    documentation:  Retrieve a collection of lead source records. Lead source defines how the information about the lead was received.
-
         Oro\Bundle\SalesBundle\Entity\B2bCustomer:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/b2b_customer.md'
             fields:
@@ -123,32 +81,8 @@ api:
                     property_path: _
                 account:
                     property_path: customerAssociation.account
-                    depends_on:
-                        - customerAssociation.account
                 customer:
-                    exclusion_policy: all
                     property_path: customerAssociation.target
-                    depends_on:
-                        - customerAssociation.target
-                customerAssociation:
-                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
-                    target_type: to-one
-                    exclude: false
-                    fields:
-                        account:
-                            exclusion_policy: all
-                            fields:
-                                id:
-                                    exclude: false
-                        target:
-                            exclusion_policy: all
-                            exclude: true
-                            data_type: association:manyToOne:customer
-                            fields:
-                                id:
-                                    exclude: false
-                        customer_f2bbc387:
-                            description: Test record.
             filters:
                 fields:
                     phones:
@@ -171,11 +105,12 @@ api:
                         type: primaryField
                         options:
                             data_field: email
-                    customerAssociation:
-                        exclude: true
 
-        Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason:
-            documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity_close_reason.md'
+        Extend\Entity\EV_Lead_Status:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
+
+        Extend\Entity\EV_Lead_Source:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
 
         Oro\Bundle\SalesBundle\Entity\LeadPhone:
             # this entity does not have own Data API resource
@@ -187,48 +122,26 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
-            filters:
-                fields:
-                    customerAssociation:
-                        exclude: true
-
-
             fields:
                 closedAt:
                     exclude: true
                 account:
                     property_path: customerAssociation.account
-                    depends_on:
-                        - customerAssociation.account
                 customer:
-                    exclusion_policy: all
                     property_path: customerAssociation.target
-                    depends_on:
-                        - customerAssociation.target
-                customerAssociation:
-                    target_class: Oro\Bundle\ApiBundle\Model\EntityIdentifier
-                    target_type: to-one
-                    exclude: false
-                    fields:
-                        account:
-                            exclusion_policy: all
-                            fields:
-                                id:
-                                    exclude: false
-                        target:
-                            exclusion_policy: all
-                            exclude: true
-                            data_type: association:manyToOne:customer
-                            fields:
-                                id:
-                                    exclude: false
+
+        Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
+
+        Extend\Entity\EV_Opportunity_Status:
+            documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
 
         Oro\Bundle\SalesBundle\Entity\Customer:
-            actions: false
             fields:
-                account: ~
                 target:
                     data_type: association:manyToOne:customer
+            # this entity does not have own Data API resource
+            actions: false
 
         Oro\Bundle\SalesBundle\Entity\SalesFunnel:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/sale_funnel.md'

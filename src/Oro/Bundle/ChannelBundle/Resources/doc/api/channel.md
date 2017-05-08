@@ -13,3 +13,15 @@ Retrieve a collection of channel records.
 Retrieve a specific channel record.
 
 {@inheritdoc}
+
+## SUBRESOURCES
+
+### dataSource
+
+#### get_subresource
+
+Retrieve an integration channel.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel.

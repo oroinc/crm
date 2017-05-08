@@ -50,3 +50,11 @@ services:
             - ['setVisitProvider', ['@oro_magento.provider.website_visit.precalculated.inner']]
         tags:
             - { name: oro_featuretogle.feature, feature: 'tracking' }
+
+    oro_magento.repository.channel:
+        class: 'Oro\Bridge\MarketingCRM\Entity\Repository\ChannelRepository'
+        parent: oro_entity.abstract_repository
+        arguments:
+            - '%oro_channel.entity.class%'
+        calls:
+            - [setConfigManager, ['@oro_config.manager']]
