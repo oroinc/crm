@@ -267,7 +267,9 @@ oro:
             name.label:          Name
             id.label:            Id
             origin_id.label:     Origin Id
-            channel.label:       Integration
+            channel:
+                label:           Integration
+                description:     The integration via which information about a Magento customer group is received.
             placeholder:         Please, select group
 
         cart:
@@ -354,7 +356,9 @@ oro:
             billing_address:
                 label:                  Billing address
                 description:            The billing address specified for a Magento shopping cart.
-            channel.label:              Integration
+            channel:
+                label:                  Integration
+                description:            The integration via which information about a Magento shopping cart is received.
             data_channel:
                 label:                  Channel
                 description:            The channel via which information about a Magento shopping cart has been received.
@@ -452,7 +456,9 @@ oro:
             product_url:
                 label:                  Product URL
                 description:            The product URL  of a Magento shopping cart item
-            channel.label:              Channel
+            channel:
+                label:                  Integration
+                description:            The integration via which information about a Magento shopping cart item is received.
             removed:
                 label:                  Removed
                 description:            Defines whether the item was removed from the Magento shopping cart.
@@ -520,7 +526,9 @@ oro:
             weight:
                 label:              Weight
                 description:        The value of weight specified for a Magento order item.
-            channel.label:          Channel
+            channel:
+                label:              Integration
+                description:        The integration via which information about a Magento order item is received.
             owner.label:            Owner
 
         magentosoaptransport:
@@ -648,7 +656,9 @@ oro:
                 yes:                Yes
                 no:                 No
                 description:        Defines whether a Magento customer who create an order is a guest or a registered user.
-            channel.label:          Integration
+            channel:
+                label:              Integration
+                description:        The integration via which information about a Magento order is received.
             data_channel:
                 label:              Channel
                 description:        The channel via which information about a Magento order has been received.
@@ -706,7 +716,9 @@ oro:
             websites:
                 label:            Websites
                 description:      The websites via which information about a Magento product is received.
-            channel.label:        Integration
+            channel:
+                label:            Integration
+                description:      The integration via which information about a Magento product is received.
 
         address:
             entity_label:             Magento Customer Address
@@ -762,7 +774,9 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento customer address.
-            country_text.label:       Country (Text)
+            country_text:
+                label:                Country (Text)
+                description:          The country specified in the Magento customer address if this country was not found in the system.
             region:
                 label:                State
                 description:          The region specified in the Magento customer address.
@@ -776,7 +790,9 @@ oro:
             sync_state:
                 label:                Sync State
                 description:          Synchronization status.
-            channel.label:            Channel
+            channel:
+                label:                Integration
+                description:          The integration via which information about a Magento customer address is received.
             country_name.label:       Country name
             country_iso2_code.label:  Country ISO2 code
             country_iso3_code.label:  Country ISO3 code
@@ -834,7 +850,9 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento cart address.
-            country_text.label:       Country (Text)
+            country_text:
+                label:                Country (Text)
+                description:          The country specified in the Magento cart address if this country was not found in the system.
             region:
                 label:                State
                 description:          The region specified in the Magento cart address.
@@ -846,7 +864,9 @@ oro:
             country_iso3_code.label:  Country ISO3 Code
             region_name.label:        Region
             region_code.label:        Region ISO code
-            channel.label:            Integration
+            channel:
+                label:                Integration
+                description:          The integration via which information about a Magento cart address is received.
             created:
                 label:                Created at
                 description:          The date and time when the Magento cart address was created.
@@ -865,7 +885,9 @@ oro:
             country:
                 label:                Country
                 description:          The country specified in the Magento order address.
-            country_text.label:       Country (Text)
+            country_text:
+                label:                Country (Text)
+                description:          The country specified in the Magento order address if this country was not found in the system.
             region:
                 label:                State
                 description:          The region specified in the Magento order address.
@@ -904,7 +926,9 @@ oro:
             country_iso3_code.label:  Country ISO3 Code
             region_name.label:        Region
             region_code.label:        Region ISO code
-            channel.label:            Channel
+            channel:
+                label:                Integration
+                description:          The integration via which information about a Magento order address is received.
             origin_id:
                 label:                Origin Id
                 description:          The order address ID on the Magento side.
@@ -923,7 +947,9 @@ oro:
             name:
                 label:            Name
                 description:      A  name assigned to a Magento store.
-            channel.label:        Integration
+            channel:
+                label:            Integration
+                description:      The integration via which information about a Magento store is received.
             website:
                 label:            Website
                 description:      The website assigned to a Magento store.
@@ -943,7 +969,9 @@ oro:
             name:
                 label:            Name
                 description:      A name assigned to a Magento website.
-            channel.label:        Integration
+            channel:
+                label:            Integration
+                description:      The integration via which information about a Magento website is received.
             default:
                 label:            Is default
                 description:      Specifies whether a specific website is set as default.

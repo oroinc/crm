@@ -565,9 +565,51 @@ Example:
 {@/request}
 
 
+# Oro\Bundle\CaseBundle\Entity\CasePriority
+
+## ACTIONS
+
+### get
+
+Retrieve a specific case priority record.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve a collection of case priority records.
+
+{@inheritdoc}
 
 
+# Oro\Bundle\CaseBundle\Entity\CaseSource
 
+## ACTIONS
 
+### get
 
+Retrieve a specific case source record.
 
+{@inheritdoc}
+
+### get_list
+
+Retrieve a collection of case source records.
+
+{@inheritdoc}
+
+# Oro\Bundle\CaseBundle\Entity\CaseStatus
+
+## ACTIONS
+
+### get
+
+Retrieve a specific case status record.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve a collection of case status records.
+
+{@inheritdoc}

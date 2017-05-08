@@ -82,3 +82,25 @@ Delete a collection of records represented by Magento regions.
 The list of records that will be deleted, could be limited by filters.
 
 The regions specified for Magento orders by Magento customers.
+
+## FIELDS
+
+### code
+
+The part of after hyphen of an ISO 3166-2 region code.
+
+### combinedCode
+
+The identifier of an entity. The region (country subdivision) code according to ISO 3166-2.
+
+### countryCode
+
+The country code specified for a region. The part before hyphen of an ISO 3166-2 region code.
+
+### name
+
+The name used to refer to a region on the interface.
+
+### regionId
+
+The region ID assigned to a Magento region.
