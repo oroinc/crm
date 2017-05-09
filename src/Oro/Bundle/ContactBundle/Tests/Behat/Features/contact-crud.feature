@@ -77,7 +77,7 @@ Scenario: Change primary address
   And I click view Charlie Sheen in grid
   And click edit LOS ANGELES address
   And check "Primary"
-  When I press "Save"
+  When I save form
   Then LOS ANGELES address must be primary
   And contact has 2 addresses
 
