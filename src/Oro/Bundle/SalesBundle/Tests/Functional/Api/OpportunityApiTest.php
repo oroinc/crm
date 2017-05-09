@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Tests\Functional\Api\DataFixtures\LoadOpportunitiesData;
 
@@ -103,6 +104,32 @@ class OpportunityApiTest extends RestJsonApiTestCase
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
         self::assertNotNull($entity);
+    }
+
+    public function testGetLeadRelationship()
+    {
+        $response = $this->getRelationship(
+            [
+                'entity'      => 'opportunities',
+                'id'          => $this->getReference('opportunity1')->getId(),
+                'association' => 'lead'
+            ]
+        );
+
+        $this->assertResponseContains('opportunity_get_relationship_lead', $response);
+    }
+
+    public function testGetLeadSubresource()
+    {
+        $response = $this->getSubresource(
+            [
+                'entity'      => 'opportunities',
+                'id'          => $this->getReference('opportunity1')->getId(),
+                'association' => 'lead'
+            ]
+        );
+
+        $this->assertResponseContains('opportunity_get_subresource_lead', $response);
     }
 
     public function testGetAccountRelationship()
@@ -223,6 +250,37 @@ class OpportunityApiTest extends RestJsonApiTestCase
         ];
     }
 
+    public function testPatchLead()
+    {
+        $opportunityId = $this->getReference('opportunity1')->getId();
+        $leadId = $this->getReference('lead2')->getId();
+        $response = $this->patch(
+            ['entity' => 'opportunities', 'id' => $opportunityId],
+            [
+                'data' => [
+                    'type'          => 'opportunities',
+                    'id'            => (string)$opportunityId,
+                    'relationships' => [
+                        'lead' => [
+                            'data' => [
+                                'type' => 'leads',
+                                'id'   => (string)$leadId,
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertResponseContains('opportunity_patch_lead.yml', $response);
+
+        // test that the lead was changed
+        $opportunity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
+        $lead = $opportunity->getLead();
+        self::assertInstanceOf(Lead::class, $lead);
+        self::assertSame($leadId, $lead->getId());
+    }
+
     public function testPatchAccount()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
@@ -287,6 +345,27 @@ class OpportunityApiTest extends RestJsonApiTestCase
         $account = $opportunity->getCustomerAssociation()->getAccount();
         self::assertInstanceOf(Account::class, $account);
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
+    }
+
+    public function testPatchLeadAsRelationship()
+    {
+        $opportunityId = $this->getReference('opportunity1')->getId();
+        $leadId = $this->getReference('lead2')->getId();
+        $this->patchRelationship(
+            ['entity' => 'opportunities', 'id' => $opportunityId, 'association' => 'lead'],
+            [
+                'data' => [
+                    'type' => 'leads',
+                    'id'   => (string)$leadId,
+                ],
+            ]
+        );
+
+        // test that the lead was changed
+        $opportunity = $this->getEntityManager()->find(Opportunity::class, $opportunityId);
+        $lead = $opportunity->getLead();
+        self::assertInstanceOf(Lead::class, $lead);
+        self::assertSame($leadId, $lead->getId());
     }
 
     public function testPatchAccountAsRelationship()

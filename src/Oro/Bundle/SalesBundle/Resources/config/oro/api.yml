@@ -57,6 +57,7 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Lead:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/lead.md'
+            form_event_subscriber: oro_sales.api.form_listener.customer_association
             fields:
                 phones:
                     data_type: array
@@ -122,6 +123,7 @@ api:
 
         Oro\Bundle\SalesBundle\Entity\Opportunity:
             documentation_resource: '@OroSalesBundle/Resources/doc/api/opportunity.md'
+            form_event_subscriber: oro_sales.api.form_listener.customer_association
             fields:
                 closedAt:
                     exclude: true

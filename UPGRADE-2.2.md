@@ -70,10 +70,7 @@ SalesBundle
         - `oro_sales.form.guesser.customer_account_guesser`
         - `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
         - `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
-    - the logic related to the customer association is implemented in the following API processors:
-        - `Oro\Bundle\SalesBundle\Api\Processor\AddCustomerAssociationFormListener`
-        - `Oro\Bundle\SalesBundle\Api\Processor\AddCustomerAssociationAccountFormListener`
-        - `Oro\Bundle\SalesBundle\Api\Processor\AddCustomerAssociationCustomerFormListener`
+    - the logic related to the customer association is implemented in `Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener`
 
 MagentoBundle
 -----------
