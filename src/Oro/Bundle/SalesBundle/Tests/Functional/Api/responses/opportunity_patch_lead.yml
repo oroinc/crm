@@ -1,0 +1,10 @@
+data:
+    type: opportunities
+    id: '<toString(@opportunity1->id)>'
+    attributes:
+        name: 'Opportunity 1'
+    relationships:
+        lead:
+            data:
+                type: leads
+                id: '<toString(@lead2->id)>'

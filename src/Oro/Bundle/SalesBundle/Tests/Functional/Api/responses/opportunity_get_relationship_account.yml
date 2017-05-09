@@ -1,0 +1,3 @@
+data:
+    type: accounts
+    id: '<toString(@account1->id)>'

@@ -45,6 +45,32 @@ SalesBundle
 - Class `Oro\Bundle\SalesBundle\Entity\Lead`
     - field `address` removed
     - methods `hasAddress`, `setAddress` removed
+- Implementation of REST API for customer association was changed.
+    - removed the following classes:
+        - `Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationCustomizeLoadedData`
+        - `Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationFinalize`
+        - `Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationGetConfig`
+        - `Oro\Bundle\SalesBundle\Api\Processor\CustomerAssociationGetMetadata`
+        - `Oro\Bundle\SalesBundle\Api\Processor\GetConfig`
+        - `Oro\Bundle\SalesBundle\Api\Processor\InitializeCustomerAccountTypeGuesser`
+        - `Oro\Bundle\SalesBundle\Api\Processor\InitializeCustomerTypeGuesser`
+        - `Oro\Bundle\SalesBundle\Form\Guesser\CustomerAccountApiTypeGuesser`
+        - `Oro\Bundle\SalesBundle\Form\Guesser\CustomerApiTypeGuesser`
+        - `Oro\Bundle\SalesBundle\Form\Type\CustomerAccountApiType`
+        - `Oro\Bundle\SalesBundle\Form\Type\CustomerApiType`
+    - removed the following services:
+        - `oro_sales.api.get_config.customer_association`
+        - `oro_sales.api.customize_loaded_data.customer_association`
+        - `oro_sales.api.get_metadata.customer_association`
+        - `oro_sales.api.get_metadata.get_config`
+        - `oro_sales.api.load_data.customer_association`
+        - `oro_sales.api.opportunity.initialize_customer_type_guesser.customer_association`
+        - `oro_sales.api.opportunity.initialize_customer_account_type_guesser`
+        - `oro_sales.form.guesser.customer_guesser`
+        - `oro_sales.form.guesser.customer_account_guesser`
+        - `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
+        - `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
+    - the logic related to the customer association is implemented in `Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener`
 
 MagentoBundle
 -----------

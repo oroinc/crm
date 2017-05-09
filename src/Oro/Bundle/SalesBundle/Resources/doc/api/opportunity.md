@@ -417,3 +417,37 @@ Retrieve a specific opportunity status record MD.
 Retrieve a collection of opportunity statuses MD.
 
 {@inheritdoc}
+
+
+# Oro\Bundle\SalesBundle\Entity\OpportunityCloseReason
+
+## ACTIONS
+
+### get
+
+Retrieve a specific opportunity close reason record.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve the collection of opportunity closed reason records.
+
+{@inheritdoc}
+
+
+# Extend\Entity\EV_Opportunity_Status
+
+## ACTIONS
+
+### get
+
+Retrieve a specific opportunity status record.
+
+Opportunity status defines a deal's stage (Open, Closed Won, etc.).
+
+### get_list
+
+Retrieve a collection of opportunity statuses.
+
+Opportunity status defines a deal's stage (Open, Closed Won, etc.).

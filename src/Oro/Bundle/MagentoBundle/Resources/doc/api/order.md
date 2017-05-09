@@ -533,6 +533,35 @@ Example:
 ```
 {@/request}
 
+### organization
+
+#### get_subresource
+
+Retrieve the record of the organization a specific Magento order record belongs to.
+
+#### get_relationship
+
+Retrieve the ID of the organization that a specific Magento order belongs to.
+
+#### update_relationship
+
+Replace the organization that a specific Magento order belongs to.
+
+{@request:json_api}
+Example:
+
+`</api/magentoorders/1/relationships/organization`
+
+```JSON
+{
+  "data": {
+    "type": "organizations",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
 ### store
 
 #### get_subresource
@@ -556,6 +585,35 @@ Example:
 {
   "data": {
     "type": "magentostores",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento order is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento order is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento order is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentoorders/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
     "id": "1"
   }
 }

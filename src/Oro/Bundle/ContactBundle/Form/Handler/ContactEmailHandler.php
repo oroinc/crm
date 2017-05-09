@@ -112,8 +112,6 @@ class ContactEmailHandler
             $em = $manager->getObjectManager();
             $em->remove($contactEmail);
             $em->flush();
-        } else {
-            throw new \Exception("oro.contact.email.error.delete.more_one", 500);
         }
     }
 
