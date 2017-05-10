@@ -12,7 +12,6 @@ use Psr\Log\LoggerAwareInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
@@ -76,21 +75,29 @@ class RestTokenProvider implements LoggerAwareInterface
             $response = $client->post(static::TOKEN_RETRIEVAL_URL, $params);
             return $response->json();
         } catch (RestException $e) {
-            $this->validateStatusCodes($e->getResponse());
+            $this->validateStatusCodes($e);
         }
     }
 
     /**
-     * @param RestResponseInterface $response
-     *
-     * @throws \Exception
+     * @param RestException $e
+     * @throws InvalidConfigurationException | RuntimeException
      */
-    protected function validateStatusCodes(RestResponseInterface $response)
+    protected function validateStatusCodes(RestException $e)
     {
+        $response = $e->getResponse();
         $statusCode = $response->getStatusCode();
         if (Codes::HTTP_UNAUTHORIZED === $statusCode) {
             throw new InvalidConfigurationException(
                 "Can't get token by defined 'api_key' and 'api_user'. Please check credentials !"
+            );
+        }
+
+        if (Codes::HTTP_OK === $statusCode) {
+            throw new RuntimeException(
+                $e->getMessage(),
+                $e->getCode(),
+                $e
             );
         }
 
