@@ -48,11 +48,17 @@ class SearchIndexListener extends IndexListener
             $meta = $entityManager->getClassMetadata($className);
 
             foreach ($meta->getAssociationMappings() as $association) {
-                if ($association['type'] === ClassMetadataInfo::MANY_TO_ONE
-                    && $this->hasEntityDependencies($className, $association['targetEntity'])) {
-                    $associationValue = $this->propertyAccessor->getValue($entity, $association['fieldName']);
-                    if (is_object($associationValue)) {
-                        $entitiesToReindex[spl_object_hash($associationValue)] = $associationValue;
+                if ($association['type'] === ClassMetadataInfo::MANY_TO_ONE) {
+                    if ($this->hasEntityDependencies($className, $association['targetEntity'])) {
+                        $associationValue = $this->propertyAccessor->getValue($entity, $association['fieldName']);
+                        if (is_object($associationValue)) {
+                            $entitiesToReindex[spl_object_hash($associationValue)] = $associationValue;
+                        }
+                    } elseif (!empty($association['inversedBy'])) {
+                        $associationValue = $this->getAssociationValue($entity, $association);
+                        if ($associationValue !== false) {
+                            $entitiesToReindex[spl_object_hash($associationValue)] = $associationValue;
+                        }
                     }
                 }
             }
