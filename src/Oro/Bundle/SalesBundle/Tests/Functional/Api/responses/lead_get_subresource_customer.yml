@@ -1,0 +1,3 @@
+data:
+    type: b2bcustomers
+    id: '<toString(@b2b_customer1->id)>'

@@ -108,7 +108,7 @@ Scenario: Create a new commerce customer, edit an existing opportunity and re-re
   Then "Account" popup is displayed
   And when I click on "Customer 13" customer
   Then I should see "Customer 13 (Customer)" at "Account" field
-  And when I click "Save And Close" button
+  And when I save and close form
   Then I should see the following on the Opportunity view page:
   | Opportunity Name  | Status  | Channel         | Account                 |
   | Prospective Kate  | Open    | Magento channel | Account G (Customer 13) |
@@ -120,7 +120,7 @@ Scenario: Create Opportunity report with budget more than $10,000.00
   And I fill out the following:
     | Budget Amount |
     | 150000.00     |
-  When I click "Save And Close" button
+  When I save and close form
   Then I should see the following on the Opportunity view page:
     | Budget Amount |
     | $150,000.00   |

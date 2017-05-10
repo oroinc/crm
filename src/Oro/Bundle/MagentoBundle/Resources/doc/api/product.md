@@ -222,3 +222,32 @@ Example:
 #### delete_relationship
 
 Remove Magento website records from a specific Magento product record
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento product is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento product is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento product is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentoproducts/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}
