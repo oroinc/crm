@@ -4,9 +4,31 @@ namespace Oro\Bridge\MarketingCRM\Entity\Repository;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepositoryAbstract;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 class ChannelRepository extends ChannelRepositoryAbstract
 {
+    /**
+     * @var ConfigManager
+     */
+    private $configManager;
+
+    /**
+     * @param ConfigManager $configManager
+     */
+    public function setConfigManager(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPrecalculatedStatisticEnabled()
+    {
+        return $this->configManager->get('oro_tracking.precalculated_statistic_enabled');
+    }
+
     /**
      * @inheritdoc
      */
@@ -14,8 +36,12 @@ class ChannelRepository extends ChannelRepositoryAbstract
     {
         $qb = $this->_em->createQueryBuilder();
 
+        $entityName = $this->isPrecalculatedStatisticEnabled() ?
+            'OroTrackingBundle:UniqueTrackingVisit' :
+            'OroTrackingBundle:TrackingVisit';
+
         $qb->select('COUNT(visit.id)')
-            ->from('OroTrackingBundle:TrackingVisit', 'visit')
+            ->from($entityName, 'visit')
             ->join('visit.trackingWebsite', 'site')
             ->leftJoin('site.channel', 'channel')
             ->where($qb->expr()->orX(
