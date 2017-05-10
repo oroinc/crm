@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
@@ -21,6 +22,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
@@ -114,14 +116,25 @@ class SoapTransport extends BaseSOAPTransport implements
     protected $bundleConfig;
 
     /**
-     * @param Mcrypt $encoder
-     * @param WsdlManager $wsdlManager
-     * @param array $bundleConfig
+     * @var UniqueCustomerEmailSoapProvider
      */
-    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager, array $bundleConfig = [])
-    {
+    protected $uniqueCustomerEmailProvider;
+
+    /**
+     * @param Mcrypt                          $encoder
+     * @param WsdlManager                     $wsdlManager
+     * @param UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider
+     * @param array                           $bundleConfig
+     */
+    public function __construct(
+        Mcrypt $encoder,
+        WsdlManager $wsdlManager,
+        UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider,
+        array $bundleConfig = []
+    ) {
         $this->encoder = $encoder;
         $this->wsdlManager = $wsdlManager;
+        $this->uniqueCustomerEmailProvider = $uniqueCustomerEmailProvider;
         $this->bundleConfig = $bundleConfig;
     }
 
@@ -431,6 +444,14 @@ class SoapTransport extends BaseSOAPTransport implements
         } else {
             return new CustomerSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCustomerHasUniqueEmail(Customer $customer)
+    {
+        return $this->uniqueCustomerEmailProvider->isCustomerHasUniqueEmail($this, $customer);
     }
 
     /**

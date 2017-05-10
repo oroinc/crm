@@ -2,151 +2,153 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\ExecutionContextInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
+use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
+
 
 class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    const INTEGRATION_TYPE = '__INTEGRATION_TYPE__';
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $transport;
+    protected $typesRegistry;
 
     /**
      * @var UniqueCustomerEmailValidator
      */
     protected $validator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transport;
+
+    /**
+     * @var UniqueCustomerEmailConstraint
+     */
+    protected $constraint;
+
     protected function setUp()
     {
-        $this->transport = $this
-            ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface')
+        $this->typesRegistry = $this
+            ->getMockBuilder(TypesRegistry::class)
+            ->setMethods(['getTransportTypeBySettingEntity'])
             ->getMock();
 
-        $this->validator = new UniqueCustomerEmailValidator($this->transport);
+        $this->transport = $this->createMock(Transport::class);
+        $this->validator = new UniqueCustomerEmailValidator($this->typesRegistry);
+        $this->constraint = new UniqueCustomerEmailConstraint();
     }
 
     protected function tearDown()
     {
-        unset($this->validator, $this->transport);
+        unset($this->validator, $this->typesRegistry, $this->constraint, $this->transport);
     }
 
     public function testValidateIncorrectInstance()
     {
         $value = new \stdClass();
-        $constraint = new UniqueCustomerEmailConstraint();
 
-        $this->transport->expects($this->never())
+        $this->typesRegistry->expects($this->never())
             ->method($this->anything());
 
-        $this->validator->validate($value, $constraint);
+        $this->validator->validate($value, $this->constraint);
     }
 
-    /**
-     * @dataProvider correctCustomersDataProvider
-     * @param array $customers
-     */
-    public function testValidateCorrect(array $customers)
+    public function testIncorrectTransportProvider()
     {
-        $constraint = new UniqueCustomerEmailConstraint();
-
-        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
-        $context->expects($this->never())
-            ->method($this->anything());
-
-        $this->assertTransportCalls($customers);
-
+        $this->expectException(UnexpectedTypeException::class);
+        $incorrectTransportProvider = $this->getMockBuilder(TransportInterface::class)->getMock();
         $customer = $this->getCustomer();
+        $this->typesRegistry->method('getTransportTypeBySettingEntity')
+            ->with($this->transport, self::INTEGRATION_TYPE)
+            ->willReturn($incorrectTransportProvider);
 
-        $this->validator->initialize($context);
-        $this->validator->validate($customer, $constraint);
-    }
-
-    /**
-     * @return array
-     */
-    public function correctCustomersDataProvider()
-    {
-        return [
-            [[]],
-            [[['customer_id' => 1]]]
-        ];
-    }
-
-    /**
-     * @dataProvider incorrectCustomersDataProvider
-     * @param array $customers
-     */
-    public function testValidateIncorrect(array $customers)
-    {
-        $constraint = new UniqueCustomerEmailConstraint();
-
-        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
-        $context->expects($this->once())
-            ->method('addViolationAt')
-            ->with('email', $constraint->message);
-
-        $this->assertTransportCalls($customers);
-
-        $customer = $this->getCustomer();
-
-        $this->validator->initialize($context);
-        $this->validator->validate($customer, $constraint);
-    }
-
-    /**
-     * @return array
-     */
-    public function incorrectCustomersDataProvider()
-    {
-        return [
-            [[['customer_id' => 2]]],
-            [[['customer_id' => '']]],
-            [[['increment_id' => 5]]],
-            [[['customer_id' => 1], ['customer_id' => 2]]]
-        ];
+        $this->validator->validate($customer, $this->constraint);
     }
 
     public function testShouldAddViolationWhenTransportInitFails()
     {
-        $constraint = new UniqueCustomerEmailConstraint();
-
-        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
+        $context = $this->createMock(ExecutionContextInterface::class);
         $context->expects($this->any())
             ->method('addViolationAt')
-            ->with('email', $constraint->transportMessage);
+            ->with('email', $this->constraint->transportMessage);
 
-        $this->transport->expects($this->any())
+        $transportProvider = $this->createMock(MagentoTransportInterface::class);
+        $transportProvider
+            ->expects($this->once())
             ->method('init')
-            ->will($this->throwException(new \RuntimeException()));
+            ->willThrowException(new \RuntimeException());
+        $this->typesRegistry->method('getTransportTypeBySettingEntity')
+            ->with($this->transport, self::INTEGRATION_TYPE)
+            ->willReturn($transportProvider);
 
         $customer = $this->getCustomer();
 
         $this->validator->initialize($context);
-        $this->validator->validate($customer, $constraint);
+        $this->validator->validate($customer, $this->constraint);
     }
 
-    public function testShouldAddViolationWhenTransportCallFails()
+    /**
+     * @dataProvider uniqueProvider
+     * @param bool $isUniqueEmail
+     * @param string $messageConstraint
+     */
+    public function testValidateCorrect($isUniqueEmail, $messageConstraint)
     {
-        $constraint = new UniqueCustomerEmailConstraint();
+        $context = $this->createMock(ExecutionContextInterface::class);
+        if (null === $messageConstraint) {
+            $context->expects($this->never())
+                ->method($this->anything());
+        } else {
+            $context
+                ->expects($this->once())
+                ->method('addViolationAt')
+                ->with('email', $messageConstraint);
+        }
 
-        $context = $this->createMock('Symfony\Component\Validator\ExecutionContextInterface');
-        $context->expects($this->any())
-            ->method('addViolationAt')
-            ->with('email', $constraint->transportMessage);
+        $transportProvider = $this->createMock(MagentoTransportInterface::class);
+        $this->typesRegistry->method('getTransportTypeBySettingEntity')
+            ->with($this->transport, self::INTEGRATION_TYPE)
+            ->willReturn($transportProvider);
 
-        $this->transport->expects($this->any())
-            ->method('init');
-
-        $this->transport->expects($this->any())
-            ->method('call')
-            ->will($this->throwException(new \RuntimeException()));
+        $transportProvider
+            ->expects($this->once())
+            ->method('init')
+            ->willThrowException(new \RuntimeException());
 
         $customer = $this->getCustomer();
+        $this->assertCustomerUniqueEmailCalls($isUniqueEmail, $customer);
 
         $this->validator->initialize($context);
-        $this->validator->validate($customer, $constraint);
+        $this->validator->validate($customer, $this->constraint);
+    }
+
+    /**
+     * @return array
+     */
+    public function uniqueProvider()
+    {
+        return [
+            'Email unique' => [
+                true,
+                null
+            ],
+            'Non-unique email' => [
+                false,
+                'oro.magento.unique_customer_email.message'
+            ]
+        ];
     }
 
     /**
@@ -154,53 +156,37 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomer()
     {
-        $transport = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Transport')
+        $channel = $this->getMockBuilder(Channel::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getTransport', 'getType'])
             ->getMock();
 
-        $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $channel->expects($this->any())
-            ->method('getTransport')
-            ->will($this->returnValue($transport));
-
-        $store = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Store')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->any())
-            ->method('getOriginId')
-            ->will($this->returnValue(42));
+        $channel->method('getTransport')->willReturn($this->transport);
+        $channel->method('getType')->willReturn(self::INTEGRATION_TYPE);
 
         $customer = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
             ->disableOriginalConstructor()
             ->getMock();
+
         $customer->expects($this->any())
             ->method('getChannel')
-            ->will($this->returnValue($channel));
-
-        $customer->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($store));
-
-        $customer->expects($this->any())
-            ->method('getOriginId')
-            ->will($this->returnValue(1));
+            ->willReturn($channel);
 
         return $customer;
     }
 
     /**
-     * @param array $customers
+     * @param bool $isUniqueEmail
+     * @param \PHPUnit_Framework_MockObject_MockObject $customer
      */
-    protected function assertTransportCalls(array $customers)
+    protected function assertCustomerUniqueEmailCalls($isUniqueEmail, $customer)
     {
         $this->transport->expects($this->once())
             ->method('init');
 
         $this->transport->expects($this->once())
-            ->method('call')
-            ->with(SoapTransport::ACTION_CUSTOMER_LIST, $this->isType('array'))
-            ->will($this->returnValue($customers));
+            ->method('isCustomerHasUniqueEmail')
+            ->with($customer)
+            ->will($this->returnValue($isUniqueEmail));
     }
 }

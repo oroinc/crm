@@ -15,6 +15,7 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
@@ -189,6 +190,16 @@ class RestTransport implements
     {
         //TODO: Implement CustomerRestIterator
         return new BaseMagentoRestIterator($this);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCustomerHasUniqueEmail(Customer $customer)
+    {
+        /**
+         * Will be implemented with method `getCustomers`
+         */
     }
 
     /**

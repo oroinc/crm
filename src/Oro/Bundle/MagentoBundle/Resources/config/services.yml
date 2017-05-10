@@ -165,10 +165,11 @@ services:
         arguments:
             - "@oro_security.encoder.mcrypt"
             - "@oro_magento.wsdl_manager"
+            - "@oro_magento.provider.soap.unique_customer_email"
             - []
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
-            - { name: oro_magento.bundle_config.aware, argument_number: 2 }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -240,6 +241,9 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\RestPingProvider
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
+
+    oro_magento.provider.soap.unique_customer_email:
+        class: Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider
 
     # forms
     oro_magento.form.subscriber.soap_transport_setting:
@@ -741,7 +745,7 @@ services:
     oro_magento.validator.unique_customer_email:
         class: %oro_magento.validator.unique_customer_email.class%
         arguments:
-            - "@oro_magento.transport.soap_transport"
+            - '@oro_integration.manager.types_registry'
         tags:
             - { name: validator.constraint_validator, alias: oro_magento.validator.unique_customer_email }
 

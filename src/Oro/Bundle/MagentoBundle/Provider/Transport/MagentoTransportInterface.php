@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
@@ -51,6 +52,13 @@ interface MagentoTransportInterface extends TransportInterface
      * @return UpdatedLoaderInterface|\Iterator
      */
     public function getCustomers();
+
+    /**
+     * @param Customer $customer
+     *
+     * @return bool
+     */
+    public function isCustomerHasUniqueEmail(Customer $customer);
 
     /**
      * Retrieve customer groups list from magento

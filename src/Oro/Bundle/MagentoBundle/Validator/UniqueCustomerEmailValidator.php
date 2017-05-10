@@ -4,118 +4,61 @@ namespace Oro\Bundle\MagentoBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
 
 class UniqueCustomerEmailValidator extends ConstraintValidator
 {
     /**
-     * @var MagentoTransportInterface
+     * @var TypesRegistry
      */
-    protected $transport;
+    protected $typesRegistry;
 
     /**
-     * @param MagentoTransportInterface $transport
+     * @param TypesRegistry $typesRegistry
      */
-    public function __construct(MagentoTransportInterface $transport)
+    public function __construct(TypesRegistry $typesRegistry)
     {
-        $this->transport = $transport;
+        $this->typesRegistry = $typesRegistry;
     }
 
     /**
-     * @param Customer $value
-     * @param UniqueCustomerEmailConstraint|Constraint $constraint
+     * @param mixed      $value
+     * @param Constraint $constraint
+     *
+     * @return void
      */
     public function validate($value, Constraint $constraint)
     {
+        /**
+         * @var $constraint UniqueCustomerEmailConstraint
+         */
         if ($value instanceof Customer) {
-            $customers = $this->getRemoteCustomers($value, $constraint);
 
-            $customers = array_filter(
-                $customers,
-                function ($customerData) use ($value) {
-                    if (is_object($customerData)) {
-                        $customerData = (array)$customerData;
-                    }
-                    if ($customerData
-                        && !empty($customerData['customer_id'])
-                        && $customerData['customer_id'] == $value->getOriginId()
-                    ) {
-                        return false;
-                    }
-
-                    return true;
-                }
+            $transportEntity = $value->getChannel()->getTransport();
+            $transportProvider = $this->typesRegistry->getTransportTypeBySettingEntity(
+                $transportEntity,
+                $value->getChannel()->getType()
             );
 
-            if (count($customers) > 0) {
-                $this->context->addViolationAt('email', $constraint->message);
+            if (! $transportProvider instanceof MagentoTransportInterface) {
+                throw new UnexpectedTypeException($transportProvider, MagentoTransportInterface::class);
             }
-        }
-    }
 
-    /**
-     * @param Customer $value
-     * @param UniqueCustomerEmailConstraint|Constraint $constraint
-     * @return array
-     */
-    protected function getRemoteCustomers($value, Constraint $constraint)
-    {
-        try {
-            $this->transport->init($value->getChannel()->getTransport());
-        } catch (\RuntimeException $e) {
-            $this->context->addViolationAt('email', $constraint->transportMessage);
-
-            return [];
-        }
-
-        $filter = new BatchFilterBag();
-        $filter->addComplexFilter(
-            'email',
-            [
-                'key' => 'email',
-                'value' => [
-                    'key' => 'eq',
-                    'value' => $value->getEmail()
-                ]
-            ]
-        );
-        $filter->addComplexFilter(
-            'store_id',
-            [
-                'key' => 'store_id',
-                'value' => [
-                    'key' => 'eq',
-                    'value' => $value->getStore()->getOriginId()
-                ]
-            ]
-        );
-
-        $filters = $filter->getAppliedFilters();
-
-        try {
-            /**
-             * @todo Replace method `call`. Will be done in CRM-8188
-             */
-            $customers = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
-        } catch (\RuntimeException $e) {
-            $this->context->addViolationAt('email', $constraint->transportMessage);
-
-            return [];
-        }
-
-        if (is_array($customers)) {
-            return $customers;
-        } else {
-            $customers = (array) $customers;
-            if (empty($customers)) {
-                return [];
-            } else {
-                return [$customers];
+            try {
+                $transportProvider->init($transportEntity);
+                /**
+                 * @var $transportProvider MagentoTransportInterface
+                 */
+                if (! $transportProvider->isCustomerHasUniqueEmail($value)) {
+                    $this->context->addViolationAt('email', $constraint->message);
+                }
+            } catch (\RuntimeException $e) {
+                $this->context->addViolationAt('email', $constraint->transportMessage);
             }
         }
     }
