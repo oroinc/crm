@@ -62,6 +62,7 @@ class SearchIndexListenerTest extends WebTestCase
 
         $customer = new Customer();
         $customer->setContact($this->getReference('contact'));
+        $customer->setAccount($this->getReference('account'));
         $customer->setCreatedAt(new \DateTime());
         $customer->setUpdatedAt(new \DateTime());
 
@@ -70,6 +71,7 @@ class SearchIndexListenerTest extends WebTestCase
 
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
             ['class' => Contact::class, 'id' => $customer->getContact()->getId()],
+            ['class' => Account::class, 'id' => $customer->getAccount()->getId()],
             ['class' => Customer::class, 'id' => $customer->getId()],
         ]);
     }
