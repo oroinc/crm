@@ -1,0 +1,6 @@
+config:
+    paths:
+        'orocontactus/js/app/modules/validator-constraints-module': 'bundles/orocontactus/js/app/modules/validator-constraints-module.js'
+        'orocontactus/js/validator/contact-request-callback': 'bundles/orocontactus/js/validator/contact-request-callback.js'
+    appmodules:
+        - orocontactus/js/app/modules/validator-constraints-module
