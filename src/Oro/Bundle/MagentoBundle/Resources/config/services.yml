@@ -553,7 +553,7 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
     oro_magento.event_listener.account_view:
-        class: 'Oro\Bundle\SalesBundle\EventListener\AccountViewListener'
+        class: 'Oro\Bundle\MagentoBundle\EventListener\AccountViewListener'
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@request_stack'
