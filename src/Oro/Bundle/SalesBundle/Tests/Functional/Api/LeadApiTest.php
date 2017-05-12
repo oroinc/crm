@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -86,6 +88,61 @@ class LeadApiTest extends RestJsonApiTestCase
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Lead::class, $this->getResourceId($response));
         self::assertNotNull($entity);
+    }
+
+    public function testPostWithoutAccountAndCustomer()
+    {
+        $response = $this->request(
+            'POST',
+            $this->getUrl('oro_rest_api_post', ['entity' => 'leads']),
+            $this->getRequestData('lead_post_no_account_and_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'Either an account or a customer should be set.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPostWithInconsistentCustomer()
+    {
+        $response = $this->request(
+            'POST',
+            $this->getUrl('oro_rest_api_post', ['entity' => 'leads']),
+            $this->getRequestData('lead_post_inconsistent_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'The customer should be a part of the specified account.',
+                    'source' => [
+                        'pointer' => '/data/relationships/customer/data'
+                    ]
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPostWithConsistentCustomer()
+    {
+        $response = $this->post(
+            ['entity' => 'leads'],
+            'lead_post_consistent_customer.yml'
+        );
+
+        $this->assertResponseContains('lead_post_consistent_customer.yml', $response);
     }
 
     public function testGetAccountRelationship()
@@ -272,6 +329,31 @@ class LeadApiTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
+    public function testPatchWithInconsistentCustomer()
+    {
+        $leadId = $this->getReference('lead1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl('oro_rest_api_patch', ['entity' => 'leads', 'id' => $leadId]),
+            $this->getRequestData('lead_patch_inconsistent_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'The customer should be a part of the specified account.',
+                    'source' => [
+                        'pointer' => '/data/relationships/customer/data'
+                    ]
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
     public function testPatchAccountAsRelationship()
     {
         $leadId = $this->getReference('lead1')->getId();
@@ -316,5 +398,59 @@ class LeadApiTest extends RestJsonApiTestCase
         $account = $lead->getCustomerAssociation()->getAccount();
         self::assertInstanceOf(Account::class, $account);
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
+    }
+
+    public function testPatchAccountAsRelationshipWithNullValue()
+    {
+        $leadId = $this->getReference('lead1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl(
+                'oro_rest_api_patch_relationship',
+                ['entity' => 'leads', 'id' => $leadId, 'association' => 'account']
+            ),
+            [
+                'data' => null
+            ]
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'not null constraint',
+                    'detail' => 'This value should not be null.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPatchCustomerAsRelationshipWithNullValue()
+    {
+        $leadId = $this->getReference('lead1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl(
+                'oro_rest_api_patch_relationship',
+                ['entity' => 'leads', 'id' => $leadId, 'association' => 'customer']
+            ),
+            [
+                'data' => null
+            ]
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'not null constraint',
+                    'detail' => 'This value should not be null.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
     }
 }

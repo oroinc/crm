@@ -1,0 +1,9 @@
+data:
+    type: leads
+    attributes:
+        name: 'New Lead'
+    relationships:
+        status:
+            data:
+                type: leadstatuses
+                id: new

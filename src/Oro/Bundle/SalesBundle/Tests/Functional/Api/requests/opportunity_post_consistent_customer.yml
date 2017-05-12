@@ -1,0 +1,17 @@
+data:
+    type: opportunities
+    attributes:
+        name: 'New Opportunity'
+    relationships:
+        status:
+            data:
+                type: opportunitystatuses
+                id: lost
+        account:
+            data:
+                type: accounts
+                id: '<toString(@account2->id)>'
+        customer:
+            data:
+                type: b2bcustomers
+                id: '<toString(@b2b_customer2->id)>'
