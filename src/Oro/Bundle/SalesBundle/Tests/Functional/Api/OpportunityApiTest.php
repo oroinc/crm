@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Api;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ApiBundle\Tests\Functional\RestJsonApiTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -104,6 +106,61 @@ class OpportunityApiTest extends RestJsonApiTestCase
         // test that the entity was created
         $entity = $this->getEntityManager()->find(Opportunity::class, $this->getResourceId($response));
         self::assertNotNull($entity);
+    }
+
+    public function testPostWithoutAccountAndCustomer()
+    {
+        $response = $this->request(
+            'POST',
+            $this->getUrl('oro_rest_api_post', ['entity' => 'opportunities']),
+            $this->getRequestData('opportunity_post_no_account_and_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'Either an account or a customer should be set.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPostWithInconsistentCustomer()
+    {
+        $response = $this->request(
+            'POST',
+            $this->getUrl('oro_rest_api_post', ['entity' => 'opportunities']),
+            $this->getRequestData('opportunity_post_inconsistent_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'The customer should be a part of the specified account.',
+                    'source' => [
+                        'pointer' => '/data/relationships/customer/data'
+                    ]
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPostWithConsistentCustomer()
+    {
+        $response = $this->post(
+            ['entity' => 'opportunities'],
+            'opportunity_post_consistent_customer.yml'
+        );
+
+        $this->assertResponseContains('opportunity_post_consistent_customer.yml', $response);
     }
 
     public function testGetLeadRelationship()
@@ -347,6 +404,31 @@ class OpportunityApiTest extends RestJsonApiTestCase
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
     }
 
+    public function testPatchWithInconsistentCustomer()
+    {
+        $opportunityId = $this->getReference('opportunity1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl('oro_rest_api_patch', ['entity' => 'opportunities', 'id' => $opportunityId]),
+            $this->getRequestData('opportunity_patch_inconsistent_customer.yml')
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'form constraint',
+                    'detail' => 'The customer should be a part of the specified account.',
+                    'source' => [
+                        'pointer' => '/data/relationships/customer/data'
+                    ]
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
     public function testPatchLeadAsRelationship()
     {
         $opportunityId = $this->getReference('opportunity1')->getId();
@@ -412,5 +494,59 @@ class OpportunityApiTest extends RestJsonApiTestCase
         $account = $opportunity->getCustomerAssociation()->getAccount();
         self::assertInstanceOf(Account::class, $account);
         self::assertSame($this->getReference('account2')->getId(), $account->getId());
+    }
+
+    public function testPatchAccountAsRelationshipWithNullValue()
+    {
+        $opportunityId = $this->getReference('opportunity1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl(
+                'oro_rest_api_patch_relationship',
+                ['entity' => 'opportunities', 'id' => $opportunityId, 'association' => 'account']
+            ),
+            [
+                'data' => null
+            ]
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'not null constraint',
+                    'detail' => 'This value should not be null.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
+    }
+
+    public function testPatchCustomerAsRelationshipWithNullValue()
+    {
+        $opportunityId = $this->getReference('opportunity1')->getId();
+        $response = $this->request(
+            'PATCH',
+            $this->getUrl(
+                'oro_rest_api_patch_relationship',
+                ['entity' => 'opportunities', 'id' => $opportunityId, 'association' => 'customer']
+            ),
+            [
+                'data' => null
+            ]
+        );
+
+        self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
+        self::assertEquals(
+            [
+                [
+                    'status' => '400',
+                    'title'  => 'not null constraint',
+                    'detail' => 'This value should not be null.'
+                ]
+            ],
+            $this->getResponseErrors($response)
+        );
     }
 }
