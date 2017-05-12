@@ -49,8 +49,6 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
         $this->configureWidget($widget, [
             'forecast_of_opportunities[dateRange][part]'  => 'value',
             'forecast_of_opportunities[dateRange][type]'  => $dateRangeType,
-            'forecast_of_opportunities[dateRange][value][start]' => isset($value['start']) ? $value['start'] : '',
-            'forecast_of_opportunities[dateRange][value][end]'   => isset($value['end']) ? $value['end'] : '',
             'forecast_of_opportunities[subWidgets][items][0][id]' => 'in_progress',
             'forecast_of_opportunities[subWidgets][items][0][order]' => 0,
             'forecast_of_opportunities[subWidgets][items][0][show]' => 'on'
@@ -100,24 +98,6 @@ class ForecastWidgetTest extends AbstractWidgetTestCase
                 'timezone' => 'America/Los_Angeles',
                 'value' => [],
                 'in_progress_count' => 2,
-            ],
-            'Close Date: Between' => [
-                'date_range_type' => AbstractDateFilterType::TYPE_BETWEEN,
-                'timezone' => 'UTC',
-                'value' => [
-                    'start' => (new \DateTime('today', new \DateTimeZone('UTC')))->format('Y-m-d'),
-                    'end'   => (new \DateTime('today', new \DateTimeZone('UTC')))->format('Y-m-d')
-                ],
-                'in_progress_count' => 1
-            ],
-            'Close Date: Between in custom timezone' => [
-                'date_range_type' => AbstractDateFilterType::TYPE_BETWEEN,
-                'timezone' => 'America/Los_Angeles',
-                'value' => [
-                    'start' => (new \DateTime('today', new \DateTimeZone('America/Los_Angeles')))->format('Y-m-d'),
-                    'end'   => (new \DateTime('today', new \DateTimeZone('America/Los_Angeles')))->format('Y-m-d')
-                ],
-                'in_progress_count' => 1
             ]
         ];
     }

@@ -8,19 +8,15 @@ use Psr\Log\LoggerInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
+
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
@@ -143,8 +139,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
-            // Disable search listeners to increase the performance
             $this->disableOptionalListeners();
+            $this->optionalListenerManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
             $this->setTemporaryIntegrationToken($integration);
 
             $result = $this->initialSyncProcessor->process(
@@ -155,7 +151,6 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
 
             if ($result) {
                 $this->scheduleAnalyticRecalculation($integration);
-                $this->scheduleSearchReindex();
             }
 
             return $result;
@@ -205,15 +200,5 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
-    }
-
-    /**
-     * Add jobs to reindex magento entities
-     */
-    private function scheduleSearchReindex()
-    {
-        $entities = [Order::class, Cart::class, Customer::class, Account::class, Contact::class];
-
-        $this->indexer->reindex($entities);
     }
 }

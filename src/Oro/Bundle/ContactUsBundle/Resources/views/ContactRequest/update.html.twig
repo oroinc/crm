@@ -4,6 +4,19 @@
 {% set fullname = form.vars.value|oro_format_name|default('N/A') %}
 {% oro_title_set({ params : {"%request.clientName%": fullname} }) %}
 
+{% set formAttr = {
+    "data-validation": {
+        "Oro\\Bundle\\ContactUsBundle\\Validator\\ContactRequestCallbackValidator": {
+            "target": "preferredContactMethod",
+            "deps": {
+                "oro.contactus.contactrequest.method.both": ["emailAddress", "phone"],
+                "oro.contactus.contactrequest.method.phone": "phone",
+                "oro.contactus.contactrequest.method.email": "emailAddress"
+            }
+        }
+    }
+} %}
+
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('oro_contactus_request_delete') %}
         {{ UI.deleteButton({

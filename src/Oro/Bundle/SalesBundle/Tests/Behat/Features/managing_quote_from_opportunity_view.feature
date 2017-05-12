@@ -27,23 +27,23 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     When I reset Status filter
     And I click View Testing opportunity_2 in grid
     Then I should see Testing opportunity2 with:
-      | Account | CommSkyNet |
-      | Status  | Closed Won |
+      | Customer | CommSkyNet |
+      | Status   | Closed Won |
     And I should not see "Create Quote"
     When I go to Sales/Opportunities
     And I reset Status filter
     And click View Testing opportunity21 in grid
     Then I should see Testing opportunity21 with:
-      | Account | CommSkyNet  |
-      | Status  | Closed Lost |
+      | Customer | CommSkyNet  |
+      | Status   | Closed Lost |
     And I should not see "Create Quote"
 
   Scenario: Allowing user to create a quote
     Given I go to Sales/Opportunities
     When click View Testing opportunity1 in grid
     Then I should see Testing opportunity1 with:
-      | Account | CommSkyNet |
-      | Status  | Open       |
+      | Customer | CommSkyNet |
+      | Status   | Open       |
     And I should see "Create Quote"
 
   Scenario: Create Quote

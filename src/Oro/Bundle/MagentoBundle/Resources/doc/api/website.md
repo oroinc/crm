@@ -125,3 +125,34 @@ The list of records that will be deleted, could be limited by filters.
 **Please note:**
 
 *This field is **required** and must remain defined.*
+
+## SUBRESOURCES
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento website is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento website is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento website is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentowebsites/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}

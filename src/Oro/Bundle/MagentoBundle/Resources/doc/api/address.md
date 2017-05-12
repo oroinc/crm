@@ -345,3 +345,32 @@ Example:
 #### delete_relationship
 
 Remove the address types of a specific Magento customer address record.
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento customer address is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento customer address is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento customer address is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentoaddresses/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}

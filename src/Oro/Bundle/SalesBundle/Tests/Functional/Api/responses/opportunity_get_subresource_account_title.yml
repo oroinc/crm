@@ -1,0 +1,29 @@
+data:
+    type: accounts
+    id: '<toString(@account1->id)>'
+    meta:
+        title: 'Account 1'
+    attributes:
+        extend_description: null
+        lastContactedDate: null
+        lastContactedDateIn: null
+        lastContactedDateOut: null
+        timesContacted: null
+        timesContactedIn: null
+        timesContactedOut: null
+        name: 'Account 1'
+        createdAt: '@account1->createdAt->format("Y-m-d\TH:i:s\Z")'
+        updatedAt: '@account1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+    relationships:
+        owner:
+            data: null
+        contacts:
+            data: []
+        defaultContact:
+            data: null
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        referredBy:
+            data: null

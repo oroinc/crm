@@ -39,7 +39,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     And I fill in the following:
     | Opportunity name         | Account         | Status |
     | <Opportunity Name>  | <Account Name>  | <Status name> |
-    And I click "Save And Close"
+    And I save and close form
     Then I should see "Create Quote" status on the Opportunity view page
   Examples:
     | Opportunity Name  | Account Name   | Status name               |
@@ -57,7 +57,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     And I fill in the following:
     | Opportunity name    | Account         | Status        |
     | <Opportunity Name>  | <Account Name>  | <Status name> |
-    And I click "Save And Close"
+    And I save and close form
     Then I should not see "Send Quote" button on the Opportunity view page
   Examples:
   | Opportunity Name | Account Name  | Status name |
@@ -72,7 +72,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     But I fill in the following:
     | PRODUCT                            | UNIT PRICE |
     | 1AB92 - Credit Card Pin Pad Reader | 10         |
-    When I click "Save and Close"
+    When I save and close form
     Then I should get back to Opportunity page
     And workflow step should be changed to "Quote Created"
     And I should see quote details on Quotes section in the Opportunity view page
@@ -102,7 +102,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     And I click "Opportunity 2"
     When I select "Edit" action for "Second Quote" Quote
     And I'm edit entity
-    And I click "Save And Close"
+    And I save and close form
     Then I should see edited Quote on the Quotes grid
     And "Commersant2000" Commerce Customer should see edited Quote
 

@@ -906,7 +906,7 @@ class Opportunity extends ExtendOpportunity implements
     public function beforeSave()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->beforeUpdate();
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**
