@@ -91,6 +91,7 @@ services:
 
     orocrm_magento.importexport.data_converter.cart_address:
         class: %orocrm_magento.importexport.data_converter.cart_address.class%
+        parent: orocrm_magento.importexport.data_converter.abstract_address
 
     orocrm_magento.importexport.data_converter.cart:
         class: %orocrm_magento.importexport.data_converter.cart.class%
@@ -101,6 +102,7 @@ services:
 
     orocrm_magento.importexport.data_converter.order_address:
         class: %orocrm_magento.importexport.data_converter.order_address.class%
+        parent: orocrm_magento.importexport.data_converter.abstract_address
 
     orocrm_magento.importexport.data_converter.order_item:
         class: %orocrm_magento.importexport.data_converter.order_item.class%
@@ -114,6 +116,7 @@ services:
 
     orocrm_magento.importexport.data_converter.customer_address:
         class: %orocrm_magento.importexport.data_converter.customer_address.class%
+        parent: orocrm_magento.importexport.data_converter.abstract_address
 
     orocrm_magento.importexport.data_converter.website:
         class: %orocrm_magento.importexport.data_converter.website.class%
@@ -692,3 +695,9 @@ services:
             - "@orocrm_magento.importexport.processor.import_customer_address"
             - "@orocrm_magento.importexport.processor.customer_address_export"
             - "@oro_entity.doctrine_helper"
+
+    orocrm_magento.importexport.data_converter.abstract_address:
+        abstract: true
+        class: OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AbstractAddressDataConverter
+        calls:
+            - [setIso2CodeProvider, ['@orocrm_magento.provider.iso2_code']]
