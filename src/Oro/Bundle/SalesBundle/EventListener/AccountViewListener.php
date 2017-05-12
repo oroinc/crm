@@ -5,6 +5,7 @@ namespace Oro\Bundle\SalesBundle\EventListener;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
@@ -23,6 +24,7 @@ class AccountViewListener
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
+    /** @var string */
     protected $entityClass;
 
     /**
@@ -63,14 +65,27 @@ class AccountViewListener
             return;
         }
 
-        $customerAssociation = $this->accountCustomerManager->getAccountCustomerByTarget($customer);
-        $account = $customerAssociation->getAccount();
+        $customerAssociation = $this->getCustomerAssociation($customer);
+        if ($customerAssociation) {
+            $account = $customerAssociation->getAccount();
 
-        $template = $event->getEnvironment()->render(
-            'OroSalesBundle:Account:account_view.html.twig',
-            ['account' => $account]
-        );
-        $event->getScrollData()->addSubBlockData(0, 0, $template);
+            $template = $event->getEnvironment()->render(
+                'OroSalesBundle:Account:account_view.html.twig',
+                ['account' => $account]
+            );
+            $event->getScrollData()->addSubBlockData(0, 0, $template);
+        }
+    }
+
+    /**
+     * @param object $customer
+     * @param bool $throwExceptionOnNotFound
+     *
+     * @return Customer
+     */
+    protected function getCustomerAssociation($customer, $throwExceptionOnNotFound = true)
+    {
+        return $this->accountCustomerManager->getAccountCustomerByTarget($customer, $throwExceptionOnNotFound);
     }
 
     /**
