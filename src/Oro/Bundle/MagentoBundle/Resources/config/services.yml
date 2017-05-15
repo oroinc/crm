@@ -528,6 +528,9 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
+    # This listener implement OptionalListenerInterface and should be enabled manualy
+    # Logic extend search IndexListener so when you enable this listener you should disable `oro_search.index_listener`
+    # to prevent message queue duplicated jobs
     oro_magento.event_listener.delayed_search_reindex:
         class: 'Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener'
         parent: oro_search.index_listener

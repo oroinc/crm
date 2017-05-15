@@ -131,8 +131,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
-            $this->disableOptionalListeners();
-            $this->optionalListenerManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
+            $this->beforeProcess();
 
             $result = $this->initialSyncProcessor->process(
                 $integration,
@@ -143,6 +142,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
             if ($result) {
                 $this->scheduleAnalyticRecalculation($integration);
             }
+
+            $this->afterProcess();
 
             return $result;
         });
@@ -158,19 +159,22 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         return [Topics::SYNC_INITIAL_INTEGRATION];
     }
 
-    private function disableOptionalListeners()
+    private function beforeProcess()
     {
-        $disabledOptionalListeners = [
+        $this->optionalListenerManager->disableListeners([
             'oro_search.index_listener',
             'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-        ];
+        ]);
+        $this->optionalListenerManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
+    }
 
-        $knownListeners  = $this->optionalListenerManager->getListeners();
-        foreach ($disabledOptionalListeners as $listenerId) {
-            if (in_array($listenerId, $knownListeners, true)) {
-                $this->optionalListenerManager->disableListener($listenerId);
-            }
-        }
+    private function afterProcess()
+    {
+        $this->optionalListenerManager->disableListener('oro_magento.event_listener.delayed_search_reindex');
+        $this->optionalListenerManager->enableListeners([
+            'oro_search.index_listener',
+            'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+        ]);
     }
 
     /**
