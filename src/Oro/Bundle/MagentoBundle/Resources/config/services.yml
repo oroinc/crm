@@ -535,6 +535,14 @@ services:
             - { name: doctrine.event_listener, event: postFlush }
             - { name: doctrine.event_listener, event: onClear }
 
+    oro_magento.migration.demo_data_fixtures_listener.search_index:
+        class: Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener
+        arguments:
+            - '@oro_platform.optional_listeners.manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.data_fixtures.pre_load, method: onPreLoad }
+            - { name: kernel.event_listener, event: oro_migration.data_fixtures.post_load, method: onPostLoad }
+
     oro_magento.service.magento_url_generator:
         class: %oro_magento.magento_url_generator.class%
         arguments:
