@@ -3,7 +3,6 @@ parameters:
     oro_contact_us.embedded_form.class:                   Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType
     oro_contact_us.contact_request.form.handler.class:    Oro\Bundle\ContactUsBundle\Form\Handler\ContactRequestHandler
     oro_contact_us.provider.phone.abstract_contact_request.class: Oro\Bundle\ContactUsBundle\Provider\AbstractContactRequestPhoneProvider
-    oro_contact_us.contactreason.entity.class: Oro\Bundle\ContactUsBundle\Entity\ContactReason
 
 services:
     oro_contact_us.embedded_form:
