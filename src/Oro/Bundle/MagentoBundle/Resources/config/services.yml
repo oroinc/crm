@@ -530,6 +530,8 @@ services:
     oro_magento.event_listener.delayed_search_reindex:
         class: 'Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener'
         parent: oro_search.index_listener
+        calls:
+            - [setEnabled, [false]]
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
