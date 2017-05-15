@@ -41,10 +41,9 @@ oro:
             entity_label: Contact Reason
             entity_plural_label: Contact Reasons
             entity_description: Represents contact reason
-            id:
-                label: ID
-            label:
-                label: Label
+            id.label:    ID
+            label.label: Label
+            saved: Contact reason has been saved successfully
 
         block:
             general:                General

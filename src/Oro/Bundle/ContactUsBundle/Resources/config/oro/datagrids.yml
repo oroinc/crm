@@ -95,3 +95,42 @@ datagrids:
         options:
             entityHint: contact requests
             entity_pagination: true
+    orcrm-contact-reasons-grid:
+        acl_resource: oro_contactus_reason_view
+        options:
+            entity_pagination: true
+        source:
+            type:         orm
+            query:
+                select:
+                    - contactReason.id
+                    - contactReason.label
+                from:
+                    - { table: '%oro_contact_us.contactreason.entity.class%', alias: contactReason }
+        columns:
+            label:
+                label: oro.contactus.contactreason.label.label
+        properties:
+            id: ~
+            update_link:
+                type:   url
+                route:  oro_contactus_reason_update
+                params: [ id ]
+            delete_link:
+                type:   url
+                route:  oro_contactus_reason_delete
+                params: [ id ]
+        actions:
+            update:
+                acl_resource: oro_contactus_reason_edit
+                type:         navigate
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+                rowAction:    true
+            delete:
+                acl_resource: oro_contactus_reason_delete
+                type:         delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link

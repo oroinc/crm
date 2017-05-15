@@ -13,6 +13,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      defaultValues={
  *          "grouping"={
  *              "groups"={"dictionary"}
+ *          },
+ *          "grid"={
+ *              "default"="orcrm-contact-reasons-grid"
  *          }
  *      }
  * )
@@ -35,7 +38,7 @@ class ContactReason
      */
     protected $label;
 
-    public function __construct($label)
+    public function __construct($label = null)
     {
         $this->label = $label;
     }

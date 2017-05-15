@@ -8,15 +8,26 @@ navigation:
                 extras:
                     routes: ['oro_contactus_request_*']
                 display: true
+            oro_contactus_reasons:
+                label: 'oro.contactus.contactreason.entity_plural_label'
+                route: 'oro_contactus_reason_index'
+                position: 30
+                extras:
+                    routes: ['oro_contactus_reason_*']
+                display: true
         tree:
             application_menu:
                 children:
                     activities_tab:
                         children:
                             oro_contactus_requests: ~
+                            oro_contactus_reasons: ~
 
     titles:
         oro_contactus_request_index:  ~
         oro_contactus_request_view:   '%request.clientName%'
         oro_contactus_request_create: 'Create contact request'
         oro_contactus_request_update: '%request.clientName% - Edit'
+        oro_contactus_reason_index:  ~
+        oro_contactus_reason_create: 'Create contact reason'
+        oro_contactus_reason_update: 'Edit contact reason'
