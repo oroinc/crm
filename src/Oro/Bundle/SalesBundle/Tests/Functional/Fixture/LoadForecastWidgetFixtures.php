@@ -54,6 +54,9 @@ class LoadForecastWidgetFixtures extends AbstractFixture
      */
     private function createOpportunity(ObjectManager $manager)
     {
+        $today = new \DateTime('now', new \DateTimeZone('UTC'));
+        $firstOfCurrentMonth = new \DateTime('first day of this month midnight', new \DateTimeZone('UTC'));
+
         $opportunityList = [
             [
                 'status' => 'in_progress',
@@ -63,13 +66,13 @@ class LoadForecastWidgetFixtures extends AbstractFixture
             ],
             [
                 'status' => 'in_progress',
-                'close_date' => new \DateTime('now'),
+                'close_date' => $today,
                 'probability' => 10, //percents
                 'budget_amount' => 100, //USD
             ],
             [
                 'status' => 'in_progress',
-                'close_date' => new \DateTime('now'),
+                'close_date' => $firstOfCurrentMonth,
                 'probability' => 100, //percents
                 'budget_amount' => 100, //USD
             ],
@@ -89,7 +92,8 @@ class LoadForecastWidgetFixtures extends AbstractFixture
             $opportunity->setStatus($manager->getReference($enumClass, $opportunityData['status']));
 
             $manager->persist($opportunity);
-            $manager->flush();
         }
+
+        $manager->flush();
     }
 }

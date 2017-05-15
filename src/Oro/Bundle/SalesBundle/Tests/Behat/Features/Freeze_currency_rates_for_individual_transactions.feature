@@ -1,3 +1,5 @@
+@ticket-OEE-1208
+@automatically-ticket-tagged
 @not-automated
 Feature: In order to ensure base currency amount for closed transactions is not adjusted according to going rates
   As an Administrator
@@ -23,7 +25,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
   And I should see the following:
   | Base budget amount  | Base Close revenue  |
   | $2,000.00           | $4,000.00           |
-  When I press "Save and Close" button
+  When I save and close form
   Then I should see the following on Opportunity view page:
     | Opportunity Name  | Status  | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
     | Josh Zuckerman    | Open    | €1,000.00     | $2,000.00           | €2,000.00     | $4,000.00           |
@@ -42,7 +44,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     And I should see the following:
       | Base budget amount  | Base Close revenue  |
       | $4,000.00           | $6,000.00           |
-    When I press "Save and Close" button
+    When I save and close form
     Then I should see the following on Opportunity view page:
       | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Josh Zuckerman    | Closed Won  | €2,000.00     | $4,000.00           | €3,000.00     | $6,000.00           |
@@ -61,7 +63,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
     And I should see the following:
       | Base budget amount  | Base Close revenue  |
       | $6,000.00           | $10,000.00          |
-    When I press "Save and Close" button
+    When I save and close form
     Then I should see the following on Opportunity view page:
       | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
       | Donna Reed        | Closed Lost | €3,000.00     | $6,000.00           | €5,000.00     | $10,000.00          |
@@ -80,7 +82,7 @@ Scenario: Ensure that for Opportunity with status "Open" Base budget amount and 
       And I should see the following:
         | Base budget amount  | Base Close revenue  |
         | $6,400.00           | $10,800.00          |
-      When I press "Save" button
+      When I save form
       Then I should see the following on Opportunity view page:
         | Opportunity Name  | Status      | Budget amount | Base budget amount  | Close revenue | Base Close revenue  |
         | Lionel Barrymore  | Closed Won  | €3,000.00     | $6,400.00           | €5,000.00     | $10,800.00          |

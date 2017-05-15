@@ -9,7 +9,7 @@ api:
         Oro\Bundle\MagentoBundle\Entity\CartItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_item.md'
         Oro\Bundle\MagentoBundle\Entity\CartStatus:
-            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart_status.md'
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/cart.md'
         Oro\Bundle\MagentoBundle\Entity\Customer:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/customer.md'
             fields:
@@ -59,17 +59,6 @@ api:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/product.md'
         Oro\Bundle\MagentoBundle\Entity\Region:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/region.md'
-            fields:
-                code:
-                    description:    The part of after hyphen of an ISO 3166-2 region code.
-                combinedCode:
-                    description:    The identifier of an entity. The region (country subdivision) code according to ISO 3166-2.
-                countryCode:
-                    description:    The country code specified for a region. The part before hyphen of an ISO 3166-2 region code.
-                name:
-                    description:    The name used to refer to a region on the interface.
-                regionId:
-                    description:    The region ID assigned to a Magento region.
         Oro\Bundle\MagentoBundle\Entity\Store:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/store.md'
         Oro\Bundle\MagentoBundle\Entity\Website:

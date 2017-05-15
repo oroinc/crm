@@ -77,11 +77,7 @@ class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('addViolation')
             ->with(
-                'At least one of the fields %fields% must be defined.',
-                [
-                    '%fields%' => 'oro.contact.first_name.label, oro.contact.last_name.label, ' .
-                                  'oro.contact.emails.label or oro.contact.phones.label'
-                ]
+                'oro.contact.validators.contact.has_information'
             );
 
         $this->validator->validate($value, new HasContactInformation());

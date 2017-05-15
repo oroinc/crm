@@ -13,6 +13,7 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
     const FIRST_ENTITY_NAME  = 'test1@test.test';
     const SECOND_ENTITY_NAME = 'test2@test.test';
     const THIRD_ENTITY_NAME  = 'test3@test.test';
+    const FOURTH_ENTITY_NAME  = 'test4@test.test';
 
     public function getDependencies()
     {
@@ -49,8 +50,8 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
         foreach ($this->contactEmailData as $contactEmailData) {
             $contactEmail = new ContactEmail();
             $contactEmail->setPrimary($contactEmailData['primary']);
-            $contactEmail->setOwner($contact);
             $contactEmail->setEmail($contactEmailData['email']);
+            $contact->addEmail($contactEmail);
             $this->setReference('ContactEmail_Several_' . $contactEmailData['email'], $contactEmail);
             $manager->persist($contactEmail);
         }
@@ -58,11 +59,18 @@ class LoadContactEmailData extends AbstractFixture implements DependentFixtureIn
         $contact2 = $this->getReference('Contact_' . LoadContactEntitiesData::SECOND_ENTITY_NAME);
         $contactEmail = new ContactEmail();
         $contactEmail->setPrimary($this->contactEmailData[0]['primary']);
-        $contactEmail->setOwner($contact2);
         $contactEmail->setEmail($this->contactEmailData[0]['email']);
+        $contact2->addEmail($contactEmail);
         $this->setReference('ContactEmail_Single_' . $this->contactEmailData[0]['email'], $contactEmail);
         $manager->persist($contactEmail);
 
+        $contact3 = $this->getReference('Contact_' . LoadContactEntitiesData::FOURTH_ENTITY_NAME);
+        $contactEmail = new ContactEmail();
+        $contactEmail->setPrimary(true);
+        $contactEmail->setEmail(self::FOURTH_ENTITY_NAME);
+        $contact3->addEmail($contactEmail);
+        $this->setReference('ContactEmail_Single_' . self::FOURTH_ENTITY_NAME, $contactEmail);
+        $manager->persist($contactEmail);
 
         $manager->flush();
     }

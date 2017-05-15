@@ -1,0 +1,114 @@
+include:
+  - ../../../../../../../../../customer-portal/src/Oro/Bundle/CustomerBundle/Tests/Behat/Features/Fixtures/opportunity_from_related.yml
+
+Oro\Bundle\ProductBundle\Entity\ProductUnitPrecision:
+    precision1:
+        unit: '@item'
+        precision: '1'
+
+Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue:
+    locvalue1:
+        string: Product1
+
+Oro\Bundle\ProductBundle\Entity\Product:
+    product1:
+        sku: 'AA1'
+        primaryUnitPrecision: '@precision1'
+        addName: ['@locvalue1']
+        inventoryStatus: '@enumInventoryStatuses'
+        status: 'enabled'
+
+Oro\Bundle\ShoppingListBundle\Entity\ShoppingList:
+    shoppinglist1:
+        label: 'Shopping List 1'
+
+Oro\Bundle\ShoppingListBundle\Entity\LineItem:
+    lineitem1:
+        product: '@product1'
+        quantity: '5'
+        unit: '@item'
+        shoppingList: '@shoppinglist1'
+        organization: '@organization'
+
+Oro\Bundle\ShoppingListBundle\Entity\ShoppingListTotal:
+    shoppinglisttotal:
+        __construct: ['@shoppinglist1','USD']
+        shoppingList: '@shoppinglist1'
+        currency: 'USD'
+        subtotalValue: '10.1'
+        valid: true
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'mister customer 1'
+    organization: '@organization'
+  account2:
+    name: 'mister customer 2'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  mrcustomer:
+    account: '@account1'
+    customer_e197f906: '@customer'
+  mrcustomer2:
+    account: '@account2'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity1:
+    name: 'Testing opportunity1'
+    customerAssociation: '@mrcustomer'
+    status: in_progress
+    organization: @organization
+    owner: '@admin'
+  opportunity2:
+    name: 'Testing opportunity_2'
+    customerAssociation: @mrcustomer
+    status: won
+    organization: @organization
+  opportunity21:
+    name: 'Testing opportunity21'
+    customerAssociation: @mrcustomer
+    status: lost
+    organization: @organization
+  opportunity3:
+    name: 'Testing opportunity3'
+    customerAssociation: @mrcustomer
+    status: needs_analysis
+    organization: @organization
+  opportunity4:
+    name: 'Testing opportunity4'
+    customerAssociation: @mrcustomer2
+    status: solution_development
+    organization: @organization
+  opportunity5:
+    name: 'Testing opportunity5'
+    customerAssociation: @mrcustomer2
+    status: negotiation
+    organization: @organization
+
+Oro\Bundle\SaleBundle\Entity\Quote:
+    quote{1..9}:
+        organization: '@organization'
+        owner: '@johnConnor'
+        customerUser: '@lucy'
+        poNumber: 'PO<current()>'
+        qid: '<current()>'
+        website: '@website1'
+        opportunity: '@opportunity1'
+        internal_status: draft
+
+Oro\Bundle\CustomerBundle\Entity\CustomerUser:
+    lucy:
+        email: 'lucy@gg.org'
+        username: 'lucy@gg.org'
+        password: 'gxP1L8r86hrdUMg9wKdfnsS/EZC4a7jOIdn6BMzegqL2S6e+KBIuHCrDVciMdiR/64osNnabmFonwK8l09vQxA=='
+        salt: 'fgswya1kzw0sck8ck48kosowckwo0ws'
+        firstName: 'Lucy'
+        lastName: 'Gjallarhorn'
+        enabled: '1'
+        confirmed: '1'
+        customer: '@customer'
+        organization: '@organization'
+        role: ['@buyer']
+        owner: '@admin'
+        website: '@website1'

@@ -21,3 +21,16 @@ oro_behat_extension:
           Preferred contact method: 'oro_magento_contactus_contact_request[preferredContactMethod]'
           Email: 'oro_magento_contactus_contact_request[emailAddress]'
           Comment: 'oro_magento_contactus_contact_request[comment]'
+
+  suites:
+    OroMagentoBundle:
+      contexts:
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - OroSecurityBundle::ACLContext
+        - OroUserBundle::FeatureContext
+        - OroSalesBundle::SalesContext
+        - OroDataGridBundle::GridContext
+        - OroFormBundle::FormContext
+        - OroMagentoBundle::FeatureContext
+      paths:
+        - '@OroMagentoBundle/Tests/Behat/Features'

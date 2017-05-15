@@ -270,11 +270,15 @@ services:
 
     oro_sales.b2bcustomer.form.type:
         class: %oro_sales.b2bcustomer.form.type.class%
+        arguments:
+            - "@property_accessor"
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer }
 
     oro_sales.b2bcustomer.form.type.api:
         class: %oro_sales.b2bcustomer.form.type.api.class%
+        arguments:
+            - '@property_accessor'
         tags:
             - { name: form.type, alias: oro_sales_b2bcustomer_api }
 

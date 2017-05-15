@@ -1,0 +1,57 @@
+data:
+    -
+        type: leads
+        id: '<toString(@lead1->id)>'
+        attributes:
+            name: 'Lead 1'
+        relationships:
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
+    -
+        type: leads
+        id: '<toString(@lead2->id)>'
+        attributes:
+            name: 'Lead 2'
+        relationships:
+            account:
+                data:
+                    type: accounts
+                    id: '<toString(@account1->id)>'
+            customer:
+                data:
+                    type: b2bcustomers
+                    id: '<toString(@b2b_customer1->id)>'
+included:
+    -
+        type: accounts
+        id: '<toString(@account1->id)>'
+        attributes:
+            extend_description: null
+            lastContactedDate: null
+            lastContactedDateIn: null
+            lastContactedDateOut: null
+            timesContacted: null
+            timesContactedIn: null
+            timesContactedOut: null
+            name: 'Account 1'
+            createdAt: '@account1->createdAt->format("Y-m-d\TH:i:s\Z")'
+            updatedAt: '@account1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+        relationships:
+            owner:
+                data: null
+            contacts:
+                data: []
+            defaultContact:
+                data: null
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            referredBy:
+                data: null

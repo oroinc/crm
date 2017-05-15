@@ -1,0 +1,28 @@
+data:
+    type: leads
+    id: '<toString(@lead1->id)>'
+    attributes:
+        name: 'Lead 1'
+    relationships:
+        owner:
+            data:
+                type: users
+                id: '<toString(@user->id)>'
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+        source:
+            data: null
+        status:
+            data:
+                type: leadstatuses
+                id: new
+        account:
+            data:
+                type: accounts
+                id: '<toString(@account1->id)>'
+        customer:
+            data:
+                type: b2bcustomers
+                id: '<toString(@b2b_customer1->id)>'

@@ -88,4 +88,4 @@ Feature: Contact call activity
     When I click "Delete Call log" on "Offered Charlie a drink with me" in activity list
     And confirm deletion
     Then I should see "Activity item deleted" flash message
-    And there is no records in activity list
+    And I see no records in activity list

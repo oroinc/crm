@@ -7,45 +7,51 @@
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
-        <div class="responsive-block">
-            {{ ui.renderProperty('oro.sales.opportunity.name.label'|trans, entity.name, entity, 'name') }}
-            {{ ui.renderProperty('oro.sales.opportunity.status.label'|trans, entity.status, entity, 'status') }}
+        <div class="responsive-block border-right">
+            <div class="row-fluid">
+                <div class="responsive-block">
+                    {{ ui.renderProperty('oro.sales.opportunity.name.label'|trans, entity.name, entity, 'name') }}
+                    {{ ui.renderProperty('oro.sales.opportunity.status.label'|trans, entity.status, entity, 'status') }}
 
-            {% if entity['dataChannel'] is defined %}
-                {% if resource_granted('VIEW', entity, 'channel') %}
-                    {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
-                {% endif %}
-            {% endif %}
+                    {% if entity['dataChannel'] is defined %}
+                        {% if resource_granted('VIEW', entity, 'channel') %}
+                            {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
+                        {% endif %}
+                    {% endif %}
 
-            {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
-                {% set contactView = ui.renderUrl(path('oro_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
-            {%- else -%}
-                {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
-            {%- endif -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.contact.label'|trans, contactView, entity, 'contact') }}
+                    {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
+                    {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}
+                    {{ currency.convert_to_base_currency(entity.budgetAmount, 'oro.sales.opportunity.budget_base_currency.label'|trans, entity, 'budgetAmount') }}
 
-            {%- if resource_granted('oro_sales_lead_view') and entity.lead -%}
-                {% set leadView = '<a href="' ~ path('oro_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
-            {%- else -%}
-                {% set leadView = entity.lead ? entity.lead|escape : '' %}
-            {%- endif -%}
-            {{ ui.renderHtmlProperty('oro.sales.opportunity.lead.label'|trans, leadView, entity, 'lead') }}
+                    {{ entityConfig.renderDynamicFields(entity) }}
+                    {{ ui.renderProperty('oro.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '', entity, 'closeDate') }}
+                    {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue.value|length ? entity.closeRevenue.value|oro_format_currency({'currency': entity.closeRevenue.currency}) : '', entity, 'closeRevenue') }}
+                    {{ currency.convert_to_base_currency(entity.closeRevenue, 'oro.sales.opportunity.budget_base_currency.label'|trans, entity, 'closeRevenue') }}
+                    {{ ui.renderProperty('oro.sales.opportunity.close_reason.label'|trans, entity.closeReason, entity, 'closeReason') }}
+                    {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, Tag.renderView(entity)) }}
+                </div>
 
-            {{ sales.render_customer_info(entity) }}
-            {{ ui.renderProperty('oro.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '', entity, 'probability') }}
-            {{ ui.renderProperty('oro.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount.value|length ? entity.budgetAmount.value|oro_format_currency({'currency': entity.budgetAmount.currency}) : '', entity, 'budgetAmount') }}
-            {{ currency.convert_to_base_currency(entity.budgetAmount, '', entity, 'budgetAmount') }}
+                <div class="responsive-block">
+                    {{ sales.render_customer_info(entity) }}
+                    {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
+                        {% set contactView = ui.renderUrl(path('oro_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
+                    {%- else -%}
+                        {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
+                    {%- endif -%}
+                    {{ ui.renderHtmlProperty('oro.sales.opportunity.contact.label'|trans, contactView, entity, 'contact') }}
 
-            {{ entityConfig.renderDynamicFields(entity) }}
-            {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, Tag.renderView(entity)) }}
+                    {%- if resource_granted('oro_sales_lead_view') and entity.lead -%}
+                        {% set leadView = '<a href="' ~ path('oro_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
+                    {%- else -%}
+                        {% set leadView = entity.lead ? entity.lead|escape : '' %}
+                    {%- endif -%}
+                    {{ ui.renderHtmlProperty('oro.sales.opportunity.lead.label'|trans, leadView, entity, 'lead') }}
+                </div>
+            </div>
         </div>
         <div class="responsive-block">
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
-            {{ ui.renderProperty('oro.sales.opportunity.close_reason.label'|trans, entity.closeReason, entity, 'closeReason') }}
-            {{ ui.renderProperty('oro.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue.value|length ? entity.closeRevenue.value|oro_format_currency({'currency': entity.closeRevenue.currency}) : '', entity, 'closeRevenue') }}
-            {{ currency.convert_to_base_currency(entity.closeRevenue, '', entity, 'closeRevenue') }}
-            {{ ui.renderProperty('oro.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '', entity, 'closeDate') }}
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
         </div>
     </div>
