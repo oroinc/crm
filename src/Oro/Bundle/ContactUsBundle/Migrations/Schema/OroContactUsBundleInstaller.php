@@ -33,7 +33,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
      */
     public function getMigrationVersion()
     {
-        return 'v1_15';
+        return 'v1_16';
     }
 
     /**
@@ -66,6 +66,7 @@ class OroContactUsBundleInstaller implements Installation, ActivityExtensionAwar
         $table = $schema->createTable('orocrm_contactus_contact_rsn');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('label', 'string', ['length' => 255]);
+        $table->addColumn('deletedAt', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
     }
 
