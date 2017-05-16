@@ -105,7 +105,7 @@ class SoapController extends Controller
             $websites,
             [
                 'id' => StoresSoapIterator::ALL_WEBSITES,
-                'label' => $translator->trans('oro.magento.magentosoaptransport.all_sites')
+                'label' => $translator->trans('oro.magento.magentotransport.all_sites')
             ]
         );
 

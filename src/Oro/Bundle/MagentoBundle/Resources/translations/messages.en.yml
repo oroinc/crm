@@ -523,18 +523,14 @@ oro:
             channel.label:          Channel
             owner.label:            Owner
 
-        magentosoaptransport:
+        magentotransport:
             entity_label:                 Magento Integration Channel Transport
             entity_plural_label:          Magento Integration Channel Transports
             entity_description:           Represent integration channel transport
             admin_url.label:              Admin url
             all_sites:                    All web sites
-            api_user.label:               SOAP API User
-            api_key.label:                SOAP API Key
-            new_api_key.label:            New SOAP API Key
             id.label:                     Id
             is_extension_installed.label: Is extension installed
-            is_wsi_mode.label:            WS-I Compliance
             guest_customer_sync.label:    Guest Customer Sync
             guest_customer_sync.tooltip:  Selecting this option will cause guest orders to be combined under a single customer based on email. If a registered customer exists with this email all guest orders with his email will be attributed to his account.
             sync_start_date.label:        Sync start date
@@ -543,12 +539,22 @@ oro:
             website_id.label:             Website
             website_id.tooltip:           This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             websites.label:               Websites
-            wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
             initial_sync_start_date.label: Initial sync start date
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
                 outdated_brige: OroBridge v.%extension_version% is used—outdated version
+            soap:
+                api_user.label:               SOAP API User
+                api_key.label:                SOAP API Key
+                new_api_key.label:            New SOAP API Key
+                is_wsi_mode.label:            WS-I Compliance
+                wsdl_url.label:               SOAP WSDL URL
+            rest:
+                api_user.label:               REST API User
+                api_key.label:                REST API Key
+                new_api_key.label:            New REST API Key
+                api_url.label:                REST API URL
 
         order:
             entity_label:           Magento Order

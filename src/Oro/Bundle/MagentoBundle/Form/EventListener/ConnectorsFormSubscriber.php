@@ -12,7 +12,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
-class SoapConnectorsFormSubscriber implements EventSubscriberInterface
+class ConnectorsFormSubscriber implements EventSubscriberInterface
 {
     /** @var TypesRegistry */
     protected $typeRegistry;

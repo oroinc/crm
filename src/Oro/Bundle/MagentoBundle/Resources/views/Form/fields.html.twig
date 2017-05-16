@@ -16,7 +16,7 @@
     {{ soapCheckerOptions|json_encode|raw }}
 {% endmacro %}
 
-{% block oro_magento_soap_transport_check_button_widget %}
+{% block oro_magento_transport_check_button_widget %}
     {% set entity = form.parent.vars.value %}
     <div class="control-group">
         <div class="controls">
@@ -31,11 +31,11 @@
             {% if entity is defined and entity.id is not empty %}
                 {% if entity.isExtensionInstalled %}
                     {% if not entity.supportedExtensionVersion %}
-                        {% set message = 'oro.magento.magentosoaptransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
+                        {% set message = 'oro.magento.magentotransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
                         {% set messageType = 'warning' %}
                     {% endif %}
                 {% else %}
-                    {% set message = 'oro.magento.magentosoaptransport.message.native_soap'|trans %}
+                    {% set message = 'oro.magento.magentotransport.message.native_soap'|trans %}
                     {% set messageType = 'info' %}
                 {% endif %}
 
@@ -47,7 +47,7 @@
     </div>
 {% endblock %}
 
-{% block oro_magento_soap_transport_check_button_row %}
+{% block oro_magento_transport_check_button_row %}
     {{ block('button_row') }}
 {% endblock %}
 

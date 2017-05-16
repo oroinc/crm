@@ -5,9 +5,9 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class SoapTransportCheckButtonType extends ButtonType
+class TransportCheckButtonType extends ButtonType
 {
-    const NAME = 'oro_magento_soap_transport_check_button';
+    const NAME = 'oro_magento_transport_check_button';
 
     /**
      * {@inheritdoc}

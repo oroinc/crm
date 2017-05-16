@@ -412,18 +412,7 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
      * @param array $websiteIds
      * @param array $storeIds
      */
-    protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
-    {
-        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
-            if (!empty($websiteIds)) {
-                $this->filter->addWebsiteFilter($websiteIds);
-            }
-
-            if (!empty($storeIds)) {
-                $this->filter->addStoreFilter($storeIds);
-            }
-        }
-    }
+    abstract protected function applyWebsiteFilters(array $websiteIds, array $storeIds);
 
     /**
      * @TODO refactor class to remove empty methods. According to CRM-8211

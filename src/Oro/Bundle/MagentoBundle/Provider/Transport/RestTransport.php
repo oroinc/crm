@@ -383,7 +383,7 @@ class RestTransport implements
      */
     public function getSettingsFormType()
     {
-        // TODO: Implement getSettingsFormType() method.
+        return 'oro_magento_rest_transport_setting_form_type';
     }
 
     /**

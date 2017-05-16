@@ -20,8 +20,6 @@ parameters:
 
     oro_magento.entity.newsletter_subscriber.class:                      Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
 
-    oro_magento.entity.soap_transport.class:                             Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport
-
     # transport
     oro_magento.transport.soap_transport.class:                          Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
@@ -37,7 +35,7 @@ parameters:
     # forms
     oro_magento.form.type.order_place.class:                             Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     oro_magento.form.type.soap_transport_setting.class:                  Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
-    oro_magento.form.type.soap_transport_check.class:                    Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType
+    oro_magento.form.type.transport_check.class:                         Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType
     oro_magento.form.subscriber.soap_transport_setting.class:            Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     oro_magento.form.type.order_select.class:                            Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType
     oro_magento.form.type.customer_select.class:                         Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType
@@ -260,10 +258,18 @@ services:
         tags:
             - { name: form.type, alias: oro_magento_soap_transport_setting_form_type }
 
-    oro_magento.form.type.soap_transport_check:
-        class: %oro_magento.form.type.soap_transport_check.class%
+    oro_magento.form.type.rest_transport_setting:
+        class: Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType
+        arguments:
+            - "@oro_magento.transport.rest_transport"
+            - "@oro_integration.manager.types_registry"
         tags:
-            - { name: form.type, alias: oro_magento_soap_transport_check_button }
+            - { name: form.type, alias: oro_magento_rest_transport_setting_form_type }
+
+    oro_magento.form.type.transport_check:
+        class: %oro_magento.form.type.transport_check.class%
+        tags:
+            - { name: form.type, alias: oro_magento_transport_check_button }
 
     oro_magento.form.type.order_select:
         class: %oro_magento.form.type.order_select.class%

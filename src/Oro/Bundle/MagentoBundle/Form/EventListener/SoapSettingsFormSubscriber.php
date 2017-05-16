@@ -56,7 +56,7 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             FormUtils::replaceField(
                 $form,
                 'apiKey',
-                ['label' => 'oro.magento.magentosoaptransport.new_api_key.label', 'required' => false],
+                ['label' => 'oro.magento.magentotransport.soap.new_api_key.label', 'required' => false],
                 ['constraints']
             );
         }
