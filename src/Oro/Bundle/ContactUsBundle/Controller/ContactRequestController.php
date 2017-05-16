@@ -34,10 +34,6 @@ class ContactRequestController extends Controller
      */
     public function viewAction(ContactRequest $contactRequest)
     {
-        if (!$this->isContactReasonExists($contactRequest)) {
-            $contactRequest->setContactReason();
-        }
-
         return [
             'entity' => $contactRequest
         ];
@@ -79,10 +75,6 @@ class ContactRequestController extends Controller
      */
     public function updateAction(ContactRequest $contactRequest)
     {
-        if (!$this->isContactReasonExists($contactRequest)) {
-            $contactRequest->setContactReason();
-        }
-
         return $this->update($contactRequest);
     }
 
@@ -143,23 +135,5 @@ class ContactRequestController extends Controller
             'entity' => $contactRequest,
             'form'   => $handler->getForm()->createView()
         ];
-    }
-
-    /**
-     * @param ContactRequest $contactRequest
-     *
-     * @return bool
-     */
-    protected function isContactReasonExists(ContactRequest $contactRequest)
-    {
-        if (!$contactRequest->getContactReason()) {
-            return null;
-        }
-
-        /** @var EntityManager $em */
-        $em = $this->get('doctrine.orm.entity_manager');
-
-        return $em->getRepository('OroContactUsBundle:ContactReason')
-            ->isContactReasonExists($contactRequest->getContactReason());
     }
 }

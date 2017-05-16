@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -51,8 +52,9 @@ class ContactReasonController extends Controller
     }
 
     /**
-     * @param ContactReason $contactReason
+     * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
      *
+     * @param ContactReason $contactReason
      * @return array
      *
      * @Route("/update/{id}", name="oro_contactus_reason_update", requirements={"id"="\d+"})
@@ -84,6 +86,11 @@ class ContactReasonController extends Controller
     }
 
     /**
+     * @ParamConverter("contactReason", options={"repository_method" = "getContactReason"})
+     *
+     * @param ContactReason $contactReason
+     * @return JsonResponse
+     *
      * @Route("/delete/{id}", name="oro_contactus_reason_delete", requirements={"id"="\d+"})
      * @Acl(
      *      id="oro_contactus_reason_delete",

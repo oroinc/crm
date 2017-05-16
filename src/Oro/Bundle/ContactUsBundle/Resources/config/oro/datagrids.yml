@@ -12,8 +12,12 @@ datagrids:
                     - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
+                    - rsn.label as cntReason
                 from:
                     - { table: %oro_contact_us.contactrequest.entity.class%, alias: cr }
+                join:
+                    left:
+                        - { join: cr.contactReason, alias: rsn }
         columns:
             firstName:
                 label:         oro.contactus.contactrequest.first_name.label
@@ -27,6 +31,8 @@ datagrids:
             createdAt:
                 frontend_type: datetime
                 label:         oro.ui.created_at
+            cntReason:
+                label:         oro.contactus.contactreason.entity_label
         sorters:
             columns:
                 firstName:
@@ -58,6 +64,9 @@ datagrids:
                 createdAt:
                     type:      datetime
                     data_name: cr.createdAt
+                cntReason:
+                    type:      string
+                    data_name: rsn.label
         properties:
             id: ~
             view_link:
@@ -106,10 +115,22 @@ datagrids:
                     - contactReason.id
                     - contactReason.label
                 from:
-                    - { table: '%oro_contact_us.contactreason.entity.class%', alias: contactReason }
+                    - { table: OroContactUsBundle:ContactReason, alias: contactReason }
+                where:
+                    and:
+                        - contactReason.deletedAt IS NULL
         columns:
             label:
                 label: oro.contactus.contactreason.label.label
+        sorters:
+            columns:
+                label:
+                    data_name: contactReason.label
+        filters:
+            columns:
+                label:
+                    type:      string
+                    data_name: contactReason.label
         properties:
             id: ~
             update_link:

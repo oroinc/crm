@@ -3,25 +3,38 @@
 namespace Oro\Bundle\ContactUsBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
 class ContactReasonRepository extends EntityRepository
 {
     /**
-     * @param ContactReason $contactReason
+     * @param int $id
      *
-     * @return bool
+     * @return ContactReason | null
      */
-    public function isContactReasonExists(ContactReason $contactReason)
+    public function getContactReason($id)
     {
-        $result = $this->createQueryBuilder('cr')
+        return $this->createQueryBuilder('cr')
             ->where('cr.id = :id')
             ->andWhere('cr.deletedAt IS NULL')
-            ->setParameter('id', $contactReason)
+            ->setParameter('id', (int)$id)
             ->getQuery()
             ->getOneOrNullResult();
+    }
 
-        return $result != null ? true : false;
+    /**
+     * Gets existed contact reasons
+     *
+     * @return QueryBuilder
+     */
+    public function getExistedContactReasonsQB()
+    {
+        $qb = $this->createQueryBuilder('cr')
+            ->where('cr.deletedAt IS NULL')
+            ->orderBy('cr.id', 'ASC');
+
+        return $qb;
     }
 }
