@@ -43,6 +43,7 @@ oro:
             entity_description: Represents contact reason
             id.label:    ID
             label.label: Label
+            deleted_at.label: Deleted At
             saved: Contact reason has been saved successfully
 
         block:
