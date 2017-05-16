@@ -139,7 +139,16 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
-            $this->beforeProcess();
+            $enabledListeners = [
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+            ];
+
+            $disabledListeners = [
+                'oro_magento.event_listener.delayed_search_reindex'
+            ];
+
+            $this->changeListenersStatus($enabledListeners, $disabledListeners);
 
             $this->setTemporaryIntegrationToken($integration);
 
@@ -153,7 +162,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
                 $this->scheduleAnalyticRecalculation($integration);
             }
 
-            $this->afterProcess();
+            $this->changeListenersStatus($disabledListeners, $enabledListeners);
 
             return $result;
         });
@@ -169,22 +178,25 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         return [Topics::SYNC_INITIAL_INTEGRATION];
     }
 
-    private function beforeProcess()
+    /**
+     * @param array $disableListeners
+     * @param array $enableListeners
+     */
+    private function changeListenersStatus(array $disableListeners, array $enableListeners = [])
     {
-        $this->optionalListenerManager->disableListeners([
-            'oro_search.index_listener',
-            'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-        ]);
-        $this->optionalListenerManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
-    }
+        $knownListeners = $this->optionalListenerManager->getListeners();
 
-    private function afterProcess()
-    {
-        $this->optionalListenerManager->disableListener('oro_magento.event_listener.delayed_search_reindex');
-        $this->optionalListenerManager->enableListeners([
-            'oro_search.index_listener',
-            'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-        ]);
+        foreach ($disableListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $this->optionalListenerManager->disableListener($listenerId);
+            }
+        }
+
+        foreach ($enableListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $this->optionalListenerManager->enableListener($listenerId);
+            }
+        }
     }
 
     /**

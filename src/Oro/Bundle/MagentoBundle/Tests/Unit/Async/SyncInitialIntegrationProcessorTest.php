@@ -179,13 +179,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('disableListener');
         $this->optionalListenerManager
             ->expects($this->never())
-            ->method('disableListeners');
-        $this->optionalListenerManager
-            ->expects($this->never())
             ->method('enableListener');
-        $this->optionalListenerManager
-            ->expects($this->never())
-            ->method('enableListeners');
 
         $status = $this->processor->process($message, new NullSession());
 
@@ -215,13 +209,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('disableListener');
         $this->optionalListenerManager
             ->expects($this->never())
-            ->method('disableListeners');
-        $this->optionalListenerManager
-            ->expects($this->never())
             ->method('enableListener');
-        $this->optionalListenerManager
-            ->expects($this->never())
-            ->method('enableListeners');
 
         $status = $this->processor->process($message, new NullSession());
 
@@ -264,27 +252,29 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $message->setMessageId('theMessageId');
 
         $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(2))
+            ->method('getListeners')
+            ->willReturn([
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+                'oro_magento.event_listener.delayed_search_reindex'
+            ]);
+        $this->optionalListenerManager
+            ->expects($this->exactly(3))
             ->method('disableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
+            ->withConsecutive(
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener'],
+                ['oro_magento.event_listener.delayed_search_reindex']
+            );
         $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('disableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
-        $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('enableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
-        $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('enableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
+            ->withConsecutive(
+                ['oro_magento.event_listener.delayed_search_reindex'],
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
+            );
 
         $result = $this->processor->process($message, new NullSession());
 
@@ -321,27 +311,29 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $message->setMessageId('theMessageId');
 
         $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(2))
+            ->method('getListeners')
+            ->willReturn([
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+                'oro_magento.event_listener.delayed_search_reindex'
+            ]);
+        $this->optionalListenerManager
+            ->expects($this->exactly(3))
             ->method('disableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
+            ->withConsecutive(
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener'],
+                ['oro_magento.event_listener.delayed_search_reindex']
+            );
         $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('disableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
-        $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('enableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
-        $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('enableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
+            ->withConsecutive(
+                ['oro_magento.event_listener.delayed_search_reindex'],
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
+            );
 
         $result = $this->processor->process($message, new NullSession());
 
@@ -364,27 +356,29 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $message->setMessageId('theMessageId');
 
         $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(2))
+            ->method('getListeners')
+            ->willReturn([
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+                'oro_magento.event_listener.delayed_search_reindex'
+            ]);
+        $this->optionalListenerManager
+            ->expects($this->exactly(3))
             ->method('disableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
+            ->withConsecutive(
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener'],
+                ['oro_magento.event_listener.delayed_search_reindex']
+            );
         $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('disableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
-        $this->optionalListenerManager
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('enableListener')
-            ->with('oro_magento.event_listener.delayed_search_reindex');
-        $this->optionalListenerManager
-            ->expects($this->once())
-            ->method('enableListeners')
-            ->with([
-                'oro_search.index_listener',
-                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-            ]);
+            ->withConsecutive(
+                ['oro_magento.event_listener.delayed_search_reindex'],
+                ['oro_search.index_listener'],
+                ['oro_entity.event_listener.entity_modify_created_updated_properties_listener']
+            );
 
         $this->processor->process($message, new NullSession());
 
