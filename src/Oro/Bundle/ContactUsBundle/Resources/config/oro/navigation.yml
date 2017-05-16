@@ -21,6 +21,8 @@ navigation:
                     activities_tab:
                         children:
                             oro_contactus_requests: ~
+                    system_tab:
+                        children:
                             oro_contactus_reasons: ~
 
     titles:
