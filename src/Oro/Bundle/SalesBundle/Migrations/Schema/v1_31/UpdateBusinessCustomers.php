@@ -32,7 +32,7 @@ class UpdateBusinessCustomers implements
     {
         $customerColumnName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class) . '_id';
 
-        $queries->addQuery(new MigrateB2bCustomersQuery($customerColumnName));
+        $queries->addQuery(new MigrateB2bCustomersQuery($customerColumnName, $schema));
         $queries->addQuery(new UpdateLeadsQuery($customerColumnName));
         $queries->addQuery(new UpdateOpportunitiesQuery($customerColumnName));
     }
