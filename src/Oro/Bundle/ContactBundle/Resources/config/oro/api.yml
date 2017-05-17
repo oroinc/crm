@@ -63,6 +63,6 @@ api:
         Oro\Bundle\ContactBundle\Entity\Group:
             documentation_resource: '@OroContactBundle/Resources/doc/api/group.md'
         Oro\Bundle\ContactBundle\Entity\Method:
-            documentation_resource: '@OroContactBundle/Resources/doc/api/method.md'
+            documentation_resource: '@OroContactBundle/Resources/doc/api/contact.md'
         Oro\Bundle\ContactBundle\Entity\Source:
-            documentation_resource: '@OroContactBundle/Resources/doc/api/source.md'
+            documentation_resource: '@OroContactBundle/Resources/doc/api/contact.md'

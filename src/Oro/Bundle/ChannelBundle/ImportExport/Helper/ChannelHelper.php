@@ -56,10 +56,6 @@ class ChannelHelper
      */
     protected function ensureInitialized()
     {
-        if (null !== $this->integrationToChannelMap) {
-            return;
-        }
-
         /** @var EntityManager $em */
         $em = $this->registry->getManager();
         $qb = $em->createQueryBuilder()

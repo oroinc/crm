@@ -672,3 +672,49 @@ Example:
 }
 ```
 {@/request}
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento shopping cart is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento shopping cart is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento shopping cart is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentocarts/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
+
+# Oro\Bundle\MagentoBundle\Entity\CartStatus
+
+## ACTIONS
+
+### get
+
+Retrieve a collection of Magento shopping cart statuses.
+
+{@inheritdoc}
+
+### get_list
+
+Retrieve a record of a specific Magento shopping cart status.
+
+{@inheritdoc}

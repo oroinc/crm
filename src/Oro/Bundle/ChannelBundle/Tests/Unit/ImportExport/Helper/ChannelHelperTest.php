@@ -66,7 +66,7 @@ class ChannelHelperTest extends OrmTestCase
 
         $existingIntegrationId = self::TEST_INTEGRATION_ID_WITH_CHANNEL;
         $existingChannelId     = self::TEST_CHANNEL_ID;
-        $this->getDriverConnectionMock($this->em)->expects($this->once())
+        $this->getDriverConnectionMock($this->em)->expects($this->atLeastOnce())
             ->method('query')
             ->will(
                 $this->returnCallback(

@@ -155,5 +155,7 @@
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,
     } %}
-    {{ parent() }}
+    <div class="responsive-form-inner">
+        {{ parent() }}
+    </div>
 {% endblock content_data %}

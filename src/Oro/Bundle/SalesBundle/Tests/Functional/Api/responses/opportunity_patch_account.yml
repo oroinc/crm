@@ -1,0 +1,12 @@
+data:
+    type: opportunities
+    id: '<toString(@opportunity1->id)>'
+    attributes:
+        name: 'Opportunity 1'
+    relationships:
+        account:
+            data:
+                type: 'accounts'
+                id: '<toString(@account2->id)>'
+        customer:
+            data: null

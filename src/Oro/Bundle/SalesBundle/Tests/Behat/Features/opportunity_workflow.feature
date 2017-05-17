@@ -1,3 +1,5 @@
+@ticket-CRM-7540
+@automatically-ticket-tagged
 Feature: Opportunity workflow
   In order to have roadmap for opportunity flow
   As sales rep

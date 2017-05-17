@@ -88,6 +88,8 @@ features:
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
             - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
             - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
+        commands:
+            - oro:b2b:lifetime:recalculate
 
     salesfunnel:
         label: oro.sales.salesfunnel.feature.label

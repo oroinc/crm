@@ -6,9 +6,6 @@ use Symfony\Component\Validator\Constraint;
 
 class HasContactInformation extends Constraint
 {
-    /** @var string */
-    public $message = 'At least one of the fields %fields% must be defined.';
-
     /**
      * {@inheritdoc}
      */

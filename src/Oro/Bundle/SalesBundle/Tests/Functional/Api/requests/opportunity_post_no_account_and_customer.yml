@@ -1,0 +1,9 @@
+data:
+    type: opportunities
+    attributes:
+        name: 'New Opportunity'
+    relationships:
+        status:
+            data:
+                type: opportunitystatuses
+                id: lost

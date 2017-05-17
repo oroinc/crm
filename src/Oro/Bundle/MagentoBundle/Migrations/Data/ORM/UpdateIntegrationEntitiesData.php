@@ -99,7 +99,7 @@ QUERY;
 
         if ($platformName === DatabasePlatformInterface::DATABASE_MYSQL) {
             $query = $mySqlQuery;
-        } elseif ($platformName === DatabasePlatformInterface::DATABASE_PLATFORM_POSTGRESQL) {
+        } elseif ($platformName === DatabasePlatformInterface::DATABASE_POSTGRESQL) {
             $query = $postgreSqlQuery;
         } else {
             return;

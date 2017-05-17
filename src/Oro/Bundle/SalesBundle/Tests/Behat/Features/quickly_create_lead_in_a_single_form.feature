@@ -1,3 +1,5 @@
+@ticket-CRM-5308
+@automatically-ticket-tagged
 @fixture-lead.yml
 Feature: Quickly create Lead in a single form
   In order to decrease time for Lead creation
@@ -60,21 +62,21 @@ Feature: Quickly create Lead in a single form
   Scenario: Inline edit Lead
     Given I go to Sales/ Leads
     When I edit first record from grid:
-      | name      | editedName       |
-      | status    | Qualified        |
-      | First Name| editedFirstName  |
-      | Last Name | editedLastName   |
-      | email     | edit@example.com |
-      | phone     | +111111111111    |
-      | owner     | Marge Simpson    |
+      | Lead Name    | editedName       |
+      | Status       | Qualified        |
+      | First Name   | editedFirstName  |
+      | Last Name    | editedLastName   |
+      | Email        | edit@example.com |
+      | Phone Number | +111111111111    |
+      | Owner        | Marge Simpson    |
     Then I should see editedName in grid with following data:
-      | First Name | editedFirstName    |
-      | Last Name  | editedLastName     |
-      | Phone      | +111111111111      |
-      | Email      | edit@example.com   |
-      | status     | Qualified          |
-      | owner      | Marge Marge Simpson|
-      | status     | Qualified          |
+      | First Name   | editedFirstName    |
+      | Last Name    | editedLastName     |
+      | Phone Number | +111111111111      |
+      | Email        | edit@example.com   |
+      | Status       | Qualified          |
+      | Owner        | Marge Marge Simpson|
+      | Status       | Qualified          |
 
   Scenario: Delete lead
     Given I click on editedName in grid

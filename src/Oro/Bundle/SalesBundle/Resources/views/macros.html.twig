@@ -40,17 +40,16 @@
         : null %}
 
     {%- set accountView = _self.entity_view(account) -%}
-    {%- set customerView = _self.entity_view(customer) -%}
 
-    {%- set compoundView -%}
-        {%- if accountView and customerView -%}
-            {{ accountView }} ({{ customerView }})
-        {%- else -%}
-            {{ accountView|default(customerView) }}
-        {%- endif -%}
-    {%- endset -%}
+    {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, accountView, entity, 'customer') }}
 
-    {{ ui.renderHtmlProperty('oro.sales.opportunity.customer.label'|trans, compoundView, entity, 'customer') }}
+    {% if customer is not empty %}
+        {%- set customerView = _self.entity_view(customer) -%}
+        <div class="base-currency-wrapper">
+            {{ ui.renderHtmlProperty(oro_entity_config_value(oro_class_name(customer), 'label')|trans, customerView, entity, 'customer') }}
+        </div>
+    {% endif %}
+
 {% endmacro %}
 
 {%- macro entity_view(entity) -%}

@@ -30,6 +30,7 @@ oro_behat_extension:
         - OroUserBundle::FeatureContext
         - OroSalesBundle::SalesContext
         - OroDataGridBundle::GridContext
+        - OroFormBundle::FormContext
         - OroMagentoBundle::FeatureContext
       paths:
         - '@OroMagentoBundle/Tests/Behat/Features'
