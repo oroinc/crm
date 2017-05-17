@@ -121,8 +121,14 @@ services:
     oro_magento.importexport.data_converter.website:
         class: %oro_magento.importexport.data_converter.website.class%
 
+    oro_magento.importexport.data_converter.rest.website:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter
+
     oro_magento.importexport.data_converter.store:
         class: %oro_magento.importexport.data_converter.store.class%
+
+    oro_magento.importexport.data_converter.rest.store:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\StoreDataConverter
 
     oro_magento.importexport.data_converter.customer_group:
         class: %oro_magento.importexport.data_converter.customer_group.class%
@@ -164,6 +170,15 @@ services:
             - { name: oro_integration.connector, type: website_dictionary, channel_type: magento }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
+    oro_magento.mage.rest.website:
+        class: Oro\Bundle\MagentoBundle\Provider\Connector\Rest\WebsiteConnector
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.website.class%]]
+        tags:
+            - { name: oro_integration.connector, type: website_dictionary, channel_type: magento2 }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
     oro_magento.mage.store:
         class: %oro_magento.mage.store.class%
         parent: oro_magento.connector.abstract
@@ -171,6 +186,15 @@ services:
             - [setClassName, [%oro_magento.entity.store.class%]]
         tags:
             - { name: oro_integration.connector, type: store_dictionary, channel_type: magento }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
+
+    oro_magento.mage.rest.store:
+        class: Oro\Bundle\MagentoBundle\Provider\Connector\Rest\StoreConnector
+        parent: oro_magento.connector.abstract
+        calls:
+            - [setClassName, [%oro_magento.entity.store.class%]]
+        tags:
+            - { name: oro_integration.connector, type: store_dictionary, channel_type: magento2 }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.customer_group:
@@ -515,6 +539,13 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.store.class%, alias: oro_magento.store }
 
+    oro_magento.importexport.processor.rest.store:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.rest.store"]]
+            - [setStrategy, ["@oro_magento.import.strategy.store"]]
+            - [setEntityName, [%oro_magento.entity.store.class%]]
+
     oro_magento.importexport.processor.website:
         parent: oro_integration.importexport.processor.import
         calls:
@@ -523,6 +554,13 @@ services:
             - [setEntityName, [%oro_magento.entity.website.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %oro_magento.entity.website.class%, alias: oro_magento.website }
+
+    oro_magento.importexport.processor.rest.website:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.rest.website"]]
+            - [setStrategy, ["@oro_magento.import.strategy.website"]]
+            - [setEntityName, [%oro_magento.entity.website.class%]]
 
     oro_magento.importexport.processor.customer_group:
         parent: oro_integration.importexport.processor.import

@@ -13,8 +13,10 @@ use Psr\Log\LoggerAwareInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
+use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class RestTokenProvider implements LoggerAwareInterface
 {
@@ -42,12 +44,12 @@ class RestTokenProvider implements LoggerAwareInterface
     }
 
     /**
-     * @param Transport           $transportEntity
+     * @param MagentoTransport    $transportEntity
      * @param RestClientInterface $client
      *
      * @return string
      */
-    public function getToken(Transport $transportEntity, RestClientInterface $client)
+    public function getToken(MagentoTransport $transportEntity, RestClientInterface $client)
     {
         $this->logger->info('Do request to get new `token`');
 
@@ -95,7 +97,7 @@ class RestTokenProvider implements LoggerAwareInterface
 
         if (Codes::HTTP_OK === $statusCode) {
             throw new RuntimeException(
-                $e->getMessage(),
+                ValidationUtils::sanitizeSecureInfo($e->getMessage()),
                 $e->getCode(),
                 $e
             );
@@ -128,10 +130,10 @@ class RestTokenProvider implements LoggerAwareInterface
     }
 
     /**
-     * @param Transport $transportEntity
+     * @param MagentoTransport $transportEntity
      * @param string    $token
      */
-    protected function updateToken(Transport $transportEntity, $token)
+    protected function updateToken(MagentoTransport $transportEntity, $token)
     {
         $em = $this->doctrine->getEntityManagerForClass(Transport::class);
         $transportEntity->setApiToken($token);

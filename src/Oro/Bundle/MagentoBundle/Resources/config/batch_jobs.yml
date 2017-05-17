@@ -318,6 +318,20 @@ connector:
                     parameters:
                         batch_size: 25
 
+        mage_store_rest_import:
+            title: "Store import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_magento.mage.rest.store
+                        processor: oro_magento.importexport.processor.rest.store
+                        writer:    oro_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
         mage_website_import:
             title: "Website import from Magento"
             type:  import
@@ -328,6 +342,20 @@ connector:
                     services:
                         reader:    oro_magento.mage.website
                         processor: oro_magento.importexport.processor.website
+                        writer:    oro_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_website_rest_import:
+            title: "Website import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    oro_magento.mage.rest.website
+                        processor: oro_magento.importexport.processor.rest.website
                         writer:    oro_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

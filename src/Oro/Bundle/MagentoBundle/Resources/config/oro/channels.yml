@@ -63,3 +63,13 @@ channels:
             integration_type: magento
             customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
             lifetime_value: lifetime
+
+        magento2:
+            label: oro.magento.channel_type.label
+            entities:
+                - Oro\Bundle\MagentoBundle\Entity\Cart
+                - Oro\Bundle\MagentoBundle\Entity\Order
+                - Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+            integration_type: magento2
+            customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
+            lifetime_value: lifetime

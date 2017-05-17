@@ -36,6 +36,7 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements
     MagentoTransportInterface,
+    SoapTransportInterface,
     ServerTimeAwareInterface,
     PingableInterface
 {

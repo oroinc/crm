@@ -1,0 +1,9 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"store/websites":
+    code: 403
+    headers: ~
+    body:

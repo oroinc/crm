@@ -181,6 +181,8 @@ services:
             - '@oro_magento.transport.rest_client_factory'
             - '@oro_magento.provider.rest_token_provider'
             - '@oro_magento.provider.rest_ping_provider'
+        tags:
+            - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 

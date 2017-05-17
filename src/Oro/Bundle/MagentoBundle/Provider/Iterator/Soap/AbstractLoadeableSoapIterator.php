@@ -3,88 +3,20 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator;
 
-abstract class AbstractLoadeableSoapIterator implements \Iterator, \Countable
+abstract class AbstractLoadeableSoapIterator extends AbstractLoadeableIterator
 {
-    /** @var SoapTransport */
+    /** @var SoapTransportInterface */
     protected $transport;
 
-    /** @var array loaded data */
-    protected $data;
-
-    /** @var bool */
-    protected $loaded = false;
-
     /**
-     * @param SoapTransport $transport
+     * @param SoapTransportInterface $transport
      */
-    public function __construct(SoapTransport $transport)
+    public function __construct(SoapTransportInterface $transport)
     {
         $this->transport = $transport;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function rewind()
-    {
-        $this->load();
-
-        reset($this->data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        return current($this->data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function next()
-    {
-        next($this->data);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function key()
-    {
-        return key($this->data);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function valid()
-    {
-        return key($this->data) !== null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function count()
-    {
-        $this->load();
-
-        return count($this->data);
-    }
-
-    /**
-     * Check whenever remote data is loaded, and call real load if not
-     */
-    protected function load()
-    {
-        if (false === $this->loaded) {
-            $this->data   = $this->getData();
-            $this->loaded = true;
-        }
     }
 
     /**
@@ -99,11 +31,4 @@ abstract class AbstractLoadeableSoapIterator implements \Iterator, \Countable
     {
         return WSIUtils::processCollectionResponse($response);
     }
-
-    /**
-     * Do load from remote instance
-     *
-     * @return array
-     */
-    abstract protected function getData();
 }

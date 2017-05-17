@@ -18,10 +18,15 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
+use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class RestTransport implements
     TransportInterface,
+    RestTransportInterface,
     MagentoTransportInterface,
     ServerTimeAwareInterface,
     PingableInterface,
@@ -88,8 +93,8 @@ class RestTransport implements
         $this->transportEntity = $transportEntity;
         $this->client = $this->clientFactory->createRestClient($transportEntity);
         $settings = $transportEntity->getSettingsBag();
-        $token = $settings->get(static::TOKEN_KEY, false);
-        if (false === $token) {
+        $token = $settings->get(static::TOKEN_KEY);
+        if (null === $token) {
             $token = $this->refreshToken();
         }
         $this->updateTokenHeaderParam($token);
@@ -215,7 +220,21 @@ class RestTransport implements
      */
     public function getStores()
     {
-        // TODO: Implement getStores() method.
+        return new StoresRestIterator($this);
+    }
+
+    /**
+     * @return array
+     *
+     * @throws RuntimeException
+     */
+    public function doGetStoresRequest()
+    {
+        try {
+            return $this->client->get('store/storeViews', [], $this->headers)->json();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'doGetStoresRequest');
+        }
     }
 
     /**
@@ -223,7 +242,19 @@ class RestTransport implements
      */
     public function getWebsites()
     {
-        // TODO: Implement getWebsites() method.
+        return new WebsiteRestIterator($this);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function doGetWebsitesRequest()
+    {
+        try {
+            return $this->client->get('store/websites', [], $this->headers)->json();
+        } catch (RestException $e) {
+            return $this->handleException($e, 'getWebsites');
+        }
     }
 
     /**
@@ -391,7 +422,7 @@ class RestTransport implements
      */
     public function getSettingsEntityFQCN()
     {
-        // TODO: Implement getSettingsEntityFQCN() method.
+        return MagentoTransport::class;
     }
 
     /**
@@ -423,11 +454,21 @@ class RestTransport implements
             return call_user_func_array([$this, $methodName], $arguments);
         }
 
+        if ($exception->getFaultCode() === Codes::HTTP_OK) {
+            throw new RuntimeException(
+                ValidationUtils::sanitizeSecureInfo($exception->getMessage()),
+                $exception->getCode(),
+                $exception
+            );
+        }
+
         throw new RuntimeException(
             sprintf(
                 'Server returned unexpected response. Response code %s',
                 $exception->getCode()
-            )
+            ),
+            $exception->getCode(),
+            $exception
         );
     }
 }

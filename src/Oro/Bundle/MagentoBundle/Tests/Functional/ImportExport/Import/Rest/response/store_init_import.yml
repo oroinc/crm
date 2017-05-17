@@ -1,0 +1,9 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"store/storeViews":
+    code: 200
+    headers: ~
+    body: [{"id":1,"code":"default","name":"Default Store","website_id":1,"store_group_id":1},{"id":0,"code":"admin","name":"Admin","website_id":0,"store_group_id":0}]

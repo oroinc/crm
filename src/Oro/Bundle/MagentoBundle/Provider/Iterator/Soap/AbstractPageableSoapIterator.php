@@ -6,9 +6,6 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator;
 
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
-/**
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- */
 abstract class AbstractPageableSoapIterator extends AbstractPageableIterator
 {
     /**
