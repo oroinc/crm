@@ -527,13 +527,26 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
+    # This listener implement OptionalListenerInterface and should be enabled manualy
+    # Logic extend search IndexListener so when you enable this listener you should disable `oro_search.index_listener`
+    # to prevent message queue duplicated jobs
     oro_magento.event_listener.delayed_search_reindex:
         class: 'Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener'
         parent: oro_search.index_listener
+        calls:
+            - [setEnabled, [false]]
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
             - { name: doctrine.event_listener, event: onClear }
+
+    oro_magento.migration.demo_data_fixtures_listener.search_index:
+        class: Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener
+        arguments:
+            - '@oro_platform.optional_listeners.manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.data_fixtures.pre_load, method: onPreLoad }
+            - { name: kernel.event_listener, event: oro_migration.data_fixtures.post_load, method: onPostLoad }
 
     oro_magento.service.magento_url_generator:
         class: %oro_magento.magento_url_generator.class%
