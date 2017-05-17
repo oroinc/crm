@@ -620,3 +620,59 @@ Example:
 }
 ```
 {@/request}
+
+### creditMemos
+
+#### get_subresource
+
+Retrieve credit memos via which information about the Magento order is received.
+
+#### get_relationship
+
+Retrieve the ID of credit memos via which information about the Magento order is received.
+
+#### add_relationship
+
+Set credit memos records for a specific Magento order record.
+
+{@request:json_api}
+Example:
+
+`</api/magentocustomers/1/relationships/addresses>`
+
+```JSON
+{
+  "data": [
+    {
+      "type": "magentocreditmemos",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
+
+#### update_relationship
+
+Replace credit memos for a specific Magento order record.
+
+{@request:json_api}
+Example:
+
+`</api/magentoorders/1/relationships/creditMemos>`
+
+```JSON
+{
+  "data": [
+    {
+      "type": "magentocreditmemos",
+      "id": "1"
+    }
+  ]
+}
+```
+{@/request}
+
+#### delete_relationship
+
+Remove credit memos for a specific Magento order record.

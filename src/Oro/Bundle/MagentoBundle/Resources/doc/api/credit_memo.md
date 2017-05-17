@@ -520,3 +520,61 @@ Example:
 }
 ```
 {@/request}
+
+### channel
+
+#### get_subresource
+
+Retrieve an integration channel via which information about the Magento credit memo is received.
+
+#### get_relationship
+
+Retrieve the ID of an integration channel via which information about the Magento credit memo is received.
+
+#### update_relationship
+
+Replace an integration channel via which information about the Magento credit memo is received.
+
+{@request:json_api}
+Example:
+
+`</api/magentocreditmemos/1/relationships/channel>`
+
+```JSON
+{
+  "data": {
+    "type": "integrationchannels",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
+### organization
+
+#### get_subresource
+
+Retrieve the record of the organization a specific Magento credit memo record belongs to.
+
+#### get_relationship
+
+Retrieve the ID of an organization record that a Magento credit memo record belongs to.
+
+#### update_relationship
+
+Replace the organization a specific Magento credit memo record belongs to.
+
+{@request:json_api}
+Example:
+
+`</api/magentocreditmemos/1/relationships/organization>`
+
+```JSON
+{
+  "data": {
+    "type": "organizations",
+    "id": "1"
+  }
+}
+```
+{@/request}

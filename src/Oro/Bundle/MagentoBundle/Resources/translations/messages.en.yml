@@ -997,8 +997,12 @@ oro:
             entity_plural_label:                  Magento Credit Memos
             entity_description:                   Allows you to operate with credit memos for orders.
             id.label:                             Id
-            channel.label:                        Integration
-            data_channel.label:                   Channel
+            channel:
+                label:                            Integration
+                description:                      The integration via which information about a Magento credit memo is received.
+            data_channel:
+                label:                            Channel
+                description:                      The channel via which information about a Magento credit memo is received.
             adjustment:
                 label:                            Adjustment
                 description:                      Total adjustment fee applied for credit memo.
@@ -1070,7 +1074,12 @@ oro:
             entity_plural_label:                  Magento Credit Memo Items
             entity_description:                   Allows you to operate with credit memos items.
             id.label:                             Id
-            channel.label:                        Integration
+            channel:
+                label:                            Integration
+                description:                      The integration via which information about a Magento credit memo item is received.
+            data_channel:
+                label:                            Channel
+                description:                      The channel via which information about a Magento credit memo is received.
             origin_id:
                 label:                            Origin ID
                 description:                      Credit memo item ID on the Magento side.
