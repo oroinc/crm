@@ -24,6 +24,9 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
         $this->customerColumnName = $customerColumnName;
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function setSchema(Schema $schema)
     {
         $this->schema = $schema;
