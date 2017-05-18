@@ -55,7 +55,7 @@ channels:
 
    channel_types:
         magento:
-            label: oro.magento.channel_type.label
+            label: oro.magento.channel_type.magento.label
             entities:
                 - Oro\Bundle\MagentoBundle\Entity\Cart
                 - Oro\Bundle\MagentoBundle\Entity\Order
@@ -65,7 +65,7 @@ channels:
             lifetime_value: lifetime
 
         magento2:
-            label: oro.magento.channel_type.label
+            label: oro.magento.channel_type.magento2.label
             entities:
                 - Oro\Bundle\MagentoBundle\Entity\Cart
                 - Oro\Bundle\MagentoBundle\Entity\Order

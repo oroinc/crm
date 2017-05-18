@@ -120,7 +120,8 @@ oro:
                 discount_percent: Discount percent
                 coupon_code: Coupon code
         channel_type:
-            label:  Magento
+            magento.label:  Magento
+            magento2.label:  Magento 2
         transport:
             soap:
                 label: SOAP v2 API
