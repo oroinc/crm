@@ -12,7 +12,6 @@ use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
 
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
 
-
 class RestPingProviderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject| RestClientInterface */
@@ -47,7 +46,13 @@ class RestPingProviderTest extends \PHPUnit_Framework_TestCase
                              ])
                              ->getMock();
 
-        $this->rawBody = '{"version":"0.1.2","mage_version":"2.1.4","admin_url":"http:\/\/fakemagento.local\/admin\/admin\/","customer_scope":"1"}';
+        $this->rawBody = <<<EOT
+        {
+            "version":"0.1.2","mage_version":"2.1.4",
+            "admin_url":"http:\/\/fakemagento.local\/admin\/admin\/",
+            "customer_scope":"1"
+        }
+EOT;
 
         $this->provider = new RestPingProvider();
         $this->provider->setLogger($this->logger);

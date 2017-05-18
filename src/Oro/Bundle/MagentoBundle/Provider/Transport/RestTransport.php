@@ -72,13 +72,13 @@ class RestTransport implements
 
     /**
      * @param BridgeRestClientFactory $clientFactory
-     * @param RestTokenProvider       $restTokenProvider
+     * @param RestTokenProvider $restTokenProvider
+     * @param RestPingProvider $pingProvider
      */
     public function __construct(
         BridgeRestClientFactory $clientFactory,
         RestTokenProvider $restTokenProvider,
         RestPingProvider $pingProvider
-
     ) {
         $this->clientFactory = $clientFactory;
         $this->restTokenProvider = $restTokenProvider;
