@@ -662,7 +662,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getSettingsEntityFQCN()
     {
-        return 'Oro\\Bundle\\MagentoBundle\\Entity\\MagentoTransport';
+        return MagentoTransport::class;
     }
 
     /**

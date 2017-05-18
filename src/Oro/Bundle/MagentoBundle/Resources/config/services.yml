@@ -185,6 +185,8 @@ services:
             - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
+        tags:
+            - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
 
     # Providers
     oro_magento.provider.channel_type:

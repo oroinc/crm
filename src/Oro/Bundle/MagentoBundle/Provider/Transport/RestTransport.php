@@ -15,6 +15,8 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
@@ -406,7 +408,7 @@ class RestTransport implements
      */
     public function getLabel()
     {
-        // TODO: Implement getLabel() method.
+        return 'oro.magento.transport.rest.label';
     }
 
     /**
@@ -414,7 +416,7 @@ class RestTransport implements
      */
     public function getSettingsFormType()
     {
-        return 'oro_magento_rest_transport_setting_form_type';
+        return RestTransportSettingFormType::NAME;
     }
 
     /**

@@ -56,10 +56,13 @@ define([
             }
         },
 
-        getUrl: function(type) {
+        getUrl: function(integrationType, transportType) {
             var params = {id: this.id};
-            if (type !== undefined) {
-                params.type = type;
+            if (integrationType !== undefined) {
+                params.type = integrationType;
+            }
+            if (transportType !== undefined) {
+                params.transport = transportType;
             }
 
             return routing.generate(this.route, params);
@@ -70,11 +73,19 @@ define([
          */
         processClick: function() {
             var data = this.$el.parents('form').serializeArray();
-            var typeData = _.filter(data, function(field) {
+            var integrationType = _.filter(data, function(field) {
                 return field.name.indexOf('[type]') !== -1;
             });
-            if (typeData.length) {
-                typeData = typeData[0].value;
+            var transportType = _.filter(data, function(field) {
+                return field.name.indexOf('[transportType]') !== -1;
+            });
+
+            if (integrationType.length) {
+                integrationType = integrationType[0].value;
+            }
+
+            if (transportType.length) {
+                transportType = transportType[0].value;
             }
 
             data = _.filter(data, function(field) {
@@ -85,7 +96,7 @@ define([
                 return field;
             });
             mediator.execute('showLoading');
-            $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
+            $.post(this.getUrl(integrationType, transportType), data, _.bind(this.responseHandler, this), 'json')
                 .always(_.bind(function(response, status) {
                     mediator.execute('hideLoading');
                     if (status !== 'success') {
