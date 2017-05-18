@@ -18,11 +18,14 @@ class MigrateB2bCustomersQuery extends ParametrizedMigrationQuery
 
     /**
      * @param string $customerColumnName
-     * @param Schema $schema
      */
-    public function __construct($customerColumnName, Schema $schema)
+    public function __construct($customerColumnName = '')
     {
         $this->customerColumnName = $customerColumnName;
+    }
+
+    public function setSchema(Schema $schema)
+    {
         $this->schema = $schema;
     }
 
