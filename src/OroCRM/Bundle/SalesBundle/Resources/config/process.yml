@@ -109,13 +109,19 @@ definitions:
                                     firstName:      $.leadFirstName
                                     lastName:       $.leadLastName
                                     status:         $.leadStatus
-                            - '@create_entity':
-                                class: OroCRM\Bundle\SalesBundle\Entity\LeadEmail
-                                attribute: $.leadEmail
-                                data:
-                                    email: $.email.fromEmailAddress.email
-                                    owner: $.leadEntity
-                                    primary: true
+                            - '@tree': # add Lead Email
+                                actions:
+                                    - '@create_entity': # create Lead Email
+                                        class: OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+                                        attribute: $.leadEmail
+                                        data:
+                                            email: $.email.fromEmailAddress.email
+                                            primary: true
+                                    - '@call_method': # add Lead Email to Lead
+                                        object: $.leadEntity
+                                        method: addEmail
+                                        method_parameters: [$.leadEmail]
+                                    - '@unset_value': [$.leadEmail]
                             - '@add_email_activity_target':
                                 email:              $.email
                                 target_entity:      $.leadEntity

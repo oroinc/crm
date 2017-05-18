@@ -585,6 +585,22 @@ services:
         class: OroCRM\Bundle\MagentoBundle\Manager\CustomerAddressManager
         arguments:
             - "@doctrine.orm.entity_manager"
+            - '@orocrm_magento.manager.customer_address.convert_address_to_contact_address'
+        calls:
+            - ['setLogger',  ["@logger"]]
+
+    orocrm_magento.manager.customer_address.convert_address_to_contact_address:
+        class: OroCRM\Bundle\MagentoBundle\Manager\CustomerAddress\ConvertAddressToContactAdress
+
+    oro_magento.manager.customer_info_manager:
+        class: OroCRM\Bundle\MagentoBundle\Manager\CustomerInfoManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_magento.transport.soap_transport"
+            - "@orocrm_magento.importexport.data_converter.customer_address"
+            - "@orocrm_magento.import.strategy.customer_address.add_or_update"
+            - "@orocrm_magento.importexport.processor.context"
+            - '@orocrm_magento.manager.customer_address.convert_address_to_contact_address'
         calls:
             - ['setLogger',  ["@logger"]]
 
@@ -854,6 +870,7 @@ services:
             - "@doctrine"
             - "@oro_security.acl_helper"
             - "@oro_dashboard.provider.big_number.date_helper"
+            - "@oro_channel.entity.repository.channel"
         tags:
             - { name: oro_dashboard.big_number.provider, alias: magento }
 
@@ -1011,3 +1028,8 @@ services:
         public: false
         calls:
             - ['setConfigManager', ['@oro_config.global']]
+
+    orocrm_magento.provider.iso2_code:
+        class: OroCRM\Bundle\MagentoBundle\Provider\Iso2CodeProvider
+        arguments:
+            - '@doctrine'

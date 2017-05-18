@@ -25,19 +25,25 @@ class MagentoBigNumberProvider
     /** @var BigNumberDateHelper */
     protected $dateHelper;
 
+    /** @var ChannelRepository */
+    protected $channelRepository;
+
     /**
      * @param RegistryInterface   $doctrine
      * @param AclHelper           $aclHelper
      * @param BigNumberDateHelper $dateHelper
+     * @param ChannelRepository   $channelRepository
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
-        BigNumberDateHelper $dateHelper
+        BigNumberDateHelper $dateHelper,
+        ChannelRepository $channelRepository
     ) {
-        $this->doctrine   = $doctrine;
-        $this->aclHelper  = $aclHelper;
-        $this->dateHelper = $dateHelper;
+        $this->doctrine          = $doctrine;
+        $this->aclHelper         = $aclHelper;
+        $this->dateHelper        = $dateHelper;
+        $this->channelRepository = $channelRepository;
     }
 
     /**
@@ -203,7 +209,7 @@ class MagentoBigNumberProvider
             'OroTrackingBundle:TrackingVisit',
             'firstActionTime'
         );
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        $visitsQb = $this->channelRepository->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
 
         return (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
@@ -219,7 +225,7 @@ class MagentoBigNumberProvider
         $result = 0;
 
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        $visitsQb = $this->channelRepository->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
         $visits = (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
         if ($visits != 0) {
@@ -241,7 +247,7 @@ class MagentoBigNumberProvider
 
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
 
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        $visitsQb = $this->channelRepository->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
         $this->applyDateFiltering($visitsQb, 'visit.firstActionTime', $start, $end);
         $visits = (int)$this->aclHelper->apply($visitsQb)->getSingleScalarResult();
         if ($visits !== 0) {
@@ -274,14 +280,6 @@ class MagentoBigNumberProvider
     protected function getCartRepository()
     {
         return $this->doctrine->getRepository('OroCRMMagentoBundle:Cart');
-    }
-
-    /**
-     * @return ChannelRepository
-     */
-    protected function getChannelRepository()
-    {
-        return $this->doctrine->getRepository('OroCRMChannelBundle:Channel');
     }
 
     /**

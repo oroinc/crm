@@ -51,17 +51,17 @@ trait PrecalculatedVisitProviderTrait
     protected function applyDateLimit(QueryBuilder $queryBuilder, \DateTime $from, \DateTime $to)
     {
         if ($from && $to && $this->getDate($from) === $this->getDate($to)) {
-            $queryBuilder->andWhere($queryBuilder->expr()->eq('t.actionDate', ':date'))
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('t.firstActionTime', ':date'))
                 ->setParameter('date', $this->getDate($from));
         } else {
             if ($from) {
                 $queryBuilder
-                    ->andWhere($queryBuilder->expr()->gte('t.actionDate', ':from'))
+                    ->andWhere($queryBuilder->expr()->gte('t.firstActionTime', ':from'))
                     ->setParameter('from', $this->getDate($from));
             }
             if ($to) {
                 $queryBuilder
-                    ->andWhere($queryBuilder->expr()->lte('t.actionDate', ':to'))
+                    ->andWhere($queryBuilder->expr()->lte('t.firstActionTime', ':to'))
                     ->setParameter('to', $this->getDate($to));
             }
         }

@@ -5,12 +5,34 @@ namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class ChannelRepository extends EntityRepository
 {
+    /**
+     * @var ConfigManager
+     */
+    private $configManager;
+
+    /**
+     * @param ConfigManager $configManager
+     */
+    public function setConfigManager(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPrecalculatedStatisticEnabled()
+    {
+        return $this->configManager ? $this->configManager->get('oro_tracking.precalculated_statistic_enabled') : false;
+    }
+
     /**
      * Returns channel names indexed by id
      *
@@ -126,8 +148,12 @@ class ChannelRepository extends EntityRepository
     {
         $qb = $this->_em->createQueryBuilder();
 
+        $entityName = $this->isPrecalculatedStatisticEnabled() ?
+            'OroTrackingBundle:UniqueTrackingVisit' :
+            'OroTrackingBundle:TrackingVisit';
+
         $qb->select('COUNT(visit.id)')
-            ->from('OroTrackingBundle:TrackingVisit', 'visit')
+            ->from($entityName, 'visit')
             ->join('visit.trackingWebsite', 'site')
             ->leftJoin('site.channel', 'channel')
             ->where($qb->expr()->orX(

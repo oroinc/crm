@@ -35,7 +35,7 @@ workflows:
                         - '@assign_value': [$cart_id, $cart.id]
 
             convert_to_opportunity:
-                label: 'Convert to opportunity'
+                label: 'Convert to Opportunity'
                 step_to: converted_to_opportunity
                 is_start: true
                 is_unavailable_hidden: true

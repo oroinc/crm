@@ -12,8 +12,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Manager\CustomerAddress\ConvertAddressToContactAdress;
 
 class CustomerAddressManager implements LoggerAwareInterface
 {
@@ -22,8 +22,11 @@ class CustomerAddressManager implements LoggerAwareInterface
     /** @var EntityManager */
     protected $em;
 
-    /** @var PropertyAccessor  */
+    /** @var PropertyAccessor */
     protected $accessor;
+
+    /** @var ConvertAddressToContactAdress */
+    protected $convertAddressToContactAddress;
 
     /** @var array */
     protected $baseAddressProperties = [
@@ -45,10 +48,14 @@ class CustomerAddressManager implements LoggerAwareInterface
 
     /**
      * @param EntityManager $em
+     * @param ConvertAddressToContactAdress $convertAddressToContactAdress
      */
-    public function __construct(EntityManager $em)
-    {
+    public function __construct(
+        EntityManager $em,
+        ConvertAddressToContactAdress $convertAddressToContactAdress
+    ) {
         $this->em = $em;
+        $this->convertAddressToContactAddress = $convertAddressToContactAdress;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -69,7 +76,6 @@ class CustomerAddressManager implements LoggerAwareInterface
 
         $iterator->setPageCallback(function () use (&$i, $customerCount) {
             $this->em->flush();
-            $this->em->flush();
             $this->logger->info(sprintf('Processed %s customers from %s', $i, $customerCount));
         });
 
@@ -81,7 +87,7 @@ class CustomerAddressManager implements LoggerAwareInterface
                 $addresses = $customer->getAddresses();
                 if ($addresses->count() > 0) {
                     foreach ($addresses as $address) {
-                        $newContactAddress = $this->convertToContactAddress($address);
+                        $newContactAddress = $this->convertAddressToContactAddress->convert($address);
                         if (!$this->contactHasAddress($contact, $newContactAddress)) {
                             $contact->addAddress($newContactAddress);
                             $message = 'Customer address with id=%s was copied in contact with id=%s';
@@ -131,28 +137,5 @@ class CustomerAddressManager implements LoggerAwareInterface
         }
 
         return $countEqualProperty === count($this->baseAddressProperties);
-    }
-
-    /**
-     * @param Address $customerAddress
-     *
-     * @return ContactAddress
-     */
-    protected function convertToContactAddress(Address $customerAddress)
-    {
-        $properties = $this->baseAddressProperties;
-        $properties[] = 'types';
-        $properties[] = 'primary';
-
-        $contactAddress = new ContactAddress();
-        foreach ($properties as $property) {
-            $this->accessor->setValue(
-                $contactAddress,
-                $property,
-                $this->accessor->getValue($customerAddress, $property)
-            );
-        }
-
-        return $contactAddress;
     }
 }

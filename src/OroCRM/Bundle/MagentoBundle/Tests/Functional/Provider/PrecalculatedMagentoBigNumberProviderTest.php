@@ -34,7 +34,8 @@ class PrecalculatedMagentoBigNumberProviderTest extends WebTestCase
         $this->originalProvider = new MagentoBigNumberProvider(
             $this->getContainer()->get('doctrine'),
             $this->getContainer()->get('oro_security.acl_helper'),
-            $this->getContainer()->get('oro_dashboard.provider.big_number.date_helper')
+            $this->getContainer()->get('oro_dashboard.provider.big_number.date_helper'),
+            $this->getContainer()->get('oro_channel.entity.repository.channel')
         );
     }
 

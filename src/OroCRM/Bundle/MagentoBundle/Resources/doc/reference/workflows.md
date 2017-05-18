@@ -51,7 +51,7 @@ that can be used to contact customer;
 * **Abandoned** - processing of shopping cart was stopped due to some reason and it should not be processed
 until reopen;
 * **Converted** - shopping cart was successfully converted;
-* **Converted to opportunity** - shopping cart was successfully converted and new opportunity was created
+* **Converted to Opportunity** - shopping cart was successfully converted and new opportunity was created
 (it can be processed separately using B2B flow).
 
 ### Transitions
@@ -72,7 +72,7 @@ until reopen;
 * **Abandon** - shopping cart must have status "Open" to allow this transition:
     * open form with Notes attribute;
     * set shopping cart status to "lost";
-* **Reopen** - shopping cart must have status "Converted", "Converted to opportunity" or "Abandoned" to allow this transition:
+* **Reopen** - shopping cart must have status "Converted", "Converted to Opportunity" or "Abandoned" to allow this transition:
     * open form with Notes attribute;
     * set shopping cart status to "open";
     * reset all attributes related to call, email and opportunity.
