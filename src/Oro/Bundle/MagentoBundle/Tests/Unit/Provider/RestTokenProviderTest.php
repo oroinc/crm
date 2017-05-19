@@ -11,6 +11,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
@@ -21,7 +22,7 @@ use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | Transport
+     * @var \PHPUnit_Framework_MockObject_MockObject | MagentoTransport
      */
     protected $transportEntity;
 
@@ -52,7 +53,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->parameterBag = new ParameterBag();
 
-        $this->transportEntity = $this->getMockBuilder(Transport::class)
+        $this->transportEntity = $this->getMockBuilder(MagentoTransport::class)
             ->setMethods(['setApiToken', 'getSettingsBag'])
             ->getMock();
 

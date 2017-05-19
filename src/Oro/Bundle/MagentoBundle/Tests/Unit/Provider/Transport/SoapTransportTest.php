@@ -41,9 +41,13 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $customerProvider = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->transport = $this->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
             ->setMethods(['getSoapClient'])
-            ->setConstructorArgs([$encoder, $wsdlManager])
+            ->setConstructorArgs([$encoder, $wsdlManager, $customerProvider])
             ->getMock();
         // Do not attempt to run request several times in Unit test. This leads to sleep and test performance impact
         $this->transport->setMultipleAttemptsEnabled(false);

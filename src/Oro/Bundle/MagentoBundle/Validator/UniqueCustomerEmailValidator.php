@@ -38,7 +38,6 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
          * @var $constraint UniqueCustomerEmailConstraint
          */
         if ($value instanceof Customer) {
-
             $transportEntity = $value->getChannel()->getTransport();
             $transportProvider = $this->typesRegistry->getTransportTypeBySettingEntity(
                 $transportEntity,

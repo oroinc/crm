@@ -13,7 +13,6 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
 
-
 class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 {
     const INTEGRATION_TYPE = '__INTEGRATION_TYPE__';

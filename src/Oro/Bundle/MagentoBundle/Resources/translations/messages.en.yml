@@ -2,6 +2,7 @@
 
 oro:
     magento:
+        magento2.label: Magento 2
         dashboard:
             e_commerce: Ecommerce
             my_sales_flow_b2c_chart:
@@ -125,6 +126,8 @@ oro:
         transport:
             soap:
                 label: SOAP v2 API
+            rest:
+                label: REST API
         connector:
             customer:
                 label: Customer connector

@@ -26,7 +26,6 @@ class RestTransportTest extends WebTestCase
             'oro_integration.transport.rest.client_factory.decorated',
             $this->fakeRestClientFactory
         );
-
     }
 
     public function testTransportInitSuccess()
@@ -114,7 +113,6 @@ class RestTransportTest extends WebTestCase
         $transportEntity->setApiUrl('http://localhost');
         $transportEntity->setApiUser('admin');
         $transportEntity->setApiKey('admin123');
-        $transportEntity->setApiToken(false);
         return $transportEntity;
     }
 

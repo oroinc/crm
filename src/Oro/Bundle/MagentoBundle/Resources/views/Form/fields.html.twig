@@ -5,7 +5,7 @@
         websiteSelectEl:        '#' ~ form.websiteId.vars.id,
         websitesListEl:         '#' ~ form.websites.vars.id,
         connectorsEl:           '#' ~ form.parent.connectors.vars.id,
-        adminUrlEl:             '#' ~ form.adminUrl.vars.id,
+
         isExtensionInstalledEl: '#' ~ form.isExtensionInstalled.vars.id,
         extensionVersionEl:     '#' ~ form.extensionVersion.vars.id,
         magentoVersionEl:       '#' ~ form.magentoVersion.vars.id,
@@ -13,6 +13,9 @@
         websitesModificationAllowed: modificationAreAllowed,
         transportEntityId:           form.vars.value ? form.vars.value.id : null,
     } %}
+    {%  if form.adminUrl is defined %}
+        {% set soapCheckerOptions = soapCheckerOptions|merge({adminUrlEl: '#' ~ form.adminUrl.vars.id}) %}
+    {%  endif %}
     {{ soapCheckerOptions|json_encode|raw }}
 {% endmacro %}
 
@@ -27,8 +30,7 @@
                     new SoapChecker({{ _self.getSoapCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
             </script>
-
-            {% if entity is defined and entity.id is not empty %}
+            {% if entity is not null and entity.id is not empty %}
                 {% if entity.isExtensionInstalled %}
                     {% if not entity.supportedExtensionVersion %}
                         {% set message = 'oro.magento.magentotransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
