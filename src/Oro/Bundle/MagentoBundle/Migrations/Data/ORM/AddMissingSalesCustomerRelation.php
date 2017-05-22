@@ -47,7 +47,7 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
         );
 
         $platformName = $manager->getConnection()->getDatabasePlatform()->getName();
-        if ($platformName === DatabasePlatformInterface::DATABASE_PLATFORM_POSTGRESQL) {
+        if ($platformName === DatabasePlatformInterface::DATABASE_POSTGRESQL) {
             $updateQuery = sprintf(
                 'UPDATE %s AS ca SET %s_id = mc.id FROM %s AS mc WHERE ca.account_id = mc.account_id ',
                 $manager->getClassMetadata(SalesCustomer::class)->getTableName(),
