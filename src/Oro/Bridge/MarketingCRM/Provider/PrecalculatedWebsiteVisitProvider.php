@@ -3,6 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;
@@ -63,7 +64,7 @@ class PrecalculatedWebsiteVisitProvider extends AbstractPrecalculatedVisitProvid
             ->setParameter('channel', ChannelType::TYPE)
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
-        $this->applyDateLimit($queryBuilder, $from, $to);
+        $this->applyDateLimitWithOptionalDates($queryBuilder, $from, $to);
 
         return $queryBuilder;
     }

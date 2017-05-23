@@ -3,6 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
@@ -88,7 +89,7 @@ class PrecalculatedTrackingVisitProvider extends AbstractPrecalculatedVisitProvi
     private function getVisitCountQueryBuilder(\DateTime $from = null, \DateTime $to = null)
     {
         $queryBuilder = $this->createUniqueVisitQueryBuilder();
-        $this->applyDateLimit($queryBuilder, $from, $to);
+        $this->applyDateLimitWithOptionalDates($queryBuilder, $from, $to);
 
         $queryBuilder
             ->select($queryBuilder->expr()->countDistinct('t.userIdentifier'))

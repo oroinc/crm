@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
@@ -62,6 +63,50 @@ class AbstractPrecalculatedVisitProvider implements FeatureToggleableInterface
 
     /**
      * @param QueryBuilder $queryBuilder
+     * @param \DateTime|null $from
+     * @param \DateTime|null $to
+     */
+    protected function applyDateLimitWithOptionalDates(
+        QueryBuilder $queryBuilder,
+        \DateTime $from = null,
+        \DateTime $to = null
+    ) {
+        if ($from && $to) {
+            $this->applyDateLimit($queryBuilder, $from, $to);
+        } else {
+            if ($from) {
+                $this->applyDateLimitFrom($queryBuilder, $from);
+            }
+            if ($to) {
+                $this->applyDateLimitTo($queryBuilder, $to);
+            }
+        }
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param \DateTime $from
+     */
+    protected function applyDateLimitFrom(QueryBuilder $queryBuilder, \DateTime $from)
+    {
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->gte('t.firstActionTime', ':from'))
+            ->setParameter('from', $this->getDate($from));
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param \DateTime $to
+     */
+    protected function applyDateLimitTo(QueryBuilder $queryBuilder, \DateTime $to)
+    {
+        $queryBuilder
+            ->andWhere($queryBuilder->expr()->lte('t.firstActionTime', ':to'))
+            ->setParameter('to', $this->getDate($to));
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
      * @param \DateTime $from
      * @param \DateTime $to
      */
@@ -72,14 +117,10 @@ class AbstractPrecalculatedVisitProvider implements FeatureToggleableInterface
                 ->setParameter('date', $this->getDate($from));
         } else {
             if ($from) {
-                $queryBuilder
-                    ->andWhere($queryBuilder->expr()->gte('t.firstActionTime', ':from'))
-                    ->setParameter('from', $this->getDate($from));
+                $this->applyDateLimitFrom($queryBuilder, $from);
             }
             if ($to) {
-                $queryBuilder
-                    ->andWhere($queryBuilder->expr()->lte('t.firstActionTime', ':to'))
-                    ->setParameter('to', $this->getDate($to));
+                $this->applyDateLimitTo($queryBuilder, $to);
             }
         }
     }

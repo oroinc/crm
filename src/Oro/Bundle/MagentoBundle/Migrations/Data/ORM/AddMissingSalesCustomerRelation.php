@@ -66,13 +66,9 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
         }
 
         $connection = $manager->getConnection();
-        try {
-            $connection->beginTransaction();
+        $connection->transactional(function () use ($connection, $updateQuery) {
             $connection->executeUpdate($updateQuery);
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-        }
+        });
 
         $qb = $manager->getRepository(Customer::class)->createQueryBuilder('mc');
         $qb->select(['mc.id', 'IDENTITY(mc.account) AS account_id']);
@@ -83,14 +79,14 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
             sprintf('ca.%s = mc.id', $associationName)
         );
         $qb->where($qb->expr()->isNull(sprintf('ca.%s', $associationName)));
-
-        $insertQB = $manager->getConnection()->createQueryBuilder();
-        $tableName = $manager->getClassMetadata(SalesCustomer::class)->getTableName();
+        $qb->andWhere($qb->expr()->isNotNull('mc.account'));
 
         $iterator = new BufferedQueryResultIterator($qb->getQuery());
+        $connection->transactional(function () use ($manager, $iterator, $associationName) {
+            $connection = $manager->getConnection();
+            $insertQB = $connection->createQueryBuilder();
+            $tableName = $manager->getClassMetadata(SalesCustomer::class)->getTableName();
 
-        try {
-            $connection->beginTransaction();
             foreach ($iterator as $item) {
                 $insertQuery = $insertQB
                     ->insert($tableName)
@@ -101,9 +97,6 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
 
                 $connection->executeQuery($insertQuery);
             }
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-        }
+        });
     }
 }
