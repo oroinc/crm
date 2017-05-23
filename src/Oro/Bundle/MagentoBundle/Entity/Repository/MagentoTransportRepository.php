@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 
 class MagentoTransportRepository extends EntityRepository
 {
@@ -27,9 +27,9 @@ class MagentoTransportRepository extends EntityRepository
             ->select('t')
             ->where('t.apiUrl = :apiUrl');
 
-        if ($criteria['websiteId'] !== StoresSoapIterator::ALL_WEBSITES) {
+        if ($criteria['websiteId'] !== Website::ALL_WEBSITES) {
             $query->andWhere('t.websiteId IN (:websiteIds)');
-            $parameters['websiteIds'] = [StoresSoapIterator::ALL_WEBSITES, $criteria['websiteId']];
+            $parameters['websiteIds'] = [Website::ALL_WEBSITES, $criteria['websiteId']];
         }
 
         return $query->setParameters($parameters)->getQuery()->getResult();

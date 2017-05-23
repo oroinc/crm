@@ -18,7 +18,7 @@ define([
          * Check url
          * @property string
          */
-        route:           'oro_magento_soap_check',
+        route:           'oro_magento_integration_check',
         url:             null,
         id:              null,
         requiredOptions: [

@@ -40,6 +40,8 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
 {
     use IntegrationEntityTrait, OriginTrait;
 
+    const ADMIN_STORE_ID = 0;
+
     /**
      * @var integer
      *

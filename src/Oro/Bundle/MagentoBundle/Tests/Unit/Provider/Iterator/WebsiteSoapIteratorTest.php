@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 
 class WebsiteSoapIteratorTest extends BaseIteratorTestCase
@@ -113,7 +113,7 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
-                        'store_id' => StoresSoapIterator::ADMIN_STORE_ID
+                        'store_id' => Store::ADMIN_STORE_ID
                     ],
                     2 => [
                         'store_id' => 2,
@@ -126,7 +126,7 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                     0 => [
                         'name' => 'Admin',
                         'code' => 'admin',
-                        'website_id' => StoresSoapIterator::ADMIN_STORE_ID
+                        'website_id' => Store::ADMIN_STORE_ID
                     ],
                     1 => [
                         'name' => 'B2C French',

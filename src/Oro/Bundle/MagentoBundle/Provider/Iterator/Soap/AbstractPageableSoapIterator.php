@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator;
 
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -32,7 +33,7 @@ abstract class AbstractPageableSoapIterator extends AbstractPageableIterator
      */
     protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
     {
-        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if ($this->websiteId !== Website::ALL_WEBSITES) {
             if (!empty($websiteIds)) {
                 $this->filter->addWebsiteFilter($websiteIds);
             }

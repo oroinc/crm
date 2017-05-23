@@ -193,4 +193,9 @@ interface MagentoTransportInterface extends TransportInterface
      * @return string
      */
     public function getMagentoVersion();
+
+    /**
+     * @return string
+     */
+    public function getRequiredExtensionVersion();
 }

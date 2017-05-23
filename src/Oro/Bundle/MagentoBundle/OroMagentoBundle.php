@@ -2,10 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle;
 
-use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MessageQueueBundle\DependencyInjection\Compiler\AddTopicMetaPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MessageQueueBundle\DependencyInjection\Compiler\AddTopicMetaPass;
 
 class OroMagentoBundle extends Bundle
 {

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIteratorInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
@@ -131,7 +132,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator implemen
      */
     protected function applyStoreFilter(BatchFilterBag $filter)
     {
-        if ($this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if ($this->websiteId && $this->websiteId !== Website::ALL_WEBSITES) {
             $filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
         }
     }

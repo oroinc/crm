@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -41,7 +42,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
             ]
         );
 
-        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if (null !== $this->websiteId && $this->websiteId !== Website::ALL_WEBSITES) {
             $filters->addWebsiteFilter([$this->websiteId]);
         }
 

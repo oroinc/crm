@@ -20,7 +20,6 @@ use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
@@ -433,6 +432,12 @@ class RestTransport implements
     public function ping()
     {
         return $this->pingProvider->ping();
+    }
+
+    /** {@inheritdoc} */
+    public function getRequiredExtensionVersion()
+    {
+        // TODO: Implement getRequiredExtensionVersion() method.
     }
 
     /**

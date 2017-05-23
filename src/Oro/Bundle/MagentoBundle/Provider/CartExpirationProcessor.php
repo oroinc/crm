@@ -10,7 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -153,7 +153,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
     {
         $stores = [];
         foreach ($transport->getStores() as $store) {
-            if ($store['website_id'] == $websiteId || $websiteId === StoresSoapIterator::ALL_WEBSITES) {
+            if ($store['website_id'] == $websiteId || $websiteId === Website::ALL_WEBSITES) {
                 $stores[] = $store['store_id'];
             }
         }

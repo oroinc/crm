@@ -5,8 +5,8 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 
@@ -412,7 +412,18 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
      * @param array $websiteIds
      * @param array $storeIds
      */
-    abstract protected function applyWebsiteFilters(array $websiteIds, array $storeIds);
+    protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
+    {
+        if ($this->websiteId !== Website::ALL_WEBSITES) {
+            if (!empty($websiteIds)) {
+                $this->filter->addWebsiteFilter($websiteIds);
+            }
+
+            if (!empty($storeIds)) {
+                $this->filter->addStoreFilter($storeIds);
+            }
+        }
+    }
 
     /**
      * @TODO refactor class to remove empty methods. According to CRM-8211

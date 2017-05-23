@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderBridgeIterator extends AbstractBridgeIterator
@@ -11,7 +12,7 @@ class OrderBridgeIterator extends AbstractBridgeIterator
      */
     protected function applyFilter()
     {
-        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if ($this->websiteId !== Website::ALL_WEBSITES) {
             $this->filter->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
         }
         parent::applyFilter();

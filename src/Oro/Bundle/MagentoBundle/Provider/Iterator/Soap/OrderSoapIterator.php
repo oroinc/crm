@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
@@ -40,7 +41,7 @@ class OrderSoapIterator extends AbstractPageableSoapIterator implements Predefin
     public function getEntityIds()
     {
         $stores = [];
-        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if ($this->websiteId !== Website::ALL_WEBSITES) {
             $stores = $this->getStoresByWebsiteId($this->websiteId);
         }
         $filters = $this->getBatchFilter($this->lastSyncDate, [], $stores);

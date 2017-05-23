@@ -6,6 +6,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportCacheClearInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
@@ -38,7 +39,8 @@ class SoapTransport extends BaseSOAPTransport implements
     MagentoTransportInterface,
     SoapTransportInterface,
     ServerTimeAwareInterface,
-    PingableInterface
+    PingableInterface,
+    TransportCacheClearInterface
 {
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
@@ -679,5 +681,17 @@ class SoapTransport extends BaseSOAPTransport implements
                 $this->serverTime = false;
             }
         }
+    }
+
+    /** {@inheritdoc} */
+    public function getRequiredExtensionVersion()
+    {
+        return self::REQUIRED_EXTENSION_VERSION;
+    }
+
+    /** {@inheritdoc} */
+    public function cacheClear($resource = null)
+    {
+        $this->wsdlManager->clearCacheForUrl($resource);
     }
 }

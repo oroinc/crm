@@ -8,7 +8,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
@@ -58,7 +58,7 @@ class StoreGridListener
                     $transport = $dataChannel->getDataSource()->getTransport();
                     if ($transport instanceof MagentoTransport) {
                         $websiteId = $transport->getSettingsBag()->get('website_id');
-                        if ($websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+                        if ($websiteId !== Website::ALL_WEBSITES) {
                             $datasource
                                 ->getQueryBuilder()
                                 ->andWhere('w.originId = :id')

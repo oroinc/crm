@@ -2,14 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class StoresSoapIterator extends AbstractLoadeableSoapIterator
 {
-    const ADMIN_STORE_ID = 0;
-    const ADMIN_WEBSITE_ID = 0;
-    const ALL_WEBSITES = -1;
-
     /**
      * {@inheritdoc}
      */
@@ -21,10 +19,10 @@ class StoresSoapIterator extends AbstractLoadeableSoapIterator
 
         if (!empty($result) && is_array($result)) {
             $adminStoreData = [
-                'website_id' => self::ADMIN_WEBSITE_ID,
+                'website_id' => Website::ADMIN_WEBSITE_ID,
                 'code'       => 'admin',
                 'name'       => 'Admin',
-                'store_id'   => self::ADMIN_STORE_ID
+                'store_id'   => Store::ADMIN_STORE_ID
             ];
             array_unshift($result, $adminStoreData);
 

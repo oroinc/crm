@@ -181,8 +181,6 @@ services:
             - '@oro_magento.transport.rest_client_factory'
             - '@oro_magento.provider.rest_token_provider'
             - '@oro_magento.provider.rest_ping_provider'
-        tags:
-            - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
         tags:
@@ -1052,6 +1050,16 @@ services:
             - "@doctrine"
             - "@security.context"
 
+    oro_magento.handler.transport:
+        class: Oro\Bundle\MagentoBundle\Handler\TransportHandler
+        scope: request
+        arguments:
+            - '@oro_integration.manager.types_registry'
+            - '@oro_magento.provider.transport_entity'
+            - '@oro_magento.provider.website_choices'
+            - '@oro_magento.provider.connector_choices'
+            - '@request'
+
     oro_magento.routing.options_resolver.old_options:
         class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
         public: false
@@ -1140,3 +1148,20 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider
         arguments:
             - '@doctrine'
+
+    oro_magento.provider.website_choices:
+        class: Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider
+        arguments:
+            - '@translator'
+
+    oro_magento.provider.connector_choices:
+        class: Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider
+        arguments:
+            - '@oro_integration.manager.types_registry'
+            - '@translator'
+
+    oro_magento.provider.transport_entity:
+        class: Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider
+        arguments:
+            - '@form.factory'
+            - '@doctrine.orm.entity_manager'
