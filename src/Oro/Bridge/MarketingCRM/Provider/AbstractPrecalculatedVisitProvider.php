@@ -65,7 +65,7 @@ class AbstractPrecalculatedVisitProvider implements FeatureToggleableInterface
      * @param \DateTime $from
      * @param \DateTime $to
      */
-    protected function applyDateLimit(QueryBuilder $queryBuilder, \DateTime $from, \DateTime $to)
+    protected function applyDateLimit(QueryBuilder $queryBuilder, \DateTime $from = null, \DateTime $to = null)
     {
         if ($from && $to && $this->getDate($from) === $this->getDate($to)) {
             $queryBuilder->andWhere($queryBuilder->expr()->eq('t.firstActionTime', ':date'))
