@@ -4,24 +4,28 @@ namespace Oro\Bundle\MagentoBundle\Provider\Customer;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
 use Oro\Bundle\UIBundle\Model\Image;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 
 class CustomerIconProvider implements CustomerIconProviderInterface
 {
-    /** @var ChannelType */
-    protected $channelType;
+    /** @var TypesRegistry */
+    protected $integrationTypeRegistry;
 
     /** @var CacheManager */
     protected $cacheManager;
 
     /**
-     * @param ChannelType $channelType
+     * @param TypesRegistry $integrationTypeRegistry
+     * @param CacheManager  $cacheManager
      */
-    public function __construct(ChannelType $channelType, CacheManager $cacheManager)
-    {
-        $this->channelType = $channelType;
+    public function __construct(
+        TypesRegistry $integrationTypeRegistry,
+        CacheManager $cacheManager
+    ) {
+        $this->integrationTypeRegistry = $integrationTypeRegistry;
         $this->cacheManager = $cacheManager;
     }
 
@@ -34,9 +38,19 @@ class CustomerIconProvider implements CustomerIconProviderInterface
             return null;
         }
 
-        return new Image(
-            Image::TYPE_FILE_PATH,
-            ['path' => $this->cacheManager->getBrowserPath($this->channelType->getIcon(), 'avatar_xsmall')]
-        );
+        $channelTypeCode = $entity->getChannel()->getType();
+        /**
+         * @var IconAwareIntegrationInterface $channelType
+         */
+        $channelType = $this->integrationTypeRegistry->getIntegrationByType($channelTypeCode);
+        
+        if ($channelType instanceof IconAwareIntegrationInterface) {
+            return new Image(
+                Image::TYPE_FILE_PATH,
+                ['path' => $this->cacheManager->getBrowserPath($channelType->getIcon(), 'avatar_xsmall')]
+            );
+        }
+
+        return null;
     }
 }

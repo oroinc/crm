@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Provider;
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 
-class ChannelType implements ChannelInterface, IconAwareIntegrationInterface
+class MagentoChannelType implements ChannelInterface, IconAwareIntegrationInterface
 {
     const TYPE = 'magento';
 
@@ -14,7 +14,7 @@ class ChannelType implements ChannelInterface, IconAwareIntegrationInterface
      */
     public function getLabel()
     {
-        return 'oro.magento.channel_type.label';
+        return 'oro.magento.channel_type.magento.label';
     }
 
     /**

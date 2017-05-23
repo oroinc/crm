@@ -7,7 +7,7 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
@@ -44,7 +44,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     {
         $channel = $event->getChannel();
 
-        if ($channel->getChannelType() === ChannelType::TYPE
+        if ($channel->getChannelType() === MagentoChannelType::TYPE
             && $channel->getDataSource()->getTransport() instanceof MagentoTransport
         ) {
             $this->transportEntity = $channel->getDataSource()->getTransport();
@@ -59,7 +59,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     protected function getConnectors(array $entities)
     {
         $dictionaryConnectors = $this->typeRegistry->getRegisteredConnectorsTypes(
-            ChannelType::TYPE,
+            MagentoChannelType::TYPE,
             function (ConnectorInterface $connector) {
                 return $connector instanceof DictionaryConnectorInterface;
             }
@@ -72,7 +72,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
             if ($connectorName) {
-                $connector = $this->typeRegistry->getConnectorType(ChannelType::TYPE, $connectorName);
+                $connector = $this->typeRegistry->getConnectorType(MagentoChannelType::TYPE, $connectorName);
                 if (!$connector) {
                     continue;
                 }

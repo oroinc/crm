@@ -6,7 +6,7 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class ChannelSettingsProvider
 {
@@ -96,7 +96,7 @@ class ChannelSettingsProvider
     {
         $channels = $this->doctrineHelper
             ->getEntityRepository($this->channelClassName)
-            ->findBy(['type' => ChannelType::TYPE, 'enabled' => true]);
+            ->findBy(['type' => MagentoChannelType::TYPE, 'enabled' => true]);
 
         return $this->collectionHasApplicableChannel($channels, $checkExtension);
     }
@@ -110,9 +110,12 @@ class ChannelSettingsProvider
      */
     public function hasOrganizationApplicableChannels(Organization $organization, $checkExtension = true)
     {
+        /**
+        * @todo Remove dependency on exact magento channel type in CRM-8153
+        */
         $channels = $this->doctrineHelper
             ->getEntityRepository($this->channelClassName)
-            ->findBy(['type' => ChannelType::TYPE, 'enabled' => true, 'organization' => $organization]);
+            ->findBy(['type' => MagentoChannelType::TYPE, 'enabled' => true, 'organization' => $organization]);
 
         return $this->collectionHasApplicableChannel($channels, $checkExtension);
     }

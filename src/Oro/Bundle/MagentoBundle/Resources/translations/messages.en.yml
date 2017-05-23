@@ -1070,6 +1070,8 @@ oro:
             choose_cart: Choose a cart...
 
         controller:
+            transport_error:               Error occurred during check request, please try later!
+            not_valid_parameters:          Parameters are not valid!
             transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.

@@ -11,6 +11,7 @@ use Oro\Bundle\IntegrationBundle\Tests\Functional\DataFixtures\LoadChannelData a
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 /**
  * @dbIsolationPerTest
@@ -48,7 +49,7 @@ class StatusTest extends WebTestCase
         $status->setCode(Status::STATUS_COMPLETED);
         $status->setDate(new \DateTime('2012-01-01 00:00:00+00:00'));
         $status->setMessage('');
-        $status->getChannel()->setType('magento');
+        $status->getChannel()->setType(MagentoChannelType::TYPE);
         $status->setConnector('order');
         $this->getEntityManager()->persist($status);
         $this->getEntityManager()->flush();

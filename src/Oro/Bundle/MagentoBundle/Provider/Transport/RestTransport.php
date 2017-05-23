@@ -18,6 +18,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
@@ -225,12 +226,14 @@ class RestTransport implements
     }
 
     /**
-     * @return array
-     *
-     * @throws RuntimeException
+     * @inheritDoc
      */
     public function doGetStoresRequest()
     {
+        if (!$this->isExtensionInstalled()) {
+            throw new ExtensionRequiredException();
+        }
+
         try {
             return $this->client->get('store/storeViews', [], $this->headers)->json();
         } catch (RestException $e) {
@@ -251,6 +254,10 @@ class RestTransport implements
      */
     public function doGetWebsitesRequest()
     {
+        if (!$this->isExtensionInstalled()) {
+            throw new ExtensionRequiredException();
+        }
+
         try {
             return $this->client->get('store/websites', [], $this->headers)->json();
         } catch (RestException $e) {
@@ -461,7 +468,10 @@ class RestTransport implements
             return call_user_func_array([$this, $methodName], $arguments);
         }
 
-        if ($exception->getFaultCode() === Codes::HTTP_OK) {
+        /**
+         * Exception caused by incorrect client settings or invalid response body
+         */
+        if (null === $exception->getResponse()) {
             throw new RuntimeException(
                 ValidationUtils::sanitizeSecureInfo($exception->getMessage()),
                 $exception->getCode(),

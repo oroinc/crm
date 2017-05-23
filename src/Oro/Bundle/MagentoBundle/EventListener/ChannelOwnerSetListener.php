@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Event\DefaultOwnerSetEvent;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 /**
  * This event listener is subscribed on 'oro_integration.default_owner.set' in order to set default owner
@@ -35,8 +35,11 @@ class ChannelOwnerSetListener
     {
         $channel = $event->getChannel();
 
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
         // process only magento channels
-        if ($channel->getType() !== ChannelType::TYPE) {
+        if ($channel->getType() !== MagentoChannelType::TYPE) {
             return;
         }
 

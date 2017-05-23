@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 {
@@ -28,7 +28,10 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
      */
     protected function getChannelType()
     {
-        return ChannelType::TYPE;
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8154
+         */
+        return MagentoChannelType::TYPE;
     }
 
     /**

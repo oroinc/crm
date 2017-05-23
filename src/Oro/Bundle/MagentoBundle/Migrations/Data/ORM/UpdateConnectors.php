@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 class UpdateConnectors extends AbstractFixture
@@ -17,7 +17,9 @@ class UpdateConnectors extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var Channel[] $channels */
-        $channels = $manager->getRepository('OroIntegrationBundle:Channel')->findBy(['type' => ChannelType::TYPE]);
+        $channels = $manager
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->findBy(['type' => MagentoChannelType::TYPE]);
 
         foreach ($channels as $channel) {
             $connectors = $channel->getConnectors();

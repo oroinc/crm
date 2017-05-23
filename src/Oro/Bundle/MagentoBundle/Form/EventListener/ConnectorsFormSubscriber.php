@@ -11,6 +11,7 @@ use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class ConnectorsFormSubscriber implements EventSubscriberInterface
 {
@@ -76,7 +77,7 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
             }
 
             $allowedTypesChoices = array_flip($this->typeRegistry->getAvailableConnectorsTypesChoiceList(
-                'magento',
+                MagentoChannelType::TYPE,
                 function (ConnectorInterface $connector) use ($data) {
                     return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }

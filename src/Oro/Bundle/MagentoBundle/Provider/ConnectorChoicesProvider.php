@@ -34,7 +34,7 @@ class ConnectorChoicesProvider
     {
         $allowedTypesChoices = $this->typesRegistry
             ->getAvailableConnectorsTypesChoiceList(
-                ChannelType::TYPE,
+                MagentoChannelType::TYPE,
                 function (ConnectorInterface $connector) use ($isExtensionInstalled, $isSupportedVersion) {
                     if ($connector instanceof ExtensionVersionAwareInterface) {
                         return $isExtensionInstalled && $isSupportedVersion;

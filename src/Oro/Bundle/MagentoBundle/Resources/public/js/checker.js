@@ -26,7 +26,6 @@ define([
             'websitesListEl',
             'isExtensionInstalledEl',
             'connectorsEl',
-            'adminUrlEl',
             'extensionVersionEl',
             'magentoVersionEl'
         ],
@@ -56,53 +55,77 @@ define([
             }
         },
 
-        getUrl: function(integrationType, transportType) {
-            var params = {id: this.id};
-            if (integrationType !== undefined) {
-                params.type = integrationType;
-            }
-            if (transportType !== undefined) {
-                params.transport = transportType;
-            }
+        /**
+         * @param additionalParams {Array}
+         * @returns {*}
+         */
+        getUrl: function(additionalParams) {
+            var params = _.extend({
+                id: this.id
+            }, additionalParams || {});
 
             return routing.generate(this.route, params);
+        },
+
+        getIntegrationAndTransportTypeParams: function(fields) {
+            var params = {};
+            var integrationType = _.first(
+                _.filter(fields, function(field) {
+                    return field.name.indexOf('[type]') !== -1;
+                })
+            );
+
+            if (_.isObject(integrationType)) {
+                params.type = integrationType.value;
+            }
+
+            var transportType = _.first(
+                _.filter(fields, function(field) {
+                    return field.name.indexOf('[transportType]') !== -1;
+                })
+            );
+
+            if (_.isObject(transportType)) {
+                params.transport = transportType.value;
+            }
+
+            return params;
+        },
+
+        /**
+         *
+         * @param fields {Array}
+         * @returns {Array}
+         */
+        getDataForRequestFromFields: function(fields) {
+            var data = _.filter(fields, function(field) {
+                return field.name.indexOf('[transport]') !== -1;
+            });
+
+            return _.map(data, function(field) {
+                field.name = field.name.replace(/.+\[(.+)\]$/, 'check[$1]');
+                return field;
+            });
         },
 
         /**
          * Click handler
          */
         processClick: function() {
-            var data = this.$el.parents('form').serializeArray();
-            var integrationType = _.filter(data, function(field) {
-                return field.name.indexOf('[type]') !== -1;
-            });
-            var transportType = _.filter(data, function(field) {
-                return field.name.indexOf('[transportType]') !== -1;
-            });
+            var fields = this.$el.parents('form').serializeArray();
+            var transportAndIntegrationTypeParams = this.getIntegrationAndTransportTypeParams(fields);
+            var url = this.getUrl(transportAndIntegrationTypeParams);
+            var data = this.getDataForRequestFromFields(fields);
 
-            if (integrationType.length) {
-                integrationType = integrationType[0].value;
-            }
-
-            if (transportType.length) {
-                transportType = transportType[0].value;
-            }
-
-            data = _.filter(data, function(field) {
-                return field.name.indexOf('[transport]') !== -1;
-            });
-            data = _.map(data, function(field) {
-                field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]');
-                return field;
-            });
             mediator.execute('showLoading');
-            $.post(this.getUrl(integrationType, transportType), data, _.bind(this.responseHandler, this), 'json')
-                .always(_.bind(function(response, status) {
+            $.post({
+                url: url,
+                data: data,
+                errorHandlerMessage: __('oro.magento.error')
+            }).done(_.bind(this.responseHandler, this))
+                .always(function() {
                     mediator.execute('hideLoading');
-                    if (status !== 'success') {
-                        this.renderResult('error', __('oro.magento.error'));
-                    }
-                }, this));
+                });
         },
 
         /**
@@ -121,7 +144,7 @@ define([
 
                 this.renderSuccessMessage(res);
             } else {
-                this.renderErrorMessage();
+                this.renderErrorMessage(res);
             }
         },
 
@@ -152,8 +175,8 @@ define([
             }
         },
 
-        renderErrorMessage: function() {
-            this.renderResult('error', __('oro.magento.not_valid_parameters'));
+        renderErrorMessage: function(res) {
+            this.renderResult('error', res.errorMessage);
         },
 
         /**
@@ -188,7 +211,9 @@ define([
          * @param {Object} res
          */
         handleAdminUrl: function(res) {
-            $(this.options.adminUrlEl).val(res.adminUrl || '');
+            if (this.options.adminUrlEl) {
+                $(this.options.adminUrlEl).val(res.adminUrl || '');
+            }
         },
 
         /**

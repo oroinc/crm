@@ -11,7 +11,7 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class CustomerDataProvider
 {
@@ -65,8 +65,11 @@ class CustomerDataProvider
         }
         $items             = [];
 
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
         // get all integration channels
-        $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, ChannelType::TYPE);
+        $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, MagentoChannelType::TYPE);
         $channelIds = array_keys($channels);
         $dates = $this->dateHelper->getDatePeriod($past, $now);
         $data  = $customerRepository->getGroupedByChannelArray(

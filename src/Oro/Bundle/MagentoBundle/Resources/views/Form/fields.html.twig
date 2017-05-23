@@ -5,7 +5,6 @@
         websiteSelectEl:        '#' ~ form.websiteId.vars.id,
         websitesListEl:         '#' ~ form.websites.vars.id,
         connectorsEl:           '#' ~ form.parent.connectors.vars.id,
-
         isExtensionInstalledEl: '#' ~ form.isExtensionInstalled.vars.id,
         extensionVersionEl:     '#' ~ form.extensionVersion.vars.id,
         magentoVersionEl:       '#' ~ form.magentoVersion.vars.id,
@@ -25,9 +24,9 @@
         <div class="controls">
             <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
             <script type="text/javascript">
-                require(['oro/magento/soap-checker'], function (SoapChecker) {
+                require(['oro/magento/checker'], function (Checker) {
                     "use strict";
-                    new SoapChecker({{ _self.getSoapCheckerOptions(form.parent, '#' ~ form.vars.id) }});
+                    new Checker({{ _self.getSoapCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
             </script>
             {% if entity is not null and entity.id is not empty %}
@@ -68,9 +67,9 @@
                         <i class="fa-refresh"></i>{{ 'Sync website list'|trans }}
                     </a>
                     <script type="text/javascript">
-                        require(['oro/magento/soap-checker'], function (SoapChecker) {
+                        require(['oro/magento/checker'], function (Checker) {
                             "use strict";
-                            new SoapChecker({{ _self.getSoapCheckerOptions(form.parent, '.sync-website-list-link') }});
+                            new Checker({{ _self.getSoapCheckerOptions(form.parent, '.sync-website-list-link') }});
                         });
                     </script>
                 {% endif %}

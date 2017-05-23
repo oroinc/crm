@@ -116,6 +116,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
                 ->with('email', $messageConstraint);
         }
 
+        $customer = $this->getCustomer();
         $transportProvider = $this->createMock(MagentoTransportInterface::class);
         $this->typesRegistry->method('getTransportTypeBySettingEntity')
             ->with($this->transport, self::INTEGRATION_TYPE)
@@ -123,11 +124,13 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 
         $transportProvider
             ->expects($this->once())
-            ->method('init')
-            ->willThrowException(new \RuntimeException());
+            ->method('init');
 
-        $customer = $this->getCustomer();
-        $this->assertCustomerUniqueEmailCalls($isUniqueEmail, $customer);
+        $transportProvider
+            ->expects($this->once())
+            ->method('isCustomerHasUniqueEmail')
+            ->with($customer)
+            ->will($this->returnValue($isUniqueEmail));
 
         $this->validator->initialize($context);
         $this->validator->validate($customer, $this->constraint);
@@ -172,20 +175,5 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($channel);
 
         return $customer;
-    }
-
-    /**
-     * @param bool $isUniqueEmail
-     * @param \PHPUnit_Framework_MockObject_MockObject $customer
-     */
-    protected function assertCustomerUniqueEmailCalls($isUniqueEmail, $customer)
-    {
-        $this->transport->expects($this->once())
-            ->method('init');
-
-        $this->transport->expects($this->once())
-            ->method('isCustomerHasUniqueEmail')
-            ->with($customer)
-            ->will($this->returnValue($isUniqueEmail));
     }
 }

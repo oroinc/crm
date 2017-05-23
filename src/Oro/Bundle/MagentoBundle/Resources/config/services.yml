@@ -24,7 +24,6 @@ parameters:
     oro_magento.transport.soap_transport.class:                          Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
-    oro_magento.provider.channel_type.class:                             Oro\Bundle\MagentoBundle\Provider\ChannelType
     oro_magento.provider.cart_expiration_processor.class:                Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor
     oro_magento.provider.tracking_visit.class:                           Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider
     oro_magento.provider.tracking_visit_event.class:                     Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider
@@ -187,10 +186,15 @@ services:
             - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
 
     # Providers
-    oro_magento.provider.channel_type:
-        class: %oro_magento.provider.channel_type.class%
+    oro_magento.provider.magento_channel_type:
+        class: Oro\Bundle\MagentoBundle\Provider\MagentoChannelType
         tags:
             - { name: oro_integration.channel, type: magento }
+
+    oro_magento.provider.magento2_channel_type:
+        class: Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType
+        tags:
+            - { name: oro_integration.channel, type: magento2 }
 
     oro_magento.provider.cart_expiration_processor:
         class: %oro_magento.provider.cart_expiration_processor.class%
@@ -1096,10 +1100,10 @@ services:
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
-    oro_magento.provider.customer.customer_icon:
+    oro_magento.provider.customer.magento_customer_icon:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
         arguments:
-            - '@oro_magento.provider.channel_type'
+            - '@oro_integration.manager.types_registry'
             - '@liip_imagine.cache.manager'
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }

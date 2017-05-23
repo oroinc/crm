@@ -3,7 +3,6 @@ oro:
         success: Connection successful, please select a website from the list below
         success_bridge: Connection was successful. You are running OroBridge version {{ extension_version }}. Please select a website from the list below
         outdated_warning: Your OroBridge extension version {{ extension_version }} is outdated and therefore its functionality will be limited. Please update the extension to the current version {{ required_version }} and re-check the connection.
-        not_valid_parameters: Parameters are not valid!
         error: Error occurred during check request, please try later!
         external_error:             External error occured
         performing_synchronization: Performing synchronization...

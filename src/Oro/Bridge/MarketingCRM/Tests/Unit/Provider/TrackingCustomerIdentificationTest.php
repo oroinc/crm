@@ -7,7 +7,7 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingEventDictionary;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bridge\MarketingCRM\Tests\Unit\Fixtures\Entity\TestTrackingWebsite;
 use Oro\Bridge\MarketingCRM\Provider\TrackingCustomerIdentification;
 
@@ -67,7 +67,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
 
         $visit = new TrackingVisit();
         $channel = new Channel();
-        $channel->setChannelType(ChannelType::TYPE);
+        $channel->setChannelType(MagentoChannelType::TYPE);
         $website = new TestTrackingWebsite();
         $website->setChannel($channel);
         $visit->setTrackingWebsite($website);
@@ -134,7 +134,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
         $visit = new TrackingVisit();
         $visitEvent->setVisit($visit);
         $channel = new Channel();
-        $channel->setChannelType(ChannelType::TYPE);
+        $channel->setChannelType(MagentoChannelType::TYPE);
         $website = new TestTrackingWebsite();
         $website->setChannel($channel);
         $visit->setTrackingWebsite($website);
@@ -173,7 +173,7 @@ class TrackingCustomerIdentificationTest extends \PHPUnit_Framework_TestCase
     {
         $trackingEvent = new TrackingVisitEvent();
         $visit = new TrackingVisit();
-        $channel->setChannelType(ChannelType::TYPE);
+        $channel->setChannelType(MagentoChannelType::TYPE);
         $website = new TestTrackingWebsite();
         $website->setChannel($channel);
         $visit->setTrackingWebsite($website);

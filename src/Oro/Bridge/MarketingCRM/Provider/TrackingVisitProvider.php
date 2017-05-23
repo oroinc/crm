@@ -11,7 +11,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureCheckerHolderTrait;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureToggleableInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -62,8 +62,11 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($queryBuilder->expr()->eq('c.status', ':status'))
+                /**
+                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 */
                 ->setParameters([
-                    'channel' => ChannelType::TYPE,
+                    'channel' => MagentoChannelType::TYPE,
                     'status'  => Channel::STATUS_ACTIVE
                 ])
                 ->andHaving('COUNT(t.userIdentifier) > 1');
@@ -107,8 +110,11 @@ class TrackingVisitProvider implements TrackingVisitProviderInterface, FeatureTo
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($queryBuilder->expr()->eq('c.status', ':status'))
+                /**
+                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 */
                 ->setParameters([
-                    'channel' => ChannelType::TYPE,
+                    'channel' => MagentoChannelType::TYPE,
                     'status'  => Channel::STATUS_ACTIVE
                 ]);
             if ($from) {

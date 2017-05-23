@@ -10,7 +10,7 @@ use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TC
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
@@ -58,7 +58,10 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 $channel = $trackingWebsite->getChannel();
                 $type    = $channel ? $channel->getChannelType() : false;
 
-                if ($type && $type === ChannelType::TYPE) {
+                /**
+                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 */
+                if ($type && $type === MagentoChannelType::TYPE) {
                     return true;
                 }
             }
@@ -103,7 +106,10 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
      */
     public function getIdentityTarget()
     {
-        return $this->settingsProvider->getCustomerIdentityFromConfig(ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
+        return $this->settingsProvider->getCustomerIdentityFromConfig(MagentoChannelType::TYPE);
     }
 
     /**
@@ -136,7 +142,10 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                 $channel = $trackingWebsite->getChannel();
                 $type    = $channel ? $channel->getChannelType() : false;
 
-                if ($type && $type === ChannelType::TYPE) {
+                /**
+                 * @todo Remove dependency on exact magento channel type in CRM-8153
+                 */
+                if ($type && $type === MagentoChannelType::TYPE) {
                     return true;
                 }
             }

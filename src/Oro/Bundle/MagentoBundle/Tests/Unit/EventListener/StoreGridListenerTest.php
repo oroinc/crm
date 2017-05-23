@@ -6,20 +6,6 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-
-
-use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-
-
-use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
-use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use Oro\Bundle\MagentoBundle\EventListener\CustomerDataGridListener;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-
 use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
 
 class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
@@ -111,7 +97,6 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new BuildAfter($this->datagrid);
         $this->listener->onBuildAfter($event);
-        $dataGrid2 = $event->getDatagrid();
     }
 
     public function testOnBuildAfterAclIntegrationAssignGranted()

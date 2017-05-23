@@ -257,7 +257,7 @@ processes:
             preconditions:
                 '@and':
                     - '@not_empty': $channel
-                    - '@equal': [$channel.type, 'magento']
+                    - '@equal': [$channel.type, 'magento'] # @todo Remove dependency on exact magento channel type in CRM-8153
                     - '@equal': [$connector, 'order']
             actions_configuration:
                 - '@assign_constant_value':

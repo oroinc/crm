@@ -88,18 +88,21 @@ class RestTokenProvider implements LoggerAwareInterface
     protected function validateStatusCodes(RestException $e)
     {
         $response = $e->getResponse();
-        $statusCode = $response->getStatusCode();
-        if (Codes::HTTP_UNAUTHORIZED === $statusCode) {
-            throw new InvalidConfigurationException(
-                "Can't get token by defined 'api_key' and 'api_user'. Please check credentials !"
-            );
-        }
-
-        if (Codes::HTTP_OK === $statusCode) {
+        /**
+         * Exception caused by incorrect client settings or invalid response body
+         */
+        if (null === $response) {
             throw new RuntimeException(
                 ValidationUtils::sanitizeSecureInfo($e->getMessage()),
                 $e->getCode(),
                 $e
+            );
+        }
+
+        $statusCode = $response->getStatusCode();
+        if (Codes::HTTP_UNAUTHORIZED === $statusCode) {
+            throw new InvalidConfigurationException(
+                "Can't get token by defined 'api_key' and 'api_user'. Please check credentials !"
             );
         }
 

@@ -10,7 +10,7 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OrderRepository extends ChannelAwareEntityRepository
@@ -149,8 +149,12 @@ class OrderRepository extends ChannelAwareEntityRepository
     ) {
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
-        $channels      = $entityManager->getRepository('OroChannelBundle:Channel')
-            ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8154
+         */
+        $channels      = $entityManager
+            ->getRepository('OroChannelBundle:Channel')
+            ->getAvailableChannelNames($aclHelper, MagentoChannelType::TYPE);
 
         // execute data query
         $queryBuilder = $this->createQueryBuilder('o');

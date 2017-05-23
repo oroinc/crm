@@ -105,25 +105,7 @@ class TransportHandler
             'requiredExtensionVersion' => $transport->getRequiredExtensionVersion(),
             'isSupportedVersion' => $isSupportedVersion,
             'connectors' => $allowedTypesChoices,
-            'adminUrl' => $transport->getAdminUrl(),
+            'adminUrl' => $transport->getAdminUrl()
         ];
-    }
-
-    /**
-     * @param string    $message
-     * @param int       $code
-     * @return array
-     */
-    public function createFailResponse($message, $code)
-    {
-        $response = [
-            'success' => false,
-            'error' => [
-                'code'      => $code,
-                'message'   => $message
-            ]
-        ];
-
-        return $response;
     }
 }

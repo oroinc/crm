@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
 
-class BaseIntegrationTest extends WebTestCase
+abstract class BaseIntegrationTest extends WebTestCase
 {
     /**
      * @var EntityManager

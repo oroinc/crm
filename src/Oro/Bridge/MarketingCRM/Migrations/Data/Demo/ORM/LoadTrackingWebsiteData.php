@@ -17,7 +17,7 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TrackingEvents;
 use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
 
@@ -94,7 +94,7 @@ class LoadTrackingWebsiteData extends AbstractFixture implements
     protected function persistTrackingWebsites(ObjectManager $om, Organization $organization)
     {
         $channels = $om->getRepository('OroChannelBundle:Channel')->findBy([
-            'channelType' => ChannelType::TYPE
+            'channelType' => MagentoChannelType::TYPE
         ]);
 
         $websites = [];

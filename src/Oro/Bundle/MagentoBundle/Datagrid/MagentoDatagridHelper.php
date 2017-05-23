@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class MagentoDatagridHelper
 {
@@ -35,10 +35,13 @@ class MagentoDatagridHelper
      */
     public function getMagentoChannelsQueryBuilder()
     {
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
         return function (EntityRepository $er) {
             return $er->createQueryBuilder('c')
                 ->where('c.type = :type')
-                ->setParameter('type', ChannelType::TYPE);
+                ->setParameter('type', MagentoChannelType::TYPE);
         };
     }
 
@@ -55,7 +58,10 @@ class MagentoDatagridHelper
         $qb = $channelRepo->createQueryBuilder('mc')
             ->select('IDENTITY(mc.dataSource) as channelId, mc.name as name')
             ->where('mc.channelType = :type')
-            ->setParameter('type', 'magento');
+            /**
+             * @todo Remove dependency on exact magento channel type in CRM-8153
+             */
+            ->setParameter('type', MagentoChannelType::TYPE);
         $results = $this->aclHelper->apply($qb)->getArrayResult();
         $magentoChannels = array_combine(array_column($results, 'channelId'), array_column($results, 'name'));
 

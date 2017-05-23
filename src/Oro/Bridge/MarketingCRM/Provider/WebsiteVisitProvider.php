@@ -10,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\DateFilterTrait;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -51,8 +51,10 @@ class WebsiteVisitProvider implements WebsiteVisitProviderInterface, FeatureTogg
         if (!$this->isFeaturesEnabled()) {
             return 0;
         }
-
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
+        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(MagentoChannelType::TYPE);
         if (!$visitsQb instanceof QueryBuilder) {
             return 0;
         }
