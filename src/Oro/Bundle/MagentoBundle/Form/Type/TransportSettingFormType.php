@@ -5,8 +5,8 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
@@ -22,15 +22,21 @@ class TransportSettingFormType extends AbstractType
     /** @var TypesRegistry */
     protected $registry;
 
+    /** @var SettingsFormSubscriber */
+    protected $subscriber;
+
     /**
      * @param TransportInterface $transport
+     * @param SettingsFormSubscriber $subscriber
      * @param TypesRegistry $registry
      */
     public function __construct(
         TransportInterface $transport,
+        SettingsFormSubscriber $subscriber,
         TypesRegistry $registry
     ) {
         $this->transport  = $transport;
+        $this->subscriber = $subscriber;
         $this->registry   = $registry;
     }
 
@@ -39,6 +45,8 @@ class TransportSettingFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventSubscriber($this->subscriber);
+
         $builder->add(
             'apiUrl',
             'text',

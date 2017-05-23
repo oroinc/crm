@@ -255,6 +255,9 @@ services:
         arguments:
             - "@oro_security.encoder.mcrypt"
 
+    oro_magento.form.subscriber.transport_setting:
+        class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
+
     oro_magento.form.type.soap_transport_setting:
         class: %oro_magento.form.type.soap_transport_setting.class%
         arguments:
@@ -268,6 +271,7 @@ services:
         class: Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType
         arguments:
             - "@oro_magento.transport.rest_transport"
+            - "@oro_magento.form.subscriber.transport_setting"
             - "@oro_integration.manager.types_registry"
         tags:
             - { name: form.type, alias: oro_magento_rest_transport_setting_form_type }

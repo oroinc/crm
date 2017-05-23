@@ -43,7 +43,7 @@ class CustomerIconProvider implements CustomerIconProviderInterface
          * @var IconAwareIntegrationInterface $channelType
          */
         $channelType = $this->integrationTypeRegistry->getIntegrationByType($channelTypeCode);
-        
+
         if ($channelType instanceof IconAwareIntegrationInterface) {
             return new Image(
                 Image::TYPE_FILE_PATH,

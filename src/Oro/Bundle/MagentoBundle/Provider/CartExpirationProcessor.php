@@ -133,7 +133,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
         }
 
         $websiteId = $settings->get('website_id');
-        $stores    = $this->getSores($transport, $websiteId);
+        $stores    = $this->getStores($transport, $websiteId);
 
         if (empty($stores)) {
             throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
@@ -149,7 +149,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
      *
      * @return array
      */
-    protected function getSores(MagentoTransportInterface $transport, $websiteId)
+    protected function getStores(MagentoTransportInterface $transport, $websiteId)
     {
         $stores = [];
         foreach ($transport->getStores() as $store) {
