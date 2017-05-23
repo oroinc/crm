@@ -33,11 +33,11 @@ class WebsiteChoicesProvider
         $websites = array_map(
             function ($website) {
                 return [
-                    'id' => $website['website_id'],
+                    'id' => $website['id'],
                     'label' => $this->translator->trans(
                         'Website ID: %websiteId%, Stores: %storesList%',
                         [
-                            '%websiteId%' => $website['website_id'],
+                            '%websiteId%' => $website['id'],
                             '%storesList%' => $website['name']
                         ]
                     )
