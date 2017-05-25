@@ -54,7 +54,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->parameterBag = new ParameterBag();
 
         $this->transportEntity = $this->getMockBuilder(MagentoTransport::class)
-            ->setMethods(['setApiToken', 'getSettingsBag'])
+            ->setMethods(['setApiToken', 'getSettingsBag', 'getId'])
             ->getMock();
 
         $this->transportEntity
@@ -89,7 +89,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     public function testInvalidTokenRequestParams()
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->setUpdateTokenNeverCall();
+        $this->setUpdateEntityNeverCall();
         $this->tokenProvider->getToken($this->transportEntity, $this->client);
     }
 
@@ -113,7 +113,11 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
         if (isset($expectedExceptionMessage)) {
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
-        $this->setUpdateTokenNeverCall();
+        $this->transportEntity
+            ->expects($this->never())
+            ->method('setApiToken')
+            ->with('token');
+        $this->setUpdateEntityNeverCall();
         $this->tokenProvider->getToken($this->transportEntity, $this->client);
     }
 
@@ -132,8 +136,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
-    public function testValidResult()
+    public function testValidResultAndTransportEntityAlreadySavedToDB()
     {
         $this->client->setDefaultResponse(
             new FakeRestResponse(CODES::HTTP_OK, [], '"token"')
@@ -147,8 +150,38 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
             ->method('setApiToken')
             ->with('token');
 
+        $this->transportEntity
+            ->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(1);
+
         $this->entityManager->expects($this->once())->method('persist')->with($this->transportEntity);
         $this->entityManager->expects($this->once())->method('flush')->with($this->transportEntity);
+
+        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+    }
+
+    public function testValidResultAndTransportEntityNotSavedToDB()
+    {
+        $this->client->setDefaultResponse(
+            new FakeRestResponse(CODES::HTTP_OK, [], '"token"')
+        );
+        $this->parameterBag->add([
+            RestTokenProvider::USER_KEY => 'api_user',
+            RestTokenProvider::PASSWORD_KEY => 'api_key'
+        ]);
+
+        $this->transportEntity
+            ->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->transportEntity
+            ->expects($this->atLeastOnce())
+            ->method('setApiToken')
+            ->with('token');
+
+        $this->setUpdateEntityNeverCall();
 
         $this->tokenProvider->getToken($this->transportEntity, $this->client);
     }
@@ -166,17 +199,16 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
             RestTokenProvider::USER_KEY => 'api_user',
             RestTokenProvider::PASSWORD_KEY => 'api_key'
         ]);
-        $this->setUpdateTokenNeverCall();
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
-    }
-
-    protected function setUpdateTokenNeverCall()
-    {
         $this->transportEntity
             ->expects($this->never())
             ->method('setApiToken')
             ->with('token');
+        $this->setUpdateEntityNeverCall();
+        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+    }
 
+    protected function setUpdateEntityNeverCall()
+    {
         $this->entityManager->expects($this->never())->method('persist')->with($this->transportEntity);
         $this->entityManager->expects($this->never())->method('flush')->with($this->transportEntity);
     }

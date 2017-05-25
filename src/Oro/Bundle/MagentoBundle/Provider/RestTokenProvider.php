@@ -138,9 +138,15 @@ class RestTokenProvider implements LoggerAwareInterface
      */
     protected function updateToken(MagentoTransport $transportEntity, $token)
     {
-        $em = $this->doctrine->getEntityManagerForClass(Transport::class);
         $transportEntity->setApiToken($token);
-        $em->persist($transportEntity);
-        $em->flush($transportEntity);
+
+        /**
+         * Save api-token only if record already exist to the database
+         */
+        if ($transportEntity->getId()) {
+            $em = $this->doctrine->getEntityManagerForClass(Transport::class);
+            $em->persist($transportEntity);
+            $em->flush($transportEntity);
+        }
     }
 }
