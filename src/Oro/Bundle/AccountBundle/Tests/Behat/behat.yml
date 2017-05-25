@@ -1,0 +1,24 @@
+oro_behat_extension:
+  suites:
+    OroAccountBundle:
+      contexts:
+        - Oro\Bundle\AccountBundle\Tests\Behat\Context\FeatureContext
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - OroActivityListBundle::ActivityContext
+        - OroDataGridBundle::GridContext
+        - OroFormBundle::FormContext
+        - OroQueryDesignerBundle::QueryDesignerContext
+        - OroSecurityBundle::ACLContext
+      paths:
+        - '@OroAccountBundle/Tests/Behat/Features'
+
+  elements:
+    Report Form:
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      selector: "form[id^='oro_report_form']"
+      options:
+        mapping:
+          Name: oro_report_form[name]
+          Entity: oro_report_form[entity]
+          Report Type: oro_report_form[type]
