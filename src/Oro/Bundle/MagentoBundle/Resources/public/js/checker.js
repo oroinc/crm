@@ -21,6 +21,12 @@ define([
         route:           'oro_magento_integration_check',
         url:             null,
         id:              null,
+        form:            null,
+        /**
+         * Use in case we edit existed integration
+         * and element type is disabled
+         */
+        integrationType:   null,
         requiredOptions: [
             'websiteSelectEl',
             'websitesListEl',
@@ -45,6 +51,7 @@ define([
         initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
+            this.integrationType = options.integrationType || null;
             this.url = this.getUrl();
 
             var requiredMissed = this.requiredOptions.filter(function(option) {
@@ -53,6 +60,20 @@ define([
             if (requiredMissed.length) {
                 throw new TypeError('Missing required option(s): ' + requiredMissed.join(','));
             }
+        },
+
+        getForm: function() {
+            if (this.form !== null && this.form.length) {
+                return this.form;
+            }
+
+            this.form = this.$el.parents('form');
+
+            if (this.form.length === 0) {
+                throw new Error('Expected form not found !');
+            }
+
+            return this.form;
         },
 
         /**
@@ -77,6 +98,12 @@ define([
 
             if (_.isObject(integrationType)) {
                 params.type = integrationType.value;
+            } else {
+                /**
+                 * In case we on edit page and field type is disabled
+                 * so we can't get it from element data array
+                 */
+                params.type = this.integrationType;
             }
 
             var transportType = _.first(
@@ -112,7 +139,7 @@ define([
          * Click handler
          */
         processClick: function() {
-            var fields = this.$el.parents('form').serializeArray();
+            var fields = this.getForm().formToArray();
             var transportAndIntegrationTypeParams = this.getIntegrationAndTransportTypeParams(fields);
             var url = this.getUrl(transportAndIntegrationTypeParams);
             var data = this.getDataForRequestFromFields(fields);
