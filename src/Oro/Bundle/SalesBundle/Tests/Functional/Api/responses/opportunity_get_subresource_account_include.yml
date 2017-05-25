@@ -1,0 +1,20 @@
+data:
+    type: accounts
+    id: '<toString(@account1->id)>'
+    relationships:
+        organization:
+            data:
+                type: organizations
+                id: '<toString(@organization->id)>'
+included:
+    -
+        type: organizations
+        id: '<toString(@organization->id)>'
+        attributes:
+            name: '@organization->getName()'
+        relationships:
+            users:
+                data:
+                    -
+                        type: users
+                        id: '<toString(@user->id)>'

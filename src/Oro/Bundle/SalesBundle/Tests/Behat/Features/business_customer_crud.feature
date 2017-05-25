@@ -8,7 +8,7 @@ Feature: Managing business customer
     Given I login as administrator
     And I go to System/Channels
     And click edit Business Customers in grid
-    When I press "Save and Close"
+    When I save and close form
     Then I should see "Channel saved" flash message
 
   Scenario: Business customer create

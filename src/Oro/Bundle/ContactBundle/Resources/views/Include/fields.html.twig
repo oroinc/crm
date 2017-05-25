@@ -1,9 +1,9 @@
 {% extends 'OroAddressBundle:Include:fields.html.twig' %}
 
 {% block oro_typed_address_rows %}
-    {{ form_row(form.types, {label: 'oro.contact.contactaddress.types.label'}) }}
     {{ form_row(form.primary, {label: 'oro.contact.contactaddress.primary.label'}) }}
     {{ block('oro_address_rows') }}
+    {{ form_row(form.types, {label: 'oro.contact.contactaddress.types.label'}) }}
 {%  endblock %}
 
 {% block oro_address_rows %}

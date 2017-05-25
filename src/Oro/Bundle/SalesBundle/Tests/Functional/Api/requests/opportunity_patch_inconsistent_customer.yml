@@ -1,0 +1,12 @@
+data:
+    type: opportunities
+    id: '<toString(@opportunity1->id)>'
+    relationships:
+        account:
+            data:
+                type: accounts
+                id: '<toString(@account1->id)>'
+        customer:
+            data:
+                type: b2bcustomers
+                id: '<toString(@b2b_customer2->id)>'

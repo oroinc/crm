@@ -8,19 +8,15 @@ use Psr\Log\LoggerInterface;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\PlatformBundle\Manager\OptionalListenerManager;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
+
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Job\JobRunner;
@@ -143,8 +139,17 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
-            // Disable search listeners to increase the performance
-            $this->disableOptionalListeners();
+            $enabledListeners = [
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+            ];
+
+            $disabledListeners = [
+                'oro_magento.event_listener.delayed_search_reindex'
+            ];
+
+            $this->changeListenersStatus($enabledListeners, $disabledListeners);
+
             $this->setTemporaryIntegrationToken($integration);
 
             $result = $this->initialSyncProcessor->process(
@@ -155,8 +160,9 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
 
             if ($result) {
                 $this->scheduleAnalyticRecalculation($integration);
-                $this->scheduleSearchReindex();
             }
+
+            $this->changeListenersStatus($disabledListeners, $enabledListeners);
 
             return $result;
         });
@@ -172,17 +178,23 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         return [Topics::SYNC_INITIAL_INTEGRATION];
     }
 
-    private function disableOptionalListeners()
+    /**
+     * @param array $disableListeners
+     * @param array $enableListeners
+     */
+    private function changeListenersStatus(array $disableListeners, array $enableListeners = [])
     {
-        $disabledOptionalListeners = [
-            'oro_search.index_listener',
-            'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-        ];
+        $knownListeners = $this->optionalListenerManager->getListeners();
 
-        $knownListeners  = $this->optionalListenerManager->getListeners();
-        foreach ($disabledOptionalListeners as $listenerId) {
+        foreach ($disableListeners as $listenerId) {
             if (in_array($listenerId, $knownListeners, true)) {
                 $this->optionalListenerManager->disableListener($listenerId);
+            }
+        }
+
+        foreach ($enableListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $this->optionalListenerManager->enableListener($listenerId);
             }
         }
     }
@@ -205,15 +217,5 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
-    }
-
-    /**
-     * Add jobs to reindex magento entities
-     */
-    private function scheduleSearchReindex()
-    {
-        $entities = [Order::class, Cart::class, Customer::class, Account::class, Contact::class];
-
-        $this->indexer->reindex($entities);
     }
 }

@@ -8,7 +8,7 @@ Scenario: Update Sales Channel
 	Given I login as administrator
 	And I go to System/Channels
 	And click edit Sales Channel in grid
-	When I press "Save and Close"
+	When I save and close form
 	Then I should see "Channel saved" flash message
 
 Scenario Outline: No records to delete selected
