@@ -210,6 +210,8 @@ class OpportunityApiTest extends RestJsonApiTestCase
      */
     public function testGetAccountSubresource(array $parameters, $expectedDataFileName)
     {
+        $this->assertNotEmpty($this->getReference('organization')->getName());
+
         $response = $this->getSubresource(
             [
                 'entity'      => 'opportunities',
