@@ -89,12 +89,14 @@ class TransportHandler
     public function getCheckResponse()
     {
         $transport = $this->getMagentoTransport();
+        $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
 
         $extensionVersion = $transport->getExtensionVersion();
         $isExtensionInstalled = !empty($extensionVersion);
         $isSupportedVersion = $transport->isSupportedExtensionVersion();
-        $allowedTypesChoices = $this->connectorProvider
-                                    ->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion);
+        $allowedTypesChoices = $this
+            ->connectorProvider
+            ->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationTypeName);
 
         return  [
             'success' => true,

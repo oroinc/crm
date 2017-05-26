@@ -28,13 +28,14 @@ class ConnectorChoicesProvider
     /**
      * @param bool $isExtensionInstalled
      * @param bool $isSupportedVersion
-     * @return string[]
+     * @param $integrationType
+     * @return \string[]
      */
-    public function getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion)
+    public function getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationType)
     {
         $allowedTypesChoices = $this->typesRegistry
             ->getAvailableConnectorsTypesChoiceList(
-                MagentoChannelType::TYPE,
+                $integrationType,
                 function (ConnectorInterface $connector) use ($isExtensionInstalled, $isSupportedVersion) {
                     if ($connector instanceof ExtensionVersionAwareInterface) {
                         return $isExtensionInstalled && $isSupportedVersion;
