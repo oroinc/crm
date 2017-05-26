@@ -7,18 +7,23 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 
-use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\DeletionQueryResultIterator;
+use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class AddMissingSalesCustomerRelation extends AbstractFixture implements ContainerAwareInterface
+class AddMissingSalesCustomerRelation extends AbstractFixture implements
+    ContainerAwareInterface,
+    VersionedFixtureInterface
 {
+    const BUFFER_SIZE = 1000;
+
     /** @var ContainerInterface */
     private $container;
 
@@ -81,7 +86,8 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
         $qb->where($qb->expr()->isNull(sprintf('ca.%s', $associationName)));
         $qb->andWhere($qb->expr()->isNotNull('mc.account'));
 
-        $iterator = new BufferedQueryResultIterator($qb->getQuery());
+        $iterator = new DeletionQueryResultIterator($qb->getQuery());
+        $iterator->setBufferSize(self::BUFFER_SIZE);
         $connection->transactional(function () use ($manager, $iterator, $associationName) {
             $connection = $manager->getConnection();
             $insertQB = $connection->createQueryBuilder();
@@ -98,5 +104,13 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
                 $connection->executeQuery($insertQuery);
             }
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.1';
     }
 }
