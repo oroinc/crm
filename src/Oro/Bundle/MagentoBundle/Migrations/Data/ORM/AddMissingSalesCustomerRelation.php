@@ -8,21 +8,26 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
 class AddMissingSalesCustomerRelation extends AbstractFixture implements
     ContainerAwareInterface,
-    DependentFixtureInterface
+    DependentFixtureInterface,
+    VersionedFixtureInterface
 {
-    use ContainerAwareTrait;
+    const BUFFER_SIZE = 1000;
+
+    /** @var ContainerInterface */
+    private $container;
 
     /**
      * {@inheritdoc}
@@ -32,6 +37,14 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements
         return [
             CreateAccountEntities::class
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -85,7 +98,8 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements
         $qb->where($qb->expr()->isNull(sprintf('ca.%s', $associationName)));
         $qb->andWhere($qb->expr()->isNotNull('mc.account'));
 
-        $iterator = new BufferedQueryResultIterator($qb->getQuery());
+        $iterator = new BufferedIdentityQueryResultIterator($qb->getQuery());
+        $iterator->setBufferSize(self::BUFFER_SIZE);
         $connection->transactional(function () use ($manager, $iterator, $associationName) {
             $connection = $manager->getConnection();
             $insertQB = $connection->createQueryBuilder();
@@ -98,8 +112,17 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements
                         'account_id' => $item['account_id'],
                         $associationName . '_id' => $item['id'],
                     ]);
+
                 $connection->executeQuery($insertQuery);
             }
         });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.1';
     }
 }
