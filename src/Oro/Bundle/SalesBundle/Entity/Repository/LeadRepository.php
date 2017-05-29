@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository
@@ -36,7 +36,7 @@ class LeadRepository extends EntityRepository
                 ->setParameter('dateEnd', $dateRange['end']);
         }
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         $rows = $aclHelper->apply($qb)->getArrayResult();

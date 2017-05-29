@@ -12,7 +12,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -153,7 +153,7 @@ class OpportunityRepository extends EntityRepository
         }
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'opportunity.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'opportunity.owner', $owners);
         }
 
         $groupedData = $aclHelper->apply($qb)->getArrayResult();
@@ -216,7 +216,7 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('notCountedStatuses', ['lost', 'won']);
         if (!empty($ownerIds)) {
             $qb->join('opportunity.owner', 'owner');
-            QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
 
         if ($start) {
@@ -447,7 +447,7 @@ class OpportunityRepository extends EntityRepository
         }
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -538,7 +538,7 @@ class OpportunityRepository extends EntityRepository
         $this->setCreationPeriod($qb, $start, $end);
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -569,7 +569,7 @@ class OpportunityRepository extends EntityRepository
         $this->setCreationPeriod($qb, $start, $end);
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -612,7 +612,7 @@ class OpportunityRepository extends EntityRepository
         $this->setClosedPeriod($qb, $start, $end);
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -662,7 +662,7 @@ class OpportunityRepository extends EntityRepository
         $this->setClosedPeriod($qb, $start, $end);
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -762,7 +762,7 @@ class OpportunityRepository extends EntityRepository
         $dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
 
         if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+            QueryBuilderUtil::applyOptimizedIn($qb, 'o.owner', $owners);
         }
 
         return $qb;

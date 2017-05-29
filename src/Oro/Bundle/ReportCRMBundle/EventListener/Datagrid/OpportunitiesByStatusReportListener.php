@@ -4,7 +4,7 @@ namespace Oro\Bundle\ReportCRMBundle\EventListener\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
@@ -177,9 +177,9 @@ class OpportunitiesByStatusReportListener
 
         // date range comparison
         if (is_array($comparator)) {
-            $paramStart = QueryUtils::generateParameterName($fieldName);
+            $paramStart = QueryBuilderUtil::generateParameterName($fieldName);
             $queryBuilder->setParameter($paramStart, $data['date_start']);
-            $paramEnd = QueryUtils::generateParameterName($fieldName);
+            $paramEnd = QueryBuilderUtil::generateParameterName($fieldName);
             $queryBuilder->setParameter($paramEnd, $data['date_end']);
 
             return sprintf(
@@ -192,7 +192,7 @@ class OpportunitiesByStatusReportListener
 
         $value = !empty($data['date_start']) ? $data['date_start'] : $data['date_end'];
         // simple date comparison
-        $param = QueryUtils::generateParameterName($fieldName);
+        $param = QueryBuilderUtil::generateParameterName($fieldName);
         $queryBuilder->setParameter($param, $value);
 
         return sprintf(' AND (%s)', $this->formatComparison($field, $comparator, $param));

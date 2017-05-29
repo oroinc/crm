@@ -11,7 +11,7 @@ included:
         type: organizations
         id: '<toString(@organization->id)>'
         attributes:
-            name: OroCRM
+            name: '@organization->getName()'
         relationships:
             users:
                 data:
