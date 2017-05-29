@@ -55,9 +55,10 @@ class ConnectorChoicesProviderTest extends \PHPUnit_Framework_TestCase
              ->method('getAvailableConnectorsTypesChoiceList')
              ->willReturn($expected);
 
+        $choices = $this->connectorChoicesProvider->getAllowedConnectorsChoices(true, true, 'magento');
         $this->assertEquals(
             $expected,
-            $this->connectorChoicesProvider->getAllowedConnectorsChoices(true, true)
+            $choices
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
@@ -6,6 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 
 class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,6 +16,9 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
 
     /** @var  TypesRegistry| \PHPUnit_Framework_MockObject_MockObject */
     protected $typesRegistry;
+
+    /** @var SettingsFormSubscriber | \PHPUnit_Framework_MockObject_MockObject */
+    protected $settingFormSubscriber;
 
     /** @var  RestTransportSettingFormType */
     protected $type;
@@ -28,8 +33,11 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->settingFormSubscriber = $this->createMock(SettingsFormSubscriber::class);
+
         $this->type = new RestTransportSettingFormType(
             $this->restTransport,
+            $this->settingFormSubscriber,
             $this->typesRegistry
         );
     }
@@ -45,9 +53,12 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->once())
+        $builder->expects($this->exactly(2))
             ->method('addEventSubscriber')
-            ->with($this->isInstanceOf(ConnectorsFormSubscriber::class));
+            ->with($this->logicalOr(
+                $this->isInstanceOf(SettingsFormSubscriber::class),
+                $this->isInstanceOf(ConnectorsFormSubscriber::class)
+            ));
 
         $builder->expects($this->any())
             ->method('add')

@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 
 class UniqueCustomerEmailSoapProviderTest extends \PHPUnit_Framework_TestCase
@@ -44,10 +45,7 @@ class UniqueCustomerEmailSoapProviderTest extends \PHPUnit_Framework_TestCase
         $customer->method('getEmail')->willReturn('oro@mail.com');
         $customer->method('getStore')->willReturn($store);
 
-        $transport = $this->getMockBuilder(SoapTransport::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['call'])
-            ->getMock();
+        $transport = $this->createMock(MagentoSoapTransportInterface::class);
 
         $transport->method('call')->willReturn($customers);
 

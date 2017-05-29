@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,17 +19,17 @@ class TransportEntityProvider
     /** @var  FormFactoryInterface */
     protected $formFactory;
 
-    /** @var  Request */
-    protected $entityManager;
+    /** @var  ManagerRegistry */
+    protected $registry;
 
     /**
      * @param FormFactoryInterface $formFactory
-     * @param EntityManager $entityManager
+     * @param ManagerRegistry $registry
      */
-    public function __construct(FormFactoryInterface $formFactory, EntityManager $entityManager)
+    public function __construct(FormFactoryInterface $formFactory, ManagerRegistry $registry)
     {
-        $this->formFactory      = $formFactory;
-        $this->entityManager    = $entityManager;
+        $this->formFactory = $formFactory;
+        $this->registry    = $registry;
     }
 
     /**
@@ -42,9 +42,12 @@ class TransportEntityProvider
      */
     public function getTransportEntityByRequest(MagentoTransportInterface $transport, Request $request)
     {
-        $entityId = $request->get(self::ENTITY_ID, false);
+        $data = null;
+        $entityId = $request->get(self::ENTITY_ID);
 
-        $data = $entityId ? $this->findTransportEntity($transport->getSettingsEntityFQCN(), $entityId) : null;
+        if (null !== $entityId) {
+            $data = $this->findTransportEntity($transport, $entityId);
+        }
 
         $form = $this->formFactory
             ->createNamed(
@@ -60,23 +63,14 @@ class TransportEntityProvider
     }
 
     /**
-     * @param string|TransportInterface $settingsEntity
+     * @param TransportInterface $settingsEntity
      * @param string                    $entityId
-     * @return null|object
-     * @throws \LogicException
+     * @return object
      */
-    public function findTransportEntity($settingsEntity, $entityId)
+    protected function findTransportEntity(TransportInterface $settingsEntity, $entityId)
     {
-        if ($settingsEntity instanceof TransportInterface) {
-            $settingsEntityFQCN = $settingsEntity->getSettingsEntityFQCN();
-        } elseif (!is_object($settingsEntity)) {
-            $settingsEntityFQCN = $settingsEntity;
-        } else {
-            throw new \LogicException(
-                sprintf('$settingsEntity must be string or instanceof %s', TransportInterface::class)
-            );
-        }
-
-        return $this->entityManager->find($settingsEntityFQCN, $entityId);
+        $className = $settingsEntity->getSettingsEntityFQCN();
+        $em = $this->registry->getManagerForClass($className);
+        return $em->find($className, $entityId);
     }
 }

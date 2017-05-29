@@ -77,11 +77,13 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
+                        'id' => 0,
                     ],
                     [
                         'website_id' => 1,
                         'code' => 'custom',
                         'name' => 'Custom',
+                        'id' => 1,
                     ]
                 ],
                 [
@@ -89,11 +91,13 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
+                        'id' => 0,
                     ],
                     [
                         'website_id' => 1,
                         'code' => 'custom',
                         'name' => 'Custom',
+                        'id' => 1,
                     ]
                 ]
             ]
@@ -113,25 +117,29 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
-                        'store_id' => Store::ADMIN_STORE_ID
+                        'store_id' => Store::ADMIN_STORE_ID,
+                        'id' => 0,
                     ],
                     2 => [
                         'store_id' => 2,
                         'code' => 'fr_b2c',
                         'website_id' => 1,
-                        'name' => 'B2C French'
+                        'name' => 'B2C French',
+                        'id' => 1,
                     ]
                 ],
                 [
                     0 => [
                         'name' => 'Admin',
                         'code' => 'admin',
-                        'website_id' => Store::ADMIN_STORE_ID
+                        'website_id' => Store::ADMIN_STORE_ID,
+                        'id' => 0,
                     ],
                     1 => [
                         'name' => 'B2C French',
                         'code' => 'fr_b2c',
-                        'website_id' => 1
+                        'website_id' => 1,
+                        'id' => 1,
                     ]
                 ]
             ],
@@ -141,20 +149,23 @@ class WebsiteSoapIteratorTest extends BaseIteratorTestCase
                         'store_id' => 1,
                         'code' => 'fr_b2b',
                         'website_id' => 1,
-                        'name' => 'B2B French'
+                        'name' => 'B2B French',
+                        'id' => 1,
                     ],
                     2 => [
                         'store_id' => 2,
                         'code' => 'fr_b2c',
                         'website_id' => 1,
-                        'name' => 'B2C French'
+                        'name' => 'B2C French',
+                        'id' => 1,
                     ]
                 ],
                 [
                     1 => [
                         'name' => 'B2B French, B2C French',
                         'code' => 'fr_b2b / fr_b2c',
-                        'website_id' => 1
+                        'website_id' => 1,
+                        'id' => 1,
                     ]
                 ]
             ]

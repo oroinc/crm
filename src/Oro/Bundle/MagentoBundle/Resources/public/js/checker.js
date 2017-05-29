@@ -26,7 +26,6 @@ define([
          * Use in case we edit existed integration
          * and element type is disabled
          */
-        integrationType:   null,
         requiredOptions: [
             'websiteSelectEl',
             'websitesListEl',
@@ -51,7 +50,6 @@ define([
         initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
-            this.integrationType = options.integrationType || null;
             this.url = this.getUrl();
 
             var requiredMissed = this.requiredOptions.filter(function(option) {
@@ -103,7 +101,10 @@ define([
                  * In case we on edit page and field type is disabled
                  * so we can't get it from element data array
                  */
-                params.type = this.integrationType;
+                var typeEl = this.getForm().find('[name$="[type]"]').first();
+                if (typeEl.length) {
+                    params.type = typeEl.val();
+                }
             }
 
             var transportType = _.first(

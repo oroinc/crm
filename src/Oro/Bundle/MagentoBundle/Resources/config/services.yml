@@ -1177,4 +1177,4 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider
         arguments:
             - '@form.factory'
-            - '@doctrine.orm.entity_manager'
+            - '@doctrine'

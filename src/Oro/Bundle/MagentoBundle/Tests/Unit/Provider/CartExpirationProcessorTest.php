@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
@@ -52,7 +53,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock(MagentoSoapTransportInterface::class);
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')->will($this->returnValue(false));
 
         $this->helper->expects($this->once())->method('getTransport')
@@ -78,7 +79,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock(MagentoSoapTransportInterface::class);
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')
@@ -119,7 +120,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->any())->method('getSettingsBag')
             ->will($this->returnValue($settingBag));
 
-        $realTransport = $this->createMock('Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+        $realTransport = $this->createMock(MagentoSoapTransportInterface::class);
         $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')

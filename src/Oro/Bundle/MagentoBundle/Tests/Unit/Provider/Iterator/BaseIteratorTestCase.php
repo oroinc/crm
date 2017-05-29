@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 
 class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 {
-    /** @var AbstractBridgeSoapIterator */
+    /** @var AbstractBridgeIterator */
     protected $iterator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransportInterface */
     protected $transport;
 
     /** @var array */
@@ -18,9 +18,7 @@ class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->transport = $this->getMockBuilder('Oro\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->transport = $this->createMock(MagentoSoapTransportInterface::class);
 
         $this->settings  = ['start_sync_date' => new \DateTime('NOW'), 'website_id' => 0];
     }

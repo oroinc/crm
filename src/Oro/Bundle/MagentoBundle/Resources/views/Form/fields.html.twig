@@ -1,7 +1,6 @@
 {% macro getCheckerOptions(form, elSelector) %}
     {% set modificationAreAllowed = form.websiteId.vars.disabled is not defined or form.websiteId.vars.disabled == false %}
     {% set transportEntityId = form.vars.value is defined ? form.vars.value.id : null %}
-    {% set integrationType     = form.parent is defined and form.parent.vars.value is defined ? form.parent.vars.value.type : null %}
     {% set soapCheckerOptions = {
         el:                     elSelector,
         websiteSelectEl:        '#' ~ form.websiteId.vars.id,
@@ -13,7 +12,6 @@
 
         websitesModificationAllowed : modificationAreAllowed,
         transportEntityId           : transportEntityId,
-        integrationType             : integrationType,
     } %}
     {%  if form.adminUrl is defined %}
         {% set soapCheckerOptions = soapCheckerOptions|merge({adminUrlEl: '#' ~ form.adminUrl.vars.id}) %}
@@ -22,7 +20,7 @@
 {% endmacro %}
 
 {% block oro_magento_transport_check_button_widget %}
-    {% set entity = form.parent.vars.value %}
+    {% set oroBridgeExtension = form.parent.vars.oroBridgeExtension is defined ? form.parent.vars.oroBridgeExtension : null %}
     <div class="control-group">
         <div class="controls">
             <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
@@ -32,10 +30,10 @@
                     new Checker({{ _self.getCheckerOptions(form.parent, '#' ~ form.vars.id) }});
                 });
             </script>
-            {% if entity is not null and entity.id is not empty %}
-                {% if entity.isExtensionInstalled %}
-                    {% if not entity.supportedExtensionVersion %}
-                        {% set message = 'oro.magento.magentotransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
+            {% if oroBridgeExtension is not null %}
+                {% if oroBridgeExtension.isExtensionInstalled %}
+                    {% if not oroBridgeExtension.isSupportExtensionVersion %}
+                        {% set message = 'oro.magento.magentotransport.message.outdated_bridge'|trans({'%extension_version%': oroBridgeExtension.extensionVersion}) %}
                         {% set messageType = 'warning' %}
                     {% endif %}
                 {% else %}
@@ -67,7 +65,7 @@
                 {{ form_widget(form) }}
                 {% if form.vars.disabled is not sameas(true) %}
                     <a href="javascript:void(0)" class="no-hash sync-website-list-link">
-                        <i class="fa-refresh"></i>{{ 'Sync website list'|trans }}
+                        <i class="fa-refresh"></i>{{ 'oro.magento.magentotransport.website_refresh.label'|trans }}
                     </a>
                     <script type="text/javascript">
                         require(['oro/magento/checker'], function (Checker) {

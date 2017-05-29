@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 
 abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
 {
@@ -26,7 +26,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
     /**
      * {@inheritdoc}
      */
-    public function __construct(SoapTransport $transport, array $settings)
+    public function __construct(MagentoSoapTransportInterface $transport, array $settings)
     {
         parent::__construct($transport, $settings);
 

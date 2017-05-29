@@ -35,7 +35,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
         $this->form = $this->factory->create('oro_magento_soap_transport_setting_form_type');
 
         $mcrypt = $this
-            ->getMockBuilder('Oro\Bundle\SecurityBundle\Encoder\Mcrypt')
+            ->getMockBuilder(Mcrypt::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -47,7 +47,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
             ->getMock();
 
         $this->event
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getForm')
             ->willReturn($this->form);
     }
@@ -61,7 +61,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
     public function testPreSetWebsites($websites, $expected)
     {
         $data = $this
-            ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
+            ->getMockBuilder(MagentoTransport::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
             ->willReturn($websites);
 
         $this->event
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn($data);
 
@@ -110,7 +110,7 @@ class SoapSettingsFormSubscriberTest extends FormIntegrationTestCase
     public function testPreSubmitWebsites($data, $expected)
     {
         $this->event
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn($data);
 

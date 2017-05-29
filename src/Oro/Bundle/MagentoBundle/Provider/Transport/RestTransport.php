@@ -26,6 +26,9 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class RestTransport implements
     TransportInterface,
     RestTransportInterface,
@@ -35,6 +38,8 @@ class RestTransport implements
     LoggerAwareInterface
 {
     use LoggerAwareTrait;
+
+    const REQUIRED_EXTENSION_VERSION = '0.0.0';
 
     const API_URL_PREFIX = 'rest/V1';
     const TOKEN_KEY = 'api_token';
@@ -48,7 +53,7 @@ class RestTransport implements
     protected $headers = [];
 
     /**
-     * @var Transport
+     * @var MagentoTransport
      */
     protected $transportEntity;
 
@@ -261,7 +266,7 @@ class RestTransport implements
         try {
             return $this->client->get('store/websites', [], $this->headers)->json();
         } catch (RestException $e) {
-            return $this->handleException($e, 'getWebsites');
+            return $this->handleException($e, 'doGetWebsitesRequest');
         }
     }
 
@@ -374,7 +379,8 @@ class RestTransport implements
      */
     public function isSupportedExtensionVersion()
     {
-        // TODO: Implement isSupportedExtensionVersion() method.
+        return $this->isExtensionInstalled()
+            && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
     }
 
     /**
@@ -444,7 +450,7 @@ class RestTransport implements
     /** {@inheritdoc} */
     public function getRequiredExtensionVersion()
     {
-        // TODO: Implement getRequiredExtensionVersion() method.
+        return self::REQUIRED_EXTENSION_VERSION;
     }
 
     /**

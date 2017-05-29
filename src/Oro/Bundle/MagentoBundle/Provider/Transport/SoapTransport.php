@@ -36,8 +36,7 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SoapTransport extends BaseSOAPTransport implements
-    MagentoTransportInterface,
-    SoapTransportInterface,
+    MagentoSoapTransportInterface,
     ServerTimeAwareInterface,
     PingableInterface,
     TransportCacheClearInterface

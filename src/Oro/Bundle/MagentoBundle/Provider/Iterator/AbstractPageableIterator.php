@@ -7,7 +7,7 @@ use Psr\Log\NullLogger;
 
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
 
 /**
@@ -34,7 +34,7 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
     /** @var \DateInterval */
     protected $syncRange;
 
-    /** @var MagentoTransportInterface */
+    /** @var MagentoSoapTransportInterface */
     protected $transport;
 
     /** @var BatchFilterBag */
@@ -66,10 +66,10 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
     protected $storesByWebsite = [];
 
     /**
-     * @param MagentoTransportInterface $transport
+     * @param MagentoSoapTransportInterface $transport
      * @param array $settings
      */
-    public function __construct(MagentoTransportInterface $transport, array $settings)
+    public function __construct(MagentoSoapTransportInterface $transport, array $settings)
     {
         $this->transport = $transport;
         $this->websiteId = $settings['website_id'];

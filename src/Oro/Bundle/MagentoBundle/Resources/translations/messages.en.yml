@@ -552,10 +552,11 @@ oro:
             website_id.tooltip:           This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             websites.label:               Websites
             check_connection.label:       Check connection
+            website_refresh.label:        Sync website list
             initial_sync_start_date.label: Initial sync start date
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
-                outdated_brige: OroBridge v.%extension_version% is used—outdated version
+                outdated_bridge: OroBridge v.%extension_version% is used—outdated version
             soap:
                 api_user.label:               SOAP API User
                 api_key.label:                SOAP API Key

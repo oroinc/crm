@@ -4,19 +4,22 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class TransportSettingFormType extends AbstractType
 {
     const NAME = 'oro_magento_transport_setting_form_type';
 
-    /** @var TransportInterface */
+    /** @var MagentoTransportInterface */
     protected $transport;
 
     /** @var TypesRegistry */
@@ -26,12 +29,12 @@ class TransportSettingFormType extends AbstractType
     protected $subscriber;
 
     /**
-     * @param TransportInterface $transport
+     * @param MagentoTransportInterface $transport
      * @param SettingsFormSubscriber $subscriber
      * @param TypesRegistry $registry
      */
     public function __construct(
-        TransportInterface $transport,
+        MagentoTransportInterface $transport,
         SettingsFormSubscriber $subscriber,
         TypesRegistry $registry
     ) {
@@ -139,5 +142,32 @@ class TransportSettingFormType extends AbstractType
     public function getBlockPrefix()
     {
         return static::NAME;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        /**
+         * @var $transport MagentoTransport
+         */
+        $transportEntity = $form->getData();
+        if ($transportEntity instanceof MagentoTransport && $transportEntity->getId()) {
+            $isExtensionInstalled = $transportEntity->getIsExtensionInstalled();
+            $extensionVersion = $transportEntity->getExtensionVersion();
+            $isSupportExtensionVersion = $isExtensionInstalled &&
+                version_compare(
+                    $transportEntity->getExtensionVersion(),
+                    $this->transport->getRequiredExtensionVersion(),
+                    'ge'
+                );
+
+            $view->vars['oroBridgeExtension'] = [
+                'isExtensionInstalled' => $isExtensionInstalled,
+                'isSupportExtensionVersion' => $isSupportExtensionVersion,
+                'extensionVersion' => $extensionVersion
+            ];
+        }
     }
 }

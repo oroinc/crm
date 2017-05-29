@@ -13,6 +13,9 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TransportHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var TransportHandler */
@@ -74,20 +77,30 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetCheckResponse()
     {
         $this->request
-             ->expects($this->exactly(2))
-             ->method('get')
-             ->will($this->returnCallback(function ($argument) {
-                 switch ($argument) {
-                     case TransportHandler::TRANSPORT_TYPE:
-                         return 'magento_soap';
-                     case TransportHandler::INTEGRATION_TYPE:
-                         return 'magento';
+            ->expects($this->atLeastOnce())
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    function ($argument) {
+                        switch ($argument) {
+                            case TransportHandler::TRANSPORT_TYPE:
+                                return 'magento_soap';
+                            case TransportHandler::INTEGRATION_TYPE:
+                                return 'magento';
+                            case TransportEntityProvider::ENTITY_ID:
+                                return 1;
+                            default:
+                                return null;
+                        }
                     }
-                })
-             );
+                )
+            );
 
         $this->connectorChoicesProvider
              ->expects($this->once())

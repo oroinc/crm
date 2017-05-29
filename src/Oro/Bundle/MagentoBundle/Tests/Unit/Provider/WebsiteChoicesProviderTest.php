@@ -72,12 +72,12 @@ class WebsiteChoicesProviderTest extends \PHPUnit_Framework_TestCase
                     [
                         'name' => 'Admin',
                         'code' => 'admin',
-                        'website_id' => 0
+                        'id' => 0
                     ],
                     [
                         'name' => 'Website 1',
                         'code' => 'english',
-                        'website_id' => 1
+                        'id' => 1
                     ]
                 ],
                 'expected' =>  [
@@ -96,12 +96,12 @@ class WebsiteChoicesProviderTest extends \PHPUnit_Framework_TestCase
                     [
                         'name' => 'Website 1',
                         'code' => 'german',
-                        'website_id' => 1
+                        'id' => 1
                     ],
                     [
                         'name' => 'Website 2',
                         'code' => 'english',
-                        'website_id' => 2
+                        'id' => 2
                     ]
                 ],
                 'expected' => [

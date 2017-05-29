@@ -4,16 +4,17 @@ namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 
-class UniqueCustomerEmailSoapProvider implements UniqueCustomerEmailProviderInterface
+class UniqueCustomerEmailSoapProvider
 {
     /**
-     * @param SoapTransport $transport
+     * @param MagentoSoapTransportInterface $transport
      * @param Customer      $customer
      *
      * @return bool
      */
-    public function isCustomerHasUniqueEmail(SoapTransport $transport, Customer $customer)
+    public function isCustomerHasUniqueEmail(MagentoSoapTransportInterface $transport, Customer $customer)
     {
         $filters = $this->getPreparedFilters($customer);
         $customers = $this->doRequest($transport, $filters);
@@ -43,12 +44,12 @@ class UniqueCustomerEmailSoapProvider implements UniqueCustomerEmailProviderInte
     }
 
     /**
-     * @param SoapTransport $transport
+     * @param MagentoSoapTransportInterface $transport
      * @param array         $filters
      *
      * @return array | false
      */
-    protected function doRequest(SoapTransport $transport, array $filters)
+    protected function doRequest(MagentoSoapTransportInterface $transport, array $filters)
     {
         $customers = $transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
 

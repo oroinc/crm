@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
-interface SoapTransportInterface
+/**
+ * @deprecated since 2.2. Use {@see Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface} instead
+ */
+interface MagentoSoapTransportInterface extends MagentoTransportInterface
 {
     /**
      * @param string $action
