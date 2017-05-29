@@ -35,8 +35,6 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Populate websites choices if exist in entity
-     *
      * @param FormEvent $event
      */
     public function preSet(FormEvent $event)
@@ -45,10 +43,6 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Pre submit event listener
-     * Encrypt passwords and populate if empty
-     * Populate websites choices from hidden fields
-     *
      * @param FormEvent $event
      */
     public function preSubmit(FormEvent $event)

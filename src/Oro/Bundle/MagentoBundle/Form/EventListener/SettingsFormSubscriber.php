@@ -7,10 +7,17 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 class SettingsFormSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Mcrypt
+     */
+    protected $encryptor;
+
     /**
      * {@inheritdoc}
      */
@@ -23,6 +30,14 @@ class SettingsFormSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param Mcrypt $encryptor
+     */
+    public function __construct(Mcrypt $encryptor)
+    {
+        $this->encryptor = $encryptor;
+    }
+
+    /**
      * Populate websites choices if exist in entity
      *
      * @param FormEvent $event
@@ -30,13 +45,29 @@ class SettingsFormSubscriber implements EventSubscriberInterface
     public function preSet(FormEvent $event)
     {
         $form = $event->getForm();
+        /**
+         * @var $data MagentoTransport
+         */
         $data = $event->getData();
 
         if ($data === null) {
             return;
         }
 
-        $this->modifyWebsitesList($form, $data->getWebsites());
+        $websites = $data->getWebsites();
+
+        if (is_array($websites)) {
+            $this->modifyWebsitesList($form, $data->getWebsites());
+        }
+
+        if ($data->getId()) {
+            FormUtils::replaceField(
+                $form,
+                'apiKey',
+                ['required' => false],
+                ['constraints']
+            );
+        }
     }
 
     /**
@@ -59,18 +90,30 @@ class SettingsFormSubscriber implements EventSubscriberInterface
             if (!is_array($websites)) {
                 $websites = json_decode($websites, true);
             }
-            $this->modifyWebsitesList($form, $websites);
+
+            if (is_array($websites)) {
+                $this->modifyWebsitesList($form, $websites);
+            }
+        }
+
+        $oldPassword = $form->get('apiKey')->getData();
+        if (empty($data['apiKey']) && $oldPassword) {
+            // populate old password
+            $data['apiKey'] = $oldPassword;
+        } elseif (isset($data['apiKey'])) {
+            $data['apiKey'] = $this->encryptor->encryptData($data['apiKey']);
         }
 
         $event->setData($data);
     }
 
     /**
-     * @param array $websites
+     * @param FormInterface $form
+     * @param array         $websites
      *
      * @return void
      */
-    protected function modifyWebsitesList(FormInterface $form, $websites)
+    protected function modifyWebsitesList(FormInterface $form, array $websites)
     {
         if (empty($websites)) {
             return;

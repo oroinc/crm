@@ -98,9 +98,8 @@ class RestTransport implements
     public function init(Transport $transportEntity)
     {
         $this->transportEntity = $transportEntity;
-        $this->client = $this->clientFactory->createRestClient($transportEntity);
-        $settings = $transportEntity->getSettingsBag();
-        $token = $settings->get(static::TOKEN_KEY);
+        $this->client = $this->clientFactory->createRestClient($this->transportEntity);
+        $token = $this->restTokenProvider->getTokenFromEntity($this->transportEntity);
         if (null === $token) {
             $token = $this->refreshToken();
         }
@@ -142,7 +141,7 @@ class RestTransport implements
      */
     protected function refreshToken()
     {
-        return $this->restTokenProvider->getToken($this->transportEntity, $this->client);
+        return $this->restTokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
     /**

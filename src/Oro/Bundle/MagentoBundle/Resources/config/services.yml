@@ -33,7 +33,6 @@ parameters:
 
     # forms
     oro_magento.form.type.order_place.class:                             Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType
-    oro_magento.form.type.soap_transport_setting.class:                  Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
     oro_magento.form.type.transport_check.class:                         Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType
     oro_magento.form.subscriber.soap_transport_setting.class:            Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     oro_magento.form.type.order_select.class:                            Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType
@@ -237,7 +236,9 @@ services:
 
     oro_magento.provider.rest_token_provider:
         class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
-        arguments: ['@doctrine']
+        arguments:
+            - '@doctrine'
+            - '@oro_security.encoder.mcrypt'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -250,19 +251,16 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider
 
     # forms
-    oro_magento.form.subscriber.soap_transport_setting:
-        class: %oro_magento.form.subscriber.soap_transport_setting.class%
+    oro_magento.form.subscriber.transport_setting:
+        class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
         arguments:
             - "@oro_security.encoder.mcrypt"
 
-    oro_magento.form.subscriber.transport_setting:
-        class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
-
     oro_magento.form.type.soap_transport_setting:
-        class: %oro_magento.form.type.soap_transport_setting.class%
+        class: Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
         arguments:
             - "@oro_magento.transport.soap_transport"
-            - "@oro_magento.form.subscriber.soap_transport_setting"
+            - "@oro_magento.form.subscriber.transport_setting"
             - "@oro_integration.manager.types_registry"
         tags:
             - { name: form.type, alias: oro_magento_soap_transport_setting_form_type }

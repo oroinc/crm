@@ -7,6 +7,7 @@ use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 /**
  * @dbIsolationPerTest
@@ -16,6 +17,11 @@ class RestTransportTest extends WebTestCase
     /** @var FakeRestClientFactory */
     private $fakeRestClientFactory;
 
+    /**
+     * @var Mcrypt
+     */
+    protected $mcrypt;
+
     public function setUp()
     {
         $this->initClient();
@@ -24,6 +30,18 @@ class RestTransportTest extends WebTestCase
 
         $this->client->getContainer()->set(
             'oro_integration.transport.rest.client_factory.decorated',
+            $this->fakeRestClientFactory
+        );
+
+        $this->mcrypt = $this->client->getContainer()->get('oro_security.encoder.mcrypt');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown()
+    {
+        unset(
             $this->fakeRestClientFactory
         );
     }
@@ -37,7 +55,10 @@ class RestTransportTest extends WebTestCase
         $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
         $transport->init($transportEntity);
 
-        $this->assertEquals('fake_token', $transportEntity->getApiToken());
+        $this->assertEquals(
+            'fake_token',
+            $this->mcrypt->decryptData($transportEntity->getApiToken())
+        );
     }
 
     public function testTransportInitFailed()

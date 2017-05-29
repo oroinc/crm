@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class SoapTransportSettingFormType extends TransportSettingFormType
+class SoapTransportSettingFormType extends AbstractTransportSettingFormType
 {
     const NAME = 'oro_magento_soap_transport_setting_form_type';
 
@@ -66,5 +66,20 @@ class SoapTransportSettingFormType extends TransportSettingFormType
             'text',
             ['label' => 'oro.magento.magentotransport.admin_url.label', 'required' => false]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return self::NAME;
     }
 }

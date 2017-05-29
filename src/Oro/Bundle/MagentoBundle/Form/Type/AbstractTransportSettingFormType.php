@@ -15,8 +15,9 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class TransportSettingFormType extends AbstractType
+abstract class AbstractTransportSettingFormType extends AbstractType
 {
+    /** @var MagentoTransportInterface */
     const NAME = 'oro_magento_transport_setting_form_type';
 
     /** @var MagentoTransportInterface */

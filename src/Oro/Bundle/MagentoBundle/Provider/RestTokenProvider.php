@@ -17,6 +17,7 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 class RestTokenProvider implements LoggerAwareInterface
 {
@@ -36,11 +37,33 @@ class RestTokenProvider implements LoggerAwareInterface
     protected $doctrine;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @var Mcrypt
      */
-    public function __construct(RegistryInterface $doctrine)
+    protected $mcrypt;
+
+    /**
+     * @param RegistryInterface $doctrine
+     * @param Mcrypt            $mcrypt
+     */
+    public function __construct(RegistryInterface $doctrine, Mcrypt $mcrypt)
     {
         $this->doctrine = $doctrine;
+        $this->mcrypt   = $mcrypt;
+    }
+
+    /**
+     * @param MagentoTransport $transportEntity
+     *
+     * @return null|string
+     */
+    public function getTokenFromEntity(MagentoTransport $transportEntity)
+    {
+        $encryptedToken = $transportEntity->getApiToken();
+        if (null === $encryptedToken) {
+            return null;
+        }
+
+        return $this->mcrypt->decryptData($encryptedToken);
     }
 
     /**
@@ -49,7 +72,7 @@ class RestTokenProvider implements LoggerAwareInterface
      *
      * @return string
      */
-    public function getToken(MagentoTransport $transportEntity, RestClientInterface $client)
+    public function generateNewToken(MagentoTransport $transportEntity, RestClientInterface $client)
     {
         $this->logger->info('Do request to get new `token`');
 
@@ -117,17 +140,19 @@ class RestTokenProvider implements LoggerAwareInterface
      */
     protected function getTokenRequestParams(ParameterBag $parameterBag)
     {
-        $username = $parameterBag->get(static::USER_KEY, false);
-        $password = $parameterBag->get(static::PASSWORD_KEY, false);
+        $username = $parameterBag->get(static::USER_KEY);
+        $encryptedPassword = $parameterBag->get(static::PASSWORD_KEY);
 
-        if (!$username || !$password) {
+        if (null === $username || null === $encryptedPassword) {
             throw new InvalidConfigurationException(
                 "Magento REST transport require 'api_key' and 'api_user' settings to be defined."
             );
         }
 
+        $password = $this->mcrypt->decryptData($encryptedPassword);
+
         return [
-            static::USER_API_PARAM => $username,
+            static::USER_API_PARAM     => $username,
             static::PASSWORD_API_PARAM => $password
         ];
     }
@@ -138,10 +163,12 @@ class RestTokenProvider implements LoggerAwareInterface
      */
     protected function updateToken(MagentoTransport $transportEntity, $token)
     {
-        $transportEntity->setApiToken($token);
+        $transportEntity->setApiToken(
+            $this->mcrypt->encryptData($token)
+        );
 
         /**
-         * Save api-token only if record already exist to the database
+         * Save api-token only if entity already saved to the database
          */
         if ($transportEntity->getId()) {
             $em = $this->doctrine->getEntityManagerForClass(Transport::class);

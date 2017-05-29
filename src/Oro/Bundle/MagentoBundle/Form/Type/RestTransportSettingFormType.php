@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class RestTransportSettingFormType extends TransportSettingFormType
+class RestTransportSettingFormType extends AbstractTransportSettingFormType
 {
     const NAME = 'oro_magento_rest_transport_setting_form_type';
 
@@ -37,5 +37,20 @@ class RestTransportSettingFormType extends TransportSettingFormType
                 'constraints' => [new NotBlank()]
             ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return self::NAME;
     }
 }
