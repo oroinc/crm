@@ -33,6 +33,13 @@ Feature: Quickly create Lead in a single form
       | City            | Kharkiv             |
       | Zip/Postal Code | 61000               |
       | State           | Kharkivs'ka Oblast' |
+    And add new address with:
+      | Primary         | false               |
+      | Country         | United States       |
+      | Street          | 45600 Marion Drive  |
+      | City            | Winter Haven        |
+      | Zip/Postal Code | 33830               |
+      | State           | Florida             |
     When I save and close form
     Then I should be on "Acme company" Lead view page
     And should see Lead in grid with:
@@ -40,7 +47,12 @@ Feature: Quickly create Lead in a single form
       | Last Name  | Sheen                        |
       | Phones     | [11-11-11, 22-22-22]         |
       | Emails     | [lead1@ex.com, lead2@ex.com] |
-    And two addresses should be in page
+    And 3 addresses should be in page
+    And Ukraine address must be primary
+
+  Scenario: Delete address from lead
+    When I delete 45600 Marion Drive address
+    Then two addresses should be in page
     And Ukraine address must be primary
 
   Scenario: Edit Lead
