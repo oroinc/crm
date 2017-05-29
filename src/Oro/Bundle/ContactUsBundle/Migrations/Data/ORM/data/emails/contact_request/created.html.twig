@@ -1,0 +1,22 @@
+@name = contact_request_create_notification
+@entityName = Oro\Bundle\ContactUsBundle\Entity\ContactRequest
+@subject = New contact request from {{ entity.firstName }} {{ entity.lastName }}
+@isSystem = 1
+@isEditable = 1
+
+<div>
+    <i>{{ entity.createdAt|date('F j, Y, g:i A') }}</i>
+</div>
+
+<h2>Contact Details</h2>
+<div>
+    <p><i>First Name:</i> {{ entity.firstName }}</p>
+    <p><i>Last Name:</i> {{ entity.lastName }}</p>
+    <p><i>Email:</i> {{ entity.emailAddress }}</p>
+    <p><i>Phone:</i> {{ entity.phone }}</p>
+</div>
+
+<h2>Comment</h2>
+<div>
+    {{ entity.comment }}
+</div>

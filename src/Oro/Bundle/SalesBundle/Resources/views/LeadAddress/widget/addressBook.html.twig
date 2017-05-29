@@ -2,4 +2,5 @@
 {% set addressListUrl = path('oro_api_get_lead_addresses', {'leadId': entity.id}) %}
 {% set addressCreateUrl = path('oro_sales_lead_address_create', {'leadId': entity.id}) %}
 {% set addressUpdateRoute = 'oro_sales_lead_address_update' %}
+{% set addressDeleteRoute = 'oro_api_delete_lead_address' %}
 {% set ownerParam = 'leadId' %}
