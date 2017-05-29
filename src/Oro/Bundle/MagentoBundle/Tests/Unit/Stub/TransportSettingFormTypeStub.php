@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Stub;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class SoapTransportSettingFormTypeStub extends AbstractType
+class TransportSettingFormTypeStub extends AbstractType
 {
     const NAME = 'oro_magento_soap_transport_setting_form_type';
 

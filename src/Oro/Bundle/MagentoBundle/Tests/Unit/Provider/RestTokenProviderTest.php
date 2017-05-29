@@ -11,6 +11,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -21,6 +22,9 @@ use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 
 class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
 {
+    const TOKEN = 'token';
+    const TOKEN_ENCRYPTED = 'token_encrypted';
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | MagentoTransport
      */
@@ -32,7 +36,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     protected $entityManager;
 
     /**
-     * @var RestTokenProvider
+     * @var  RestTokenProvider
      */
     protected $tokenProvider;
 
@@ -46,6 +50,9 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $client;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject |  Mcrypt */
+    protected $mcrypt;
+
     /**
      * @inheritDoc
      */
@@ -53,9 +60,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->parameterBag = new ParameterBag();
 
-        $this->transportEntity = $this->getMockBuilder(MagentoTransport::class)
-            ->setMethods(['setApiToken', 'getSettingsBag', 'getId'])
-            ->getMock();
+        $this->transportEntity = $this->createMock(MagentoTransport::class);
 
         $this->transportEntity
             ->method('getSettingsBag')
@@ -69,7 +74,9 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
             ->with(Transport::class)
             ->willReturn($this->entityManager);
 
-        $this->tokenProvider = new RestTokenProvider($doctrine);
+        $this->mcrypt = $this->createMock(Mcrypt::class);
+
+        $this->tokenProvider = new RestTokenProvider($doctrine, $this->mcrypt);
         $this->tokenProvider->setLogger(new NullLogger());
 
         $this->client = new FakeRestClient();
@@ -90,7 +97,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->setUpdateEntityNeverCall();
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+        $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
     /**
@@ -105,20 +112,24 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->client->setDefaultResponse(
             new FakeRestResponse($httpCode)
         );
+
         $this->parameterBag->add([
              RestTokenProvider::USER_KEY => 'api_user',
              RestTokenProvider::PASSWORD_KEY => 'api_key'
         ]);
+
         $this->expectException($expectedException);
         if (isset($expectedExceptionMessage)) {
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
+
         $this->transportEntity
             ->expects($this->never())
             ->method('setApiToken')
             ->with('token');
+
         $this->setUpdateEntityNeverCall();
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+        $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
     public function getExceptionProvider()
@@ -139,32 +150,39 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
     public function testValidResultAndTransportEntityAlreadySavedToDB()
     {
         $this->client->setDefaultResponse(
-            new FakeRestResponse(CODES::HTTP_OK, [], '"token"')
+            new FakeRestResponse(CODES::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
         );
         $this->parameterBag->add([
             RestTokenProvider::USER_KEY => 'api_user',
-            RestTokenProvider::PASSWORD_KEY => 'api_key'
+            RestTokenProvider::PASSWORD_KEY => 'api_key_encrypted'
         ]);
+
         $this->transportEntity
             ->expects($this->atLeastOnce())
             ->method('setApiToken')
-            ->with('token');
+            ->with(self::TOKEN_ENCRYPTED);
 
         $this->transportEntity
             ->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(1);
 
+        $this->mcrypt
+            ->expects($this->atLeastOnce())
+            ->method('encryptData')
+            ->with(self::TOKEN)
+            ->willReturn(self::TOKEN_ENCRYPTED);
+
         $this->entityManager->expects($this->once())->method('persist')->with($this->transportEntity);
         $this->entityManager->expects($this->once())->method('flush')->with($this->transportEntity);
 
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+        $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
     public function testValidResultAndTransportEntityNotSavedToDB()
     {
         $this->client->setDefaultResponse(
-            new FakeRestResponse(CODES::HTTP_OK, [], '"token"')
+            new FakeRestResponse(CODES::HTTP_OK, [], sprintf('"%s"', self::TOKEN))
         );
         $this->parameterBag->add([
             RestTokenProvider::USER_KEY => 'api_user',
@@ -179,11 +197,17 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
         $this->transportEntity
             ->expects($this->atLeastOnce())
             ->method('setApiToken')
-            ->with('token');
+            ->with(self::TOKEN_ENCRYPTED);
+
+        $this->mcrypt
+            ->expects($this->atLeastOnce())
+            ->method('encryptData')
+            ->with(self::TOKEN)
+            ->willReturn(self::TOKEN_ENCRYPTED);
 
         $this->setUpdateEntityNeverCall();
 
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+        $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
     }
 
     /**
@@ -203,8 +227,28 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('setApiToken')
             ->with('token');
+
         $this->setUpdateEntityNeverCall();
-        $this->tokenProvider->getToken($this->transportEntity, $this->client);
+        $this->tokenProvider->generateNewToken($this->transportEntity, $this->client);
+    }
+
+    public function testGetTokenFromEntity()
+    {
+        $this->transportEntity
+            ->expects($this->atLeastOnce())
+            ->method('getApiToken')
+            ->willReturn(self::TOKEN_ENCRYPTED);
+
+        $this->mcrypt
+            ->expects($this->atLeastOnce())
+            ->method('decryptData')
+            ->with(self::TOKEN_ENCRYPTED)
+            ->willReturn(self::TOKEN);
+
+        $this->assertEquals(
+            self::TOKEN,
+            $this->tokenProvider->getTokenFromEntity($this->transportEntity)
+        );
     }
 
     protected function setUpdateEntityNeverCall()

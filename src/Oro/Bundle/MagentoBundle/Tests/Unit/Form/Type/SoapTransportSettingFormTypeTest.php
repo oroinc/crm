@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -13,8 +13,8 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
     /** @var  SoapTransport | \PHPUnit_Framework_MockObject_MockObject */
     protected $soapTransport;
 
-    /** @var  SoapSettingsFormSubscriber | \PHPUnit_Framework_MockObject_MockObject */
-    protected $soapSettingsFormSubscriber;
+    /** @var  SettingsFormSubscriber | \PHPUnit_Framework_MockObject_MockObject */
+    protected $settingsFormSubscriber;
 
     /** @var  TypesRegistry| \PHPUnit_Framework_MockObject_MockObject */
     protected $typesRegistry;
@@ -28,7 +28,7 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->soapSettingsFormSubscriber = $this->getMockBuilder(SoapSettingsFormSubscriber::class)
+        $this->settingsFormSubscriber = $this->getMockBuilder(SettingsFormSubscriber::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -38,7 +38,7 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
 
         $this->type = new SoapTransportSettingFormType(
             $this->soapTransport,
-            $this->soapSettingsFormSubscriber,
+            $this->settingsFormSubscriber,
             $this->typesRegistry
         );
     }
@@ -57,7 +57,7 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->exactly(2))
             ->method('addEventSubscriber')
             ->with($this->logicalOr(
-                $this->isInstanceOf(SoapSettingsFormSubscriber::class),
+                $this->isInstanceOf(SettingsFormSubscriber::class),
                 $this->isInstanceOf(ConnectorsFormSubscriber::class)
             ));
 

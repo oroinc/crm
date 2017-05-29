@@ -57,7 +57,7 @@ class SettingsFormSubscriber implements EventSubscriberInterface
         $websites = $data->getWebsites();
 
         if (is_array($websites)) {
-            $this->modifyWebsitesList($form, $data->getWebsites());
+            $this->modifyWebsitesList($form, $websites);
         }
 
         if ($data->getId()) {
