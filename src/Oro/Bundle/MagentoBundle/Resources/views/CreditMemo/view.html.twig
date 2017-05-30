@@ -1,0 +1,65 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+
+{% oro_title_set({params : {"%creditMemo.incrementId%":  entity.incrementId} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('oro_magento_credit_memo_index'),
+        'indexLabel': 'oro.magento.creditmemo.entity_plural_label'|trans,
+        'entityTitle': 'oro.magento.entity_number'|trans({'%entityName%': 'oro.magento.creditmemo.entity_label'|trans, '%entityNumber%': entity.incrementId})
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set generalSubblocks = [] %}
+
+    {% set creditMemoInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('oro_magento_credit_memo_widget_info', {id: entity.id}),
+            'title': 'oro.magento.credit_memo_information'|trans
+        }) }}
+    {% endset %}
+    {% set generalSubblocks = generalSubblocks|merge([{'data' : [creditMemoInformationWidget] }]) %}
+
+    {% if entity.order and resource_granted('oro_magento_order_view') %}
+        {% set orderInformationWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_magento_order_widget_info', {id: entity.order.id}),
+                'title': 'oro.magento.order_information'|trans
+            }) }}
+        {% endset %}
+        {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
+    {% endif %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'oro.magento.general_information'|trans,
+            'class': 'active',
+            'subblocks': generalSubblocks
+        }
+    ] %}
+
+    {% set creditMemoItemsWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('oro_magento_credit_memo_widget_items', {id: entity.id})
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'oro.magento.creditmemo.items.label'|trans,
+            'subblocks': [
+                {'data' : [creditMemoItemsWidget] }
+            ]
+        }
+    ]) %}
+
+    {% set id = 'magentoCreditMemoView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock content_data %}

@@ -13,6 +13,8 @@ parameters:
     oro_magento.entity.order_address.class:                              Oro\Bundle\MagentoBundle\Entity\OrderAddress
     oro_magento.entity.order_item.class:                                 Oro\Bundle\MagentoBundle\Entity\OrderItem
 
+    oro_magento.entity.credit_memo.class:                                Oro\Bundle\MagentoBundle\Entity\CreditMemo
+
     oro_magento.entity.product.class:                                    Oro\Bundle\MagentoBundle\Entity\Product
     oro_magento.entity.region.class:                                     Oro\Bundle\MagentoBundle\Entity\Region
     oro_magento.entity.store.class:                                      Oro\Bundle\MagentoBundle\Entity\Store

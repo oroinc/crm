@@ -42,6 +42,7 @@ class OrderTest extends AbstractEntityTestCase
 
         return [
             'incrementId'         => ['incrementId', 1, 1],
+            'originId'            => ['originId', 1, 1],
             'customer'            => ['customer', $customer, $customer],
             'store'               => ['store', $store, $store],
             'isVirtual'           => ['isVirtual', true, true],

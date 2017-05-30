@@ -44,6 +44,18 @@ channels:
               connector: order
 
        -
+          name: Oro\Bundle\MagentoBundle\Entity\CreditMemo
+          dependent:
+              - Oro\Bundle\MagentoBundle\Entity\OrderAddress
+              - Oro\Bundle\MagentoBundle\Entity\CreditMemoItem
+              - Oro\Bundle\MagentoBundle\Entity\Store
+          navigation_items:
+              - application_menu.sales_tab.magento_credit_memo
+          belongs_to:
+              integration: magento
+              connector: credit_memo
+
+       -
           name: Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
           dependent:
               - Oro\Bundle\MagentoBundle\Entity\Store
@@ -59,6 +71,7 @@ channels:
             entities:
                 - Oro\Bundle\MagentoBundle\Entity\Cart
                 - Oro\Bundle\MagentoBundle\Entity\Order
+                - Oro\Bundle\MagentoBundle\Entity\CreditMemo
                 - Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
             integration_type: magento
             customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
