@@ -70,8 +70,10 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
                 $config['auto_initialize'] = false;
             }
 
+            $channelType = $this->getFormChannelType($form);
+
             $allowedTypesChoices = array_flip($this->typeRegistry->getAvailableConnectorsTypesChoiceList(
-                MagentoChannelType::TYPE,
+                $channelType,
                 function (ConnectorInterface $connector) use ($data) {
                     return $connector instanceof ExtensionAwareInterface ? $data : true;
                 }
@@ -80,6 +82,19 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
             $form->getParent()
                 ->add('connectors', 'choice', array_merge($config, ['choices' => $allowedTypesChoices]));
         }
+    }
+
+    /**
+     * @param FormInterface $form
+     * @return string
+     */
+    protected function getFormChannelType(FormInterface $form)
+    {
+        if ($form->getParent() && $form->getParent()->has('type')) {
+            return $form->getParent()->get('type')->getViewData();
+        }
+
+        return MagentoChannelType::TYPE;
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;

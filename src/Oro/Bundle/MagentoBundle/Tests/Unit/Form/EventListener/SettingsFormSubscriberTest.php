@@ -61,7 +61,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
             ->getMock();
 
         $data
-            ->expects($this->atLeastOnce())
+            ->expects($this->once())
             ->method('getWebsites')
             ->willReturn($websites);
 
