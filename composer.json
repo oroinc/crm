@@ -15,15 +15,15 @@
     },
     "require": {
         "php": ">=7.0",
-        "oro/platform": "2.x-dev",
-        "oro/crm-task-bundle": "2.x-dev",
-        "oro/crm-call-bundle": "2.x-dev",
-        "oro/calendar-bundle": "2.x-dev",
-        "oro/marketing": "2.x-dev"
+        "oro/platform": "2.2.*",
+        "oro/crm-task-bundle": "2.2.*",
+        "oro/crm-call-bundle": "2.2.*",
+        "oro/calendar-bundle": "2.2.*",
+        "oro/marketing": "2.2.*"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "2.2.x-dev"
         }
     }
 }
