@@ -31,7 +31,7 @@ abstract class AbstractInitialProcessor extends MagentoSyncProcessor
     {
         /** @var ConnectorInterface[] $dictionaryConnectors */
         $dictionaryConnectors = $this->registry->getRegisteredConnectorsTypes(
-            MagentoChannelType::TYPE,
+            $integration->getType(),
             function (ConnectorInterface $connector) {
                 return $connector instanceof DictionaryConnectorInterface;
             }
