@@ -79,6 +79,16 @@
         }
     ]) %}
 {% endif %}
+{% if creditMemoClassName in customer.dataChannel.entities %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'oro_magento_customer_credit_memos' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'oro.magento.creditmemo.entity_plural_label'|trans,
+            'url': path('oro_magento_widget_customer_credit_memo', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
+{% endif %}
 {% set tabPanelOptions = {
     useDropdown: isMobileVersion()
 } %}

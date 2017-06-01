@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderBridgeIterator extends AbstractBridgeIterator
@@ -28,21 +29,59 @@ class OrderBridgeIterator extends AbstractBridgeIterator
         $filters          = $this->filter->getAppliedFilters();
         $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
 
+        $this->loadByFilters($filters);
+
+        return array_keys($this->entityBuffer);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $filters->addWebsiteFilter([$this->websiteId]);
+        }
+
+        $filters = $filters->getAppliedFilters();
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
+
+        $this->loadByFilters($filters);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_ORO_ORDER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
-        $that               = $this;
-        $resultIds          = array_map(
-            function (&$item) use ($that) {
-                $item->items = $that->processCollectionResponse($item->items);
+        $resultIds = array_map(
+            function (&$item) {
+                $item->items = $this->processCollectionResponse($item->items);
 
                 return $item->order_id;
             },
             $result
         );
         $this->entityBuffer = array_combine($resultIds, $result);
-
-        return $resultIds;
     }
 
     /**

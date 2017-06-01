@@ -66,6 +66,43 @@ search:
                         target_type:   integer
                         target_fields: [dataChannelId]
 
+    Oro\Bundle\MagentoBundle\Entity\CreditMemo:
+        alias:                          oro_magento_credit_memo
+        label:                          oro.magento.creditmemo.entity_plural_label
+        title_fields:                   [incrementId]
+        route:
+            name:                       oro_magento_credit_memo_view
+            parameters:
+                id:                     id
+        search_template:                OroMagentoBundle:CreditMemo:searchResult.html.twig
+        fields:
+            -
+                name:                   incrementId
+                target_type:            text
+                target_fields:          [incrementId]
+
+            -
+                name:                   dataChannel
+                relation_type:          many-to-one
+                relation_fields:
+                    -
+                        name:          id
+                        target_type:   integer
+                        target_fields: [dataChannelId]
+            -
+                name:                   order
+                relation_type:          many-to-one
+                relation_fields:
+                    -
+                        name:                   firstName
+                        target_type:            text
+                        target_fields:          [firstName]
+                    -
+                        name:                   lastName
+                        target_type:            text
+                        target_fields:          [lastName]
+
+
     Oro\Bundle\MagentoBundle\Entity\Cart:
         alias:                          oro_magento_cart
         label:                          oro.magento.cart.entity_plural_label

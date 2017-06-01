@@ -18,9 +18,12 @@ use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
@@ -76,8 +79,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $group = $this->persistDemoUserGroup($om, $store->getChannel());
             $customers = $this->persistDemoCustomers($om, $store, $group, $channel, $organization);
             $carts = $this->persistDemoCarts($om, $customers);
-            $this->persistDemoOrders($om, $carts);
+            $orders = $this->persistDemoOrders($om, $carts);
             $this->persistDemoRFM($om, $channel, $organization);
+            $this->persistDemoCreditMemos($om, $orders);
 
             $om->flush();
         }
@@ -140,7 +144,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
 
         $integration = new Integration();
         $integration->setType('magento');
-        $integration->setConnectors(['customer', 'cart', 'order', 'newsletter_subscriber']);
+        $integration->setConnectors(['customer', 'cart', 'order', 'newsletter_subscriber', 'credit_memo']);
         $integration->setName($integrationName);
         $integration->setTransport($transport);
         $integration->setOrganization($organization);
@@ -278,6 +282,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     /**
      * @param ObjectManager $om
      * @param Cart[] $carts
+     *
+     * @return Order[]
      */
     protected function persistDemoOrders(ObjectManager $om, array $carts)
     {
@@ -285,6 +291,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $paymentMethodDetails = ['Card[MC]', 'Card[AE]', 'N/A'];
         $status = ['Pending', 'Processing', 'Completed', 'Canceled'];
         $i = 0;
+        $orders = [];
         foreach ($carts as $cart) {
             /** @var Cart $cart */
             $order = $this->generateOrder(
@@ -299,6 +306,26 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 $i++
             );
             $this->generateOrderItem($om, $order, $cart);
+            $orders[] = $order;
+        }
+
+        return $orders;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param array $orders
+     */
+    protected function persistDemoCreditMemos(ObjectManager $om, array $orders)
+    {
+        for ($i = 0; $i < 5; ++$i) {
+            $order = $orders[array_rand($orders)];
+            $creditMemo = $this->generateCreditMemo(
+                $om,
+                $order,
+                $i
+            );
+            $this->generateCreditMemoItem($om, $creditMemo, $order);
         }
     }
 
@@ -504,6 +531,71 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $cart->setTaxAmount($totalTaxAmount);
         $om->persist($cart);
         return $cartItems;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Order $order
+     * @param string $origin
+     *
+     * @return CreditMemo
+     */
+    protected function generateCreditMemo(ObjectManager $om, Order $order, $origin)
+    {
+        $className = ExtendHelper::buildEnumValueClassName(CreditMemo::STATUS_ENUM_CODE);
+        $status = $om->getRepository($className)->find(CreditMemo::STATUS_REFUNDED);
+        $memo = new CreditMemo();
+        $memo->setChannel($order->getChannel());
+        $memo->setDataChannel($order->getDataChannel());
+        $memo->setOrder($order);
+        $memo->setStatus($status);
+        $memo->setIncrementId(++$origin);
+        $memo->setOriginId($origin);
+        $memo->setStore($order->getStore());
+        $memo->setOwner($order->getOwner());
+        $memo->setOrganization($order->getOrganization());
+        $memo->setCreatedAt(new \DateTime('now'));
+        $memo->setUpdatedAt(new \DateTime('now'));
+        $memo->setSubtotal($order->getTotalAmount());
+        $memo->setGrandTotal($order->getTotalAmount());
+        $om->persist($memo);
+
+        return $memo;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param CreditMemo $creditMemo
+     * @param Order $order
+     *
+     * @return CreditMemoItem[]
+     */
+    protected function generateCreditMemoItem(ObjectManager $om, CreditMemo $creditMemo, Order $order)
+    {
+        $items = [];
+
+        $orderItems = $order->getItems();
+        $originId = 0;
+        foreach ($orderItems as $orderItem) {
+            $originId++;
+            $item = new CreditMemoItem();
+            $item->setChannel($creditMemo->getChannel());
+            $item->setOrderItemId($orderItem->getId());
+            $item->setParent($creditMemo);
+            $item->setOriginId($originId);
+            $item->setQty($orderItem->getQty());
+            $item->setSku($orderItem->getSku());
+            $item->setName($orderItem->getName());
+            $item->setOwner($orderItem->getOwner());
+            $item->setPrice($orderItem->getPrice());
+            $item->setRowTotal($orderItem->getRowTotal());
+            $items[] = $item;
+            $om->persist($item);
+        }
+        $creditMemo->setItems($items);
+        $om->persist($creditMemo);
+
+        return $items;
     }
 
     protected function getOrderAddress(ObjectManager $om)

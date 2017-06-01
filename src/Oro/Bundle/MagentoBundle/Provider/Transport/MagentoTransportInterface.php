@@ -120,6 +120,18 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrderInfo($incrementId);
 
     /**
+     * Retrieve credit memos from magento.
+     *
+     * @return UpdatedLoaderInterface|\Iterator
+     */
+    public function getCreditMemos();
+
+    /**
+     * @param string $incrementId
+     */
+    public function getCreditMemoInfo($incrementId);
+
+    /**
      * @param array $customerData
      *
      * @return int ID of the created customer

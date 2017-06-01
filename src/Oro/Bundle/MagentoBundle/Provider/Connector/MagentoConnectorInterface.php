@@ -17,6 +17,7 @@ interface MagentoConnectorInterface extends ConnectorInterface
     const WEBSITE_TYPE = 'Oro\\Bundle\\MagentoBundle\\Entity\\Website';
 
     const ORDER_TYPE                    = 'Oro\\Bundle\\MagentoBundle\\Entity\\Order';
+    const CREDIT_MEMO_TYPE              = 'Oro\\Bundle\\MagentoBundle\\Entity\\CreditMemo';
     const ORDER_ADDRESS_TYPE            = 'Oro\\Bundle\\MagentoBundle\\Entity\\OrderAddress';
     const ORDER_ADDRESS_COLLECTION_TYPE = 'ArrayCollection<Oro\\Bundle\\MagentoBundle\\Entity\\OrderAddress>';
     const ORDER_ITEM_TYPE               = 'Oro\\Bundle\\MagentoBundle\\Entity\\OrderItem';

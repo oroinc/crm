@@ -120,6 +120,7 @@ oro:
                 discount_amount: Discount amount
                 discount_percent: Discount percent
                 coupon_code: Coupon code
+                orderCreatedAt: Order Date
         channel_type:
             magento.label:  Magento
             magento2.label:  Magento 2
@@ -142,6 +143,9 @@ oro:
             order:
                 label: Order connector
                 initial.label: Initial Order connector
+            credit_memo:
+                label: Credit Memo connector
+                initial.label: Initial Credit Memo connector
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
@@ -580,6 +584,9 @@ oro:
             increment_id:
                 label:              "Order #"
                 description:        The increment ID specified for a Magento order.
+            origin_id:
+                label:              Order origin id
+                description:        Order ID on the Magento side.
             items_qty.label:        Items qty
             gift_message:
                 label:              Gift message
@@ -695,6 +702,9 @@ oro:
             synced_at:
                 label:              Last Synced At
                 description:        The date and time of the last Magento order synchronization.
+            credit_memos:
+                label:              Credit Memos
+                description:        Collection of Credit Memos for a Magento order.
             b2c_flow_order_follow_up.step.label: Step
 
         product:
@@ -993,6 +1003,132 @@ oro:
                 label:            Sort Order
                 description:      The sort order that determines the sequence in which a Magento website is listed.
 
+        creditmemo:
+            entity_label:                         Magento Credit Memo
+            entity_plural_label:                  Magento Credit Memos
+            entity_description:                   Allows you to operate with credit memos for orders.
+            id.label:                             Id
+            channel:
+                label:                            Integration
+                description:                      The integration via which information about a Magento credit memo is received.
+            data_channel:
+                label:                            Channel
+                description:                      The channel via which information about a Magento credit memo is received.
+            adjustment:
+                label:                            Adjustment
+                description:                      Total adjustment fee applied for credit memo.
+            imported_at:
+                label:                            Imported At
+                description:                      The date and time when the record was imported.
+            synced_at:
+                label:                            Last Synced At
+                description:                      The date and time of the last Magento credit memo synchronization.
+            updated_at:
+                label:                            Updated At
+                description:                      The date and time Magento credit memo was updated.
+            created_at:
+                label:                            Created At
+                description:                      The date and time Magento credit memo was created.
+            increment_id:
+                label:                            "Credit Memo #"
+                description:                      The increment ID specified for a Magento credit memo.
+            transaction_id:
+                label:                            "Transaction #"
+                description:                      Number of transaction associated with Magento credit memo.
+            invoice_id:
+                label:                            Invoice ID
+                description:                      ID of the invoice for which the credit memo was created.
+            status:
+                label:                            Status
+                description:                      Credit memo status.
+            email_sent:
+                label:                            Email Sent
+                description:                      Defines whether the credit memo email is sent to the customer.
+            order:
+                label:                            Order
+                description:                      Magento order for which the credit memo was created.
+            subtotal:
+                label:                            Subtotal
+                description:                      The subtotal refunded amount.
+            adjustment_negative:
+                label:                            Adjustment fee amount
+                description:                      Adjustment fee amount.
+            shipping_amount:
+                label:                            Refunded shipping amount
+                description:                      Refunded shipping amount.
+            grand_total:
+                label:                            Refunded
+                description:                      The total amount refundeded.
+            adjustment_positive:
+                label:                            Adjustment refund amount
+                description:                      Adjustment refund amount.
+            store:
+                label:                            Store
+                description:                      A Magento store where a Magento order has been created.
+            customer_bal_total_refunded:
+                label:                            Customer balance total refunded
+                description:                      The amount refunded from customer's balance
+            reward_points_balance_refund:
+                label:                            Reward points balance refund
+                description:                      The balance of refunded reward points
+            origin_id:
+                label:                            Origin ID
+                description:                      Credit memo ID on the Magento side.
+            organization.label:                   Organization
+            owner.label:                          Owner
+            items:
+                label:                            Credit Memo Items
+                description:                      The items specified for a Magento credit memo.
+
+        creditmemoitem:
+            entity_label:                         Magento Credit Memo Item
+            entity_plural_label:                  Magento Credit Memo Items
+            entity_description:                   Allows you to operate with credit memos items.
+            id.label:                             Id
+            channel:
+                label:                            Integration
+                description:                      The integration via which information about a Magento credit memo item is received.
+            data_channel:
+                label:                            Channel
+                description:                      The channel via which information about a Magento credit memo is received.
+            origin_id:
+                label:                            Origin ID
+                description:                      Credit memo item ID on the Magento side.
+            parent:
+                label:                            Credit Memo
+                description:                      The credit memo to which a specific Magento credit memo item belongs.
+            discount_amount:
+                label:                            Discount amount
+                description:                      The discount amount applied for specific credit memo item.
+            tax_amount:
+                label:                            Tax amount
+                description:                      The tax amount applied for specific credit memo item.
+            row_total:
+                label:                            Row total
+                description:                      The row total price amount for a Magento credit memo item.
+            qty:
+                label:                            Qty
+                description:                      The quantity of items to refund.
+            price:
+                label:                            Price
+                description:                      The credit item price including special prices but before calculating taxes.
+            order_item_id:
+                label:                            Order Item Id
+                description:                      ID of the corresponding order item.
+            additional_data:
+                label:                            Additional data
+                description:                      Additional data supplied for credit memo item.
+            description:
+                label:                            Description
+                description:                      Description of product.
+            sku:
+                label:                            Item SKU
+                description:                      A stock keeping unit represented by a unique identification code that allows to track a Magento credit memo item.
+            name:
+                label:                            Name
+                description:                      The name specified for a Magento credit memo item.
+            owner.label:                          Owner
+
         #regions:
         #   entity_label:        Magento Region
         #   entity_plural_label: Magento Regions
@@ -1082,6 +1218,7 @@ oro:
         ping_site_error: Unable to load form
 
         order_information: Order Information
+        credit_memo_information: Credit Memo Information
         customer_information: Customer Information
         general_info: General Info
         general_information: General Information
