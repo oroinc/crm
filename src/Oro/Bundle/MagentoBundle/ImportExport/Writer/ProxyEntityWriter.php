@@ -14,6 +14,7 @@ use Oro\Bundle\BatchBundle\Step\StepExecutionRestoreInterface;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
 use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
@@ -74,6 +75,8 @@ class ProxyEntityWriter implements
                 $this->handleIdentifier($uniqueItems, $item, $item->getOriginId());
             } elseif ($item instanceof Order) {
                 $this->handleIdentifier($uniqueItems, $item, $item->getIncrementId());
+            } elseif ($item instanceof CreditMemo) {
+                $this->handleIdentifier($uniqueItems, $item, $item->getOriginId());
             } elseif ($item instanceof NewsletterSubscriber) {
                 $identifier = $item->getCustomer() ? $item->getCustomer()->getId() : 0;
                 if ($identifier !== 0 && in_array($identifier, $uniqueKeys)) {

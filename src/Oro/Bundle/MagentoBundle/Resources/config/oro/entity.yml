@@ -44,6 +44,12 @@ oro_entity:
         Oro\Bundle\MagentoBundle\Entity\OrderItem:
             alias:        magentoorderitem
             plural_alias: magentoorderitems
+        Oro\Bundle\MagentoBundle\Entity\CreditMemo:
+            alias:        magentocreditmemo
+            plural_alias: magentocreditmemos
+        Oro\Bundle\MagentoBundle\Entity\CreditMemoItem:
+            alias:        magentocreditmemoitem
+            plural_alias: magentocreditmemoitems
         Oro\Bundle\MagentoBundle\Entity\Product:
             alias:        magentoproduct
             plural_alias: magentoproducts
@@ -59,3 +65,6 @@ oro_entity:
         Extend\Entity\EV_Mage_Subscr_Status:
             alias:        magentonewslettersubscriberstatus
             plural_alias: magentonewslettersubscriberstatuses
+        Extend\Entity\EV_Creditmemo_Status:
+            alias:        magentocreditmemostatus
+            plural_alias: magentocreditmemostatuses

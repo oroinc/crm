@@ -28,7 +28,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          @ORM\Index(name="mageorder_created_idx",columns={"created_at", "id"})
  *     },
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"})
+ *          @ORM\UniqueConstraint(name="unq_increment_id_channel_id", columns={"increment_id", "channel_id"}),
+ *          @ORM\UniqueConstraint(name="unq_origin_id_channel_id", columns={"origin_id", "channel_id"})
  *     }
  * )
  * @Config(
@@ -65,12 +66,23 @@ class Order extends ExtendOrder implements
     ChannelAwareInterface,
     FirstNameInterface,
     LastNameInterface,
-    IntegrationAwareInterface
+    IntegrationAwareInterface,
+    OriginAwareInterface
 {
     const STATUS_CANCELED  = 'canceled';
     const STATUS_COMPLETED = 'completed';
 
-    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait, OriginTrait;
+
+    /**
+     * Mage entity origin id
+     * Should not be used as identity because incrementId is already used
+     *
+     * @var integer
+     *
+     * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true}, nullable=true)
+     */
+    protected $originId;
 
     /**
      * @var string
@@ -109,6 +121,22 @@ class Order extends ExtendOrder implements
      * )
      */
     protected $addresses;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="CreditMemo",
+     *     mappedBy="order", cascade={"all"}
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
+     */
+    protected $creditMemos;
 
     /**
      * @var Store
@@ -264,6 +292,15 @@ class Order extends ExtendOrder implements
      * @ORM\Column(type="datetime", name="synced_at", nullable=true)
      */
     protected $syncedAt;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->creditMemos = new ArrayCollection();
+    }
 
     /**
      * @param string $incrementId
@@ -709,6 +746,68 @@ class Order extends ExtendOrder implements
         $this->importedAt = $importedAt;
 
         return $this;
+    }
+
+    /**
+     * @param ArrayCollection|CreditMemo[] $creditMemos
+     *
+     * @return Order
+     */
+    public function resetCreditMemos($creditMemos)
+    {
+        $this->creditMemos->clear();
+
+        foreach ($creditMemos as $creditMemo) {
+            $this->addCreditMemo($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return Order
+     */
+    public function addCreditMemo(CreditMemo $creditMemo)
+    {
+        if (!$this->creditMemos->contains($creditMemo)) {
+            $this->creditMemos->add($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return Order
+     */
+    public function removeCreditMemo(CreditMemo $creditMemo)
+    {
+        if ($this->creditMemos->contains($creditMemo)) {
+            $this->creditMemos->removeElement($creditMemo);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|CreditMemo[]
+     */
+    public function getCreditMemos()
+    {
+        return $this->creditMemos;
+    }
+
+    /**
+     * @param CreditMemo $creditMemo
+     *
+     * @return bool
+     */
+    public function hasCreditMemo(CreditMemo $creditMemo)
+    {
+        return $this->getCreditMemos()->contains($creditMemo);
     }
 
     /**

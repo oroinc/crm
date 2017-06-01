@@ -96,6 +96,15 @@
                         'oro_magento_customer_carts_widget',
                         {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
+                },
+                {
+                    'alias': 'oro_magento_customer_credit_memos',
+                    'widgetType': 'block',
+                    'label': "oro.magento.creditmemo.entity_plural_label"|trans,
+                    'url': path(
+                        'oro_magento_customer_credit_memo_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
                 }
             ] %}
             {{ tabPanel(tabs) }}

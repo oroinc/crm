@@ -253,7 +253,16 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 'Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
                 false,
                 '\LogicException'
-            ]
+            ],
+            'Credit memos without extension'                    => [
+                'getCreditMemos',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CreditMemoSoapIterator'
+            ],
+            'Credit memos with extension'                       => [
+                'getCreditMemos',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CreditMemoSoapIterator',
+                SoapTransport::REQUIRED_EXTENSION_VERSION
+            ],
         ];
     }
 
@@ -647,7 +656,16 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 [3, []],
                 true,
                 true
-            ]
+            ],
+            'getCreditMemoInfo native' => [
+                'getCreditMemoInfo',
+                SoapTransport::ACTION_CREDIT_MEMO_INFO,
+                ['sessionId' => $this->sessionId, 'creditmemoIncrementId' => 3],
+                [],
+                [3],
+                false,
+                false
+            ],
         ];
     }
 }
