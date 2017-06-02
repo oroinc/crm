@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CreditMemoSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class CreditMemosSoapIteratorTest extends BaseIteratorTestCase
+class CreditMemosSoapIteratorTest extends BaseSoapIteratorTestCase
 {
     protected function setUp()
     {

@@ -2,9 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use Oro\Bundle\MagentoBundle\Provider\CreditMemoConnector;
-
 class InitialCreditMemoConnector extends AbstractMagentoConnector implements InitialConnectorInterface
 {
     /**

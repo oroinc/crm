@@ -6,6 +6,17 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase
 {
@@ -184,87 +195,87 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         return [
             'Orders without extension'                     => [
                 'getOrders',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\OrderSoapIterator'
+                OrderSoapIterator::class
             ],
             'Orders with extension'                        => [
                 'getOrders',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\OrderBridgeIterator',
+                OrderBridgeIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts with extension'                         => [
                 'getCarts',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CartsBridgeIterator',
+                CartsBridgeIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts without extension should provoke error' => [
                 'getCarts',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CartsBridgeIterator',
+                CartsBridgeIterator::class,
                 false,
                 '\LogicException'
             ],
             'Regions without extension'                    => [
                 'getRegions',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\RegionSoapIterator'
+                RegionSoapIterator::class
             ],
             'Regions with extension'                       => [
                 'getRegions',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\RegionSoapIterator',
+                RegionSoapIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Websites without extension'                   => [
                 'getWebsites',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\WebsiteSoapIterator'
+                WebsiteSoapIterator::class
             ],
             'Websites with extension'                      => [
                 'getWebsites',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\WebsiteSoapIterator',
+                WebsiteSoapIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Stores without extension'                     => [
                 'getStores',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\StoresSoapIterator'
+                StoresSoapIterator::class
             ],
             'Stores with extension'                        => [
                 'getStores',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\StoresSoapIterator',
+                StoresSoapIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customer groups without extension'            => [
                 'getCustomerGroups',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CustomerGroupSoapIterator'
+                CustomerGroupSoapIterator::class
             ],
             'Customer groups with extension'               => [
                 'getCustomerGroups',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CustomerGroupSoapIterator',
+                CustomerGroupSoapIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customers without extension'                  => [
                 'getCustomers',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CustomerSoapIterator'
+                CustomerSoapIterator::class
             ],
             'Customers with extension'                     => [
                 'getCustomers',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\Soap\\CustomerBridgeIterator',
+                CustomerBridgeIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Newsletter Subscribers with extension' => [
                 'getNewsletterSubscribers',
-                'Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator',
+                NewsletterSubscriberBridgeIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Newsletter Subscribers without extension' => [
                 'getNewsletterSubscribers',
-                'Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator',
+                NewsletterSubscriberBridgeIterator::class,
                 false,
                 '\LogicException'
             ],
             'Credit memos without extension'                    => [
                 'getCreditMemos',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CreditMemoSoapIterator'
+                CreditMemoSoapIterator::class
             ],
             'Credit memos with extension'                       => [
                 'getCreditMemos',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\CreditMemoSoapIterator',
+                CreditMemoSoapIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
         ];

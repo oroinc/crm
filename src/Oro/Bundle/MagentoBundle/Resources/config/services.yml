@@ -36,7 +36,6 @@ parameters:
     # forms
     oro_magento.form.type.order_place.class:                             Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     oro_magento.form.type.transport_check.class:                         Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType
-    oro_magento.form.subscriber.soap_transport_setting.class:            Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
     oro_magento.form.type.order_select.class:                            Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType
     oro_magento.form.type.customer_select.class:                         Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType
     oro_magento.form.type.cart_select.class:                             Oro\Bundle\MagentoBundle\Form\Type\CartSelectType

@@ -7,8 +7,7 @@ use Psr\Log\NullLogger;
 
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
-use Oro\Bundle\MagentoBundle\Provider\Transport\ServerTimeAwareInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -34,7 +33,7 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
     /** @var \DateInterval */
     protected $syncRange;
 
-    /** @var MagentoSoapTransportInterface */
+    /** @var MagentoTransportInterface */
     protected $transport;
 
     /** @var BatchFilterBag */
@@ -66,10 +65,10 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
     protected $storesByWebsite = [];
 
     /**
-     * @param MagentoSoapTransportInterface $transport
+     * @param MagentoTransportInterface $transport
      * @param array $settings
      */
-    public function __construct(MagentoSoapTransportInterface $transport, array $settings)
+    public function __construct(MagentoTransportInterface $transport, array $settings)
     {
         $this->transport = $transport;
         $this->websiteId = $settings['website_id'];
@@ -383,17 +382,20 @@ abstract class AbstractPageableIterator implements \Iterator, UpdatedLoaderInter
         return $toDate;
     }
 
-    protected function getToDate($dateToSync)
+    /**
+     * @param \DateTime $dateToSync
+     *
+     * @return \DateTime
+     */
+    protected function getToDate(\DateTime $dateToSync)
     {
         $dateTo = clone $dateToSync;
         $dateTo->add($this->syncRange);
-        if ($this->transport instanceof ServerTimeAwareInterface) {
-            $time = $this->transport->getServerTime();
-            if (false !== $time) {
-                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
-                if ($frameLimit < $dateTo) {
-                    return $frameLimit;
-                }
+        $time = $this->transport->getServerTime();
+        if (false !== $time) {
+            $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+            if ($frameLimit < $dateTo) {
+                return $frameLimit;
             }
         }
 

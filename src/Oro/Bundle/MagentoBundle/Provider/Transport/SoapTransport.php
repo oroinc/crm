@@ -13,7 +13,7 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CreditMemoSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupSoapIterator;
@@ -38,7 +38,6 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements
     MagentoSoapTransportInterface,
-    ServerTimeAwareInterface,
     PingableInterface,
     TransportCacheClearInterface
 {

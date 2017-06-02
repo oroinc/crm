@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 
-class StoresSoapIteratorTest extends BaseIteratorTestCase
+class StoresSoapIteratorTest extends BaseSoapIteratorTestCase
 {
     protected function setUp()
     {

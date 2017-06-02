@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Provider;
+namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 class CreditMemoConnector extends AbstractMagentoConnector
 {

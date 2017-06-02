@@ -4,11 +4,23 @@ namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator;
-
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
 abstract class AbstractPageableSoapIterator extends AbstractPageableIterator
 {
+    /** @var MagentoSoapTransportInterface */
+    protected $transport;
+
+    /**
+     * @param MagentoSoapTransportInterface $transport
+     * @param array                         $settings
+     */
+    public function __construct(MagentoSoapTransportInterface $transport, array $settings)
+    {
+        parent::__construct($transport, $settings);
+    }
+
     /**
      * @param mixed $response
      *

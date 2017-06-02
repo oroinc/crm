@@ -127,7 +127,7 @@ class OrderSoapIterator extends AbstractPageableSoapIterator implements Predefin
             ]
         );
 
-        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+        if (null !== $this->websiteId && $this->websiteId !== Website::ALL_WEBSITES) {
             $filters->addWebsiteFilter([$this->websiteId]);
         }
 

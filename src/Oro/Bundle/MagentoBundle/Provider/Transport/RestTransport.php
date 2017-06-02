@@ -33,7 +33,6 @@ class RestTransport implements
     TransportInterface,
     RestTransportInterface,
     MagentoTransportInterface,
-    ServerTimeAwareInterface,
     PingableInterface,
     LoggerAwareInterface
 {
@@ -155,7 +154,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isExtensionInstalled()
     {
@@ -167,7 +166,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAdminUrl()
     {
@@ -450,6 +449,22 @@ class RestTransport implements
     public function getRequiredExtensionVersion()
     {
         return self::REQUIRED_EXTENSION_VERSION;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreditMemos()
+    {
+        // TODO: Implement getCreditMemos() method. Will be implemented in CRM-8310
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreditMemoInfo($incrementId)
+    {
+        // TODO: Implement getCreditMemoInfo() method. Will be implemented in CRM-8310
     }
 
     /**

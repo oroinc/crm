@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class OrderBridgeIteratorTest extends BaseIteratorTestCase
+class OrderBridgeIteratorTest extends BaseSoapIteratorTestCase
 {
     protected function setUp()
     {

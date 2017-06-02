@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator;
 
-class AbstractPageableSoapIteratorTest extends BaseIteratorTestCase
+class AbstractPageableSoapIteratorTest extends BaseSoapIteratorTestCase
 {
     public function testIterator()
     {

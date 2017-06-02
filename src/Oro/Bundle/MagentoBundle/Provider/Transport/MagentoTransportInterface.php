@@ -6,7 +6,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
-interface MagentoTransportInterface extends TransportInterface
+interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareInterface
 {
     const ALIAS_GROUPS = 'groups';
     const ALIAS_STORES = 'stores';

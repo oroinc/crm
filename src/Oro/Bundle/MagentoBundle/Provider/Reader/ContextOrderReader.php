@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\MagentoBundle\Provider\OrderConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextOrderReader extends OrderConnector

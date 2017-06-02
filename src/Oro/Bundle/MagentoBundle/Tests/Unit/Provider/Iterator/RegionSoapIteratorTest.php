@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
 
-class RegionSoapIteratorTest extends BaseIteratorTestCase
+class RegionSoapIteratorTest extends BaseSoapIteratorTestCase
 {
     protected function setUp()
     {
