@@ -180,6 +180,7 @@ services:
             - '@oro_magento.transport.rest_client_factory'
             - '@oro_magento.provider.rest_token_provider'
             - '@oro_magento.transport.provider.oro_bridge_extension_config_provider'
+            - '@oro_magento.converter.rest.response_converter_manager'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
         tags:
@@ -1175,3 +1176,11 @@ services:
         arguments:
             - '@form.factory'
             - '@doctrine'
+
+    oro_magento.converter.rest.response_converter_manager:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager
+
+    oro_magento.converter.rest.region_converter:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\RegionConverter
+        tags:
+            - {name: oro_magento.rest_response.converter, type: region }

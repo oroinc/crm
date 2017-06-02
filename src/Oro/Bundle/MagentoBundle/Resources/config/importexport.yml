@@ -291,6 +291,7 @@ services:
         parent: oro_magento.connector.abstract
         tags:
             - { name: oro_integration.connector, type: region_dictionary, channel_type: magento }
+            - { name: oro_integration.connector, type: region_dictionary, channel_type: magento2 }
             - { name: oro_magento.bundle_config.aware, argument_number: 3 }
 
     oro_magento.mage.newsletter_subscriber_connector:

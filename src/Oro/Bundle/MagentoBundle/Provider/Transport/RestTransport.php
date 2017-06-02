@@ -25,6 +25,8 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider;
+use Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\RegionRestIterator;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 /**
@@ -40,6 +42,8 @@ class RestTransport implements
     use LoggerAwareTrait;
 
     const REQUIRED_EXTENSION_VERSION = '0.0.0';
+
+    const REGION_RESPONSE_TYPE = 'region';
 
     const API_URL_PREFIX = 'rest/V1';
     const TOKEN_KEY = 'api_token';
@@ -80,18 +84,26 @@ class RestTransport implements
     protected $oroBridgeExtensionConfigProvider;
 
     /**
+     * @var ResponseConverterManager
+     */
+    protected $responseConverterManager;
+
+    /**
      * @param BridgeRestClientFactory   $clientFactory
      * @param RestTokenProvider         $restTokenProvider
      * @param OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider
+     * @param ResponseConverterManager $responseConverterManager
      */
     public function __construct(
         BridgeRestClientFactory $clientFactory,
         RestTokenProvider $restTokenProvider,
-        OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider
+        OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider,
+        ResponseConverterManager $responseConverterManager
     ) {
         $this->clientFactory = $clientFactory;
         $this->restTokenProvider = $restTokenProvider;
         $this->oroBridgeExtensionConfigProvider = $oroBridgeExtensionConfigProvider;
+        $this->responseConverterManager = $responseConverterManager;
     }
 
     /**
@@ -265,9 +277,7 @@ class RestTransport implements
      */
     public function doGetWebsitesRequest()
     {
-        if (!$this->isExtensionInstalled()) {
-            throw new ExtensionRequiredException();
-        }
+        $this->checkExtensionInstalled();
 
         try {
             return $this->client->get('store/websites', [], $this->headers)->json();
@@ -281,7 +291,33 @@ class RestTransport implements
      */
     public function getRegions()
     {
-        // TODO: Implement getRegions() method.
+        return new RegionRestIterator($this, $this->transportEntity->getSettingsBag()->all());
+    }
+
+    /**
+     * @return array
+     */
+    public function doGetRegionsRequest()
+    {
+        $this->checkExtensionInstalled();
+
+        try {
+            $data = $this->client->get(sprintf('directory/countries'), [], $this->headers)->json();
+
+            return $this->responseConverterManager->convert($data, self::REGION_RESPONSE_TYPE);
+        } catch (RestException $e) {
+            return $this->handleException($e, 'doGetRegionsRequest');
+        }
+    }
+
+    /**
+     * @throws ExtensionRequiredException
+     */
+    protected function checkExtensionInstalled()
+    {
+        if (!$this->isExtensionInstalled()) {
+            throw new ExtensionRequiredException();
+        }
     }
 
     /**

@@ -1,0 +1,35 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body: {"version": "1.0.0","mage_version":"2.1.0","admin_url":"localhost/admin","customer_scope":1}
+
+"directory/countries":
+    code: 200
+    headers: ~
+    body:
+      -
+        id: "AD"
+        two_letter_abbreviation: "AD"
+        three_letter_abbreviation: "AND"
+        full_name_locale: "Andorra"
+        full_name_english: "Andorra"
+      -
+        id: "FR"
+        two_letter_abbreviation: "FR"
+        three_letter_abbreviation: "FRA"
+        full_name_locale: "France"
+        full_name_english: "France"
+        available_regions:
+          -
+            id: "182"
+            code: "1"
+            name: "Ain"
+          -
+            id: "183"
+            code: "2"
+            name: "Aisne"

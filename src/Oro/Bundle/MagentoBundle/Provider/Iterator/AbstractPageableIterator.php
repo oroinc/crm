@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
 use Psr\Log\LoggerAwareInterface;

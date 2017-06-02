@@ -2,41 +2,25 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator\Soap;
 
+use Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractRegionIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class RegionSoapIterator extends AbstractPageableSoapIterator
+class RegionSoapIterator extends AbstractRegionIterator
 {
-    /** @var array */
-    protected $countriesBuffer;
-
-    /** @var array */
-    protected $regionsBuffer = [];
-
-    /** @var array */
-    protected $currentCountry;
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCountryList()
+    {
+        return $this->transport->call(SoapTransport::ACTION_COUNTRY_LIST);
+    }
 
     /**
      * {@inheritdoc}
      */
-    protected function findEntitiesToProcess()
+    protected function getRegionList($iso2Code)
     {
-        if (empty($this->countriesBuffer)) {
-            $this->countriesBuffer = $this->transport->call(SoapTransport::ACTION_COUNTRY_LIST);
-        }
-
-        if (key($this->countriesBuffer) === null) {
-            return null;
-        }
-
-        if (empty($this->entitiesIdsBuffer)) {
-            $this->currentCountry = (array)current($this->countriesBuffer);
-            next($this->countriesBuffer);
-
-            $this->entitiesIdsBuffer = $this->getEntityIds();
-            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
-        }
-
-        return true;
+        return (array)$this->transport->call(SoapTransport::ACTION_REGION_LIST, ['country' => $iso2Code]);
     }
 
     /**
@@ -45,42 +29,13 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
     protected function getEntityIds()
     {
         $iso2Code = $this->currentCountry['iso2_code'];
-        $result   = (array)$this->transport->call(SoapTransport::ACTION_REGION_LIST, ['country' => $iso2Code]);
+        $result   = $this->getRegionList($iso2Code);
 
-        $this->regionsBuffer = [];
+        $this->regions = [];
         foreach ($result as $obj) {
-            $this->regionsBuffer[$obj->code] = (array)$obj;
+            $this->regions[$obj->code] = (array)$obj;
         }
 
-        return array_keys($this->regionsBuffer);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEntity($id)
-    {
-        $region                = $this->regionsBuffer[$id];
-        $region['countryCode'] = $this->currentCountry['iso2_code'];
-
-        return $region;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getIdFieldName()
-    {
-        return 'code';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function current()
-    {
-        $this->logger->info(sprintf('Loading Region by id: %s', $this->key()));
-
-        return $this->current;
+        return array_keys($this->regions);
     }
 }
