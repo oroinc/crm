@@ -179,11 +179,14 @@ services:
         arguments:
             - '@oro_magento.transport.rest_client_factory'
             - '@oro_magento.provider.rest_token_provider'
-            - '@oro_magento.provider.rest_ping_provider'
+            - '@oro_magento.transport.provider.oro_bridge_extension_config_provider'
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
         tags:
             - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
+
+    oro_magento.transport.provider.oro_bridge_extension_config_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider
 
     # Providers
     oro_magento.provider.magento_channel_type:
@@ -240,11 +243,6 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.encoder.mcrypt'
-        calls:
-            - [setLogger, ["@oro_integration.logger.strategy"]]
-
-    oro_magento.provider.rest_ping_provider:
-        class: Oro\Bundle\MagentoBundle\Provider\RestPingProvider
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 

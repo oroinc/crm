@@ -8,7 +8,7 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Exception\RuntimeException;
+use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
@@ -19,11 +19,12 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
+use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
-use Oro\Bundle\MagentoBundle\Provider\RestPingProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 /**
@@ -43,8 +44,10 @@ class RestTransport implements
     const API_URL_PREFIX = 'rest/V1';
     const TOKEN_KEY = 'api_token';
 
-    const TOKEN_HEADER_KEY = 'Authorization';
-    const TOKEN_MASK = 'Bearer %s';
+    const TOKEN_HEADER_KEY  = 'Authorization';
+    const TOKEN_MASK        = 'Bearer %s';
+
+    const REST_PING_URI     = 'oro/ping';
 
     /**
      * @var array
@@ -72,40 +75,53 @@ class RestTransport implements
     protected $restTokenProvider;
 
     /**
-     * @var RestPingProvider
+     * @var  OroBridgeExtensionConfigProvider
      */
-    protected $pingProvider;
+    protected $oroBridgeExtensionConfigProvider;
 
     /**
-     * @param BridgeRestClientFactory $clientFactory
-     * @param RestTokenProvider $restTokenProvider
-     * @param RestPingProvider $pingProvider
+     * @param BridgeRestClientFactory   $clientFactory
+     * @param RestTokenProvider         $restTokenProvider
+     * @param OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider
      */
     public function __construct(
         BridgeRestClientFactory $clientFactory,
         RestTokenProvider $restTokenProvider,
-        RestPingProvider $pingProvider
+        OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider
     ) {
         $this->clientFactory = $clientFactory;
         $this->restTokenProvider = $restTokenProvider;
-        $this->pingProvider = $pingProvider;
+        $this->oroBridgeExtensionConfigProvider = $oroBridgeExtensionConfigProvider;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function init(Transport $transportEntity)
     {
         $this->transportEntity = $transportEntity;
         $this->client = $this->clientFactory->createRestClient($this->transportEntity);
         $token = $this->restTokenProvider->getTokenFromEntity($this->transportEntity);
+        $this->oroBridgeExtensionConfigProvider->setClient($this->client);
+
         if (null === $token) {
             $token = $this->refreshToken();
         }
         $this->updateTokenHeaderParam($token);
+    }
 
-        $this->pingProvider->setClient($this->client);
-        $this->pingProvider->setHeaders($this->headers);
+    /**
+     * @return RestClientInterface
+     *
+     * @throws RuntimeException
+     */
+    protected function getClient()
+    {
+        if (null === $this->client) {
+            throw new RuntimeException("REST Transport isn't configured properly.");
+        }
+
+        return $this->client;
     }
 
     /**
@@ -136,7 +152,7 @@ class RestTransport implements
     }
 
     /**
-     * @return array
+     * @return string
      */
     protected function refreshToken()
     {
@@ -158,11 +174,7 @@ class RestTransport implements
      */
     public function isExtensionInstalled()
     {
-        try {
-            return $this->pingProvider->isExtensionInstalled();
-        } catch (RestException $e) {
-            return $this->handleException($e, 'isExtensionInstalled');
-        }
+        return !empty($this->getExtensionConfig()->getExtensionVersion());
     }
 
     /**
@@ -170,15 +182,11 @@ class RestTransport implements
      */
     public function getAdminUrl()
     {
-        try {
-            return $this->pingProvider->getAdminUrl();
-        } catch (RestException $e) {
-            return $this->handleException($e, 'getAdminUrl');
-        }
+        return $this->getExtensionConfig()->getAdminUrl();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getOrders()
     {
@@ -186,7 +194,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCarts()
     {
@@ -194,7 +202,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCustomers()
     {
@@ -213,7 +221,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCustomerGroups()
     {
@@ -221,7 +229,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getStores()
     {
@@ -229,7 +237,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function doGetStoresRequest()
     {
@@ -245,7 +253,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getWebsites()
     {
@@ -253,7 +261,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function doGetWebsitesRequest()
     {
@@ -269,7 +277,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRegions()
     {
@@ -277,7 +285,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCustomerInfo($originId)
     {
@@ -285,7 +293,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCustomerAddresses($originId)
     {
@@ -293,7 +301,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getErrorCode(\Exception $e)
     {
@@ -301,7 +309,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getOrderInfo($incrementId)
     {
@@ -309,7 +317,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function createCustomer(array $customerData)
     {
@@ -317,7 +325,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function updateCustomer($customerId, array $customerData)
     {
@@ -325,7 +333,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function createCustomerAddress($customerId, array $item)
     {
@@ -333,7 +341,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function updateCustomerAddress($customerAddressId, array $item)
     {
@@ -341,7 +349,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
@@ -349,7 +357,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getNewsletterSubscribers()
     {
@@ -357,7 +365,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function createNewsletterSubscriber(array $subscriberData)
     {
@@ -365,7 +373,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
@@ -373,7 +381,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isSupportedExtensionVersion()
     {
@@ -382,31 +390,23 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExtensionVersion()
     {
-        try {
-            return $this->pingProvider->getBridgeVersion();
-        } catch (RestException $e) {
-            return $this->handleException($e, 'getExtensionVersion');
-        }
+        return $this->getExtensionConfig()->getExtensionVersion();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getMagentoVersion()
     {
-        try {
-            return $this->pingProvider->getMagentoVersion();
-        } catch (RestException $e) {
-            return $this->handleException($e, 'getMagentoVersion');
-        }
+        return $this->getExtensionConfig()->getMagentoVersion();
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getServerTime()
     {
@@ -414,7 +414,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getLabel()
     {
@@ -422,7 +422,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
@@ -430,7 +430,7 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getSettingsEntityFQCN()
     {
@@ -438,14 +438,22 @@ class RestTransport implements
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function ping()
     {
-        return $this->pingProvider->ping();
+        try {
+            $this->getClient()->get(static::REST_PING_URI, [], $this->headers);
+        } catch (RestException $e) {
+            return false;
+        }
+
+        return true;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getRequiredExtensionVersion()
     {
         return self::REQUIRED_EXTENSION_VERSION;
@@ -468,11 +476,36 @@ class RestTransport implements
     }
 
     /**
+     * Fill extension data to OroBridgeExtension object
+     *
+     * In case when we need refresh extension data please call this method with $force = true
+     *
+     * @param bool $force
+     *
+     * @return Config
+     *
+     * @throws RuntimeException
+     */
+    public function getExtensionConfig($force = false)
+    {
+        try {
+            return $this->oroBridgeExtensionConfigProvider->getConfig(
+                $this->headers,
+                $force
+            );
+        } catch (RestException $e) {
+            return $this->handleException($e, 'getExtensionConfig', [$force]);
+        }
+    }
+
+    /**
      * @param RestException $exception
      * @param string        $methodName
      * @param array         $arguments
      *
      * @return mixed
+     *
+     * @throws RuntimeException
      */
     protected function handleException(RestException $exception, $methodName, $arguments = [])
     {
