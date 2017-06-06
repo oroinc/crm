@@ -139,8 +139,17 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         }
 
         $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($body, $integration) {
-            $this->disableOptionalListeners();
-            $this->optionalListenerManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
+            $enabledListeners = [
+                'oro_search.index_listener',
+                'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
+            ];
+
+            $disabledListeners = [
+                'oro_magento.event_listener.delayed_search_reindex'
+            ];
+
+            $this->changeListenersStatus($enabledListeners, $disabledListeners);
+
             $this->setTemporaryIntegrationToken($integration);
 
             $result = $this->initialSyncProcessor->process(
@@ -152,6 +161,8 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
             if ($result) {
                 $this->scheduleAnalyticRecalculation($integration);
             }
+
+            $this->changeListenersStatus($disabledListeners, $enabledListeners);
 
             return $result;
         });
@@ -167,17 +178,23 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         return [Topics::SYNC_INITIAL_INTEGRATION];
     }
 
-    private function disableOptionalListeners()
+    /**
+     * @param array $disableListeners
+     * @param array $enableListeners
+     */
+    private function changeListenersStatus(array $disableListeners, array $enableListeners = [])
     {
-        $disabledOptionalListeners = [
-            'oro_search.index_listener',
-            'oro_entity.event_listener.entity_modify_created_updated_properties_listener',
-        ];
+        $knownListeners = $this->optionalListenerManager->getListeners();
 
-        $knownListeners  = $this->optionalListenerManager->getListeners();
-        foreach ($disabledOptionalListeners as $listenerId) {
+        foreach ($disableListeners as $listenerId) {
             if (in_array($listenerId, $knownListeners, true)) {
                 $this->optionalListenerManager->disableListener($listenerId);
+            }
+        }
+
+        foreach ($enableListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $this->optionalListenerManager->enableListener($listenerId);
             }
         }
     }

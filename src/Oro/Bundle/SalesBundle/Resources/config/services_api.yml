@@ -4,6 +4,7 @@ services:
         class: Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener
         arguments:
             - '@oro_sales.manager.account_customer'
+            - '@oro_security.form.field_acl_helper'
 
     oro_sales.api.b2bcustomer.customize_loaded_data.compute_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\ComputePrimaryField

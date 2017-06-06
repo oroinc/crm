@@ -1,0 +1,25 @@
+{#
+    Available variables:
+    * entity       - user entity Oro\Bundle\MagentoBundle\Entity\CreditMemo or null
+    * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
+#}
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+
+{% set recordUrl = indexer_item.recordUrl %}
+{% set title = entity ?
+    'oro.magento.entity_number'|trans({'%entityName%': 'oro.magento.creditmemo.entity_label'|trans, '%entityNumber%': entity.incrementId})
+    : indexer_item.recordTitle
+%}
+
+{% set entityType = 'oro.magento.creditmemo.entity_label'|trans %}
+
+{% set entityInfo = [
+    {'title': 'oro.magento.creditmemo.channel.label'|trans, 'value': entity.channel|default(false) ? entity.channel.name : 'N/A'},
+    {'title': 'oro.magento.creditmemo.store.label'|trans, 'value': entity.store|default(false) ? entity.store.name : 'N/A'},
+    {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.magento.creditmemo.grand_total.label'|trans, 'value': entity.grandTotal ? entity.grandTotal|oro_format_currency : 'N/A'},
+    {'title': 'oro.magento.creditmemo.subtotal.label'|trans, 'value': entity.subtotal ? entity.subtotal|oro_format_currency : 'N/A'},
+] %}

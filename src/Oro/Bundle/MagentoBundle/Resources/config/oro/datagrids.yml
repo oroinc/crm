@@ -1912,3 +1912,248 @@ datagrids:
         # Source config field is modified in TrackingEventsDataGridListener to change
         # the source table and add filter by customer identifiers
         # source: ~
+
+    magento-credit-memo-grid-base:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemo
+        acl_resource: oro_magento_credit_memo_view
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.createdAt
+                    - c.updatedAt
+                    - c.incrementId
+                    - o.incrementId as orderNumber
+                    - o.createdAt as orderCreatedAt
+                    - c.grandTotal as refunded
+                    - o.currency
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemo, alias: c }
+                join:
+                    left:
+                        - { join: c.order, alias: o }
+        columns:
+            incrementId:
+                label:            oro.magento.creditmemo.increment_id.label
+                order: 30
+            createdAt:
+                label:            oro.ui.created_at
+                frontend_type:    datetime
+                order: 40
+            updatedAt:
+                label:            oro.ui.updated_at
+                frontend_type:    datetime
+                order: 50
+            refunded:
+                label:  oro.magento.creditmemo.grand_total.label
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+                order: 70
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: oro_magento_credit_memo_view
+                params: [ id ]
+        sorters:
+            columns:
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+                incrementId: { data_name: c.incrementId }
+            default:
+                createdAt:  DESC
+        actions:
+            view:
+                type:         navigate
+                label:        oro.grid.action.view
+                link:         view_link
+                icon:         eye
+                acl_resource: oro_magento_credit_memo_view
+                rowAction:    true
+        options:
+            entityHint: credit memo
+
+    magento-credit-memo-order-info-mixin:
+        columns:
+            orderNumber:
+                label:            oro.magento.datagrid.columns.increment_id
+                order: 65
+            orderCreatedAt:
+                label:            oro.magento.datagrid.columns.orderCreatedAt
+                frontend_type:    datetime
+                order: 66
+
+    magento-credit-memo-filters-mixin:
+        filters:
+            columns:
+                createdAt:
+                    type:             datetime
+                    data_name:        c.createdAt
+                updatedAt:
+                    type:             datetime
+                    data_name:        c.updatedAt
+                    enabled:          false
+                refunded:
+                    type: currency
+                    data_name: c.grandTotal
+                incrementId:
+                    type:             string
+                    data_name:        c.incrementId
+
+    magento-credit-memo-grid:
+        extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
+            - magento-credit-memo-filters-mixin
+        source:
+            query:
+                select:
+                    - o.firstName
+                    - o.lastName
+                    - channel.name as channelName
+                    - cw.name as websiteName
+                join:
+                    left:
+                        - { join: o.dataChannel, alias: channel }
+                        - { join: o.store, alias: cs }
+                        - { join: cs.website, alias: cw }
+        columns:
+            channelName:
+                label: oro.magento.creditmemo.data_channel.label
+                order: 10
+            websiteName:
+                label: oro.magento.order.website.label
+                order: 20
+            firstName:
+                label: oro.magento.datagrid.columns.first_name
+                order: 35
+            lastName:
+                label: oro.magento.datagrid.columns.last_name
+                order: 36
+        filters:
+            columns:
+                channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                websiteName:
+                    type: entity
+                    data_name: cw.id
+                    options:
+                        field_options:
+                            class: OroMagentoBundle:Website
+                            property: name
+                            translatable_options: false
+                    enabled:   false
+                firstName:
+                    type:             string
+                    data_name:        o.firstName
+                lastName:
+                    type:             string
+                    data_name:        o.lastName
+        options:
+            export: true
+            entity_pagination: true
+
+    magento-customer-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
+            - magento-credit-memo-filters-mixin
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId AND o.channel = :channelId
+            bind_parameters:
+                - customerId
+                - channelId
+
+    magento-account-customer-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        mixins:
+            - magento-credit-memo-order-info-mixin
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId AND o.channel = :channelId
+            bind_parameters:
+                - customerId
+                - channelId
+
+    magento-order-credit-memo-widget-grid:
+        extends:  magento-credit-memo-grid-base
+        source:
+            query:
+                where:
+                    and:
+                        - c.order = :orderId
+            bind_parameters:
+                - orderId
+
+    magento-credit-memo-item-grid:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem
+        acl_resource: oro_magento_credit_memo_view
+        source:
+            type: orm
+            query:
+                select:
+                    - cmi.id
+                    - cmi.sku
+                    - cmi.name
+                    - cmi.qty
+                    - cmi.price
+                    - cmi.rowTotal
+                    - o.currency
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\CreditMemoItem, alias: cmi }
+                join:
+                    left:
+                        - { join: cmi.parent, alias: cm }
+                        - { join: cm.order, alias: o }
+                where:
+                    and:
+                        - cmi.parent = :creditMemoId
+            bind_parameters:
+                - creditMemoId
+        columns:
+            sku:
+                label: oro.magento.datagrid.columns.sku
+            name:
+                label: oro.magento.datagrid.columns.name
+            qty:
+                label: oro.magento.datagrid.columns.qty
+                frontend_type: number
+            price:
+                label: oro.magento.datagrid.columns.price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            rowTotal:
+                label: oro.magento.datagrid.columns.rowTotal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+        sorters:
+            columns:
+                sku:                 { data_name: cmi.sku }
+                name:                { data_name: cmi.name }
+                qty:                 { data_name: cmi.qty }
+                price:               { data_name: cmi.price }
+                rowTotal:            { data_name: cmi.rowTotal }
+        options:
+            entityHint: credit memo item
+            toolbarOptions:
+                hide: true
+                pagination:
+                    hide: true

@@ -37,6 +37,15 @@ navigation:
                     routes:      ['/^oro_magento_newsletter_subscriber_(index|view)$/']
                     description: 'oro.magento.newslettersubscriber.entity_plural_label'
 
+            magento_credit_memo:
+                label:   'oro.magento.creditmemo.entity_plural_label'
+                route:   'oro_magento_credit_memo_index'
+                display: false
+                position: 80
+                extras:
+                    routes:      ['/^oro_magento_credit_memo_(index|view)$/']
+                    description: 'oro.magento.credit_memo.entity_plural_label'
+
         tree:
             application_menu:
                 children:
@@ -44,6 +53,7 @@ navigation:
                         children:
                             magento_cart: ~
                             magento_order: ~
+                            magento_credit_memo: ~
                     customers_tab:
                         children:
                             magento_customer: ~
@@ -62,6 +72,9 @@ navigation:
 
         oro_magento_order_index:    ~
         oro_magento_order_view:     'Order #%order.incrementId%'
+
+        oro_magento_credit_memo_index:    ~
+        oro_magento_credit_memo_view:     'Credit Memo #%creditMemo.incrementId%'
 
         oro_magento_product_index:  'oro.magento.product.entity_plural_label'
         oro_magento_product_view:   '%product.name%'

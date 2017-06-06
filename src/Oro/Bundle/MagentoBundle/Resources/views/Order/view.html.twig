@@ -72,6 +72,24 @@
         ]) %}
     {% endif %}
 
+    {% if resource_granted('oro_magento_credit_memo_view') %}
+        {% set orderCreditMemoWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_magento_order_credit_memo_widget', {orderId: entity.id})
+            }) }}
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'oro.magento.creditmemo.entity_plural_label'|trans,
+                'subblocks': [
+                    {'data' : [orderCreditMemoWidget] }
+                ]
+            }
+        ]) %}
+    {% endif %}
+
     {% set id = 'magentoOrderView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

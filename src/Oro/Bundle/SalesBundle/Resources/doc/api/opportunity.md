@@ -21,6 +21,11 @@ The created record is returned in the response.
 
 {@inheritdoc}
 
+**Please note:**
+
+*Either **account** or **customer** field should be specified. In case when both fields are provided
+the customer should be a part of the specified account.*
+
 {@request:json_api}
 Example:
 
@@ -61,10 +66,7 @@ Example:
             }
          },
          "account":{
-            "data":{
-               "type":"accounts",
-               "id":"3"
-            }
+            "data":null
          },
          "status":{  
             "data":{  
@@ -84,6 +86,12 @@ Update existing Opportunity record.
 The updated record is returned in the response.
 
 {@inheritdoc}
+
+**Please note:**
+
+*The **account** and **customer** fields are related and you cannot pass them together if
+the customer is not a part of the specified account.
+These fields could be used independent from each other, but must be correlated if both of them are specified.*
 
 {@request:json_api}
 Example:
@@ -117,12 +125,6 @@ Example:
             "data":{  
                "type":"organizations",
                "id":"1"
-            }
-         },
-         "customer":{
-            "data":{  
-               "type":"b2bcustomers",
-               "id":"9"
             }
          },
          "account":{
@@ -176,19 +178,29 @@ The list of records that will be deleted, could be limited by filters.
 
 ### customer
 
-The customer the opportunity is assigned to.
+A customer the opportunity is assigned to.
 
 #### create
 
-The customer the opportunity is assigned to (**required** if no account is specified).
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** if the **account** field is not specified.*
+
+*If both **customer** and **account** fields are provided the customer should be a part of the specified account.*
 
 ### account
 
-The account the opportunity is assigned to.
+An account the opportunity is assigned to.
 
 #### create
 
-The account the opportunity is assigned to (**required** if no customer is specified, taken from customer if it is). If customer field is specified, this account have to relate to the customer.
+{@inheritdoc}
+
+**Please note:**
+
+*This field is **required** if the **customer** field is not specified.*
 
 ### status
 
@@ -272,6 +284,21 @@ Get a customer the opportunity is created for.
 
 Update a customer the opportunity is created for.
 
+{@request:json_api}
+Example:
+
+`</api/opportunities/1/relationships/customer>`
+
+```JSON
+{
+  "data": {
+    "type": "b2bcustomers",
+    "id": "1"
+  }
+}
+```
+{@/request}
+
 ### account
 
 #### get_subresource
@@ -285,6 +312,21 @@ Get an account the opportunity is created for.
 #### update_relationship
 
 Update an account the opportunity is created for.
+
+{@request:json_api}
+Example:
+
+`</api/opportunities/1/relationships/account>`
+
+```JSON
+{
+  "data": {
+    "type": "accounts",
+    "id": "1"
+  }
+}
+```
+{@/request}
 
 ### lead
 

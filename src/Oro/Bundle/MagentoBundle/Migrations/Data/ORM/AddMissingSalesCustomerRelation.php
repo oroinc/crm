@@ -7,18 +7,23 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 
-use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
+use Oro\Bundle\EntityBundle\ORM\DatabasePlatformInterface;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 use Oro\Bundle\SalesBundle\Entity\Customer as SalesCustomer;
 use Oro\Bundle\SalesBundle\EntityConfig\CustomerScope;
 
-class AddMissingSalesCustomerRelation extends AbstractFixture implements ContainerAwareInterface
+class AddMissingSalesCustomerRelation extends AbstractFixture implements
+    ContainerAwareInterface,
+    VersionedFixtureInterface
 {
+    const BUFFER_SIZE = 1000;
+
     /** @var ContainerInterface */
     private $container;
 
@@ -47,7 +52,7 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
         );
 
         $platformName = $manager->getConnection()->getDatabasePlatform()->getName();
-        if ($platformName === DatabasePlatformInterface::DATABASE_PLATFORM_POSTGRESQL) {
+        if ($platformName === DatabasePlatformInterface::DATABASE_POSTGRESQL) {
             $updateQuery = sprintf(
                 'UPDATE %s AS ca SET %s_id = mc.id FROM %s AS mc WHERE ca.account_id = mc.account_id ',
                 $manager->getClassMetadata(SalesCustomer::class)->getTableName(),
@@ -66,13 +71,9 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
         }
 
         $connection = $manager->getConnection();
-        try {
-            $connection->beginTransaction();
+        $connection->transactional(function () use ($connection, $updateQuery) {
             $connection->executeUpdate($updateQuery);
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-        }
+        });
 
         $qb = $manager->getRepository(Customer::class)->createQueryBuilder('mc');
         $qb->select(['mc.id', 'IDENTITY(mc.account) AS account_id']);
@@ -83,14 +84,15 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
             sprintf('ca.%s = mc.id', $associationName)
         );
         $qb->where($qb->expr()->isNull(sprintf('ca.%s', $associationName)));
+        $qb->andWhere($qb->expr()->isNotNull('mc.account'));
 
-        $insertQB = $manager->getConnection()->createQueryBuilder();
-        $tableName = $manager->getClassMetadata(SalesCustomer::class)->getTableName();
+        $iterator = new BufferedIdentityQueryResultIterator($qb->getQuery());
+        $iterator->setBufferSize(self::BUFFER_SIZE);
+        $connection->transactional(function () use ($manager, $iterator, $associationName) {
+            $connection = $manager->getConnection();
+            $insertQB = $connection->createQueryBuilder();
+            $tableName = $manager->getClassMetadata(SalesCustomer::class)->getTableName();
 
-        $iterator = new BufferedQueryResultIterator($qb->getQuery());
-
-        try {
-            $connection->beginTransaction();
             foreach ($iterator as $item) {
                 $insertQuery = $insertQB
                     ->insert($tableName)
@@ -101,9 +103,14 @@ class AddMissingSalesCustomerRelation extends AbstractFixture implements Contain
 
                 $connection->executeQuery($insertQuery);
             }
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-        }
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.1';
     }
 }

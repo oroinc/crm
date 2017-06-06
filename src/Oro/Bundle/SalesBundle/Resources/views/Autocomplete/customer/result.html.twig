@@ -1,4 +1,4 @@
-<% if (typeof(icon) !== "undefined") { %>
+<% if (!_.isEmpty(obj.icon)) { %>
     <% if (icon.type === 'file-path') { %>
         <img src="<%= icon.data.path %>" class="separated-img">
     <% } else if (icon.type === 'icon') { %>

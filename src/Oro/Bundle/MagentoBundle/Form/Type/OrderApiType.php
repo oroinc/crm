@@ -19,6 +19,7 @@ class OrderApiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('incrementId', 'text', ['required' => true]);
+        $builder->add('originId', 'text', ['required' => false]);
         $builder->add('isVirtual', 'checkbox', ['required' => false]);
         $builder->add('isGuest', 'checkbox', ['required' => false]);
         $builder->add('giftMessage', 'text', ['required' => false]);

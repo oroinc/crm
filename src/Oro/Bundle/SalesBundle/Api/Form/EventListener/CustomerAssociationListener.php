@@ -2,15 +2,19 @@
 
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
+use Oro\Bundle\ApiBundle\Form\FormUtil;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SecurityBundle\Form\FieldAclHelper;
 
 /**
  * The form event listener responsible for save the customer association related fields.
@@ -23,12 +27,19 @@ class CustomerAssociationListener implements EventSubscriberInterface
     /** @var AccountCustomerManager */
     protected $accountCustomerManager;
 
+    /** @var FieldAclHelper */
+    protected $fieldAclHelper;
+
     /**
      * @param AccountCustomerManager $accountCustomerManager
+     * @param FieldAclHelper         $fieldAclHelper
      */
-    public function __construct(AccountCustomerManager $accountCustomerManager)
-    {
+    public function __construct(
+        AccountCustomerManager $accountCustomerManager,
+        FieldAclHelper $fieldAclHelper
+    ) {
         $this->accountCustomerManager = $accountCustomerManager;
+        $this->fieldAclHelper = $fieldAclHelper;
     }
 
     /**
@@ -65,13 +76,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
     protected function handleAccountRelationship(FormInterface $form)
     {
         $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
-        if ($this->isSubmittedAndValid($accountField)) {
-            $submittedAccount = $accountField->getData();
-            if (null === $submittedAccount) {
-                $this->addFormError($accountField, 'This value should not be null.');
-            } else {
-                $this->setCustomerAssociationForAccount($form->getData(), $submittedAccount);
-            }
+        if (FormUtil::isSubmittedAndValid($accountField)) {
+            $this->setCustomerAssociationForAccount($form->getData(), $accountField->getData(), $accountField);
         }
     }
 
@@ -81,13 +87,8 @@ class CustomerAssociationListener implements EventSubscriberInterface
     protected function handleCustomerRelationship(FormInterface $form)
     {
         $customerField = $form->get(self::CUSTOMER_FIELD_NAME);
-        if ($this->isSubmittedAndValid($customerField)) {
-            $submittedCustomer = $customerField->getData();
-            if (null === $submittedCustomer) {
-                $this->addFormError($customerField, 'This value should not be null.');
-            } else {
-                $this->setCustomerAssociationForCustomer($form->getData(), $submittedCustomer);
-            }
+        if (FormUtil::isSubmittedAndValid($customerField)) {
+            $this->setCustomerAssociationForCustomer($form->getData(), $customerField->getData(), $customerField);
         }
     }
 
@@ -102,11 +103,11 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedAccount = null;
         $submittedCustomer = null;
         $hasSubmittedData = false;
-        if ($this->isSubmittedAndValid($accountField)) {
+        if (FormUtil::isSubmittedAndValid($accountField)) {
             $submittedAccount = $accountField->getData();
             $hasSubmittedData = true;
         }
-        if ($this->isSubmittedAndValid($customerField)) {
+        if (FormUtil::isSubmittedAndValid($customerField)) {
             $submittedCustomer = $customerField->getData();
             $hasSubmittedData = true;
         }
@@ -139,34 +140,48 @@ class CustomerAssociationListener implements EventSubscriberInterface
     }
 
     /**
-     * @param object  $ownerEntity
-     * @param Account $account
+     * @param object        $ownerEntity
+     * @param Account|null  $account
+     * @param FormInterface $accountField
      */
-    public function setCustomerAssociationForAccount($ownerEntity, Account $account)
+    public function setCustomerAssociationForAccount($ownerEntity, $account, FormInterface $accountField)
     {
-        /** @var Customer|null $existingCustomerAssociation */
-        $existingCustomerAssociation = $this->getCustomerAssociation($ownerEntity);
-        if (null === $existingCustomerAssociation
-            || !$this->isCustomerAssociationForAccountEquals($existingCustomerAssociation, $account)
-        ) {
-            $this->setCustomerAssociation(
-                $ownerEntity,
-                $this->createCustomerAssociationForAccount($account)
-            );
+        if (!$this->isCustomerAssociationModificationGranted($ownerEntity)) {
+            $this->addFieldModificationDeniedFormError($accountField);
+        } elseif (null === $account) {
+            FormUtil::addFormConstraintViolation($accountField, new NotNull());
+        } else {
+            /** @var Customer|null $existingCustomerAssociation */
+            $existingCustomerAssociation = $this->getCustomerAssociation($ownerEntity);
+            if (null === $existingCustomerAssociation
+                || !$this->isCustomerAssociationForAccountEquals($existingCustomerAssociation, $account)
+            ) {
+                $this->setCustomerAssociation(
+                    $ownerEntity,
+                    $this->createCustomerAssociationForAccount($account)
+                );
+            }
         }
     }
 
     /**
-     * @param object $ownerEntity
-     * @param object $customer
+     * @param object        $ownerEntity
+     * @param object|null   $customer
+     * @param FormInterface $customerField
      */
-    public function setCustomerAssociationForCustomer($ownerEntity, $customer)
+    public function setCustomerAssociationForCustomer($ownerEntity, $customer, FormInterface $customerField)
     {
-        $customerAssociation = $this->findCustomerAssociationForCustomer($customer);
-        if (null === $customerAssociation) {
-            $customerAssociation = $this->createCustomerAssociationForCustomer($customer);
+        if (!$this->isCustomerAssociationModificationGranted($ownerEntity)) {
+            $this->addFieldModificationDeniedFormError($customerField);
+        } elseif (null === $customer) {
+            FormUtil::addFormConstraintViolation($customerField, new NotNull());
+        } else {
+            $customerAssociation = $this->findCustomerAssociationForCustomer($customer);
+            if (null === $customerAssociation) {
+                $customerAssociation = $this->createCustomerAssociationForCustomer($customer);
+            }
+            $this->setCustomerAssociation($ownerEntity, $customerAssociation);
         }
-        $this->setCustomerAssociation($ownerEntity, $customerAssociation);
     }
 
     /**
@@ -230,49 +245,54 @@ class CustomerAssociationListener implements EventSubscriberInterface
         $submittedCustomer = null
     ) {
         if (null === $submittedAccount && null === $submittedCustomer) {
-            $this->addFormError($form, 'Either an account or a customer should be set.');
+            FormUtil::addFormError($form, 'Either an account or a customer should be set.');
         } else {
             $entity = $form->getData();
-            $existingCustomerAssociation = $this->getCustomerAssociation($entity);
 
             $accountField = $form->get(self::ACCOUNT_FIELD_NAME);
             $customerField = $form->get(self::CUSTOMER_FIELD_NAME);
-            if ($this->isSubmittedAndValid($accountField)
-                && $this->isSubmittedAndValid($customerField)
-                && null !== $submittedAccount
-                && null !== $submittedCustomer
-                && (
-                    null === $existingCustomerAssociation
-                    || $existingCustomerAssociation->getAccount()->getId() !== $submittedAccount->getId()
-                )
-            ) {
-                $this->addFormError($accountField, 'Either an account or a customer can be changed.');
-            } else {
-                if (null !== $submittedCustomer) {
-                    $this->setCustomerAssociationForCustomer($entity, $submittedCustomer);
+            if (FormUtil::isSubmittedAndValid($accountField) && FormUtil::isSubmittedAndValid($customerField)) {
+                if (null === $submittedCustomer) {
+                    $this->setCustomerAssociationForAccount($entity, $submittedAccount, $accountField);
                 } else {
-                    $this->setCustomerAssociationForAccount($entity, $submittedAccount);
+                    $this->setCustomerAssociationForCustomer($entity, $submittedCustomer, $customerField);
+                    if (null !== $submittedAccount && $customerField->isValid()) {
+                        $account = $this->getCustomerAssociation($entity)->getAccount();
+                        if ($submittedAccount->getId() !== $account->getId()) {
+                            FormUtil::addFormError(
+                                $customerField,
+                                'The customer should be a part of the specified account.'
+                            );
+                        }
+                    }
                 }
+            } elseif (null !== $submittedCustomer) {
+                $this->setCustomerAssociationForCustomer($entity, $submittedCustomer, $customerField);
+            } else {
+                $this->setCustomerAssociationForAccount($entity, $submittedAccount, $accountField);
             }
         }
     }
 
     /**
-     * @param FormInterface $form
+     * @param object $entity
      *
      * @return bool
      */
-    public function isSubmittedAndValid(FormInterface $form)
+    protected function isCustomerAssociationModificationGranted($entity)
     {
-        return $form->isSubmitted() && $form->isValid();
+        if (!$this->fieldAclHelper->isFieldAclEnabled(ClassUtils::getClass($entity))) {
+            return true;
+        }
+
+        return $this->fieldAclHelper->isFieldModificationGranted($entity, 'customerAssociation');
     }
 
     /**
      * @param FormInterface $form
-     * @param string        $errorMessage
      */
-    public function addFormError(FormInterface $form, $errorMessage)
+    protected function addFieldModificationDeniedFormError(FormInterface $form)
     {
-        $form->addError(new FormError($errorMessage));
+        $this->fieldAclHelper->addFieldModificationDeniedFormError($form);
     }
 }
