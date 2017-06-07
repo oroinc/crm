@@ -15,7 +15,14 @@
 
     <testsuites>
         <testsuite name="Project Unit Tests">
-            <directory suffix="Test.php">src/OroCRM/Bundle/*Bundle/Tests/Unit</directory>
+            <directory>Tests/Unit</directory>
+            <directory>src/*/Tests/Unit</directory>
+            <directory>src/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/*/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 
@@ -36,5 +43,4 @@
             </exclude>
         </whitelist>
     </filter>
-
 </phpunit>

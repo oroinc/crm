@@ -25,6 +25,10 @@
         "php": ">=5.5.9",
         "oro/platform": "1.10.x-dev"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "squizlabs/php_codesniffer": "2.3.*"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
