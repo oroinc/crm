@@ -53,6 +53,37 @@ class PrecalculatedTrackingWebsiteProviderTest extends WebTestCase
         $this->assertEquals($original, $precalculated);
     }
 
+    public function testGetVisitedCountForNullFromDate()
+    {
+        $timezone = $this->getTimezone();
+        $from = null;
+        $to = new \DateTime('2013-01-13', $timezone);
+        $dateRange = ['start' => $from, 'end' => $to];
+        $original = $this->originalProvider->getSiteVisitsValues($dateRange);
+        $precalculated = $this->provider->getSiteVisitsValues($dateRange);
+        $this->assertEquals($original, $precalculated);
+    }
+
+    public function testGetVisitedCountForNullToDate()
+    {
+        $timezone = $this->getTimezone();
+        $from = new \DateTime('2012-01-11', $timezone);
+        $to = null;
+        $dateRange = ['start' => $from, 'end' => $to];
+        $original = $this->originalProvider->getSiteVisitsValues($dateRange);
+        $precalculated = $this->provider->getSiteVisitsValues($dateRange);
+        $this->assertEquals($original, $precalculated);
+    }
+
+    public function testGetVisitedCountForNullDates()
+    {
+        $from = $to = null;
+        $dateRange = ['start' => $from, 'end' => $to];
+        $original = $this->originalProvider->getSiteVisitsValues($dateRange);
+        $precalculated = $this->provider->getSiteVisitsValues($dateRange);
+        $this->assertEquals($original, $precalculated);
+    }
+
     /**
      * @return \DateTimeZone
      */

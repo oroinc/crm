@@ -17,6 +17,14 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+            contactInformation:
+                query:
+                    select:
+                        expr:         emails.email
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.emails, alias: emails, conditionType: 'WITH', condition: 'emails.primary = true' }
 
     virtual_relations:
         Oro\Bundle\ContactBundle\Entity\Contact:

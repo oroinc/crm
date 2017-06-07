@@ -58,6 +58,7 @@ oro:
             label:                  Description
             description:            Details or a short description of an account record.
         lifetime_value.label:       Lifetime sales value
+        contact_information.label:  Contact Information
 
         contact:
             name:                   Contact name

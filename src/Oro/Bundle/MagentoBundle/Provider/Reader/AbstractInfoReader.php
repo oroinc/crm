@@ -30,6 +30,13 @@ abstract class AbstractInfoReader extends AbstractContextKeyReader
     protected $ids = [];
 
     /**
+     * Flag to control if read entity is used by the bridge extension
+     *
+     * @var bool
+     */
+    protected $extensionUsed = true;
+
+    /**
      * @param ContextRegistry $contextRegistry
      * @param LoggerStrategy $logger
      * @param ConnectorContextMediator $contextMediator
@@ -54,7 +61,7 @@ abstract class AbstractInfoReader extends AbstractContextKeyReader
         $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
 
         // info was loaded from index action
-        if ($this->transport->isSupportedExtensionVersion()) {
+        if ($this->extensionUsed && $this->transport->isSupportedExtensionVersion()) {
             return;
         }
 

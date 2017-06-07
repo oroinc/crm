@@ -8,7 +8,7 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class LifetimeHistoryRepository extends EntityRepository
 {
@@ -35,7 +35,7 @@ class LifetimeHistoryRepository extends EntityRepository
         $selectFields = [];
         $channelConditions = [];
         foreach ($customerIdentities as $customerClass => $customerLifetimeField) {
-            $customerAlias = QueryUtils::generateParameterName('customer');
+            $customerAlias = QueryBuilderUtil::generateParameterName('customer');
             $qb
                 ->leftJoin(
                     sprintf('c.%s', AccountCustomerManager::getCustomerTargetField($customerClass)),
