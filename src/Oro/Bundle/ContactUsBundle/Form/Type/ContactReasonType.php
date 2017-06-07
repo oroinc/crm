@@ -11,8 +11,6 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
 class ContactReasonType extends AbstractType
 {
-    const NAME = 'oro_contactus_contact_reason';
-
     /**
      * {@inheritdoc}
      */
@@ -46,6 +44,6 @@ class ContactReasonType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return self::NAME;
+        return 'oro_contactus_contact_reason';
     }
 }
