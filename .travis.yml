@@ -17,9 +17,10 @@ cache:
 
 before_script:
   - phpenv config-rm xdebug.ini
+  - phpenv config-add travis.php.ini
   - composer self-update
   - composer global require fxp/composer-asset-plugin
-  - travis_wait composer install --prefer-dist --optimize-autoloader --no-interaction  --no-suggest
+  - travis_retry travis_wait composer install --prefer-dist --optimize-autoloader --no-interaction  --no-suggest
   - set +e; DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$"); set -e;
 
 script:
