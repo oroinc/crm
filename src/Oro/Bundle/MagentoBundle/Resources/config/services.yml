@@ -1099,3 +1099,11 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider
         arguments:
             - '@doctrine'
+
+    oro_magento.async.upgrade_relations_accounts_contacts_processor:
+        class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_48_1\UpdateRelationsAccountsAndContactsProcessor
+        arguments:
+            - '@oro_message_queue.message_producer'
+            - '@oro_entity.orm.native_query_executor_helper'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.upgrade_relations_accounts_contacts' }
