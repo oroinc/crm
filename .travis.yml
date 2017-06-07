@@ -21,14 +21,8 @@ before_script:
   - phpenv config-rm xdebug.ini
   - phpenv config-add travis.php.ini
   - composer self-update
-  - composer config minimum-stability dev
-  - composer config prefer-stable true
-  - composer config repositories.oro composer https://packagist.orocrm.com
-  - composer require --no-update --dev "phpunit/phpunit:5.7.*"
-  - composer require --no-update --dev "squizlabs/php_codesniffer:2.7.*"
-  - composer require --no-update --dev "phpmd/phpmd:2.5.*"
   - composer global require fxp/composer-asset-plugin
-  - travis_wait composer update --prefer-dist --optimize-autoloader --no-interaction  --no-suggest --prefer-stable
+  - travis_retry travis_wait composer install --prefer-dist --optimize-autoloader --no-interaction  --no-suggest
   - set +e; DIFF=$(git diff --name-only --diff-filter=ACMR $TRAVIS_COMMIT_RANGE | grep -e ".*\.php$"); set -e;
 
 script:
