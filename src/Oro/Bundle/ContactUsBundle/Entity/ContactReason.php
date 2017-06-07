@@ -3,22 +3,31 @@
 namespace Oro\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\ContactUsBundle\Entity\Repository\ContactReasonRepository")
  * @ORM\Table(name="orocrm_contactus_contact_rsn")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ *
  * @Config(
  *      defaultValues={
  *          "grouping"={
  *              "groups"={"dictionary"}
+ *          },
+ *          "grid"={
+ *              "default"="orcrm-contact-reasons-grid"
  *          }
  *      }
  * )
  */
 class ContactReason
 {
+    use SoftDeleteableEntity;
+
     /**
      * @var integer
      *
@@ -35,7 +44,7 @@ class ContactReason
      */
     protected $label;
 
-    public function __construct($label)
+    public function __construct($label = null)
     {
         $this->label = $label;
     }

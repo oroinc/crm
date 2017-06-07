@@ -39,3 +39,8 @@ services:
         arguments:
             - %oro_contact_us.contactrequest.entity.class%
             - "@doctrine.orm.entity_manager"
+
+    oro_contact_us.form.type.contact_reason:
+        class: 'Oro\Bundle\ContactUsBundle\Form\Type\ContactReasonType'
+        tags:
+            - { name: form.type }

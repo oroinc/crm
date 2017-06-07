@@ -12,8 +12,12 @@ datagrids:
                     - cr.emailAddress
                     - cr.phone
                     - cr.createdAt
+                    - rsn.label as cntReason
                 from:
                     - { table: %oro_contact_us.contactrequest.entity.class%, alias: cr }
+                join:
+                    left:
+                        - { join: cr.contactReason, alias: rsn }
         columns:
             firstName:
                 label:         oro.contactus.contactrequest.first_name.label
@@ -27,6 +31,8 @@ datagrids:
             createdAt:
                 frontend_type: datetime
                 label:         oro.ui.created_at
+            cntReason:
+                label:         oro.contactus.contactreason.entity_label
         sorters:
             columns:
                 firstName:
@@ -58,6 +64,9 @@ datagrids:
                 createdAt:
                     type:      datetime
                     data_name: cr.createdAt
+                cntReason:
+                    type:      string
+                    data_name: rsn.label
         properties:
             id: ~
             view_link:
@@ -95,3 +104,54 @@ datagrids:
         options:
             entityHint: contact requests
             entity_pagination: true
+    orcrm-contact-reasons-grid:
+        acl_resource: oro_contactus_reason_view
+        options:
+            entity_pagination: true
+        source:
+            type:         orm
+            query:
+                select:
+                    - contactReason.id
+                    - contactReason.label
+                from:
+                    - { table: OroContactUsBundle:ContactReason, alias: contactReason }
+                where:
+                    and:
+                        - contactReason.deletedAt IS NULL
+        columns:
+            label:
+                label: oro.contactus.contactreason.label.label
+        sorters:
+            columns:
+                label:
+                    data_name: contactReason.label
+        filters:
+            columns:
+                label:
+                    type:      string
+                    data_name: contactReason.label
+        properties:
+            id: ~
+            update_link:
+                type:   url
+                route:  oro_contactus_reason_update
+                params: [ id ]
+            delete_link:
+                type:   url
+                route:  oro_contactus_reason_delete
+                params: [ id ]
+        actions:
+            update:
+                acl_resource: oro_contactus_reason_edit
+                type:         navigate
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
+                rowAction:    true
+            delete:
+                acl_resource: oro_contactus_reason_delete
+                type:         delete
+                label:        oro.grid.action.delete
+                icon:         trash
+                link:         delete_link

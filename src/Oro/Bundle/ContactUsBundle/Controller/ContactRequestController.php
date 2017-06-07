@@ -19,6 +19,10 @@ use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
 class ContactRequestController extends Controller
 {
     /**
+     * @param ContactRequest $contactRequest
+     *
+     * @return array
+     *
      * @Route("/view/{id}", name="oro_contactus_request_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
