@@ -35,6 +35,18 @@ processes:
                                 nameSuffix:   $nameSuffix
                                 owner:        $owner
                                 organization: $organization
+                        - '@tree': # add Account to Contact
+                            conditions:
+                                '@not_empty': $account
+                            actions:
+                                - '@call_method': # add Account
+                                    object: $contact
+                                    method: addAccount
+                                    method_parameters: [$account]
+                                - '@call_method': # makes Contact as default for this Account
+                                    object: $account
+                                    method: setDefaultContact
+                                    method_parameters: [$contact]
                         - '@tree': # add Contact Email
                             conditions:
                                 '@not_empty': $email
