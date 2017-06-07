@@ -15,15 +15,22 @@
 
     <testsuites>
         <testsuite name="Project Unit Tests">
-            <directory suffix="Test.php">src/Oro/Bundle/*Bundle/Tests/Unit</directory>
+            <directory>Tests/Unit</directory>
+            <directory>src/*/Tests/Unit</directory>
+            <directory>src/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/*/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 
-    <!--
     <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
+        <!--<server name="KERNEL_DIR" value="/path/to/your/app/" />-->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
-    -->
+
     <filter>
         <whitelist>
             <directory>src</directory>
