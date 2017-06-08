@@ -68,10 +68,9 @@ class CreditMemoStrategyTest extends WebTestCase
         $creditMemo->setItems([$item]);
 
         $this->strategy->setEntityName(CreditMemo::class);
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->assertSame($creditMemo, $this->strategy->process($creditMemo));
-        $this->assertGreaterThanOrEqual($now, $creditMemo->getImportedAt());
-        $this->assertGreaterThanOrEqual($now, $creditMemo->getSyncedAt());
+        $this->assertInstanceOf('DateTime', $creditMemo->getImportedAt());
+        $this->assertInstanceOf('DateTime', $creditMemo->getSyncedAt());
 
         $this->assertSame($creditMemo, $item->getParent());
         $this->assertSame($creditMemo->getOrganization(), $item->getOwner());
