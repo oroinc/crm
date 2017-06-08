@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Command;
 
+use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,6 +66,24 @@ class CalculateAnalyticsCommand extends Command implements ContainerAwareInterfa
 
         if ($channelId) {
             $output->writeln(sprintf('Schedule analytics calculation for "%s" channel.', $channelId));
+
+            $channel = $this->container->get('doctrine')->getRepository(Channel::class)->find($channelId);
+
+            // check if given channel is active.
+            if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
+                $output->writeln(sprintf('Channel not active: %s', $channelId));
+
+                return;
+            }
+
+            // check if the channel's customer supports analytics.
+            if (false === is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
+                $output->writeln(
+                    sprintf('Channel is not supposed to calculate analytics: %s', $channelId)
+                );
+
+                return;
+            }
 
             $this->getCalculateAnalyticsScheduler()->scheduleForChannel($channelId, $customerIds);
         } else {

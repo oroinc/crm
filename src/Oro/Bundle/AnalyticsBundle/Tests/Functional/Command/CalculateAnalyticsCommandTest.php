@@ -48,6 +48,30 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         );
     }
 
+    public function testShouldNotScheduleCalculateAnalyticsForNonSupportedChannel()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerIdentity');
+        $channelId = $channel->getId();
+
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
+
+        self::assertContains('Schedule analytics calculation for "'. $channelId.'" channel.', $result);
+        self::assertContains(sprintf('Channel is not supposed to calculate analytics: %s', $channelId), $result);
+    }
+
+    public function testShouldNotScheduleCalculateAnalyticsForNonActiveChannel()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.AnalyticsAwareInterface');
+        $channelId = $channel->getId();
+
+        $result = $this->runCommand('oro:cron:analytic:calculate', ['--channel=' . $channelId]);
+
+        self::assertContains('Schedule analytics calculation for "'. $channelId . '" channel.', $result);
+        self::assertContains(sprintf('Channel not active: %s', $channelId), $result);
+    }
+
     public function testShouldScheduleAnalyticsCalculationForAllAvailableChannels()
     {
         $result = $this->runCommand('oro:cron:analytic:calculate');
