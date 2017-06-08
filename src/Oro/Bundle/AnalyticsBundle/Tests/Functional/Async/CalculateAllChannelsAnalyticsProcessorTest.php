@@ -44,7 +44,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 4);
+        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 3);
     }
 
     public function testShouldSendCalculateAnalyticsMessageOnlyForActiveChannels()
@@ -61,7 +61,7 @@ class CalculateAllChannelsAnalyticsProcessorTest extends WebTestCase
 
         $processor->process(new NullMessage(), new NullSession());
 
-        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 3);
+        self::assertMessagesCount(Topics::CALCULATE_CHANNEL_ANALYTICS, 2);
     }
 
     /**
