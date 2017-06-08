@@ -344,7 +344,7 @@ class MagentoTransport extends Transport
     }
 
     /**
-     * TODO: move required version to another class
+     * TODO: move required version to another class. According to CRM-8328
      * @return bool
      */
     public function isSupportedExtensionVersion()
