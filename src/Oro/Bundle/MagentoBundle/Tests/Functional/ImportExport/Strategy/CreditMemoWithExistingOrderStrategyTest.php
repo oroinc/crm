@@ -15,7 +15,7 @@ use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CreditMemoWithExistingOrderStrategy;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader;
 
-class CreditMemoStrategyTest extends WebTestCase
+class CreditMemoWithExistingOrderStrategyTest extends WebTestCase
 {
     /**
      * @var CreditMemoWithExistingOrderStrategy
