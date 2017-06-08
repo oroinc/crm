@@ -10,6 +10,9 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
 
+/**
+ * Incapsulate logic of requesting information form Magento extension
+ */
 class OroBridgeExtensionConfigProvider
 {
     const REST_CONFIG_URI = 'oro/ping';
@@ -29,6 +32,8 @@ class OroBridgeExtensionConfigProvider
     }
 
     /**
+     * Inits REST client for provider. This method should be called before any other public method
+     *
      * @param RestClientInterface $client
      */
     public function setClient(RestClientInterface $client)
@@ -38,12 +43,14 @@ class OroBridgeExtensionConfigProvider
     }
 
     /**
-     * @param array $headers
-     * @param bool $force
+     * Performs ping request to the Magento server and returns Config object with server information
+     *
+     * @param array $headers REST client headers with auth token
+     * @param bool $force if false then only first call will cause request to Magento server
      *
      * @return Config
      *
-     * @throws RestException
+     * @throws RestException in case of REST client fail to connect
      */
     public function getConfig($headers, $force = false)
     {
@@ -63,6 +70,11 @@ class OroBridgeExtensionConfigProvider
         return $this->config;
     }
 
+    /**
+     * Creates new config and init property with it
+     *
+     * @return $this
+     */
     protected function initDefaultConfig()
     {
         $this->config = new Config();
@@ -71,6 +83,8 @@ class OroBridgeExtensionConfigProvider
     }
 
     /**
+     * Fill config with response data
+     *
      * @param $data
      */
     protected function processData($data)

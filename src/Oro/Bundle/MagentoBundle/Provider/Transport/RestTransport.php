@@ -253,10 +253,6 @@ class RestTransport implements
      */
     public function doGetStoresRequest()
     {
-        if (!$this->isExtensionInstalled()) {
-            throw new ExtensionRequiredException();
-        }
-
         try {
             return $this->client->get('store/storeViews', [], $this->headers)->json();
         } catch (RestException $e) {
@@ -277,8 +273,6 @@ class RestTransport implements
      */
     public function doGetWebsitesRequest()
     {
-        $this->checkExtensionInstalled();
-
         try {
             return $this->client->get('store/websites', [], $this->headers)->json();
         } catch (RestException $e) {
@@ -299,8 +293,6 @@ class RestTransport implements
      */
     public function doGetRegionsRequest()
     {
-        $this->checkExtensionInstalled();
-
         try {
             $data = $this->client->get(sprintf('directory/countries'), [], $this->headers)->json();
 
