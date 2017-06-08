@@ -1,5 +1,5 @@
 oro_contactus:
-    resource: "@OroContactUsBundle/Controller"
+    resource: "@OroContactUsBundle/Controller/ContactRequestController.php"
     type:     annotation
     prefix:   /contact-us
 
@@ -12,3 +12,8 @@ oro_contactus_api:
         _format:  json
     defaults:
         version:  latest
+
+oro_contact_reason:
+    resource: "@OroContactUsBundle/Controller/ContactReasonController.php"
+    type:     annotation
+    prefix:   /contact-reason

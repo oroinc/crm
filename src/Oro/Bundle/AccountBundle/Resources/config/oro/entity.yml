@@ -9,3 +9,11 @@ oro_entity:
                     join:
                         left:
                             - { join: 'OroChannelBundle:LifetimeValueHistory', alias: 'h', conditionType: 'WITH', condition: 'h.account = entity AND h.status = true' }
+            contactInformation:
+                query:
+                    select:
+                        expr:         defaultContact.email
+                        return_type:  string
+                    join:
+                        left:
+                            - { join: entity.defaultContact, alias: defaultContact }
