@@ -129,6 +129,8 @@ oro:
         default_in_accounts:
             label:           Accounts Default Contact
             description:     A collection of accounts where the contact is set as default.
+        contact_information:
+            label:           Contact Information
 
         #
         # Entity Oro\Bundle\ContactBundle\Entity\ContactAddress

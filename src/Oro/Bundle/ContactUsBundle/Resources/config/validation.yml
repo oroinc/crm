@@ -18,3 +18,11 @@ Oro\Bundle\ContactUsBundle\Entity\ContactRequest:
         - Callback:
             methods:
                 - [ Oro\Bundle\ContactUsBundle\Validator\ContactRequestCallbackValidator, validate]
+
+Oro\Bundle\ContactUsBundle\Entity\ContactReason:
+    properties:
+        label:
+            - NotBlank: ~
+            - Length:
+                min: 1
+                max: 255

@@ -330,7 +330,8 @@ oro:
                 label:            Opportunities
                 description:      A collection of opportunities to which the lead was converted.
             information:          Lead Information
-            contact_information:  Contact Information
+            contact_information:
+                label:            Contact Information
             campaign:
                 label:            Campaign
                 description:
@@ -574,6 +575,8 @@ oro:
                     shipping_address_street.label:      Shipping Address Street
                     shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
+            contact_information:
+                label: Contact Information
 
         #
         # Entity Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone
