@@ -31,12 +31,4 @@ class BaseMagentoRestIterator extends AbstractPageableIterator
     {
         return 'id';
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
-    {
-        //@TODO implement this method
-    }
 }

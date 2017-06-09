@@ -554,6 +554,7 @@ services:
             - [setMessageProducer, ["@oro_message_queue.message_producer"]]
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
+            - { name: oro_integration.sync_processor, integration: magento2 }
 
     oro_magento.importexport.processor.context:
         class: %oro_magento.importexport.processor.context.class%

@@ -65,6 +65,9 @@ channels:
               integration: magento
               connector: newsletter_subscriber
 
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\Website
+
    channel_types:
         magento:
             label: oro.magento.channel_type.magento.label
@@ -80,9 +83,6 @@ channels:
         magento2:
             label: oro.magento.channel_type.magento2.label
             entities:
-                - Oro\Bundle\MagentoBundle\Entity\Cart
-                - Oro\Bundle\MagentoBundle\Entity\Order
-                - Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
+                - Oro\Bundle\MagentoBundle\Entity\Website
             integration_type: magento2
-            customer_identity: Oro\Bundle\MagentoBundle\Entity\Customer
-            lifetime_value: lifetime
+            customer_identity: Oro\Bundle\ChannelBundle\Entity\CustomerIdentity

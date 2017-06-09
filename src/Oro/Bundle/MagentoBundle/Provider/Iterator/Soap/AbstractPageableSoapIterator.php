@@ -39,20 +39,4 @@ abstract class AbstractPageableSoapIterator extends AbstractPageableIterator
     {
         return WSIUtils::convertResponseToMultiArray($response);
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
-    {
-        if ($this->websiteId !== Website::ALL_WEBSITES) {
-            if (!empty($websiteIds)) {
-                $this->filter->addWebsiteFilter($websiteIds);
-            }
-
-            if (!empty($storeIds)) {
-                $this->filter->addStoreFilter($storeIds);
-            }
-        }
-    }
 }
