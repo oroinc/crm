@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
+use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
@@ -49,6 +50,11 @@ class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterfac
         $channels = new BufferedQueryResultIterator($qb);
 
         foreach ($channels as $channel) {
+            // check if the channel's customer supports analytics.
+            if (!is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
+                continue;
+            }
+
             $this->calculateAnalyticsScheduler->scheduleForChannel($channel->getId());
         }
 
