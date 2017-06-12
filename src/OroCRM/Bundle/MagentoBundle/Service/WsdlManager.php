@@ -24,15 +24,26 @@ class WsdlManager
     protected $cachePath;
 
     /**
+     * @var array
+     */
+    protected $bundleConfig;
+
+    /**
      * @param Filesystem $filesystem
      * @param ClientInterface $guzzleClient
      * @param string $cachePath
+     * @param array $bundleConfig
      */
-    public function __construct(Filesystem $filesystem, ClientInterface $guzzleClient, $cachePath)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        ClientInterface $guzzleClient,
+        $cachePath,
+        array $bundleConfig = []
+    ) {
         $this->fs = $filesystem;
         $this->guzzleClient = $guzzleClient;
         $this->cachePath = $cachePath;
+        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -43,7 +54,10 @@ class WsdlManager
      */
     public function loadWsdl($url)
     {
-        $response = $this->guzzleClient->get($url)->send();
+        $clientOptions = [
+            'verify' => empty($this->bundleConfig['sync_settings']['skip_ssl_verification'])
+        ];
+        $response = $this->guzzleClient->get($url, null, $clientOptions)->send();
 
         $cacheFilePath = $this->getCachedWsdlPath($url);
         $this->fs->dumpFile($cacheFilePath, $response->getBody(true));

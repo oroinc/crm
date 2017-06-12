@@ -29,8 +29,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
- *              "context-grid"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "icon"="icon-user-md"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -48,7 +47,11 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *         "form"={
  *             "form_type"="orocrm_sales_b2bcustomer_select"
- *         }
+ *         },
+ *         "grid"={
+ *              "default"="orocrm-sales-b2bcustomers-grid",
+ *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
+ *          }
  *      }
  * )
  */
@@ -148,7 +151,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},

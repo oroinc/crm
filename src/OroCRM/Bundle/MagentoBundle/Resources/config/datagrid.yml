@@ -1,4 +1,5 @@
 datagrid:
+    # Newsletter subscribers filtering is added by CustomerDataGridListener
     magento-customers-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
         source:
@@ -6,7 +7,7 @@ datagrid:
             acl_resource: orocrm_magento_customer_view
             query:
                 select:
-                    - DISTINCT c.id
+                    - c.id
                     - c.firstName
                     - c.lastName
                     - c.email
@@ -19,25 +20,20 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-#                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
-                    - CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL THEN (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 'yes' ELSE 'no' END) ELSE 'unknown' END as isSubscriber
-                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
+                    - c AS customerData
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: dataChannel }
                         - { join: c.channel, alias: channel }
-                        - { join: %orocrm_magento.entity.soap_transport.class%, alias: transport, conditionType: WITH, condition: 'channel.transport = transport' }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscribers, alias: newsletterSubscribers }
-                        - { join: newsletterSubscribers.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -59,13 +55,6 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_country
             regionName:
                 label:            orocrm.magento.datagrid.columns.billing_region
-            isSubscriber:
-                label:            orocrm.magento.datagrid.columns.is_subscriber.label
-                frontend_type: select
-                choices:
-                    unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
-                    no: orocrm.magento.datagrid.columns.is_subscriber.no
-                    yes: orocrm.magento.datagrid.columns.is_subscriber.yes
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -102,7 +91,6 @@ datagrid:
                 countryName: { data_name: country.name }
                 lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
-                isSubscriber:  { data_name: isSubscriber }
             default:
                 lastName:  ASC
                 firstName: ASC
@@ -149,16 +137,6 @@ datagrid:
                 lifetime:
                     type: number
                     data_name: c.lifetime
-                isSubscriber:
-                    label: orocrm.magento.datagrid.columns.is_subscriber.label
-                    type: single_choice
-                    options:
-                        field_options:
-                            choices:
-                                unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
-                                no: orocrm.magento.datagrid.columns.is_subscriber.no
-                                yes: orocrm.magento.datagrid.columns.is_subscriber.yes
-                    data_name: isSubscriber
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
                     type: boolean
@@ -1408,6 +1386,7 @@ datagrid:
         source:
             type: orm
             acl_resource: orocrm_magento_customer_view
+            skip_acl_apply: true
             query:
                 select:
                     - g.id
@@ -1441,6 +1420,7 @@ datagrid:
         source:
             type: orm
             acl_resource: orocrm_magento_customer_view
+            skip_acl_apply: true
             query:
                 select:
                     - s.id
@@ -1502,6 +1482,7 @@ datagrid:
                     - newsletterSubscriber.createdAt
                     - newsletterSubscriber.updatedAt
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
+                    - newsletterSubscriber AS customerData
                 from:
                     - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
                 join:

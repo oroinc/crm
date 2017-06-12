@@ -10,11 +10,12 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
 {
     const CHANNEL_KEY = 'channelId';
     const CUSTOMER_ID = 'customerId';
+    const CUSTOMER    = 'customerData';
     const CUSTOMER_ORIGIN_ID = 'customerOriginId';
     /**
      * @var ChannelSettingsProvider
      */
-    private $channelSettingsProvider;
+    protected $channelSettingsProvider;
 
     /**
      * @param ChannelSettingsProvider $channelSettingsProvider

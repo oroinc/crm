@@ -14,8 +14,12 @@ class NewsletterSubscriberInitialWriter extends ProxyEntityWriter
     {
         parent::write($items);
 
+        $count = count($items);
+        if (!$count) {
+            return;
+        }
         // Save minimum originId received by initial sync for further filtering in case of failure
-        $lastSubscriber = $items[count($items) - 1];
+        $lastSubscriber = $items[$count - 1];
         $transport = $lastSubscriber->getChannel()->getTransport();
         if ($transport instanceof MagentoSoapTransport) {
             /** @var MagentoSoapTransport $transport */

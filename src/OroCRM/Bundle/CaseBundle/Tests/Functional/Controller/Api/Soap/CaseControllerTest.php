@@ -11,6 +11,7 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 /**
  * @outputBuffering enabled
  * @dbIsolation
+ * @group soap
  */
 class CaseControllerTest extends WebTestCase
 {

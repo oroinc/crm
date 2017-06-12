@@ -7,6 +7,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 /**
  * @outputBuffering enabled
  * @dbIsolation
+ * @group soap
  */
 class SoapContactApiTest extends WebTestCase
 {

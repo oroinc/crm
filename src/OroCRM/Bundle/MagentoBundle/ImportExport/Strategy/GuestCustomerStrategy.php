@@ -7,6 +7,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 class GuestCustomerStrategy extends AbstractImportStrategy
 {
     /**
+     * ID of group for not logged customers
+     */
+    const NOT_LOGGED_IN_ID          = 0;
+
+    /**
      * {@inheritdoc}
      */
     public function process($entity)
@@ -71,8 +76,12 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             $address->setOriginId(null);
         }
 
-        $entity->setWebsite($entity->getStore()->getWebsite());
-        $this->setDefaultGroup($entity);
+        $customerStore = $entity->getStore();
+        if ($customerStore) {
+            $website = $customerStore->getWebsite();
+            $entity->setWebsite($website);
+            $this->setDefaultGroup($entity);
+        }
     }
 
     /**
@@ -80,12 +89,12 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function setDefaultGroup(Customer $entity)
     {
-        if (!$entity->getGroup() && $entity->getWebsite()->getDefaultGroupId()) {
+        if (!$entity->getGroup()) {
             $em = $this->strategyHelper->getEntityManager('OroCRMMagentoBundle:CustomerGroup');
             $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
                 ->findOneBy(
                     [
-                        'originId' => $entity->getWebsite()->getDefaultGroupId(),
+                        'originId' => static::NOT_LOGGED_IN_ID,
                         'channel' => $entity->getChannel()
                     ]
                 );

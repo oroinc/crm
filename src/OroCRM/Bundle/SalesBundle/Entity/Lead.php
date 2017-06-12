@@ -40,8 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone",
- *              "context-grid"="sales-lead-for-context-grid"
+ *              "icon"="icon-phone"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -57,6 +56,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",
  *              "grid_name"="sales-lead-grid",
+ *          },
+ *          "grid"={
+ *              "default"="sales-lead-grid",
+ *              "context"="sales-lead-for-context-grid"
  *          },
  *          "dataaudit"={
  *              "auditable"=true

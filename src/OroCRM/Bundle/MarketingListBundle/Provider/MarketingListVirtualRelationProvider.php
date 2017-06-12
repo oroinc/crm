@@ -120,19 +120,19 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
                 'join' => [
                     'left' => [
                         [
+                            'join' => 'OroCRMMarketingListBundle:MarketingListItem',
+                            'alias' => self::MARKETING_LIST_ITEM_RELATION_NAME,
+                            'conditionType' => Join::WITH,
+                            'condition' => 'entity.' . $idField
+                                    . ' = ' . self::MARKETING_LIST_ITEM_RELATION_NAME . '.entityId'
+                        ],
+                        [
                             'join' => 'OroCRMMarketingListBundle:MarketingList',
                             'alias' => self::RELATION_NAME,
                             'conditionType' => Join::WITH,
                             'condition' => self::RELATION_NAME . ".entity = '{$className}'"
-                        ],
-                        [
-                            'join' => 'OroCRMMarketingListBundle:MarketingListItem',
-                            'alias' => self::MARKETING_LIST_ITEM_RELATION_NAME,
-                            'conditionType' => Join::WITH,
-                            'condition' => self::MARKETING_LIST_ITEM_RELATION_NAME
+                                . ' AND ' . self::MARKETING_LIST_ITEM_RELATION_NAME
                                 . '.marketingList = ' . self::RELATION_NAME
-                                . ' AND entity.' . $idField
-                                    . ' = ' . self::MARKETING_LIST_ITEM_RELATION_NAME . '.entityId'
                         ]
                     ]
                 ]

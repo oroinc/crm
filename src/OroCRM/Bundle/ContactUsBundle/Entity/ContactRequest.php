@@ -27,6 +27,7 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *
  * @Config(
  *      routeName="orocrm_contactus_request_index",
+ *      routeView="orocrm_contactus_request_view",
  *      defaultValues={
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",
@@ -40,6 +41,9 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *              "type"="ACL",
  *              "permissions"="All",
  *              "group_name"=""
+ *          },
+ *          "grid"={
+ *              "default"="orcrm-contact-requests-grid"
  *          }
  *      }
  * )

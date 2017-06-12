@@ -26,7 +26,10 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->wrapped = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface');
+        $this->wrapped = $this
+            ->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface')
+            ->setMethods(['write'])
+            ->getMock();
 
         $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
             ->disableOriginalConstructor()
@@ -131,5 +134,129 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->writer->setStepExecution($stepExecution);
+    }
+
+    /**
+     * @param $actualCustomersArray
+     * @param $expectedCustomersArray
+     *
+     * @dataProvider customerProvider
+     */
+    public function testMergeGuestCustomers($actualCustomersArray, $expectedCustomersArray)
+    {
+        $this->wrapped
+            ->expects($this->once())
+            ->method('write')
+            ->with($expectedCustomersArray);
+
+        $this->writer->write($actualCustomersArray);
+    }
+
+    /**
+     * @param string $customerEmail
+     * @param int $channelId
+     * @param bool $isGuest
+     * @param int $originId
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getCustomer($customerEmail, $channelId, $isGuest = true, $originId = null)
+    {
+        $channel = $this
+            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+            ->setMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customer = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->setMethods(['getChannel', 'getOriginId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        if ($channelId) {
+            $channel
+                ->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($channelId));
+            $customer
+                ->expects($this->any())
+                ->method('getChannel')
+                ->will($this->returnValue($channel));
+        }
+
+        if (!$isGuest && $originId) {
+            $customer
+                ->expects($this->any())
+                ->method('getOriginId')
+                ->will($this->returnValue($originId));
+        }
+
+        $customer->setEmail($customerEmail);
+        $customer->setGuest($isGuest);
+
+        return $customer;
+    }
+
+    /**
+     * @return array
+     */
+    public function customerProvider()
+    {
+        return [
+            [ //guest mode. customers will be merged
+                [$this->getCustomer('test@test.com', 1), $this->getCustomer('test@test.com', 1)],
+                [$this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1)]
+            ],
+            [ //guest mode. customers will be merged
+                [$this->getCustomer('TEST@test.com', 1), $this->getCustomer('test@test.com', 1)],
+                [$this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1)]
+            ],
+            [ //guest mode. customers will be merged
+                [$this->getCustomer('example!user@e.com', 1), $this->getCustomer('example!user@e.com', 1)],
+                [$this->getUniqueHash('example!user@e.com', 1) => $this->getCustomer('example!user@e.com', 1)]
+            ],
+            [ //guest mode. customers will be merged
+                [$this->getCustomer('example&@e.com', 1), $this->getCustomer('example&@e.com', 1)],
+                [$this->getUniqueHash('example&@e.com', 1) => $this->getCustomer('example&@e.com', 1)]
+            ],
+            [ //guest mode. customers won't be merged, different channel
+                [$this->getCustomer('test@test.com', 1), $this->getCustomer('test@test.com', 2)],
+                [
+                    $this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1),
+                    $this->getUniqueHash('test@test.com', 2) => $this->getCustomer('test@test.com', 2)
+                ]
+            ],
+            [ //guest mode. customers won't be merged, different email
+                [$this->getCustomer('tests@test.com', 1), $this->getCustomer('test@test.com', 1)],
+                [
+                    $this->getUniqueHash('tests@test.com', 1) => $this->getCustomer('tests@test.com', 1),
+                    $this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1)
+                ]
+            ],
+            [ //guest mode. customers will be merged, without channel
+                [$this->getCustomer('example&@e.com', null), $this->getCustomer('example&@e.com', null)],
+                [$this->getUniqueHash('example&@e.com', null) => $this->getCustomer('example&@e.com', null)]
+            ],
+            [ //not guest mode. customers will be merged with originId
+                [$this->getCustomer('example@e.com', 1, false, 10), $this->getCustomer('example@e.com', 1, false, 10)],
+                [10 => $this->getCustomer('example@e.com', 1, false, 10)]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $email
+     * @param int $channelId
+     *
+     * @return string
+     */
+    public function getUniqueHash($email, $channelId = null)
+    {
+        $string = $email;
+
+        if ($channelId) {
+            $string.=$channelId;
+        }
+
+        return md5($string);
     }
 }

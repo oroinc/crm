@@ -45,8 +45,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user",
- *              "context-grid"="magento-customers-for-context-grid"
+ *              "icon"="icon-user"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -62,6 +61,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          "form"={
  *              "grid_name"="magento-customers-grid",
  *          },
+ *          "grid"={
+ *              "default"="magento-customers-grid",
+ *              "context"="magento-customers-for-context-grid"
+ *          }
  *      }
  * )
  * @Oro\Loggable
@@ -282,7 +285,7 @@ class Customer extends ExtendCustomer implements
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

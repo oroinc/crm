@@ -5,7 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider;
 
 class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
@@ -135,6 +139,118 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
                 ['view' => true, 'subscribe' => true, 'unsubscribe' => false],
                 true
             ],
+        ];
+    }
+
+    /**
+     * @param ResultRecordInterface $record
+     * @param array $actions
+     * @param array $expected
+     * @param bool $isAllowed
+     *
+     * @dataProvider permissionsChannelDataProvider
+     */
+    public function testGetActionsPermissionsByChannelPermissions(
+        ResultRecordInterface $record,
+        array $actions,
+        array $expected,
+        $isAllowed
+    ) {
+        $this->settingsProvider
+            ->expects($this->any())
+            ->method('isChannelApplicable')
+            ->will($this->returnValue(true));
+
+        $this->securityFacade->expects($this->any())
+            ->method('isGranted')
+            ->will($this->returnValue($isAllowed));
+
+        $this->assertEquals(
+            $expected,
+            $this->provider->getActionsPermissions($record, $actions)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function permissionsChannelDataProvider()
+    {
+        /** @var Integration $integration */
+        $integration = $this->createChannelIntegrationEntity(1);
+
+        /** @var Channel $channel */
+        $channel = $this->createChannelEntity(1);
+
+        /** @var Customer $customer */
+        $customer = new Customer();
+        $customer
+            ->setId(1)
+            ->setChannel($integration)
+            ->setDataChannel($channel);
+
+        /** @var NewsletterSubscriber $newsletterSubscriber */
+        $newsletterSubscriber = new NewsletterSubscriber();
+        $newsletterSubscriber
+            ->setCustomer($customer)
+            ->setChannel($customer->getChannel())
+            ->setDataChannel($customer->getDataChannel());
+
+        return [
+            'subscribe with channel permission VIEW is granted' => [
+                new ResultRecord(
+                    [
+                        'channelId'                    => 1,
+                        'customerOriginId'             => 1,
+                        'customerId'                   => 1,
+                        'newsletterSubscriberStatusId' => 2,
+                        'customerData'                 => $newsletterSubscriber
+                    ]
+                ),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => true, 'unsubscribe' => false],
+                true
+            ],
+            'subscribe with channel permission VIEW is not granted, get channel from customer' => [
+                new ResultRecord(
+                    [
+                        'channelId'                    => null,
+                        'customerOriginId'             => 1,
+                        'customerId'                   => 1,
+                        'newsletterSubscriberStatusId' => 2,
+                        'customerData'                 => $newsletterSubscriber
+                    ]
+                ),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => true, 'unsubscribe' => false],
+                true
+            ],
+            'customers grid - channel permission VIEW is granted' => [
+                new ResultRecord(
+                    [
+                        'channelId'                    => 1,
+                        'customerOriginId'             => 1,
+                        'customerId'                   => 1,
+                        'customerData'                 => $customer
+                    ]
+                ),
+                ['view' => []],
+                ['view' => true],
+                true
+            ],
+            'customers grid - channel permission VIEW is not granted, get channel from customer' => [
+                new ResultRecord(
+                    [
+                        'channelId'                    => null,
+                        'customerOriginId'             => 1,
+                        'customerId'                   => 1,
+                        'customerData'                 => $customer
+                    ]
+                ),
+                ['view' => []],
+                ['view' => true],
+                true
+            ]
         ];
     }
 }

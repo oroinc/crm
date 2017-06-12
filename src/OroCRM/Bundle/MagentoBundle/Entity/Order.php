@@ -40,8 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_order_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt",
- *              "context-grid"="magento-order-for-context-grid"
+ *              "icon"="icon-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -53,6 +52,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""
+ *          },
+ *          "grid"={
+ *              "default"="magento-order-grid",
+ *              "context"="magento-order-for-context-grid"
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_order_follow_up"
@@ -784,6 +787,7 @@ class Order extends ExtendOrder implements
      * Set organization
      *
      * @param Organization $organization
+     *
      * @return Order
      */
     public function setOrganization(Organization $organization = null)

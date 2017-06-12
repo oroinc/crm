@@ -3,12 +3,17 @@
 namespace OroCRM\Bundle\MagentoBundle\Autocomplete;
 
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class IntegrationAwareSearchHandler extends SearchHandler
 {
     /** @var string */
     protected $dataChannelClass;
+
+    /** @var SecurityFacade */
+    protected $securityFacade;
 
     /**
      * @param string $dataChannelClass
@@ -19,6 +24,14 @@ abstract class IntegrationAwareSearchHandler extends SearchHandler
         $this->dataChannelClass = $dataChannelClass;
 
         return $this;
+    }
+
+    /**
+     * @param SecurityFacade $securityFacade
+     */
+    public function setSecurityFacade(SecurityFacade $securityFacade)
+    {
+        $this->securityFacade = $securityFacade;
     }
 
     /**

@@ -33,3 +33,10 @@ services:
         class: %orocrm_contact_us.provider.phone.abstract_contact_request.class%
         tags:
             - { name: oro_address.phone_provider, class: OroCRM\Bundle\ContactUsBundle\Entity\AbstractContactRequest }
+
+    orocrm_contact_us.contact_request.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_contact_us.contactrequest.entity.class%
+            - "@doctrine.orm.entity_manager"

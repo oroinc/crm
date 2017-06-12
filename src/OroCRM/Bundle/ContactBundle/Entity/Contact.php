@@ -52,8 +52,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                  "phone"={
  *                      {"fieldName"="primaryPhone"}
  *                  }
- *              },
- *              "context-grid"="contacts-for-context-grid"
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -69,6 +68,10 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          "form"={
  *              "form_type"="orocrm_contact_select",
  *              "grid_name"="contacts-select-grid",
+ *          },
+ *          "grid"={
+ *              "default"="contacts-grid",
+ *              "context"="contacts-for-context-grid"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
@@ -678,6 +681,22 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      */
     protected $organization;
 
+    /**
+     * @var Account[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account",
+     *    mappedBy="defaultContact", cascade={"persist"}
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=240
+     *          }
+     *      }
+     * )
+     */
+    protected $defaultInAccounts;
+
     public function __construct()
     {
         parent::__construct();
@@ -687,6 +706,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         $this->emails   = new ArrayCollection();
         $this->phones   = new ArrayCollection();
         $this->tags     = new ArrayCollection();
+        $this->defaultInAccounts = new ArrayCollection();
     }
 
     public function __clone()
@@ -707,6 +727,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         }
         if ($this->tags) {
             $this->tags = clone $this->tags;
+        }
+        if ($this->defaultInAccounts) {
+            $this->defaultInAccounts = clone $this->defaultInAccounts;
         }
     }
 
@@ -1564,5 +1587,43 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function addDefaultInAccount(Account $account)
+    {
+        if (!$this->defaultInAccounts->contains($account)) {
+            $this->defaultInAccounts->add($account);
+            $account->setDefaultContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function removeDefaultInAccount(Account $account)
+    {
+        $this->defaultInAccounts->removeElement($account);
+        if ($account->getDefaultContact() === $this) {
+            $account->setDefaultContact(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Account[]|Collection
+     */
+    public function getDefaultInAccounts()
+    {
+        return $this->defaultInAccounts;
     }
 }

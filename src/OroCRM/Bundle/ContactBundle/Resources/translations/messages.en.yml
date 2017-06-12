@@ -82,6 +82,7 @@ orocrm:
         updated_by.label:    Updated By
         picture.label:       Picture
         organization.label:  Organization
+        default_in_accounts.label: Accounts Default Contact
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress

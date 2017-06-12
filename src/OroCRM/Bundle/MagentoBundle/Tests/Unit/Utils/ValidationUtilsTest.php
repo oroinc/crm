@@ -38,4 +38,37 @@ class ValidationUtilsTest extends \PHPUnit_Framework_TestCase
             'should not provoke error, show default message' => [$cartStatus, self::TEST_DEFAULT_MESSAGE]
         ];
     }
+
+    /**
+     * @dataProvider messageProvider
+     *
+     * @param string $exceptionMessage
+     * @param string $expectedMessage
+     */
+    public function testSanitizeSecureInfo($exceptionMessage, $expectedMessage)
+    {
+        $sanitisedMessage = ValidationUtils::sanitizeSecureInfo($exceptionMessage);
+        $this->assertEquals($expectedMessage, $sanitisedMessage);
+    }
+
+    /**
+     * @return array
+     */
+    public function messageProvider()
+    {
+        return [
+            'some other text' => [
+                '$exceptionMessage' => 'some message text',
+                '$expectedMessage'  => 'some message text'
+            ],
+            'sanitized exception message'       => [
+                '$exceptionMessage' => '<?xml version="1.0" encoding="UTF-8"?>' .
+                    '<SOAP-ENV:Body><ns1:login><username xsi:type="xsd:string">abc</username>' .
+                    '<apiKey xsi:type="xsd:string">abcabc1</apiKey></ns1:login></SOAP-ENV:Body></SOAP-ENV:Envelope>',
+                '$expectedMessage'  => '<?xml version="1.0" encoding="UTF-8"?>' .
+                    '<SOAP-ENV:Body><ns1:login><username xsi:type="xsd:string">abc</username>' .
+                    '<apiKey xsi:type="xsd:string">***</apiKey></ns1:login></SOAP-ENV:Body></SOAP-ENV:Envelope>'
+            ]
+        ];
+    }
 }

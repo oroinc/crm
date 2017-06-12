@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class IntegrationSyncAfterEventListener
 {
@@ -20,10 +21,7 @@ class IntegrationSyncAfterEventListener
         $jobResult  = $event->getJobResult();
         $exceptions = array_map(
             function ($exception) {
-                if (is_string($exception)) {
-                    return preg_replace('#(<apiKey.*?>)(.*)(</apiKey>)#i', '$1***$3', $exception);
-                }
-
+                $exception = ValidationUtils::sanitizeSecureInfo($exception);
                 return $exception;
             },
             $jobResult->getFailureExceptions()

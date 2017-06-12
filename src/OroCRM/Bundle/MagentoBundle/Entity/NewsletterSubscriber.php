@@ -30,6 +30,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
  *              "owner_column_name"="owner_id",
  *              "organization_field_name"="organization",
  *              "organization_column_name"="organization_id"
+ *          },
+ *          "grid"={
+ *              "default"="magento-newsletter-subscriber-grid"
  *          }
  *      }
  * )

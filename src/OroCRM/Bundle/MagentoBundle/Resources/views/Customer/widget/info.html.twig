@@ -11,8 +11,10 @@
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
             {% endif %}
 
-            {{ channel.renderChannelProperty(entity, 'orocrm.magento.customer.data_channel.label') }}
-            {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
+            {% if entity.channel %}
+                {{ channel.renderChannelProperty(entity, 'orocrm.magento.customer.data_channel.label') }}
+                {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
+            {% endif %}
 
             {% if entity.website %}
                 {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}

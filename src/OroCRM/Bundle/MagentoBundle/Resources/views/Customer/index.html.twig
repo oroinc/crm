@@ -6,7 +6,7 @@
 {% set gridName = 'magento-customers-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_magento_customer_create') %}
+    {% if resource_granted('orocrm_magento_customer_create') and resource_granted('oro_integration_assign') %}
         <div class="btn-group">
             {{ UI.addButton({
                 'path' : path('orocrm_magento_customer_create'),

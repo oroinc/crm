@@ -22,7 +22,7 @@ class CustomerGroupSearchHandler extends IntegrationAwareSearchHandler
             ->setMaxResults($maxResults);
 
         $dataChannel = $this->getDataChannelById($channelId);
-        if ($dataChannel) {
+        if ($dataChannel && $this->securityFacade->isGranted('oro_integration_assign')) {
             $queryBuilder->andWhere('e.channel = :channel')
                 ->setParameter('channel', $dataChannel->getDataSource());
         } else {

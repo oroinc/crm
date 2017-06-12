@@ -18,6 +18,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 class SoapController extends Controller
 {
@@ -56,7 +57,8 @@ class SoapController extends Controller
                 'adminUrl' => $transport->getAdminUrl(),
             ];
         } catch (\Exception $e) {
-            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
+            $message = ValidationUtils::sanitizeSecureInfo($e->getMessage());
+            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $message));
         }
 
         return new JsonResponse($response);
