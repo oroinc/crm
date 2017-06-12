@@ -2,8 +2,8 @@ oro:
     magento:
         success: Connection successful, please select a website from the list below
         success_bridge: Connection was successful. You are running OroBridge version {{ extension_version }}. Please select a website from the list below
-        outdated_warning: Your OroBridge extension version {{ extension_version }} is outdated and therefore its functionality will be limited. Please update the extension to the current version {{ required_version }} and re-check the connection.
-        error: Error occurred during check request, please try later!
+        outdated_warning: Your OroBridge extension version {{ extension_version }} is outdated and its functionality limited. Please update the extension to the latest version {{ required_version }} and check the connection again.
+        error: Check connection failed. Please, try again later.
         external_error:             External error occured
         performing_synchronization: Performing synchronization...
         view_order: View order

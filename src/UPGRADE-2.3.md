@@ -6,7 +6,7 @@ MagentoBundle
 - Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface` was added. 
     - public method `call($action, $params = [])` was added
 - Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
-    - removed method `call` because it conflicts with REST conception. MagentoTransportInterface from now will not allow to specify http methods and resource through parameters.
+    - removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
     - public method `isCustomerHasUniqueEmail(Customer $customer)` was added
     - public method `getRequiredExtensionVersion()` was added
 - Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was renamed to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
