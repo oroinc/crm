@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Behat\Context;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 
@@ -143,7 +144,20 @@ class FeatureContext extends OroFeatureContext implements
         }
 
         $this->getDriver()->switchToIFrame($embeddedFormId);
-        $this->getSession()->getPage()->pressButton($button);
+        $page = $this->getSession()->getPage();
+        $button = $this->fixStepArgument($button);
+
+        try {
+            $page->pressButton($button);
+        } catch (ElementNotFoundException $e) {
+            if ($page->hasLink($button)) {
+                $page->clickLink($button);
+            } elseif ($this->elementFactory->hasElement($button)) {
+                $this->elementFactory->createElement($button)->click();
+            } else {
+                throw $e;
+            }
+        }
         $this->getDriver()->switchToWindow();
     }
 }
