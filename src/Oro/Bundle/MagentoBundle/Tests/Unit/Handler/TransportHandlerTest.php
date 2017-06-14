@@ -9,7 +9,7 @@ use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 
@@ -39,7 +39,7 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var  MagentoTransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $magentoTransport;
 
-    /** @var  MagentoTransport|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MagentoSoapTransport|\PHPUnit_Framework_MockObject_MockObject */
     protected $transportEntity;
 
     public function setUp()
@@ -51,7 +51,7 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
         $this->magentoTransport         = $this->createMock(MagentoTransportInterface::class);
         $this->request                  = $this->createMock(Request::class);
 
-        $this->transportEntity          = $this->createMock(MagentoTransport::class);
+        $this->transportEntity          = $this->createMock(MagentoSoapTransport::class);
 
         $this->transportHandler = new TransportHandler(
             $this->typesRegistry,

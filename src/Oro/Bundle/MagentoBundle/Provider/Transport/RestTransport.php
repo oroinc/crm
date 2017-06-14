@@ -15,9 +15,9 @@ use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
@@ -59,7 +59,7 @@ class RestTransport implements
     protected $headers = [];
 
     /**
-     * @var MagentoTransport
+     * @var MagentoRestTransport
      */
     protected $transportEntity;
 
@@ -462,7 +462,7 @@ class RestTransport implements
      */
     public function getSettingsEntityFQCN()
     {
-        return MagentoTransport::class;
+        return MagentoRestTransport::class;
     }
 
     /**

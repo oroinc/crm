@@ -13,7 +13,7 @@ use Psr\Log\LoggerAwareInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
@@ -52,11 +52,11 @@ class RestTokenProvider implements LoggerAwareInterface
     }
 
     /**
-     * @param MagentoTransport $transportEntity
+     * @param MagentoRestTransport $transportEntity
      *
      * @return null|string
      */
-    public function getTokenFromEntity(MagentoTransport $transportEntity)
+    public function getTokenFromEntity(MagentoRestTransport $transportEntity)
     {
         $encryptedToken = $transportEntity->getApiToken();
         if (null === $encryptedToken) {
@@ -67,12 +67,12 @@ class RestTokenProvider implements LoggerAwareInterface
     }
 
     /**
-     * @param MagentoTransport    $transportEntity
+     * @param MagentoRestTransport    $transportEntity
      * @param RestClientInterface $client
      *
      * @return string
      */
-    public function generateNewToken(MagentoTransport $transportEntity, RestClientInterface $client)
+    public function generateNewToken(MagentoRestTransport $transportEntity, RestClientInterface $client)
     {
         $this->logger->info('Do request to get new `token`');
 
@@ -158,10 +158,10 @@ class RestTokenProvider implements LoggerAwareInterface
     }
 
     /**
-     * @param MagentoTransport $transportEntity
+     * @param MagentoRestTransport $transportEntity
      * @param string    $token
      */
-    protected function updateToken(MagentoTransport $transportEntity, $token)
+    protected function updateToken(MagentoRestTransport $transportEntity, $token)
     {
         $transportEntity->setApiToken(
             $this->mcrypt->encryptData($token)

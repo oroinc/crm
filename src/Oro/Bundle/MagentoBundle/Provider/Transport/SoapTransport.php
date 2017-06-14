@@ -11,7 +11,7 @@ use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
@@ -151,7 +151,7 @@ class SoapTransport extends BaseSOAPTransport implements
          * Cache WSDL and force transport entity to use it instead of original URL.
          * This should be done before parent::init as settings will be cached there.
          */
-        if ($transportEntity instanceof MagentoTransport) {
+        if ($transportEntity instanceof MagentoSoapTransport) {
             $wsdlUrl = $transportEntity->getWsdlUrl();
 
             // Save auth information to be able to perform requests.
@@ -683,7 +683,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getSettingsEntityFQCN()
     {
-        return MagentoTransport::class;
+        return MagentoSoapTransport::class;
     }
 
     /**

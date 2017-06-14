@@ -34,17 +34,5 @@ class AddRestToken implements Migration, RenameExtensionAwareInterface
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
         $this->renameExtension->renameColumn($schema, $queries, $table, 'wsdl_url', 'api_url');
-
-        $sql = 'UPDATE oro_integration_transport' .
-            ' SET type = :new_type' .
-            ' WHERE type = :old_type';
-
-        $queries->addQuery(
-            new ParametrizedSqlMigrationQuery(
-                $sql,
-                ['new_type' => 'magentotransport', 'old_type' => 'magentosoaptransport'],
-                ['new_type' => Type::STRING, 'old_type' => Type::STRING]
-            )
-        );
     }
 }

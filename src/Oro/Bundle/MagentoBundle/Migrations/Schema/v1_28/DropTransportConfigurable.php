@@ -15,29 +15,34 @@ class DropTransportConfigurable implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $className = 'Oro\Bundle\MagentoBundle\Entity\MagentoTransport';
+        $classNames = [
+            'Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport',
+            'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport'
+        ];
 
-        $dropFieldsSql = 'DELETE FROM oro_entity_config_field'
-            . ' WHERE entity_id IN ('
-            . ' SELECT id'
-            . ' FROM oro_entity_config'
-            . ' WHERE class_name = :class'
-            . ' )';
-        $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
-        $dropFieldsQuery->addSql(
-            $dropFieldsSql,
-            ['class' => $className],
-            ['class' => 'string']
-        );
-        $queries->addPostQuery($dropFieldsQuery);
+        foreach ($classNames as $className) {
+            $dropFieldsSql = 'DELETE FROM oro_entity_config_field'
+                . ' WHERE entity_id IN ('
+                . ' SELECT id'
+                . ' FROM oro_entity_config'
+                . ' WHERE class_name = :class'
+                . ' )';
+            $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
+            $dropFieldsQuery->addSql(
+                $dropFieldsSql,
+                ['class' => $className],
+                ['class' => 'string']
+            );
+            $queries->addPostQuery($dropFieldsQuery);
 
-        $dropConfigurationSql = 'DELETE FROM oro_entity_config WHERE class_name = :class';
-        $dropConfigurationQuery = new ParametrizedSqlMigrationQuery();
-        $dropConfigurationQuery->addSql(
-            $dropConfigurationSql,
-            ['class' => $className],
-            ['class' => 'string']
-        );
-        $queries->addQuery($dropConfigurationQuery);
+            $dropConfigurationSql = 'DELETE FROM oro_entity_config WHERE class_name = :class';
+            $dropConfigurationQuery = new ParametrizedSqlMigrationQuery();
+            $dropConfigurationQuery->addSql(
+                $dropConfigurationSql,
+                ['class' => $className],
+                ['class' => 'string']
+            );
+            $queries->addQuery($dropConfigurationQuery);
+        }
     }
 }

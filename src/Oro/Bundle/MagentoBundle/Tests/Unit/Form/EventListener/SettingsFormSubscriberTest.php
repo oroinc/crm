@@ -12,7 +12,7 @@ use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\TransportSettingFormTypeStub;
 use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class SettingsFormSubscriberTest extends FormIntegrationTestCase
 {
@@ -56,7 +56,7 @@ class SettingsFormSubscriberTest extends FormIntegrationTestCase
         $this->initStubForm();
 
         $data = $this
-            ->getMockBuilder(MagentoTransport::class)
+            ->getMockBuilder(MagentoSoapTransport::class)
             ->disableOriginalConstructor()
             ->getMock();
 

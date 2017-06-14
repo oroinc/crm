@@ -9,8 +9,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +30,7 @@ class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
     /** @var  Request|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
 
-    /** @var  MagentoTransport */
+    /** @var  MagentoSoapTransport */
     protected $transportEntity;
 
     public function setUp()
@@ -39,7 +39,7 @@ class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
         $this->form             = $this->createMock(FormInterface::class);
         $this->registry         = $this->createMock(ManagerRegistry::class);
         $this->request          = $this->createMock(Request::class);
-        $this->transportEntity  = $this->createMock(MagentoTransport::class);
+        $this->transportEntity  = $this->createMock(MagentoSoapTransport::class);
 
         $this->transportEntityProvider = new TransportEntityProvider(
             $this->formFactory,

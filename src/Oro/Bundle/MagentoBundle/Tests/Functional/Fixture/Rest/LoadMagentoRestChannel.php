@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -71,7 +72,7 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
 
     public function createTransport()
     {
-        $transport = new MagentoTransport();
+        $transport = new MagentoRestTransport();
         $transport->setAdminUrl('http://localhost/magento/admin');
         $transport->setApiKey('key');
         $transport->setApiUser('user');

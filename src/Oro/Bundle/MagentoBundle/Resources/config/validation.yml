@@ -3,7 +3,22 @@ Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
         email:
             - NotBlank: ~
 
-Oro\Bundle\MagentoBundle\Entity\MagentoTransport:
+Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    constraints:
+        - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
+              fields:     [ websiteId, apiUrl ]
+    properties:
+        apiUrl:
+          - NotBlank: ~
+        apiUser:
+          - NotBlank: ~
+        syncStartDate:
+          - NotBlank: ~
+          - Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
+        websiteId:
+          - NotBlank: ~
+
+Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport:
     constraints:
         - Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
               fields:     [ websiteId, apiUrl ]

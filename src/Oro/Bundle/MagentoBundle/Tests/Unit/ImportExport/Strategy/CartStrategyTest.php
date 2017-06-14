@@ -49,7 +49,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $this->context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
             ->getMock();
 
-        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoTransport')
+        $this->transport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
             ->getMock();
 

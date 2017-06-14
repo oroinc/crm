@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
@@ -80,12 +80,12 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $this->restTransport->expects($this->once())
             ->method('getSettingsEntityFQCN')
-            ->willReturn(MagentoTransport::class);
+            ->willReturn(MagentoRestTransport::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class' => MagentoTransport::class,
+                    'data_class' => MagentoRestTransport::class,
                 ]
             );
 

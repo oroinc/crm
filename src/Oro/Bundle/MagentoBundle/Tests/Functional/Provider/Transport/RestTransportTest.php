@@ -2,10 +2,10 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
@@ -126,11 +126,11 @@ class RestTransportTest extends WebTestCase
     /**
      * Creates transport entity
      *
-     * @return MagentoTransport
+     * @return MagentoRestTransport
      */
     private function getTransportEntity()
     {
-        $transportEntity = new MagentoTransport();
+        $transportEntity = new MagentoRestTransport();
         $transportEntity->setApiUrl('http://localhost');
         $transportEntity->setApiUser('admin');
         $transportEntity->setApiKey('admin123');

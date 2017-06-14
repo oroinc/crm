@@ -15,7 +15,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
      */
     public function getEntityFQCN()
     {
-        return 'Oro\Bundle\MagentoBundle\Entity\MagentoTransport';
+        return 'Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport';
     }
 
     /**
@@ -65,8 +65,6 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'extension_version' => '1.1.0',
             'magento_version' => '1.8.0.0',
             'newsletter_subscriber_synced_to_id' => 10,
-            'api_url' => 'http://test.url/',
-            'api_token' => null
         ];
 
         $this->entity

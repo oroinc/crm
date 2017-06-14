@@ -26,7 +26,6 @@ use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
@@ -131,7 +130,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     {
         static $i = 0;
 
-        $transport = new MagentoTransport();
+        $transport = new MagentoSoapTransport();
         $transport->setApiUser('api_user');
         $transport->setApiKey('api_key');
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);

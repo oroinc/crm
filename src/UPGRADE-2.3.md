@@ -17,9 +17,9 @@ MagentoBundle
 - Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` was added to support Magento2 as a new integration
 - Class `Oro\Bundle\MagentoBundle\Controller\SoapController.php` was removed. Use `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php`instead
 - Class `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php` was added. It is a universal entry point for both Magento and Magento2 integration check requests
-- Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was renamed to `Oro\Bundle\MagentoBundle\Entity\MagentoTransport`. Now it is used for both Magento and Magento2 transports
-    - added property `apiToken` to store rest token
-    - renamed property `wsdlUrl` to `apiUrl`. But `setWsldUrl()` and `getWsdlUrl` methods were left for backward compatibility (they work with `apiUrl` property)
+- Class `Oro\Bundle\MagentoBundle\Entity\MagentoTransport` was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
+- Class `Oro\Bundle\MagentoBundle\Entity\MagentRestTransport` was added
+- Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
 - Class `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository` was renamed to `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository`
 - Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber` was renamed to `Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber`
     - added protected method `getFormChannelType`
@@ -176,3 +176,4 @@ This class has the same responsibilities as SoapTransport.
 - Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractRegionIterator` was added
     - abstract protected method `getCountryList()` was added
 - Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionRestIterator` was added. Extends `AbstractRegionIterator` with REST implementation
+- Process `magento_schedule_integration` was removed. Two new processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added

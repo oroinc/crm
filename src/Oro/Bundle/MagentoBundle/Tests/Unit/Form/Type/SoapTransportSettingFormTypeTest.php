@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
@@ -82,12 +82,12 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
         $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $this->soapTransport->expects($this->once())
             ->method('getSettingsEntityFQCN')
-            ->willReturn(MagentoTransport::class);
+            ->willReturn(MagentoSoapTransport::class);
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(
                 [
-                    'data_class' => MagentoTransport::class,
+                    'data_class' => MagentoSoapTransport::class,
                 ]
             );
 
