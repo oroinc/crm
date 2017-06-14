@@ -8,25 +8,23 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
+use Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
+use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
+use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\LoadableRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider;
-use Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\RegionRestIterator;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 
 /**
@@ -34,7 +32,6 @@ use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
  */
 class RestTransport implements
     TransportInterface,
-    RestTransportInterface,
     MagentoTransportInterface,
     PingableInterface,
     LoggerAwareInterface
@@ -245,18 +242,12 @@ class RestTransport implements
      */
     public function getStores()
     {
-        return new StoresRestIterator($this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function doGetStoresRequest()
-    {
         try {
-            return $this->client->get('store/storeViews', [], $this->headers)->json();
+            $data = $this->client->get('store/storeViews', [], $this->headers)->json();
+
+            return new LoadableRestIterator($data);
         } catch (RestException $e) {
-            return $this->handleException($e, 'doGetStoresRequest');
+            return $this->handleException($e, 'getStores');
         }
     }
 
@@ -265,18 +256,12 @@ class RestTransport implements
      */
     public function getWebsites()
     {
-        return new WebsiteRestIterator($this);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function doGetWebsitesRequest()
-    {
         try {
-            return $this->client->get('store/websites', [], $this->headers)->json();
+            $data = $this->client->get('store/websites', [], $this->headers)->json();
+
+            return new LoadableRestIterator($data);
         } catch (RestException $e) {
-            return $this->handleException($e, 'doGetWebsitesRequest');
+            return $this->handleException($e, 'getWebsites');
         }
     }
 
@@ -285,20 +270,13 @@ class RestTransport implements
      */
     public function getRegions()
     {
-        return new RegionRestIterator($this, $this->transportEntity->getSettingsBag()->all());
-    }
-
-    /**
-     * @return array
-     */
-    public function doGetRegionsRequest()
-    {
         try {
             $data = $this->client->get(sprintf('directory/countries'), [], $this->headers)->json();
+            $data = $this->responseConverterManager->convert($data, self::REGION_RESPONSE_TYPE);
 
-            return $this->responseConverterManager->convert($data, self::REGION_RESPONSE_TYPE);
+            return new LoadableRestIterator($data);
         } catch (RestException $e) {
-            return $this->handleException($e, 'doGetRegionsRequest');
+            return $this->handleException($e, 'getRegions');
         }
     }
 

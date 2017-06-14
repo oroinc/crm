@@ -123,7 +123,7 @@ MagentoBundle
 - Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestClientFactory` was added. Extends `Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory`
     - protected method `getClientBaseUrl(ParameterBag $parameterBag)` was added
     - protected method `getClientOptions(ParameterBag $parameterBag)` was added
-- Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `RestTransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
+- Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
     - const `REGION_RESPONSE_TYPE` was added
     - construction signature was changed, now it takes the next arguments:
         - BridgeRestClientFactory $clientFactory
@@ -131,9 +131,6 @@ MagentoBundle
         - RestPingProvider $pingProvider
         - ResponseConverterManager $responseConverterManager
 This class has the same responsibilities as SoapTransport.
-- Interface `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportInterface` was added
-    - public method `doGetStoresRequest()::array` was added
-    - public method `doGetWebsitesRequest()::array` was added
 - Class `Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport` now implements `TransportCacheClearInterface`
     - construction signature was changed, now it takes the next arguments:
         - Mcrypt $encoder
