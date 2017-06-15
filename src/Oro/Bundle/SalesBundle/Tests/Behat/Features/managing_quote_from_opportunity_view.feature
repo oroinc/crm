@@ -75,7 +75,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
   Scenario: Check quotes sorting
     Given I go to Sales/Opportunities
     When I click View Opportunity1 in grid
-    And I sort Quotes Grid by Updated At
+    And I sort "Quotes Grid" by Updated At
     Then Quotes Grid must be sorted ascending by updated date
 
   Scenario: Multiple quotes can be created for a single Opportunity
@@ -104,7 +104,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
   Scenario: Check quote appearing in buyer account
     Given I login as AmandaRCole@example.org buyer
     When open Customer Quotes List page
-    Then records in current Customer Quotes Grid should be 1
+    Then records in "Customer Quotes Grid" should be 1
     When I click "View"
     Then I should see SKU123 in Quote View Grid with following data:
       | Quantity   | 1 item or more |
@@ -144,7 +144,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
   Scenario: Check edited quote from buyer account
     Given I login as AmandaRCole@example.org buyer
     When I open Customer Quotes List page
-    Then records in current Customer Quotes Grid should be 1
+    Then records in "Customer Quotes Grid" should be 1
     And I should see 1 in Customer Quotes Grid with following data:
 #    @todo Uncomment when bug will resolved. BAP-12124.
 #      | Valid Until | Dec 20, 2018, 11:00 AM |
@@ -165,4 +165,4 @@ Feature: In order send the customer detailed proposal while negotiating a deal
   Scenario: Check deleted quote from buyer account
     Given I login as AmandaRCole@example.org buyer
     When open Customer Quotes List page
-    Then there is no records in Customer Quotes Grid
+    Then there is no records in "Customer Quotes Grid"
