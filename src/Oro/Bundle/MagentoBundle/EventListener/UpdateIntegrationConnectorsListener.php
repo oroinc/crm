@@ -7,11 +7,11 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 /**
  * Add initial connectors to connectors list.
@@ -30,6 +30,11 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     protected $transportEntity;
 
     /**
+     * @var string
+     */
+    protected $channelType;
+
+    /**
      * @param TypesRegistry $registry
      */
     public function setConnectorsTypeRegistry(TypesRegistry $registry)
@@ -44,11 +49,13 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     {
         $channel = $event->getChannel();
 
-        if ($channel->getChannelType() === MagentoChannelType::TYPE
-            && $channel->getDataSource()->getTransport() instanceof MagentoTransport
-        ) {
-            $this->transportEntity = $channel->getDataSource()->getTransport();
+        if (null === $channel->getDataSource()) {
+            return;
+        }
 
+        if ($channel->getDataSource()->getTransport() instanceof MagentoTransport) {
+            $this->transportEntity = $channel->getDataSource()->getTransport();
+            $this->channelType = $channel->getChannelType();
             parent::onChannelSave($event);
         }
     }
@@ -59,20 +66,27 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     protected function getConnectors(array $entities)
     {
         $dictionaryConnectors = $this->typeRegistry->getRegisteredConnectorsTypes(
-            MagentoChannelType::TYPE,
+            $this->channelType,
             function (ConnectorInterface $connector) {
                 return $connector instanceof DictionaryConnectorInterface;
             }
         )->toArray();
+
+        /** @var MagentoTransportInterface $transport */
+        $transport = $this->typeRegistry
+                          ->getTransportTypeBySettingEntity($this->transportEntity, $this->channelType);
+
+        $transport->init($this->transportEntity);
+
         $connectors = [];
         $initialConnectors = [];
-        $isSupportedExtensionVersion = $this->transportEntity->isSupportedExtensionVersion();
-        $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
+        $isSupportedExtensionVersion = $transport->isSupportedExtensionVersion();
+        $isExtensionInstalled = $transport->isExtensionInstalled();
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
             if ($connectorName) {
-                $connector = $this->typeRegistry->getConnectorType(MagentoChannelType::TYPE, $connectorName);
+                $connector = $this->typeRegistry->getConnectorType($this->channelType, $connectorName);
                 if (!$connector) {
                     continue;
                 }

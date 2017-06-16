@@ -10,17 +10,32 @@ use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry */
     protected $typesRegistry;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface */
+    protected $transport;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->typesRegistry = $this->createMock('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry');
+        $this->transport = $this->createMock(MagentoTransportInterface::class);
+
+        $this->transport
+             ->expects($this->any())
+             ->method('isSupportedExtensionVersion')
+             ->willReturn(false);
+
+        $this->typesRegistry
+             ->expects($this->any())
+             ->method('getTransportTypeBySettingEntity')
+             ->willReturn($this->transport);
     }
 
     /**
@@ -47,6 +62,11 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
+
+        $this->transport
+            ->expects($this->any())
+            ->method('isExtensionInstalled')
+            ->willReturn($isExtensionInstalled);
 
         $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector')
             ->disableOriginalConstructor()
@@ -102,6 +122,11 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion($version);
         $this->integration->setTransport($transport);
+
+        $this->transport
+            ->expects($this->any())
+            ->method('isExtensionInstalled')
+            ->willReturn($isExtensionInstalled);
 
         $extensionAwareConnector = $this
             ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface')

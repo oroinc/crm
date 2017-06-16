@@ -54,6 +54,8 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function getCustomers();
 
     /**
+     * Check that customer has unique email
+     *
      * @param Customer $customer
      *
      * @return bool
@@ -92,6 +94,7 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
      * Retrieve customer information from magento.
      *
      * @param string $originId
+     *
      * @return array
      */
     public function getCustomerInfo($originId);
@@ -115,6 +118,8 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function getErrorCode(\Exception $e);
 
     /**
+     * Retrieve order info from magento.
+     *
      * @param string $incrementId
      */
     public function getOrderInfo($incrementId);
@@ -127,11 +132,15 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function getCreditMemos();
 
     /**
+     * Retrieve credit memo info from magento.
+     *
      * @param string $incrementId
      */
     public function getCreditMemoInfo($incrementId);
 
     /**
+     * Create customer.
+     *
      * @param array $customerData
      *
      * @return int ID of the created customer
@@ -139,6 +148,8 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function createCustomer(array $customerData);
 
     /**
+     * Update customer.
+     *
      * @param int $customerId
      * @param array $customerData
      *
@@ -147,15 +158,21 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function updateCustomer($customerId, array $customerData);
 
     /**
+     * Create customer address.
+     *
      * @param int $customerId
      * @param array $item
+     *
      * @return int
      */
     public function createCustomerAddress($customerId, array $item);
 
     /**
+     * Update customer address.
+     *
      * @param int $customerAddressId
      * @param array $item
+     *
      * @return bool
      */
     public function updateCustomerAddress($customerAddressId, array $item);
@@ -177,6 +194,8 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function getNewsletterSubscribers();
 
     /**
+     * Create news letter subscriber.
+     *
      * @param array $subscriberData
      *
      * @return array
@@ -184,6 +203,8 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function createNewsletterSubscriber(array $subscriberData);
 
     /**
+     * Update news letter subscriber.
+     *
      * @param int $subscriberId
      * @param array $subscriberData
      *
@@ -192,22 +213,36 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
 
     /**
+     * Check that retrieved extension version from magento is supported.
+     *
      * @return bool
      */
     public function isSupportedExtensionVersion();
 
     /**
+     * Retrieve extension version.
+     *
      * @return string
      */
     public function getExtensionVersion();
 
     /**
+     * Retrieve magento version.
+     *
      * @return string
      */
     public function getMagentoVersion();
 
     /**
+     * Retrieve required extension version.
+     *
      * @return string
      */
     public function getRequiredExtensionVersion();
+
+    /**
+     * Revert initial state. Use for action check connection to execute request
+     * to instance of magento.
+     */
+    public function resetInitialState();
 }

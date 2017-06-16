@@ -1207,7 +1207,7 @@ oro:
             choose_cart: Choose a cart...
 
         controller:
-            transport_error:               An error occurred when checking the connection. Please, try again later!
+            transport_error:               Magento instance is unavailable right now, or the provided URL is incorrect.
             not_valid_parameters:          Parameters are not valid!
             transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.

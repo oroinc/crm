@@ -58,9 +58,36 @@ class TransportHandler
     }
 
     /**
+     * @return array
+     */
+    public function getCheckResponse()
+    {
+        $transport = $this->getMagentoTransport();
+
+        $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
+        $isExtensionInstalled = $transport->isExtensionInstalled();
+        $isSupportedVersion = $transport->isSupportedExtensionVersion();
+        $allowedTypesChoices = $this
+            ->connectorProvider
+            ->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationTypeName);
+
+        return  [
+            'success' => true,
+            'websites' => $this->websiteProvider->formatWebsiteChoices($transport),
+            'isExtensionInstalled' => $isExtensionInstalled,
+            'magentoVersion' => $transport->getMagentoVersion(),
+            'extensionVersion' => $transport->getExtensionVersion(),
+            'requiredExtensionVersion' => $transport->getRequiredExtensionVersion(),
+            'isSupportedVersion' => $isSupportedVersion,
+            'connectors' => $allowedTypesChoices,
+            'adminUrl' => $transport->getAdminUrl()
+        ];
+    }
+
+    /**
      * @return MagentoTransportInterface
      */
-    public function getMagentoTransport()
+    protected function getMagentoTransport()
     {
         $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
         $transportType       = $this->request->get(self::TRANSPORT_TYPE, false);
@@ -79,35 +106,8 @@ class TransportHandler
         }
 
         $transport->init($transportEntity);
+        $transport->resetInitialState();
 
         return $transport;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCheckResponse()
-    {
-        $transport = $this->getMagentoTransport();
-        $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
-
-        $extensionVersion = $transport->getExtensionVersion();
-        $isExtensionInstalled = !empty($extensionVersion);
-        $isSupportedVersion = $transport->isSupportedExtensionVersion();
-        $allowedTypesChoices = $this
-            ->connectorProvider
-            ->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationTypeName);
-
-        return  [
-            'success' => true,
-            'websites' => $this->websiteProvider->formatWebsiteChoices($transport),
-            'isExtensionInstalled' => $isExtensionInstalled,
-            'magentoVersion' => $transport->getMagentoVersion(),
-            'extensionVersion' => $extensionVersion,
-            'requiredExtensionVersion' => $transport->getRequiredExtensionVersion(),
-            'isSupportedVersion' => $isSupportedVersion,
-            'connectors' => $allowedTypesChoices,
-            'adminUrl' => $transport->getAdminUrl()
-        ];
     }
 }

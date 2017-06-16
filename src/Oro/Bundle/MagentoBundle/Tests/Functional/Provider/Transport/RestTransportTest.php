@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
@@ -98,7 +99,7 @@ class RestTransportTest extends WebTestCase
         $this->assertTrue($transport->ping());
     }
 
-    public function testExtensionDetection()
+    public function testExtensionDetectionWithoutResetInitialState()
     {
         $this->loadRestFixture('ping');
 
@@ -106,6 +107,34 @@ class RestTransportTest extends WebTestCase
         $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
         $transport->init($this->getTransportEntity());
 
+        $this->assertFalse($transport->isExtensionInstalled());
+        $this->assertEquals("http://localhost/admin", $transport->getAdminUrl());
+        $this->assertEquals(null, $transport->getExtensionVersion());
+        $this->assertEquals(null, $transport->getMagentoVersion());
+    }
+
+    public function testExtensionDetectionWithDataAndWithoutResetInitialState()
+    {
+        $this->loadRestFixture('ping');
+
+        /** @var RestTransport $transport */
+        $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
+        $transport->init($this->getTransportEntity(true));
+
+        $this->assertFalse($transport->isExtensionInstalled());
+        $this->assertEquals("http://localhost/admin", $transport->getAdminUrl());
+        $this->assertEquals("1.0.0", $transport->getExtensionVersion());
+        $this->assertEquals("2.1.4", $transport->getMagentoVersion());
+    }
+
+    public function testExtensionDetectionWithResetInitialState()
+    {
+        $this->loadRestFixture('ping');
+
+        /** @var RestTransport $transport */
+        $transport = $this->client->getContainer()->get('oro_magento.transport.rest_transport');
+        $transport->init($this->getTransportEntity());
+        $transport->resetInitialState();
         $this->assertTrue($transport->isExtensionInstalled());
         $this->assertEquals("http://localhost/admin", $transport->getAdminUrl());
         $this->assertEquals("1.0.0", $transport->getExtensionVersion());
@@ -126,14 +155,22 @@ class RestTransportTest extends WebTestCase
     /**
      * Creates transport entity
      *
+     * @param bool $withVersions adds extension version and magento version in $transportEntity
+     *
      * @return MagentoRestTransport
      */
-    private function getTransportEntity()
+    private function getTransportEntity($withVersions = false)
     {
         $transportEntity = new MagentoRestTransport();
         $transportEntity->setApiUrl('http://localhost');
         $transportEntity->setApiUser('admin');
         $transportEntity->setApiKey('admin123');
+
+        if ($withVersions) {
+            $transportEntity->setExtensionVersion('1.0.0');
+            $transportEntity->setMagentoVersion('2.1.4');
+        }
+
         return $transportEntity;
     }
 

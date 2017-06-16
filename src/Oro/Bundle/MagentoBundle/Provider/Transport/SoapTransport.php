@@ -41,6 +41,8 @@ class SoapTransport extends BaseSOAPTransport implements
     PingableInterface,
     TransportCacheClearInterface
 {
+    use ExtensionVersionTrait;
+
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
@@ -184,7 +186,6 @@ class SoapTransport extends BaseSOAPTransport implements
         }
 
         // revert initial state
-        $this->isExtensionInstalled = null;
         $this->adminUrl = null;
         $this->isWsiMode = $wsiMode;
         $this->serverTime = null;
@@ -194,6 +195,14 @@ class SoapTransport extends BaseSOAPTransport implements
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
 
         $this->checkExtensionFunctions();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resetInitialState()
+    {
+        $this->isExtensionInstalled = null;
     }
 
     protected function checkExtensionFunctions()
@@ -332,8 +341,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function isSupportedExtensionVersion()
     {
-        return $this->isExtensionInstalled()
-            && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
+        return $this->isSupportedVersion($this->getExtensionVersion());
     }
 
     /**
@@ -709,8 +717,8 @@ class SoapTransport extends BaseSOAPTransport implements
     }
 
     /** {@inheritdoc} */
-    public function cacheClear($resource = null)
+    public function cacheClear($url = null)
     {
-        $this->wsdlManager->clearCacheForUrl($resource);
+        $this->wsdlManager->clearCacheForUrl($url);
     }
 }

@@ -155,8 +155,10 @@ abstract class AbstractTransportSettingFormType extends AbstractType
          */
         $transportEntity = $form->getData();
         if ($transportEntity instanceof MagentoTransport && $transportEntity->getId()) {
+            // todo: use transport entity to get required values. It will be changed in scope of CRM-8339
             $isExtensionInstalled = $transportEntity->getIsExtensionInstalled();
             $extensionVersion = $transportEntity->getExtensionVersion();
+
             $isSupportExtensionVersion = $isExtensionInstalled &&
                 version_compare(
                     $transportEntity->getExtensionVersion(),

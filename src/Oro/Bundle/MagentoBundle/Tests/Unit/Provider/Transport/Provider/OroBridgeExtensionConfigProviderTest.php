@@ -27,7 +27,6 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->oroBridgeExtensionConfigProvider = new OroBridgeExtensionConfigProvider();
-        $this->oroBridgeExtensionConfigProvider->setClient($this->client);
     }
 
     public function testConfig()
@@ -46,7 +45,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->client->expects($this->once())->method('get')->willReturn($response);
 
-        $config = $this->oroBridgeExtensionConfigProvider->getConfig($headers, false);
+        $config = $this->oroBridgeExtensionConfigProvider->getConfig($this->client, $headers);
 
         $expectedConfig = new Config();
         $expectedConfig->setAdminUrl('testAdminUrl');
@@ -58,13 +57,13 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getDataToTestForce
+     * @dataProvider getDataToTestClearCache
      *
      * @param array $body
      * @param int $expectedCountExecution
-     * @param bool $force
+     * @param bool $clearCache
      */
-    public function testConfigForce($body, $expectedCountExecution, $force)
+    public function testClearCache($body, $expectedCountExecution, $clearCache)
     {
         $headers = [];
         $response = new FakeRestResponse(200, [], json_encode($body));
@@ -76,17 +75,21 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
         $expectedConfig->setExtensionVersion('1');
         $expectedConfig->setMagentoVersion('1');
 
-        $config = $this->oroBridgeExtensionConfigProvider->getConfig($headers, false);
+        $config = $this->oroBridgeExtensionConfigProvider->getConfig($this->client, $headers);
         $this->assertEquals($config, $expectedConfig);
 
-        $config = $this->oroBridgeExtensionConfigProvider->getConfig($headers, $force);
+        if ($clearCache) {
+            $this->oroBridgeExtensionConfigProvider->clearCache();
+        }
+
+        $config = $this->oroBridgeExtensionConfigProvider->getConfig($this->client, $headers);
         $this->assertEquals($config, $expectedConfig);
     }
 
     /**
      * @return array
      */
-    public function getDataToTestForce()
+    public function getDataToTestClearCache()
     {
         return [
             'execute get config 2 times and second time with force = true' => [
@@ -97,7 +100,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'customer_scope' => 'default'
                 ],
                 'expectedCountExecution' => 2,
-                'force' => true
+                'clearCache' => true
             ],
             'execute get config 2 times and second time with force = false' => [
                 'body' => [
@@ -107,7 +110,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'customer_scope' => 'default'
                 ],
                 'expectedCountExecution' => 1,
-                'force' => false
+                'clearCache' => false
             ],
         ];
     }
@@ -128,7 +131,7 @@ class OroBridgeExtensionConfigProviderTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException(RestException::class);
         }
 
-        $config = $this->oroBridgeExtensionConfigProvider->getConfig($headers, false);
+        $config = $this->oroBridgeExtensionConfigProvider->getConfig($this->client, $headers, false);
 
         if ($code === 404) {
             $expectedConfig = new Config();

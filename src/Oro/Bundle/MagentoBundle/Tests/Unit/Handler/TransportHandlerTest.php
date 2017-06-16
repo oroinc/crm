@@ -148,6 +148,11 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->magentoTransport
+            ->expects($this->once())
+            ->method('isExtensionInstalled')
+            ->willReturn(true);
+
+        $this->magentoTransport
              ->expects($this->once())
              ->method('getAdminUrl')
              ->willReturn('/admin');

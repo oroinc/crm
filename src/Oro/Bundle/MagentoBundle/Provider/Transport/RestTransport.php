@@ -37,6 +37,7 @@ class RestTransport implements
     LoggerAwareInterface
 {
     use LoggerAwareTrait;
+    use ExtensionVersionTrait;
 
     const REQUIRED_EXTENSION_VERSION = '0.0.0';
 
@@ -111,12 +112,20 @@ class RestTransport implements
         $this->transportEntity = $transportEntity;
         $this->client = $this->clientFactory->createRestClient($this->transportEntity);
         $token = $this->restTokenProvider->getTokenFromEntity($this->transportEntity);
-        $this->oroBridgeExtensionConfigProvider->setClient($this->client);
+        $this->oroBridgeExtensionConfigProvider->clearCache();
 
         if (null === $token) {
             $token = $this->refreshToken();
         }
         $this->updateTokenHeaderParam($token);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resetInitialState()
+    {
+        $this->transportEntity->setIsExtensionInstalled(null);
     }
 
     /**
@@ -176,14 +185,6 @@ class RestTransport implements
     protected function getTokenForHeader($token)
     {
         return sprintf(static::TOKEN_MASK, $token);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isExtensionInstalled()
-    {
-        return !empty($this->getExtensionConfig()->getExtensionVersion());
     }
 
     /**
@@ -389,10 +390,17 @@ class RestTransport implements
     /**
      * {@inheritdoc}
      */
+    public function isExtensionInstalled()
+    {
+        return $this->getTransportEntity()->getIsExtensionInstalled();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isSupportedExtensionVersion()
     {
-        return $this->isExtensionInstalled()
-            && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
+        return $this->isSupportedVersion($this->getExtensionVersion());
     }
 
     /**
@@ -400,7 +408,7 @@ class RestTransport implements
      */
     public function getExtensionVersion()
     {
-        return $this->getExtensionConfig()->getExtensionVersion();
+        return $this->getTransportEntity()->getExtensionVersion();
     }
 
     /**
@@ -408,7 +416,32 @@ class RestTransport implements
      */
     public function getMagentoVersion()
     {
-        return $this->getExtensionConfig()->getMagentoVersion();
+        return $this->getTransportEntity()->getMagentoVersion();
+    }
+
+
+    /**
+     * @return MagentoTransport
+     */
+    protected function getTransportEntity()
+    {
+        if (!$this->isTransportEntityInit()) {
+            $config = $this->getExtensionConfig();
+
+            $this->transportEntity->setMagentoVersion($config->getMagentoVersion());
+            $this->transportEntity->setExtensionVersion($config->getExtensionVersion());
+            $this->transportEntity->setIsExtensionInstalled(!empty($config->getExtensionVersion()));
+        }
+
+        return $this->transportEntity;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTransportEntityInit()
+    {
+        return null !== $this->transportEntity->getIsExtensionInstalled();
     }
 
     /**
@@ -492,10 +525,11 @@ class RestTransport implements
      *
      * @throws RuntimeException
      */
-    public function getExtensionConfig($force = false)
+    protected function getExtensionConfig($force = false)
     {
         try {
             return $this->oroBridgeExtensionConfigProvider->getConfig(
+                $this->client,
                 $this->headers,
                 $force
             );

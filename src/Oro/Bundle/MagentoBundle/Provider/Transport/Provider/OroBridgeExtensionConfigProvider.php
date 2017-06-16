@@ -23,40 +23,34 @@ class OroBridgeExtensionConfigProvider
     /** @var PropertyAccess */
     protected $accessor;
 
-    /** @var RestClientInterface */
-    protected $client;
-
     public function __construct()
     {
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
-     * Inits REST client for provider. This method should be called before any other public method
-     *
-     * @param RestClientInterface $client
+     * Use to clear cached data of config
      */
-    public function setClient(RestClientInterface $client)
+    public function clearCache()
     {
-        $this->client = $client;
         $this->config = null;
     }
 
     /**
      * Performs ping request to the Magento server and returns Config object with server information
      *
+     * @param RestClientInterface $client REST client
      * @param array $headers REST client headers with auth token
-     * @param bool $force if false then only first call will cause request to Magento server
      *
      * @return Config
      *
      * @throws RestException in case of REST client fail to connect
      */
-    public function getConfig($headers, $force = false)
+    public function getConfig(RestClientInterface $client, $headers)
     {
-        if (null === $this->config || $force) {
+        if (null === $this->config) {
             try {
-                $data = $this->client->get(static::REST_CONFIG_URI, [], $headers)->json();
+                $data = $client->get(static::REST_CONFIG_URI, [], $headers)->json();
                 $this->processData($data);
             } catch (RestException $e) {
                 if (Codes::HTTP_NOT_FOUND === $e->getCode()) {
