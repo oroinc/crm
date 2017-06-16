@@ -204,7 +204,11 @@ define([
         },
 
         renderErrorMessage: function(res) {
-            this.renderResult('error', res.errorMessage);
+            if (res.errorMessage) {
+                this.renderResult('error', res.errorMessage);
+            } else {
+                this.renderResult('error', __('oro.magento.error'));
+            }
         },
 
         /**
