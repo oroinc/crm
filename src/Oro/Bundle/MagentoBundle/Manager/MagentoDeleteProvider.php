@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
@@ -31,10 +32,8 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     public function supports($channelType)
     {
-        /**
-         * @todo Remove dependency on exact magento channel type in CRM-8153
-         */
-        return MagentoChannelType::TYPE === $channelType;
+        return MagentoChannelType::TYPE === $channelType
+            || Magento2ChannelType::TYPE === $channelType;
     }
 
     /**
