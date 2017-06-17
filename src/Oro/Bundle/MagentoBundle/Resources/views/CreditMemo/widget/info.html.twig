@@ -12,7 +12,7 @@
             {{ ui.renderProperty('oro.magento.creditmemo.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
             {{ ui.renderProperty('oro.magento.creditmemo.transaction_id.label'|trans, entity.transactionId) }}
             {% set orderData %}
-                {% if entity.order and resource_granted('oro_magento_order_view') %}
+                {% if entity.order and is_granted('oro_magento_order_view') %}
                     <a href="{{ path('oro_magento_order_view', {'id': entity.order.id}) }}">
                         {{ 'oro.magento.order.entity_label'|trans ~ ' ' ~  entity.order.incrementId }}
                     </a>

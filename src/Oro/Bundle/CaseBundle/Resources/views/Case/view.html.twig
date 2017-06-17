@@ -6,7 +6,7 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_case_comment_create') and resource_granted('oro_case_comment_view') %}
+    {% if is_granted('oro_case_comment_create') and is_granted('oro_case_comment_view') %}
         {{ UI.clientButton({
             'id': 'add-case-comment-button',
             'aCss': 'no-hash',
@@ -24,13 +24,13 @@
             });
         </script>
     {% endif %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('oro_case_update', { id: entity.id }),
             'entity_label': 'oro.case.caseentity.entity_label'|trans
         }) }}
     {% endif %}
-    {% if resource_granted('DELETE', entity) %}
+    {% if is_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_case_api_delete_case', {'id': entity.id}),
             'dataRedirect': path('oro_case_index'),
@@ -85,7 +85,7 @@
 
                 {%- set relatedContact -%}
                     {%- if entity.relatedContact -%}
-                        {% if resource_granted('oro_contact_view') %}
+                        {% if is_granted('oro_contact_view') %}
                             <a href="{{ path('oro_contact_view', {'id': entity.relatedContact.id}) }}">
                                 {{ entity.relatedContact|oro_format_name|escape }}
                             </a>
@@ -98,7 +98,7 @@
 
                 {%- set relatedAccount -%}
                     {%- if entity.relatedAccount -%}
-                        {% if resource_granted('oro_account_view') %}
+                        {% if is_granted('oro_account_view') %}
                             <a href="{{ path('oro_account_view', {'id': entity.relatedAccount.id}) }}">
                                 {{ UI.renderEntityViewLabel(entity.relatedAccount, 'name', 'oro.account.entity_label') }}
                             </a>
@@ -125,7 +125,7 @@
         }
     ] %}
 
-    {% if resource_granted('oro_case_comment_view') %}
+    {% if is_granted('oro_case_comment_view') %}
         {% set caseComments %}
             {{ oro_widget_render({
                 'widgetType': 'block',

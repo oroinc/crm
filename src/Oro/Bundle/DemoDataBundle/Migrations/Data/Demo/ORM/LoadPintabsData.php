@@ -129,11 +129,11 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
         );
         $organization = $this->getReference('default_organization');
         foreach ($this->users as $user) {
-            $securityContext = $this->container->get('security.context');
+            $tokenStorage = $this->container->get('security.token_storage');
 
             $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
 
-            $securityContext->setToken($token);
+            $tokenStorage->setToken($token);
             foreach ($params as $param) {
                 $param['user'] = $user;
                 $pinTab = $this->navigationFactory->createItem($param['type'], $param);

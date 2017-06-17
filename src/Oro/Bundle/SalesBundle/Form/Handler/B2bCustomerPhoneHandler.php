@@ -6,10 +6,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerPhoneDeleteValidator;
@@ -28,28 +28,28 @@ class B2bCustomerPhoneHandler
     /** @var  B2bCustomerPhoneDeleteValidator */
     protected $b2bCustomerPhoneDeleteValidator;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
      * @param FormInterface $form
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param B2bCustomerPhoneDeleteValidator $b2bCustomerPhoneDeleteValidator
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         EntityManagerInterface $manager,
         B2bCustomerPhoneDeleteValidator $b2bCustomerPhoneDeleteValidator,
-        SecurityFacade $securityFacade
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
         $this->b2bCustomerPhoneDeleteValidator = $b2bCustomerPhoneDeleteValidator;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -79,7 +79,7 @@ class B2bCustomerPhoneHandler
                     'OroSalesBundle:B2bCustomer',
                     $b2bCustomerId
                 );
-                if (!$this->securityFacade->isGranted('EDIT', $customer)) {
+                if (!$this->authorizationChecker->isGranted('EDIT', $customer)) {
                     throw new AccessDeniedException();
                 }
 
@@ -106,7 +106,7 @@ class B2bCustomerPhoneHandler
     {
         /** @var B2bCustomerPhone $b2bCustomerPhone */
         $b2bCustomerPhone = $manager->find($id);
-        if (!$this->securityFacade->isGranted('EDIT', $b2bCustomerPhone->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $b2bCustomerPhone->getOwner())) {
             throw new AccessDeniedException();
         }
 

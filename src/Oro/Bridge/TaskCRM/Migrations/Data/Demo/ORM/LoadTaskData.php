@@ -197,7 +197,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
     protected function addActivityTarget(Task $task, $target)
     {
         if ($task->supportActivityTarget(get_class($target))) {
-            $securityContext = $this->container->get('security.context');
+            $tokenStorage = $this->container->get('security.token_storage');
             $user = $task->getOwner();
             $token = new UsernamePasswordOrganizationToken(
                 $user,
@@ -205,7 +205,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
                 'main',
                 $this->getReference('default_organization')
             );
-            $securityContext->setToken($token);
+            $tokenStorage->setToken($token);
             $task->addActivityTarget($target);
         }
     }

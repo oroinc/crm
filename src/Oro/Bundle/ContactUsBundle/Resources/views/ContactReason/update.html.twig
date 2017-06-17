@@ -3,7 +3,7 @@
 {% set formAction = form.vars.value.id ? path('oro_contactus_reason_update', { 'id': form.vars.value.id }) : path('oro_contactus_reason_create') %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('oro_contactus_reason_delete') %}
+    {% if form.vars.value.id and is_granted('oro_contactus_reason_delete') %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_contactus_reason_delete', {'id': form.vars.value.id}),
             'dataRedirect': path('oro_contactus_reason_index'),
@@ -18,12 +18,12 @@
     {% set html = UI.saveAndCloseButton({
         'route': 'oro_contactus_reason_index'
     }) %}
-    {% if resource_granted('oro_contactus_reason_create') %}
+    {% if is_granted('oro_contactus_reason_create') %}
         {% set html = html ~ UI.saveAndNewButton({
             'route': 'oro_contactus_reason_create'
         }) %}
     {% endif %}
-    {% if resource_granted('oro_contactus_reason_edit') %}
+    {% if is_granted('oro_contactus_reason_edit') %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'oro_contactus_reason_update',
             'params': {'id': '$id'}

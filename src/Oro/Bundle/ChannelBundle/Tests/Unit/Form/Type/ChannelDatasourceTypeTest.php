@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Validator;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Form\PreloadedExtension;
@@ -28,6 +29,9 @@ use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
+use Oro\Bundle\IntegrationBundle\Form\EventListener\DefaultOwnerSubscriber;
+use Oro\Bundle\IntegrationBundle\Provider\SettingsProvider;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 {
@@ -85,8 +89,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $registry->addChannelType(self::TEST_TYPE, $integrationType);
         $registry->addTransportType($transportName, self::TEST_TYPE, $transportType);
 
-        $security = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()->getMock();
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
         $em       = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
@@ -133,7 +136,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                     'oro_user_organization_acl_select'   => new OrganizationUserAclSelectType(),
                     'oro_user_acl_select'                => new UserAclSelectType(),
                     'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType(
-                        $security,
+                        $authorizationChecker,
                         $cm,
                         $em,
                         $searchRegistry
@@ -237,17 +240,12 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
      */
     protected function getChannelType(TypesRegistry $registry)
     {
-        $settingsProvider = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Provider\SettingsProvider')
-            ->disableOriginalConstructor()->getMock();
-        $subscriberNS     = 'Oro\Bundle\IntegrationBundle\Form\EventListener';
+        $settingsProvider = $this->createMock(SettingsProvider::class);
+        $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
 
-        $securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $channelSubscriber      = new ChannelFormSubscriber($registry, $settingsProvider);
-        $ownerSubscriber        = $this->getMockBuilder($subscriberNS . '\DefaultOwnerSubscriber')
-            ->setConstructorArgs([$securityFacade, $registry])
+        $channelSubscriber = new ChannelFormSubscriber($registry, $settingsProvider);
+        $ownerSubscriber = $this->getMockBuilder(DefaultOwnerSubscriber::class)
+            ->setConstructorArgs([$tokenAccessor, $registry])
             ->setMethods(['postSet'])
             ->getMock();
 

@@ -4,9 +4,10 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
@@ -18,8 +19,8 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
  */
 class StoreGridListener
 {
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /** @var string */
     protected $dataChannelClass;
@@ -28,15 +29,18 @@ class StoreGridListener
     protected $entityManager;
 
     /**
-     * @param SecurityFacade $securityFacade
-     * @param string $dataChannelClass
-     * @param EntityManager $entityManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param string                        $dataChannelClass
+     * @param EntityManager                 $entityManager
      */
-    public function __construct(SecurityFacade $securityFacade, $dataChannelClass, EntityManager $entityManager)
-    {
-        $this->securityFacade   = $securityFacade;
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker,
+        $dataChannelClass,
+        EntityManager $entityManager
+    ) {
+        $this->authorizationChecker = $authorizationChecker;
         $this->dataChannelClass = $dataChannelClass;
-        $this->entityManager    = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -50,7 +54,7 @@ class StoreGridListener
         $datagrid   = $event->getDatagrid();
         $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
-            if ($this->securityFacade->isGranted('oro_integration_assign')) {
+            if ($this->authorizationChecker->isGranted('oro_integration_assign')) {
                 $parameters = $datagrid->getParameters();
                 $channelIds = $parameters->get('channelIds');
                 $dataChannel = $this->getDataChannelById($channelIds);

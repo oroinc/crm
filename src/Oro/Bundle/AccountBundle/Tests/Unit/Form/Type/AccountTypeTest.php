@@ -3,27 +3,23 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use Oro\Bundle\AccountBundle\Form\Type\AccountType;
 
 class AccountTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $router;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $entityNameResolver;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $securityFacade;
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $authorizationChecker;
 
     protected function setUp()
     {
@@ -33,9 +29,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $this->entityNameResolver = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
     }
 
     public function testAddEntityFields()
@@ -44,7 +38,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
             ->will($this->returnValue(true));
@@ -62,7 +56,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $type->buildForm($builder, []);
     }
 
@@ -72,7 +66,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
             ->will($this->returnValue(false));
@@ -82,7 +76,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->with('name', 'text')
             ->will($this->returnSelf());
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $type->buildForm($builder, []);
     }
 
@@ -94,19 +88,19 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with($this->isType('array'));
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $type->setDefaultOptions($resolver);
     }
 
     public function testGetName()
     {
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $this->assertEquals('oro_account', $type->getName());
     }
 
     public function testFinishView()
     {
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_contact_view')
             ->will($this->returnValue(true));
@@ -174,7 +168,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contactsFormView = new FormView($formView);
         $formView->children['contacts'] = $contactsFormView;
 
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $type->finishView($formView, $form, array());
 
         $this->assertEquals($contactsFormView->vars['grid_url'], '/test-path/100');
@@ -195,7 +189,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testFinishViewWithoutContactPermission()
     {
-        $this->securityFacade->expects($this->exactly(1))
+        $this->authorizationChecker->expects($this->exactly(1))
             ->method('isGranted')
             ->with('oro_contact_view')
             ->will($this->returnValue(false));
@@ -205,7 +199,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $formView = new FormView();
-        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->authorizationChecker);
         $type->finishView($formView, $form, array());
 
         $this->assertTrue(empty($formView->children['contacts']));

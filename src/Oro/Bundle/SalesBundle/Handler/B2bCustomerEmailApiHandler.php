@@ -2,39 +2,32 @@
 
 namespace Oro\Bundle\SalesBundle\Handler;
 
+use Doctrine\ORM\EntityManager;
+
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
-use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-/**
- * Class B2bCustomerEmailApiHandler
- * @package Oro\Bundle\SalesBundle\Handler
- */
 class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail';
 
-    /**
-     * @var OroEntityManager
-     */
+    /** @var EntityManager */
     protected $entityManager;
 
-    /**
-     * @var SecurityFacade
-     */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
-     * @param OroEntityManager $entityManager
-     * @param SecurityFacade $securityFacade
+     * @param EntityManager                 $entityManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(OroEntityManager $entityManager, SecurityFacade $securityFacade)
+    public function __construct(EntityManager $entityManager, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->entityManager = $entityManager;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -43,7 +36,7 @@ class B2bCustomerEmailApiHandler extends AbstractEntityApiHandler
     public function beforeProcess($entity)
     {
         //check owner (B2bCustomer) entity with 'edit' permission
-        if (!$this->securityFacade->isGranted('EDIT', $entity->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $entity->getOwner())) {
             throw new AccessDeniedException();
         }
     }

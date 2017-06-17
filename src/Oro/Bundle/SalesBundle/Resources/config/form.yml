@@ -371,7 +371,7 @@ services:
             - "@form.factory"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
 
     oro_sales.form.type.lead_email.type:
         class: %oro_sales.lead_email.type.class%
@@ -385,7 +385,7 @@ services:
             - "@form.factory"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
 
     oro_sales.form.type.b2bcustomer_phone:
         class: Symfony\Component\Form\Form
@@ -405,7 +405,7 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_sales.validator.b2bcustomer_phone_delete"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
 
     oro_sales.form.type.b2bcustomer_email:
         class: Symfony\Component\Form\Form
@@ -425,7 +425,7 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_sales.validator.b2bcustomer_email_delete"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
 
     oro_sales.form.type.customer:
         class: Oro\Bundle\SalesBundle\Form\Type\CustomerType
@@ -435,7 +435,7 @@ services:
             - '@oro_entity.entity_alias_resolver'
             - '@oro_sales.provider.customer.chain_customer_icon'
             - '@translator'
-            - '@oro_security.security_facade'
+            - '@security.authorization_checker'
             - '@oro_datagrid.datagrid.manager'
             - '@oro_entity.entity_name_resolver'
             - '@oro_datagrid.multi_grid_provider'

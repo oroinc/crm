@@ -7,11 +7,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 
 class CustomerApiHandler
@@ -32,23 +31,23 @@ class CustomerApiHandler
     protected $organization;
 
     /**
-     * @param FormInterface            $form
-     * @param Request                  $request
-     * @param RegistryInterface        $registry
-     * @param SecurityContextInterface $security
-     * @param AccountCustomerManager   $accountCustomerManager
+     * @param FormInterface           $form
+     * @param Request                 $request
+     * @param RegistryInterface       $registry
+     * @param TokenAccessorInterface  $security
+     * @param AccountCustomerManager  $accountCustomerManager
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $registry,
-        SecurityContextInterface $security,
+        TokenAccessorInterface $security,
         AccountCustomerManager $accountCustomerManager
     ) {
         $this->form = $form;
         $this->request = $request;
         $this->manager = $registry->getManager();
-        $this->organization = $security->getToken()->getOrganizationContext();
+        $this->organization = $security->getOrganization();
         $this->accountCustomerManager = $accountCustomerManager;
     }
 

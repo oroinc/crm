@@ -24,7 +24,7 @@
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [creditMemoInformationWidget] }]) %}
 
-    {% if entity.order and resource_granted('oro_magento_order_view') %}
+    {% if entity.order and is_granted('oro_magento_order_view') %}
         {% set orderInformationWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',

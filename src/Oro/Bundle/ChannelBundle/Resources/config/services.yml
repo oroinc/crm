@@ -208,7 +208,7 @@ services:
             - "@oro_channel.provider.settings_provider"
             - "@oro_channel.state_cache"
             - "@doctrine"
-            - "@oro_security.security_facade.link"
+            - "@oro_security.token_accessor"
             - "@oro_security.acl_helper"
         tags:
             - { name: kernel.event_listener, event: 'oro_channel.channel.save_succeed', method: processChannelChange}

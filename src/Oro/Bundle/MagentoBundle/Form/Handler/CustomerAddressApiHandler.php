@@ -7,10 +7,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class CustomerAddressApiHandler
 {
@@ -27,21 +27,21 @@ class CustomerAddressApiHandler
     protected $organization;
 
     /**
-     * @param FormInterface            $form
-     * @param Request                  $request
-     * @param RegistryInterface        $registry
-     * @param SecurityContextInterface $security
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param RegistryInterface      $registry
+     * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $registry,
-        SecurityContextInterface $security
+        TokenAccessorInterface $security
     ) {
         $this->form         = $form;
         $this->request      = $request;
         $this->manager      = $registry->getManager();
-        $this->organization = $security->getToken()->getOrganizationContext();
+        $this->organization = $security->getOrganization();
     }
 
     /**

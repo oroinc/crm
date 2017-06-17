@@ -3,12 +3,12 @@
 namespace Oro\Bundle\CaseBundle\Model;
 
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -16,51 +16,39 @@ use Oro\Bundle\CaseBundle\Entity\CaseComment;
 
 class ViewFactory
 {
-    /**
-     * @var SecurityFacade
-     */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     protected $router;
 
-    /**
-     * @var EntityNameResolver
-     */
+    /** @var EntityNameResolver */
     protected $entityNameResolver;
 
-    /**
-     * @var DateTimeFormatter
-     */
+    /** @var DateTimeFormatter */
     protected $dateTimeFormatter;
 
-    /**
-     * @var CacheManager
-     */
+    /** @var CacheManager */
     protected $imageCacheManager;
 
-    /**
-     * @var AttachmentManager
-     */
+    /** @var AttachmentManager */
     protected $attachmentManager;
 
     /**
-     * @param SecurityFacade $securityFacade
-     * @param RouterInterface $router
-     * @param EntityNameResolver $entityNameResolver
-     * @param DateTimeFormatter $dateTimeFormatter
-     * @param AttachmentManager $attachmentManager
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param RouterInterface               $router
+     * @param EntityNameResolver            $entityNameResolver
+     * @param DateTimeFormatter             $dateTimeFormatter
+     * @param AttachmentManager             $attachmentManager
      */
     public function __construct(
-        SecurityFacade $securityFacade,
+        AuthorizationCheckerInterface $authorizationChecker,
         RouterInterface $router,
         EntityNameResolver $entityNameResolver,
         DateTimeFormatter $dateTimeFormatter,
         AttachmentManager $attachmentManager
     ) {
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
         $this->router = $router;
         $this->entityNameResolver = $entityNameResolver;
         $this->dateTimeFormatter = $dateTimeFormatter;
@@ -100,8 +88,8 @@ class ViewFactory
             'updatedAt'     => $comment->getUpdatedAt() ?
                 $this->dateTimeFormatter->format($comment->getUpdatedAt()) : null,
             'permissions'   => array(
-                'edit'      => $this->securityFacade->isGranted('EDIT', $comment),
-                'delete'    => $this->securityFacade->isGranted('DELETE', $comment),
+                'edit'      => $this->authorizationChecker->isGranted('EDIT', $comment),
+                'delete'    => $this->authorizationChecker->isGranted('DELETE', $comment),
             ),
         ];
 
@@ -146,7 +134,7 @@ class ViewFactory
             'fullName' => $this->entityNameResolver->getName($contact),
             'avatar' => null,
             'permissions' => array(
-                'view' => $this->securityFacade->isGranted('VIEW', $contact)
+                'view' => $this->authorizationChecker->isGranted('VIEW', $contact)
             ),
         ];
     }
@@ -165,7 +153,7 @@ class ViewFactory
                 ? $this->attachmentManager->getFilteredImageUrl($user->getAvatar(), 'avatar_xsmall')
                 : null,
             'permissions' => array(
-                'view' => $this->securityFacade->isGranted('VIEW', $user)
+                'view' => $this->authorizationChecker->isGranted('VIEW', $user)
             ),
         ];
     }

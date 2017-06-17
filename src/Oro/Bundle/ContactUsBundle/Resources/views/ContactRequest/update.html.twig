@@ -18,7 +18,7 @@
 } %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('oro_contactus_request_delete') %}
+    {% if form.vars.value.id and is_granted('oro_contactus_request_delete') %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_contactus_request_delete', {'id': form.vars.value.id}),
             'dataRedirect': path('oro_contactus_request_index'),
@@ -34,12 +34,12 @@
         'route': 'oro_contactus_request_view',
         'params': {'id': '$id'}
     }) %}
-    {% if resource_granted('oro_contactus_request_create') %}
+    {% if is_granted('oro_contactus_request_create') %}
         {% set html = html ~ UI.saveAndNewButton({
             'route': 'oro_contactus_request_create'
         }) %}
     {% endif %}
-    {% if resource_granted('oro_contactus_request_edit') %}
+    {% if is_granted('oro_contactus_request_edit') %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'oro_contactus_request_update',
             'params': {'id': '$id'}

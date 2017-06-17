@@ -2,9 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -13,26 +14,20 @@ use Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider;
 
 class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
 {
-    /**
-     * @var NewsletterSubscriberPermissionProvider
-     */
+    /** @var NewsletterSubscriberPermissionProvider */
     protected $provider;
 
-    /**
-     * @var SecurityFacade|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $authorizationChecker;
 
     protected function setUp()
     {
         parent::setUp();
 
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
         $this->provider = new NewsletterSubscriberPermissionProvider($this->settingsProvider, '\stdClass');
-        $this->provider->setSecurityFacade($this->securityFacade);
+        $this->provider->setAuthorizationChecker($this->authorizationChecker);
     }
 
     /**
@@ -54,7 +49,7 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
             ->method('isChannelApplicable')
             ->will($this->returnValue(true));
 
-        $this->securityFacade->expects($this->any())
+        $this->authorizationChecker->expects($this->any())
             ->method('isGranted')
             ->will($this->returnValue($isAllowed));
 
@@ -160,7 +155,7 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
             ->method('isChannelApplicable')
             ->will($this->returnValue(true));
 
-        $this->securityFacade->expects($this->any())
+        $this->authorizationChecker->expects($this->any())
             ->method('isGranted')
             ->will($this->returnValue($isAllowed));
 

@@ -4,7 +4,7 @@
 {% set pageTitle = 'oro.contact.group.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_contact_group_create') %}
+    {% if is_granted('oro_contact_group_create') %}
         {{ UI.addButton({
             'path' : path('oro_contact_group_create'),
             'entity_label' :'oro.contact.group.entity_label'|trans,

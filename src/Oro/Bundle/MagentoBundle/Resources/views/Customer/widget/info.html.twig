@@ -35,7 +35,7 @@
             {% if entity.contact %}
                 {%- set contactData -%}
                     {% if entity.contact %}
-                        {% set contactViewGranted = resource_granted('oro_contact_view') %}
+                        {% set contactViewGranted = is_granted('oro_contact_view') %}
                         {%- if contactViewGranted -%}
                             <a href="{{ path('oro_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact|oro_format_name|escape }}</a>
                         {%- else -%}

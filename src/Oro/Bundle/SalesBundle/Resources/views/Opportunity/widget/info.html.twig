@@ -14,7 +14,7 @@
                     {{ ui.renderProperty('oro.sales.opportunity.status.label'|trans, entity.status, entity, 'status') }}
 
                     {% if entity['dataChannel'] is defined %}
-                        {% if resource_granted('VIEW', entity, 'channel') %}
+                        {% if is_granted('VIEW', entity, 'channel') %}
                             {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
                         {% endif %}
                     {% endif %}
@@ -33,14 +33,14 @@
 
                 <div class="responsive-block">
                     {{ sales.render_customer_info(entity) }}
-                    {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
+                    {%- if entity.contact and is_granted('VIEW', entity.contact) -%}
                         {% set contactView = ui.renderUrl(path('oro_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
                     {%- else -%}
                         {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
                     {%- endif -%}
                     {{ ui.renderHtmlProperty('oro.sales.opportunity.contact.label'|trans, contactView, entity, 'contact') }}
 
-                    {%- if resource_granted('oro_sales_lead_view') and entity.lead -%}
+                    {%- if is_granted('oro_sales_lead_view') and entity.lead -%}
                         {% set leadView = '<a href="' ~ path('oro_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
                     {%- else -%}
                         {% set leadView = entity.lead ? entity.lead|escape : '' %}

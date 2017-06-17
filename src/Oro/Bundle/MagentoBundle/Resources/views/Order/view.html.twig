@@ -35,7 +35,7 @@
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
 
-    {% if entity.customer and resource_granted('oro_magento_customer_view') %}
+    {% if entity.customer and is_granted('oro_magento_customer_view') %}
         {% set customerInformationWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
@@ -54,7 +54,7 @@
         }
     ] %}
 
-    {% if resource_granted('oro_magento_cart_view') %}
+    {% if is_granted('oro_magento_cart_view') %}
         {% set orderItemsWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
@@ -72,7 +72,7 @@
         ]) %}
     {% endif %}
 
-    {% if resource_granted('oro_magento_credit_memo_view') %}
+    {% if is_granted('oro_magento_credit_memo_view') %}
         {% set orderCreditMemoWidget %}
             {{ oro_widget_render({
                 'widgetType': 'block',
