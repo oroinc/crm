@@ -14,10 +14,15 @@
         bootstrap                   = "vendor/autoload.php">
 
     <testsuites>
-        <testsuite name="unit">
-            <directory suffix="Test.php">src/*/Bundle/*Bundle/Tests/Unit</directory>
-            <directory suffix="Test.php">src/*/Component/*/Tests/Unit</directory>
-            <directory suffix="Test.php">src/*/*/Tests/Unit</directory>
+        <testsuite name="Project Unit Tests">
+            <directory>Tests/Unit</directory>
+            <directory>src/*/Tests/Unit</directory>
+            <directory>src/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/Tests/Unit</directory>
+            <directory>src/*/*/*/*/*/*/*/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 
@@ -38,5 +43,4 @@
             </exclude>
         </whitelist>
     </filter>
-
 </phpunit>

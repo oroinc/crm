@@ -16,6 +16,10 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!class_exists('OroCRM\Bundle\CallBundle\Entity\Call', false)) {
+            $this->markTestSkipped('call package required');
+        }
+
         $this->activityManager = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
             ->disableOriginalConstructor()
             ->getMock();

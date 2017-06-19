@@ -1,11 +1,6 @@
-sudo: false
+sudo: required
 
 language: php
-
-branches:
-  only:
-    - master
-    - /^1\.\d+$/
 
 php:
     - 5.5
@@ -14,14 +9,14 @@ php:
 
 cache:
   directories:
-    - $HOME/.composer/cache/
+    - $HOME/.composer/cache/files
 
 before_script:
   - phpenv config-rm xdebug.ini
-  - phpenv config-add travis.php.ini
   - composer self-update
-  - composer install
+  - phpenv config-add travis.php.ini
+  - travis_retry travis_wait composer install --prefer-dist --optimize-autoloader --no-interaction  --no-suggest
 
 script:
-  - ./vendor/bin/phpunit --verbose --testsuite=unit
+  - ./vendor/bin/phpunit
   - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=psr2
