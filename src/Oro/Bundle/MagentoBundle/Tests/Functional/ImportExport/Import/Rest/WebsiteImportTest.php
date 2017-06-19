@@ -2,14 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Import\Rest;
 
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestChannel;
 use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest\LoadMagentoRestChannel;
 
 class WebsiteImportTest extends BaseIntegrationTest
 {
     protected function setUp()
     {
         parent::setUp();
+
+        $this->markTestSkipped(
+            'Channel type "magento2" is disabled. It should be enabled in CRM-8153'
+        );
+
         $this->loadFixtures([
             LoadMagentoRestChannel::class
         ]);

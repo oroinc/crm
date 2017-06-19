@@ -1,8 +1,14 @@
 UPGRADE FROM 2.2 to 2.3
-========================
+=======================
 
 MagentoBundle
 -------------
+
+Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
+
+For more details on how to enable such integration, see [Magento 2 Documentation](Oro/Bundle/MagentoBundle/Resources/doc/reference/magento2.md).
+
+
 - Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface` was added. 
     - public method `call($action, $params = [])` was added
 - Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`

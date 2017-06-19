@@ -15,6 +15,11 @@ class RegionImportTest extends BaseIntegrationTest
     protected function setUp()
     {
         parent::setUp();
+
+        $this->markTestSkipped(
+            'Channel type "magento2" is disabled. It should be enabled in CRM-8153'
+        );
+
         $this->loadFixtures([
             LoadMagentoRestChannel::class
         ]);
