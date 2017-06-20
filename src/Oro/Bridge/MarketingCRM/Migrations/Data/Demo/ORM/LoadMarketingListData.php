@@ -26,7 +26,7 @@ class LoadMarketingListData extends AbstractFixture implements DependentFixtureI
      */
     public function load(ObjectManager $manager)
     {
-        $defaultUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
+        $defaultUser = $manager->getRepository('OroUserBundle:User')->findOneBy([] , ['id' => 'ASC']);
         $type = $manager->getRepository('OroMarketingListBundle:MarketingListType')->findOneBy(['name' => 'dynamic']);
         $segment = $manager->getRepository('OroSegmentBundle:Segment')->findOneBy(['name' => 'Contact List Segment']);
         $list = new MarketingList();
