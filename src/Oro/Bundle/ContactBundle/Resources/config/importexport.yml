@@ -45,7 +45,7 @@ services:
         parent: oro_importexport.strategy.add
         calls:
             - [setContactImportHelper, ['@oro_contact.importexport.helper.contact_import_helper']]
-            - [setSecurityContext, ['@security.context']]
+            - [setTokenStorage, ['@security.token_storage']]
 
     # Import processor
     oro_contact.importexport.processor.import.add_or_replace:

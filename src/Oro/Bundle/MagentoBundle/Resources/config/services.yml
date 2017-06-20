@@ -280,7 +280,7 @@ services:
     oro_magento.form.type.customer_group_selector:
         class: %oro_magento.form.type.customer_group_selector.class%
         arguments:
-            - '@oro_security.security_facade'
+            - '@security.authorization_checker'
         tags:
             - { name: form.type, alias: oro_magento_customer_group_select }
 
@@ -501,14 +501,14 @@ services:
     oro_magento.event_listener.customer_group_grid_listener:
         class: Oro\Bundle\MagentoBundle\EventListener\CustomerGroupGridListener
         arguments:
-            - '@oro_security.security_facade'
+            - '@security.authorization_checker'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-group-by-channel-grid, method: onBuildAfter }
 
     oro_magento.event_listener.store_grid_listener:
         class: Oro\Bundle\MagentoBundle\EventListener\StoreGridListener
         arguments:
-            - '@oro_security.security_facade'
+            - '@security.authorization_checker'
             - '%oro_channel.entity.class%'
             - '@doctrine.orm.entity_manager'
         tags:
@@ -720,7 +720,7 @@ services:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%oro_channel.entity.class%]]
-            - [setSecurityFacade, ['@oro_security.security_facade']]
+            - [setAuthorizationChecker, ['@security.authorization_checker']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_customer_group", acl_resource: "oro_magento_customer_view" }
 
@@ -733,7 +733,7 @@ services:
             - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%oro_channel.entity.class%]]
-            - [setSecurityFacade, ['@oro_security.security_facade']]
+            - [setAuthorizationChecker, ['@security.authorization_checker']]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_store", acl_resource: "oro_magento_customer_view" }
 
@@ -802,7 +802,7 @@ services:
         arguments:
             - "@oro_magento.model.channel_settings_provider"
         calls:
-            - [setSecurityFacade,  ["@oro_security.security_facade"]]
+            - [setAuthorizationChecker,  ["@security.authorization_checker"]]
 
     oro_magento.model.newsletter_subscriber_manager:
         class: %oro_magento.model.newsletter_subscriber_manager.class%
@@ -957,7 +957,7 @@ services:
             - "@oro_magento.form.cart.api"
             - "@request"
             - "@doctrine"
-            - "@security.context"
+            - "@oro_security.token_accessor"
 
     oro_magento.form.handler.cart_address:
         class: %oro_magento.form.handler.cart_address.class%
@@ -966,7 +966,7 @@ services:
             - "@oro_magento.form.cart_address.api"
             - "@request"
             - "@doctrine"
-            - "@security.context"
+            - "@oro_security.token_accessor"
 
     oro_magento.form.handler.cart_item:
         class: %oro_magento.form.handler.cart_item.class%
@@ -983,7 +983,7 @@ services:
             - "@oro_magento.form.order.api"
             - "@request"
             - "@doctrine"
-            - "@security.context"
+            - "@oro_security.token_accessor"
 
     oro_magento.form.handler.order_item:
         class: %oro_magento.form.handler.order_item.class%
@@ -1000,7 +1000,7 @@ services:
             - "@oro_magento.form.order_address.api"
             - "@request"
             - "@doctrine.orm.entity_manager"
-            - "@security.context"
+            - "@oro_security.token_accessor"
 
     oro_magento.form.handler.customer.api:
         class: %oro_magento.form.api.handler.customer.class%
@@ -1009,7 +1009,7 @@ services:
             - "@oro_magento.form.customer.api"
             - "@request"
             - "@doctrine"
-            - "@security.context"
+            - "@oro_security.token_accessor"
             - "@oro_sales.manager.account_customer"
 
     oro_magento.form.api.handler.customer_address:
@@ -1019,7 +1019,7 @@ services:
             - "@oro_magento.form.customer_address.api"
             - "@request"
             - "@doctrine"
-            - "@security.context"
+            - "@oro_security.token_accessor"
 
     oro_magento.routing.options_resolver.old_options:
         class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver

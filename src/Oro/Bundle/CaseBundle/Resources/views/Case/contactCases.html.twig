@@ -1,4 +1,4 @@
-{% if resource_granted('oro_case_view') %}
+{% if is_granted('oro_case_view') %}
     {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
     <div class="responsive-cell">

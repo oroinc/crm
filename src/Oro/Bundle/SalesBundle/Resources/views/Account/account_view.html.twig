@@ -1,7 +1,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% if account %}
-    {% if resource_granted('oro_account_view') %}
+    {% if is_granted('oro_account_view') %}
         {% set accountData %}
             <a href="{{ path('oro_account_view', {id: account.id}) }}">
                 {{ account.name }}

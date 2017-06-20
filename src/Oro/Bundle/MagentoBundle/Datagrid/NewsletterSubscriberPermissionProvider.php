@@ -2,17 +2,18 @@
 
 namespace Oro\Bundle\MagentoBundle\Datagrid;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
     /**
-     * @var SecurityFacade
+     * @var AuthorizationCheckerInterface
      */
-    protected $securityFacade;
+    protected $authorizationChecker;
 
     /**
      * @var bool|null
@@ -59,12 +60,12 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
     }
 
     /**
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      * @return NewsletterSubscriberPermissionProvider
      */
-    public function setSecurityFacade(SecurityFacade $securityFacade)
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
 
         return $this;
     }
@@ -116,7 +117,7 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
     protected function isSubscribeGranted()
     {
         if ($this->subscribeGranted === null) {
-            $this->subscribeGranted = $this->securityFacade
+            $this->subscribeGranted = $this->authorizationChecker
                 ->isGranted('oro_magento_newsletter_subscriber_subscribe_customer');
         }
 
@@ -129,7 +130,7 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
     protected function isUnsubscribeGranted()
     {
         if ($this->unsubscribeGranted === null) {
-            $this->unsubscribeGranted = $this->securityFacade
+            $this->unsubscribeGranted = $this->authorizationChecker
                 ->isGranted('oro_magento_newsletter_subscriber_unsubscribe_customer');
         }
 

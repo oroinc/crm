@@ -6,7 +6,7 @@
         <div class="responsive-block">
             {{ ui.renderProperty('oro.sales.salesfunnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
 
-            {%- if entity.lead and resource_granted('VIEW', entity.lead) -%}
+            {%- if entity.lead and is_granted('VIEW', entity.lead) -%}
                 {% set leadView = ui.renderUrl(
                     path('oro_sales_lead_view', {'id': entity.lead.id}),
                     entity.lead.name)
@@ -16,7 +16,7 @@
             {%- endif -%}
             {{ ui.renderHtmlProperty('oro.sales.salesfunnel.lead.label'|trans, leadView) }}
 
-            {%- if entity.opportunity and resource_granted('VIEW', entity.opportunity) -%}
+            {%- if entity.opportunity and is_granted('VIEW', entity.opportunity) -%}
                 {% set opportunityView = ui.renderUrl(
                     path('oro_sales_opportunity_view', {'id': entity.opportunity.id}),
                     entity.opportunity.name)

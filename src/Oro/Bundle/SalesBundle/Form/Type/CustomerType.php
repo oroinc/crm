@@ -12,7 +12,6 @@ use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider;
 use Oro\Bundle\SalesBundle\Provider\Customer\CustomerIconProviderInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Component\PhpUtils\ArrayUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -21,6 +20,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 
 class CustomerType extends AbstractType
@@ -40,8 +40,8 @@ class CustomerType extends AbstractType
     /** @var TranslatorInterface */
     protected $translator;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /** @var ManagerInterface */
     protected $gridManager;
@@ -58,7 +58,7 @@ class CustomerType extends AbstractType
      * @param EntityAliasResolver           $entityAliasResolver
      * @param CustomerIconProviderInterface $customerIconProvider
      * @param TranslatorInterface           $translator
-     * @param SecurityFacade                $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      * @param ManagerInterface              $gridManager
      * @param EntityNameResolver            $entityNameResolver
      * @param MultiGridProvider             $multiGridProvider
@@ -69,7 +69,7 @@ class CustomerType extends AbstractType
         EntityAliasResolver $entityAliasResolver,
         CustomerIconProviderInterface $customerIconProvider,
         TranslatorInterface $translator,
-        SecurityFacade $securityFacade,
+        AuthorizationCheckerInterface $authorizationChecker,
         ManagerInterface $gridManager,
         EntityNameResolver $entityNameResolver,
         MultiGridProvider $multiGridProvider
@@ -79,7 +79,7 @@ class CustomerType extends AbstractType
         $this->entityAliasResolver = $entityAliasResolver;
         $this->customerIconProvider = $customerIconProvider;
         $this->translator = $translator;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
         $this->gridManager = $gridManager;
         $this->entityNameResolver = $entityNameResolver;
         $this->multiGridProvider = $multiGridProvider;
@@ -230,7 +230,7 @@ class CustomerType extends AbstractType
         ];
 
         foreach ($customerClasses as $class) {
-            if (!$this->securityFacade->isGranted('CREATE', sprintf('entity:%s', $class))) {
+            if (!$this->authorizationChecker->isGranted('CREATE', sprintf('entity:%s', $class))) {
                 continue;
             }
 

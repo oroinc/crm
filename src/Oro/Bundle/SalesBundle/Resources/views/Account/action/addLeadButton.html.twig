@@ -1,6 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-{% if resource_granted('oro_sales_lead_create') %}
+{% if is_granted('oro_sales_lead_create') %}
     {{ UI.dropdownItem({
         'path': path('oro_sales_lead_create', {'account': entity.id}),
         'title': 'oro.sales.lead.add_entity'|trans,

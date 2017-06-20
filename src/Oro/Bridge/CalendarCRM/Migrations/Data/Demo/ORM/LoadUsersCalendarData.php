@@ -21,7 +21,7 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -43,8 +43,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     /** @var EntityManager */
     protected $em;
 
-    /** @var SecurityContext */
-    protected $securityContext;
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
 
     /** @var \DateTimeZone */
     protected $timeZone;
@@ -67,10 +67,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $this->container = $container;
 
-        $this->em              = $container->get('doctrine')->getManager();
-        $this->securityContext = $container->get('security.context');
+        $this->em = $container->get('doctrine')->getManager();
+        $this->tokenStorage = $container->get('security.token_storage');
 
-        $this->user     = $this->em->getRepository('OroUserBundle:User');
+        $this->user = $this->em->getRepository('OroUserBundle:User');
         $this->calendar = $this->em->getRepository('OroCalendarBundle:Calendar');
     }
 
@@ -320,7 +320,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     protected function setSecurityContext(User $user)
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-        $this->securityContext->setToken($token);
+        $this->tokenStorage->setToken($token);
     }
 
     /**

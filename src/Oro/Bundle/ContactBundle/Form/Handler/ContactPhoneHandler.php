@@ -6,10 +6,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -28,28 +28,28 @@ class ContactPhoneHandler
     /** @var  ContactPhoneDeleteValidator */
     protected $contactPhoneDeleteValidator;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
      * @param FormInterface $form
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param ContactPhoneDeleteValidator $contactPhoneDeleteValidator
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         EntityManagerInterface $manager,
         ContactPhoneDeleteValidator $contactPhoneDeleteValidator,
-        SecurityFacade $securityFacade
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
         $this->contactPhoneDeleteValidator = $contactPhoneDeleteValidator;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -78,7 +78,7 @@ class ContactPhoneHandler
                     'OroContactBundle:Contact',
                     $this->request->request->get('contactId')
                 );
-                if (!$this->securityFacade->isGranted('EDIT', $contact)) {
+                if (!$this->authorizationChecker->isGranted('EDIT', $contact)) {
                     throw new AccessDeniedException();
                 }
 
@@ -105,7 +105,7 @@ class ContactPhoneHandler
     {
         /** @var ContactPhone $contactPhone */
         $contactPhone = $manager->find($id);
-        if (!$this->securityFacade->isGranted('EDIT', $contactPhone->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $contactPhone->getOwner())) {
             throw new AccessDeniedException();
         }
 

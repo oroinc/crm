@@ -2,10 +2,8 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -13,6 +11,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
@@ -48,9 +47,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var Organization */
     protected $organization;
 
-    /** @var SecurityContext */
-    protected $securityContext;
-
     /**
      * {@inheritdoc}
      */
@@ -78,8 +74,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $this->organization = $this->container->get('doctrine')->getManager()
             ->getRepository('OroOrganizationBundle:Organization')->getFirst();
-
-        $this->securityContext = $this->container->get('security.context');
 
         $this->initSupportingEntities($manager);
         $this->loadFlows();
@@ -249,8 +243,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     protected function setSecurityContext($user)
     {
+        $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-        $this->securityContext->setToken($token);
+        $tokenStorage->setToken($token);
     }
 
     /**

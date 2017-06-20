@@ -12,7 +12,6 @@ use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityType;
 use Oro\Bundle\SalesBundle\Provider\ProbabilityProvider;
@@ -20,18 +19,6 @@ use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\OpportunityStub;
 
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SecurityFacade
-     */
-    protected $securityFacade;
-
-    protected function setUp()
-    {
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     public function testShouldNotOverwriteProbability()
     {
         $opportunity = $this->getOpportunity('negotiation', 0.7);

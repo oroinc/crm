@@ -4,13 +4,13 @@
 {% oro_title_set({params : {"%b2bcustomer.name%": entity.name} }) %}
 
 {% block navButtons %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('oro_sales_b2bcustomer_update', { 'id': entity.id }),
             'entity_label': 'oro.sales.b2bcustomer.entity_label'|trans
         }) }}
     {% endif %}
-    {% if resource_granted('DELETE', entity) %}
+    {% if is_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_b2bcustomer', {'id': entity.id}),
             'dataRedirect': path('oro_sales_b2bcustomer_index'),

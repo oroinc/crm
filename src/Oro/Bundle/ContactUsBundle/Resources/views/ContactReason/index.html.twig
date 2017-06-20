@@ -4,7 +4,7 @@
 {% set pageTitle = 'oro.contactus.contactreason.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_contactus_reason_create') %}
+    {% if is_granted('oro_contactus_reason_create') %}
         <div class="btn-group">
             {{ UI.addButton({
                 'path' : path('oro_contactus_reason_create'),

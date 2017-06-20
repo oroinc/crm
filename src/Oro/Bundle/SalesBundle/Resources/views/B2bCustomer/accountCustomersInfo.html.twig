@@ -1,4 +1,4 @@
-{% if resource_granted('oro_sales_b2bcustomer_view') and customers|length > 0 %}
+{% if is_granted('oro_sales_b2bcustomer_view') and customers|length > 0 %}
     {% set tabs = [] %}
     {% for customer in customers %}
         {% set tabs = tabs|merge([

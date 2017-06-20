@@ -2,40 +2,32 @@
 
 namespace Oro\Bundle\SalesBundle\Handler;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
-/**
- * Class LeadPhoneApiHandler
- * @package Oro\Bundle\SalesBundle\Handler
- */
 class LeadPhoneApiHandler extends AbstractEntityApiHandler
 {
     const ENTITY_CLASS = 'Oro\Bundle\SalesBundle\Entity\LeadPhone';
 
-    /**
-     * @var Registry
-     */
+    /** @var ManagerRegistry */
     protected $doctrine;
 
-    /**
-     * @var SecurityFacade
-     */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
-     * @param Registry $doctrine
-     * @param SecurityFacade $securityFacade
+     * @param ManagerRegistry               $doctrine
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(Registry $doctrine, SecurityFacade $securityFacade)
+    public function __construct(ManagerRegistry $doctrine, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->doctrine = $doctrine;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -44,7 +36,7 @@ class LeadPhoneApiHandler extends AbstractEntityApiHandler
     public function beforeProcess($entity)
     {
         //check owner (Lead) entity with 'edit' permission
-        if (!$this->securityFacade->isGranted('EDIT', $entity->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $entity->getOwner())) {
             throw new AccessDeniedException();
         }
     }

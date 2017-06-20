@@ -6,35 +6,30 @@ use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 use Oro\Bundle\ContactBundle\EventListener\ContactListener;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 
 class ContactListenerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ContactListener
-     */
+    /** @var ContactListener */
     protected $contactListener;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $container;
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $tokenStorage;
 
     protected function setUp()
     {
-        $this->container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
 
-        $this->contactListener = new ContactListener($this->container);
+        $this->contactListener = new ContactListener($this->tokenStorage);
     }
 
     protected function tearDown()
     {
-        unset($this->container);
+        unset($this->tokenStorage);
         unset($this->contactListener);
     }
 
@@ -250,11 +245,6 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function mockSecurityContext($mockToken = false, $mockUser = false, $user = null)
     {
-        $securityContext = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
-            ->setMethods(array('getToken'))
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         if ($mockToken) {
             $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')
                 ->setMethods(array('getUser'))
@@ -267,14 +257,9 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue($user));
             }
 
-            $securityContext->expects($this->any())
+            $this->tokenStorage->expects($this->any())
                 ->method('getToken')
                 ->will($this->returnValue($token));
         }
-
-        $this->container->expects($this->any())
-            ->method('get')
-            ->with('security.context')
-            ->will($this->returnValue($securityContext));
     }
 }

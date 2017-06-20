@@ -7,9 +7,8 @@ use Doctrine\Common\Cache\Cache;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class StateProvider
 {
@@ -30,27 +29,27 @@ class StateProvider
     /** @var AclHelper */
     protected $aclHelper;
 
-    /** @var ServiceLink */
-    protected $securityFacadeLink;
+    /** @var TokenAccessorInterface */
+    protected $tokenAccessor;
 
     /**
-     * @param SettingsProvider  $settingsProvider
-     * @param Cache             $cache
-     * @param RegistryInterface $registry
-     * @param ServiceLink       $securityFacadeLink
-     * @param AclHelper         $aclHelper
+     * @param SettingsProvider       $settingsProvider
+     * @param Cache                  $cache
+     * @param RegistryInterface      $registry
+     * @param TokenAccessorInterface $tokenAccessor
+     * @param AclHelper              $aclHelper
      */
     public function __construct(
         SettingsProvider $settingsProvider,
         Cache $cache,
         RegistryInterface $registry,
-        ServiceLink $securityFacadeLink,
+        TokenAccessorInterface $tokenAccessor,
         AclHelper $aclHelper
     ) {
         $this->settingsProvider = $settingsProvider;
         $this->cache = $cache;
         $this->registry = $registry;
-        $this->securityFacadeLink = $securityFacadeLink;
+        $this->tokenAccessor = $tokenAccessor;
         $this->aclHelper = $aclHelper;
     }
 
@@ -188,8 +187,9 @@ class StateProvider
     protected function getCacheId($organizationId = null)
     {
         if (!$organizationId) {
-            $organizationId = $this->securityFacadeLink->getService()->getOrganizationId();
+            $organizationId = $this->tokenAccessor->getOrganizationId();
         }
+
         return self::CACHE_ID . '_' . $organizationId;
     }
 }
