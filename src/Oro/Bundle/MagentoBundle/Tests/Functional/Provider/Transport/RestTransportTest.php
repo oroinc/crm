@@ -6,9 +6,9 @@ use Oro\Bundle\IntegrationBundle\Test\FakeRestClientFactory;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @dbIsolationPerTest
@@ -38,7 +38,7 @@ class RestTransportTest extends WebTestCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function tearDown()
     {

@@ -33,6 +33,7 @@ abstract class AbstractPageableSoapIterator extends AbstractPageableIterator
 
     /**
      * @param array $response
+     *
      * @return array
      */
     protected function convertResponseToMultiArray($response)

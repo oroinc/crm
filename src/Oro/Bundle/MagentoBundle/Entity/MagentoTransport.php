@@ -292,6 +292,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @param string $extensionVersion
+     *
      * @return MagentoTransport
      */
     public function setExtensionVersion($extensionVersion)
@@ -303,6 +304,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * TODO: move required version to another class. According to CRM-8328
+     *
      * @return bool
      */
     public function isSupportedExtensionVersion()
@@ -321,6 +323,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @param string $magentoVersion
+     *
      * @return MagentoTransport
      */
     public function setMagentoVersion($magentoVersion)
@@ -380,6 +383,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @param \DateTime $initialSyncStartDate
+     *
      * @return MagentoTransport
      */
     public function setInitialSyncStartDate($initialSyncStartDate)
@@ -399,6 +403,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @param int $newsletterSubscriberSyncedToId
+     *
      * @return MagentoTransport
      */
     public function setNewsletterSubscriberSyncedToId($newsletterSubscriberSyncedToId)
@@ -410,6 +415,7 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @deprecated since 2.3 version. Use getApiUrl() instead
+     *
      * @return string
      */
     public function getWsdlUrl()
@@ -419,7 +425,9 @@ abstract class MagentoTransport extends Transport
 
     /**
      * @deprecated since 2.3 version. Use setApiUrl() instead
+     *
      * @param $wsdlUrl
+     *
      * @return MagentoTransport
      */
     public function setWsdlUrl($wsdlUrl)

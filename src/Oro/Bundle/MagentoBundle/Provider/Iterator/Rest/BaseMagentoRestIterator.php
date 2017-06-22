@@ -10,7 +10,7 @@ class BaseMagentoRestIterator extends AbstractPageableIterator
     const DATA_KEY = 'items';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getEntityIds()
     {
@@ -18,14 +18,14 @@ class BaseMagentoRestIterator extends AbstractPageableIterator
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getEntity($id)
     {
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getIdFieldName()
     {

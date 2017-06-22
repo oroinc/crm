@@ -27,7 +27,7 @@ class AddRestToken implements Migration, RenameExtensionAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {

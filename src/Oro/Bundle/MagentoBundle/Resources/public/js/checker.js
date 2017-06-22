@@ -121,7 +121,6 @@ define([
         },
 
         /**
-         *
          * @param fields {Array}
          * @returns {Array}
          */

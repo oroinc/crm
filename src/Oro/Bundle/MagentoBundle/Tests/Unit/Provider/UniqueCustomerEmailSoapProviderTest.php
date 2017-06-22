@@ -11,6 +11,7 @@ use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 class UniqueCustomerEmailSoapProviderTest extends \PHPUnit_Framework_TestCase
 {
     const ORIGIN_ID = 1;
+
     /**
      * @var UniqueCustomerEmailSoapProvider
      */

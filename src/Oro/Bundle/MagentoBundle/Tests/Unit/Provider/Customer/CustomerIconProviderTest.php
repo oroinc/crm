@@ -3,13 +3,14 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
+use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider;
 use Oro\Bundle\UIBundle\Model\Image;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Provider\IconAwareIntegrationInterface;
 
 class CustomerIconProviderTest extends \PHPUnit_Framework_TestCase
 {

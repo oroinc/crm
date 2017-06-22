@@ -37,7 +37,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function tearDown()
     {
@@ -45,7 +45,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function setUpBeforeClass()
     {
@@ -53,7 +53,7 @@ abstract class BaseIntegrationTest extends WebTestCase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public static function tearDownAfterClass()
     {

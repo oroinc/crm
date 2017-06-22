@@ -3,6 +3,7 @@
 namespace Oro\Bridge\MarketingCRM\Provider;
 
 use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteVisitProviderInterface;
@@ -44,6 +45,7 @@ class PrecalculatedWebsiteVisitProvider extends AbstractPrecalculatedVisitProvid
     /**
      * @param \DateTime|null $from
      * @param \DateTime|null $to
+     *
      * @return QueryBuilder
      */
     private function getVisitsCountQueryBuilder(\DateTime $from = null, \DateTime $to = null)

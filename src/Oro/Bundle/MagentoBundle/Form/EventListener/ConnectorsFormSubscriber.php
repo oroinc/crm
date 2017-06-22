@@ -86,6 +86,7 @@ class ConnectorsFormSubscriber implements EventSubscriberInterface
 
     /**
      * @param FormInterface $form
+     *
      * @return string
      */
     protected function getFormChannelType(FormInterface $form)

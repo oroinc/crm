@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\TranslationBundle\Translation\Translator;
 use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 
 class ConnectorChoicesProviderTest extends \PHPUnit_Framework_TestCase

@@ -11,11 +11,11 @@ use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
@@ -50,11 +50,13 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $client;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject |  Mcrypt */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject |  Mcrypt
+     */
     protected $mcrypt;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function setUp()
     {

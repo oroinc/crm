@@ -4,12 +4,12 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Form;
 
 use Symfony\Component\DomCrawler\Crawler;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class MagentoIntegrationFormTest extends WebTestCase
 {

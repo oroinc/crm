@@ -11,7 +11,7 @@ class RestClientFactory extends BridgeRestClientFactory
     const API_URL_PREFIX = 'rest/V1';
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getClientBaseUrl(ParameterBag $parameterBag)
     {
@@ -19,7 +19,7 @@ class RestClientFactory extends BridgeRestClientFactory
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getClientOptions(ParameterBag $parameterBag)
     {

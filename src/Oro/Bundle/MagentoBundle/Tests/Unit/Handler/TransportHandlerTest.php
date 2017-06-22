@@ -5,12 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Test\Unit\Handler;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-
 use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 
 /**

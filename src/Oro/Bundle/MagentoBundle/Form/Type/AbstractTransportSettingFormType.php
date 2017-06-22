@@ -146,7 +146,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {

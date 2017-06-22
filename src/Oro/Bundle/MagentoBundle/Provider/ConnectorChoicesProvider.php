@@ -29,6 +29,7 @@ class ConnectorChoicesProvider
      * @param bool $isExtensionInstalled
      * @param bool $isSupportedVersion
      * @param $integrationType
+     *
      * @return \string[]
      */
     public function getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationType)

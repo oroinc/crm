@@ -40,6 +40,7 @@ class WebsiteImportTest extends BaseIntegrationTest
         $jobResult = $this->executeJob();
         $this->assertTrue($jobResult->isSuccessful());
         $this->assertWebsitesEquals($expectedWebsites);
+
         return $expectedWebsites;
     }
 

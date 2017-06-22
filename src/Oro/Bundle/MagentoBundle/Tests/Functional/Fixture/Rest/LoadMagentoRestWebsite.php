@@ -12,7 +12,7 @@ use Oro\Bundle\MagentoBundle\Entity\Website;
 class LoadMagentoRestWebsite extends AbstractFixture implements DependentFixtureInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getDependencies()
     {
@@ -22,7 +22,7 @@ class LoadMagentoRestWebsite extends AbstractFixture implements DependentFixture
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -32,8 +32,7 @@ class LoadMagentoRestWebsite extends AbstractFixture implements DependentFixture
             ->setCode('admin')
             ->setOriginId(0)
             ->setDefaultGroupId(0)
-            ->setChannel($this->getReference('default_integration_channel'))
-        ;
+            ->setChannel($this->getReference('default_integration_channel'));
 
         $manager->persist($adminWebsite);
 
@@ -43,8 +42,7 @@ class LoadMagentoRestWebsite extends AbstractFixture implements DependentFixture
             ->setCode('base')
             ->setOriginId(1)
             ->setDefaultGroupId(1)
-            ->setChannel($this->getReference('default_integration_channel'))
-        ;
+            ->setChannel($this->getReference('default_integration_channel'));
 
         $manager->persist($baseWebsite);
         $manager->flush();

@@ -92,6 +92,7 @@ class RestTokenProvider implements LoggerAwareInterface
      * @param array               $params
      *
      * @return string
+     *
      * @throws RestException
      */
     protected function doTokenRequest(RestClientInterface $client, array $params)
@@ -106,6 +107,7 @@ class RestTokenProvider implements LoggerAwareInterface
 
     /**
      * @param RestException $e
+     *
      * @throws InvalidConfigurationException | RuntimeException
      */
     protected function validateStatusCodes(RestException $e)
@@ -136,6 +138,7 @@ class RestTokenProvider implements LoggerAwareInterface
      * @param ParameterBag $parameterBag
      *
      * @return array
+     *
      * @throws InvalidConfigurationException
      */
     protected function getTokenRequestParams(ParameterBag $parameterBag)

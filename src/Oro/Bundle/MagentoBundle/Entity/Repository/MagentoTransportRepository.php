@@ -9,13 +9,14 @@ use Oro\Bundle\MagentoBundle\Entity\Website;
 class MagentoTransportRepository extends EntityRepository
 {
     /**
-     * @param array $criteria
-     * @return array
-     *
      * This method is used by UniqueEntityValidator for MagentoTransport entity.
      * Entity is not unique if there is already at least one entity
      * with such wsdl_url and such websiteId or websiteId that represent all web sites for
      * corresponding wsdl_url(-1)
+     *
+     * @param array $criteria
+     *
+     * @return array
      */
     public function getUniqueByWsdlUrlAndWebsiteIds(array $criteria)
     {

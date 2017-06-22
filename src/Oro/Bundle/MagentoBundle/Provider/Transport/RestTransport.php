@@ -158,6 +158,7 @@ class RestTransport implements
     protected function isAllowToProcessUnauthorizedResponse()
     {
         $lastResponse = $this->client->getLastResponse();
+
         return null === $lastResponse || $lastResponse->getStatusCode() !== Codes::HTTP_UNAUTHORIZED;
     }
 
@@ -558,6 +559,7 @@ class RestTransport implements
              */
             $token = $this->refreshToken();
             $this->updateTokenHeaderParam($token);
+
             return call_user_func_array([$this, $methodName], $arguments);
         }
 

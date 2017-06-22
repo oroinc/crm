@@ -46,6 +46,7 @@ class RestTransportSettingFormType extends AbstractTransportSettingFormType
     {
         return $this->getBlockPrefix();
     }
+
     /**
      * {@inheritdoc}
      */

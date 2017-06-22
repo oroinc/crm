@@ -7,10 +7,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class IntegrationConfigController extends Controller
 {
@@ -57,6 +57,7 @@ class IntegrationConfigController extends Controller
 
     /**
      * @param string    $message
+     *
      * @return array
      */
     protected function createFailResponse($message)

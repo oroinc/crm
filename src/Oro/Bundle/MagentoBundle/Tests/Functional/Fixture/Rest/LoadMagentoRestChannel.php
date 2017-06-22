@@ -5,17 +5,17 @@ namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\Rest;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Component\Config\Common\ConfigObject;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -56,18 +56,16 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
-        $this
-            ->createTransport()
+        $this->createTransport()
             ->createIntegration()
-            ->createChannel()
-        ;
+            ->createChannel();
     }
 
     public function createTransport()
@@ -85,6 +83,7 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
 
         $this->transport = $transport;
         $this->addReference('default_transport', $transport);
+
         return $this;
     }
 
@@ -105,6 +104,7 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
 
         $this->setReference('default_integration_channel', $integration);
         $this->integration = $integration;
+
         return $this;
     }
 
@@ -123,6 +123,7 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
         $this->em->flush();
 
         $this->setReference('default_channel', $channel);
+
         return $this;
     }
 }

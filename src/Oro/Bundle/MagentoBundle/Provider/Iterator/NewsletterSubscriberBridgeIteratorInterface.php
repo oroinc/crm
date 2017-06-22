@@ -6,6 +6,7 @@ interface NewsletterSubscriberBridgeIteratorInterface
 {
     /**
      * @param int $initialId
+     *
      * @return NewsletterSubscriberBridgeIteratorInterface
      */
     public function setInitialId($initialId);

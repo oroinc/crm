@@ -38,6 +38,7 @@ class TransportEntityProvider
      *
      * @param MagentoTransportInterface $transport
      * @param Request                   $request
+     *
      * @return MagentoTransport
      */
     public function getTransportEntityByRequest(MagentoTransportInterface $transport, Request $request)
@@ -65,12 +66,14 @@ class TransportEntityProvider
     /**
      * @param TransportInterface $settingsEntity
      * @param string                    $entityId
+     *
      * @return object
      */
     protected function findTransportEntity(TransportInterface $settingsEntity, $entityId)
     {
         $className = $settingsEntity->getSettingsEntityFQCN();
         $em = $this->registry->getManagerForClass($className);
+
         return $em->find($className, $entityId);
     }
 }

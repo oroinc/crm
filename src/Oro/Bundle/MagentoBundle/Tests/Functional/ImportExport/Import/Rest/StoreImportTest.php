@@ -41,11 +41,13 @@ class StoreImportTest extends BaseIntegrationTest
         $jobResult = $this->executeJob();
         $this->assertTrue($jobResult->isSuccessful());
         $this->assertStoresEquals($expectedStores);
+
         return $expectedStores;
     }
 
     /**
      * @depends testInitImport
+     *
      * @param array $expectedStores
      */
     public function testImportWithException(array $expectedStores)
@@ -58,6 +60,7 @@ class StoreImportTest extends BaseIntegrationTest
 
     /**
      * @depends testInitImport
+     *
      * @param array $expectedStores
      */
     public function testImportExistingData(array $expectedStores)

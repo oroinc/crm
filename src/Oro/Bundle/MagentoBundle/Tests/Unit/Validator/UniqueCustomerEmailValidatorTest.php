@@ -100,6 +100,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider uniqueProvider
+     *
      * @param bool $isUniqueEmail
      * @param string $messageConstraint
      */

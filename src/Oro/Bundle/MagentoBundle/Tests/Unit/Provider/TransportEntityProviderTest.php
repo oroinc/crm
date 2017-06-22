@@ -60,6 +60,7 @@ class TransportEntityProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider testGetTransportEntityByRequestProvider
+     *
      * @param bool $doFind
      */
     public function testGetTransportEntityByRequest($doFind)

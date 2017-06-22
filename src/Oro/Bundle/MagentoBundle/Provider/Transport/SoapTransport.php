@@ -710,13 +710,17 @@ class SoapTransport extends BaseSOAPTransport implements
         }
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getRequiredExtensionVersion()
     {
         return self::REQUIRED_EXTENSION_VERSION;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function cacheClear($url = null)
     {
         $this->wsdlManager->clearCacheForUrl($url);
