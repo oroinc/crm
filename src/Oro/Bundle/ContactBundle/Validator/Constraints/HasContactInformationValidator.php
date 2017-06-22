@@ -45,7 +45,7 @@ class HasContactInformationValidator extends ConstraintValidator
         }
 
         $this->context->addViolation(
-            $this->translator->trans('oro.contact.validators.contact.has_information')
+            $this->translator->trans('oro.contact.validators.contact.has_information', [], 'validators')
         );
     }
 }

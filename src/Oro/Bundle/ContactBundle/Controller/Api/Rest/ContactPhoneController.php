@@ -122,7 +122,15 @@ class ContactPhoneController extends RestController implements ClassResourceInte
 
             return new JsonResponse(["id" => ""]);
         } catch (\Exception $e) {
-            return new JsonResponse(["code" => $e->getCode(), "message"=>$e->getMessage() ], $e->getCode());
+            $errors["errors"] = [$e->getMessage()];
+            return new JsonResponse(
+                [
+                    "code" => $e->getCode(),
+                    "message"=>$e->getMessage(),
+                    "errors" => $errors
+                ],
+                $e->getCode()
+            );
         }
     }
 
