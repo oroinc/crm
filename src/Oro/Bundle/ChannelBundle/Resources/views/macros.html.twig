@@ -60,7 +60,7 @@
         :  oro_entity_config_value('Oro\\Bundle\\ChannelBundle\\Entity\\Channel', 'label')
     %}
 
-    {%- if entity.dataChannel and resource_granted('VIEW', entity.dataChannel) -%}
+    {%- if entity.dataChannel and is_granted('VIEW', entity.dataChannel) -%}
         {% set channelView = '<a href="' ~ path('oro_channel_view', {'id': entity.dataChannel.id}) ~ '">' ~ entity.dataChannel.name|escape ~ '</a>' %}
     {%- else -%}
         {% set channelView = entity.dataChannel ? entity.dataChannel : '' %}

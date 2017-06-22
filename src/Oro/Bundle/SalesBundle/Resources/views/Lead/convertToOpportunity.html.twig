@@ -25,7 +25,7 @@
         'route': 'oro_sales_lead_view',
         'params': {'id': entity.lead.id}
     }) %}
-    {% if resource_granted('oro_sales_lead_convert_to_opportunity') %}
+    {% if is_granted('oro_sales_lead_convert_to_opportunity') %}
         {% set html = UI.saveAndCloseButton({
             'route': 'oro_sales_opportunity_view',
             'params': {'id': '$id'}

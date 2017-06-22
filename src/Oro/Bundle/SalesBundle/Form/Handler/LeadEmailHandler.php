@@ -6,10 +6,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 
@@ -24,25 +24,25 @@ class LeadEmailHandler
     /** @var EntityManagerInterface */
     protected $manager;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
      * @param FormFactory $form
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormFactory $form,
         Request $request,
         EntityManagerInterface $manager,
-        SecurityFacade $securityFacade
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -72,7 +72,7 @@ class LeadEmailHandler
                     'OroSalesBundle:Lead',
                     $this->request->request->get('entityId')
                 );
-                if (!$this->securityFacade->isGranted('EDIT', $lead)) {
+                if (!$this->authorizationChecker->isGranted('EDIT', $lead)) {
                     throw new AccessDeniedException();
                 }
 
@@ -98,7 +98,7 @@ class LeadEmailHandler
     {
         /** @var LeadEmail $leadEmail */
         $leadEmail = $manager->find($id);
-        if (!$this->securityFacade->isGranted('EDIT', $leadEmail->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $leadEmail->getOwner())) {
             throw new AccessDeniedException();
         }
 

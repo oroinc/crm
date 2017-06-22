@@ -11,7 +11,7 @@
                 {{ customer.name|escape }}
             </a>
         {% endset %}
-        {%- if resource_granted('oro_contact_view') and customer.contact -%}
+        {%- if is_granted('oro_contact_view') and customer.contact -%}
             {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': customer.contact.id}) ~ '">' ~ customer.contact|oro_format_name|escape ~ '</a>' %}
         {%- else -%}
             {% set contactView = customer.contact ? customer.contact|oro_format_name : '' %}

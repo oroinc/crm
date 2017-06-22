@@ -52,7 +52,7 @@
 
     {% if data[contact_count_key] is defined and data[contact_count_key] > 0 %}
         {% set last_datetime = '' %}
-        {% if  resource_granted('VIEW', entity, last_contact_date_key) %}
+        {% if  is_granted('VIEW', entity, last_contact_date_key) %}
             {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
         {% endif %}
         {% set direction     = '<i class="fa-sign-'
@@ -60,7 +60,7 @@
             ~ '"></i>'
         %}
     <ul class="inline">
-        {% if  resource_granted('VIEW', entity, contact_count_key) %}
+        {% if  is_granted('VIEW', entity, contact_count_key) %}
             <li>
             {{ 'oro.activity_contact.info_title_times'|trans({
                 '{{ total_contacted }}': data[contact_count_key]|default(0)

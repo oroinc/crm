@@ -9,12 +9,12 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class CartAddressHandler
 {
@@ -40,21 +40,21 @@ class CartAddressHandler
     ];
 
     /**
-     * @param FormInterface            $form
-     * @param Request                  $request
-     * @param RegistryInterface        $registry
-     * @param SecurityContextInterface $security
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param RegistryInterface      $registry
+     * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $registry,
-        SecurityContextInterface $security
+        TokenAccessorInterface $security
     ) {
         $this->form         = $form;
         $this->request      = $request;
         $this->manager      = $registry->getManager();
-        $this->organization = $security->getToken()->getOrganizationContext();
+        $this->organization = $security->getOrganization();
     }
 
     /**

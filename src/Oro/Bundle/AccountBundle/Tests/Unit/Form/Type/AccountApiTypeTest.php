@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 
 class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var AccountApiType
-     */
+    /** @var AccountApiType */
     private $type;
 
     /**
@@ -26,16 +26,13 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $securityFacade->expects($this->any())
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $authorizationChecker->expects($this->any())
             ->method('isGranted')
             ->with('oro_contact_view')
             ->will($this->returnValue($havePrivilege));
 
-        $this->type = new AccountApiType($router, $entityNameResolver, $securityFacade);
+        $this->type = new AccountApiType($router, $entityNameResolver, $authorizationChecker);
     }
 
     public function testSetDefaultOptions()

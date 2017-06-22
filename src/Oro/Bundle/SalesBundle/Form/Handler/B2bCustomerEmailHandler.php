@@ -9,10 +9,10 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 class B2bCustomerEmailHandler
 {
@@ -28,28 +28,28 @@ class B2bCustomerEmailHandler
     /** @var  B2bCustomerEmailDeleteValidator */
     protected $b2bCustomerEmailDeleteValidator;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
      * @param FormInterface $form
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         EntityManagerInterface $manager,
         B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator,
-        SecurityFacade $securityFacade
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
         $this->b2bCustomerEmailDeleteValidator = $b2bCustomerEmailDeleteValidator;
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -79,7 +79,7 @@ class B2bCustomerEmailHandler
                     'OroSalesBundle:B2bCustomer',
                     $b2bCustomerId
                 );
-                if (!$this->securityFacade->isGranted('EDIT', $customer)) {
+                if (!$this->authorizationChecker->isGranted('EDIT', $customer)) {
                     throw new AccessDeniedException();
                 }
 
@@ -105,7 +105,7 @@ class B2bCustomerEmailHandler
     {
         /** @var B2bCustomerEmail $customerEmail */
         $customerEmail = $manager->find($id);
-        if (!$this->securityFacade->isGranted('EDIT', $customerEmail->getOwner())) {
+        if (!$this->authorizationChecker->isGranted('EDIT', $customerEmail->getOwner())) {
             throw new AccessDeniedException();
         }
 

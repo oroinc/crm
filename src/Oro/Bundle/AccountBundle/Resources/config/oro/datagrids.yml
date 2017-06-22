@@ -25,7 +25,7 @@ datagrids:
                             condition: "a.id=history.entityId AND history.route='oro_account_view'"
                 where:
                     and:
-                      - history.user = @oro_security.security_facade->getLoggedUserId
+                      - history.user = @oro_security.token_accessor->getUserId
                 groupBy:  a.id
                 orderBy:
                     - column: visitDate

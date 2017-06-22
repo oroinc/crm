@@ -23,7 +23,7 @@ services:
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: form.type, alias: oro_account }
 
@@ -54,7 +54,7 @@ services:
         arguments:
             - "@router"
             - "@oro_entity.entity_name_resolver"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: form.type, alias: account }
 

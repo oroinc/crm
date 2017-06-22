@@ -1,6 +1,43 @@
 UPGRADE FROM 2.2 to 2.3
 =======================
 
+**IMPORTANT**
+-------------
+
+The class `Oro\Bundle\SecurityBundle\SecurityFacade`, services `oro_security.security_facade` and `oro_security.security_facade.link`, and TWIG function `resource_granted` were marked as deprecated.
+Use services `security.authorization_checker`, `security.token_storage`, `oro_security.token_accessor`, `oro_security.class_authorization_checker`, `oro_security.request_authorization_checker` and TWIG function `is_granted` instead.
+In controllers use `isGranted` method from `Symfony\Bundle\FrameworkBundle\Controller\Controller`.
+The usage of deprecated service `security.context` (interface `Symfony\Component\Security\Core\SecurityContextInterface`) was removed as well.
+All existing classes were updated to use new services instead of the `SecurityFacade` and `SecurityContext`:
+
+- service `security.authorization_checker`
+    - implements `Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface`
+    - the property name in classes that use this service is `authorizationChecker`
+- service `security.token_storage`
+    - implements `Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface`
+    - the property name in classes that use this service is `tokenStorage`
+- service `oro_security.token_accessor`
+    - implements `Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface`
+    - the property name in classes that use this service is `tokenAccessor`
+- service `oro_security.class_authorization_checker`
+    - implements `Oro\Bundle\SecurityBundle\Authorization\ClassAuthorizationChecker`
+    - the property name in classes that use this service is `classAuthorizationChecker`
+- service `oro_security.request_authorization_checker`
+    - implements `Oro\Bundle\SecurityBundle\Authorization\RequestAuthorizationChecker`
+    - the property name in classes that use this service is `requestAuthorizationChecker`
+
+AccountBundle
+-------------
+- Class `Oro\Bundle\AccountBundle\Form\Type\AccountType`
+    - changed the constructor signature: parameter `Router $router` was replaced with `RouterInterface $router`
+
+ContactBundle
+-------------
+- Class `Oro\Bundle\ContactBundle\EventListener\ContactListener`
+    - removed method `getSecurityContext`
+- Class `Oro\Bundle\ContactBundle\ImportExport\Strategy\ContactAddStrategy`
+    - method `setSecurityContext` was replaced with `setTokenStorage`
+
 MagentoBundle
 -------------
 Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
@@ -14,7 +51,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
     - removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
     - public method `isCustomerHasUniqueEmail(Customer $customer)` was added
     - public method `getRequiredExtensionVersion()` was added
-    - Added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.
+    - added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.  
 - Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was renamed to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
 - Class `Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator` moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator`:
     - constant `ALL_WEBSITES` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
@@ -138,6 +175,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
         - ResponseConverterManager $responseConverterManager
 This class has the same responsibilities as SoapTransport.
 - Class `Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport` now implements `TransportCacheClearInterface`
+    - Updated according to `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface` changes.
     - construction signature was changed, now it takes the next arguments:
         - Mcrypt $encoder
         - WsdlManager $wsdlManager
@@ -185,3 +223,9 @@ This class has the same responsibilities as SoapTransport.
 - Class `Oro\Bundle\MagentoBundle\Entity\Order`
     - field `originId` added
     - `Oro\Bundle\MagentoBundle\Entity\OriginTrait` used
+- Class `Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler`
+    - method `setSecurityFacade` was replaced with `setAuthorizationChecker`
+- Class `Oro\Bundle\MagentoBundle\Controller\CustomerController`
+    - removed method `getSecurityFacade`
+- Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
+    - method `setSecurityFacade` was replaced with `setAuthorizationChecker`

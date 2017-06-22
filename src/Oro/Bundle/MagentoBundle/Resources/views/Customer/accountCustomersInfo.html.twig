@@ -1,4 +1,4 @@
-{% if resource_granted('oro_magento_customer_view') and customers|length > 0 %}
+{% if is_granted('oro_magento_customer_view') and customers|length > 0 %}
     {% set tabs = [] %}
     {% if isMobileVersion() %}
         {% set tabsOptions = {useDropdown: true} %}

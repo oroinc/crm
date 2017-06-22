@@ -24,7 +24,7 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
             ->addOrderBy('e.name', 'ASC');
 
         $dataChannel = $this->getDataChannelById($channelId);
-        if ($dataChannel && $this->securityFacade->isGranted('oro_integration_assign')) {
+        if ($dataChannel && $this->authorizationChecker->isGranted('oro_integration_assign')) {
             $queryBuilder->andWhere('e.channel = :channel')
                 ->setParameter('channel', $dataChannel->getDataSource());
 

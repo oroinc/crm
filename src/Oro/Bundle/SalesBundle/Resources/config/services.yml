@@ -178,7 +178,6 @@ services:
         class: %oro_sales.provider.mailbox_process.lead.class%
         arguments:
             - '@doctrine'
-            - '@oro_security.security_facade.link'
         tags:
             - { name: oro_email.mailbox_process, type: lead }
 
@@ -333,7 +332,7 @@ services:
         class: Oro\Bundle\SalesBundle\Handler\B2bCustomerPhoneApiHandler
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -348,7 +347,7 @@ services:
         class: Oro\Bundle\SalesBundle\Handler\B2bCustomerEmailApiHandler
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -374,7 +373,7 @@ services:
         class: %oro_sales.handler.lead_phone_api.class%
         arguments:
             - "@doctrine"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -466,8 +465,6 @@ services:
         public: false
         arguments:
             - '@oro_entity_config.config_manager'
-            - '@oro_datagrid.multi_grid_provider.link'
-            - '@oro_security.security_facade.link'
 
     oro_sales.customer.account_config_provider:
         class: Oro\Bundle\SalesBundle\Provider\Customer\AccountConfigProvider

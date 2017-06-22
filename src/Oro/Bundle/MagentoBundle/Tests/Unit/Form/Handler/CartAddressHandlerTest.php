@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\MagentoBundle\Form\Handler\CartAddressHandler;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class CartAddressHandlerTest extends AbstractHandlerTest
 {
@@ -26,29 +27,16 @@ class CartAddressHandlerTest extends AbstractHandlerTest
             ->method('getManager')
             ->will($this->returnValue($this->manager));
 
-        $security     = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
-            ->setMethods(['getToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $token        = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Token')
-            ->setMethods(['getOrganizationContext'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
         $organization = $this->getMockBuilder('Oro\Bundle\OrganizationBundle\Entity\Organization')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $token->expects($this->once())
-            ->method('getOrganizationContext')
+        $tokenAccessor->expects($this->once())
+            ->method('getOrganization')
             ->will($this->returnValue($organization));
 
-        $security->expects($this->once())
-            ->method('getToken')
-            ->will($this->returnValue($token));
-
-
         $this->entity  = new CartAddress();
-        $this->handler = new CartAddressHandler($this->form, $this->request, $registry, $security);
+        $this->handler = new CartAddressHandler($this->form, $this->request, $registry, $tokenAccessor);
     }
 
     public function testAddCartAddressOnSuccess()

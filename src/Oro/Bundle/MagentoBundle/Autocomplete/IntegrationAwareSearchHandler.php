@@ -2,8 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Autocomplete;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class IntegrationAwareSearchHandler extends SearchHandler
@@ -11,8 +12,8 @@ abstract class IntegrationAwareSearchHandler extends SearchHandler
     /** @var string */
     protected $dataChannelClass;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
      * @param string $dataChannelClass
@@ -26,11 +27,11 @@ abstract class IntegrationAwareSearchHandler extends SearchHandler
     }
 
     /**
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function setSecurityFacade(SecurityFacade $securityFacade)
+    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**

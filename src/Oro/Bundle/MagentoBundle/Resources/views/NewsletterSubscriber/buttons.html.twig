@@ -1,7 +1,7 @@
 {% set subscribedId = constant('Oro\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber::STATUS_SUBSCRIBED') %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% if newsletterSubscriber is defined and newsletterSubscriber.id is not empty %}
-    {% if resource_granted('EDIT', newsletterSubscriber) %}
+    {% if is_granted('EDIT', newsletterSubscriber) %}
         <div class="pull-left" data-page-component-module="oromagento/js/app/components/subscription-manager">
         {% if newsletterSubscriber.status.id|default(false) == subscribedId %}
         {{ UI.clientButton({
@@ -19,7 +19,7 @@
         </div>
     {% endif %}
 {% elseif customer is defined and customer.originId %}
-    {% if resource_granted('EDIT', customer) %}
+    {% if is_granted('EDIT', customer) %}
         <div class="pull-left" data-page-component-module="oromagento/js/app/components/subscription-manager">
         {% if customer.subscribed %}
         {{ UI.clientButton({

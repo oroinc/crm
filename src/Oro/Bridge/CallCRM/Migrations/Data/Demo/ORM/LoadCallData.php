@@ -163,8 +163,8 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
      */
     protected function setSecurityContext($user)
     {
-        $securityContext = $this->container->get('security.context');
+        $tokenStorage = $this->container->get('security.token_storage');
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-        $securityContext->setToken($token);
+        $tokenStorage->setToken($token);
     }
 }

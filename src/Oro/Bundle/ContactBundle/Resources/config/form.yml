@@ -26,7 +26,7 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_contact.validator.contact_phone_delete"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
 
     oro_contact.form.type.contact_email:
         class: Symfony\Component\Form\Form
@@ -47,4 +47,4 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@oro_contact.validator.contact_email_delete"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"

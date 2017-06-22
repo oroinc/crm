@@ -5,29 +5,24 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
-
-use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class CustomerGroupSelectType extends AbstractType
 {
     const NAME = 'oro_magento_customer_group_select';
 
-    /**
-     * @var SecurityFacade
-     */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
-    /**
-     * @var boolean
-     */
+    /** @var bool */
     protected $canAssignChannel;
 
     /**
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(SecurityFacade $securityFacade)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -91,9 +86,6 @@ class CustomerGroupSelectType extends AbstractType
      */
     protected function isReadOnly($options)
     {
-        if (!$this->securityFacade->isGranted('oro_integration_assign')) {
-            return true;
-        }
-        return false;
+        return !$this->authorizationChecker->isGranted('oro_integration_assign');
     }
 }

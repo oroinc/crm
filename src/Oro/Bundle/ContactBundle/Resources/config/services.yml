@@ -201,7 +201,7 @@ services:
     oro_contact.subscriber.contact_listener:
         class: %oro_contact.subscriber.contact_listener.class%
         arguments:
-            - "@service_container"
+            - "@security.token_storage"
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -249,7 +249,7 @@ services:
         class: %oro_contact.handler.contact_email_api.class%
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -257,7 +257,7 @@ services:
         class: %oro_contact.handler.contact_phone_api.class%
         arguments:
             - "@doctrine.orm.entity_manager"
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 

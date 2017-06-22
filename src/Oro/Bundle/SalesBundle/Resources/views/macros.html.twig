@@ -56,7 +56,7 @@
     {%- import 'OroUIBundle::macros.html.twig' as ui -%}
 
     {%- set entityName = entity ? entity|oro_format_name : '' -%}
-    {%- if (entity and resource_granted('VIEW', entity)) -%}
+    {%- if (entity and is_granted('VIEW', entity)) -%}
         {{ ui.renderUrl(oro_entity_object_view_link(entity), entityName) }}
     {%- else -%}
         {{ entityName }}

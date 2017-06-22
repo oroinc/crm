@@ -17,7 +17,7 @@
 
 {% set customerData %}
     {% if entity.customer %}
-        {% set customerViewGranted = resource_granted('oro_magento_customer_view') %}
+        {% set customerViewGranted = is_granted('oro_magento_customer_view') %}
         {%- if customerViewGranted -%}
             <a href="{{ path('oro_magento_customer_view', {'id': entity.customer.id}) }}">{{ entity.customer|oro_format_name|default('N/A'|trans)|escape }}</a>
         {%- else -%}

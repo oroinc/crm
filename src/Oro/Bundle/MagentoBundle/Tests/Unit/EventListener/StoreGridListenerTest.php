@@ -2,9 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener\Datagrid;
 
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\EventListener\StoreGridListener;
 
@@ -14,7 +17,7 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
     protected $listener;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $securityFacade;
+    protected $authorizationChecker;
 
     /** @var string */
     protected $dataChannelClass;
@@ -33,17 +36,12 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->dataChannelClass = 'Oro\Bundle\IntegrationBundle\Entity\Channel';
-
-        $this->entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
+        $this->entityManager = $this->createMock(EntityManager::class);
 
         $this->listener = new StoreGridListener(
-            $this->securityFacade,
+            $this->authorizationChecker,
             $this->dataChannelClass,
             $this->entityManager
         );
@@ -62,7 +60,7 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testWebsiteConditionForStores()
     {
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_integration_assign')
             ->will($this->returnValue(true));
@@ -101,7 +99,7 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnBuildAfterAclIntegrationAssignGranted()
     {
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_integration_assign')
             ->will($this->returnValue(true));
@@ -125,7 +123,7 @@ class StoreGridListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnBuildAfterAclIntegrationAssignNotGranted()
     {
-        $this->securityFacade->expects($this->once())
+        $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('oro_integration_assign')
             ->will($this->returnValue(false));

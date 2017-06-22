@@ -36,7 +36,7 @@ services:
     oro_case.view_factory:
         class: %oro_case.view_factory.class%
         arguments:
-            - "@oro_security.security_facade"
+            - "@security.authorization_checker"
             - "@router"
             - "@oro_entity.entity_name_resolver"
             - "@oro_locale.formatter.date_time"

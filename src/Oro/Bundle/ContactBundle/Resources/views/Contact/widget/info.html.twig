@@ -99,7 +99,7 @@
         <div class="responsive-block">
             {%- set accountsData -%}
                 {%- if entity.accounts.count -%}
-                    {% set accountViewGranted = resource_granted('oro_account_view') %}
+                    {% set accountViewGranted = is_granted('oro_account_view') %}
                     {%- for account in entity.accounts -%}
                         {%- if accountViewGranted -%}
                             <a href="{{ path('oro_account_view', {'id': account.id}) }}">{{ ui.renderEntityViewLabel(account, 'name', 'oro.account.entity_label') }}</a>

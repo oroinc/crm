@@ -5,11 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Form\Handler;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class CartHandler
 {
@@ -23,21 +23,21 @@ class CartHandler
     protected $manager;
 
     /**
-     * @param FormInterface            $form
-     * @param Request                  $request
-     * @param RegistryInterface        $registry
-     * @param SecurityContextInterface $security
+     * @param FormInterface          $form
+     * @param Request                $request
+     * @param RegistryInterface      $registry
+     * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         RegistryInterface $registry,
-        SecurityContextInterface $security
+        TokenAccessorInterface $security
     ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $registry->getManager();
-        $this->organization = $security->getToken()->getOrganizationContext();
+        $this->organization = $security->getOrganization();
     }
 
     /**

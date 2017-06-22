@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationContextTokenInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
@@ -17,9 +17,9 @@ class ContactAddStrategy extends AbstractImportStrategy
     protected $contactImportHelper;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenStorageInterface
      */
-    protected $securityContext;
+    protected $tokenStorage;
 
     /**
      * @param ContactImportHelper $contactImportHelper
@@ -30,11 +30,11 @@ class ContactAddStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param SecurityContextInterface $securityContext
+     * @param TokenStorageInterface $tokenStorage
      */
-    public function setSecurityContext(SecurityContextInterface $securityContext)
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -164,7 +164,7 @@ class ContactAddStrategy extends AbstractImportStrategy
             $owner = $this->findExistingEntity($owner);
         }
         if (!$owner) {
-            $token = $this->securityContext->getToken();
+            $token = $this->tokenStorage->getToken();
             if ($token) {
                 $owner = $token->getUser();
             }
@@ -177,7 +177,7 @@ class ContactAddStrategy extends AbstractImportStrategy
             $organization = $this->findExistingEntity($organization);
         }
         if (!$organization) {
-            $token = $this->securityContext->getToken();
+            $token = $this->tokenStorage->getToken();
             if ($token && $token instanceof OrganizationContextTokenInterface) {
                 $organization = $token->getOrganizationContext();
             }

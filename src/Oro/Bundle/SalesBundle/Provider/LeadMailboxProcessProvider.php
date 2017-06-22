@@ -8,8 +8,6 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
 
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
-
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
     const LEAD_CLASS = 'Oro\Bundle\SalesBundle\Entity\Lead';
@@ -18,17 +16,12 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     /** @var Registry */
     protected $registry;
 
-    /** @var ServiceLink */
-    private $securityLink;
-
     /**
-     * @param Registry       $registry
-     * @param ServiceLink    $securityLink
+     * @param Registry $registry
      */
-    public function __construct(Registry $registry, ServiceLink $securityLink)
+    public function __construct(Registry $registry)
     {
         $this->registry = $registry;
-        $this->securityLink = $securityLink;
     }
 
     /**

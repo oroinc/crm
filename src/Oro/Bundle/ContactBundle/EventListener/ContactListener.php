@@ -2,36 +2,27 @@
 
 namespace Oro\Bundle\ContactBundle\EventListener;
 
-use Doctrine\ORM\UnitOfWork;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\UnitOfWork;
+
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class ContactListener
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
 
     /**
-     * @var SecurityContextInterface
+     * @param TokenStorageInterface $tokenStorage
      */
-    protected $securityContext;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
-        // can't inject security context directly because of circular dependency for Doctrine entity manager
-        $this->container = $container;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -112,7 +103,7 @@ class ContactListener
      */
     protected function getUser(EntityManager $entityManager)
     {
-        $token = $this->getSecurityContext()->getToken();
+        $token = $this->tokenStorage->getToken();
         if (!$token) {
             return null;
         }
@@ -127,17 +118,5 @@ class ContactListener
         }
 
         return $user;
-    }
-
-    /**
-     * @return SecurityContextInterface
-     */
-    protected function getSecurityContext()
-    {
-        if (!$this->securityContext) {
-            $this->securityContext = $this->container->get('security.context');
-        }
-
-        return $this->securityContext;
     }
 }

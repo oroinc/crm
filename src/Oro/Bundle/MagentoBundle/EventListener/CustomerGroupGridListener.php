@@ -2,9 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 /**
  * Listener for grid "magento-customers-group-by-channel-grid".
@@ -13,15 +14,15 @@ use Oro\Bundle\SecurityBundle\SecurityFacade;
  */
 class CustomerGroupGridListener
 {
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var AuthorizationCheckerInterface */
+    protected $authorizationChecker;
 
     /**
-     * @param SecurityFacade $securityFacade
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(SecurityFacade $securityFacade)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->securityFacade = $securityFacade;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -33,7 +34,7 @@ class CustomerGroupGridListener
         $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
             $queryBuilder = $datasource->getQueryBuilder();
-            $isGranted = $this->securityFacade->isGranted('oro_integration_assign');
+            $isGranted = $this->authorizationChecker->isGranted('oro_integration_assign');
             // if permission for integration channel assign is not granted
             if (!$isGranted) {
                 $queryBuilder->andWhere('1 = 0');

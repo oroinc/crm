@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Form\Handler\CartHandler;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
 class CartHandlerTest extends AbstractHandlerTest
 {
@@ -27,28 +28,16 @@ class CartHandlerTest extends AbstractHandlerTest
             ->method('getManager')
             ->will($this->returnValue($this->manager));
 
-        $security     = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
-            ->setMethods(['getToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $token        = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Token')
-            ->setMethods(['getOrganizationContext'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
         $organization = $this->getMockBuilder('Oro\Bundle\OrganizationBundle\Entity\Organization')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $token->expects($this->once())
-            ->method('getOrganizationContext')
+        $tokenAccessor->expects($this->once())
+            ->method('getOrganization')
             ->will($this->returnValue($organization));
 
-        $security->expects($this->once())
-            ->method('getToken')
-            ->will($this->returnValue($token));
-
         $this->entity  = new Cart();
-        $this->handler = new CartHandler($this->form, $this->request, $registry, $security);
+        $this->handler = new CartHandler($this->form, $this->request, $registry, $tokenAccessor);
     }
 
     public function testProcessOnSuccess()
