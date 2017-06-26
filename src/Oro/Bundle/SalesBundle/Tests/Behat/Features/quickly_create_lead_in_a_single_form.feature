@@ -52,6 +52,7 @@ Feature: Quickly create Lead in a single form
 
   Scenario: Delete address from lead
     When I delete 45600 Marion Drive address
+    And press "Yes, Delete"
     Then two addresses should be in page
     And Ukraine address must be primary
 
