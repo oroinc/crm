@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TransportCacheClearInterface;
@@ -42,6 +43,7 @@ class SoapTransport extends BaseSOAPTransport implements
     TransportCacheClearInterface
 {
     use ExtensionVersionTrait;
+    use MultiAttemptsConfigTrait;
 
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
@@ -127,6 +129,11 @@ class SoapTransport extends BaseSOAPTransport implements
     protected $uniqueCustomerEmailProvider;
 
     /**
+     * @var array
+     */
+    private $clientAdditionalParams = [];
+
+    /**
      * @param Mcrypt                          $encoder
      * @param WsdlManager                     $wsdlManager
      * @param UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider
@@ -173,6 +180,7 @@ class SoapTransport extends BaseSOAPTransport implements
         }
 
         parent::init($transportEntity);
+        $this->processClientAdditionalParameters($this->clientAdditionalParams);
 
         $wsiMode = $this->settings->get('wsi_mode', false);
         $apiUser = $this->settings->get('api_user', false);
@@ -200,9 +208,36 @@ class SoapTransport extends BaseSOAPTransport implements
     /**
      * {@inheritdoc}
      */
+    public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)
+    {
+        $this->clientAdditionalParams = $clientExtraOptions;
+        $this->init($transportEntity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function resetInitialState()
     {
         $this->isExtensionInstalled = null;
+    }
+
+    /**
+     * @param array $clientAdditionalParams
+     */
+    protected function processClientAdditionalParameters(array $clientAdditionalParams)
+    {
+        $configuration = $this->multiAttemptsDefaultConfigurationParameters;
+        if (isset($clientAdditionalParams[self::$multiAttemptsConfigKey])) {
+            $configuration = array_merge($configuration, $clientAdditionalParams[self::$multiAttemptsConfigKey]);
+        }
+
+        $this->setMultipleAttemptsEnabled(
+            $this->getMultiAttemptsEnabledParameter($configuration)
+        );
+        $this->setSleepBetweenAttempt(
+            $this->getSleepBetweenAttemptsParameter($configuration)
+        );
     }
 
     protected function checkExtensionFunctions()

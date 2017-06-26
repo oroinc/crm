@@ -56,6 +56,12 @@ class MagentoRestTransport extends MagentoTransport
     {
         $this->apiToken = $apiToken;
 
+        /**
+         * We can update api_token several times while getting some data from instance
+         * that's why we should reset settings object to have fresh new settings
+         */
+        $this->settings = null;
+
         return $this;
     }
 

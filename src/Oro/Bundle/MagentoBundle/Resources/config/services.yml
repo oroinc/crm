@@ -170,14 +170,10 @@ services:
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
-    oro_magento.transport.rest_client_factory:
-        class: Oro\Bundle\MagentoBundle\Provider\Transport\RestClientFactory
-        parent: oro_integration.transport.rest.bridge.decorated_client_factory
-
     oro_magento.transport.rest_transport:
         class: Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport
         arguments:
-            - '@oro_magento.transport.rest_client_factory'
+            - '@oro_integration.transport.rest.event_dispatchable_client_factory'
             - '@oro_magento.provider.rest_token_provider'
             - '@oro_magento.transport.provider.oro_bridge_extension_config_provider'
             - '@oro_magento.converter.rest.response_converter_manager'

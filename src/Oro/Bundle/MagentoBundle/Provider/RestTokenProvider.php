@@ -53,14 +53,15 @@ class RestTokenProvider implements LoggerAwareInterface
 
     /**
      * @param MagentoRestTransport $transportEntity
+     * @param RestClientInterface $client
      *
-     * @return null|string
+     * @return string
      */
-    public function getTokenFromEntity(MagentoRestTransport $transportEntity)
+    public function getTokenFromEntity(MagentoRestTransport $transportEntity, RestClientInterface $client)
     {
         $encryptedToken = $transportEntity->getApiToken();
         if (null === $encryptedToken) {
-            return null;
+            return $this->generateNewToken($transportEntity, $client);
         }
 
         return $this->mcrypt->decryptData($encryptedToken);

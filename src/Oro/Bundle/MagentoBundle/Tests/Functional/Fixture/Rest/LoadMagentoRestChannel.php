@@ -56,7 +56,7 @@ class LoadMagentoRestChannel extends AbstractFixture implements ContainerAwareIn
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {

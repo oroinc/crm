@@ -123,8 +123,7 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->magentoTransport
              ->expects($this->once())
-             ->method('init')
-             ->willReturn($this->returnSelf());
+             ->method('initWithExtraOptions');
 
         $this->magentoTransport
              ->expects($this->once())

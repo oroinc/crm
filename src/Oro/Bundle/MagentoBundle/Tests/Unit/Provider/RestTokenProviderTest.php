@@ -249,7 +249,7 @@ class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             self::TOKEN,
-            $this->tokenProvider->getTokenFromEntity($this->transportEntity)
+            $this->tokenProvider->getTokenFromEntity($this->transportEntity, $this->client)
         );
     }
 

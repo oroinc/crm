@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
@@ -17,6 +18,16 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     const WEBSITE_NAME_SEPARATOR = ', ';
 
     const TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST = 102;
+
+    /**
+     * Allow initialize transport with additional settings (no multi attempts, debug logs, etc.)
+     *
+     * @param Transport $transportEntity
+     * @param array     $clientExtraOptions
+     *
+     * @return void
+     */
+    public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions);
 
     /**
      * Return true if oro bridge extension installed on remote instance

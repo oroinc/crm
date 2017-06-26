@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportCacheClearInterface;
 use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
+use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
@@ -92,6 +93,7 @@ class TransportHandler
         $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
         $transportType       = $this->request->get(self::TRANSPORT_TYPE, false);
 
+        /** @var MagentoTransportInterface $transport */
         $transport = $this->typesRegistry->getTransportType($integrationTypeName, $transportType);
 
         if (!$transport instanceof MagentoTransportInterface) {
@@ -102,10 +104,9 @@ class TransportHandler
 
         if ($transport instanceof TransportCacheClearInterface) {
             $transport->cacheClear($transportEntity->getWsdlUrl());
-            $transport->setMultipleAttemptsEnabled(false);
         }
 
-        $transport->init($transportEntity);
+        $transport->initWithExtraOptions($transportEntity, MultiAttemptsConfigTrait::getMultiAttemptsDisabledConfig());
         $transport->resetInitialState();
 
         return $transport;

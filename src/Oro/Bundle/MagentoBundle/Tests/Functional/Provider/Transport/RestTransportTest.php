@@ -30,7 +30,7 @@ class RestTransportTest extends WebTestCase
         $this->fakeRestClientFactory = new FakeRestClientFactory();
 
         $this->client->getContainer()->set(
-            'oro_integration.transport.rest.client_factory.decorated',
+            'oro_integration.transport.rest.client_factory',
             $this->fakeRestClientFactory
         );
 

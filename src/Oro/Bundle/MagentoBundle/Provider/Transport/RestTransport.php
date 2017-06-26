@@ -12,7 +12,7 @@ use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\FactoryInterface as RestClientFactoryInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -67,7 +67,7 @@ class RestTransport implements
     protected $client;
 
     /**
-     * @var BridgeRestClientFactory
+     * @var RestClientFactoryInterface
      */
     protected $clientFactory;
 
@@ -87,13 +87,13 @@ class RestTransport implements
     protected $responseConverterManager;
 
     /**
-     * @param BridgeRestClientFactory   $clientFactory
+     * @param RestClientFactoryInterface   $clientFactory
      * @param RestTokenProvider         $restTokenProvider
      * @param OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider
      * @param ResponseConverterManager $responseConverterManager
      */
     public function __construct(
-        BridgeRestClientFactory $clientFactory,
+        RestClientFactoryInterface $clientFactory,
         RestTokenProvider $restTokenProvider,
         OroBridgeExtensionConfigProvider $oroBridgeExtensionConfigProvider,
         ResponseConverterManager $responseConverterManager
@@ -109,15 +109,21 @@ class RestTransport implements
      */
     public function init(Transport $transportEntity)
     {
-        $this->transportEntity = $transportEntity;
-        $this->client = $this->clientFactory->createRestClient($this->transportEntity);
-        $token = $this->restTokenProvider->getTokenFromEntity($this->transportEntity);
-        $this->oroBridgeExtensionConfigProvider->clearCache();
+        $this->initWithExtraOptions($transportEntity, []);
+    }
 
-        if (null === $token) {
-            $token = $this->refreshToken();
-        }
+    /**
+     * {@inheritdoc}
+     */
+    public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)
+    {
+        $this->transportEntity = $transportEntity;
+        $this->client = $this->clientFactory->getClientInstance(
+            new RestTransportAdapter($this->transportEntity, $clientExtraOptions)
+        );
+        $token = $this->restTokenProvider->getTokenFromEntity($this->transportEntity, $this->client);
         $this->updateTokenHeaderParam($token);
+        $this->oroBridgeExtensionConfigProvider->clearCache();
     }
 
     /**
@@ -218,7 +224,7 @@ class RestTransport implements
     public function getCustomers()
     {
         //TODO: Implement CustomerRestIterator. Will be implemented in CRM-8153
-        return new BaseMagentoRestIterator($this);
+        return new BaseMagentoRestIterator($this, []);
     }
 
     /**
@@ -518,24 +524,19 @@ class RestTransport implements
     /**
      * Fill extension data to OroBridgeExtension object
      *
-     * In case when we need refresh extension data please call this method with $force = true
-     *
-     * @param bool $force
-     *
      * @return Config
      *
      * @throws RuntimeException
      */
-    protected function getExtensionConfig($force = false)
+    protected function getExtensionConfig()
     {
         try {
             return $this->oroBridgeExtensionConfigProvider->getConfig(
                 $this->client,
-                $this->headers,
-                $force
+                $this->headers
             );
         } catch (RestException $e) {
-            return $this->handleException($e, 'getExtensionConfig', [$force]);
+            return $this->handleException($e, 'getExtensionConfig', []);
         }
     }
 
