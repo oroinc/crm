@@ -294,4 +294,13 @@ class FeatureContext extends OroFeatureContext implements
             );
         }
     }
+
+    /**
+     * @Given /^I select "(?P<option>.+)" from "(?P<element>.+)" field$/
+     */
+    public function iSelectFromField($option, $element)
+    {
+        $field = $this->createElement($element);
+        $field->selectOption($option);
+    }
 }
