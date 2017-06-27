@@ -41,6 +41,6 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
             $this->setReference('Account_' . $name, $account);
             $manager->persist($account);
         }
-         $manager->flush();
+        $manager->flush();
     }
 }

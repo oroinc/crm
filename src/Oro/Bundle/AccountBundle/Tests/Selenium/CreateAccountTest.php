@@ -76,7 +76,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->toGrid()
             ->assertTitle('All - Accounts - Customers')
             ->close();
-         return $newAccountName;
+        return $newAccountName;
     }
 
     /**

@@ -101,7 +101,6 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-
         $identifier = 'o.id';
         if ($this->em->getConnection()->getDriver()->getName() === DatabaseDriverInterface::DRIVER_POSTGRESQL) {
             $identifier = sprintf('CAST(%s as string)', $identifier);

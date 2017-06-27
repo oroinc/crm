@@ -70,7 +70,7 @@ class LeadAddressController extends RestController implements ClassResourceInter
      */
     public function getPrimaryAction($leadId)
     {
-         /** @var Lead $lead */
+        /** @var Lead $lead */
         $lead = $this->getLeadManager()->find($leadId);
 
         if ($lead) {

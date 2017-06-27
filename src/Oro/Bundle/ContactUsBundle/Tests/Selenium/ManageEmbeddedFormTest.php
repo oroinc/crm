@@ -13,7 +13,6 @@ use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
  */
 class ManageEmbeddedFormTest extends Selenium2TestCase
 {
-
     public function setUp()
     {
         $this->markTestSkipped('Due to bug BAP-4693');

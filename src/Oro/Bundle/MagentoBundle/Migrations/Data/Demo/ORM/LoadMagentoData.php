@@ -480,7 +480,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     protected function generateShoppingCartItem(ObjectManager $om, Cart $cart)
     {
-
         $products = ['Computer', 'Gaming Computer', 'Universal Camera Case', 'SLR Camera Tripod',
             'Two Year Extended Warranty - Parts and Labor', 'Couch', 'Chair', 'Magento Red Furniture Set'];
 

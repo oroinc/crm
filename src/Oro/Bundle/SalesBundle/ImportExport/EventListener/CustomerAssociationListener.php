@@ -53,7 +53,6 @@ class CustomerAssociationListener
      */
     public function onProcessAfter(StrategyEvent $event)
     {
-
         $entity = $event->getEntity();
         if ($entity instanceof Opportunity || $entity instanceof Lead) {
             $this->validateCustomerAssociation($entity, $event);
