@@ -40,7 +40,10 @@ class ContactEmailDeleteValidator
             return;
         }
 
-        throw new \Exception("oro.contact.email.error.delete.more_one", 500);
+        throw new \Exception(
+            $this->translator->trans('oro.contact.validators.emails.delete.more_one', [], 'validators'),
+            400
+        );
     }
 
     /**
@@ -55,16 +58,10 @@ class ContactEmailDeleteValidator
             $contact->getPhones()->count() > 0) {
             return;
         }
-        $fields = sprintf(
-            '%s, %s, %s or %s',
-            $this->translator->trans('oro.contact.first_name.label'),
-            $this->translator->trans('oro.contact.last_name.label'),
-            $this->translator->trans('oro.contact.emails.label'),
-            $this->translator->trans('oro.contact.phones.label')
-        );
+
         throw new \Exception(
-            $this->translator->trans('oro.contact.validators.contact.has_information', ['%fields%' => $fields]),
-            500
+            $this->translator->trans('oro.contact.validators.contact.has_information', [], 'validators'),
+            400
         );
     }
 }

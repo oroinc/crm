@@ -78,11 +78,16 @@ class RestContactPhoneApiTest extends WebTestCase
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $expectedMessage = "Phone number was not deleted, the contact has ".
+            "more than one phone number, can't set the new primary.";
+        $this->assertEquals(400, $realResponse->code);
         $this->assertEquals(
-            '{"code":500,"message":"oro.contact.phone.error.delete.more_one"}',
-            $this->client->getResponse()->getContent()
+            $expectedMessage,
+            $realResponse->message
         );
+        $this->assertNotEmpty($realResponse->errors->errors);
     }
 
     public function testCanDeleteNonPrimaryPhone()
@@ -117,11 +122,14 @@ class RestContactPhoneApiTest extends WebTestCase
             'id' => $contactEmail->getId()
         ];
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
-        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+        $realResponse = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals(400, $realResponse->code);
         $this->assertEquals(
-            '{"code":500,"message":"oro.contact.validators.contact.has_information"}',
-            $this->client->getResponse()->getContent()
+            "At least one of the fields First name, Last name, Emails or Phones must be defined.",
+            $realResponse->message
         );
+        $this->assertNotEmpty($realResponse->errors->errors);
     }
 
     public function testDeletePhoneSuccess()

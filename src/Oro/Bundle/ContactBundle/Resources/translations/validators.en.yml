@@ -6,7 +6,9 @@ oro:
                 has_information: "At least one of the fields First name, Last name, Emails or Phones must be defined."
             emails:
                 contains_primary: "One of the emails must be set as primary."
+                delete.more_one: "Email address was not deleted, the contact has more than one email addresses, can't set the new primary."
             phones:
                 contains_primary: "One of the phones must be set as primary."
+                delete.more_one: "Phone number was not deleted, the contact has more than one phone number, can't set the new primary."
             addresses:
                 contains_primary: "One of the addresses must be set as primary."

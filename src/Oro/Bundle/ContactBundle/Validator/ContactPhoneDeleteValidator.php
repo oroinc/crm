@@ -43,7 +43,10 @@ class ContactPhoneDeleteValidator
             return;
         }
 
-        throw new \Exception("oro.contact.phone.error.delete.more_one", 500);
+        throw new \Exception(
+            $this->translator->trans('oro.contact.validators.phones.delete.more_one', [], 'validators'),
+            400
+        );
     }
 
     /**
@@ -60,8 +63,8 @@ class ContactPhoneDeleteValidator
         }
 
         throw new \Exception(
-            $this->translator->trans('oro.contact.validators.contact.has_information'),
-            500
+            $this->translator->trans('oro.contact.validators.contact.has_information', [], 'validators'),
+            400
         );
     }
 }
