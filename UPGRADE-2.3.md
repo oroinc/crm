@@ -51,7 +51,8 @@ For more details on how to enable such integration, see [Magento 2 Documentation
     - removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
     - public method `isCustomerHasUniqueEmail(Customer $customer)` was added
     - public method `getRequiredExtensionVersion()` was added
-    - added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.  
+    - public method `initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)` was added
+    - added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.
 - Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was renamed to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
 - Class `Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator` moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator`:
     - constant `ALL_WEBSITES` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
@@ -157,19 +158,17 @@ For more details on how to enable such integration, see [Magento 2 Documentation
     - construction signature:
         - RegistryInterface $doctrine
         - Mcrypt $mcrypt
-    - public method `getTokenFromEntity(MagentoTransport $transportEntity)` was added
+    - public method `getTokenFromEntity(MagentoTransport $transportEntity, RestClientInterface $client)` was added
     - public method `generateNewToken(MagentoTransport $transportEntity, RestClientInterface $client)` was added
     - protected method `doTokenRequest(RestClientInterface $client, array $params)` was added
     - protected method `validateStatusCodes(RestException $e)` was added
     - protected method `getTokenRequestParams(ParameterBag $parameterBag)` was added
     - protected method `updateToken(MagentoTransport $transportEntity, $token)` was added
-- Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestClientFactory` was added. Extends `Oro\Bundle\IntegrationBundle\Provider\Rest\Client\BridgeRestClientFactory`
-    - protected method `getClientBaseUrl(ParameterBag $parameterBag)` was added
-    - protected method `getClientOptions(ParameterBag $parameterBag)` was added
+- Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter` was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
 - Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
     - const `REGION_RESPONSE_TYPE` was added
-    - construction signature was changed, now it takes the next arguments:
-        - BridgeRestClientFactory $clientFactory
+    - construction signature takes the next arguments:
+        - RestClientFactoryInterface $clientFactory
         - RestTokenProvider $restTokenProvider
         - RestPingProvider $pingProvider
         - ResponseConverterManager $responseConverterManager
@@ -229,3 +228,9 @@ This class has the same responsibilities as SoapTransport.
     - removed method `getSecurityFacade`
 - Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
     - method `setSecurityFacade` was replaced with `setAuthorizationChecker`
+- Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
+- Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Client/FactoryInterface was added.
+- Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
+- Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added.  It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
+- Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
+- Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
