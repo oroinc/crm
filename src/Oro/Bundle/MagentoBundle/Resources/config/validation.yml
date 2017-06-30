@@ -103,8 +103,6 @@ Oro\Bundle\MagentoBundle\Entity\Customer:
             - NotBlank: ~
         channel:
             - NotBlank: ~
-        organization:
-            - NotBlank: ~
 
 Oro\Bundle\MagentoBundle\Entity\CustomerGroup:
     properties:
