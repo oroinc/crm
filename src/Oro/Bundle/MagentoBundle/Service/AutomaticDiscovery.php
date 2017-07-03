@@ -10,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 
@@ -44,21 +44,21 @@ class AutomaticDiscovery
     protected $defaultStrategy;
 
     /**
-     * @var OwnershipMetadataProvider
+     * @var OwnershipMetadataProviderInterface
      */
     protected $ownershipMetadata;
 
     /**
      * @param DoctrineHelper $doctrineHelper
      * @param DiscoveryStrategyInterface $defaultStrategy
-     * @param OwnershipMetadataProvider $ownershipMetadata
+     * @param OwnershipMetadataProviderInterface $ownershipMetadata
      * @param string $discoveryEntityClass
      * @param array $configuration
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         DiscoveryStrategyInterface $defaultStrategy,
-        OwnershipMetadataProvider $ownershipMetadata,
+        OwnershipMetadataProviderInterface $ownershipMetadata,
         $discoveryEntityClass,
         array $configuration
     ) {

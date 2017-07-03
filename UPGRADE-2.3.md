@@ -53,3 +53,5 @@ MagentoBundle
     - removed method `getSecurityFacade`
 - Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
     - method `setSecurityFacade` was replaced with `setAuthorizationChecker`
+- Class `Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery`
+    - changed the constructor signature: parameter `OwnershipMetadataProvider $ownershipMetadata` was replaced with `OwnershipMetadataProviderInterface $ownershipMetadata`
