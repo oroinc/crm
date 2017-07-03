@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Functional\API;
+namespace Oro\Bundle\ContactBundle\Tests\Functional\ApiOld;
 
 use FOS\RestBundle\Util\Codes;
 
