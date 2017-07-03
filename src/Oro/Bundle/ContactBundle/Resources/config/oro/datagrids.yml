@@ -492,7 +492,7 @@ datagrids:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: c.owner
-                    autocomplete_alias: users
+                    autocomplete_alias: assigned_to_organization_users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
                 assignedName:
@@ -643,7 +643,7 @@ datagrids:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: a.owner
-                    autocomplete_alias: users
+                    autocomplete_alias: assigned_to_organization_users
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:

@@ -83,6 +83,7 @@ Scenario: Change primary address
 
 Scenario: Add/Delete address from contact view
   When I delete Ukraine address
+  And press "Yes, Delete"
   Then contact has one address
   When I press "+ Add Address"
   And fill form with:

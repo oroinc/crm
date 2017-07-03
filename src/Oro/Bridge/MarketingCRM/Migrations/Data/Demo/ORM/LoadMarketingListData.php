@@ -8,6 +8,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\MarketingListBundle\Entity\MarketingList;
 use Oro\Bundle\MarketingListBundle\Entity\MarketingListType;
+use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadMarketingListData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -22,11 +24,11 @@ class LoadMarketingListData extends AbstractFixture implements DependentFixtureI
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        $defaultUser = $manager->getRepository('OroUserBundle:User')->findOneBy(['username' => 'admin']);
+        $defaultUser = $this->getAdminUser($manager);
         $type = $manager->getRepository('OroMarketingListBundle:MarketingListType')->findOneBy(['name' => 'dynamic']);
         $segment = $manager->getRepository('OroSegmentBundle:Segment')->findOneBy(['name' => 'Contact List Segment']);
         $list = new MarketingList();
@@ -42,5 +44,30 @@ class LoadMarketingListData extends AbstractFixture implements DependentFixtureI
 
         $manager->persist($list);
         $manager->flush();
+    }
+
+    /**
+     * @param ObjectManager $manager
+     * @return User
+     * @throws \InvalidArgumentException
+     */
+    private function getAdminUser(ObjectManager $manager)
+    {
+        $repository = $manager->getRepository(Role::class);
+        $role       = $repository->findOneBy(['role' => User::ROLE_ADMINISTRATOR]);
+
+        if (!$role) {
+            throw new \InvalidArgumentException('Administrator role should exist.');
+        }
+
+        $user = $repository->getFirstMatchedUser($role);
+
+        if (!$user) {
+            throw new \InvalidArgumentException(
+                'Administrator user should exist to load Marketing List demo data.'
+            );
+        }
+
+        return $user;
     }
 }

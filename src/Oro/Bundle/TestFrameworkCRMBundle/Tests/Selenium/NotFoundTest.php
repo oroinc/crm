@@ -5,7 +5,7 @@ namespace Oro\Bundle\TestFrameworkCRMBundle\Tests\Selenium;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\SecurityBundle\Tests\Selenium\Pages\AclCheck;
 
-class NotFoundTest404 extends Selenium2TestCase
+class NotFoundTest extends Selenium2TestCase
 {
     public function test404()
     {

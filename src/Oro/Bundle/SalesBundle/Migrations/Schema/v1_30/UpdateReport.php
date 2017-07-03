@@ -80,7 +80,6 @@ class UpdateReport extends ParametrizedMigrationQuery implements Migration, Orde
      */
     protected function migrate(LoggerInterface $logger, $dryRun, $fetchQuery, $updateQuery)
     {
-
         $className = 'Oro\Bundle\SalesBundle\Entity\Opportunity';
         $replacements = [
             'closeRevenue'      => 'closeRevenueBaseCurrency',

@@ -13,7 +13,6 @@ use Oro\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
  */
 class CreateIntegrationTest extends Selenium2TestCase
 {
-
     protected function setUp()
     {
         $this->markTestSkipped("Skipped because added Channels Management");

@@ -234,3 +234,5 @@ This class has the same responsibilities as SoapTransport.
 - Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added.  It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
 - Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
 - Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
+- Class `Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery`
+    - changed the constructor signature: parameter `OwnershipMetadataProvider $ownershipMetadata` was replaced with `OwnershipMetadataProviderInterface $ownershipMetadata`

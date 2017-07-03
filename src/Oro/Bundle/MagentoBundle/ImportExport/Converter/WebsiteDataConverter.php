@@ -38,7 +38,6 @@ class WebsiteDataConverter extends IntegrationAwareDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-
         if (!empty($importedRecord['name']) && mb_strlen($importedRecord['name']) > self::NAME_MAX_LENGTH) {
             $importedRecord['name'] = $this->cutFieldToLength($importedRecord['name'], self::NAME_MAX_LENGTH);
         }
