@@ -210,6 +210,10 @@ An account the opportunity is assigned to.
 
 **The required field**
 
+### campaign
+
+The marketing campaign as a result of which the Opportunity was created.
+
 ## SUBRESOURCES
 
 ### closeReason

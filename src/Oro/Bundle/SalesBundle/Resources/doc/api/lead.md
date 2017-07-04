@@ -302,6 +302,10 @@ An account the lead is assigned to.
 
 *This field is **required** if the **customer** field is not specified.*
 
+### campaign
+
+The marketing campaign as a result of which the Lead was created
+
 ## SUBRESOURCES
 
 ###addresses
@@ -648,6 +652,19 @@ Example:
 ```
 {@/request}
 
+### campaign
+
+#### get_subresource
+
+Retrieve a record of campaign of a specific lead record.
+
+#### get_relationship
+
+Retrieve the ID of the campaign record of a specific lead record.
+
+#### update_relationship
+
+Replace the campaign of a specific lead record.
 
 # Extend\Entity\EV_Lead_Status
 
