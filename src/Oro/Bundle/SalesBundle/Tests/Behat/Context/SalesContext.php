@@ -35,13 +35,11 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
-     * Load users.yml alice fixture
-     *
      * @Given /^two users (charlie) and (samantha) exists in the system$/
      */
     public function twoUsersExistsInTheSystem()
     {
-        $this->fixtureLoader->loadFixtureFile('users.yml');
+        $this->fixtureLoader->loadFixtureFile('OroUserBundle:samantha_and_charlie_users.yml ');
     }
 
     /**
