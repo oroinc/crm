@@ -39,7 +39,7 @@ class SalesContext extends OroFeatureContext implements
      */
     public function twoUsersExistsInTheSystem()
     {
-        $this->fixtureLoader->loadFixtureFile('OroUserBundle:samantha_and_charlie_users.yml ');
+        $this->fixtureLoader->loadFixtureFile('OroUserBundle:samantha_and_charlie_users.yml');
     }
 
     /**
