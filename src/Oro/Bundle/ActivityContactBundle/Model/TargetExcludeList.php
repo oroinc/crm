@@ -10,7 +10,7 @@ class TargetExcludeList
      * @var array
      */
     protected static $excludeTargets = [
-        'Oro\Bundle\UserBundle\Entity\User',
+        'Oro\Bundle\UserBundle\Entity\AbstractUser',
         'Oro\Bundle\TaskBundle\Entity\Task',
         'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
         'Oro\Bundle\CallBundle\Entity\Call',
@@ -24,6 +24,16 @@ class TargetExcludeList
      */
     public static function isExcluded($className)
     {
-        return in_array($className, self::$excludeTargets, true);
+        if (in_array($className, self::$excludeTargets, true)) {
+            return true;
+        }
+
+        foreach (self::$excludeTargets as $excludedTarget) {
+            if (is_subclass_of($className, $excludedTarget)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
