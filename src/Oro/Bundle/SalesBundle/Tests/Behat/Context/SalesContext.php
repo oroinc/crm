@@ -110,7 +110,7 @@ class SalesContext extends OroFeatureContext implements
      */
     public function accountHasBusinessCustomers()
     {
-        $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
+        $this->fixtureLoader->loadFixtureFile('OroMagentoBundle:accounts_with_customers.yml');
     }
 
     /**
