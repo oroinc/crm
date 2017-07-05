@@ -1,4 +1,4 @@
-@fixture-activities.yml
+@fixture-OroCRMBundle:activities.yml
 Feature: Activity list feature
   In order to have ability manage contact activity
   As OroCRM sales rep

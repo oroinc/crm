@@ -6,7 +6,7 @@
 @fixture-OroCheckoutBundle:Shipping.yml
 @fixture-OroPaymentTermBundle:PaymentTermIntegration.yml
 @fixture-OroCheckoutBundle:Payment.yml
-@fixture-shipping_selector_quote.yml
+@fixture-OroSalesBundle:shipping_selector_quote.yml
 @fixture-OroCheckoutBundle:InventoryLevel.yml
 Feature: Default Shipping Service Selector on Quote Edit page
 
