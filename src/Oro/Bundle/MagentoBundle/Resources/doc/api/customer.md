@@ -481,7 +481,7 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is the owner of a specific Magento customer.
+Retrieve the record of the user who is the owner of a specific Magento customer record.
 
 #### get_relationship
 
