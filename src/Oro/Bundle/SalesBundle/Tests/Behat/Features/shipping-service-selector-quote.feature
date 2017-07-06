@@ -14,7 +14,9 @@ Feature: Default Shipping Service Selector on Quote Edit page
     Given There are products in the system available for order
     And I signed in as AmandaRCole@example.org on the store frontend
     And I click "Quick Order Form"
-    And I add product SKU123 with quantity 1 to quick order form
+    And I fill "QuickAddForm" with:
+      | SKU1 | SKU123 |
+      | QTY1 | 1      |
     And I click "Add to Shopping List"
     And I open page with shopping list Shopping list
     And I request a quote from shopping list "Shopping list" with data:
