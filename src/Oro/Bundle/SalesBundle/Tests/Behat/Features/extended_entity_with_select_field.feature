@@ -1,5 +1,5 @@
 @ticket-BAP-14504
-@fixture-lead.yml
+@fixture-OroSalesBundle:lead.yml
 Feature: Unidirectional entity relations created via UI
   In order to create custom field with type "Select"
   As an Administrator
