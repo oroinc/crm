@@ -222,7 +222,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
         if (null !== $isTwoWaySyncEnabled) {
             $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
         }
-        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
+        $transport = $this->createMock('Oro\Bundle\MagentoBundle\Entity\MagentoTransport');
         $transport->expects($this->any())->method('isSupportedExtensionVersion')
             ->willReturn($isSupportedExtensionVersion);
         $settings = ConfigObject::create($settings);

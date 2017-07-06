@@ -8,7 +8,7 @@ use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
 
-class CalculateAnalyticsSchedulerTest extends \PHPUnit_Framework_TestCase
+class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
 {
     use MessageQueueExtension;
 

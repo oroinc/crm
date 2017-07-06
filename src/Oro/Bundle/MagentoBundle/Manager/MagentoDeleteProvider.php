@@ -8,6 +8,8 @@ use Oro\Bundle\EntityBundle\ORM\DatabaseDriverInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
@@ -30,7 +32,8 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     public function supports($channelType)
     {
-        return 'magento' === $channelType;
+        return MagentoChannelType::TYPE === $channelType
+            || Magento2ChannelType::TYPE === $channelType;
     }
 
     /**
@@ -101,7 +104,6 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-
         $identifier = 'o.id';
         if ($this->em->getConnection()->getDriver()->getName() === DatabaseDriverInterface::DRIVER_POSTGRESQL) {
             $identifier = sprintf('CAST(%s as string)', $identifier);

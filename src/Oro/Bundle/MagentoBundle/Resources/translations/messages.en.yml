@@ -2,19 +2,20 @@
 
 oro:
     magento:
+        magento2.label: Magento 2
         dashboard:
             e_commerce: Ecommerce
             my_sales_flow_b2c_chart:
                 title: My Sales Flow B2C
-                description: This widget gives you a quick overview of a B2C workflow in form of a funnel chart
+                description: This widget gives you a quick overview of a B2C workflow in a form of a funnel chart
             average_order_amount_chart:
                 title: Average order amount
-                description: This widget shows average order amount for each data channel in form of a line chart
+                description: This widget shows average order amount for each data channel in a form of a line chart
                 order_amount: Order amount
                 month: Month
             new_magento_customers_chart:
                 title: New Magento Customers
-                description: This widget gives you a quick overview of new magento customers
+                description: This widget gives you a quick overview of new Magento customers
                 customer_count: Customers count
                 month: Month
             e_commerce_statistic:
@@ -36,15 +37,15 @@ oro:
                 compare_to.label: Compare to Date
             revenue_over_time_chart:
                 title: Revenue over time
-                description: This widget gives you a quick overview of magento revenues
+                description: This widget gives you a quick overview of Magento revenues
                 revenue: Revenue
                 date: Date
                 current_period: Current period
                 previous_period: Previous period
             orders_over_time_chart:
                 title: Orders over time
-                description: This widget gives you a quick overview of magento orders
-                order_count: Orders count
+                description: This widget gives you a quick overview of Magento orders
+                order_count: Order count
                 date: Date
                 current_period: Current period
                 previous_period: Previous period
@@ -121,10 +122,13 @@ oro:
                 coupon_code: Coupon code
                 orderCreatedAt: Order Date
         channel_type:
-            label:  Magento
+            magento.label:  Magento
+            magento2.label:  Magento 2
         transport:
             soap:
                 label: SOAP v2 API
+            rest:
+                label: REST API
         connector:
             customer:
                 label: Customer connector
@@ -535,32 +539,39 @@ oro:
                 description:        The integration via which information about a Magento order item is received.
             owner.label:            Owner
 
-        magentosoaptransport:
+        magentotransport:
             entity_label:                 Magento Integration Channel Transport
             entity_plural_label:          Magento Integration Channel Transports
             entity_description:           Represent integration channel transport
             admin_url.label:              Admin url
             all_sites:                    All web sites
-            api_user.label:               SOAP API User
-            api_key.label:                SOAP API Key
-            new_api_key.label:            New SOAP API Key
             id.label:                     Id
             is_extension_installed.label: Is extension installed
-            is_wsi_mode.label:            WS-I Compliance
             guest_customer_sync.label:    Guest Customer Sync
-            guest_customer_sync.tooltip:  Selecting this option will cause guest orders to be combined under a single customer based on email. If a registered customer exists with this email all guest orders with his email will be attributed to his account.
+            guest_customer_sync.tooltip:  Selecting this option will combine guest orders under a single customer based on email. If a registered customer exists with this email, all guest orders with such email will be attributed to their account.
             sync_start_date.label:        Sync start date
-            sync_start_date.tooltip:      This is a starting date for data synchronization. Only records updated after this date will be synchronized
+            sync_start_date.tooltip:      This is the starting date for data synchronization. Only records updated after this date will be synchronized
             sync_range.label:             Sync range
             website_id.label:             Website
-            website_id.tooltip:           This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
+            website_id.tooltip:           This is a list of websites associated with the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             websites.label:               Websites
-            wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
+            website_refresh.label:        Sync website list
             initial_sync_start_date.label: Initial sync start date
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
-                outdated_brige: OroBridge v.%extension_version% is used—outdated version
+                outdated_bridge: OroBridge v.%extension_version% is used—outdated version
+            soap:
+                api_user.label:               SOAP API User
+                api_key.label:                SOAP API Key
+                new_api_key.label:            New SOAP API Key
+                is_wsi_mode.label:            WS-I Compliance
+                wsdl_url.label:               SOAP WSDL URL
+            rest:
+                api_user.label:               REST API User
+                api_key.label:                REST API Key
+                new_api_key.label:            New REST API Key
+                api_url.label:                REST API URL
 
         order:
             entity_label:           Magento Order
@@ -582,7 +593,7 @@ oro:
                 description:        Defines whether a gift message is specified for a Magento order.
             remote_ip:
                 label:              Remote address
-                description:        The remore IP address of a customer who created a Magento order.
+                description:        The remote IP address of a customer who created a Magento order.
             store_name:
                 label:              Website
                 description:        The Magento store in which the order was created.
@@ -642,13 +653,13 @@ oro:
                 description:        The status of a Magento order (Processing, Canceled, Completed).
             customer:
                 label:              Customer
-                description:        The Magento customer who create a Magento order.
+                description:        The Magento customer who created a Magento order.
             addresses:
                 label:              Addresses
                 description:        Collection of addresses specified for a Magento order.
             store:
                 label:              Store
-                description:        A Magento store where a Magento order has been created.
+                description:        A Magento store where a Magento order was created.
             cart:
                 label:              Cart
                 description:        The cart from which a Magento order was created.
@@ -1196,6 +1207,8 @@ oro:
             choose_cart: Choose a cart...
 
         controller:
+            transport_error:               Magento instance is unavailable right now, or the provided URL is incorrect.
+            not_valid_parameters:          Parameters are not valid!
             transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.

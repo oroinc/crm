@@ -216,8 +216,10 @@ class MagentoBigNumberProvider
     public function getOrderConversionValues($dateRange)
     {
         $result = 0;
-
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
+        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(MagentoChannelType::TYPE);
         if (!$visitsQb instanceof QueryBuilder) {
             return $result;
         }
@@ -242,7 +244,10 @@ class MagentoBigNumberProvider
     {
         $result = 0;
 
-        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8153
+         */
+        $visitsQb = $this->getChannelRepository()->getVisitsCountForChannelTypeQB(MagentoChannelType::TYPE);
         if (!$visitsQb instanceof QueryBuilder) {
             return $result;
         }

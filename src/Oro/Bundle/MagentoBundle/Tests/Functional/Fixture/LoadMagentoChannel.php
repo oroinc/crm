@@ -28,12 +28,12 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\SalesBundle\Entity\Customer as CustomerAssociation;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
@@ -282,7 +282,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
      */
     protected function createTransport()
     {
-        $transport = new MagentoSoapTransport;
+        $transport = new MagentoSoapTransport();
         $transport->setAdminUrl('http://localhost/magento/admin');
         $transport->setApiKey('key');
         $transport->setApiUser('user');

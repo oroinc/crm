@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Component\Config\Common\ConfigObject;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -21,7 +22,7 @@ use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\MagentoBundle\Entity\Store;
@@ -40,7 +41,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     /** @var integration */
     protected $integration;
 
-    /** @var MagentoSoapTransport */
+    /** @var MagentoTransport */
     protected $transport;
 
     /** @var array */
@@ -157,7 +158,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
      */
     protected function createTransport()
     {
-        $transport = new MagentoSoapTransport;
+        $transport = new MagentoSoapTransport();
         $transport->setAdminUrl('http://localhost/magento/admin');
         $transport->setApiKey('key');
         $transport->setApiUser('user');

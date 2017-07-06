@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\MagentoBundle\Provider\CustomerConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\CustomerConnector;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCustomerReader extends CustomerConnector

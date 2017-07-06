@@ -140,7 +140,7 @@ Filter records by primary phone number.
 
 ### get
 
-Retreive a specific contact record.
+Retrieve a specific contact record.
 
 {@inheritdoc}
 
@@ -269,7 +269,7 @@ The list of records that will be deleted, could be limited by filters.
 
 #### get_subresource
 
-Retreive the account records a specific contact record is assigned to.
+Retrieve the account records a specific contact record is assigned to.
 
 #### get_relationship
 
@@ -381,11 +381,11 @@ Remove address records from a specific contact record.
 
 #### get_subresource
 
-Retreive the record of the user to whom a specific contact record is assigned.
+Retrieve the record of the user to whom a specific contact record is assigned.
 
 #### get_relationship
 
-Get a user record which a specific contact record will be assigned to.
+Retrieve the ID of a user record which a specific contact record will be assigned to.
 
 #### update_relationship
 
@@ -414,7 +414,7 @@ Retrieve the record of the user who created a specific contact record.
 
 #### get_relationship
 
-Retreive the ID of the user who created a specific contact record.
+Retrieve the ID of the user who created a specific contact record.
 
 #### update_relationship
 
@@ -495,7 +495,7 @@ Remove an account from the list of accounts for which a specific contact record 
 
 #### get_subresource
 
-Retreive the records of groups a specific contact record belongs to.
+Retrieve the records of groups a specific contact record belongs to.
 
 #### get_relationship
 

@@ -37,6 +37,9 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
 {
     use IntegrationEntityTrait, OriginTrait;
 
+    const ADMIN_WEBSITE_ID  = 0;
+    const ALL_WEBSITES      = -1;
+
     /**
      * @var integer
      *

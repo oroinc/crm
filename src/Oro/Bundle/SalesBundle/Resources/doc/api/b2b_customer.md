@@ -561,15 +561,15 @@ Example:
 
 #### get_subresource
 
-Retrieve the record of the user who is the owner of a specific business customer.
+Retrieve the record of the user who is the owner of a specific business customer record.
 
 #### get_relationship
 
-Retrieve the ID of the user who is an owner of a specific business customer.
+Retrieve the ID of the user who is an owner of a specific business customer record.
 
 #### update_relationship
 
-Replace the owner for a specific business customer.
+Replace the owner of a specific business customer record.
 
 {@request:json_api}
 Example:

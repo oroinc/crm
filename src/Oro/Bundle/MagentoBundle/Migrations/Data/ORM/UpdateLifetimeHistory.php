@@ -17,7 +17,7 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInterface
 {
@@ -43,10 +43,10 @@ class UpdateLifetimeHistory extends AbstractFixture implements ContainerAwareInt
     {
         $settingsProvider = $this->container->get('oro_channel.provider.settings_provider');
         $lifetimeSettings = $settingsProvider->getLifetimeValueSettings();
-        if (!array_key_exists(ChannelType::TYPE, $lifetimeSettings)) {
+        if (!array_key_exists(MagentoChannelType::TYPE, $lifetimeSettings)) {
             return;
         }
-        $magentoChannelSettings = $lifetimeSettings[ChannelType::TYPE];
+        $magentoChannelSettings = $lifetimeSettings[MagentoChannelType::TYPE];
         $customerIdentityClass = $magentoChannelSettings['entity'];
         $lifetimeField = $magentoChannelSettings['field'];
 

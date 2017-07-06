@@ -1,0 +1,113 @@
+Oro\Bundle\CustomerBundle\Entity\CustomerGroup:
+    all_customers:
+        name: 'All Customers'
+
+Oro\Bundle\CustomerBundle\Entity\Customer:
+    companyA:
+        name: 'Company A'
+        organization: '@organization'
+        owner: '@admin'
+        group: '@all_customers'
+        payment_term_7c4f1e8e: '@paymentTerm'
+
+Oro\Bundle\CustomerBundle\Entity\CustomerUser:
+    amanda:
+        email: 'AmandaRCole@example.org'
+        username: 'AmandaRCole@example.org'
+        password: 'gxP1L8r86hrdUMg9wKdfnsS/EZC4a7jOIdn6BMzegqL2S6e+KBIuHCrDVciMdiR/64osNnabmFonwK8l09vQxA=='
+        salt: 'fgswya1kzw0sck8ck48kosowckwo0ws'
+        firstName: 'Amanda'
+        lastName: 'Cole'
+        enabled: '1'
+        confirmed: '1'
+        customer: '@companyA'
+        organization: '@organization'
+        role: ['@buyer']
+        owner: '@admin'
+        website: '@website1'
+
+Oro\Bundle\CustomerBundle\Entity\CustomerAddress:
+    customerAddress1:
+        region: 'US-FL'
+        frontendOwner: '@companyA'
+        country: 'US'
+        owner: '@admin'
+        systemOrganization: '@organization'
+        primary: false
+        label: 'Address 1'
+        street: '801 Scenic Hwy'
+        city: 'Haines City'
+        postalCode: '33844'
+
+Oro\Bundle\CustomerBundle\Entity\CustomerUserAddress:
+    amandaAddress1:
+        region: 'US-FL'
+        frontendOwner: '@amanda'
+        country: 'US'
+        owner: '@admin'
+        systemOrganization: '@organization'
+        primary: false
+        label: 'Address 1'
+        street: '801 Scenic Hwy'
+        city: 'Haines City'
+        postalCode: '33844'
+
+Oro\Bundle\CustomerBundle\Entity\CustomerUserAddressToAddressType:
+    amandaAddress1ShippingDefault:
+        address: '@amandaAddress1'
+        type: 'shipping'
+        default: true
+    amandaAddress1BillingDefault:
+        address: '@amandaAddress1'
+        type: 'billing'
+        default: true
+
+Oro\Bundle\CustomerBundle\Entity\CustomerAddressToAddressType:
+    shippingType:
+        address: '@customerAddress1'
+        type: 'shipping'
+        default: true
+    billingType:
+        address: '@customerAddress1'
+        type: 'billing'
+        default: true
+
+Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue:
+    productName:
+        string: 'Product1'
+
+Oro\Bundle\ProductBundle\Entity\ProductUnitPrecision:
+    precision:
+        unit: '@item'
+        precision: '1'
+
+Oro\Bundle\ProductBundle\Entity\Product:
+    product:
+        sku: 'SKU123'
+        primaryUnitPrecision: '@precision'
+        addName: ['@productName']
+        inventoryStatus: '@enumInventoryStatuses'
+        status: 'enabled'
+        owner: '@business_unit'
+        organization: '@organization'
+        attributeFamily: '@defaultProductFamily'
+        type: 'simple'
+
+Oro\Bundle\PricingBundle\Entity\ProductPrice:
+    price1:
+        product: '@product'
+        priceList: '@defaultPriceList'
+        currency: 'USD'
+        quantity: 1
+        unit: '@item'
+        value: 95
+
+Oro\Bundle\PricingBundle\Entity\CombinedProductPrice:
+   combinedProductPriceProduct1:
+        pricelist: '@combinedPriceList'
+        product: '@product'
+        productSku: 'SKU123'
+        quantity: 1
+        unit: '@item'
+        value: 95
+        currency: 'USD'

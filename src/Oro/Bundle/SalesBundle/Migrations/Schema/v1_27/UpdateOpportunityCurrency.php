@@ -87,7 +87,6 @@ class UpdateOpportunityCurrency implements
      */
     protected function updateOpportunityTable(QueryBag $queries, array $currencies, $defaultCurrency)
     {
-
         $query = 'UPDATE orocrm_sales_opportunity 
                   SET budget_amount_currency = :currency, close_revenue_currency = :currency';
 

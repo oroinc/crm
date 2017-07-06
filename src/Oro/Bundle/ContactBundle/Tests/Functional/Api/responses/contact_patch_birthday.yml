@@ -1,0 +1,10 @@
+data:
+    type: contacts
+    id: '<toString(@contact1->id)>'
+    attributes:
+        birthday: '1995-05-25'
+    relationships:
+        updatedBy:
+            data:
+                type: users
+                id: '<toString(@user->id)>'

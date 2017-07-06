@@ -44,7 +44,7 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture
         $this->em->persist($lead);
         $this->em->flush();
 
-        ($referenceName === null ) ?: $this->setReference($referenceName, $lead);
+        ($referenceName === null) ?: $this->setReference($referenceName, $lead);
 
         return $lead;
     }
@@ -68,7 +68,7 @@ class LoadCampaignByCloseRevenueWidgetFixture extends AbstractFixture
         $opportunity->setStatus($opportunityStatus);
         $opportunity->setLead($lead);
 
-        ($closeRevenue === null ) ?: $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenue, 'USD'));
+        ($closeRevenue === null) ?: $opportunity->setCloseRevenue(MultiCurrency::create($closeRevenue, 'USD'));
 
         $opportunity->setOrganization($this->organization);
         $this->em->persist($opportunity);

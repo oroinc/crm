@@ -6,7 +6,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
-class ContactTaskActivityListTest extends Selenium2TestCase
+class ContactActivityListTest extends Selenium2TestCase
 {
     /**
      * @return string

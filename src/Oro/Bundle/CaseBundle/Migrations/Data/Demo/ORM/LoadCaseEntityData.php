@@ -8,7 +8,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
@@ -26,7 +25,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     /**
      * @var array
      */
-    static protected $fixtureSubjects = array(
+    protected static $fixtureSubjects = array(
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit',
         'Aenean commodo ligula eget dolor',
         'Aenean massa',
@@ -52,7 +51,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     /**
      * @var array
      */
-    static protected $fixtureText = array(
+    protected static $fixtureText = array(
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
         'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
@@ -78,7 +77,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     /**
      * @var array
      */
-    static protected $relatedEntities = array(
+    protected static $relatedEntities = array(
         'OroContactBundle:Contact'   => 'setRelatedContact',
         'OroAccountBundle:Account'   => 'setRelatedAccount',
     );

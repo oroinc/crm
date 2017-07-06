@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class MagentoSoapTransportTest extends AbstractEntityTestCase
 {
-    /** @var MagentoSoapTransport */
+    /** @var MagentoTransport */
     protected $entity;
 
     /**
@@ -64,7 +64,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'initial_sync_start_date' => new \DateTime('now'),
             'extension_version' => '1.1.0',
             'magento_version' => '1.8.0.0',
-            'newsletter_subscriber_synced_to_id' => 10
+            'newsletter_subscriber_synced_to_id' => 10,
         ];
 
         $this->entity

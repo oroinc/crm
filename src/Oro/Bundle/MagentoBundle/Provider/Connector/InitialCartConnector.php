@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use Oro\Bundle\MagentoBundle\Provider\CartConnector;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
 class InitialCartConnector extends AbstractMagentoConnector implements

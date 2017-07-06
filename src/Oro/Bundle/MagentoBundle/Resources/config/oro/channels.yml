@@ -65,9 +65,12 @@ channels:
               integration: magento
               connector: newsletter_subscriber
 
+       -
+          name: Oro\Bundle\MagentoBundle\Entity\Website
+
    channel_types:
         magento:
-            label: oro.magento.channel_type.label
+            label: oro.magento.channel_type.magento.label
             entities:
                 - Oro\Bundle\MagentoBundle\Entity\Cart
                 - Oro\Bundle\MagentoBundle\Entity\Order

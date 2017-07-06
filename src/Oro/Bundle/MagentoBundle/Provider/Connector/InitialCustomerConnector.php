@@ -2,9 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use Oro\Bundle\MagentoBundle\Provider\CustomerConnector;
-
 class InitialCustomerConnector extends AbstractMagentoConnector implements InitialConnectorInterface
 {
     const TYPE = 'customer_initial';

@@ -4,24 +4,28 @@ namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportCacheClearInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CreditMemoSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
@@ -34,10 +38,13 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SoapTransport extends BaseSOAPTransport implements
-    MagentoTransportInterface,
-    ServerTimeAwareInterface,
-    PingableInterface
+    MagentoSoapTransportInterface,
+    PingableInterface,
+    TransportCacheClearInterface
 {
+    use ExtensionVersionTrait;
+    use MultiAttemptsConfigTrait;
+
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
@@ -117,14 +124,30 @@ class SoapTransport extends BaseSOAPTransport implements
     protected $bundleConfig;
 
     /**
-     * @param Mcrypt $encoder
-     * @param WsdlManager $wsdlManager
-     * @param array $bundleConfig
+     * @var UniqueCustomerEmailSoapProvider
      */
-    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager, array $bundleConfig = [])
-    {
+    protected $uniqueCustomerEmailProvider;
+
+    /**
+     * @var array
+     */
+    private $clientAdditionalParams = [];
+
+    /**
+     * @param Mcrypt                          $encoder
+     * @param WsdlManager                     $wsdlManager
+     * @param UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider
+     * @param array                           $bundleConfig
+     */
+    public function __construct(
+        Mcrypt $encoder,
+        WsdlManager $wsdlManager,
+        UniqueCustomerEmailSoapProvider $uniqueCustomerEmailProvider,
+        array $bundleConfig = []
+    ) {
         $this->encoder = $encoder;
         $this->wsdlManager = $wsdlManager;
+        $this->uniqueCustomerEmailProvider = $uniqueCustomerEmailProvider;
         $this->bundleConfig = $bundleConfig;
     }
 
@@ -157,6 +180,7 @@ class SoapTransport extends BaseSOAPTransport implements
         }
 
         parent::init($transportEntity);
+        $this->processClientAdditionalParameters($this->clientAdditionalParams);
 
         $wsiMode = $this->settings->get('wsi_mode', false);
         $apiUser = $this->settings->get('api_user', false);
@@ -170,7 +194,6 @@ class SoapTransport extends BaseSOAPTransport implements
         }
 
         // revert initial state
-        $this->isExtensionInstalled = null;
         $this->adminUrl = null;
         $this->isWsiMode = $wsiMode;
         $this->serverTime = null;
@@ -180,6 +203,41 @@ class SoapTransport extends BaseSOAPTransport implements
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
 
         $this->checkExtensionFunctions();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)
+    {
+        $this->clientAdditionalParams = $clientExtraOptions;
+        $this->init($transportEntity);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resetInitialState()
+    {
+        $this->isExtensionInstalled = null;
+    }
+
+    /**
+     * @param array $clientAdditionalParams
+     */
+    protected function processClientAdditionalParameters(array $clientAdditionalParams)
+    {
+        $configuration = $this->multiAttemptsDefaultConfigurationParameters;
+        if (isset($clientAdditionalParams[self::$multiAttemptsConfigKey])) {
+            $configuration = array_merge($configuration, $clientAdditionalParams[self::$multiAttemptsConfigKey]);
+        }
+
+        $this->setMultipleAttemptsEnabled(
+            $this->getMultiAttemptsEnabledParameter($configuration)
+        );
+        $this->setSleepBetweenAttempt(
+            $this->getSleepBetweenAttemptsParameter($configuration)
+        );
     }
 
     protected function checkExtensionFunctions()
@@ -318,8 +376,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function isSupportedExtensionVersion()
     {
-        return $this->isExtensionInstalled()
-            && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
+        return $this->isSupportedVersion($this->getExtensionVersion());
     }
 
     /**
@@ -452,6 +509,14 @@ class SoapTransport extends BaseSOAPTransport implements
         } else {
             return new CustomerSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCustomerHasUniqueEmail(Customer $customer)
+    {
+        return $this->uniqueCustomerEmailProvider->isCustomerHasUniqueEmail($this, $customer);
     }
 
     /**
@@ -661,7 +726,7 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getSettingsEntityFQCN()
     {
-        return 'Oro\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
+        return MagentoSoapTransport::class;
     }
 
     /**
@@ -678,5 +743,21 @@ class SoapTransport extends BaseSOAPTransport implements
                 $this->serverTime = false;
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRequiredExtensionVersion()
+    {
+        return self::REQUIRED_EXTENSION_VERSION;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cacheClear($url = null)
+    {
+        $this->wsdlManager->clearCacheForUrl($url);
     }
 }

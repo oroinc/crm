@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Exception\AdminUrlRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
@@ -188,7 +188,7 @@ class MagentoUrlGenerator
 
         if ($this->getChannel() && $this->getChannel()->getTransport()) {
             $transport = $this->getChannel()->getTransport();
-            if ($transport instanceof MagentoSoapTransport) {
+            if ($transport instanceof MagentoTransport) {
                 $url = $transport->getAdminUrl();
             }
         }

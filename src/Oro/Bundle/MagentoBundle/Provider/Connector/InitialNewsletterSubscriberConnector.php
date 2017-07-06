@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIteratorInterface;
 
 class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector implements
     ExtensionVersionAwareInterface,
@@ -53,7 +52,7 @@ class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector impl
     {
         parent::initializeFromContext($context);
         $iterator = $this->getSourceIterator();
-        if ($iterator instanceof NewsletterSubscriberBridgeIterator) {
+        if ($iterator instanceof NewsletterSubscriberBridgeIteratorInterface) {
             $iterator->setInitialId($context->getOption('initial_id'));
         }
     }

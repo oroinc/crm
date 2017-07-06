@@ -4,19 +4,19 @@
 
 ### get
 
-Get one Opportunity record.
+Retrieve a specific opportunity record.
 
 {@inheritdoc}
 
 ### get_list
 
-Get the list of Opportunity records.
+Retrieve a collection of opportunity records.
 
 {@inheritdoc}
 
 ### create
 
-Create a new Opportunity record.
+Create a new opportunity record.
 The created record is returned in the response.
 
 {@inheritdoc}
@@ -82,7 +82,7 @@ Example:
 
 ### update
 
-Update existing Opportunity record.
+Edit a specific opportunity record.
 The updated record is returned in the response.
 
 {@inheritdoc}
@@ -147,13 +147,13 @@ Example:
 
 ### delete
 
-Delete existing Opportunity record.
+Delete a specific opportunity record.
 
 {@inheritdoc}
 
 ### delete_list
 
-Delete existing Opportunity records.
+Delete a collection of opportunity records.
 The list of records that will be deleted, could be limited by filters.
 
 {@inheritdoc}
@@ -210,17 +210,21 @@ An account the opportunity is assigned to.
 
 **The required field**
 
+### campaign
+
+The marketing campaign as a result of which the Opportunity was created.
+
 ## SUBRESOURCES
 
 ### closeReason
 
 #### get_subresource
 
-Get full information about the reason for opportunity closure.
+Retrieve the reason for opportunity closure.
 
 #### get_relationship
 
-Get the reason for opportunity closure.
+Retrieve the ID of the reason for opportunity closure.
 
 #### update_relationship
 
@@ -245,11 +249,11 @@ Example:
 
 #### get_subresource
 
-Get full information about the person on the customer side who is directly related to the opportunity.
+Retrieve the person on the customer side who is directly related to the opportunity.
 
 #### get_relationship
 
-Get the person on the customer side who is directly related to the opportunity.
+Retrieve the ID of the person on the customer side who is directly related to the opportunity.
 
 #### update_relationship
 
@@ -274,11 +278,11 @@ Example:
 
 #### get_subresource
 
-Get full information about a customer the opportunity is created for.
+Retrieve a customer the opportunity is created for.
 
 #### get_relationship
 
-Get a customer the opportunity is created for.
+Retrieve the ID of a customer the opportunity is created for.
 
 #### update_relationship
 
@@ -303,11 +307,11 @@ Example:
 
 #### get_subresource
 
-Get full information about an account the opportunity is created for.
+Retrieve an account the opportunity is created for.
 
 #### get_relationship
 
-Get an account the opportunity is created for.
+Retrieve the ID of an account the opportunity is created for.
 
 #### update_relationship
 
@@ -332,11 +336,11 @@ Example:
 
 #### get_subresource
 
-Get full information about the sale prospect that has been successfully qualified into this opportunity.
+Retrieve the sale prospect that has been successfully qualified into this opportunity.
 
 #### get_relationship
 
-Get the sale prospect that has been successfully qualified into this opportunity.
+Retrieve the ID of the sale prospect that has been successfully qualified into this opportunity.
 
 #### update_relationship
 
@@ -361,11 +365,11 @@ Example:
 
 #### get_subresource
 
-Get full information about an organization to which the opportunity belongs.
+Retrieve an organization to which the opportunity belongs.
 
 #### get_relationship
 
-Get an organization to which the opportunity belongs.
+Retrieve the ID of an organization to which the opportunity belongs.
 
 #### update_relationship
 
@@ -390,11 +394,11 @@ Example:
 
 #### get_subresource
 
-Get full information about an user who owns the opportunity.
+Retrieve an user who owns the opportunity.
 
 #### get_relationship
 
-Get an user who owns the opportunity
+Retrieve the ID of an user who owns the opportunity
 
 #### update_relationship
 
@@ -419,11 +423,11 @@ Example:
 
 #### get_subresource
 
-Get full information about a stage in the process of a sale.
+Retrieve a stage in the process of a sale.
 
 #### get_relationship
 
-Get a stage in the process of a sale.
+Retrieve the ID of a stage in the process of a sale.
 
 #### update_relationship
 
@@ -450,13 +454,13 @@ Example:
 
 ### get
 
-Retrieve a specific opportunity status record MD.
+Retrieve a specific opportunity status record.
 
 {@inheritdoc}
 
 ### get_list
 
-Retrieve a collection of opportunity statuses MD.
+Retrieve a collection of opportunity status records.
 
 {@inheritdoc}
 

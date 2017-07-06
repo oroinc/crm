@@ -10,9 +10,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface;
 use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
 
 class CartExpirationProcessor implements SyncProcessorInterface
@@ -25,7 +25,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
     /** @var EntityManager */
     protected $em;
 
-    /** @var MagentoTransportInterface */
+    /** @var MagentoSoapTransportInterface */
     protected $transport;
 
     /** @var array */
@@ -121,7 +121,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
      */
     protected function configure(Channel $channel)
     {
-        /** @var SoapTransport $transport */
+        /** @var MagentoSoapTransportInterface $transport */
         $transport = $this->helper->getTransport($channel);
         $transport->init($channel->getTransport());
 
@@ -133,7 +133,7 @@ class CartExpirationProcessor implements SyncProcessorInterface
         }
 
         $websiteId = $settings->get('website_id');
-        $stores    = $this->getSores($transport, $websiteId);
+        $stores    = $this->getStores($transport, $websiteId);
 
         if (empty($stores)) {
             throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
@@ -144,16 +144,16 @@ class CartExpirationProcessor implements SyncProcessorInterface
     }
 
     /**
-     * @param MagentoTransportInterface $transport
+     * @param MagentoSoapTransportInterface $transport
      * @param int                       $websiteId
      *
      * @return array
      */
-    protected function getSores(MagentoTransportInterface $transport, $websiteId)
+    protected function getStores(MagentoSoapTransportInterface $transport, $websiteId)
     {
         $stores = [];
         foreach ($transport->getStores() as $store) {
-            if ($store['website_id'] == $websiteId || $websiteId === StoresSoapIterator::ALL_WEBSITES) {
+            if ($store['website_id'] == $websiteId || $websiteId === Website::ALL_WEBSITES) {
                 $stores[] = $store['store_id'];
             }
         }

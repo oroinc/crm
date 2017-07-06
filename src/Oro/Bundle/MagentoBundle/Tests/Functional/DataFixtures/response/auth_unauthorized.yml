@@ -1,0 +1,4 @@
+"integration/admin/token":
+    code: 401
+    headers: ~
+    body: ~

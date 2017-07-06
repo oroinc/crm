@@ -2,10 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
-interface MagentoTransportInterface extends TransportInterface
+interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareInterface
 {
     const ALIAS_GROUPS = 'groups';
     const ALIAS_STORES = 'stores';
@@ -18,12 +20,14 @@ interface MagentoTransportInterface extends TransportInterface
     const TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST = 102;
 
     /**
-     * @param string       $action
-     * @param object|array $params
+     * Allow initialize transport with additional settings (no multi attempts, debug logs, etc.)
      *
-     * @return mixed
+     * @param Transport $transportEntity
+     * @param array     $clientExtraOptions
+     *
+     * @return void
      */
-    public function call($action, $params = []);
+    public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions);
 
     /**
      * Return true if oro bridge extension installed on remote instance
@@ -61,6 +65,15 @@ interface MagentoTransportInterface extends TransportInterface
     public function getCustomers();
 
     /**
+     * Check that customer has unique email
+     *
+     * @param Customer $customer
+     *
+     * @return bool
+     */
+    public function isCustomerHasUniqueEmail(Customer $customer);
+
+    /**
      * Retrieve customer groups list from magento
      *
      * @return \Iterator
@@ -92,6 +105,7 @@ interface MagentoTransportInterface extends TransportInterface
      * Retrieve customer information from magento.
      *
      * @param string $originId
+     *
      * @return array
      */
     public function getCustomerInfo($originId);
@@ -115,6 +129,8 @@ interface MagentoTransportInterface extends TransportInterface
     public function getErrorCode(\Exception $e);
 
     /**
+     * Retrieve order info from magento.
+     *
      * @param string $incrementId
      */
     public function getOrderInfo($incrementId);
@@ -127,11 +143,15 @@ interface MagentoTransportInterface extends TransportInterface
     public function getCreditMemos();
 
     /**
+     * Retrieve credit memo info from magento.
+     *
      * @param string $incrementId
      */
     public function getCreditMemoInfo($incrementId);
 
     /**
+     * Create customer.
+     *
      * @param array $customerData
      *
      * @return int ID of the created customer
@@ -139,6 +159,8 @@ interface MagentoTransportInterface extends TransportInterface
     public function createCustomer(array $customerData);
 
     /**
+     * Update customer.
+     *
      * @param int $customerId
      * @param array $customerData
      *
@@ -147,15 +169,21 @@ interface MagentoTransportInterface extends TransportInterface
     public function updateCustomer($customerId, array $customerData);
 
     /**
+     * Create customer address.
+     *
      * @param int $customerId
      * @param array $item
+     *
      * @return int
      */
     public function createCustomerAddress($customerId, array $item);
 
     /**
+     * Update customer address.
+     *
      * @param int $customerAddressId
      * @param array $item
+     *
      * @return bool
      */
     public function updateCustomerAddress($customerAddressId, array $item);
@@ -177,6 +205,8 @@ interface MagentoTransportInterface extends TransportInterface
     public function getNewsletterSubscribers();
 
     /**
+     * Create news letter subscriber.
+     *
      * @param array $subscriberData
      *
      * @return array
@@ -184,6 +214,8 @@ interface MagentoTransportInterface extends TransportInterface
     public function createNewsletterSubscriber(array $subscriberData);
 
     /**
+     * Update news letter subscriber.
+     *
      * @param int $subscriberId
      * @param array $subscriberData
      *
@@ -192,17 +224,36 @@ interface MagentoTransportInterface extends TransportInterface
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
 
     /**
+     * Check that retrieved extension version from magento is supported.
+     *
      * @return bool
      */
     public function isSupportedExtensionVersion();
 
     /**
+     * Retrieve extension version.
+     *
      * @return string
      */
     public function getExtensionVersion();
 
     /**
+     * Retrieve magento version.
+     *
      * @return string
      */
     public function getMagentoVersion();
+
+    /**
+     * Retrieve required extension version.
+     *
+     * @return string
+     */
+    public function getRequiredExtensionVersion();
+
+    /**
+     * Revert initial state. Use for action check connection to execute request
+     * to instance of magento.
+     */
+    public function resetInitialState();
 }

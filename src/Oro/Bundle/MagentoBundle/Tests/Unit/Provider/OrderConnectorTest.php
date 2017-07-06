@@ -5,7 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use Oro\Bundle\MagentoBundle\Provider\OrderConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector;
 
 class OrderConnectorTest extends MagentoConnectorTestCase
 {

@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Doctrine\ORM\Query\Expr;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
@@ -23,7 +23,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
     protected $defaultStrategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OwnershipMetadataProvider
+     * @var \PHPUnit_Framework_MockObject_MockObject|OwnershipMetadataProviderInterface
      */
     protected $metadataProvider;
 
@@ -44,7 +44,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
         $this->defaultStrategy = $this
             ->createMock('Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface');
         $this->metadataProvider = $this
-            ->getMockBuilder('Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider')
+            ->getMockBuilder('Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->entityClass = 'Oro\Bundle\MagentoBundle\Entity\Customer';

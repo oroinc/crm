@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class DashboardControllerTest extends WebTestCase
 {
@@ -63,7 +63,9 @@ class DashboardControllerTest extends WebTestCase
         $this->assertContains('Average order amount', $result->getContent());
 
         /** @var Channel[] $channels */
-        $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')->findBy(['channelType' => 'magento']);
+        $channels = $this->doctrine
+            ->getRepository('OroChannelBundle:Channel')
+            ->findBy(['channelType' => MagentoChannelType::TYPE]);
         foreach ($channels as $channel) {
             $this->assertContains($channel->getName(), $result->getContent());
         }
@@ -86,7 +88,7 @@ class DashboardControllerTest extends WebTestCase
 
         /** @var array $channels */
         $channels = $this->doctrine->getRepository('OroChannelBundle:Channel')
-            ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
+            ->getAvailableChannelNames($aclHelper, MagentoChannelType::TYPE);
         foreach ($channels as $channel) {
             $this->assertContains($channel['name'], $result->getContent());
         }

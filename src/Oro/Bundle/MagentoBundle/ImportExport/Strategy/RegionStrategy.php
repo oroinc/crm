@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
-use Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 
 class RegionStrategy extends AbstractImportStrategy
 {

@@ -18,7 +18,7 @@ use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 class CartStrategyTest extends AbstractStrategyTest
 {
@@ -28,7 +28,7 @@ class CartStrategyTest extends AbstractStrategyTest
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoSoapTransport $transport
+     * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransport $transport
      */
     protected $transport;
 
