@@ -16,7 +16,10 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I click "Quick Order Form"
     And I add product SKU123 with quantity 1 to quick order form
     And I click "Add to Shopping List"
-    And I open page with shopping list Shopping list
+    #And I open page with shopping list Shopping list
+    Given I open shopping list widget
+    And I click "View Details"
+    And I should see "SKU123"
     And I request a quote from shopping list "Shopping list" with data:
       | PO Number | PONUMBER1 |
 
