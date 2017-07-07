@@ -22,19 +22,19 @@ Feature: Unidirectional entity relations created via UI
       | Option2 |
     And I save and close form
     Then I should see "Field saved" flash message
-
-    When I click update schema
-    Then I should see "Schema updated" flash message
-
-  Scenario: Update value of field for Lead entity
-    Given I go to Sales/ Leads
-    When I click edit Bruce in grid
-    And I fill form with:
-      | TestField | Option2 |
-    And I save and close form
-    Then I should see "Lead saved" flash message
-
-    And I go to Sales/ Leads
-    Then I should see Bruce in grid with following data:
-      | Lead name | Bruce   |
-      | TestField | Option2 |
+#BAP-15004
+#    When I click update schema
+#    Then I should see "Schema updated" flash message
+#
+#  Scenario: Update value of field for Lead entity
+#    Given I go to Sales/ Leads
+#    When I click edit Bruce in grid
+#    And I fill form with:
+#      | TestField | Option2 |
+#    And I save and close form
+#    Then I should see "Lead saved" flash message
+#
+#    And I go to Sales/ Leads
+#    Then I should see Bruce in grid with following data:
+#      | Lead name | Bruce   |
+#      | TestField | Option2 |
