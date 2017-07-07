@@ -18,9 +18,13 @@ Feature: Default Shipping Service Selector on Quote Edit page
       | SKU1 | SKU123 |
       | QTY1 | 1      |
     And I click "Add to Shopping List"
-    And I open page with shopping list Shopping list
-    And I request a quote from shopping list "Shopping list" with data:
-      | PO Number | PONUMBER1 |
+    And I open shopping list widget
+    And I click "View Details"
+    And I should see "SKU123"
+    And I click "Request Quote"
+    And I fill in "PO Number" with "PONUMBER1"
+    And I click "Submit Request"
+    And click "Sign Out"
 
     And I login as administrator
     And I go to Sales/ Requests For Quote
