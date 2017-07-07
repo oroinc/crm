@@ -24,9 +24,6 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I click "Request Quote"
     And I fill in "PO Number" with "PONUMBER1"
     And I click "Submit Request"
-    #And I request a quote from current shopping list with data:
-     # | PO Number | PONUMBER1 |
-    #And I should see "Request has been saved" flash message
     And click "Sign Out"
 
     And I login as administrator
