@@ -8,6 +8,7 @@
 @fixture-OroCheckoutBundle:Payment.yml
 @fixture-OroSalesBundle:shipping_selector_quote.yml
 @fixture-OroCheckoutBundle:InventoryLevel.yml
+@skip
 Feature: Default Shipping Service Selector on Quote Edit page
 
   Scenario: Create a quote and finished checkout with Flat Rate Shipping Method
