@@ -18,7 +18,7 @@ class ContactNormalizer extends ConfigurableEntityNormalizer
     /**
      * @var array
      */
-    static protected $socialFields = array(
+    protected static $socialFields = array(
         Social::TWITTER     => 'twitter',
         Social::FACEBOOK    => 'facebook',
         Social::GOOGLE_PLUS => 'googlePlus',

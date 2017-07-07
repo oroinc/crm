@@ -139,17 +139,17 @@ class AddMultiCurrencyFields implements
      */
     public static function fillCurrencyFieldsWithDefaultValue(QueryBag $queries)
     {
-         $queries->addPostQuery(
-             new ParametrizedSqlMigrationQuery(
-                 'UPDATE orocrm_sales_opportunity SET budget_amount_currency = :currency_code, 
-                                 close_revenue_currency = :currency_code',
-                 [
-                     'currency_code' => CurrencyConfiguration::DEFAULT_CURRENCY
-                 ],
-                 [
-                     'currency_code' => Type::STRING,
-                 ]
-             )
-         );
+        $queries->addPostQuery(
+            new ParametrizedSqlMigrationQuery(
+                'UPDATE orocrm_sales_opportunity SET budget_amount_currency = :currency_code, 
+                               close_revenue_currency = :currency_code',
+                [
+                    'currency_code' => CurrencyConfiguration::DEFAULT_CURRENCY
+                ],
+                [
+                    'currency_code' => Type::STRING,
+                ]
+            )
+        );
     }
 }

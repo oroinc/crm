@@ -19,7 +19,7 @@ class RestAccountTest extends WebTestCase
         $manager->createQuery(sprintf('DELETE FROM %s', Account::class))->execute();
 
         $request = array(
-            "account" => array (
+            "account" => array(
                 "name" => 'Account_name_' . mt_rand(),
                 "owner" => '1',
             )

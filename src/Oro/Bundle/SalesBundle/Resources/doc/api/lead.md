@@ -4,20 +4,20 @@
 
 ### get
 
-Get a specific lead record.
+Retrieve a specific lead record.
 
 {@inheritdoc}
 
 ### get_list
 
-Get a collection of lead records.
+Retrieve a collection of lead records.
 The list of records that will be returned, could be limited by filters.
 
 {@inheritdoc}
 
 ### create
 
-Create a new Lead record.
+Create a new lead record.
 The created record is returned in the response.
 
 {@inheritdoc}
@@ -82,7 +82,7 @@ Example:
 
 ### update
 
-Edit a specific lead record
+Edit a specific lead record.
 The updated record is returned in the response.
 
 {@inheritdoc}
@@ -155,7 +155,7 @@ Example:
 
 ### delete
 
-Delete a specific lead record
+Delete a specific lead record.
 
 {@inheritdoc}
 
@@ -302,6 +302,10 @@ An account the lead is assigned to.
 
 *This field is **required** if the **customer** field is not specified.*
 
+### campaign
+
+The marketing campaign as a result of which the Lead was created
+
 ## SUBRESOURCES
 
 ###addresses
@@ -393,11 +397,11 @@ Example:
 
 #### get_subresource
 
-Get full information about a customer the opportunity is created for.
+Retrieve a customer records the opportunity is created for.
 
 #### get_relationship
 
-Get a customer the opportunity is created for.
+Retrieve the IDs a customer records the opportunity is created for.
 
 #### update_relationship
 
@@ -422,11 +426,11 @@ Example:
 
 #### get_subresource
 
-Get full information about an account the opportunity is created for.
+Retrieve an account record the opportunity is created for.
 
 #### get_relationship
 
-Get an account the opportunity is created for.
+Retrieve the ID of an account record the opportunity is created for.
 
 #### update_relationship
 
@@ -648,6 +652,19 @@ Example:
 ```
 {@/request}
 
+### campaign
+
+#### get_subresource
+
+Retrieve a record of campaign of a specific lead record.
+
+#### get_relationship
+
+Retrieve the ID of the campaign record of a specific lead record.
+
+#### update_relationship
+
+Replace the campaign of a specific lead record.
 
 # Extend\Entity\EV_Lead_Status
 

@@ -5,7 +5,7 @@ namespace Oro\Bridge\MarketingCRM\Provider;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProviderInterface;
 
 class PrecalculatedTrackingVisitProvider extends AbstractPrecalculatedVisitProvider implements
@@ -96,7 +96,10 @@ class PrecalculatedTrackingVisitProvider extends AbstractPrecalculatedVisitProvi
             ->join('tw.channel', 'c')
             ->andWhere($queryBuilder->expr()->eq('c.channelType', ':channel'))
             ->andWhere($queryBuilder->expr()->eq('c.status', ':status'))
-            ->setParameter('channel', ChannelType::TYPE)
+            /**
+             * @todo Remove dependency on exact magento channel type in CRM-8153
+             */
+            ->setParameter('channel', MagentoChannelType::TYPE)
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
         return $queryBuilder;

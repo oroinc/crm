@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerType extends AbstractType
@@ -155,7 +155,7 @@ class CustomerType extends AbstractType
     protected function isPasswordSetAllowed($data)
     {
         if ($data && $data instanceof Customer && $data->getChannel() && $data->getChannel()->getTransport()) {
-            /** @var MagentoSoapTransport $transport */
+            /** @var MagentoTransport $transport */
             $transport = $data->getChannel()->getTransport();
 
             return !$data->getId() || $transport->isSupportedExtensionVersion();

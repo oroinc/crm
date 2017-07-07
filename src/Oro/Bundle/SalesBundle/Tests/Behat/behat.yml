@@ -49,6 +49,25 @@ oro_behat_extension:
             locator: '.quote-lineitem-product-select .select2-offscreen[type="text"]'
           Unit Price: 'oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]'
 
+    Unit Price:
+      selector: '[name="oro_sale_quote[quoteProducts][0][quoteProductOffers][0][price][value]"]'
+
+    Shipping Address:
+      selector: '[data-name="field__customer-address"]'
+      class: Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity
+
+    Calculate Shipping:
+      selector: '[data-role="possible_shipping_methods_btn"]'
+
+    Shipping Method Form:
+      selector: 'div.possible_shipping_methods_form'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Method:
+            type: 'xpath'
+            locator: "//input[@name='possibleShippingMethodType']/../..//label"
+
     Customer Quotes Grid:
       selector: '.grid-container'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendGrid
@@ -106,5 +125,10 @@ oro_behat_extension:
         - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
+        - OroProductBundle::FeatureContext
+        - OroRFPBundle::FeatureContext
+        - OroCheckoutBundle::FeatureContext
+        - OroShoppingListBundle::ShoppingListContext
+        - OroAuthorizeNetBundle::FeatureContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

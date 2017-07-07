@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 
 class DefaultConfigurableEntityDenormalizer implements DenormalizerInterface
 {
@@ -52,6 +52,6 @@ class DefaultConfigurableEntityDenormalizer implements DenormalizerInterface
             class_exists($type) &&
             $this->fieldHelper->hasConfig($type) &&
             !empty($context['channelType']) &&
-            $context['channelType'] == ChannelType::TYPE;
+            $context['channelType'] == MagentoChannelType::TYPE;
     }
 }

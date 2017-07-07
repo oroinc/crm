@@ -9,7 +9,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 
 use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
@@ -29,7 +29,10 @@ class ScheduleNewsletterSubscribersResync implements FixtureInterface, Container
         /** @var IntegrationRepository $integrationRepository */
         $integrationRepository = $manager->getRepository(Integration::class);
         /** @var Integration[] $applicableIntegrations */
-        $applicableIntegrations = $integrationRepository->getConfiguredChannelsForSync(ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8156
+         */
+        $applicableIntegrations = $integrationRepository->getConfiguredChannelsForSync(MagentoChannelType::TYPE);
         if ($applicableIntegrations) {
             foreach ($applicableIntegrations as $integration) {
                 $this->getMessageProducer()->send(

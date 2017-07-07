@@ -1,0 +1,13 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: fake_token
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body:
+        version: "1.0.0"
+        mage_version: "2.1.4"
+        admin_url: "http://localhost/admin"
+        customer_scope: "1"

@@ -10,7 +10,7 @@ use Oro\Bundle\AddressBundle\Form\EventListener\FixAddressesPrimarySubscriber;
 
 class LeadAddressType extends AbstractType
 {
-     /**
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -58,7 +58,7 @@ class AccountAutocompleteProvider implements AccountAutocompleteProviderInterfac
             $entity->getMiddleName().
             $entity->getLastName().
             $entity->getNameSuffix();
-            $data[] = $contactName;
+        $data[] = $contactName;
 
         return $data;
     }

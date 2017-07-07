@@ -2,10 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Doctrine\ORM\Query\Expr;
-
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
@@ -49,7 +46,7 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
             ->method('getLastStatusForConnector')
             ->will($this->returnValue($status));
 
-        $transport = new MagentoSoapTransport();
+        $transport = new MagentoRestTransport();
         $transport->setNewsletterSubscriberSyncedToId(42);
         $integration->expects($this->any())
             ->method('getTransport')

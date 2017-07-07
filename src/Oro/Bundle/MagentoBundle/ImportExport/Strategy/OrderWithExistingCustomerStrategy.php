@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
@@ -45,7 +45,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         }
 
         // Do not try to load cart if bridge does not installed
-        /** @var MagentoSoapTransport $transport */
+        /** @var MagentoTransport $transport */
         $channel = $this->databaseHelper->findOneByIdentity($order->getChannel());
         $transport = $channel->getTransport();
         if ($transport->getIsExtensionInstalled()) {

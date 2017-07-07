@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 
 class StartSyncDateValidator extends ConstraintValidator
@@ -45,7 +45,7 @@ class StartSyncDateValidator extends ConstraintValidator
         }
 
         $transport = $integration->getTransport();
-        if (!$transport instanceof MagentoSoapTransport) {
+        if (!$transport instanceof MagentoTransport) {
             return;
         }
 

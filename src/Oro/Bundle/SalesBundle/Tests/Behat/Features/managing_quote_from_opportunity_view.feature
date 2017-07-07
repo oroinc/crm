@@ -3,7 +3,7 @@
 @fixture-OroFlatRateShippingBundle:FlatRateIntegration.yml
 @fixture-OroPaymentTermBundle:PaymentTermIntegration.yml
 @fixture-OroCheckoutBundle:Checkout.yml
-@fixture-opportunities.yml
+@fixture-OroSalesBundle:opportunities.yml
 Feature: In order send the customer detailed proposal while negotiating a deal
   As a Sales Representative
   I want to be able to create Quotes from Opportunity View

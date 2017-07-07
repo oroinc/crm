@@ -22,13 +22,10 @@ parameters:
 
     oro_magento.entity.newsletter_subscriber.class:                      Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber
 
-    oro_magento.entity.soap_transport.class:                             Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport
-
     # transport
     oro_magento.transport.soap_transport.class:                          Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
-    oro_magento.provider.channel_type.class:                             Oro\Bundle\MagentoBundle\Provider\ChannelType
     oro_magento.provider.cart_expiration_processor.class:                Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor
     oro_magento.provider.tracking_visit.class:                           Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider
     oro_magento.provider.tracking_visit_event.class:                     Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider
@@ -38,9 +35,7 @@ parameters:
 
     # forms
     oro_magento.form.type.order_place.class:                             Oro\Bundle\MagentoBundle\Form\Type\OrderPlaceType
-    oro_magento.form.type.soap_transport_setting.class:                  Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
-    oro_magento.form.type.soap_transport_check.class:                    Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType
-    oro_magento.form.subscriber.soap_transport_setting.class:            Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber
+    oro_magento.form.type.transport_check.class:                         Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType
     oro_magento.form.type.order_select.class:                            Oro\Bundle\MagentoBundle\Form\Type\OrderSelectType
     oro_magento.form.type.customer_select.class:                         Oro\Bundle\MagentoBundle\Form\Type\CustomerSelectType
     oro_magento.form.type.cart_select.class:                             Oro\Bundle\MagentoBundle\Form\Type\CartSelectType
@@ -167,18 +162,39 @@ services:
         arguments:
             - "@oro_security.encoder.mcrypt"
             - "@oro_magento.wsdl_manager"
+            - "@oro_magento.provider.soap.unique_customer_email"
             - []
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
-            - { name: oro_magento.bundle_config.aware, argument_number: 2 }
+            - { name: oro_magento.bundle_config.aware, argument_number: 3 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
+    oro_magento.transport.rest_transport:
+        class: Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport
+        arguments:
+            - '@oro_integration.transport.rest.event_dispatchable_client_factory'
+            - '@oro_magento.provider.rest_token_provider'
+            - '@oro_magento.transport.provider.oro_bridge_extension_config_provider'
+            - '@oro_magento.converter.rest.response_converter_manager'
+        calls:
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+        tags:
+            - { name: oro_integration.transport, type: magento_rest, channel_type: magento2 }
+
+    oro_magento.transport.provider.oro_bridge_extension_config_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider
+
     # Providers
-    oro_magento.provider.channel_type:
-        class: %oro_magento.provider.channel_type.class%
+    oro_magento.provider.magento_channel_type:
+        class: Oro\Bundle\MagentoBundle\Provider\MagentoChannelType
         tags:
             - { name: oro_integration.channel, type: magento }
+
+    oro_magento.provider.magento2_channel_type:
+        class: Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType
+        tags:
+            - { name: oro_integration.channel, type: magento2 }
 
     oro_magento.provider.cart_expiration_processor:
         class: %oro_magento.provider.cart_expiration_processor.class%
@@ -219,25 +235,45 @@ services:
         class: %oro_magento.provider.website_channel_chart.class%
         parent: oro_magento.provider.website_chart
 
+    oro_magento.provider.rest_token_provider:
+        class: Oro\Bundle\MagentoBundle\Provider\RestTokenProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.encoder.mcrypt'
+        calls:
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+
+    oro_magento.provider.soap.unique_customer_email:
+        class: Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider
+
     # forms
-    oro_magento.form.subscriber.soap_transport_setting:
-        class: %oro_magento.form.subscriber.soap_transport_setting.class%
+    oro_magento.form.subscriber.transport_setting:
+        class: Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber
         arguments:
             - "@oro_security.encoder.mcrypt"
 
     oro_magento.form.type.soap_transport_setting:
-        class: %oro_magento.form.type.soap_transport_setting.class%
+        class: Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
         arguments:
             - "@oro_magento.transport.soap_transport"
-            - "@oro_magento.form.subscriber.soap_transport_setting"
+            - "@oro_magento.form.subscriber.transport_setting"
             - "@oro_integration.manager.types_registry"
         tags:
             - { name: form.type, alias: oro_magento_soap_transport_setting_form_type }
 
-    oro_magento.form.type.soap_transport_check:
-        class: %oro_magento.form.type.soap_transport_check.class%
+    oro_magento.form.type.rest_transport_setting:
+        class: Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType
+        arguments:
+            - "@oro_magento.transport.rest_transport"
+            - "@oro_magento.form.subscriber.transport_setting"
+            - "@oro_integration.manager.types_registry"
         tags:
-            - { name: form.type, alias: oro_magento_soap_transport_check_button }
+            - { name: form.type, alias: oro_magento_rest_transport_setting_form_type }
+
+    oro_magento.form.type.transport_check:
+        class: %oro_magento.form.type.transport_check.class%
+        tags:
+            - { name: form.type, alias: oro_magento_transport_check_button }
 
     oro_magento.form.type.order_select:
         class: %oro_magento.form.type.order_select.class%
@@ -740,7 +776,7 @@ services:
     oro_magento.validator.unique_customer_email:
         class: %oro_magento.validator.unique_customer_email.class%
         arguments:
-            - "@oro_magento.transport.soap_transport"
+            - '@oro_integration.manager.types_registry'
         tags:
             - { name: validator.constraint_validator, alias: oro_magento.validator.unique_customer_email }
 
@@ -1021,6 +1057,16 @@ services:
             - "@doctrine"
             - "@oro_security.token_accessor"
 
+    oro_magento.handler.transport:
+        class: Oro\Bundle\MagentoBundle\Handler\TransportHandler
+        scope: request
+        arguments:
+            - '@oro_integration.manager.types_registry'
+            - '@oro_magento.provider.transport_entity'
+            - '@oro_magento.provider.website_choices'
+            - '@oro_magento.provider.connector_choices'
+            - '@request'
+
     oro_magento.routing.options_resolver.old_options:
         class: Oro\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
         public: false
@@ -1057,10 +1103,10 @@ services:
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
-    oro_magento.provider.customer.customer_icon:
+    oro_magento.provider.customer.magento_customer_icon:
         class: Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider
         arguments:
-            - '@oro_magento.provider.channel_type'
+            - '@oro_integration.manager.types_registry'
             - '@liip_imagine.cache.manager'
         tags:
             - { name: oro_sales.customer_icon, priority: 10 }
@@ -1109,6 +1155,31 @@ services:
         class: Oro\Bundle\MagentoBundle\Provider\Iso2CodeProvider
         arguments:
             - '@doctrine'
+
+    oro_magento.provider.website_choices:
+        class: Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider
+        arguments:
+            - '@translator'
+
+    oro_magento.provider.connector_choices:
+        class: Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider
+        arguments:
+            - '@oro_integration.manager.types_registry'
+            - '@translator'
+
+    oro_magento.provider.transport_entity:
+        class: Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider
+        arguments:
+            - '@form.factory'
+            - '@doctrine'
+
+    oro_magento.converter.rest.response_converter_manager:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager
+
+    oro_magento.converter.rest.region_converter:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\RegionConverter
+        tags:
+            - {name: oro_magento.rest_response.converter, type: region }
 
     oro_magento.async.upgrade_relations_accounts_contacts_processor:
         class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50\UpdateRelationsAccountsAndContactsProcessor

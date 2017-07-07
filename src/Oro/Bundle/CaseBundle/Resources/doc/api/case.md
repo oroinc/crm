@@ -398,11 +398,11 @@ Retrieve the records of the user who is an owner of a specific case record.
 
 #### get_relationship
 
-Retrieve the ID of the user who is an owner of a specific case.
+Retrieve the ID of the user who is an owner of a specific case record.
 
 #### update_relationship
 
-Replace the owner for a specific case.
+Replace the owner of a specific case record.
 
 {@request:json_api}
 Example:

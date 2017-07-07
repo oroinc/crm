@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class CustomerChannelSelectType extends AbstractType
@@ -90,7 +90,10 @@ class CustomerChannelSelectType extends AbstractType
                                 $queryBuilder->expr()->eq('d.enabled', ':enabled')
                             )
                         )
-                        ->setParameter('type', ChannelType::TYPE)
+                        /**
+                         * @todo Remove dependency on exact magento channel type in CRM-8153
+                         */
+                        ->setParameter('type', MagentoChannelType::TYPE)
                         ->setParameter('enabled', true);
 
                     $filteredQb = clone $queryBuilder;

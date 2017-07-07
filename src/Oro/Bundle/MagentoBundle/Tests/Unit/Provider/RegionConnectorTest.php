@@ -7,7 +7,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use Oro\Bundle\MagentoBundle\Provider\RegionConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\RegionConnector;
 
 class RegionConnectorTest extends MagentoConnectorTestCase
 {

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
 

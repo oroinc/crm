@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Writer;
 
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class NewsletterSubscriberInitialWriter extends ProxyEntityWriter
@@ -21,8 +21,8 @@ class NewsletterSubscriberInitialWriter extends ProxyEntityWriter
         // Save minimum originId received by initial sync for further filtering in case of failure
         $lastSubscriber = $items[$count - 1];
         $transport = $lastSubscriber->getChannel()->getTransport();
-        if ($transport instanceof MagentoSoapTransport) {
-            /** @var MagentoSoapTransport $transport */
+        if ($transport instanceof MagentoTransport) {
+            /** @var MagentoTransport $transport */
             $transport = $this->databaseHelper->getEntityReference($transport);
             $syncedToId = $transport->getNewsletterSubscriberSyncedToId();
             if (!$syncedToId || $syncedToId > $lastSubscriber->getOriginId()) {

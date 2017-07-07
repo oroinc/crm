@@ -26,13 +26,13 @@ use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
-use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -480,7 +480,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     protected function generateShoppingCartItem(ObjectManager $om, Cart $cart)
     {
-
         $products = ['Computer', 'Gaming Computer', 'Universal Camera Case', 'SLR Camera Tripod',
             'Two Year Extended Warranty - Parts and Labor', 'Couch', 'Chair', 'Magento Red Furniture Set'];
 

@@ -2,9 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use Oro\Bundle\MagentoBundle\Provider\OrderConnector;
-
 class InitialOrderConnector extends AbstractMagentoConnector implements InitialConnectorInterface
 {
     const TYPE = 'order_initial';

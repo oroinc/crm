@@ -1,0 +1,29 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body: {"version": "1.0.0","mage_version":"2.1.0","admin_url":"localhost/admin","customer_scope":1}
+
+"directory/countries":
+    code: 200
+    headers: ~
+    body:
+      -
+        id: "RM"
+        two_letter_abbreviation: "RM"
+        three_letter_abbreviation: "RMN"
+        full_name_locale: "Romania"
+        full_name_english: "Romania"
+        available_regions:
+          -
+            id: "192"
+            code: "1"
+            name: "Abn"
+          -
+            id: "193"
+            code: "2"
+            name: "Arn"

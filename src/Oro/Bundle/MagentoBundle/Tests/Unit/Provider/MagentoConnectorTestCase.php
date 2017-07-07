@@ -10,16 +10,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
+use Oro\Bundle\ImportExportBundle\Context\Context;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
-use Oro\Bundle\ImportExportBundle\Context\Context;
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase

@@ -709,12 +709,12 @@ Example:
 
 ### get
 
-Retrieve a collection of Magento shopping cart statuses.
+Retrieve a collection of Magento shopping cart status records.
 
 {@inheritdoc}
 
 ### get_list
 
-Retrieve a record of a specific Magento shopping cart status.
+Retrieve a record of a specific Magento shopping cart status record.
 
 {@inheritdoc}

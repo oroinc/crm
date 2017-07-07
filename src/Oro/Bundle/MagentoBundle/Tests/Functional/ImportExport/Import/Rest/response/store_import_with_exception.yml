@@ -1,0 +1,14 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body: {"version": "1.0.0","mage_version":"2.1.0","admin_url":"localhost/admin","customer_scope":1}
+
+"store/storeViews":
+    code: 403
+    headers: ~
+    body:

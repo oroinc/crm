@@ -8,19 +8,34 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry */
     protected $typesRegistry;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface */
+    protected $transport;
+
     protected function setUp()
     {
         parent::setUp();
 
         $this->typesRegistry = $this->createMock('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry');
+        $this->transport = $this->createMock(MagentoTransportInterface::class);
+
+        $this->transport
+             ->expects($this->any())
+             ->method('isSupportedExtensionVersion')
+             ->willReturn(false);
+
+        $this->typesRegistry
+             ->expects($this->any())
+             ->method('getTransportTypeBySettingEntity')
+             ->willReturn($this->transport);
     }
 
     /**
@@ -42,17 +57,22 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
      */
     public function testOnChannelSaveWithExtension($isExtensionInstalled, array $expectedConnectors)
     {
-        $this->entity->setChannelType(ChannelType::TYPE);
+        $this->entity->setChannelType(MagentoChannelType::TYPE);
         $transport = new MagentoSoapTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
 
-        $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\OrderConnector')
+        $this->transport
+            ->expects($this->any())
+            ->method('isExtensionInstalled')
+            ->willReturn($isExtensionInstalled);
+
+        $orderConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\OrderConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $cartConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\CartConnector')
+        $cartConnector = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Connector\CartConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,11 +117,16 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
      */
     public function testCartConnectorNotRelyOnVersion($isExtensionInstalled, $version, array $expectedConnectors)
     {
-        $this->entity->setChannelType(ChannelType::TYPE);
+        $this->entity->setChannelType(MagentoChannelType::TYPE);
         $transport = new MagentoSoapTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
         $transport->setExtensionVersion($version);
         $this->integration->setTransport($transport);
+
+        $this->transport
+            ->expects($this->any())
+            ->method('isExtensionInstalled')
+            ->willReturn($isExtensionInstalled);
 
         $extensionAwareConnector = $this
             ->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface')
@@ -166,7 +191,7 @@ class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 
     public function testOnChannelSave()
     {
-        $this->entity->setChannelType(ChannelType::TYPE);
+        $this->entity->setChannelType(MagentoChannelType::TYPE);
         $transport = new MagentoSoapTransport();
         $transport->setIsExtensionInstalled(false);
         $this->integration->setTransport($transport);

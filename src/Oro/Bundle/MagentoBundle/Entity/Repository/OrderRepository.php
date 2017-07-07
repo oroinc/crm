@@ -10,7 +10,7 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Provider\ChannelType;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OrderRepository extends ChannelAwareEntityRepository
@@ -19,6 +19,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getRevenueValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
@@ -43,6 +44,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getOrdersNumberValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
@@ -65,6 +67,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getAOVValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
@@ -90,7 +93,9 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return float|int
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getDiscountedOrdersPercentByDatePeriod(
@@ -117,6 +122,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param string        $field
      *
      * @return Cart|Customer|null $item
+     *
      * @throws InvalidEntityException
      */
     public function getLastPlacedOrderBy($item, $field)
@@ -139,6 +145,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime  $dateFrom
      * @param \DateTime  $dateTo
      * @param DateHelper $dateHelper
+     *
      * @return array
      */
     public function getAverageOrderAmount(
@@ -149,8 +156,12 @@ class OrderRepository extends ChannelAwareEntityRepository
     ) {
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
-        $channels      = $entityManager->getRepository('OroChannelBundle:Channel')
-            ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
+        /**
+         * @todo Remove dependency on exact magento channel type in CRM-8154
+         */
+        $channels      = $entityManager
+            ->getRepository('OroChannelBundle:Channel')
+            ->getAvailableChannelNames($aclHelper, MagentoChannelType::TYPE);
 
         // execute data query
         $queryBuilder = $this->createQueryBuilder('o');

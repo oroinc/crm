@@ -6,7 +6,7 @@ use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 
-class AddressHandlerTest extends AbstractHandlerTest
+class CustomerAddressApiHandlerTest extends AbstractHandlerTest
 {
     protected function setUp()
     {

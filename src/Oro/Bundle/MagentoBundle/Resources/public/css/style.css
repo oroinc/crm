@@ -13,9 +13,6 @@
 .magento-website-selector-container .selector > span {
     overflow: hidden;
 }
-.magento-website-selector-container .selector select {
-    width: 235px !important;
-}
 .magento-website-selector-container .sync-website-list-link {
     line-height: 28px;
     position: absolute;

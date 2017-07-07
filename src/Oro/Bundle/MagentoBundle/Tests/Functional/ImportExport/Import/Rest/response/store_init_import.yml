@@ -1,0 +1,14 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body: {"version": "1.0.0","mage_version":"2.1.0","admin_url":"localhost/admin","customer_scope":1}
+
+"store/storeViews":
+    code: 200
+    headers: ~
+    body: [{"id":1,"code":"default","name":"Default Store","website_id":1,"store_group_id":1},{"id":0,"code":"admin","name":"Admin","website_id":0,"store_group_id":0}]

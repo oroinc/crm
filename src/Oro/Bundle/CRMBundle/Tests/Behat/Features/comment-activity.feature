@@ -1,5 +1,5 @@
 # @todo: Unskip when CRM-6965 will be resolved
-@fixture-comment-activity.yml @skip
+@fixture-OroCRMBundle:comment-activity.yml @skip
 Feature: Comment activity feature
   In order to have ability manage contact activity
   As OroCRM sales rep

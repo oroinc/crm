@@ -1,0 +1,14 @@
+"integration/admin/token":
+    code: 200
+    headers: ~
+    body: "token"
+
+"oro/ping":
+    code: 200
+    headers: ~
+    body: {"version": "1.0.0","mage_version":"2.1.0","admin_url":"localhost/admin","customer_scope":1}
+
+"store/websites":
+    code: 200
+    headers: ~
+    body: [{"id":2,"code":"spare_website","name":"Spare Website","default_group_id":1},{"id":1,"code":"base","name":"New name of main website","default_group_id":2},{"id":0,"code":"admin","name":"Admin","default_group_id":0}]

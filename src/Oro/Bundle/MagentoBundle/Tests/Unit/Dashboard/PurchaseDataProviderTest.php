@@ -151,7 +151,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->with('OroMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
-         $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
+        $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
             ->disableOriginalConstructor()
             ->getMock();
         $chartViewBuilder = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartViewBuilder')
