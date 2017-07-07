@@ -221,7 +221,7 @@ Example:
 
 #### delete_relationship
 
-Remove Magento website records from a specific Magento product record
+Remove Magento website records from a specific Magento product record.
 
 ### channel
 

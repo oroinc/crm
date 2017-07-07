@@ -1,4 +1,4 @@
-@fixture-business_customer_crud.yml
+@fixture-OroSalesBundle:business_customer_crud.yml
 Feature: Managing business customer
   In order to check business customer crud
   As an Administrator

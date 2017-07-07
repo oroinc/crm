@@ -153,6 +153,10 @@ The list of records that will be deleted, could be limited by filters.
 
 **The required field**
 
+### campaign
+
+The marketing campaign as a result of which the LeadAddress was created.
+
 ## SUBRESOURCES
 
 ### country

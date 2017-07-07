@@ -43,7 +43,7 @@ class FeatureContext extends OroFeatureContext implements
      */
     public function crmHasSecondSalesChannel()
     {
-        $this->fixtureLoader->loadFixtureFile('second_sales_channel.yml');
+        $this->fixtureLoader->loadFixtureFile('OroMagentoBundle:second_sales_channel.yml');
     }
 
     /**

@@ -6,7 +6,7 @@
 @fixture-OroCheckoutBundle:Shipping.yml
 @fixture-OroPaymentTermBundle:PaymentTermIntegration.yml
 @fixture-OroCheckoutBundle:Payment.yml
-@fixture-shipping_selector_quote.yml
+@fixture-OroSalesBundle:shipping_selector_quote.yml
 @fixture-OroCheckoutBundle:InventoryLevel.yml
 Feature: Default Shipping Service Selector on Quote Edit page
 
@@ -14,7 +14,9 @@ Feature: Default Shipping Service Selector on Quote Edit page
     Given There are products in the system available for order
     And I signed in as AmandaRCole@example.org on the store frontend
     And I click "Quick Order Form"
-    And I add product SKU123 with quantity 1 to quick order form
+    And I fill "QuickAddForm" with:
+      | SKU1 | SKU123 |
+      | QTY1 | 1      |
     And I click "Add to Shopping List"
     And I open shopping list widget
     And I click "View Details"

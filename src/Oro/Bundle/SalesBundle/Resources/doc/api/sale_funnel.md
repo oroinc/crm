@@ -162,6 +162,10 @@ The list of records that will be deleted, could be limited by filters.
 **Conditionally required field:**
 *At least one of the fields Lead or Opportunity must be defined.*
 
+### campaign
+
+The marketing campaign as a result of which the SalesFunnel was created.
+
 ## SUBRESOURCES
 
 ### lead

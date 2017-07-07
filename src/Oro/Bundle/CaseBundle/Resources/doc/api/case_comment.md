@@ -221,15 +221,15 @@ Example:
 
 #### get_subresource
 
-Retrieve the records of the contact who is an author of a specific case comment.
+Retrieve the records of the contact who is an author of a specific case comment record.
 
 #### get_relationship
 
-Retrieve the ID of the contact who is an author of a specific case comment.
+Retrieve the ID of the contact who is an author of a specific case comment record.
 
 #### update_relationship
 
-Replace the contact who is an author of a specific case comment.
+Replace the contact who is an author of a specific case comment record.
 
 {@request:json_api}
 Example:
@@ -285,11 +285,11 @@ This user is also considered the case comment author if the *contact* field valu
 
 #### get_relationship
 
-Retrieve the ID of the user who is an owner of a specific case comment.
+Retrieve the ID of the user who is an owner of a specific case comment record.
 
 #### update_relationship
 
-Replace the owner for a specific case comment.
+Replace the owner of a specific case comment record.
 
 {@request:json_api}
 Example:
