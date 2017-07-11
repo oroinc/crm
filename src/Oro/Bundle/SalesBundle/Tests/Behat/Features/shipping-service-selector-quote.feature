@@ -6,7 +6,7 @@
 @fixture-OroCheckoutBundle:Shipping.yml
 @fixture-OroPaymentTermBundle:PaymentTermIntegration.yml
 @fixture-OroCheckoutBundle:Payment.yml
-@fixture-shipping_selector_quote.yml
+@fixture-OroSalesBundle:shipping_selector_quote.yml
 @fixture-OroCheckoutBundle:InventoryLevel.yml
 Feature: Default Shipping Service Selector on Quote Edit page
 
@@ -14,11 +14,17 @@ Feature: Default Shipping Service Selector on Quote Edit page
     Given There are products in the system available for order
     And I signed in as AmandaRCole@example.org on the store frontend
     And I click "Quick Order Form"
-    And I add product SKU123 with quantity 1 to quick order form
+    And I fill "QuickAddForm" with:
+      | SKU1 | SKU123 |
+      | QTY1 | 1      |
     And I click "Add to Shopping List"
-    And I open page with shopping list Shopping list
-    And I request a quote from shopping list "Shopping list" with data:
-      | PO Number | PONUMBER1 |
+    And I open shopping list widget
+    And I click "View Details"
+    And I should see "SKU123"
+    And I click "Request Quote"
+    And I fill in "PO Number" with "PONUMBER1"
+    And I click "Submit Request"
+    And click "Sign Out"
 
     And I login as administrator
     And I go to Sales/ Requests For Quote

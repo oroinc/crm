@@ -1,4 +1,4 @@
-@fixture-case_crud.yml
+@fixture-OroCaseBundle:case_crud.yml
 Feature: Activity cases
   In order to keep track of all trouble cases
   As a Sales Manager
