@@ -53,7 +53,7 @@ oro:
         add_entity:          Add contact
         addresses:
             label:           Addresses
-            description:     Collection of Contact addresses: mailing, business, home, billing, etc.
+            description:     "Collection of Contact addresses: mailing, business, home, billing, etc."
         assigned_to:
             label:           Assigned to
             description:     OroCRM user who is responsible for managing relations with the contact.
