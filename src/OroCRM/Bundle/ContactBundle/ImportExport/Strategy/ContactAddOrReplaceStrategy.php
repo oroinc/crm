@@ -131,7 +131,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
                 $contactExistCallback = function ($key, Contact $value) use ($contact) {
                     return $contact !== $value && (int)$contact->getId() === (int)$value->getId();
                 };
-                if ($contact->getId() !== null && $account->getContacts()->exists($contactExistCallback)) {
+                if ($account->getContacts()->exists($contactExistCallback)) {
                     $account->removeContact($contact);
                 }
             }
