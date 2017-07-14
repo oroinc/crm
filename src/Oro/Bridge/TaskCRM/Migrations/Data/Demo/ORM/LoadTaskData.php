@@ -145,6 +145,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface,
             $dueDate->add(new \DateInterval(sprintf('P%dDT%dM', rand(0, 30), rand(0, 1440))));
             $task->setDueDate($dueDate);
             $task->setOwner($assignedTo);
+            $task->setCreatedBy($assignedTo);
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
             $task->setStatus($status);
