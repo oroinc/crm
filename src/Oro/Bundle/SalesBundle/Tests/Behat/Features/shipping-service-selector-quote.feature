@@ -31,7 +31,7 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I open RFQ view page on backend with id "1"
     And I click "Create Quote"
     And I fill in "Unit Price" with "22"
-    And I select "801 Scenic Hwy, HAINES CITY FL US 33844" from "Shipping Address" field
+    And I select "ORO, 801 Scenic Hwy, HAINES CITY FL US 33844" from "Shipping Address" field
     And I click on "Calculate Shipping"
     And I fill "Shipping Method Form" with:
       | Method | Flat Rate |
@@ -45,7 +45,7 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I click on View in grid
     And click "Accept and Submit to Order"
     And click "Submit"
-    And I select "801 Scenic Hwy, HAINES CITY FL US 33844" on the "Billing Information" checkout step and press Continue
+    And I select "ORO, 801 Scenic Hwy, HAINES CITY FL US 33844" on the "Billing Information" checkout step and press Continue
     And on the "Shipping Information" checkout step I press Continue
     And on the "Shipping Method" checkout step I press Continue
     And on the "Payment" checkout step I press Continue

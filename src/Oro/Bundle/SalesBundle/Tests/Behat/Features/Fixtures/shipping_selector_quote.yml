@@ -38,6 +38,7 @@ Oro\Bundle\CustomerBundle\Entity\CustomerAddress:
         street: '801 Scenic Hwy'
         city: 'Haines City'
         postalCode: '33844'
+        organization: '@organization'
 
 Oro\Bundle\CustomerBundle\Entity\CustomerUserAddress:
     amandaAddress1:
@@ -51,6 +52,7 @@ Oro\Bundle\CustomerBundle\Entity\CustomerUserAddress:
         street: '801 Scenic Hwy'
         city: 'Haines City'
         postalCode: '33844'
+        organization: '@organization'
 
 Oro\Bundle\CustomerBundle\Entity\CustomerUserAddressToAddressType:
     amandaAddress1ShippingDefault:

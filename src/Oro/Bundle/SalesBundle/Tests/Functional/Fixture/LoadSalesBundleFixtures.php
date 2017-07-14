@@ -264,11 +264,12 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function getBillingAddress()
     {
         $address = new Address();
-        $address->setCountry($this->getCounty());
-        $address->setStreet('1215 Caldwell Road');
-        $address->setCity('Rochester');
-        $address->setPostalCode('14608');
-        $address->setRegionText('Arizona1');
+        $address->setCountry($this->getCounty())
+            ->setStreet('1215 Caldwell Road')
+            ->setCity('Rochester')
+            ->setPostalCode('14608')
+            ->setRegionText('Arizona1')
+            ->setOrganization('Test Org');
 
         return $address;
     }
@@ -279,11 +280,12 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     protected function getShippingAddress()
     {
         $address = new Address();
-        $address->setCountry($this->getCounty());
-        $address->setStreet('1215 Caldwell Road');
-        $address->setCity('Rochester');
-        $address->setPostalCode('14608');
-        $address->setRegionText('Arizona1');
+        $address->setCountry($this->getCounty())
+            ->setStreet('1215 Caldwell Road')
+            ->setCity('Rochester')
+            ->setPostalCode('14608')
+            ->setRegionText('Arizona1')
+            ->setOrganization('Test Org');
 
         return $address;
     }
