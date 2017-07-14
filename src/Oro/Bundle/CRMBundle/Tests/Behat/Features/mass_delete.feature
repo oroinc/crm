@@ -1,4 +1,4 @@
-@fixture-mass_action.yml
+@fixture-OroCRMBundle:mass_action.yml
 Feature: Mass Delete records
 	In order to decrease time needed to delete several records at once
 	As a crm administrator

@@ -1,5 +1,5 @@
 @ticket-BAP-14504
-@fixture-lead.yml
+@fixture-OroSalesBundle:lead.yml
 Feature: Unidirectional entity relations created via UI
   In order to create custom field with type "Select"
   As an Administrator
@@ -22,9 +22,8 @@ Feature: Unidirectional entity relations created via UI
       | Option2 |
     And I save and close form
     Then I should see "Field saved" flash message
-
     When I click update schema
-    Then I should see "Schema updated" flash message
+    Then I should see Schema updated flash message
 
   Scenario: Update value of field for Lead entity
     Given I go to Sales/ Leads

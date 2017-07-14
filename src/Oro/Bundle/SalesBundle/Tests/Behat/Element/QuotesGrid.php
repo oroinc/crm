@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Element;
 
+use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridMappedChildInterface;
-use Oro\Bundle\TestFrameworkBundle\Behat\Element\Table;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\TableRow;
 
-class QuotesGrid extends Table implements GridMappedChildInterface
+class QuotesGrid extends Grid implements GridMappedChildInterface
 {
     /**
      * @return TableRow[]

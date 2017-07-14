@@ -1,4 +1,4 @@
-@fixture-crud-account.yml
+@fixture-OroAccountBundle:crud-account.yml
 Feature: CRUD Account
   In order to have ability create, view, update and delete accounts
   As a administrator

@@ -97,7 +97,9 @@ class LoadAddressDiscoveryData extends AbstractFixture
 
             foreach ($item['addresses'] as $addressData) {
                 $address = new Address();
-                $address->setPostalCode($addressData['postalCode']);
+                $address->setPostalCode($addressData['postalCode'])
+                    ->setFirstName($item['firstName'])
+                    ->setLastName($item['lastName']);
                 $address->addType($addressTypeRepo->findOneBy(['name' => $addressData['type']]));
 
                 $customer->addAddress($address);
