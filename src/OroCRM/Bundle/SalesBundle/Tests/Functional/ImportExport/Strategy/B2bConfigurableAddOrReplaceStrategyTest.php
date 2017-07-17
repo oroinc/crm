@@ -51,16 +51,7 @@ class B2bConfigurableAddOrReplaceStrategyTest extends WebTestCase
 
         $container = $this->getContainer();
 
-        $this->strategy = new B2bConfigurableAddOrReplaceStrategy(
-            $container->get('event_dispatcher'),
-            $container->get('oro_importexport.strategy.import.helper'),
-            $container->get('oro_importexport.field.field_helper'),
-            $container->get('oro_importexport.field.database_helper'),
-            $container->get('oro_entity.entity_class_name_provider'),
-            $container->get('translator'),
-            $container->get('oro_importexport.strategy.new_entities_helper'),
-            $container->get('oro_entity.doctrine_helper')
-        );
+        $this->strategy = $container->get('orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace');
 
         $this->stepExecution = new StepExecution('step', new JobExecution());
         $this->context = new StepExecutionProxyContext($this->stepExecution);
