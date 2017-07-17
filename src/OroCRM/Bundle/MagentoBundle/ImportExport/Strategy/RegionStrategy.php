@@ -29,7 +29,7 @@ class RegionStrategy extends AbstractImportStrategy
         $isPersistNew = false,
         $itemData = null,
         array $searchContext = [],
-        $entityIsRelation = false
+        $entityIsRequiredRelation = false
     ) {
         $excluded = [];
 
