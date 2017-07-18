@@ -15,6 +15,9 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
     {
         parent::setUp();
 
+        $this->getContainer()->get('oro_magento.importexport.processor.customer_address_export.job')->setTransport(
+            $this->transport
+        );
         $this->getContainer()->get('oro_magento.importexport.writer.customer_address')->setTransport(
             $this->transport
         );
@@ -81,7 +84,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         /** @var Address $address */
         $address = $customer->getAddresses()->first();
 
-        $this->transport->expects($this->once())
+        $this->transport->expects($this->any())
             ->method('getCustomerAddressInfo')
             ->will(
                 $this->returnValue(
@@ -132,7 +135,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         $this->assertTrue($stateManager->isInState($address->getSyncState(), 0));
     }
 
-    public function testRemovedStateIfFailed()
+    public function testRemovedFailed()
     {
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
@@ -144,9 +147,11 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         $address = $customer->getAddresses()->first();
 
         $e = new TransportException();
-        $e->setFaultCode(102);
+        $e->setFaultCode(103);
 
-        $this->transport->expects($this->once())->method('getCustomerAddressInfo')->will($this->throwException($e));
+        $this->transport->expects($this->once())
+            ->method('getCustomerAddressInfo')
+            ->will($this->throwException($e));
         $this->transport->expects($this->never())->method('updateCustomerAddress');
         $this->transport->expects($this->never())->method('createCustomerAddress');
 
@@ -171,42 +176,6 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
 
         $this->getContainer()->get('doctrine')->getManager()->refresh($address);
 
-        $stateManager = new StateManager();
-        $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED));
-    }
-
-    public function testRemovedState()
-    {
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
-
-        /** @var Customer $customer */
-        $customer = $this->getReference('customer');
-
-        /** @var Address $address */
-        $address = $customer->getAddresses()->first();
-
-        $this->transport->expects($this->never())->method('getCustomerAddressInfo');
-        $this->transport->expects($this->never())->method('updateCustomerAddress');
-        $this->transport->expects($this->never())->method('createCustomerAddress');
-
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
-            'export',
-            'magento_customer_address_export',
-            [
-                'channel' => $address->getChannel()->getId(),
-                'entity' => $address,
-                'changeSet' => [],
-                'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
-            ]
-        );
-
-        $this->assertEmpty($jobResult->getFailureExceptions());
-        $this->assertTrue($jobResult->isSuccessful());
-
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
+        $this->assertFalse($customer->getAddresses()->contains($address));
     }
 }

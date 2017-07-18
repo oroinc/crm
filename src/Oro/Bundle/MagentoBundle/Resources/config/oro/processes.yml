@@ -165,6 +165,7 @@ processes:
                                         twoWaySyncStrategy: $.twoWaySyncStrategy
                                         writer_skip_clear: true
                                         processorAlias: oro_magento # to enable magento normalizers
+                                        remote_excluded_fields: ['addresses']
                                     attribute: $.jobResult
                                 - '@call_method':
                                     object: $.stateManager
