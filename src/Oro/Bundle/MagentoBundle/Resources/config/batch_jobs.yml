@@ -85,7 +85,7 @@ connector:
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_magento.importexport.reader.entity
-                        processor: oro_magento.importexport.processor.customer_address_export
+                        processor: oro_magento.importexport.processor.customer_address_export.job
                         writer:    oro_magento.importexport.writer.customer_address
                     parameters:
                         batch_size: 1
