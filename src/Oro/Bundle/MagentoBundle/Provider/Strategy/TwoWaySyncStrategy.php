@@ -13,6 +13,8 @@ use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
 {
+    const REMOTE_EXCLUDED_FIELDS = 'remote_excluded_fields';
+
     /** @var array */
     protected $supportedStrategies = [
         TwoWaySyncConnectorInterface::REMOTE_WINS,
@@ -30,6 +32,13 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
 
     /** @var object|null */
     protected $normalizedObject;
+
+    /**
+     * Array of fields which should be excluded from remote data processing
+     *
+     * @var null|[]
+     */
+    protected $remoteExcludedFields;
 
     /**
      * @param StepExecutionAwareImportProcessor $importProcessor
@@ -51,6 +60,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
      */
     public function setStepExecution(StepExecution $stepExecution)
     {
+        $this->initExcludedFields($stepExecution);
         $this->importProcessor->setStepExecution($stepExecution);
         $this->exportProcessor->setStepExecution($stepExecution);
     }
@@ -75,7 +85,8 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             );
         }
 
-        $remoteData = $this->normalize($remoteData);
+        $data = $this->initRemoteData($remoteData);
+        $remoteData = $this->normalize($data);
         if (!$changeSet) {
             $this->refreshNormalizedObject();
 
@@ -143,6 +154,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
     /**
      * @param array $localData
      * @param array $oldValues
+     *
      * @return array
      */
     protected function getSnapshot(array $localData, array $oldValues)
@@ -155,7 +167,9 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             $propertyAccessor->setValue($object, $propertyName, $value);
         }
 
-        return $this->exportProcessor->process($object);
+        $result = $this->exportProcessor->process($object);
+
+        return $result ?: [];
     }
 
     /**
@@ -228,5 +242,43 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
                 return $value !== null;
             }
         );
+    }
+
+    /**
+     * Exclude fields from remote data array by "remote_excluded" keys
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function initRemoteData(array $data)
+    {
+        if (null !== $this->remoteExcludedFields) {
+            foreach ($data as $field => $item) {
+                if (!empty($this->remoteExcludedFields[$field])) {
+                    unset($data[$field]);
+                }
+            }
+            $this->remoteExcludedFields = null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Set excluded fields from job's configuration
+     *
+     * @param StepExecution $stepExecution
+     */
+    protected function initExcludedFields(StepExecution $stepExecution)
+    {
+        $jobInstance = $stepExecution->getJobExecution()->getJobInstance();
+        $configuration = $jobInstance ? $jobInstance->getRawConfiguration(): [];
+
+        if (isset($configuration[self::REMOTE_EXCLUDED_FIELDS])) {
+            foreach ((array)$configuration[self::REMOTE_EXCLUDED_FIELDS] as $item) {
+                $this->remoteExcludedFields[$item] = true;
+            }
+        }
     }
 }
