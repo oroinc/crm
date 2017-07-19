@@ -1,0 +1,8 @@
+parameters:
+    lead1_name: 'Lead 1'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+    lead1:
+        owner: '@admin'
+        name: '<{lead1_name}>'
+        organization: '@organization'
