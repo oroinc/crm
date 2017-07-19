@@ -2,14 +2,18 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
@@ -111,6 +115,40 @@ class SalesContext extends OroFeatureContext implements
     public function accountHasBusinessCustomers()
     {
         $this->fixtureLoader->loadFixtureFile('OroMagentoBundle:accounts_with_customers.yml');
+    }
+
+    /**
+     * @Given /^I set "(?P<status>([^"]*))" status for Lead "(?P<leadName>([^"]*))"$/
+     *
+     * @param $leadName
+     * @param $status
+     */
+    public function iSetStatusForLead($leadName, $status)
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $lead = $doctrine->getRepository(Lead::class)->findOneBy(['name' => $leadName]);
+        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+        $id = ExtendHelper::buildEnumValueId($status);
+        $leadStatus = $doctrine->getManager()->getRepository($className)->findOneBy(['id' => $id]);
+        $lead->setStatus($leadStatus);
+        $doctrine->getManager()->flush($lead);
+    }
+
+    /**
+     * @Given /^I set "(?P<status>([^"]*))" status for Opportunity "(?P<opportunityName>([^"]*))"$/
+     *
+     * @param $opportunityName
+     * @param $status
+     */
+    public function iSetStatusForOpportunity($opportunityName, $status)
+    {
+        $doctrine = $this->getContainer()->get('doctrine');
+        $opportunity = $doctrine->getRepository(Opportunity::class)->findOneBy(['name' => $opportunityName]);
+        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        $id = ExtendHelper::buildEnumValueId(strtolower(str_replace(' ', '_', $status)));
+        $status = $doctrine->getManager()->getRepository($className)->findOneBy(['id' => $id]);
+        $opportunity->setStatus($status);
+        $doctrine->getManager()->flush($opportunity);
     }
 
     /**

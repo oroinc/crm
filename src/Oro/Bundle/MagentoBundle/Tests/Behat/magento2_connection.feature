@@ -77,7 +77,7 @@ Feature: Fetch base data for Magento 2 integration
 
   Scenario: Start sync after channel save
     Given I click "Done"
-    And I click "Save and Close"
+    And I save and close form
     When I go to System/ Jobs
     Then I should see new Magento 2 job started
     And I should wait until it's finished
