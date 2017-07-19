@@ -656,6 +656,14 @@ services:
         parent: oro_integration.importexport.processor.export
         calls:
              - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_address"]]
+
+    oro_magento.importexport.processor.customer_address_export.job:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Processor\CustomerAddressExportProcessor
+        parent: oro_integration.importexport.processor.export
+        calls:
+             - [setDataConverter, ["@oro_magento.importexport.data_converter.customer_address"]]
+             - [setStateHandler, ["@oro_magento.customer_state_handler"]]
+             - [setTransport, ["@oro_magento.transport.soap_transport"]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %oro_magento.entity.address.class%, alias: oro_magento.customer_address_export }
 
