@@ -268,6 +268,7 @@ oro:
                 label:            Last Synced At
                 description:      The date and time of the last Magento customer synchronization.
             newsletter_subscribers.label: Newsletter Subscribers
+            contact_information.label:    Contact Information
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -389,6 +390,7 @@ oro:
                 label:                  Last Synced At
                 description:            The date and time of the last Magento shopping cart synchronization.
             b2c_flow_abandoned_shopping_cart.step.label: Step
+            contact_information.label:  Contact Information
 
         cartitem:
             entity_label:               Magento Shopping Cart Item
@@ -1197,6 +1199,8 @@ oro:
             email.label:         Email
             status.label:        Status
             store.label:         Store
+            contact_information:
+                label:           Contact Information
 
         account:
             no_customers_exist: No customers exist
