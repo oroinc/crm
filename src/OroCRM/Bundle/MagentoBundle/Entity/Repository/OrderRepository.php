@@ -250,7 +250,7 @@ class OrderRepository extends ChannelAwareEntityRepository
                     CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
                 ) AS amount');
 
-        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt', false);
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
 
         if ($to) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
