@@ -23,3 +23,12 @@ channels:
             integration_type: magento2
             customer_identity: Oro\Bundle\ChannelBundle\Entity\CustomerIdentity
 ```
+
+And register following service in services.yml
+
+```yaml
+oro_magento.provider.magento2_channel_type:
+    class: Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType
+    tags:
+        - { name: oro_integration.channel, type: magento2 }
+```

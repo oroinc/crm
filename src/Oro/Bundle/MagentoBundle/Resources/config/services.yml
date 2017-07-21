@@ -191,11 +191,6 @@ services:
         tags:
             - { name: oro_integration.channel, type: magento }
 
-    oro_magento.provider.magento2_channel_type:
-        class: Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType
-        tags:
-            - { name: oro_integration.channel, type: magento2 }
-
     oro_magento.provider.cart_expiration_processor:
         class: %oro_magento.provider.cart_expiration_processor.class%
         arguments:

@@ -71,9 +71,10 @@ class MagentoIntegrationFormTest extends WebTestCase
             [
                 'type' => MagentoChannelType::TYPE
             ],
-            [
-                'type' => Magento2ChannelType::TYPE
-            ]
+            // @todo: Configuration runs test for magento2. It should be enabled in CRM-8153
+//            [
+//                'type' => Magento2ChannelType::TYPE
+//            ]
         ];
     }
 
