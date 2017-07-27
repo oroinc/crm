@@ -1,4 +1,5 @@
 @ticket-CRM-5308
+@selenium-incompatible
 @automatically-ticket-tagged
 @fixture-OroSalesBundle:lead.yml
 Feature: Quickly create Lead in a single form
