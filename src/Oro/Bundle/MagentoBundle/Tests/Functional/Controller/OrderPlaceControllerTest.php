@@ -3,12 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Stub\StubIterator;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
  * @outputBuffering enabled
@@ -38,8 +38,11 @@ class OrderPlaceControllerTest extends WebTestCase
     /** @var Customer */
     protected $customer;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $soapTransport;
+
+    /** @var SoapTransport */
+    protected $originalSoapTransport;
 
     protected function setUp()
     {
@@ -49,9 +52,19 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $this->soapTransport = $this->getMockBuilder('Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
             ->setMethods(['init', 'call', 'getCarts', 'getCustomers', 'getOrders'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        // replace the SOAP transport with a mock object
+        $this->originalSoapTransport = $this->getContainer()->get('oro_magento.transport.soap_transport');
         $this->getContainer()->set('oro_magento.transport.soap_transport', $this->soapTransport);
+    }
+
+    protected function tearDown()
+    {
+        // restore the original SOAP transport
+        $this->getContainer()->set('oro_magento.transport.soap_transport', $this->originalSoapTransport);
+        $this->originalSoapTransport = null;
     }
 
     protected function postFixtureLoad()

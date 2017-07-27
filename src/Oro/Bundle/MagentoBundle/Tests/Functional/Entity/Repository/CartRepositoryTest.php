@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Functional\Repository;
+namespace Oro\Bundle\MagentoBundle\Tests\Functional\Entity\Repository;
 
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CartRepository;
