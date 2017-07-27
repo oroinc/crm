@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
+
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\MagentoBundle\Entity\Address;
@@ -40,12 +41,12 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $customer->getChannel()->getId(),
-                'entity' => $customer,
-                'changeSet' => [],
+                'channel'            => $customer->getChannel()->getId(),
+                'entity'             => $customer,
+                'changeSet'          => [],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -55,7 +56,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
+        $customer = $this->getContainer()->get('doctrine')->getManager()->find(Customer::class, $customer->getId());
 
         $this->assertEquals($originId, $customer->getOriginId());
 
@@ -92,17 +93,17 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $customer->getChannel()->getId(),
-                'entity' => $customer,
-                'changeSet' => [
+                'channel'            => $customer->getChannel()->getId(),
+                'entity'             => $customer,
+                'changeSet'          => [
                     'firstName' => [
                         'old' => $customer->getFirstName(),
                         'new' => $newName
                     ]
                 ],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -112,17 +113,13 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
+        $customer = $this->getContainer()->get('doctrine')->getManager()->find(Customer::class, $customer->getId());
 
         $this->assertEquals($newName, $customer->getFirstName());
         $this->assertEmpty($customer->getPassword());
 
         $stateManager = new StateManager();
         $this->assertTrue($stateManager->isInState($customer->getSyncState(), 0));
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::SYNC_TO_MAGENTO));
-        }
     }
 
     public function testRemovedStateIfFailed()
@@ -144,12 +141,12 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $customer->getChannel()->getId(),
-                'entity' => $customer,
-                'changeSet' => [],
+                'channel'            => $customer->getChannel()->getId(),
+                'entity'             => $customer,
+                'changeSet'          => [],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -158,6 +155,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+
+        $customer = $this->getContainer()->get('doctrine')->getManager()->find(Customer::class, $customer->getId());
 
         $stateManager = new StateManager();
         $this->assertTrue($stateManager->isInState($customer->getSyncState(), Customer::MAGENTO_REMOVED));
@@ -165,38 +164,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         foreach ($customer->getAddresses() as $address) {
             $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED));
         }
-    }
-
-    public function testRemovedState()
-    {
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
-
-        /** @var Customer $customer */
-        $customer = $this->getReference('customer');
-
-        $this->transport->expects($this->never())->method('getCustomerInfo');
-        $this->transport->expects($this->never())->method('updateCustomer');
-        $this->transport->expects($this->never())->method('createCustomer');
-
-        $jobResult = $this->getJobExecutor()->executeJob(
-            'export',
-            'magento_customer_export',
-            [
-                'channel' => $customer->getChannel()->getId(),
-                'entity' => $customer,
-                'changeSet' => [],
-                'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
-            ]
-        );
-
-        $this->assertEmpty($jobResult->getFailureExceptions());
-        $this->assertTrue($jobResult->isSuccessful());
-
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
     }
 
     /**
