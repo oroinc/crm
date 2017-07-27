@@ -10,7 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\StateManager;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class CustomerAddressExportWriterTest extends AbstractExportWriterTest
 {
@@ -51,12 +51,12 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_address_export',
             [
-                'channel' => $address->getChannel()->getId(),
-                'entity' => $address,
-                'changeSet' => [],
+                'channel'            => $address->getChannel()->getId(),
+                'entity'             => $address,
+                'changeSet'          => [],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -66,7 +66,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
+        $address = $this->getContainer()->get('doctrine')->getManager()->find(Address::class, $address->getId());
 
         $this->assertEquals($originId, $address->getOriginId());
 
@@ -92,10 +92,10 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
             ->will(
                 $this->returnValue(
                     [
-                        'street' => $newStreet,
-                        'country_id' => $address->getCountry()->getIso2Code(),
+                        'street'              => $newStreet,
+                        'country_id'          => $address->getCountry()->getIso2Code(),
                         'customer_address_id' => $address->getOriginId(),
-                        'customer_id' => $customer->getOriginId()
+                        'customer_id'         => $customer->getOriginId()
                     ]
                 )
             );
@@ -110,17 +110,17 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_address_export',
             [
-                'channel' => $address->getChannel()->getId(),
-                'entity' => $address,
-                'changeSet' => [
+                'channel'            => $address->getChannel()->getId(),
+                'entity'             => $address,
+                'changeSet'          => [
                     'firstName' => [
                         'old' => $address->getCity(),
                         'new' => $newStreet
                     ]
                 ],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -130,7 +130,8 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
+
+        $address = $this->getContainer()->get('doctrine')->getManager()->find(Address::class, $address->getId());
 
         $this->assertEquals($newStreet, $address->getStreet());
 
@@ -148,6 +149,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
 
         /** @var Address $address */
         $address = $customer->getAddresses()->first();
+        $addressId = $address->getId();
 
         $e = new TransportException();
         $e->setFaultCode(103);
@@ -162,12 +164,12 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_address_export',
             [
-                'channel' => $address->getChannel()->getId(),
-                'entity' => $address,
-                'changeSet' => [],
+                'channel'            => $address->getChannel()->getId(),
+                'entity'             => $address,
+                'changeSet'          => [],
                 'twoWaySyncStrategy' => 'remote',
-                'writer_skip_clear' => true,
-                'processorAlias' => 'oro_magento'
+                'writer_skip_clear'  => true,
+                'processorAlias'     => 'oro_magento'
             ]
         );
 
@@ -177,7 +179,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
+        $address = $this->getContainer()->get('doctrine')->getManager()->find(Address::class, $addressId);
 
         $this->assertFalse($customer->getAddresses()->contains($address));
     }

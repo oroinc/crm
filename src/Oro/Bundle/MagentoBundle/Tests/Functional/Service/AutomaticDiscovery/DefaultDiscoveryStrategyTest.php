@@ -11,13 +11,11 @@ use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class DefaultDiscoveryStrategyTest extends WebTestCase
 {
-    /**
-     * @var DefaultDiscoveryStrategy
-     */
+    /** @var DefaultDiscoveryStrategy */
     protected $strategy;
 
     protected function setUp()
@@ -59,7 +57,6 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
             ],
             $entity
         );
-
 
         $expected = array_map(
             function ($expectedReference) {

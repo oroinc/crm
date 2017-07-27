@@ -8,7 +8,7 @@ use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 
 /**
- * @dbIsolation
+ * @dbIsolationPerTest
  */
 class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
 {
