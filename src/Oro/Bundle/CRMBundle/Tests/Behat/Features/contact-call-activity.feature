@@ -1,4 +1,4 @@
-@skip @fix-in-scope-of-CRM-8395
+@fix-in-scope-of-CRM-8395
 Feature: Contact call activity
   In order to have view all phone collaboration with contact
   As OroCRM sales rep
