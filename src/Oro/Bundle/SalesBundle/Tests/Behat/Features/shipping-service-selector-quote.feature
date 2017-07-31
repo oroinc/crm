@@ -1,5 +1,4 @@
 @ticket-BB-9268
-@selenium-incompatible
 # we need 2 flat rate shipping methods, so fixtures are loaded twice
 @fixture-OroFlatRateShippingBundle:FlatRateIntegration.yml
 @fixture-OroCheckoutBundle:Shipping.yml
