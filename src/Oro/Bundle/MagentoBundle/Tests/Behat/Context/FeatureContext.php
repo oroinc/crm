@@ -115,7 +115,12 @@ class FeatureContext extends OroFeatureContext implements
         } elseif ('Magento Customers' == $accountType) {
             $ownAccounts = $doctrine->getEntityRepositoryForClass(Customer::class)->findBy(['owner' => $owner]);
             $accountsInGrid = array_map(function (GridRow $row) {
-                return $row->getCellValue('First Name').' '.$row->getCellValue('Last Name');
+                $firstName = $row->getCellValue('First Name');
+                $lastName = $row->getCellValue('Last Name');
+                $firstName =  $firstName instanceof \DateTime ? $firstName->format('Y-m-d H:i:s') : $firstName;
+                $lastName =  $lastName instanceof \DateTime ? $lastName->format('Y-m-d H:i:s') : $lastName;
+
+                return $firstName.' '.$lastName;
             }, $grid->getRows());
             array_walk($ownAccounts, function (Customer &$element) {
                 $element = $element->getFirstName().' '.$element->getLastName();
