@@ -8,7 +8,6 @@ Feature: Lead Navigation Items
 
   Scenario: Pin and Add to favorites Lead Grid page
     Given I login as administrator
-    And I set "New" status for Lead "Lead 1"
     And I should see Sales/Leads in main menu
     And I go to Sales/Leads
     And I should see Lead 1 in grid
