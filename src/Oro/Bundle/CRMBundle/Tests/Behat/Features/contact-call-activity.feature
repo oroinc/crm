@@ -1,4 +1,3 @@
-@selenium-incompatible
 Feature: Contact call activity
   In order to have view all phone collaboration with contact
   As OroCRM sales rep
