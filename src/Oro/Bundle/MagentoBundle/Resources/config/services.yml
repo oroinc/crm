@@ -1177,7 +1177,7 @@ services:
             - {name: oro_magento.rest_response.converter, type: region }
 
     oro_magento.async.upgrade_relations_accounts_contacts_processor:
-        class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50\UpdateRelationsAccountsAndContactsProcessor
+        class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49\UpdateRelationsAccountsAndContactsProcessor
         arguments:
             - '@oro_message_queue.message_producer'
             - '@oro_entity.orm.native_query_executor_helper'
