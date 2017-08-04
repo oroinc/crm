@@ -9,6 +9,25 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.addresses, alias: addresses, conditionType: 'WITH', condition: 'addresses.primary = true' }
+    virtual_fields:
+        Oro\Bundle\MagentoBundle\Entity\Customer:
+            contactInformation:
+                query:
+                    select:
+                        expr:         entity.email
+                        return_type:  string
+        Oro\Bundle\MagentoBundle\Entity\Cart:
+            contactInformation:
+                query:
+                    select:
+                        expr:         entity.email
+                        return_type:  string
+        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
+            contactInformation:
+                query:
+                    select:
+                        expr:         entity.email
+                        return_type:  string
 
     entity_aliases:
         Oro\Bundle\MagentoBundle\Entity\Address:
