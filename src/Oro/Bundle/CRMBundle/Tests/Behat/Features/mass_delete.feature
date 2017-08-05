@@ -1,3 +1,4 @@
+@regression
 @fixture-OroCRMBundle:mass_action.yml
 Feature: Mass Delete records
 	In order to decrease time needed to delete several records at once
@@ -65,8 +66,7 @@ Scenario: Uncheck few records
 	And confirm deletion
 	Then the number of records decreased by 8
 
-#@skip
-# ToDo: uncomment when BAP-10673 will completed
+#@not-automated
 #Scenario Outline: Delete different number of records
 #	Given I have 6000 of Accounts in the system
 #	And I am on the Accounts page

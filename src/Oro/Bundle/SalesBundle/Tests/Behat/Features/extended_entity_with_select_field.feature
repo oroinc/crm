@@ -1,3 +1,4 @@
+@regression
 @ticket-BAP-14504
 @fixture-OroSalesBundle:lead.yml
 Feature: Unidirectional entity relations created via UI
