@@ -159,5 +159,6 @@ class FeatureContext extends OroFeatureContext implements
             }
         }
         $this->getDriver()->switchToWindow();
+        $this->waitForAjax();
     }
 }

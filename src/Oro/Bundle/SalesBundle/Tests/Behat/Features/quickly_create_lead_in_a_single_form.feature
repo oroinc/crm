@@ -1,5 +1,4 @@
 @ticket-CRM-5308
-@selenium-incompatible
 @automatically-ticket-tagged
 @fixture-OroSalesBundle:lead.yml
 Feature: Quickly create Lead in a single form
@@ -88,7 +87,6 @@ Feature: Quickly create Lead in a single form
       | Last Name    | editedLastName     |
       | Phone Number | +111111111111      |
       | Email        | edit@example.com   |
-      | Status       | Qualified          |
       | Owner        | Marge Marge Simpson|
       | Status       | Qualified          |
 

@@ -1,3 +1,4 @@
+@regression
 @fix-BAP-14500
 Feature: Account report
   In order to see Account related information in report

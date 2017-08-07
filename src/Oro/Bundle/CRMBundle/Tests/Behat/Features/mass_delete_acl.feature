@@ -1,3 +1,4 @@
+@regression
 Feature: Mass Delete records with acl
 	In order to control what records in what entities users can access
 	As a Administrator
@@ -30,8 +31,7 @@ Scenario: User can delete only his records but view all
 	And confirm deletion
 	Then I should see "5 entities were deleted" flash message
 
-#@skip
-# ToDo: uncomment when BAP-10673 will completed
+#@not-automated
 #Scenario: Check limitation on Delete action
 #	Given limit on delete action is set on 50 records
 #	And I am on the Calls index page
