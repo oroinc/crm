@@ -1,0 +1,4 @@
+config:
+    paths:
+        'orocase/js/app/views/comment-view': 'bundles/orocase/js/app/views/comment-view.js'
+        'orocase/js/app/models/comment-model': 'bundles/orocase/js/app/models/comment-model.js'
