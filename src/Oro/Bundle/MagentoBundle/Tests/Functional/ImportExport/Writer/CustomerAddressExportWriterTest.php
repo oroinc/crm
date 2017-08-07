@@ -15,6 +15,9 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
     {
         parent::setUp();
 
+        $this->getContainer()->get('oro_magento.importexport.processor.customer_address_export.job')->setTransport(
+            $this->transport
+        );
         $this->getContainer()->get('oro_magento.importexport.writer.customer_address')->setTransport(
             $this->transport
         );
@@ -81,7 +84,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         /** @var Address $address */
         $address = $customer->getAddresses()->first();
 
-        $this->transport->expects($this->once())
+        $this->transport->expects($this->any())
             ->method('getCustomerAddressInfo')
             ->will(
                 $this->returnValue(
@@ -133,7 +136,7 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         $this->assertTrue($stateManager->isInState($address->getSyncState(), 0));
     }
 
-    public function testRemovedStateIfFailed()
+    public function testRemovedFailed()
     {
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
@@ -146,9 +149,11 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
         $addressId = $address->getId();
 
         $e = new TransportException();
-        $e->setFaultCode(102);
+        $e->setFaultCode(103);
 
-        $this->transport->expects($this->once())->method('getCustomerAddressInfo')->will($this->throwException($e));
+        $this->transport->expects($this->once())
+            ->method('getCustomerAddressInfo')
+            ->will($this->throwException($e));
         $this->transport->expects($this->never())->method('updateCustomerAddress');
         $this->transport->expects($this->never())->method('createCustomerAddress');
 
@@ -173,7 +178,6 @@ class CustomerAddressExportWriterTest extends AbstractExportWriterTest
 
         $address = $this->getContainer()->get('doctrine')->getManager()->find(Address::class, $addressId);
 
-        $stateManager = new StateManager();
-        $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED));
+        $this->assertFalse($customer->getAddresses()->contains($address));
     }
 }
