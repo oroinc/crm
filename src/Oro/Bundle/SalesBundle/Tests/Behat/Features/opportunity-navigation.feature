@@ -1,3 +1,4 @@
+@regression
 @ticket-CRM-8143
 @fixture-OroSalesBundle:OpportunityFixture.yml
 
@@ -8,7 +9,6 @@ Feature: Opportunity Navigation Items
 
   Scenario: Pin and Add to favorites Opportunity Grid page
     Given I login as administrator
-    And I set "In Progress" status for Opportunity "Opportunity 1"
     And I should see Sales/Opportunities in main menu
     And I go to Sales/Opportunities
     And I should see Opportunity 1 in grid
