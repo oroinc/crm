@@ -16,6 +16,8 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I click "Quick Order Form"
     And I fill "QuickAddForm" with:
       | SKU1 | SKU123 |
+    And I wait for products to load
+    When I fill "QuickAddForm" with:
       | QTY1 | 1      |
     And I click "Add to Shopping List"
     And I open shopping list widget
