@@ -1,6 +1,6 @@
 @ticket-CRM-8143
 @fixture-OroSalesBundle:LeadFixture.yml
-
+# @TODO check pins separately (e.g. in opportunity-navigation.feature)
 Feature: Lead Navigation Items
   In order to manage lead feature
   as an Administrator

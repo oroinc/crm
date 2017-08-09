@@ -1,5 +1,6 @@
+@regression
 @skip
-# @todo: fix this test with import/export functionality for lead and opportunity in CRM-6722
+# @todo: enable feature in scope of BAP-13155
 Feature: Import opportunity feature
   In order to simplify work with opportunities
   As crm user

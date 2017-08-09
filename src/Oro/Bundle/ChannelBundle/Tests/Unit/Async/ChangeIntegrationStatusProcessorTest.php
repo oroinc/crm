@@ -52,7 +52,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('critical')
-            ->with('The message invalid. It must have channelId set', ['message' => $message])
+            ->with('The message invalid. It must have channelId set')
         ;
 
         $processor = new ChangeIntegrationStatusProcessor($this->createRegistryStub(), $logger);
@@ -95,7 +95,7 @@ class ChangeIntegrationStatusProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('critical')
-            ->with('Channel not found: theChannelId', ['message' => $message])
+            ->with('Channel not found: theChannelId')
         ;
 
         $registryStub = $this->createRegistryStub($entityManagerMock);

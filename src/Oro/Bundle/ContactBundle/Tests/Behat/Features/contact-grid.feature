@@ -1,3 +1,4 @@
+@regression
 @fixture-OroContactBundle:contacts.yml
 Feature: Contacts grid
   In order to have ability work with contacts

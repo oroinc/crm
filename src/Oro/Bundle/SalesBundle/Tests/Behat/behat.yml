@@ -134,5 +134,6 @@ oro_behat_extension:
         - OroShoppingListBundle::FeatureContext
         - OroSalesBundle::SalesFeatureToggleContext
         - OroNavigationBundle::FeatureContext
+        - OroProductBundle::QuickOrderFormContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

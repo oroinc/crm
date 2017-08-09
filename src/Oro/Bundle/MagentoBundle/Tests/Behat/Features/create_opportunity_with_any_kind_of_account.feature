@@ -1,3 +1,4 @@
+@regression
 Feature: Create opportunity with different accounts type
   In order to create opportunity
   As sales rep

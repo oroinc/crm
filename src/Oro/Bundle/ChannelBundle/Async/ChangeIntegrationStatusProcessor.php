@@ -44,7 +44,7 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
     {
         $body = array_replace(['channelId' => null], JSON::decode($message->getBody()));
         if (! $body['channelId']) {
-            $this->logger->critical('The message invalid. It must have channelId set', ['message' => $message]);
+            $this->logger->critical('The message invalid. It must have channelId set');
 
             return self::REJECT;
         }
@@ -54,7 +54,7 @@ class ChangeIntegrationStatusProcessor implements MessageProcessorInterface, Top
         /** @var Channel $channel */
         $channel = $em->find(Channel::class, $body['channelId']);
         if (! $channel) {
-            $this->logger->critical(sprintf('Channel not found: %s', $body['channelId']), ['message' => $message]);
+            $this->logger->critical(sprintf('Channel not found: %s', $body['channelId']));
 
             return self::REJECT;
         }

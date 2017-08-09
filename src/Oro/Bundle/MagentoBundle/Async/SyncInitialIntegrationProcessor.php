@@ -107,7 +107,7 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         ], $body);
 
         if (false == $body['integration_id']) {
-            $this->logger->critical('The message invalid. It must have integrationId set', ['message' => $message]);
+            $this->logger->critical('The message invalid. It must have integrationId set');
 
             return self::REJECT;
         }
@@ -123,16 +123,14 @@ class SyncInitialIntegrationProcessor implements MessageProcessorInterface, Topi
         $integration = $em->find(Integration::class, $body['integration_id']);
         if (! $integration) {
             $this->logger->error(
-                sprintf('Integration not found: %s', $body['integration_id']),
-                ['message' => $message]
+                sprintf('Integration not found: %s', $body['integration_id'])
             );
 
             return self::REJECT;
         }
         if (! $integration->isEnabled()) {
             $this->logger->error(
-                sprintf('Integration is not enabled: %s', $body['integration_id']),
-                ['message' => $message]
+                sprintf('Integration is not enabled: %s', $body['integration_id'])
             );
 
             return self::REJECT;

@@ -1,3 +1,4 @@
+@regression
 Feature: Account attachment
   In order to have ability add attachments to account
   As a sales rep

@@ -66,7 +66,7 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
         ], $body);
 
         if (false == $body['channel_id']) {
-            $this->logger->critical('The message invalid. It must have channel_id set', ['message' => $message]);
+            $this->logger->critical('The message invalid. It must have channel_id set');
 
             return self::REJECT;
         }
@@ -79,19 +79,18 @@ class CalculateChannelAnalyticsProcessor implements MessageProcessorInterface, T
         /** @var Channel $channel */
         $channel = $em->find(Channel::class, $body['channel_id']);
         if (! $channel) {
-            $this->logger->error(sprintf('Channel not found: %s', $body['channel_id']), ['message' => $message]);
+            $this->logger->error(sprintf('Channel not found: %s', $body['channel_id']));
 
             return self::REJECT;
         }
         if (Channel::STATUS_ACTIVE != $channel->getStatus()) {
-            $this->logger->error(sprintf('Channel not active: %s', $body['channel_id']), ['message' => $message]);
+            $this->logger->error(sprintf('Channel not active: %s', $body['channel_id']));
 
             return self::REJECT;
         }
         if (false == is_a($channel->getCustomerIdentity(), AnalyticsAwareInterface::class, true)) {
             $this->logger->error(
-                sprintf('Channel is not supposed to calculate analytics: %s', $body['channel_id']),
-                ['message' => $message]
+                sprintf('Channel is not supposed to calculate analytics: %s', $body['channel_id'])
             );
 
             return self::REJECT;
