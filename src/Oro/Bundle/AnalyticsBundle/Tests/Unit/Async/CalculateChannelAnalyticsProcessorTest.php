@@ -63,7 +63,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('critical')
-            ->with('The message invalid. It must have channel_id set', ['message' => $message])
+            ->with('The message invalid. It must have channel_id set')
         ;
 
         $processor = new CalculateChannelAnalyticsProcessor(
@@ -121,7 +121,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('Channel not found: theChannelId', ['message' => $message])
+            ->with('Channel not found: theChannelId')
         ;
 
 
@@ -166,7 +166,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('Channel not active: theChannelId', ['message' => $message])
+            ->with('Channel not active: theChannelId')
         ;
 
 
@@ -212,7 +212,7 @@ class CalculateChannelAnalyticsProcessorTest extends \PHPUnit_Framework_TestCase
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('Channel is not supposed to calculate analytics: theChannelId', ['message' => $message])
+            ->with('Channel is not supposed to calculate analytics: theChannelId')
         ;
 
         $processor = new CalculateChannelAnalyticsProcessor(

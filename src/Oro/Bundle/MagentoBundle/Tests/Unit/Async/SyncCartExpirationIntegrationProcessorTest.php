@@ -62,7 +62,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger
             ->expects($this->once())
             ->method('critical')
-            ->with('The message invalid. It must have integrationId set', ['message' => $message])
+            ->with('The message invalid. It must have integrationId set')
         ;
 
         $processor = new SyncCartExpirationIntegrationProcessor(
@@ -110,7 +110,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('The integration should exist and be enabled: theIntegrationId', ['message' => $message])
+            ->with('The integration should exist and be enabled: theIntegrationId')
         ;
 
         $processor = new SyncCartExpirationIntegrationProcessor(
@@ -142,7 +142,7 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
         $logger
             ->expects($this->once())
             ->method('error')
-            ->with('The integration should exist and be enabled: theIntegrationId', ['message' => $message])
+            ->with('The integration should exist and be enabled: theIntegrationId')
         ;
 
         $processor = new SyncCartExpirationIntegrationProcessor(
@@ -177,7 +177,6 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             ->with(
                 'The integration should have cart in connectors: theIntegrationId',
                 [
-                    'message' => $message,
                     'integration' => $integration
                 ]
             )

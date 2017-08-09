@@ -81,7 +81,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
         ], $body);
 
         if (! $body['integrationId']) {
-            $this->logger->critical('The message invalid. It must have integrationId set', ['message' => $message]);
+            $this->logger->critical('The message invalid. It must have integrationId set');
 
             return self::REJECT;
         }
@@ -95,8 +95,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
 
         if (! $integration || ! $integration->isEnabled()) {
             $this->logger->error(
-                sprintf('The integration should exist and be enabled: %s', $body['integrationId']),
-                ['message' => $message]
+                sprintf('The integration should exist and be enabled: %s', $body['integrationId'])
             );
 
             return self::REJECT;
@@ -105,10 +104,7 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
         if (! is_array($integration->getConnectors()) || ! in_array('cart', $integration->getConnectors())) {
             $this->logger->error(
                 sprintf('The integration should have cart in connectors: %s', $body['integrationId']),
-                [
-                    'message' => $message,
-                    'integration' => $integration
-                ]
+                ['integration' => $integration]
             );
 
             return self::REJECT;

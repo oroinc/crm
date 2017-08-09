@@ -132,7 +132,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->logger
             ->expects($this->once())
             ->method('critical')
-            ->with('The message invalid. It must have integrationId set', ['message' => $message]);
+            ->with('The message invalid. It must have integrationId set');
 
         $this->optionalListenerManager
             ->expects($this->never())
@@ -172,7 +172,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->logger
             ->expects($this->once())
             ->method('error')
-            ->with('Integration not found: theIntegrationId', ['message' => $message]);
+            ->with('Integration not found: theIntegrationId');
 
         $this->optionalListenerManager
             ->expects($this->never())
@@ -202,7 +202,7 @@ class SyncInitialIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
         $this->logger
             ->expects($this->once())
             ->method('error')
-            ->with('Integration is not enabled: theIntegrationId', ['message' => $message]);
+            ->with('Integration is not enabled: theIntegrationId');
 
         $this->optionalListenerManager
             ->expects($this->never())
