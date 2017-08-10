@@ -73,30 +73,36 @@ class CartStrategy extends AbstractImportStrategy
         if ($cart->getCustomer()) {
             $customer = $this->findExistingCustomer($cart);
             $customerOriginId = $cart->getCustomer()->getOriginId();
-            if (!$customer && $customerOriginId) {
-                $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
-
-                $isProcessingAllowed = false;
-            }
-
-            /**
-             * If registered customer add items to cart in Magento
-             * but after customer was deleted in Magento before customer and cart were synced
-             * Cart will not have connection to the customer
-             * Customer for such Carts should be processed as guest if Guest Customer synchronization is allowed
-             */
-            if (!$customer && !$customerOriginId) {
-                /** @var Channel $channel */
-                $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
-                /** @var MagentoTransport $transport */
-                $transport = $channel->getTransport();
-                if ($transport->getGuestCustomerSync()) {
+            if (!$customer) {
+                if ($customerOriginId) {
                     $this->appendDataToContext(
-                        'postProcessGuestCustomers',
-                        GuestCustomerDataConverter::extractCustomersValues((array)$this->context->getValue('itemData'))
+                        ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS,
+                        $customerOriginId
                     );
 
                     $isProcessingAllowed = false;
+                } else {
+                    /**
+                     * If registered customer add items to cart in Magento
+                     * but after customer was deleted in Magento before customer and cart were synced
+                     * Cart will not have connection to the customer
+                     * Customer for such Carts should be processed as guest if Guest Customer synchronization is allowed
+                     */
+
+                    /** @var Channel $channel */
+                    $channel = $this->databaseHelper->findOneByIdentity($cart->getChannel());
+                    /** @var MagentoTransport $transport */
+                    $transport = $channel->getTransport();
+                    if ($transport->getGuestCustomerSync()) {
+                        $this->appendDataToContext(
+                            'postProcessGuestCustomers',
+                            GuestCustomerDataConverter::extractCustomersValues(
+                                (array)$this->context->getValue('itemData')
+                            )
+                        );
+
+                        $isProcessingAllowed = false;
+                    }
                 }
             }
         }
@@ -106,7 +112,7 @@ class CartStrategy extends AbstractImportStrategy
 
     /**
      * Get existing registered customer or existing guest customer
-     * If customer not found by Identifier
+     * If customer not found by Identifier and customer is guest or was deleted on Magento side
      * find existing customer using entity data for entities containing customer like Order and Cart
      *
      * @param Cart $entity
@@ -121,7 +127,8 @@ class CartStrategy extends AbstractImportStrategy
         if ($customer->getId() || $customer->getOriginId()) {
             $existingEntity = parent::findExistingEntity($customer);
         }
-        if (!$existingEntity) {
+
+        if (!$existingEntity && !$customer->getOriginId()) {
             $existingEntity = $this->findExistingCustomerByContext($entity);
         }
 
