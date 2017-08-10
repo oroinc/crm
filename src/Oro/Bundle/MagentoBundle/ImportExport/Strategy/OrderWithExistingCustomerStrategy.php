@@ -77,7 +77,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
     /**
      * Get existing registered customer or existing guest customer
-     * If customer not found by Identifier
+     * If customer not found by Identifier and customer is guest or was deleted on Magento side
      * find existing customer using entity data for entities containing customer like Order and Cart
      *
      * @param Order $entity
@@ -92,7 +92,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         if ($customer->getId() || $customer->getOriginId()) {
             $existingEntity = parent::findExistingEntity($customer);
         }
-        if (!$existingEntity) {
+        if (!$existingEntity && !$customer->getOriginId()) {
             $existingEntity = $this->findExistingCustomerByContext($entity);
         }
 
