@@ -1,3 +1,5 @@
+# TODO: remove @skip in scope of BB-11430
+@skip
 @regression
 Feature: Account attachment
   In order to have ability add attachments to account
