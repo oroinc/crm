@@ -1,3 +1,5 @@
+# TODO: remove @skip in scope of BB-11430
+@skip
 @regression
 Feature: Account attachment
   In order to have ability add attachments to account
@@ -10,7 +12,7 @@ Feature: Account attachment
       | name          | extendDescription    |
       | Charlie Sheen | <sentences(3, true)> |
     And I go to Customers/Accounts
-    And click on Charlie Sheen in grid
+    And click view "Charlie Sheen" in grid
     And follow "More actions"
     And press "Add attachment"
     When I fill "Attachment Form" with:
