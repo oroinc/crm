@@ -29,12 +29,6 @@ class ImportReplaceOrAddStrategyTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
-
-        $dataDir = $this->getContainer()
-            ->get('kernel')
-            ->locateResource('@OroCRMContactBundle/Tests/Functional/DataFixtures/Data');
-
-        $this->file = $dataDir . DIRECTORY_SEPARATOR. "contacts.csv";
     }
 
     /**
@@ -63,6 +57,8 @@ class ImportReplaceOrAddStrategyTest extends WebTestCase
      */
     public function testAddOrReplaceStrategyImport()
     {
+        $this->initDataFixtureFile('contacts.csv');
+
         $this->validateImportFile(self::ADD_OR_REPLACE_STRATEGY);
         $this->doImport(self::ADD_OR_REPLACE_STRATEGY, 10, 0);
 
@@ -75,6 +71,8 @@ class ImportReplaceOrAddStrategyTest extends WebTestCase
      */
     public function testAddOrStrategyImport()
     {
+        $this->initDataFixtureFile('contacts.csv');
+
         $this->validateImportFile(self::ADD_OR_REPLACE_STRATEGY);
         $this->doImport(self::ADD_OR_REPLACE_STRATEGY, 10, 0);
 
@@ -82,6 +80,14 @@ class ImportReplaceOrAddStrategyTest extends WebTestCase
 
         $this->validateImportFile(self::ADD_OR_REPLACE_STRATEGY);
         $this->doImport(self::ADD_OR_REPLACE_STRATEGY, 10, 0);
+    }
+
+    public function testAddOrReplaceStrategyWithDuplicateRecordsImport()
+    {
+        $this->initDataFixtureFile('contact_with_duplicate_records.csv');
+
+        $this->validateImportFile(self::ADD_OR_REPLACE_STRATEGY);
+        $this->doImport(self::ADD_OR_REPLACE_STRATEGY, 1, 1);
     }
 
     protected function deleteTableRecords()
@@ -182,5 +188,17 @@ class ImportReplaceOrAddStrategyTest extends WebTestCase
         $batchJobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
 
         return $batchJobRepository->getJobManager();
+    }
+
+    /**
+     * @param $fileName
+     */
+    protected function initDataFixtureFile($fileName)
+    {
+        $dataDir = $this->getContainer()
+            ->get('kernel')
+            ->locateResource('@OroCRMContactBundle/Tests/Functional/DataFixtures/Data');
+
+        $this->file = $dataDir . DIRECTORY_SEPARATOR. $fileName;
     }
 }
