@@ -1,7 +1,7 @@
 oro_behat_extension:
   elements:
     Account Form:
-      selector: 'div#container'
+      selector: 'form[name="oro_account_form"]'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
       options:
         mapping:
