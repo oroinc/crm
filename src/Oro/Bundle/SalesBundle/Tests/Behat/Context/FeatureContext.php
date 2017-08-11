@@ -6,6 +6,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ConfigBundle\Tests\Behat\Element\SidebarConfigMenu;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Entity;
@@ -191,8 +192,9 @@ class FeatureContext extends OroFeatureContext implements
         $mainMenu->openAndClick('System/ Configuration');
         $this->waitForAjax();
 
+        /** @var SidebarConfigMenu $sidebarMenu */
         $sidebarMenu = $this->createElement('SidebarConfigMenu');
-        $sidebarMenu->clickLink('Opportunity');
+        $sidebarMenu->openNestedMenu('CRM/Sales Pipeline/Opportunity');
         $this->waitForAjax();
 
         /** @var OpportunityProbabilitiesConfigForm $form */

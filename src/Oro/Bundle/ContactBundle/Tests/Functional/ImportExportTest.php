@@ -43,11 +43,29 @@ class ImportExportTest extends WebTestCase
             'This test will be completely removed and replaced with a set of smaller functional tests
             (see BAP-13063 and BAP-13064)'
         );
+        $this->file = $this->getImportTemplate();
+        $this->assertTrue(file_exists($this->file));
+
         $this->validateImportFile($strategy);
         $this->doImport($strategy, $added, $replaced);
 
         $this->doExport();
         $this->validateExportResult();
+    }
+
+    public function testAddOrReplaceStrategyWithDuplicateRecordsImport()
+    {
+        $this->markTestSkipped(
+            'This test will be completely removed and replaced with a set of smaller functional tests
+            (see BAP-13063 and BAP-13064)'
+        );
+        $dataDir = $this->getContainer()
+            ->get('kernel')
+            ->locateResource('@OroContactBundle/Tests/Functional/DataFixtures/Data');
+        $this->file = $dataDir . DIRECTORY_SEPARATOR . 'contact_with_duplicate_records.csv';
+
+        $this->validateImportFile('oro_contact.add_or_replace');
+        $this->doImport('oro_contact.add_or_replace', 1, 1);
     }
 
     /**
@@ -68,9 +86,6 @@ class ImportExportTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains($strategy, $result->getContent());
-
-        $this->file = $this->getImportTemplate();
-        $this->assertTrue(file_exists($this->file));
 
         /** @var Form $form */
         $form = $crawler->selectButton('Submit')->form();
