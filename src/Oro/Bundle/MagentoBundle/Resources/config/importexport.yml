@@ -122,9 +122,6 @@ services:
     oro_magento.importexport.data_converter.website:
         class: %oro_magento.importexport.data_converter.website.class%
 
-    oro_magento.importexport.data_converter.rest.website:
-        class: Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter
-
     oro_magento.importexport.data_converter.store:
         class: %oro_magento.importexport.data_converter.store.class%
 
@@ -613,7 +610,7 @@ services:
     oro_magento.importexport.processor.rest.website:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter, ["@oro_magento.importexport.data_converter.rest.website"]]
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.website"]]
             - [setStrategy, ["@oro_magento.import.strategy.website"]]
             - [setEntityName, [%oro_magento.entity.website.class%]]
 

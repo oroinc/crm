@@ -42,6 +42,7 @@ class RestTransport implements
     const REQUIRED_EXTENSION_VERSION = '0.0.0';
 
     const REGION_RESPONSE_TYPE = 'region';
+    const WEBSITE_RESPONSE_TYPE = 'website';
 
     const API_URL_PREFIX = 'rest/V1';
     const TOKEN_KEY = 'api_token';
@@ -266,6 +267,7 @@ class RestTransport implements
     {
         try {
             $data = $this->client->get('store/websites', [], $this->headers)->json();
+            $data = $this->responseConverterManager->convert($data, self::WEBSITE_RESPONSE_TYPE);
 
             return new LoadableRestIterator($data);
         } catch (RestException $e) {

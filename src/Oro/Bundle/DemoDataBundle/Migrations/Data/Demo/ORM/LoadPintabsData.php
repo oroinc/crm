@@ -140,6 +140,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 $pinTab->getItem()->setOrganization($organization);
                 $this->persist($this->em, $pinTab);
             }
+            $tokenStorage->setToken(null);
         }
         $this->flush($this->em);
     }
