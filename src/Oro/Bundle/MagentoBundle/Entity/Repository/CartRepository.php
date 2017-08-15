@@ -115,7 +115,8 @@ class CartRepository extends ChannelAwareEntityRepository
             ->leftJoin('cart.status', 'status')
             ->groupBy('workflowStep.name');
 
-        $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', $steps));
+        $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', ':workflowStepsNames'))
+            ->setParameter('workflowStepsNames', $steps);
 
         if ($dateFrom) {
             $queryBuilder
@@ -361,7 +362,8 @@ class CartRepository extends ChannelAwareEntityRepository
             ->leftJoin(sprintf('%s.status', $alias), 'status')
             ->groupBy('workflowStep.name');
 
-        $qb->where($qb->expr()->in('workflowStep.name', $steps));
+        $qb->where($qb->expr()->in('workflowStep.name', ':workflowStepsNames'))
+            ->setParameter('workflowStepsNames', $steps);
 
         if ($excludedStatuses) {
             $qb->andWhere($qb->expr()->notIn('status.name', $excludedStatuses));
