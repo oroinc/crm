@@ -123,6 +123,7 @@ services:
         class: %oro_magento.importexport.data_converter.website.class%
 
     oro_magento.importexport.data_converter.rest.website:
+        deprecated: The service "%service_id%" is deprecated and will beremoved in 2.4 use oro_magento.importexport.data_converter.website instead
         class: Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter
 
     oro_magento.importexport.data_converter.store:
@@ -613,7 +614,7 @@ services:
     oro_magento.importexport.processor.rest.website:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter, ["@oro_magento.importexport.data_converter.rest.website"]]
+            - [setDataConverter, ["@oro_magento.importexport.data_converter.website"]]
             - [setStrategy, ["@oro_magento.import.strategy.website"]]
             - [setEntityName, [%oro_magento.entity.website.class%]]
 

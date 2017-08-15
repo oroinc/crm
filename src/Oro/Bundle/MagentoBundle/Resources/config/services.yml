@@ -1176,6 +1176,11 @@ services:
         tags:
             - {name: oro_magento.rest_response.converter, type: region }
 
+    oro_magento.converter.rest.website_converter:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\WebsiteConverter
+        tags:
+            - {name: oro_magento.rest_response.converter, type: website }
+
     oro_magento.async.upgrade_relations_accounts_contacts_processor:
         class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49\UpdateRelationsAccountsAndContactsProcessor
         arguments:
