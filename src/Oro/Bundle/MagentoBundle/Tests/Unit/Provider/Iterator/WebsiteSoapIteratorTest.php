@@ -25,16 +25,7 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
         $this->transport->expects($this->once())->method('getStores')
             ->will($this->returnValue($storesList));
 
-        $expectedKeys = array_keys($expectedResult);
-        $expectedValues = array_values($expectedResult);
-        $keys = $values = [];
-        foreach ($this->iterator as $key => $value) {
-            $keys[] = $key;
-            $values[] = $value;
-        }
-
-        $this->assertEquals($expectedKeys, $keys, 'Should return correct keys');
-        $this->assertEquals($expectedValues, $values, 'Should return correct values');
+        $this->assertResponseFormat($this->iterator);
         $this->assertEquals($expectedResult, iterator_to_array($this->iterator));
     }
 
@@ -51,16 +42,7 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
         $this->transport->expects($this->once())->method('call')
             ->willReturn($storesList);
 
-        $expectedKeys = array_keys($expectedResult);
-        $expectedValues = array_values($expectedResult);
-        $keys = $values = [];
-        foreach ($this->iterator as $key => $value) {
-            $keys[] = $key;
-            $values[] = $value;
-        }
-
-        $this->assertEquals($expectedKeys, $keys, 'Should return correct keys');
-        $this->assertEquals($expectedValues, $values, 'Should return correct values');
+        $this->assertResponseFormat($this->iterator);
         $this->assertEquals($expectedResult, iterator_to_array($this->iterator));
     }
 
@@ -77,13 +59,11 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
-                        'id' => 0,
                     ],
                     [
                         'website_id' => 1,
                         'code' => 'custom',
                         'name' => 'Custom',
-                        'id' => 1,
                     ]
                 ],
                 [
@@ -91,13 +71,11 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
-                        'id' => 0,
                     ],
                     [
                         'website_id' => 1,
                         'code' => 'custom',
                         'name' => 'Custom',
-                        'id' => 1,
                     ]
                 ]
             ]
@@ -117,29 +95,25 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
-                        'store_id' => Store::ADMIN_STORE_ID,
-                        'id' => 0,
+                        'store_id' => Store::ADMIN_STORE_ID
                     ],
                     2 => [
                         'store_id' => 2,
                         'code' => 'fr_b2c',
                         'website_id' => 1,
-                        'name' => 'B2C French',
-                        'id' => 1,
+                        'name' => 'B2C French'
                     ]
                 ],
                 [
                     0 => [
                         'name' => 'Admin',
                         'code' => 'admin',
-                        'website_id' => Store::ADMIN_STORE_ID,
-                        'id' => 0,
+                        'website_id' => Store::ADMIN_STORE_ID
                     ],
                     1 => [
                         'name' => 'B2C French',
                         'code' => 'fr_b2c',
-                        'website_id' => 1,
-                        'id' => 1,
+                        'website_id' => 1
                     ]
                 ]
             ],
@@ -149,26 +123,49 @@ class WebsiteSoapIteratorTest extends BaseSoapIteratorTestCase
                         'store_id' => 1,
                         'code' => 'fr_b2b',
                         'website_id' => 1,
-                        'name' => 'B2B French',
-                        'id' => 1,
+                        'name' => 'B2B French'
                     ],
                     2 => [
                         'store_id' => 2,
                         'code' => 'fr_b2c',
                         'website_id' => 1,
-                        'name' => 'B2C French',
-                        'id' => 1,
+                        'name' => 'B2C French'
                     ]
                 ],
                 [
                     1 => [
                         'name' => 'B2B French, B2C French',
                         'code' => 'fr_b2b / fr_b2c',
-                        'website_id' => 1,
-                        'id' => 1,
+                        'website_id' => 1
                     ]
                 ]
             ]
         ];
+    }
+
+    /**
+     * Asserts if iterator return data in format which can be processed correctly later
+     *
+     * @param WebsiteSoapIterator $iterator
+     *
+     * @throws \PHPUnit_Framework_AssertionFailedError
+     */
+    protected function assertResponseFormat(WebsiteSoapIterator $iterator)
+    {
+        foreach ($iterator as $websiteData) {
+            $extraFields = array_diff(array_keys($websiteData), [
+                'website_id',
+                'code',
+                'name'
+            ]);
+
+            $this->assertEmpty(
+                $extraFields,
+                sprintf(
+                    'Website data contains extra fields which are not mapped in converter: %s',
+                    implode(', ', $extraFields)
+                )
+            );
+        }
     }
 }

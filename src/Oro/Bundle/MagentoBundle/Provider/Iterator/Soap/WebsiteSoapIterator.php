@@ -31,14 +31,6 @@ class WebsiteSoapIterator extends AbstractLoadeableSoapIterator
             }
         }
 
-        foreach ($websites as $key => $website) {
-            if (!isset($website['website_id'])) {
-                unset($websites[$key]);
-            } else {
-                $websites[$key]['id'] = $website['website_id'];
-            }
-        }
-
         return $websites;
     }
 }
