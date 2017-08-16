@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Utils;
 
+use Oro\Bundle\IntegrationBundle\Utils\SecureErrorMessageHelper;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class ValidationUtils
@@ -34,10 +35,6 @@ class ValidationUtils
      */
     public static function sanitizeSecureInfo($message)
     {
-        if (is_string($message)) {
-            return preg_replace('#(<apiKey.*?>)(.*)(</apiKey>)#i', '$1***$3', $message);
-        }
-
-        return $message;
+        return SecureErrorMessageHelper::sanitizeSecureInfo($message);
     }
 }
