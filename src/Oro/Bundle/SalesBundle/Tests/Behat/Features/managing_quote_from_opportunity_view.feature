@@ -83,7 +83,7 @@ Feature: In order send the customer detailed proposal while negotiating a deal
     When I click View Testing opportunity1 in grid
     And I click View John Doe in grid
     And click "Send to Customer"
-    And I fill in "To" with "AmandaRCole@example.org"
+    And I fill in "To" with "Amanda Cole"
     And press "Send"
     Then I should see Quote with:
       | Opportunity     | Testing opportunity1 |
