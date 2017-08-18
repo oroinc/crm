@@ -4,18 +4,15 @@ namespace Oro\Bundle\SalesBundle\Tests\Behat\Context;
 
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Behat\Symfony2Extension\Context\KernelDictionary;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\DataGridBundle\Tests\Behat\Element\GridRow;
 use Oro\Bundle\FormBundle\Tests\Behat\Element\OroForm;
 use Oro\Bundle\NavigationBundle\Tests\Behat\Element\MainMenu;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroPageObjectAware;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderAwareInterface;
 use Oro\Bundle\TestFrameworkBundle\Behat\Fixtures\FixtureLoaderDictionary;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\PageObjectDictionary;
-use Oro\Bundle\UserBundle\Entity\User;
 
 class SalesContext extends OroFeatureContext implements
     FixtureLoaderAwareInterface,
@@ -113,31 +110,5 @@ class SalesContext extends OroFeatureContext implements
     public function accountHasBusinessCustomers()
     {
         $this->fixtureLoader->loadFixtureFile('accounts_with_customers.yml');
-    }
-
-    /**
-     * @param string $channelName
-     * @param string $username
-     * @return array
-     */
-    private function getCustomers($channelName, $username)
-    {
-        $doctrine = $this->getContainer()->get('oro_entity.doctrine_helper');
-        $customerRepository = $doctrine->getEntityManagerForClass(B2bCustomer::class)
-            ->getRepository(B2bCustomer::class);
-        $channelRepository = $doctrine->getEntityManagerForClass(Channel::class)->getRepository(Channel::class);
-
-        $user = $doctrine->getEntityManagerForClass(User::class)->getRepository(User::class)
-            ->findOneBy(['username' => $username]);
-        $channel = $channelRepository->findOneBy(['name' => $channelName]);
-
-        $customers = [];
-
-        /** @var B2bCustomer $customer */
-        foreach ($customerRepository->findBy(['owner' => $user, 'dataChannel' => $channel]) as $customer) {
-            $customers[] = sprintf('%s (%s)', $customer->getName(), $customer->getAccount()->getName());
-        }
-
-        return $customers;
     }
 }
