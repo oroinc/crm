@@ -133,6 +133,16 @@ class SalesContext extends OroFeatureContext implements
     }
 
     /**
+     * Loads opportunity_with_account.yml fixture
+     *
+     * @Given I have Opportunity connected to Account
+     */
+    public function opportunityConnectedToAccount()
+    {
+        $this->fixtureLoader->loadFixtureFile('opportunity_with_account.yml');
+    }
+
+    /**
      * @param string $channelName
      * @param string $username
      * @return array
