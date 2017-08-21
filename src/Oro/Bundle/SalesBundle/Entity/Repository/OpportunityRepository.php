@@ -59,8 +59,9 @@ class OpportunityRepository extends EntityRepository
         $qb = $this->createQueryBuilder('opportunity');
         $qb
             ->select('COUNT(opportunity.id)')
-            ->where($qb->expr()->in('opportunity.budgetAmountCurrency', $removingCurrencies))
-            ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', $removingCurrencies));
+            ->where($qb->expr()->in('opportunity.budgetAmountCurrency', ':removingCurrencies'))
+            ->orWhere($qb->expr()->in('opportunity.closeRevenueCurrency', ':removingCurrencies'))
+            ->setParameter('removingCurrencies', $removingCurrencies);
         if ($organization instanceof Organization) {
             $qb->andWhere('opportunity.organization = :organization');
             $qb->setParameter(':organization', $organization);
