@@ -108,7 +108,8 @@ class SalesFunnelRepository extends EntityRepository
         $budgetAmountQueryBuilder = $this->getTemplateQueryBuilder($dateFrom, $dateTo)
             ->addSelect('SUM(opportunity.budgetAmountValue) as budgetAmount');
         $budgetAmountQueryBuilder
-            ->andWhere($budgetAmountQueryBuilder->expr()->in('workflowStep.name', $steps));
+            ->andWhere($budgetAmountQueryBuilder->expr()->in('workflowStep.name', ':workflowStepNames'))
+            ->setParameter('workflowStepNames', $steps);
         $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);
 
         foreach ($budgetAmountQuery->getArrayResult() as $record) {
@@ -125,7 +126,8 @@ class SalesFunnelRepository extends EntityRepository
                 ->andWhere('workflowStep.name = :workflowStep')
                 ->setParameter('workflowStep', $step);
             $customStepQueryBuilder
-                ->andWhere($customStepQueryBuilder->expr()->in('workflowStep.name', $steps));
+                ->andWhere($customStepQueryBuilder->expr()->in('workflowStep.name', ':workflowStepNames'))
+                ->setParameter('workflowStepNames', $steps);
             $customStepQuery = $this->getQuery($customStepQueryBuilder, $aclHelper);
 
             foreach ($customStepQuery->getArrayResult() as $record) {
