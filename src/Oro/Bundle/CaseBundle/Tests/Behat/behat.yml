@@ -1,0 +1,5 @@
+oro_behat_extension:
+    elements:
+        UserCasesGrid:
+            selector: "div[id^='grid-user-cases-grid']"
+            class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
