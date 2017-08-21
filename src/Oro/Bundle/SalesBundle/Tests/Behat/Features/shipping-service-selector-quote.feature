@@ -35,8 +35,7 @@ Feature: Default Shipping Service Selector on Quote Edit page
     And I fill in "Unit Price" with "22"
     And I select "ORO, 801 Scenic Hwy, HAINES CITY FL US 33844" from "Shipping Address" field
     And I click on "Calculate Shipping"
-    And I fill "Shipping Method Form" with:
-      | Method | Flat Rate |
+    And I click "Shipping Method Flat Rate Radio Button"
     And I save and close form
     And I click "Send to Customer"
     And I click "Send" in modal window
