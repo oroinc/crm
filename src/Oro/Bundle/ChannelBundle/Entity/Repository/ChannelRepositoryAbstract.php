@@ -87,7 +87,8 @@ abstract class ChannelRepositoryAbstract extends EntityRepository implements Cha
             $countDistinctName = $query->expr()->eq($query->expr()->countDistinct('e.name'), ':count');
 
             $query->innerJoin('c.entities', 'e');
-            $query->andWhere($query->expr()->in('e.name', $entities));
+            $query->andWhere($query->expr()->in('e.name', ':entitiesNames'));
+            $query->setParameter('entitiesNames', $entities);
             $query->groupBy('c.name', 'c.id');
             $query->having($countDistinctName);
             $query->setParameter('count', count($entities));
