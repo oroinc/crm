@@ -204,7 +204,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ],
             'Regions with extension'                       => [
                 'getRegions',
-                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator',
+                'Oro\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionBridgeIterator',
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Websites without extension'                   => [
@@ -488,7 +488,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         if ($withPing) {
             if ($extensionInstalled) {
                 $pingResponse = (object)[
-                    'version' => '1.2.3',
+                    'version' => '1.2.14',
                     'mage_version' => '1.8.0.0',
                     'admin_url' => 'http://localhost/admin/'
                 ];
