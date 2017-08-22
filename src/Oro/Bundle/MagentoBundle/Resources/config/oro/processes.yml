@@ -326,7 +326,7 @@ processes:
             -
                 event:    create
                 priority: 5
-                queued:   true
+                queued:   false
 
         magento_customer_export:
             -
