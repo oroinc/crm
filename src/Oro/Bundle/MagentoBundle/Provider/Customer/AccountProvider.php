@@ -65,18 +65,35 @@ class AccountProvider implements AccountProviderInterface, ContainerAwareInterfa
                 }
             }
 
-            // create new Account from customer data
-            $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
-                ? 'N/A'
-                : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
-
-            $account = (new Account())->setName($accountName);
-            $account->setOwner($targetCustomer->getOwner());
-            $account->setOrganization($targetCustomer->getOrganization());
+            $account = $this->createAccount($targetCustomer);
         }
 
         if ($targetCustomer->getId()) {
             $this->newEntitiesHelper->setEntity(sprintf($newAccountKey, $targetCustomer->getId()), $account);
+        }
+
+        return $account;
+    }
+
+    /**
+     * Create new Account from customer data
+     *
+     * @param $targetCustomer
+     *
+     * @return Account
+     */
+    protected function createAccount($targetCustomer)
+    {
+        $accountName = !$targetCustomer->getFirstName() && !$targetCustomer->getLastName()
+            ? 'N/A'
+            : sprintf('%s %s', $targetCustomer->getFirstName(), $targetCustomer->getLastName());
+
+        $account = (new Account())->setName($accountName);
+        $account->setOwner($targetCustomer->getOwner());
+        $account->setOrganization($targetCustomer->getOrganization());
+        $contact = $targetCustomer->getContact();
+        if ($contact) {
+            $account->setDefaultContact($contact);
         }
 
         return $account;
