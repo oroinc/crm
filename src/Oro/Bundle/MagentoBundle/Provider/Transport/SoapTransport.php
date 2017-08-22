@@ -23,6 +23,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIt
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider;
@@ -45,7 +46,7 @@ class SoapTransport extends BaseSOAPTransport implements
     use ExtensionVersionTrait;
     use MultiAttemptsConfigTrait;
 
-    const REQUIRED_EXTENSION_VERSION = '1.2.0';
+    const REQUIRED_EXTENSION_VERSION = '1.2.14';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
@@ -82,6 +83,7 @@ class SoapTransport extends BaseSOAPTransport implements
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE = 'newsletterSubscriberUpdate';
     const ACTION_ORO_WEBSITE_LIST = 'oroWebsiteList';
+    const ACTION_ORO_REGION_LIST = 'oroRegionList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -199,7 +201,6 @@ class SoapTransport extends BaseSOAPTransport implements
         $this->serverTime = null;
 
         /** @var string sessionId returned by Magento API login method */
-        $this->sessionId = null;
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
 
         $this->checkExtensionFunctions();
@@ -548,7 +549,13 @@ class SoapTransport extends BaseSOAPTransport implements
      */
     public function getRegions()
     {
-        return new RegionSoapIterator($this, $this->settings->all());
+        $settings = $this->settings->all();
+
+        if ($this->isExtensionInstalled()) {
+            return new RegionBridgeIterator($this, $settings);
+        } else {
+            return new RegionSoapIterator($this, $settings);
+        }
     }
 
     /**
