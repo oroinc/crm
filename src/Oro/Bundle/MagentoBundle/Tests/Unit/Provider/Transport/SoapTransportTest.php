@@ -9,6 +9,7 @@ use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
@@ -219,7 +220,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ],
             'Regions with extension'                       => [
                 'getRegions',
-                RegionSoapIterator::class,
+                RegionBridgeIterator::class,
                 SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Websites without extension'                   => [
@@ -344,12 +345,12 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ['oroPing'],
                 true,
                 (object)[
-                    'version' => '1.2.3',
+                    'version' => '1.2.14',
                     'mage_version' => '1.8.0.0',
                     'admin_url' => 'http://localhost/admin/',
                 ],
                 'http://localhost/admin/',
-                '1.2.3',
+                '1.2.14',
                 '1.8.0.0',
             ],
             'good result with out version' => [
@@ -512,7 +513,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         if ($withPing) {
             if ($extensionInstalled) {
                 $pingResponse = (object)[
-                    'version' => '1.2.3',
+                    'version' => '1.2.14',
                     'mage_version' => '1.8.0.0',
                     'admin_url' => 'http://localhost/admin/'
                 ];
