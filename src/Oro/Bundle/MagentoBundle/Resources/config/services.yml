@@ -1188,3 +1188,12 @@ services:
             - '@oro_entity.orm.native_query_executor_helper'
         tags:
             - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.upgrade_relations_accounts_contacts' }
+
+    oro_magento.async.schedule_stucked_jobs_processor:
+        class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50\ScheduleStuckedJobsProcessor
+        arguments:
+            - '@oro_message_queue.message_producer'
+            - '@oro_entity.orm.native_query_executor_helper'
+            - '@oro_workflow.process.logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.schedule_stucked_jobs' }
