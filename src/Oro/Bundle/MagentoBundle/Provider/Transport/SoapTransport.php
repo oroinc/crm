@@ -17,6 +17,7 @@ use Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
@@ -33,7 +34,7 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    const REQUIRED_EXTENSION_VERSION = '1.2.0';
+    const REQUIRED_EXTENSION_VERSION = '1.2.14';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
@@ -68,6 +69,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE = 'newsletterSubscriberUpdate';
     const ACTION_ORO_WEBSITE_LIST = 'oroWebsiteList';
+    const ACTION_ORO_REGION_LIST = 'oroRegionList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -169,7 +171,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $this->serverTime = null;
 
         /** @var string sessionId returned by Magento API login method */
-        $this->sessionId = null;
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
 
         $this->checkExtensionFunctions();
@@ -450,7 +451,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getRegions()
     {
-        return new RegionSoapIterator($this, $this->settings->all());
+        $settings = $this->settings->all();
+
+        if ($this->isExtensionInstalled()) {
+            return new RegionBridgeIterator($this, $settings);
+        } else {
+            return new RegionSoapIterator($this, $settings);
+        }
     }
 
     /**
