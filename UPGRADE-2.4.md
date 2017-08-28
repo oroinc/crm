@@ -33,3 +33,8 @@ The new response is the following:
 
 As the result of these changes, the `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter`class was removed. The `Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter` class should be used instead. 
 In addition, the `@oro_magento.importexport.data_converter.rest.website`service was replaced with `@oro_magento.importexport.data_converter.website`.
+
+* Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
+    - changed `updateRegionByMagentoRegionId` signature: new parameter `$unsetNonSystemRegionOnly` with default value `false` added 
+    - removed method `updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly` use `updateRegionByMagentoRegionId` instead
+
