@@ -2,15 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Controller;
 
+use Guzzle\Http\Exception\CurlException;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Provider\ChannelType;
 use Oro\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
@@ -56,8 +60,7 @@ class SoapController extends Controller
                 'adminUrl' => $transport->getAdminUrl(),
             ];
         } catch (\Exception $e) {
-            $message = ValidationUtils::sanitizeSecureInfo($e->getMessage());
-            $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $message));
+            $this->logError($e);
         }
 
         return new JsonResponse($response);
@@ -164,5 +167,25 @@ class SoapController extends Controller
         $form->submit($request);
 
         return $form->getData();
+    }
+
+    /**
+     * @param \Exception $e
+     */
+    private function logError(\Exception $e)
+    {
+        $message = ValidationUtils::sanitizeSecureInfo($e->getMessage());
+        $message = sprintf('MageCheck error: %s: %s', $e->getCode(), $message);
+
+        if ($e instanceof TransportException
+            || $e instanceof CurlException
+            || $e instanceof ExtensionRequiredException
+        ) {
+            $this->get('logger')->debug($message);
+
+            return;
+        }
+
+        $this->get('logger')->critical($message);
     }
 }
