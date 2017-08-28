@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
-use Akeneo\Bundle\BatchBundle\Item\InvalidItemException;
-
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
@@ -39,8 +37,6 @@ class AddressImportHelper
     /**
      * @param AbstractAddress $address
      * @param int             $mageRegionId
-     *
-     * @throws InvalidItemException
      */
     public function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
     {
@@ -49,7 +45,7 @@ class AddressImportHelper
         }
 
         $countryCode = $address->getCountry()->getIso2Code();
-        $country     = $this->getAddressCountryByCode($address, $countryCode);
+        $country = $this->getAddressCountryByCode($address, $countryCode);
         $address->setCountry($country);
         if (!$country) {
             return;
@@ -75,7 +71,7 @@ class AddressImportHelper
      */
     public function mergeAddressTypes(AbstractTypedAddress $localAddress, AbstractTypedAddress $remoteAddress)
     {
-        $newAddressTypes     = array_diff($remoteAddress->getTypeNames(), $localAddress->getTypeNames());
+        $newAddressTypes = array_diff($remoteAddress->getTypeNames(), $localAddress->getTypeNames());
         $deletedAddressTypes = array_diff($localAddress->getTypeNames(), $remoteAddress->getTypeNames());
 
         foreach ($deletedAddressTypes as $addressType) {
@@ -95,7 +91,7 @@ class AddressImportHelper
     {
         return $this->doctrineHelper->getEntityByCriteria(
             ['regionId' => $mageRegionId],
-            'Oro\Bundle\MagentoBundle\Entity\Region'
+            Region::class
         );
     }
 
@@ -122,7 +118,6 @@ class AddressImportHelper
      * @param AbstractAddress $address
      * @param string          $countryCode
      *
-     * @throws InvalidItemException
      * @return Country|null
      */
     public function getAddressCountryByCode(AbstractAddress $address, $countryCode)
@@ -137,9 +132,9 @@ class AddressImportHelper
             }
         } else {
             /** @var Country $country */
-            $country                            = $this->doctrineHelper->findAndReplaceEntity(
+            $country = $this->doctrineHelper->findAndReplaceEntity(
                 $address->getCountry(),
-                'Oro\Bundle\AddressBundle\Entity\Country',
+                Country::class,
                 'iso2Code',
                 ['iso2Code', 'iso3Code', 'name']
             );
@@ -154,30 +149,27 @@ class AddressImportHelper
      * @param string $countryCode
      * @param string $code
      *
-     * @return BAPRegion
+     * @return BAPRegion|null
      */
     public function loadRegionByCode($combinedCode, $countryCode, $code)
     {
-        $regionClass  = 'Oro\Bundle\AddressBundle\Entity\Region';
-        $countryClass = 'Oro\Bundle\AddressBundle\Entity\Country';
-
         // Simply search region by combinedCode
         $region = $this->doctrineHelper->getEntityByCriteria(
             [
-                 'combinedCode' => $combinedCode
+                'combinedCode' => $combinedCode
             ],
-            $regionClass
+            BAPRegion::class
         );
         if (!$region) {
             // Some region codes in magento are filled by region names
-            $em      = $this->doctrineHelper->getEntityManager($countryClass);
-            $country = $em->getReference($countryClass, $countryCode);
-            $region  = $this->doctrineHelper->getEntityByCriteria(
+            $em = $this->doctrineHelper->getEntityManager(Country::class);
+            $country = $em->getReference(Country::class, $countryCode);
+            $region = $this->doctrineHelper->getEntityByCriteria(
                 [
-                     'country' => $country,
-                     'name'    => $combinedCode
+                    'country' => $country,
+                    'name' => $combinedCode
                 ],
-                $regionClass
+                BAPRegion::class
             );
         }
         if (!$region) {
@@ -185,13 +177,13 @@ class AddressImportHelper
             // As example FR-1 in magento and FR-01 in ISO
             $region = $this->doctrineHelper->getEntityByCriteria(
                 [
-                     'combinedCode' =>
-                         BAPRegion::getRegionCombinedCode(
-                             $countryCode,
-                             str_pad($code, 2, '0', STR_PAD_LEFT)
-                         )
+                    'combinedCode' =>
+                        BAPRegion::getRegionCombinedCode(
+                            $countryCode,
+                            str_pad($code, 2, '0', STR_PAD_LEFT)
+                        )
                 ],
-                $regionClass
+                BAPRegion::class
             );
         }
 
@@ -200,43 +192,89 @@ class AddressImportHelper
 
     /**
      * @param AbstractAddress $address
-     * @param string $countryCode
+     * @param string          $countryCode
      * @param int|string|null $mageRegionId
-     * @throws InvalidItemException
      */
     public function updateRegionByMagentoRegionId(AbstractAddress $address, $countryCode, $mageRegionId = null)
     {
-        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId]) && is_numeric($mageRegionId)) {
-            $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
-        }
+        $this->updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly($address, $countryCode, $mageRegionId);
+    }
 
-        if (!empty($this->mageRegionsCache[$mageRegionId])) {
+    /**
+     * @param AbstractAddress $address
+     * @param string          $countryCode
+     * @param null            $mageRegionId
+     * @param bool            $unsetNonSystemRegionOnly
+     *
+     * @deprecated Since 2.0, will be removed after 2.3 and all code will move to `updateRegionByMagentoRegionId`
+     */
+    public function updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly(
+        AbstractAddress $address,
+        $countryCode,
+        $mageRegionId = null,
+        $unsetNonSystemRegionOnly = false
+    ) {
+        $magentoRegion = $this->getMagentoRegionByRegionId($mageRegionId);
+        $region = $this->getSystemRegion($countryCode, $magentoRegion);
+
+        /**
+         * no region found in system db for corresponding magento region, use region text
+         */
+        if (null === $region) {
+            $address->setRegion(null);
+            if ($magentoRegion instanceof Region) {
+                $address->setRegionText($magentoRegion->getName());
+            }
+        } elseif (!$unsetNonSystemRegionOnly) {
+            /**
+             * @var $region BAPRegion
+             */
+            $region = $this->doctrineHelper->merge($region);
+            $address->setRegion($region);
+            $address->setRegionText(null);
+        }
+    }
+
+    /**
+     * @param string          $countryCode
+     * @param Region|null     $magentoRegion
+     *
+     * @return bool|mixed
+     */
+    protected function getSystemRegion($countryCode, $magentoRegion)
+    {
+        if (!empty($magentoRegion)) {
             /** @var Region $mageRegion */
-            $mageRegion = $this->mageRegionsCache[$mageRegionId];
-            $combinedCode = $mageRegion->getCombinedCode();
-            $regionCode = $mageRegion->getCode();
+            $combinedCode = $magentoRegion->getCombinedCode();
+            $regionCode = $magentoRegion->getCode();
 
             if (!array_key_exists($combinedCode, $this->regionsCache)) {
                 $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
             }
 
-            /**
-             * no region found in system db for corresponding magento region, use region text
-             */
-            if (empty($this->regionsCache[$combinedCode])) {
-                $address->setRegion(null);
-                $address->setRegionText($mageRegion->getName());
-            } else {
-                $this->regionsCache[$combinedCode] = $this->doctrineHelper->merge($this->regionsCache[$combinedCode]);
-                $address->setRegion($this->regionsCache[$combinedCode]);
-                $address->setRegionText(null);
-            }
-        } elseif ($address->getRegionText() || $address->getCountry()) {
-            $address->setRegion(null);
-            // unable to find corresponding region and region text is empty,
-            // it's correct case for UK addresses, if country present
-        } else {
-            throw new InvalidItemException('Unable to handle region for address', [$address]);
+            return $this->regionsCache[$combinedCode];
         }
+
+        // unable to find corresponding BAPRegion
+        // it's correct case for UK, DE addresses, if country present
+        return null;
+    }
+
+    /**
+     * @param $mageRegionId
+     *
+     * @return Region|null
+     */
+    protected function getMagentoRegionByRegionId($mageRegionId)
+    {
+        if (is_numeric($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId])) {
+            $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
+        }
+
+        if (array_key_exists($mageRegionId, $this->mageRegionsCache)) {
+            return $this->mageRegionsCache[$mageRegionId];
+        }
+
+        return null;
     }
 }
