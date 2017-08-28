@@ -35,6 +35,15 @@ class CustomerStrategy extends AbstractImportStrategy
                     $originId = $address->getOriginId();
                     $this->importingAddresses[$originId] = $address;
 
+                    if ($address->getRegion() && $address->getCountry()) {
+                        $this->addressHelper->updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly(
+                            $address,
+                            $address->getCountry()->getIso2Code(),
+                            $address->getRegion()->getCombinedCode(),
+                            true
+                        );
+                    }
+
                     if ($address->getRegion()) {
                         $this->addressRegions[$originId] = $address->getRegion()->getCombinedCode();
                     } else {
