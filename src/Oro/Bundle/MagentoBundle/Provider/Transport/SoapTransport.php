@@ -34,7 +34,9 @@ use Oro\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    const REQUIRED_EXTENSION_VERSION = '1.2.14';
+    const REQUIRED_EXTENSION_VERSION = '1.2.0';
+
+    const ACTION_ORO_REGION_LIST_VERSION_REQUIRED = '1.2.14';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
@@ -312,8 +314,19 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function isSupportedExtensionVersion()
     {
+        return $this->isExtensionInstalledAndIsVersionSupported();
+    }
+
+    /**
+     * @param string|null $versionRequired
+     * @return bool
+     */
+    public function isExtensionInstalledAndIsVersionSupported($versionRequired = null)
+    {
+        $versionRequired = $versionRequired === null ? self::REQUIRED_EXTENSION_VERSION : $versionRequired;
+
         return $this->isExtensionInstalled()
-            && version_compare($this->getExtensionVersion(), self::REQUIRED_EXTENSION_VERSION, 'ge');
+            && version_compare($this->getExtensionVersion(), $versionRequired, 'ge');
     }
 
     /**
@@ -453,7 +466,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         $settings = $this->settings->all();
 
-        if ($this->isExtensionInstalled()) {
+        if ($this->isExtensionInstalledAndIsVersionSupported(self::ACTION_ORO_REGION_LIST_VERSION_REQUIRED)) {
             return new RegionBridgeIterator($this, $settings);
         } else {
             return new RegionSoapIterator($this, $settings);
