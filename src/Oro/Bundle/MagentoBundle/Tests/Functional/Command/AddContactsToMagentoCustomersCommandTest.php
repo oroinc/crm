@@ -14,7 +14,7 @@ class AddContactsToMagentoCustomersCommandTest extends WebTestCase
     {
         $this->initClient();
         $this->loadFixtures([LoadMagentoChannel::class]);
-        $entityManager = $this->getContainer()->get('doctrine')->getEntityManager();
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
         //remove contact from customer and delete it
         $customer = $this->getReference('customer_1');
