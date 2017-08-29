@@ -46,7 +46,9 @@ class SoapTransport extends BaseSOAPTransport implements
     use ExtensionVersionTrait;
     use MultiAttemptsConfigTrait;
 
-    const REQUIRED_EXTENSION_VERSION = '1.2.14';
+    const REQUIRED_EXTENSION_VERSION = '1.2.0';
+
+    const ACTION_ORO_REGION_LIST_VERSION_REQUIRED = '1.2.14';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
@@ -389,6 +391,18 @@ class SoapTransport extends BaseSOAPTransport implements
     }
 
     /**
+     * @param string|null $versionRequired
+     * @return bool
+     */
+    public function isExtensionInstalledAndIsVersionSupported($versionRequired = null)
+    {
+        $versionRequired = $versionRequired === null ? self::REQUIRED_EXTENSION_VERSION : $versionRequired;
+
+        return $this->isExtensionInstalled()
+            && version_compare($this->getExtensionVersion(), $versionRequired, 'ge');
+    }
+
+    /**
      * Pings magento and fill data related to Bridge Extension.
      *
      * @return $this
@@ -551,7 +565,7 @@ class SoapTransport extends BaseSOAPTransport implements
     {
         $settings = $this->settings->all();
 
-        if ($this->isExtensionInstalled()) {
+        if ($this->isExtensionInstalledAndIsVersionSupported(self::ACTION_ORO_REGION_LIST_VERSION_REQUIRED)) {
             return new RegionBridgeIterator($this, $settings);
         } else {
             return new RegionSoapIterator($this, $settings);
