@@ -221,7 +221,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Regions with extension'                       => [
                 'getRegions',
                 RegionBridgeIterator::class,
-                SoapTransport::REQUIRED_EXTENSION_VERSION
+                SoapTransport::ACTION_ORO_REGION_LIST_VERSION_REQUIRED
             ],
             'Websites without extension'                   => [
                 'getWebsites',
@@ -357,6 +357,78 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ['oroPing'],
                 false,
                 (object)[null],
+                false,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider testIsExtensionInstalledAndIsVersionSupportedProvider
+     * @param object $soapResult
+     * @param string|null $requiredVersion
+     * @param bool $expectedResult
+     */
+    public function testIsExtensionInstalledAndIsVersionSupported($soapResult, $requiredVersion, $expectedResult)
+    {
+        $this->initSettings(false, [SoapTransport::ACTION_PING]);
+        $this->soapClientMock->expects($this->at(3))
+            ->method('__soapCall')
+            ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
+            ->will($this->returnValue($soapResult));
+
+        $this->transport->init($this->transportEntity);
+
+        $this->assertSame(
+            $expectedResult,
+            $this->transport->isExtensionInstalledAndIsVersionSupported($requiredVersion)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function testIsExtensionInstalledAndIsVersionSupportedProvider()
+    {
+        return [
+            'bridge is not installed' => [
+                (object)[null],
+                null,
+                false,
+            ],
+            'bridge is installed with old version' => [
+                (object)[
+                    'version' => '1.1.3',
+                    'mage_version' => '1.8.0.0',
+                    'admin_url' => 'http://localhost/admin/',
+                ],
+                null,
+                false,
+            ],
+            'bridge is installed' => [
+                (object)[
+                    'version' => '1.2.3',
+                    'mage_version' => '1.8.0.0',
+                    'admin_url' => 'http://localhost/admin/',
+                ],
+                null,
+                true,
+            ],
+            'bridge is installed #2' => [
+                (object)[
+                    'version' => '1.2.6',
+                    'mage_version' => '1.8.0.0',
+                    'admin_url' => 'http://localhost/admin/',
+                ],
+                '1.2.4',
+                true,
+            ],
+            'bridge ist installed but we ask for higher version' => [
+                (object)[
+                    'version' => '1.2.3',
+                    'mage_version' => '1.8.0.0',
+                    'admin_url' => 'http://localhost/admin/',
+                ],
+                '1.2.14',
                 false,
             ],
         ];
