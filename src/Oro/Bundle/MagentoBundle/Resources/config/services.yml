@@ -609,6 +609,14 @@ services:
         calls:
             - ['setLogger',  ["@logger"]]
 
+    oro_magento.manager.customer_contact_manager:
+        class: Oro\Bundle\MagentoBundle\Manager\CustomerContactManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_workflow.listener.extension.process_trigger"
+        calls:
+            - ['setLogger',  ["@logger"]]
+
     oro_magento.importexport.address_import_helper:
         class: %oro_magento.importexport.address_import_helper.class%
         arguments:
