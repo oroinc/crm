@@ -115,10 +115,8 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
-        - OroConfigBundle::FeatureContext
         - OroDataGridBundle::GridContext
         - OroFormBundle::FormContext
-        - OroApplicationBundle::CommerceMainContext
         - OroSecurityBundle::ACLContext
         - OroImportExportBundle::ImportExportContext:
           - '@oro_entity.entity_alias_resolver'
@@ -126,14 +124,7 @@ oro_behat_extension:
         - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
-        - OroProductBundle::FeatureContext
-        - OroRFPBundle::FeatureContext
-        - OroCheckoutBundle::FeatureContext
-        - OroShoppingListBundle::ShoppingListContext
-        - OroAuthorizeNetBundle::FeatureContext
-        - OroShoppingListBundle::FeatureContext
-        - OroSalesBundle::SalesFeatureToggleContext
         - OroNavigationBundle::FeatureContext
-        - OroProductBundle::QuickOrderFormContext
+        - OroSalesBundle::SalesFeatureToggleContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
