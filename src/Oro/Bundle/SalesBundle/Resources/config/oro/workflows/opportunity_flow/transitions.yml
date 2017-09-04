@@ -9,6 +9,7 @@ workflows:
                 transition_definition: create_definition
                 frontend_options:
                     pageComponent:
+                        layout: separate
                         module: 'oroui/js/app/components/view-component'
                         options:
                             view: 'orosales/js/app/views/opportunity-status-select-view'
@@ -34,6 +35,7 @@ workflows:
                     icon: fa-play
                     class: btn-primary
                     pageComponent:
+                        layout: separate
                         module: 'oroui/js/app/components/view-component'
                         options:
                             view: 'orosales/js/app/views/opportunity-status-select-view'
@@ -138,6 +140,7 @@ workflows:
                     icon: 'fa-backward'
                     class: 'btn-primary'
                     pageComponent:
+                        layout: separate
                         module: 'oroui/js/app/components/view-component'
                         options:
                             view: 'orosales/js/app/views/opportunity-status-select-view'
