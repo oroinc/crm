@@ -1,0 +1,10 @@
+Oro\Bundle\TagBundle\Entity\Tag:
+    tag{1..9}:
+        name: 'tag<current()>'
+        owner: '@admin'
+        organization: '@organization'
+
+Oro\Bundle\TagBundle\Entity\Tagging:
+    contact1tag{1..9}:
+        tag: '@tag<current()>'
+        entity: '@contact-1'

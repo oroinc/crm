@@ -1,0 +1,18 @@
+oro_behat_extension:
+  suites:
+    OroContactBundle:
+      contexts:
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - OroQueryDesignerBundle::QueryDesignerContext
+        - OroFormBundle::FormContext
+        - OroDataGridBundle::GridContext
+        - OroSecurityBundle::ACLContext
+        - OroAddressBundle::AddressContext
+        - OroImportExportBundle::ImportExportContext:
+            - '@oro_entity.entity_alias_resolver'
+            - '@oro_importexport.processor.registry'
+        - OroEmailBundle::EmailContext
+        - OroContactBundle::FeatureContext
+      paths:
+        - '@OroContactBundle/Tests/Behat/Features'
