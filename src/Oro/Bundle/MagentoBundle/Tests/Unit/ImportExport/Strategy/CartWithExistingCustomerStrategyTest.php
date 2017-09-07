@@ -23,7 +23,8 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->chainEntityClassNameProvider,
             $this->translator,
             $this->newEntitiesHelper,
-            $this->doctrineHelper
+            $this->doctrineHelper,
+            $this->ownerChecker
         );
     }
 
