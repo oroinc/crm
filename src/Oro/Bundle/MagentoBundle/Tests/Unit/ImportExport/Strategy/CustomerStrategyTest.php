@@ -27,7 +27,8 @@ class CustomerStrategyTest extends AbstractStrategyTest
             $this->chainEntityClassNameProvider,
             $this->translator,
             $this->newEntitiesHelper,
-            $this->doctrineHelper
+            $this->doctrineHelper,
+            $this->ownerChecker
         );
 
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
