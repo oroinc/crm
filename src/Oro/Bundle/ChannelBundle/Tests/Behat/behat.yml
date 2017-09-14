@@ -1,0 +1,10 @@
+oro_behat_extension:
+  elements:
+    Channel Form:
+      selector: 'form[name="oro_channel_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Entities Select:
+            locator: '//input[@class="select2-focusser select2-offscreen"]'
+            type: xpath
