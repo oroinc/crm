@@ -1,4 +1,17 @@
 oro_behat_extension:
+  suites:
+    OroCRMBundle:
+      contexts:
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
+        - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - OroDataGridBundle::GridContext
+        - OroActivityListBundle::ActivityContext
+        - OroFormBundle::FormContext
+        - OroSecurityBundle::ACLContext
+        - OroCalendarBundle::FeatureContext
+      paths:
+        - '@OroCRMBundle/Tests/Behat/Features'
+
   elements:
     Account Form:
       selector: 'form[name="oro_account_form"]'
