@@ -4,6 +4,9 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Event\OnClearEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -11,6 +14,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\SearchBundle\Engine\IndexerInterface;
 use Oro\Bundle\SearchBundle\EventListener\IndexListener;
@@ -34,6 +38,38 @@ class SearchIndexListener extends IndexListener
         PropertyAccessorInterface $propertyAccessor
     ) {
         parent::__construct($doctrineHelper, $searchIndexer, $propertyAccessor);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function postFlush(PostFlushEventArgs $args)
+    {
+        // Do nothing and waiting until import will be finished
+        // This method should be removed after CRM-8458
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onClear(OnClearEventArgs $args)
+    {
+        // Do nothing and waiting until import will be finished
+        // This method should be removed after CRM-8458
+    }
+
+    /**
+     * Sends collected entities to indexation
+     *
+     * @param SyncEvent $event
+     *
+     * @todo This method is temporary solution and after CRM-8458 will be not required
+     */
+    public function onFinish(SyncEvent $event)
+    {
+        if ($this->hasEntitiesToIndex()) {
+            $this->indexEntities();
+        }
     }
 
     /**
