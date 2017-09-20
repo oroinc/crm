@@ -16,6 +16,8 @@ class CustomerStrategy extends AbstractImportStrategy
 
     /**
      * @var array
+     *
+     * @deprecated will me removed from here to AddressImportHelper in 2.5.
      */
     protected $addressRegions = [];
 
@@ -26,28 +28,31 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function beforeProcessEntity($entity)
     {
         $this->importingAddresses = [];
-        $this->addressRegions = [];
         $importingAddresses = $entity->getAddresses();
         if ($importingAddresses) {
             foreach ($importingAddresses as $address) {
                 if ($address->getSyncState() !== Address::SYNC_TO_MAGENTO) {
                     $originId = $address->getOriginId();
-                    $this->importingAddresses[$originId] = $address;
-
                     if ($address->getRegion() && $address->getCountry()) {
+                        // at this point imported address region have combinedCode equal to region_id in magento db
+                        $this->addressHelper->addMageRegionId(
+                            Address::class,
+                            $originId,
+                            $address->getRegion()->getCode()
+                        );
+                        /**
+                         * We must run this method here because it set regionText to address to prevent error of
+                         * "Not found entity". Real Region will be set in "afterProcessEntity" method
+                         */
                         $this->addressHelper->updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly(
                             $address,
                             $address->getCountry()->getIso2Code(),
-                            $address->getRegion()->getCombinedCode(),
+                            $originId,
                             true
                         );
                     }
 
-                    if ($address->getRegion()) {
-                        $this->addressRegions[$originId] = $address->getRegion()->getCombinedCode();
-                    } else {
-                        $this->addressRegions[$originId] = null;
-                    }
+                    $this->importingAddresses[$originId] = $address;
                 }
             }
         }
@@ -88,11 +93,11 @@ class CustomerStrategy extends AbstractImportStrategy
                         $remoteAddress = $this->importingAddresses[$originId];
                         $this->addressHelper->mergeAddressTypes($address, $remoteAddress);
 
-                        if (!empty($this->addressRegions[$originId]) && $address->getCountry()) {
+                        if ($address->getCountry()) {
                             $this->addressHelper->updateRegionByMagentoRegionId(
                                 $address,
                                 $address->getCountry()->getIso2Code(),
-                                $this->addressRegions[$originId]
+                                $originId
                             );
                         }
                     }

@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -37,7 +36,36 @@ class CartStrategy extends AbstractImportStrategy
         if ($this->existingEntity) {
             $this->existingCartItems = $this->existingEntity->getCartItems()->toArray();
         } else {
+            $this->existingCartItems = [];
             $this->existingEntity = $entity;
+        }
+
+        /** @var CartAddress[] $addressData */
+        $addressData = array_filter([
+            $this->existingEntity->getBillingAddress(),
+            $this->existingEntity->getShippingAddress()
+        ]);
+
+        foreach ($addressData as $address) {
+            if ($address->getRegion() && $address->getCountry()) {
+                $originId = $address->getOriginId();
+                // at this point imported address region have code equal to region_id in magento db field
+                $this->addressHelper->addMageRegionId(
+                    CartAddress::class,
+                    $originId,
+                    $address->getRegion()->getCode()
+                );
+                /**
+                 * We must run this method here because it set regionText to address to prevent error of
+                 * "Not found entity". Real Region will be set in "afterProcessEntity" method
+                 */
+                $this->addressHelper->updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly(
+                    $address,
+                    $address->getCountry()->getIso2Code(),
+                    $originId,
+                    true
+                );
+            }
         }
 
         return parent::beforeProcessEntity($entity);
@@ -143,6 +171,10 @@ class CartStrategy extends AbstractImportStrategy
     {
         if ($this->existingEntity->getStatus()->getName() === CartStatus::STATUS_OPEN) {
             $this->updateRemovedCartItems($entity);
+        } else {
+            // allow to modify status only for "open" carts
+            // because magento can only expire cart, so for different statuses this useless
+            $this->updateCartStatus($entity);
         }
 
         if (!$this->hasContactInfo($entity)) {
@@ -152,8 +184,7 @@ class CartStrategy extends AbstractImportStrategy
         $this
             ->updateCustomer($entity)
             ->updateAddresses($entity)
-            ->updateCartItems($entity)
-            ->updateCartStatus($entity);
+            ->updateCartItems($entity);
 
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         if (!$entity->getImportedAt()) {
@@ -161,6 +192,7 @@ class CartStrategy extends AbstractImportStrategy
         }
         $entity->setSyncedAt($now);
 
+        $this->addressHelper->resetMageRegionIdCache(CartAddress::class);
         $this->existingEntity = null;
         $this->existingCartItems = null;
 
@@ -174,25 +206,30 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function updateRemovedCartItems(Cart $entity)
     {
+        $newCartItems = $entity->getCartItems();
         if ((int)$entity->getItemsQty() === 0) {
-            foreach ($entity->getCartItems() as $cartItem) {
-                if (!$cartItem->isRemoved()) {
-                    $cartItem->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-                    $cartItem->setRemoved(true);
-                }
+            foreach ($newCartItems as $cartItem) {
+                $this->setCartItemRemoved($cartItem);
             }
-        } elseif ($this->existingCartItems) {
-            $existingCartItems = new ArrayCollection($this->existingCartItems);
-            $newCartItems = $entity->getCartItems();
 
-            foreach ($existingCartItems as $existingCartItem) {
-                if (!$newCartItems->contains($existingCartItem)) {
-                    if (!$existingCartItem->isRemoved()) {
-                        $existingCartItem->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-                        $existingCartItem->setRemoved(true);
-                    }
-                }
+            return;
+        }
+
+        foreach ($this->existingCartItems as $existingCartItem) {
+            if (!$newCartItems->contains($existingCartItem)) {
+                $this->setCartItemRemoved($existingCartItem);
             }
+        }
+    }
+
+    /**
+     * @param CartItem $cartItem
+     */
+    protected function setCartItemRemoved(CartItem $cartItem)
+    {
+        if (!$cartItem->isRemoved()) {
+            $cartItem->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            $cartItem->setRemoved(true);
         }
     }
 
@@ -240,23 +277,28 @@ class CartStrategy extends AbstractImportStrategy
         foreach ($addresses as $addressName) {
             /** @var CartAddress $address */
             $address = $this->getPropertyAccessor()->getValue($entity, $addressName);
-
-            if (!$address) {
-                continue;
-            }
-
-            // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
-            if ($address->getCountry()) {
-                $address->setCountryText(null);
-                $this->getPropertyAccessor()->setValue($entity, $addressName, $address);
-            } else {
-                $this->getPropertyAccessor()->setValue($entity, $addressName, null);
+            if ($address) {
+                $this->getPropertyAccessor()->setValue($entity, $addressName, $this->getUpdatedAddress($address));
             }
         }
 
         return $this;
+    }
+
+    /**
+     * @param CartAddress $address
+     *
+     * @return null|CartAddress
+     */
+    protected function getUpdatedAddress(CartAddress $address)
+    {
+        $this->addressHelper->updateAddressCountryRegion($address, $address->getOriginId());
+        if (!$address->getCountry()) {
+            return null;
+        }
+        $address->setCountryText(null);
+
+        return $address;
     }
 
     /**
@@ -286,18 +328,12 @@ class CartStrategy extends AbstractImportStrategy
      * @param Cart $cart
      *
      * @return CartStrategy
+     *
+     * @deprecated  since 2.5 body of this method will be directly used in AfterProcessEntity method
      */
     protected function updateCartStatus(Cart $cart)
     {
-        // allow to modify status only for "open" carts
-        // because magento can only expire cart, so for different statuses this useless
-        if ($this->existingEntity->getStatus()->getName() !== CartStatus::STATUS_OPEN) {
-            $status = $this->existingEntity->getStatus();
-        } else {
-            $status = $cart->getStatus();
-        }
-
-        $cart->setStatus($status);
+        $cart->setStatus($status = $this->existingEntity->getStatus());
 
         return $this;
     }

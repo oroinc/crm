@@ -31,6 +31,28 @@ class OrderStrategy extends AbstractImportStrategy
             $this->existingEntity = $entity;
         }
 
+        foreach ($entity->getAddresses() as $address) {
+            if ($address->getRegion() && $address->getCountry()) {
+                $originId = $address->getOriginId();
+                // at this point imported address region have code equal to region_id in magento db field
+                $this->addressHelper->addMageRegionId(
+                    OrderAddress::class,
+                    $originId,
+                    $address->getRegion()->getCode()
+                );
+                /**
+                 * We must run this method here because it set regionText to address to prevent error of
+                 * "Not found entity State". Real Region will be set in "afterProcessEntity" method
+                 */
+                $this->addressHelper->updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly(
+                    $address,
+                    $address->getCountry()->getIso2Code(),
+                    $originId,
+                    true
+                );
+            }
+        }
+
         return parent::beforeProcessEntity($entity);
     }
 
@@ -57,6 +79,7 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processAddresses($entity);
         $this->processCustomer($entity, $entity->getCustomer());
 
+        $this->addressHelper->resetMageRegionIdCache(OrderAddress::class);
         $this->existingEntity = null;
 
         $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS_IDS, $entity->getIncrementId());
@@ -146,11 +169,16 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected function processAddresses(Order $order)
     {
-        /** @var OrderAddress $address */
         foreach ($order->getAddresses() as $address) {
             if ($address->getCountry()) {
+                $this->addressHelper->updateRegionByMagentoRegionId(
+                    $address,
+                    $address->getCountry()->getIso2Code(),
+                    $address->getOriginId()
+                );
                 $address->setCountryText(null);
             }
+
             $address->setOwner($order);
         }
 
