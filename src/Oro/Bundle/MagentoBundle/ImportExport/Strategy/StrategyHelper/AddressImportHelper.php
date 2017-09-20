@@ -26,6 +26,9 @@ class AddressImportHelper
     /** @var AddressType[] */
     protected $addressTypesCache = [];
 
+    /**@var array */
+    protected $mageRegionsIds = [];
+
     /**
      * @param DoctrineHelper $doctrineHelper
      */
@@ -36,9 +39,9 @@ class AddressImportHelper
 
     /**
      * @param AbstractAddress $address
-     * @param int             $mageRegionId
+     * @param int|string      $originId
      */
-    public function updateAddressCountryRegion(AbstractAddress $address, $mageRegionId)
+    public function updateAddressCountryRegion(AbstractAddress $address, $originId)
     {
         if (!$address->getCountry()) {
             return;
@@ -51,7 +54,7 @@ class AddressImportHelper
             return;
         }
 
-        $this->updateRegionByMagentoRegionId($address, $countryCode, $mageRegionId);
+        $this->updateRegionByMagentoRegionId($address, $countryCode, $originId);
     }
 
     /**
@@ -193,34 +196,65 @@ class AddressImportHelper
     /**
      * @param AbstractAddress $address
      * @param string          $countryCode
-     * @param int|string|null $mageRegionId
+     * @param int|string      $originId
      * @param bool            $unsetNonSystemRegionOnly
      */
     public function updateRegionByMagentoRegionId(
         AbstractAddress $address,
         $countryCode,
-        $mageRegionId = null,
+        $originId = null,
         $unsetNonSystemRegionOnly = false
     ) {
-        $magentoRegion = $this->getMagentoRegionByRegionId($mageRegionId);
+        $magentoRegion = $this->getMagentoRegionByRegionId($this->getMageRegionId(get_class($address), $originId));
         $region = $this->getSystemRegion($countryCode, $magentoRegion);
 
-        /**
-         * no region found in system db for corresponding magento region, use region text
-         */
+        //no region found in system db for corresponding magento region, use region text
         if (null === $region) {
             $address->setRegion(null);
             if ($magentoRegion instanceof Region) {
                 $address->setRegionText($magentoRegion->getName());
             }
         } elseif (!$unsetNonSystemRegionOnly) {
-            /**
-             * @var $region BAPRegion
-             */
+            /**@var $region BAPRegion */
             $region = $this->doctrineHelper->merge($region);
             $address->setRegion($region);
             $address->setRegionText(null);
         }
+    }
+
+    /**
+     * @param string          $addressType
+     * @param int|string      $originId
+     * @param int|string|null $mageRegionId
+     */
+    public function addMageRegionId($addressType, $originId, $mageRegionId)
+    {
+        if ($addressType && $originId) {
+            $this->mageRegionsIds[$addressType][$originId] = $mageRegionId;
+        }
+    }
+
+    /**
+     * @param string $addressType
+     */
+    public function resetMageRegionIdCache($addressType)
+    {
+        if (isset($this->mageRegionsIds[$addressType])) {
+            unset($this->mageRegionsIds[$addressType]);
+        }
+    }
+
+    /***
+     * @param string $addressType
+     * @param int|string $originId
+     *
+     * @return int|string|null
+     */
+    protected function getMageRegionId($addressType, $originId)
+    {
+        return isset($this->mageRegionsIds[$addressType][$originId]) ?
+            $this->mageRegionsIds[$addressType][$originId] :
+            null;
     }
 
     /**
@@ -231,7 +265,7 @@ class AddressImportHelper
      */
     protected function getSystemRegion($countryCode, $magentoRegion)
     {
-        if (!empty($magentoRegion)) {
+        if ($magentoRegion) {
             /** @var Region $mageRegion */
             $combinedCode = $magentoRegion->getCombinedCode();
             $regionCode = $magentoRegion->getCode();
@@ -249,7 +283,7 @@ class AddressImportHelper
     }
 
     /**
-     * @param $mageRegionId
+     * @param int|string|null $mageRegionId
      *
      * @return Region|null
      */
