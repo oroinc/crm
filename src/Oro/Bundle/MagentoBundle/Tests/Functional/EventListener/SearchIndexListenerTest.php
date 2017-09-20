@@ -6,6 +6,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
+use Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerContact;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -20,6 +22,9 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 class SearchIndexListenerTest extends WebTestCase
 {
     use MessageQueueAssertTrait;
+
+    /** @var SearchIndexListener */
+    private $listener;
 
     /** @var RegistryInterface */
     private $registry;
@@ -42,6 +47,7 @@ class SearchIndexListenerTest extends WebTestCase
         $optionalListenersManager->disableListener('oro_search.index_listener');
         $optionalListenersManager->enableListener('oro_magento.event_listener.delayed_search_reindex');
 
+        $this->listener = $this->getContainer()->get('oro_magento.event_listener.delayed_search_reindex');
         $this->registry = $this->getContainer()->get('doctrine');
     }
 
@@ -69,6 +75,10 @@ class SearchIndexListenerTest extends WebTestCase
         $em->persist($customer);
         $em->flush();
 
+        self::assertMessagesEmpty(Topics::INDEX_ENTITIES);
+
+        $this->listener->onFinish(new SyncEvent('magento_test_job', []));
+
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
             ['class' => Contact::class, 'id' => $customer->getContact()->getId()],
             ['class' => Account::class, 'id' => $customer->getAccount()->getId()],
@@ -89,6 +99,10 @@ class SearchIndexListenerTest extends WebTestCase
         $em->persist($customer);
         $em->flush();
 
+        self::assertMessagesEmpty(Topics::INDEX_ENTITIES);
+
+        $this->listener->onFinish(new SyncEvent('magento_test_job', []));
+
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
             ['class' => Customer::class, 'id' => $customer->getId()],
             ['class' => Contact::class, 'id' => $customer->getContact()->getId()],
@@ -107,6 +121,10 @@ class SearchIndexListenerTest extends WebTestCase
 
         $em->remove($customer);
         $em->flush();
+
+        self::assertMessagesEmpty(Topics::INDEX_ENTITIES);
+
+        $this->listener->onFinish(new SyncEvent('magento_test_job', []));
 
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
             ['class' => Customer::class, 'id' => $customerId]
