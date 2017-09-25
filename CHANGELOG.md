@@ -183,7 +183,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
         * `oro_sales.form.guesser.customer_account_guesser`
         * `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
         * `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
-    * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/laboro/dev/blob/maintenance/2.2/package/crm/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
+    * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/oroinc/crm/tree/2.2.0/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
 ## 2.1.6 (2017-06-30)
 ## 2.1.5 (2017-06-08)
 ## 2.1.4 (2017-05-30)
