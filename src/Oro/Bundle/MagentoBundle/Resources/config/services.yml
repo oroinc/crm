@@ -572,6 +572,17 @@ services:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
             - { name: doctrine.event_listener, event: onClear }
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: onFinish }
+
+    # This listener implemented to enable/disable oro_magento.event_listener.delayed_search_reindex
+    # for Magento integration only
+    oro_magento.event_listener.alternative_search_index_switcher:
+        class: 'Oro\Bundle\MagentoBundle\EventListener\AlternativeSearchIndexSwitcherListener'
+        arguments:
+            - '@oro_platform.optional_listeners.manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.event.sync_before, method: onStart }
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: onFinish }
 
     oro_magento.migration.demo_data_fixtures_listener.search_index:
         class: Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener

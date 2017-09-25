@@ -14,7 +14,7 @@ Feature: Lead Navigation Items
     When I pin page
     And add page to favorites
     Then Leads link must be in pin holder
-    And Favorites must contain "Open Leads - Leads - Sales"
+    And Favorites must contain "Leads - Sales"
 
   Scenario: Pin and Add to favorites Lead View page
     Given I click View Lead 1 in grid

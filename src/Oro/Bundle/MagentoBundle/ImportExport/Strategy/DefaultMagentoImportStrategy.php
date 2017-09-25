@@ -161,27 +161,27 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * Find existing Magento Region entity
+     * Find existing Oro Region entity
      * Find by Code if parameter $regionId not passed
      *
      * @param Region      $entity
-     * @param string|null $regionId
+     * @param string|null $mageRegionId
      *
-     * @return null|MagentoRegion
+     * @return null|Region
      */
-    protected function findRegionEntity(Region $entity, $regionId = null)
+    protected function findRegionEntity(Region $entity, $mageRegionId = null)
     {
         $existingEntity = null;
 
-        if (!$regionId) {
-            $regionId = $entity->getCode();
+        if (!$mageRegionId) {
+            $mageRegionId = $entity->getCode();
         }
 
         /** @var Region $magentoRegion */
         $magentoRegion = $this->databaseHelper->findOneBy(
             'Oro\Bundle\MagentoBundle\Entity\Region',
             [
-                'regionId' => $regionId
+                'regionId' => $mageRegionId
             ]
         );
         if ($magentoRegion) {
