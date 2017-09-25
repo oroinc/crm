@@ -9,42 +9,43 @@
 [Show detailed list of changes](#file-incompatibilities-2-3-0.md)
 
 ### Added
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface` was added.
+#### MagentoBundle
+* Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoSoapTransportInterface` was added.
     * public method `call($action, $params = [])` was added
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
+* Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
     * public method `isCustomerHasUniqueEmail(Customer $customer)` was added
     * public method `getRequiredExtensionVersion()` was added
     * public method `initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions)` was added
     * added methods `getCreditMemos()`, `getCreditMemoInfo($incrementId)`.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` was added to support Magento2 as a new integration
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php` was added. It is a universal entry point for both Magento and Magento2 integration check requests
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\MagentoTransport` was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\MagentRestTransport` was added
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType` was added. It is inherited by `SoapTransportSettingFormType` and `RestTransportSettingFormType`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType` and its service `oro_magento.form.type.rest_transport_setting` were added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Handler\TransportHandler` and its service `oro_magento.handler.transport` were added. It is a layer between transport and controller.
+* Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` was added to support Magento2 as a new integration
+* Class `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php` was added. It is a universal entry point for both Magento and Magento2 integration check requests
+* Class `Oro\Bundle\MagentoBundle\Entity\MagentoTransport` was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
+* Class `Oro\Bundle\MagentoBundle\Entity\MagentRestTransport` was added
+* Abstract class `Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType` was added. It is inherited by `SoapTransportSettingFormType` and `RestTransportSettingFormType`
+* Class `Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType` and its service `oro_magento.form.type.rest_transport_setting` were added
+* Class `Oro\Bundle\MagentoBundle\Handler\TransportHandler` and its service `oro_magento.handler.transport` were added. It is a layer between transport and controller.
     * Method `getMagentoTransport` was added. Its main responsibility is to initialize and return MagentoTransport from check request.
     * Method `getCheckResponse`: returns array with data for response.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\StoreDataConverter` and its service `oro_magento.importexport.data_converter.rest.store` were added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter` and its service `oro_magento.importexport.data_converter.rest.website` were added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Connector\Rest\StoreConnector` and its service `oro_magento.mage.rest.store` were added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Connector\Rest\WebsiteConnector` and its service `oro_magento.mage.rest.website` were added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\ProviderConnectorChoicesProvider` and its service `oro_magento.provider.connector_choices` were added. It has method:
+* Class `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\StoreDataConverter` and its service `oro_magento.importexport.data_converter.rest.store` were added
+* Class `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter` and its service `oro_magento.importexport.data_converter.rest.website` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\Connector\Rest\StoreConnector` and its service `oro_magento.mage.rest.store` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\Connector\Rest\WebsiteConnector` and its service `oro_magento.mage.rest.website` were added
+* Class `Oro\Bundle\MagentoBundle\ProviderConnectorChoicesProvider` and its service `oro_magento.provider.connector_choices` were added. It has method:
     * `getAllowedConnectorsChoices` it returns a list of connectors available for some integration.
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractLoadeableRestIterator` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator` was added
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractLoadeableSoapIterator` was added
+* Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractLoadeableRestIterator` was added
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator` was added
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\StoresRestIterator` was added
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\WebsiteRestIterator` was added
+* Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractLoadeableSoapIterator` was added
     * method processCollectionResponse($response) was added
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractPageableSoapIterator` was added
+* Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\AbstractPageableSoapIterator` was added
     * method `processCollectionResponse($response)` was added
     * method `convertResponseToMultiArray($response)` was added
     * method `applyWebsiteFilters(array $websiteIds, array $storeIds)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` and its service `oro_magento.provider.magento2_channel_type` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` and its service `oro_magento.provider.magento2_channel_type` were added
     * method getLabel() was added
     * method getIcon() was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RestPingProvider` and its service `oro_magento.provider.rest_ping_provider` were added. Use it to send ping request to Magento and store response data.
+* Class `Oro\Bundle\MagentoBundle\Provider\RestPingProvider` and its service `oro_magento.provider.rest_ping_provider` were added. Use it to send ping request to Magento and store response data.
     * public method `setClient(RestClientInterface $client)` was added
     * public method `setHeaders(array $headers)` was added
     * public method `setParams(array $params)` was added
@@ -59,112 +60,110 @@
     * protected method `getClient()` was added
     * protected method `doRequest()` was added
     * protected method `processResponse(array $responseData)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RestRokenProvider` and its service `oro_magento.provider.rest_token_provider` were added. Use it to get a token, generate a new token and store it.
+* Class `Oro\Bundle\MagentoBundle\Provider\RestRokenProvider` and its service `oro_magento.provider.rest_token_provider` were added. Use it to get a token, generate a new token and store it.
     * public method `getTokenFromEntity(MagentoTransport $transportEntity, RestClientInterface $client)` was added
     * public method `generateNewToken(MagentoTransport $transportEntity, RestClientInterface $client)` was added
     * protected method `doTokenRequest(RestClientInterface $client, array $params)` was added
     * protected method `validateStatusCodes(RestException $e)` was added
     * protected method `getTokenRequestParams(ParameterBag $parameterBag)` was added
     * protected method `updateToken(MagentoTransport $transportEntity, $token)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter` was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
+* Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter` was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
+* Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
 This class has the same responsibilities as SoapTransport.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider` and its service `oro_magento.provider.transport_entity` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider` and its service `oro_magento.provider.transport_entity` were added
     * public method `getTransportEntityByRequest(MagentoTransportInterface $transport, Request $request)` was added
     * protected method `findTransportEntity(TransportInterface $settingsEntity, $entityId)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider` and its service `oro_magento.provider.soap.unique_customer_email` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\UniqueCustomerEmailSoapProvider` and its service `oro_magento.provider.soap.unique_customer_email` were added
     - public method `isCustomerHasUniqueEmail(MagentoSoapTransportInterface $transport, Customer $customer)` was added
     - protected method `doRequest(MagentoSoapTransportInterface $transport, array $filters)` was added
     - protected method `getPreparedFilters(Customer $customer)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider` and its service `oro_magento.provider.website_choices` were added
+* Class `Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider` and its service `oro_magento.provider.website_choices` were added
     - public method `formatWebsiteChoices(MagentoTransportInterface $transport)` was added
-* **MagentoBundle**: The next batch jobs were added to `batch_jobs.yml`:
+* The next batch jobs were added to `batch_jobs.yml`:
     - mage_store_rest_import
     - mage_website_rest_import
-* **MagentoBundle**: New channel `magento2` was added to `channels.yml`
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Converter\RestResponseConverterInterface` was added
+* New channel `magento2` was added to `channels.yml`
+* Interface `Oro\Bundle\MagentoBundle\Converter\RestResponseConverterInterface` was added
     * public method `convert($data)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Converter\Rest\RegionConverter` with its service `oro_magento.converter.rest.region_converter` were added. Implements `RestResponseConverterInterface`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager` with its service `oro_magento.converter.rest.response_converter_manager` were added
+* Class `Oro\Bundle\MagentoBundle\Converter\Rest\RegionConverter` with its service `oro_magento.converter.rest.region_converter` were added. Implements `RestResponseConverterInterface`
+* Class `Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager` with its service `oro_magento.converter.rest.response_converter_manager` were added
     * public method `convert($data, $type)` was added
     * public method `addConverter($responseType, RestResponseConverterInterface $converter)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\DependencyInjection\Compiler\ResponseConvertersPass` was added. Collects converters that implement `RestResponseConverterInterface`
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractRegionIterator` was added
+* Class `Oro\Bundle\MagentoBundle\DependencyInjection\Compiler\ResponseConvertersPass` was added. Collects converters that implement `RestResponseConverterInterface`
+* Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractRegionIterator` was added
     * abstract protected method `getCountryList()` was added
-* **MagentoBundle**: Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionRestIterator` was added. Extends `AbstractRegionIterator` with REST implementation
-* **MagentoBundle**: Processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added
-* **MagentoBundle**: Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
-* **MagentoBundle**: Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Client/FactoryInterface was added.
-* **MagentoBundle**: Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
-* **MagentoBundle**: Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added.  It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
-* **MagentoBundle**: Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
-* **MagentoBundle**: Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
-
+* Abstract class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionRestIterator` was added. Extends `AbstractRegionIterator` with REST implementation
+* Processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added
+* Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
+* Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Client/FactoryInterface was added.
+* Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
+* Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added.  It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
+* Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
+* Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
 ### Changed
-* **MagentoBundle**: Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
+#### MagentoBundle
+* Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
 For more details on how to enable such integration, see [Magento 2 Documentation](src/Oro/Bundle/MagentoBundle/Resources/doc/reference/magento2.md).
-
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was renamed to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator` moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator`:
+* Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was renamed to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator` moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator`:
     * constant `ALL_WEBSITES` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
     * constant `ADMIN_WEBSITE_ID` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
     * constant `ADMIN_STORE_ID` moved to `Oro\Bundle\MagentoBundle\Entity\Store`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository` was renamed to `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber` was renamed to `Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber`
+* Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
+* Class `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository` was renamed to `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository`
+* Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber` was renamed to `Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber`
     * added protected method `getFormChannelType`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber` was renamed to `Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber` and its service were renamed to `oro_magento.form.subscriber.transport_setting`
+* Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber` was renamed to `Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber` and its service were renamed to `oro_magento.form.subscriber.transport_setting`
     * protected method `getModifierWebsitesList` was renamed to `modifyWebsitesList` and now it returns void.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType` was renamed to `Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType`
-* **MagentoBundle**: Method `getSores` in `Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor` was renamed to `getStores`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\AbstractMagentoConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\CartConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\CartConnector
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\OrderConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\OrderConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RegionConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\RegionConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\CustomerConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\CustomerConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\NewsletterSubscriberConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface` was moved to `Oro\Bundle\MagentoBundle\Connector\MagentoConnectorInterface`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider`. Its service was renamed to `oro_magento.provider.customer.magento_customer_icon`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator` was renamed to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator` was renamed to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator`
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIteratorInterface` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator` and now implements `NewsletterSubscriberBridgeIteratorInterface`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator`
-* **MagentoBundle**:  Class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator`
+* Class `Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType` was renamed to `Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType`
+* Method `getSores` in `Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor` was renamed to `getStores`
+* Class `Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\AbstractMagentoConnector`
+* Class `Oro\Bundle\MagentoBundle\Provider\CartConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\CartConnector
+* Class `Oro\Bundle\MagentoBundle\Provider\OrderConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\OrderConnector`
+* Class `Oro\Bundle\MagentoBundle\Provider\RegionConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\RegionConnector`
+* Class `Oro\Bundle\MagentoBundle\Provider\CustomerConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\CustomerConnector`
+* Class `Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector` was moved to `Oro\Bundle\MagentoBundle\Connector\NewsletterSubscriberConnector`
+* Class `Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface` was moved to `Oro\Bundle\MagentoBundle\Connector\MagentoConnectorInterface`
+* Class `Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider`. Its service was renamed to `oro_magento.provider.customer.magento_customer_icon`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator` was renamed to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator` was renamed to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator`
+* Interface `Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIteratorInterface` was added
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupBridgeIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator` and now implements `NewsletterSubscriberBridgeIteratorInterface`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator`
     * protected method `findEntitiesToProcess()` was moved to parent class
     * protected method `getEntityIds()` was moved to parent class
     * protected method `getEntity($id)` was moved to parent class
     * protected method `getIdFieldName()` was moved to parent class
     * protected method `current()` was moved to parent class
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport` now implements `TransportCacheClearInterface`
+* Class `Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator` was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator`
+* Class `Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport` now implements `TransportCacheClearInterface`
     * Updated according to `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface` changes.
     * public method `isCustomerHasUniqueEmail(Customer $customer)` was added
     * public method `getRequiredExtensionVersion()` was added
     * public method `cacheClear($resource = null)` was added
     * public method `getCreditMemos()` was added
     * public method `getCreditMemoInfo($incrementId)` was added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\Order` changed
+* Class `Oro\Bundle\MagentoBundle\Entity\Order` changed
     * field `originId` added
     * `Oro\Bundle\MagentoBundle\Entity\OriginTrait` used
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler`
+* Class `Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler`
     * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
+* Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
     * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
-
 ### Removed
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
+#### MagentoBundle
+* Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
     * removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
-* **MagentoBundle**: Route `oro_magento_soap_check` was renamed to `oro_magento_integration_check`
-* **MagentoBundle**: Translation with key `not_valid_parameters` was removed
-* **MagentoBundle**: Process `magento_schedule_integration` was removed.
-
+* Route `oro_magento_soap_check` was renamed to `oro_magento_integration_check`
+* Translation with key `not_valid_parameters` was removed
+* Process `magento_schedule_integration` was removed.
 ## 2.2.6 (2017-08-30)
 ## 2.2.5 (2017-08-22)
 ## 2.2.4 (2017-08-16)
@@ -174,7 +173,8 @@ For more details on how to enable such integration, see [Magento 2 Documentation
 ## 2.2.0 (2017-05-31)
 [Show detailed list of changes](#file-incompatibilities-2-2-0.md)
 
-* **SalesBundle**: Implementation of REST API for customer association was changed.
+#### SalesBundle
+* Implementation of REST API for customer association was changed.
     * removed the following services:
         * `oro_sales.api.get_config.customer_association`
         * `oro_sales.api.customize_loaded_data.customer_association`
@@ -188,7 +188,6 @@ For more details on how to enable such integration, see [Magento 2 Documentation
         * `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
         * `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
     * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/laboro/dev/blob/maintenance/2.2/package/crm/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
-
 ## 2.1.6 (2017-06-30)
 ## 2.1.5 (2017-06-08)
 ## 2.1.4 (2017-05-30)
@@ -199,39 +198,44 @@ For more details on how to enable such integration, see [Magento 2 Documentation
 [Show detailed list of changes](#file-incompatibilities-2-1-0.md)
 
 ### Changed
-* **AnalyticsBundle**: Class `Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder`
+#### AnalyticsBundle
+* Class `Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder`
     * changed the return type of `getEntityIdsByChannel` method from `\ArrayIterator|BufferedQueryResultIterator` to `\Iterator`
-* **ChannelBundle**: Class `Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand`
+#### CRMBundle
+* Updated service definition for `oro_crm.extension.transtation_packages_provider`:
+    * changed class to `Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension`
+    * changed publicity to `false
+#### ChannelBundle
+* Class `Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand`
     * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
-* **ChannelBundle**: Class `Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber`
+* Class `Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber`
     * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
     * the visibility of property `$accounts` was changed from `protected` to `private`
     * the visibility of methods `createNoCustomerCondition`, `scheduleOpportunityAccount`, `scheduleCustomerAccounts`, `scheduleAccount` were changed from `protected` to `private`
-* **ChannelBundle**: The following services were marked as `private`:
+* The following services were marked as `private`:
     * `oro_channel.twig.metadata_extension`
     * `oro_channel.twig.lifetime_value_extension`
-* **ContactBundle**: The service `oro_contact.twig.extension.social_url` was renamed to `oro_contact.twig.extension` and marked as `private`
-* **ContactBundle**: Class `Oro\Bundle\ContactBundle\Twig\SocialUrlExtension` was renamed to `Oro\Bundle\ContactBundle\Twig\ContactExtension`
-* **SalesBundle**: Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`:
+#### ContactBundle
+* The service `oro_contact.twig.extension.social_url` was renamed to `oro_contact.twig.extension` and marked as `private`
+* Class `Oro\Bundle\ContactBundle\Twig\SocialUrlExtension` was renamed to `Oro\Bundle\ContactBundle\Twig\ContactExtension`
+#### SalesBundle
+* Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`:
     * added UnsupportedGridPrefixesTrait
-* **SalesBundle**: opportunity` and `lead` apis changed:
+* opportunity` and `lead` apis changed:
     * `customerAssociation` relation replaced by `customer` and `account` relations
-* **CRMBundle**: Updated service definition for `oro_crm.extension.transtation_packages_provider`:
-    * changed class to `Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension`
-    * changed publicity to `false
-
 ### Deprecated
-* **SalesBundle**: Class `Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository`:
+#### SalesBundle
+* Class `Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository`:
     * Method `getNewOpportunitiesAmount` was marked as deprecated. Method `getOpportunitiesByPeriodQB` should be used instead
     * Method `getWonOpportunitiesToDateCount` was marked as deprecated. Method `getWonOpportunitiesCountByPeriodQB` should be used instead
-
 ### Removed
-* **ChannelBundle**: Removed the following parameters from DIC:
+#### ChannelBundle
+* Removed the following parameters from DIC:
     * `oro_channel.twig.metadata_extension.class`
     * `oro_channel.twig.lifetime_value_extension.class`
-* **ContactBundle**: Removed the following parameters from DIC:
+#### ContactBundle
+* Removed the following parameters from DIC:
     * `oro_contact.twig.extension.social_url.class`
-
 ## 2.0.20 (2017-08-29)
 ## 2.0.19 (2017-08-23)
 ## 2.0.18 (2017-08-16)
