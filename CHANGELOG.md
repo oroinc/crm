@@ -2,10 +2,11 @@
 [Show detailed list of changes](#file-incompatibilities-2-4-0.md)
 
 ### Added
-* **MagentoBundle**:
-
+#### MagentoBundle
+* 
 ### Changed
-* **MagentoBundle**: The `SoapTransport` (Magento 1 default transport) and `RestTransport` (Magento 2)  classes changed format of the data 
+#### MagentoBundle
+* The `SoapTransport` (Magento 1 default transport) and `RestTransport` (Magento 2)  classes changed format of the data 
 returned by `getWebsites` method. The old response was the following:
 ```
 [
@@ -15,9 +16,7 @@ returned by `getWebsites` method. The old response was the following:
     'default_group_id' => 'default group id'
 ]
 ```
-
 The new response is the following:
-
 ```
 [
     'website_id' => 'id', // Magento original webdsite id
@@ -26,105 +25,103 @@ The new response is the following:
     'default_group_id' => 'default group id'
 ]
 ```
-
 ### Removed
-* **MagentoBundle**: The `Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter`class was removed. The `Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter` class should be used instead. In addition, the `@oro_magento.importexport.data_converter.rest.website`service was replaced with `@oro_magento.importexport.data_converter.website`.
-* **MagentoBundle**: Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
+#### MagentoBundle
+* The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/Rest/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter")</sup>class was removed. The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter")</sup> class should be used instead. In addition, the `@oro_magento.importexport.data_converter.rest.website`service was replaced with `@oro_magento.importexport.data_converter.website`.
+* Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
     * removed method `updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly` use `updateRegionByMagentoRegionId` instead
-
 ## 2.3.0 (2017-07-28)
 [Show detailed list of changes](#file-incompatibilities-2-3-0.md)
 
 ### Added
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType` was added to support Magento2 as a new integration
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php` was added. It is a universal entry point for both Magento and Magento2 integration check requests
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\MagentoTransport` was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Handler\TransportHandler` and its service `oro_magento.handler.transport` were added. It is a layer between transport and controller.
+#### MagentoBundle
+* Class `Magento2ChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Magento2ChannelType.php "Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType")</sup> was added to support Magento2 as a new integration
+* Class `IntegrationConfigController.php`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Controller/IntegrationConfigController.php.php "Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php")</sup> was added. It is a universal entry point for both Magento and Magento2 integration check requests
+* Class `MagentoTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/MagentoTransport.php "Oro\Bundle\MagentoBundle\Entity\MagentoTransport")</sup> was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
+* Class `TransportHandler`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Handler/TransportHandler.php "Oro\Bundle\MagentoBundle\Handler\TransportHandler")</sup> and its service `oro_magento.handler.transport` were added. It is a layer between transport and controller.
     * Method `getMagentoTransport` was added. Its main responsibility is to initialize and return MagentoTransport from check request.
     * Method `getCheckResponse`: returns array with data for response.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\ProviderConnectorChoicesProvider` and its service `oro_magento.provider.connector_choices` were added. It has method:
+* Class `ProviderConnectorChoicesProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/ProviderConnectorChoicesProvider.php "Oro\Bundle\MagentoBundle\ProviderConnectorChoicesProvider")</sup> and its service `oro_magento.provider.connector_choices` were added. It has method:
     * `getAllowedConnectorsChoices` it returns a list of connectors available for some integration.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RestPingProvider` and its service `oro_magento.provider.rest_ping_provider` were added. Use it to send ping request to Magento and store response data.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RestRokenProvider` and its service `oro_magento.provider.rest_token_provider` were added. Use it to get a token, generate a new token and store it.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter` was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport` and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
+* Class `RestPingProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RestPingProvider.php "Oro\Bundle\MagentoBundle\Provider\RestPingProvider")</sup> and its service `oro_magento.provider.rest_ping_provider` were added. Use it to send ping request to Magento and store response data.
+* Class `RestRokenProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RestRokenProvider.php "Oro\Bundle\MagentoBundle\Provider\RestRokenProvider")</sup> and its service `oro_magento.provider.rest_token_provider` were added. Use it to get a token, generate a new token and store it.
+* Class `RestTransportAdapter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/RestTransportAdapter.php "Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter")</sup> was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
+* Class `RestTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/RestTransport.php "Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport")</sup> and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
 This class has the same responsibilities as SoapTransport.
-* **MagentoBundle**: The next batch jobs were added to `batch_jobs.yml`:
+* The next batch jobs were added to `batch_jobs.yml`:
     - mage_store_rest_import
     - mage_website_rest_import
-* **MagentoBundle**: New channel `magento2` was added to `channels.yml`
-* **MagentoBundle**: Interface `RestResponseConverterInterface` was added. Class `Oro\Bundle\MagentoBundle\DependencyInjection\Compiler\ResponseConvertersPass` was added. Collects converters that implement `RestResponseConverterInterface`
-* **MagentoBundle**: Processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added
-* **MagentoBundle**: Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
-* **MagentoBundle**: Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
-* **MagentoBundle**: Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added. It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
-* **MagentoBundle**: Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
-* **MagentoBundle**: Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
-
+* New channel `magento2` was added to `channels.yml`
+* Interface `RestResponseConverterInterface` was added. Class `ResponseConvertersPass`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/DependencyInjection/Compiler/ResponseConvertersPass.php "Oro\Bundle\MagentoBundle\DependencyInjection\Compiler\ResponseConvertersPass")</sup> was added. Collects converters that implement `RestResponseConverterInterface`
+* Processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added
+* Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
+* Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
+* Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added. It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
+* Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
+* Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
 ### Changed
-* **MagentoBundle**: Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
+#### MagentoBundle
+* Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
 For more details on how to enable such integration, see [Magento 2 Documentation](src/Oro/Bundle/MagentoBundle/Resources/doc/reference/magento2.md).
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider`. Its service was renamed to `oro_magento.provider.customer.magento_customer_icon`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler`
+* Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
+* Class `CustomerIconProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Customer/CustomerIconProvider.php "Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider")</sup>. Its service was renamed to `oro_magento.provider.customer.magento_customer_icon`
+* Class `IntegrationAwareSearchHandler`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Autocomplete/IntegrationAwareSearchHandler.php "Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler")</sup>
     * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider`
+* Class `NewsletterSubscriberPermissionProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Datagrid/NewsletterSubscriberPermissionProvider.php "Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider")</sup>
     * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
-
 ### Removed
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\ChannelType` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\MagentoChannelType` and its service was renamed to `oro_magento.provider.magento_channel_type`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator`:
-    * constant `ALL_WEBSITES` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
-    * constant `ADMIN_WEBSITE_ID` moved to `Oro\Bundle\MagentoBundle\Entity\Website`
-    * constant `ADMIN_STORE_ID` moved to `Oro\Bundle\MagentoBundle\Entity\Store`
-
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber`
+#### MagentoBundle
+* Class `ChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/ChannelType.php "Oro\Bundle\MagentoBundle\Provider\ChannelType")</sup> was removed. Logic was moved to `MagentoChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/MagentoChannelType.php "Oro\Bundle\MagentoBundle\Provider\MagentoChannelType")</sup> and its service was renamed to `oro_magento.provider.magento_channel_type`
+* Class `StoresSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/StoresSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator")</sup> was removed. Logic was moved to `StoresSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/StoresSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator")</sup>:
+    * constant `ALL_WEBSITES` moved to `Website`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Website.php "Oro\Bundle\MagentoBundle\Entity\Website")</sup>
+    * constant `ADMIN_WEBSITE_ID` moved to `Website`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Website.php "Oro\Bundle\MagentoBundle\Entity\Website")</sup>
+    * constant `ADMIN_STORE_ID` moved to `Store`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Store.php "Oro\Bundle\MagentoBundle\Entity\Store")</sup>
+* Class `MagentoSoapTransportRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Repository/MagentoSoapTransportRepository.php "Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")</sup> was removed. Logic was moved to `MagentoTransportRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Repository/MagentoTransportRepository.php "Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository")</sup>
+* Class `SoapConnectorsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SoapConnectorsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber")</sup> was removed. Logic was moved to `ConnectorsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/ConnectorsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber")</sup>
     * added protected method `getFormChannelType`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber` and its service were renamed to `oro_magento.form.subscriber.transport_setting`
+* Class `SoapSettingsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SoapSettingsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber")</sup> was removed. Logic was moved to `SettingsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SettingsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber")</sup> and its service were renamed to `oro_magento.form.subscriber.transport_setting`
     * protected method `getModifierWebsitesList` was renamed to `modifyWebsitesList` and now it returns void.
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType`
-* **MagentoBundle**: Method `getSores` in `Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor` was removed. Logic was moved to `getStores` method
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\AbstractMagentoConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\CartConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\CartConnector
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\OrderConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\OrderConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\RegionConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\RegionConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\CustomerConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\CustomerConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\NewsletterSubscriberConnector`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\MagentoConnectorInterface`
-
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator` and now implements `NewsletterSubscriberBridgeIteratorInterface`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator`
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator`
-* **MagentoBundle**:  Class `Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator`
+* Class `SoapTransportCheckButtonType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/Type/SoapTransportCheckButtonType.php "Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType")</sup> was removed. Logic was moved to `TransportCheckButtonType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/Type/TransportCheckButtonType.php "Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType")</sup>
+* Method `getSores` in `CartExpirationProcessor`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CartExpirationProcessor.php "Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor")</sup> was removed. Logic was moved to `getStores` method
+* Class `AbstractMagentoConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/AbstractMagentoConnector.php "Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector")</sup> was removed. Logic was moved to `AbstractMagentoConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/AbstractMagentoConnector.php "Oro\Bundle\MagentoBundle\Connector\AbstractMagentoConnector")</sup>
+* Class `CartConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CartConnector.php "Oro\Bundle\MagentoBundle\Provider\CartConnector")</sup> was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\CartConnector
+* Class `OrderConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/OrderConnector.php "Oro\Bundle\MagentoBundle\Provider\OrderConnector")</sup> was removed. Logic was moved to `OrderConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/OrderConnector.php "Oro\Bundle\MagentoBundle\Connector\OrderConnector")</sup>
+* Class `RegionConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RegionConnector.php "Oro\Bundle\MagentoBundle\Provider\RegionConnector")</sup> was removed. Logic was moved to `RegionConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/RegionConnector.php "Oro\Bundle\MagentoBundle\Connector\RegionConnector")</sup>
+* Class `CustomerConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CustomerConnector.php "Oro\Bundle\MagentoBundle\Provider\CustomerConnector")</sup> was removed. Logic was moved to `CustomerConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/CustomerConnector.php "Oro\Bundle\MagentoBundle\Connector\CustomerConnector")</sup>
+* Class `NewsletterSubscriberConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/NewsletterSubscriberConnector.php "Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector")</sup> was removed. Logic was moved to `NewsletterSubscriberConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/NewsletterSubscriberConnector.php "Oro\Bundle\MagentoBundle\Connector\NewsletterSubscriberConnector")</sup>
+* Class `MagentoConnectorInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/MagentoConnectorInterface.php "Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface")</sup> was removed. Logic was moved to `MagentoConnectorInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/MagentoConnectorInterface.php "Oro\Bundle\MagentoBundle\Connector\MagentoConnectorInterface")</sup>
+* Class `AbstractLoadeableSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractLoadeableSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator")</sup> was removed. Logic was moved to `AbstractLoadeableIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractLoadeableIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator")</sup>
+* Class `AbstractPageableSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractPageableSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator")</sup> was removed. Logic was moved to `AbstractPageableIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractPageableIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator")</sup>
+* Class `AbstractBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator")</sup> was removed. Logic was moved to `AbstractBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/AbstractBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator")</sup>
+* Class `CartsBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CartsBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator")</sup> was removed. Logic was moved to `CartsBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CartsBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator")</sup>
+* Class `CustomerBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator")</sup> was removed. Logic was moved to `CustomerBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator")</sup>
+* Class `CustomerSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator")</sup> was removed. Logic was moved to `CustomerSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator")</sup>
+* Class `CustomerGroupBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerGroupBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupBridgeIterator")</sup> was removed. Logic was moved to `CustomerGroupBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerGroupBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupBridgeIterator")</sup>
+* Class `NewsletterSubscriberBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/NewsletterSubscriberBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator")</sup> was removed. Logic was moved to `NewsletterSubscriberBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/NewsletterSubscriberBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator")</sup> and now implements `NewsletterSubscriberBridgeIteratorInterface`
+* Class `OrderBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/OrderBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator")</sup> was removed. Logic was moved to `OrderBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/OrderBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator")</sup>
+* Class `OrderSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/OrderSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator")</sup> was removed. Logic was moved to `OrderSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/OrderSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator")</sup>
+* Class `RegionSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/RegionSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator")</sup> was removed. Logic was moved to `RegionSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/RegionSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator")</sup>
     * protected method `findEntitiesToProcess()` was moved to parent class
     * protected method `getEntityIds()` was moved to parent class
     * protected method `getEntity($id)` was moved to parent class
     * protected method `getIdFieldName()` was moved to parent class
     * protected method `current()` was moved to parent class
-* **MagentoBundle**: Class `Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator` was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator`
-* **MagentoBundle**: Interface `Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface`
+* Class `WebsiteSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/WebsiteSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator")</sup> was removed. Logic was moved to `WebsiteSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/WebsiteSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator")</sup>
+* Interface `MagentoTransportInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/MagentoTransportInterface.php "Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface")</sup>
     * removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
-* **MagentoBundle**: Route `oro_magento_soap_check` was renamed to `oro_magento_integration_check`
-* **MagentoBundle**: Translation with key `not_valid_parameters` was removed
-* **MagentoBundle**: Process `magento_schedule_integration` was removed.
-
+* Route `oro_magento_soap_check` was renamed to `oro_magento_integration_check`
+* Translation with key `not_valid_parameters` was removed
+* Process `magento_schedule_integration` was removed.
 ## 2.2.0 (2017-05-31)
 [Show detailed list of changes](#file-incompatibilities-2-2-0.md)
 
 ### Changed
-* **SalesBundle**: Implementation of REST API for customer association was changed.
+#### SalesBundle
+* Implementation of REST API for customer association was changed.
     * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/laboro/dev/blob/maintenance/2.2/package/crm/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
-
 ### Removed
-* **SalesBundle**: removed the following services:
+#### SalesBundle
+* removed the following services:
     * `oro_sales.api.get_config.customer_association`
     * `oro_sales.api.customize_loaded_data.customer_association`
     * `oro_sales.api.get_metadata.customer_association`
@@ -136,43 +133,46 @@ For more details on how to enable such integration, see [Magento 2 Documentation
     * `oro_sales.form.guesser.customer_account_guesser`
     * `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
     * `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
-
 ## 2.1.0 (2017-03-30)
 [Show detailed list of changes](#file-incompatibilities-2-1-0.md)
 
 ### Changed
-* **AnalyticsBundle**: Class `Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder`
+#### AnalyticsBundle
+* Class `RFMBuilder`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/AnalyticsBundle/Builder/RFMBuilder.php "Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder")</sup>
     * changed the return type of `getEntityIdsByChannel` method from `\ArrayIterator|BufferedQueryResultIterator` to `\Iterator`
-* **ChannelBundle**: Class `Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand`
+#### CRMBundle
+* Updated service definition for `oro_crm.extension.transtation_packages_provider`:
+    * changed class to `TranslationPackagesProviderExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/FrontendBundle/Provider/TranslationPackagesProviderExtension.php "Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension")</sup>
+    * changed publicity to `false
+#### ChannelBundle
+* Class `RecalculateLifetimeCommand`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ChannelBundle/Command/RecalculateLifetimeCommand.php "Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand")</sup>
     * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
-* **ChannelBundle**: Class `Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber`
+* Class `AccountLifetimeSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ChannelBundle/EventListener/AccountLifetimeSubscriber.php "Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber")</sup>
     * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
-* **ChannelBundle**: The following services were marked as `private`:
+* The following services were marked as `private`:
     * `oro_channel.twig.metadata_extension`
     * `oro_channel.twig.lifetime_value_extension`
-* **ContactBundle**: The service `oro_contact.twig.extension.social_url` was renamed to `oro_contact.twig.extension` and marked as `private`
-
-* **SalesBundle**: Class `Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension`:
+#### ContactBundle
+* The service `oro_contact.twig.extension.social_url` was renamed to `oro_contact.twig.extension` and marked as `private`
+#### SalesBundle
+* Class `AccountExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/SalesBundle/Datagrid/Extension/Customers/AccountExtension.php "Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension")</sup>:
     * added UnsupportedGridPrefixesTrait
-* **SalesBundle**: opportunity` and `lead` apis changed:
+* opportunity` and `lead` apis changed:
     * `customerAssociation` relation replaced by `customer` and `account` relations
-* **CRMBundle**: Updated service definition for `oro_crm.extension.transtation_packages_provider`:
-    * changed class to `Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension`
-    * changed publicity to `false
-
 ### Deprecated
-* **SalesBundle**: Class `Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository`:
+#### SalesBundle
+* Class `OpportunityRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/SalesBundle/Entity/Repository/OpportunityRepository.php "Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")</sup>:
     * Method `getNewOpportunitiesAmount` was marked as deprecated. Method `getOpportunitiesByPeriodQB` should be used instead
     * Method `getWonOpportunitiesToDateCount` was marked as deprecated. Method `getWonOpportunitiesCountByPeriodQB` should be used instead
-
 ### Removed
-* **ChannelBundle**: Removed the following parameters from DIC:
+#### ChannelBundle
+* Removed the following parameters from DIC:
     * `oro_channel.twig.metadata_extension.class`
     * `oro_channel.twig.lifetime_value_extension.class`
-* **ContactBundle**: Removed the following parameters from DIC:
+#### ContactBundle
+* Removed the following parameters from DIC:
     * `oro_contact.twig.extension.social_url.class`
-* **ContactBundle**: Class `Oro\Bundle\ContactBundle\Twig\SocialUrlExtension` was renamed to `Oro\Bundle\ContactBundle\Twig\ContactExtension`
-
+* Class `SocialUrlExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ContactBundle/Twig/SocialUrlExtension.php "Oro\Bundle\ContactBundle\Twig\SocialUrlExtension")</sup> was renamed to `ContactExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ContactBundle/Twig/ContactExtension.php "Oro\Bundle\ContactBundle\Twig\ContactExtension")</sup>
 ## 2.0.0 (2017-01-16)
 
 This changelog references the relevant changes (new features, changes and bugs) done in 2.0 versions.
