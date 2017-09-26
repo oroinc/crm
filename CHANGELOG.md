@@ -1,9 +1,6 @@
 ## 2.4.0 (Unreleased)
 [Show detailed list of changes](#file-incompatibilities-2-4-0.md)
 
-### Added
-#### MagentoBundle
-* 
 ### Changed
 #### MagentoBundle
 * The `SoapTransport` (Magento 1 default transport) and `RestTransport` (Magento 2)  classes changed format of the data 
