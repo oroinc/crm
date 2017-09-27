@@ -1,32 +1,29 @@
-## 2.4.0 (Unreleased)
-[Show detailed list of changes](#incompatibilities-2-4.md)
-
-### Changed
+## 2.3.1 (2017-08-16)
+### Deprecated
 #### MagentoBundle
-* The `SoapTransport` (Magento 1 default transport) and `RestTransport` (Magento 2)  classes changed format of the data 
+* The `Rest\WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.1/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/Rest/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter")</sup> class was deprecated and will be removed in 2.4. The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.1/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter")</sup> class should be used instead.
+ The reason is that `SoapTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.1/src/Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport.php "Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport")</sup> (Magento 1 default transport) and `RestTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.1/src/Oro/Bundle/MagentoBundle/Provider/Transport/RestTransport.php "Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport")</sup> (Magento 2) classes changed format of the data 
 returned by `getWebsites` method. The old response was the following:
-```
-[
-    'id' => 'id', // Magento original webdsite id
-    'code' => 'code',
-    'name' => 'name',
-    'default_group_id' => 'default group id'
-]
-```
-The new response is the following:
-```
-[
-    'website_id' => 'id', // Magento original webdsite id
-    'code' => 'code',
-    'name' => 'name',
-    'default_group_id' => 'default group id'
-]
-```
-### Removed
-#### MagentoBundle
-* The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/Rest/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter")</sup>class was removed. The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter")</sup> class should be used instead. In addition, the `@oro_magento.importexport.data_converter.rest.website`service was replaced with `@oro_magento.importexport.data_converter.website`.
-* Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
-    * removed method `updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly` use `updateRegionByMagentoRegionId` instead
+    ```
+    [
+        'id' => 'id', // Magento original webdsite id
+        'code' => 'code',
+        'name' => 'name',
+        'default_group_id' => 'default group id'
+    ]
+    ```
+
+    The new response is the following:
+
+    ```
+    [
+        'website_id' => 'id', // Magento original webdsite id
+        'code' => 'code',
+        'name' => 'name',
+        'default_group_id' => 'default group id'
+    ]
+    ```
+
 ## 2.3.0 (2017-07-28)
 [Show detailed list of changes](#incompatibilities-2-3.md)
 
