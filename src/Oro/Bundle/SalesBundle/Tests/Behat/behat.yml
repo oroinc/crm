@@ -98,24 +98,6 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
-    Administrator link:
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
-      selector:
-        locator: '//button[@data-password="admin"]'
-        type: xpath
-
-    Sales Manager link:
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
-      selector:
-        locator: '//button//span[text()="Sales Manager"]'
-        type: xpath
-
-    Marketing Associate links:
-      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
-      selector:
-        locator: '//button//span[text()="Marketing Associate"]'
-        type: xpath
-
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
