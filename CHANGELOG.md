@@ -1,5 +1,5 @@
 ## 2.4.0 (Unreleased)
-[Show detailed list of changes](#file-incompatibilities-2-4-0.md)
+[Show detailed list of changes](#incompatibilities-2-4.md)
 
 ### Changed
 #### MagentoBundle
@@ -28,7 +28,7 @@ The new response is the following:
 * Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
     * removed method `updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly` use `updateRegionByMagentoRegionId` instead
 ## 2.3.0 (2017-07-28)
-[Show detailed list of changes](#file-incompatibilities-2-3-0.md)
+[Show detailed list of changes](#incompatibilities-2-3.md)
 
 ### Added
 #### MagentoBundle
@@ -110,7 +110,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
 * Translation with key `not_valid_parameters` was removed
 * Process `magento_schedule_integration` was removed.
 ## 2.2.0 (2017-05-31)
-[Show detailed list of changes](#file-incompatibilities-2-2-0.md)
+[Show detailed list of changes](#incompatibilities-2-2.md)
 
 ### Changed
 #### SalesBundle
@@ -131,7 +131,7 @@ For more details on how to enable such integration, see [Magento 2 Documentation
     * `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
     * `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
 ## 2.1.0 (2017-03-30)
-[Show detailed list of changes](#file-incompatibilities-2-1-0.md)
+[Show detailed list of changes](#incompatibilities-2-1.md)
 
 ### Changed
 #### AnalyticsBundle
