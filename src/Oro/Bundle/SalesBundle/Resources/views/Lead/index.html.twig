@@ -4,13 +4,8 @@
 {% set pageTitle = 'oro.sales.lead.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
-        entity_class: entity_class,
-        exportProcessor: 'oro_sales_lead',
-        exportTemplateProcessor: 'oro_sales_lead',
-        importProcessor: 'oro_sales_lead.add_or_replace',
-        importTitle: 'oro.importexport.import.entity'|trans({'%entityName%': 'oro.sales.lead.entity_plural_label'|trans}),
-        datagridName: gridName
+    {% include 'OroImportExportBundle:ImportExport:buttons_from_configuration.html.twig' with {
+        'alias': 'oro_lead'
     } %}
 
     {% if is_granted('oro_sales_lead_create') %}
