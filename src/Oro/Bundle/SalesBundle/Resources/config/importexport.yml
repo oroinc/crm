@@ -129,3 +129,8 @@ services:
         class: 'Oro\Bundle\SalesBundle\ImportExport\Configuration\B2bCustomerImportExportConfigurationProvider'
         tags:
             - { name: oro_importexport.configuration, alias: oro_b2b_customer }
+
+    oro_sales.importexport.configuration_provider.opportunity:
+        class: 'Oro\Bundle\SalesBundle\ImportExport\Configuration\OpportunityImportExportConfigurationProvider'
+        tags:
+            - { name: oro_importexport.configuration, alias: oro_opportunity }
