@@ -1,18 +1,190 @@
-CHANGELOG for 2.0
-=================
+## 2.4.0 (Unreleased)
+[Show detailed list of changes](#incompatibilities-2-4.md)
+
+### Changed
+#### MagentoBundle
+* The `SoapTransport` (Magento 1 default transport) and `RestTransport` (Magento 2)  classes changed format of the data 
+returned by `getWebsites` method. The old response was the following:
+```
+[
+    'id' => 'id', // Magento original webdsite id
+    'code' => 'code',
+    'name' => 'name',
+    'default_group_id' => 'default group id'
+]
+```
+The new response is the following:
+```
+[
+    'website_id' => 'id', // Magento original webdsite id
+    'code' => 'code',
+    'name' => 'name',
+    'default_group_id' => 'default group id'
+]
+```
+### Removed
+#### MagentoBundle
+* The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/Rest/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\Rest\WebsiteDataConverter")</sup>class was removed. The `WebsiteDataConverter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.4.0/src/Oro/Bundle/MagentoBundle/ImportExport/Converter/WebsiteDataConverter.php "Oro\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter")</sup> class should be used instead. In addition, the `@oro_magento.importexport.data_converter.rest.website`service was replaced with `@oro_magento.importexport.data_converter.website`.
+* Class `AddressImportHelper`<sup>[[?]](https://github.com/oroinc/crm/blob/2.3.0/src/Oro/Bundle/MagentoBundle/ImportExport/Strategy/StrategyHelper/AddressImportHelper.php "Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper")</sup>:
+    * removed method `updateRegionByMagentoRegionIdOrUnsetNonSystemRegionOnly` use `updateRegionByMagentoRegionId` instead
+## 2.3.0 (2017-07-28)
+[Show detailed list of changes](#incompatibilities-2-3.md)
+
+### Added
+#### MagentoBundle
+* Class `Magento2ChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Magento2ChannelType.php "Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType")</sup> was added to support Magento2 as a new integration
+* Class `IntegrationConfigController.php`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Controller/IntegrationConfigController.php.php "Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php")</sup> was added. It is a universal entry point for both Magento and Magento2 integration check requests
+* Class `MagentoTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/MagentoTransport.php "Oro\Bundle\MagentoBundle\Entity\MagentoTransport")</sup> was added. It's a parent for `MagentoSoapTransport` and `MagentoRestTransport` and it has all their similar properties and methods
+* Class `TransportHandler`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Handler/TransportHandler.php "Oro\Bundle\MagentoBundle\Handler\TransportHandler")</sup> and its service `oro_magento.handler.transport` were added. It is a layer between transport and controller.
+    * Method `getMagentoTransport` was added. Its main responsibility is to initialize and return MagentoTransport from check request.
+    * Method `getCheckResponse`: returns array with data for response.
+* Class `ProviderConnectorChoicesProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/ProviderConnectorChoicesProvider.php "Oro\Bundle\MagentoBundle\ProviderConnectorChoicesProvider")</sup> and its service `oro_magento.provider.connector_choices` were added. It has method:
+    * `getAllowedConnectorsChoices` it returns a list of connectors available for some integration.
+* Class `RestPingProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RestPingProvider.php "Oro\Bundle\MagentoBundle\Provider\RestPingProvider")</sup> and its service `oro_magento.provider.rest_ping_provider` were added. Use it to send ping request to Magento and store response data.
+* Class `RestRokenProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RestRokenProvider.php "Oro\Bundle\MagentoBundle\Provider\RestRokenProvider")</sup> and its service `oro_magento.provider.rest_token_provider` were added. Use it to get a token, generate a new token and store it.
+* Class `RestTransportAdapter`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/RestTransportAdapter.php "Oro\Bundle\MagentoBundle\Provider\Transport\RestTransportAdapter")</sup> was added. It converts MagentoRestTransport entity to interface suitable for REST client factory.
+* Class `RestTransport`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/RestTransport.php "Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport")</sup> and its service `oro_magento.transport.rest_transport` were added. Implements `TransportInterface`, `MagentoTransportInterface`, `ServerTimeAwareInterface`, `PingableInterface`, `LoggerAwareInterface`
+This class has the same responsibilities as SoapTransport.
+* The next batch jobs were added to `batch_jobs.yml`:
+    - mage_store_rest_import
+    - mage_website_rest_import
+* New channel `magento2` was added to `channels.yml`
+* Interface `RestResponseConverterInterface` was added. Class `ResponseConvertersPass`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/DependencyInjection/Compiler/ResponseConvertersPass.php "Oro\Bundle\MagentoBundle\DependencyInjection\Compiler\ResponseConvertersPass")</sup> was added. Collects converters that implement `RestResponseConverterInterface`
+* Processes `magento_soap_schedule_integration` and `magento_rest_schedule_integration` were added
+* Class EventDispatchableRestClientFactory was added. It extends the basic factory functionality with an event which can be used to decorate REST client or replace it.
+* Interface Oro/Bundle/IntegrationBundle/Provider/Rest/Transport/RestTransportSettingsInterface was added. The purpose of RestTransportSettingsInterface interface is to provide settings required for REST client initialization and are used in factories.
+* Event Oro\Bundle\IntegrationBundle\Event\ClientCreatedAfterEvent was added. It is an event which is called when a new client is created. Use it if you want to decorate or replace a client in case of irregular behavior.
+* Class Oro\Bundle\IntegrationBundle\EventListener\AbstractClientDecoratorListener was added. It is used by Oro\Bundle\IntegrationBundle\EventListener\LoggerClientDecoratorListener and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener. These listeners decorate the client entity after it was created.
+* Trait Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait was added. It is used in Oro/Bundle/MagentoBundle/Provider/Transport/SoapTransport and Oro\Bundle\IntegrationBundle\EventListener\MultiAttemptsClientDecoratorListener to execute the feature several times, if the process fails after the first try.
+### Changed
+#### MagentoBundle
+* Support for data synchronization with Magento 2 by REST protocol was added. Store, website and regions dictionaries are available for synchronization. However, synchronization of other entities has not yet been developed and it is, therefore, not available in the current version of the package. This is the reason for Magento 2 integration being absent from the "Channel type" field when creating a new channel.
+For more details on how to enable such integration, see [Magento 2 Documentation](src/Oro/Bundle/MagentoBundle/Resources/doc/reference/magento2.md).
+* Class `Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport' was changed. Now it consists of fields and methods that are specific for SoapTransport.
+* Class `CustomerIconProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Customer/CustomerIconProvider.php "Oro\Bundle\MagentoBundle\Provider\Customer\CustomerIconProvider")</sup>. Its service was renamed to `oro_magento.provider.customer.magento_customer_icon`
+* Class `IntegrationAwareSearchHandler`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Autocomplete/IntegrationAwareSearchHandler.php "Oro\Bundle\MagentoBundle\Autocomplete\IntegrationAwareSearchHandler")</sup>
+    * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
+* Class `NewsletterSubscriberPermissionProvider`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Datagrid/NewsletterSubscriberPermissionProvider.php "Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider")</sup>
+    * method `setSecurityFacade` was replaced with `setAuthorizationChecker`
+### Removed
+#### MagentoBundle
+* Class `ChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/ChannelType.php "Oro\Bundle\MagentoBundle\Provider\ChannelType")</sup> was removed. Logic was moved to `MagentoChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/MagentoChannelType.php "Oro\Bundle\MagentoBundle\Provider\MagentoChannelType")</sup> and its service was renamed to `oro_magento.provider.magento_channel_type`
+* Class `StoresSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/StoresSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator")</sup> was removed. Logic was moved to `StoresSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/StoresSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator")</sup>:
+    * constant `ALL_WEBSITES` moved to `Website`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Website.php "Oro\Bundle\MagentoBundle\Entity\Website")</sup>
+    * constant `ADMIN_WEBSITE_ID` moved to `Website`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Website.php "Oro\Bundle\MagentoBundle\Entity\Website")</sup>
+    * constant `ADMIN_STORE_ID` moved to `Store`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Store.php "Oro\Bundle\MagentoBundle\Entity\Store")</sup>
+* Class `MagentoSoapTransportRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Repository/MagentoSoapTransportRepository.php "Oro\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")</sup> was removed. Logic was moved to `MagentoTransportRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Entity/Repository/MagentoTransportRepository.php "Oro\Bundle\MagentoBundle\Entity\Repository\MagentoTransportRepository")</sup>
+* Class `SoapConnectorsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SoapConnectorsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber")</sup> was removed. Logic was moved to `ConnectorsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/ConnectorsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber")</sup>
+    * added protected method `getFormChannelType`
+* Class `SoapSettingsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SoapSettingsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber")</sup> was removed. Logic was moved to `SettingsFormSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/EventListener/SettingsFormSubscriber.php "Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber")</sup> and its service were renamed to `oro_magento.form.subscriber.transport_setting`
+    * protected method `getModifierWebsitesList` was renamed to `modifyWebsitesList` and now it returns void.
+* Class `SoapTransportCheckButtonType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/Type/SoapTransportCheckButtonType.php "Oro\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType")</sup> was removed. Logic was moved to `TransportCheckButtonType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Form/Type/TransportCheckButtonType.php "Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType")</sup>
+* Method `getSores` in `CartExpirationProcessor`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CartExpirationProcessor.php "Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor")</sup> was removed. Logic was moved to `getStores` method
+* Class `AbstractMagentoConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/AbstractMagentoConnector.php "Oro\Bundle\MagentoBundle\Provider\AbstractMagentoConnector")</sup> was removed. Logic was moved to `AbstractMagentoConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/AbstractMagentoConnector.php "Oro\Bundle\MagentoBundle\Connector\AbstractMagentoConnector")</sup>
+* Class `CartConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CartConnector.php "Oro\Bundle\MagentoBundle\Provider\CartConnector")</sup> was removed. Logic was moved to `Oro\Bundle\MagentoBundle\Connector\CartConnector
+* Class `OrderConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/OrderConnector.php "Oro\Bundle\MagentoBundle\Provider\OrderConnector")</sup> was removed. Logic was moved to `OrderConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/OrderConnector.php "Oro\Bundle\MagentoBundle\Connector\OrderConnector")</sup>
+* Class `RegionConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/RegionConnector.php "Oro\Bundle\MagentoBundle\Provider\RegionConnector")</sup> was removed. Logic was moved to `RegionConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/RegionConnector.php "Oro\Bundle\MagentoBundle\Connector\RegionConnector")</sup>
+* Class `CustomerConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/CustomerConnector.php "Oro\Bundle\MagentoBundle\Provider\CustomerConnector")</sup> was removed. Logic was moved to `CustomerConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/CustomerConnector.php "Oro\Bundle\MagentoBundle\Connector\CustomerConnector")</sup>
+* Class `NewsletterSubscriberConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/NewsletterSubscriberConnector.php "Oro\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector")</sup> was removed. Logic was moved to `NewsletterSubscriberConnector`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/NewsletterSubscriberConnector.php "Oro\Bundle\MagentoBundle\Connector\NewsletterSubscriberConnector")</sup>
+* Class `MagentoConnectorInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/MagentoConnectorInterface.php "Oro\Bundle\MagentoBundle\Provider\MagentoConnectorInterface")</sup> was removed. Logic was moved to `MagentoConnectorInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Connector/MagentoConnectorInterface.php "Oro\Bundle\MagentoBundle\Connector\MagentoConnectorInterface")</sup>
+* Class `AbstractLoadeableSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractLoadeableSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableSoapIterator")</sup> was removed. Logic was moved to `AbstractLoadeableIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractLoadeableIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractLoadeableIterator")</sup>
+* Class `AbstractPageableSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractPageableSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableSoapIterator")</sup> was removed. Logic was moved to `AbstractPageableIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractPageableIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractPageableIterator")</sup>
+* Class `AbstractBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/AbstractBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator")</sup> was removed. Logic was moved to `AbstractBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/AbstractBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\AbstractBridgeIterator")</sup>
+* Class `CartsBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CartsBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator")</sup> was removed. Logic was moved to `CartsBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CartsBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator")</sup>
+* Class `CustomerBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator")</sup> was removed. Logic was moved to `CustomerBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator")</sup>
+* Class `CustomerSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator")</sup> was removed. Logic was moved to `CustomerSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator")</sup>
+* Class `CustomerGroupBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/CustomerGroupBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupBridgeIterator")</sup> was removed. Logic was moved to `CustomerGroupBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/CustomerGroupBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupBridgeIterator")</sup>
+* Class `NewsletterSubscriberBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/NewsletterSubscriberBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator")</sup> was removed. Logic was moved to `NewsletterSubscriberBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/NewsletterSubscriberBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator")</sup> and now implements `NewsletterSubscriberBridgeIteratorInterface`
+* Class `OrderBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/OrderBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator")</sup> was removed. Logic was moved to `OrderBridgeIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/OrderBridgeIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator")</sup>
+* Class `OrderSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/OrderSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator")</sup> was removed. Logic was moved to `OrderSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/OrderSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator")</sup>
+* Class `RegionSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/RegionSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator")</sup> was removed. Logic was moved to `RegionSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/RegionSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator")</sup>
+    * protected method `findEntitiesToProcess()` was moved to parent class
+    * protected method `getEntityIds()` was moved to parent class
+    * protected method `getEntity($id)` was moved to parent class
+    * protected method `getIdFieldName()` was moved to parent class
+    * protected method `current()` was moved to parent class
+* Class `WebsiteSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/WebsiteSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator")</sup> was removed. Logic was moved to `WebsiteSoapIterator`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Iterator/Soap/WebsiteSoapIterator.php "Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator")</sup>
+* Interface `MagentoTransportInterface`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Transport/MagentoTransportInterface.php "Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface")</sup>
+    * removed the `call` method because it conflicts with REST conception. From now on, MagentoTransportInterface will not allow to specify http methods and resource through parameters.
+* Route `oro_magento_soap_check` was renamed to `oro_magento_integration_check`
+* Translation with key `not_valid_parameters` was removed
+* Process `magento_schedule_integration` was removed.
+## 2.2.0 (2017-05-31)
+[Show detailed list of changes](#incompatibilities-2-2.md)
+
+### Changed
+#### SalesBundle
+* Implementation of REST API for customer association was changed.
+    * the logic related to the customer association is implemented in `CustomerAssociationListener`<sup>[[?]](https://github.com/laboro/dev/blob/maintenance/2.2/package/crm/src/Oro/Bundle/SalesBundle/Api/Form/EventListener/CustomerAssociationListener.php "Oro\Bundle\SalesBundle\Api\Form\EventListener\CustomerAssociationListener")</sup>
+### Removed
+#### SalesBundle
+* removed the following services:
+    * `oro_sales.api.get_config.customer_association`
+    * `oro_sales.api.customize_loaded_data.customer_association`
+    * `oro_sales.api.get_metadata.customer_association`
+    * `oro_sales.api.get_metadata.get_config`
+    * `oro_sales.api.load_data.customer_association`
+    * `oro_sales.api.opportunity.initialize_customer_type_guesser.customer_association`
+    * `oro_sales.api.opportunity.initialize_customer_account_type_guesser`
+    * `oro_sales.form.guesser.customer_guesser`
+    * `oro_sales.form.guesser.customer_account_guesser`
+    * `oro_sales.form.type.customer_api` (API form type alias `oro_sales_customer_api`)
+    * `oro_sales.form.type.customer_account_api` (API form type alias `oro_sales_customer_account_api`)
+## 2.1.0 (2017-03-30)
+[Show detailed list of changes](#incompatibilities-2-1.md)
+
+### Changed
+#### AnalyticsBundle
+* Class `RFMBuilder`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/AnalyticsBundle/Builder/RFMBuilder.php "Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder")</sup>
+    * changed the return type of `getEntityIdsByChannel` method from `\ArrayIterator|BufferedQueryResultIterator` to `\Iterator`
+#### CRMBundle
+* Updated service definition for `oro_crm.extension.transtation_packages_provider`:
+    * changed class to `TranslationPackagesProviderExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/FrontendBundle/Provider/TranslationPackagesProviderExtension.php "Oro\Bundle\FrontendBundle\Provider\TranslationPackagesProviderExtension")</sup>
+    * changed publicity to `false
+#### ChannelBundle
+* Class `RecalculateLifetimeCommand`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ChannelBundle/Command/RecalculateLifetimeCommand.php "Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand")</sup>
+    * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
+* Class `AccountLifetimeSubscriber`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ChannelBundle/EventListener/AccountLifetimeSubscriber.php "Oro\Bundle\ChannelBundle\EventListener\AccountLifetimeSubscriber")</sup>
+    * changed the return type of `getCustomersIterator` method from `BufferedQueryResultIterator` to `BufferedQueryResultIteratorInterface`
+* The following services were marked as `private`:
+    * `oro_channel.twig.metadata_extension`
+    * `oro_channel.twig.lifetime_value_extension`
+#### ContactBundle
+* The service `oro_contact.twig.extension.social_url` was renamed to `oro_contact.twig.extension` and marked as `private`
+#### SalesBundle
+* Class `AccountExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/SalesBundle/Datagrid/Extension/Customers/AccountExtension.php "Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\AccountExtension")</sup>:
+    * added UnsupportedGridPrefixesTrait
+* opportunity` and `lead` apis changed:
+    * `customerAssociation` relation replaced by `customer` and `account` relations
+### Deprecated
+#### SalesBundle
+* Class `OpportunityRepository`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/SalesBundle/Entity/Repository/OpportunityRepository.php "Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository")</sup>:
+    * Method `getNewOpportunitiesAmount` was marked as deprecated. Method `getOpportunitiesByPeriodQB` should be used instead
+    * Method `getWonOpportunitiesToDateCount` was marked as deprecated. Method `getWonOpportunitiesCountByPeriodQB` should be used instead
+### Removed
+#### ChannelBundle
+* Removed the following parameters from DIC:
+    * `oro_channel.twig.metadata_extension.class`
+    * `oro_channel.twig.lifetime_value_extension.class`
+#### ContactBundle
+* Removed the following parameters from DIC:
+    * `oro_contact.twig.extension.social_url.class`
+* Class `SocialUrlExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ContactBundle/Twig/SocialUrlExtension.php "Oro\Bundle\ContactBundle\Twig\SocialUrlExtension")</sup> was renamed to `ContactExtension`<sup>[[?]](https://github.com/oroinc/crm/tree/2.1.0/src/Oro/Bundle/ContactBundle/Twig/ContactExtension.php "Oro\Bundle\ContactBundle\Twig\ContactExtension")</sup>
+## 2.0.0 (2017-01-16)
+
 This changelog references the relevant changes (new features, changes and bugs) done in 2.0 versions.
   * Changed minimum required php version to 5.6
   * Added support of PHP 7.1
 
-CHANGELOG for 1.10.0
-===================
+## 1.10.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.10.0 versions.
   * The application has been upgraded to Symfony 2.8 (Symfony 2.8.10 doesn't supported because of [Symfony issue](https://github.com/symfony/symfony/issues/19840))
   * Added support php 7
   * Changed minimum required php version to 5.5.9
 
-CHANGELOG for 1.9.0
-===================
+## 1.9.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.9.0 versions.
 * 1.9.0 (2016-02-15)
  * Filter records by teams
@@ -24,8 +196,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Filter emails by correspondent on the My Emails page
  * Segment Magento customers by coupons and discounts applied to their orders
 
-CHANGELOG for 1.8.0
-===================
+## 1.8.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.8.0 versions.
 * 1.8.0 (2015-08-26)
  * Improved Email capabilities and features
@@ -34,8 +206,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Tags may be used as filtering conditions in segments and grids
  * UX for Ecommerce Statistics widget has been improved
 
-CHANGELOG for 1.7.0
-===================
+## 1.7.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
 * 1.7.0 (2015-04-28)
  * Tracking of email conversations and threads
@@ -52,15 +224,15 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * New widgets for eCommerce dashboard
  * Dropped support of Magento 1.6 due to API limitations.
 
-CHANGELOG for 1.6.0
-===================
+## 1.6.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.6.0 versions.
 * 1.6.0 (2015-01-19)
  * Availability of email campaign results for filtering in reports & segments.
 Now email campaign results, such as opens, clicks, bounces, etc., are available for filter queries in reporting and customer segmentation. This also includes campaign statistics received via MailChimp integration
 
-CHANGELOG for 1.5.0
-===================
+## 1.5.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.5.0 versions.
 * 1.5.0 (2014-12-18)
  * RFM analytic for Magento channels.
@@ -73,8 +245,8 @@ To construct these metrics, the entire range of values is divided into a small n
 After the metric is applied, every customer gets a three-number set of RFM scores. R1 F1 M1 identifies the best customers, and the higher the scores are, the worse these customers perform in a particular field.
 RFM scores are displayed on the Magento customer view page and on the customer section of the Account view. You may also re-use these scores in reporting and segmentation.
 
-CHANGELOG for 1.4.0
-===================
+## 1.4.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.4.0 versions.
 * 1.4.0 (2014-10-15)
  * The re-introduction of Channels.
@@ -116,8 +288,8 @@ In addition to default dashboard we have added a special Ecommerce-targeted boar
    <li>Average customer lifetime sales</li></ul>
 Every widget displays historical trend for the particular value over the past 12 months. You can also add them to any other dashboard using the Add Widget button.
 
-CHANGELOG for 1.4.0-RC1
-===================
+## 1.4.0-RC1
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.4.0-RC1 versions.
 * 1.4.0-RC1 (2014-09-30)
  * The re-introduction of Channels.
@@ -159,8 +331,8 @@ In addition to default dashboard we have added a special Ecommerce-targeted boar
    <li>Average customer lifetime sales</li></ul>
 Every widget displays historical trend for the particular value over the past 12 months. You can also add them to any other dashboard using the Add Widget button.
 
-CHANGELOG for 1.3.1
-===================
+## 1.3.1
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.3.1 versions.
 
 * 1.3.1 (2014-08-14)
@@ -170,8 +342,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Fixed issue: Recent Emails dashboard widget is broken.
  * Fixed issue: Accounts cannot be linked to Contacts from Edit Contact page.
 
-CHANGELOG for 1.3.0
-===================
+## 1.3.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.3.0 versions.
 
 * 1.3.0 (2014-07-23)
@@ -185,8 +357,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Zendesk integration
  * Other changes and improvements
 
-CHANGELOG for 1.2.0
-===================
+## 1.2.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.2.0 versions.
 
 * 1.2.0 (2014-05-28)
@@ -196,8 +368,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Fixed issue Broken widgets in merged Account view
  * Fixed Community requests
 
-CHANGELOG for 1.2.0-rc1
-===================
+## 1.2.0-rc1
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.2.0 RC1 versions.
 
 * 1.2.0 RC1 (2014-05-12)
@@ -205,16 +377,16 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Improvements to display of Magento data
  * Fixed issue Broken widgets in merged Account view
 
-CHANGELOG for 1.0.0
-===================
+## 1.0.0
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0 versions.
 
 * 1.0.0 (2014-04-01)
  * Tasks
  * Improved UI for launch of the Sales Process workflow
 
-CHANGELOG for 1.0.0-rc2
-===================
+## 1.0.0-rc2
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-rc2 versions.
 
 * 1.0.0-rc2 (2014-02-25)
@@ -222,8 +394,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Embedded forms
  * Account merging
 
-CHANGELOG for 1.0.0-rc1
-===================
+## 1.0.0-rc1
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-rc1 versions.
 
 * 1.0.0-rc1 (2014-01-30)
@@ -233,8 +405,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Magento import performance improvements
  * Other improvements in channnels, contacts
 
-CHANGELOG for 1.0.0-beta6
-===================
+## 1.0.0-beta6
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta6 versions.
 
 * 1.0.0-beta6 (2013-12-30)
@@ -243,8 +415,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Call view window
  * Basic dashboards
 
-CHANGELOG for 1.0.0-beta5
-===================
+## 1.0.0-beta5
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta5 versions.
 
 * 1.0.0-beta5 (2013-12-05)
@@ -253,8 +425,8 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Call entity
  * Add weather layer in the map on contact view page
 
-CHANGELOG for 1.0.0-beta4
-===================
+## 1.0.0-beta4
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta4 versions.
 
 * 1.0.0-beta4 (2013-11-21)
@@ -262,22 +434,22 @@ This changelog references the relevant changes (new features, changes and bugs) 
  * Make all entities as Extended
  * End support for Internet Explorer 9
 
-CHANGELOG for 1.0.0-beta3
-===================
+## 1.0.0-beta3
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta3 versions.
 
 * 1.0.0-beta3 (2013-11-11)
   * Oro Platform Beta 3 dependency changes
 
-CHANGELOG for 1.0.0-beta2
-===================
+## 1.0.0-beta2
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta2 versions.
 
 * 1.0.0-beta2 (2013-10-28)
   * Oro Platform Beta 2 dependency changes
 
-CHANGELOG for 1.0.0-beta1
-===================
+## 1.0.0-beta1
+
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta1 versions.
 
 * 1.0.0-beta1 (2013-09-30)
@@ -286,29 +458,25 @@ This changelog references the relevant changes (new features, changes and bugs) 
   * Account association with contacts
   * Custom entities and fields in usage
 
-CHANGELOG for 1.0.0-alpha6
-===================
+## 1.0.0-alpha6
 
 * 1.0.0-alpha6 (2013-09-12)
   * Leads and Opportunities
   * Flexible Workflow Engine (FWE)
 
-CHANGELOG for 1.0.0-alpha5
-===================
+## 1.0.0-alpha5
 
 * 1.0.0-alpha5 (2013-08-29)
  * Contacts Improvements
    * added ability to manage addresses from contact view page with Google Maps API support
    * added support of multiple Emails and Phones for Contact
 
-CHANGELOG for 1.0.0-alpha4
-===================
+## 1.0.0-alpha4
 
 * 1.0.0-alpha4 (2013-07-31)
  * Address Types Management. Added ability to set different type for addresses in Contact address book
 
-CHANGELOG for 1.0.0-alpha3
-===================
+## 1.0.0-alpha3
 
 This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-alpha3 versions.
 
