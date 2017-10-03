@@ -1,3 +1,4 @@
+@fixture-OroSalesBundle:OpportunityFixture.yml
 Feature: Create opportunity in a single form
   I order to create Opportunity
   As a Sales rep
@@ -17,26 +18,23 @@ Feature: Create opportunity in a single form
     Then Customer Need and Proposed Solution have WYSIWYG editor
 
   Scenario: New Opportunity
-    Given there is following Account:
-      | name |
-      | Acme |
-    And "Acme" Account was created
-    And there is one record in grid
-    When I open Opportunity Create page
+    Given I open Opportunity Create page
     And fill form with:
-      | Opportunity Name | Supper Opportunity |
-      | Account          | Acme               |
+      | Opportunity Name | Supper Opportunity             |
+      | Account          | mister customer 1              |
+      | Contact          | CatherineJHinojosa@armyspy.com |
     And save and close form
     Then I should see "Opportunity saved" flash message
+    And I should see "Mrs. Catherine Hinojosa"
 
   Scenario: New Account
     Given I open Opportunity Create page
     When fill form with:
-      | Opportunity Name | Another New Opportunity           |
-      | Account          | Supper Brand New Customer Account |
+      | Opportunity Name | Another New Opportunity  |
+      | Account          | Supper Brand New Account |
     And save and close form
     Then I should see "Opportunity saved" flash message
-    But "Supper Brand New Customer Account" Account was created
+    And "Supper Brand New Account" Account was created
     And there are two records in grid
 
   Scenario: No permissions to create Account
