@@ -6,6 +6,17 @@ Oro\Bundle\AccountBundle\Entity\Account:
     name: 'mister customer 1'
     organization: '@organization'
 
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contactEmail1:
+        email: 'CatherineJHinojosa@armyspy.com'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact1:
+    namePrefix: 'Mrs.'
+    firstName: 'Catherine'
+    lastName: 'Hinojosa'
+    addEmail: ['@contactEmail1']
+
 Oro\Bundle\SalesBundle\Entity\Customer:
   mrcustomer:
     account: '@account1'
