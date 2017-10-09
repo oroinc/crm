@@ -5,9 +5,9 @@ data:
         incrementId: '100000002'
         originId: 2
         invoiceId: 2
-        subtotal: 215.66
-        grandTotal: 220.66
-        shippingAmount: 5
+        subtotal: '215.6600'
+        grandTotal: '220.6600'
+        shippingAmount: '5.0000'
     relationships:
         order:
             data:

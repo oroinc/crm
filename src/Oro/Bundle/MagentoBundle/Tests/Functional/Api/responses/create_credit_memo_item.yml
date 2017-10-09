@@ -6,8 +6,8 @@ data:
         qty: 1
         sku: 'sku'
         name: 'product name'
-        price: 10.10
-        rowTotal: 20.20
+        price: '10.1000'
+        rowTotal: '20.2000'
     relationships:
         parent:
             data:
