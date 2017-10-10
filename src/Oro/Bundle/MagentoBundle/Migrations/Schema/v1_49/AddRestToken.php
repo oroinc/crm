@@ -1,11 +1,14 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50_4;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
+
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class AddRestToken implements Migration, RenameExtensionAwareInterface
@@ -29,13 +32,7 @@ class AddRestToken implements Migration, RenameExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('oro_integration_transport');
-
-        if (!$table->hasColumn('api_token')) {
-            $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
-        }
-
-        if ($table->hasColumn('wsdl_url')) {
-            $this->renameExtension->renameColumn($schema, $queries, $table, 'wsdl_url', 'api_url');
-        }
+        $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
+        $this->renameExtension->renameColumn($schema, $queries, $table, 'wsdl_url', 'api_url');
     }
 }
