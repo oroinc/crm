@@ -1,8 +1,9 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50_4;
+namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -58,16 +59,12 @@ class CreatedCreditMemoTables implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if (!$schema->hasTable('orocrm_magento_credit_memo')) {
-            $this->createCreditMemoTable($schema);
-            $this->addCreditMemoForeignKeys($schema);
-            $this->addCreditMemoActivities($schema);
-        }
+        $this->createCreditMemoTable($schema);
+        $this->addCreditMemoForeignKeys($schema);
+        $this->addCreditMemoActivities($schema);
 
-        if (!$schema->hasTable('orocrm_magento_creditmemo_item')) {
-            $this->createCreditMemoItemTable($schema);
-            $this->addCreditMemoItemForeignKeys($schema);
-        }
+        $this->createCreditMemoItemTable($schema);
+        $this->addCreditMemoItemForeignKeys($schema);
     }
 
     /**
