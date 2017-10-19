@@ -1,0 +1,6 @@
+bundles:
+    # should be loaded after
+    # - OroCustomerBundle (priority: 25)
+    # - OroAccountBundle (priority: 26)
+    # - OroContactBundle (priority: 10)
+    - { name: Oro\Bridge\CustomerPortalCRM\OroCustomerPortalCRMBridgeBundle, priority: 50 }

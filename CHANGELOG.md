@@ -1,4 +1,4 @@
-## 2.4.0 (Unreleased)
+## 2.4.0 (2017-09-29)
 [Show detailed list of changes](#incompatibilities-2-4.md)
 
 ### Changed
@@ -31,6 +31,8 @@ The new response is the following:
 [Show detailed list of changes](#incompatibilities-2-3.md)
 
 ### Added
+#### ACL
+* In case when CRM works together with Customer Portal, the `Account Manager` role has full permissions for Account and Contact entities
 #### MagentoBundle
 * Class `Magento2ChannelType`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Provider/Magento2ChannelType.php "Oro\Bundle\MagentoBundle\Provider\Magento2ChannelType")</sup> was added to support Magento2 as a new integration
 * Class `IntegrationConfigController.php`<sup>[[?]](https://github.com/oroinc/crm/tree/2.3.0/src/Oro/Bundle/MagentoBundle/Controller/IntegrationConfigController.php.php "Oro\Bundle\MagentoBundle\Controller\IntegrationConfigController.php")</sup> was added. It is a universal entry point for both Magento and Magento2 integration check requests

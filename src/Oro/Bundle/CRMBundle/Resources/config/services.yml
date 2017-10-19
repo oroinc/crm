@@ -5,6 +5,15 @@ services:
         parent: oro_translation.extension.transtation_packages_provider.abstract
         calls:
             - ['addPackage', ['OroCRM', 'oro/crm', '/src']]
+            - ['addPackage', ['OroCRM', 'oro/crm-call-bundle']]
+            - ['addPackage', ['OroCRM', 'oro/crm-dotmailer']]
+            - ['addPackage', ['OroCRM', 'oro/crm-hangouts-call-bundle']]
+            - ['addPackage', ['OroCRM', 'oro/crm-abandoned-cart']]
+            - ['addPackage', ['OroCRM', 'oro/crm-magento-embedded-contact-us']]
+            - ['addPackage', ['OroCRM', 'oro/crm-mail-chimp']]
+            - ['addPackage', ['OroCRM', 'oro/marketing', '/src']]
+            - ['addPackage', ['OroCRM', 'oro/crm-task-bundle']]
+            - ['addPackage', ['OroCRM', 'oro/crm-zendesk']]
         tags:
             - {name: oro_translation.extension.packages_provider}
 
