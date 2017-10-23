@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\Type\OroTextIntegerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -75,7 +76,7 @@ class LeadType extends AbstractType
             ->add('website', 'url', array('required' => false, 'label' => 'oro.sales.lead.website.label'))
             ->add(
                 'numberOfEmployees',
-                'number',
+                OroTextIntegerType::class,
                 array(
                     'required' => false,
                     'label' => 'oro.sales.lead.number_of_employees.label'
