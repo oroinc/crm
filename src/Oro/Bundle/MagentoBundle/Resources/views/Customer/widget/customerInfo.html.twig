@@ -73,7 +73,7 @@
             'alias': 'oro_magento_customer_recent_purchases' ~ uniqueSuffix,
             'widgetType': 'block',
             'label': 'oro.magento.recent_purchases.label'|trans,
-            'url': path('oro_magento_customer_recent_purchases_widget', {'customerId': customer.id, 'channelId': customer.channel.id})
+            'url': path('oro_magento_widget_customer_recent_purchases', {'customerId': customer.id, 'channelId': customer.channel.id})
         }
     ]) %}
 {% endif %}
