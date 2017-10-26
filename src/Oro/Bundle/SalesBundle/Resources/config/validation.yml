@@ -34,8 +34,6 @@ Oro\Bundle\SalesBundle\Entity\Lead:
         phones:
             - Valid: ~
         numberOfEmployees:
-            - Type:
-                type: integer
             - Regex: # For frontend validation
                 pattern: '/^[\d+]*$/'
                 message: "This value should contain only numbers."
