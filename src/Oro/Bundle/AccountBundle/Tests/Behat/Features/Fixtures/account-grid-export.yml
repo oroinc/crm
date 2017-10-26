@@ -1,0 +1,13 @@
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact{1..5}:
+    firstName: 'First_<current()>'
+    lastName: 'Last_<current()>'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account{1..5}:
+    name: 'Account <current()>'
+    defaultContact: '@contact<current()>'
+    owner: '@admin'
+    organization: '@organization'
