@@ -6,6 +6,7 @@ oro_behat_extension:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
         - OroActivityListBundle::ActivityContext
+        - OroCustomerBundle::CustomerUserContext
         - OroDataGridBundle::GridContext
         - OroFormBundle::FormContext
         - OroQueryDesignerBundle::QueryDesignerContext
