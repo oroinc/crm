@@ -2186,7 +2186,9 @@ datagrids:
                         - { join: oi.order, alias: o }
                 where:
                     and:
-                        - o.customer = :customerId AND o.channel = :channelId
+                        - o.customer = :customerId
+                        - o.channel = :channelId
+                        - o.status != 'canceled'
         columns:
             orderOriginId:
                 label: oro.magento.order.increment_id.label
