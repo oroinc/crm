@@ -14,6 +14,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
 
 abstract class AbstractTransportSettingFormType extends AbstractType
 {
@@ -109,6 +110,18 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         $builder->add(
             $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
+        );
+
+        $builder->add(
+            $builder->create(
+                'sharedGuestEmailList',
+                'textarea',
+                [
+                    'label'    => 'oro.magento.magentotransport.shared_guest_email_list.label',
+                    'required' => false,
+                    'tooltip'  => 'oro.magento.magentotransport.shared_guest_email_list.tooltip',
+                ]
+            )->addViewTransformer(new EmailListToStringTransformer())
         );
 
         $builder->add(

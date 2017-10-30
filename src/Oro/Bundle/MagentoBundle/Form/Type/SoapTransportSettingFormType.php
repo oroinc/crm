@@ -5,6 +5,8 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
+
 class SoapTransportSettingFormType extends AbstractTransportSettingFormType
 {
     const NAME = 'oro_magento_soap_transport_setting_form_type';
@@ -43,6 +45,7 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
 
         $builder->remove('check');
         $builder->remove('websiteId');
+        $builder->remove('sharedGuestEmailList');
 
         // added because of field orders
         $builder->add(
@@ -65,6 +68,18 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
             'adminUrl',
             'text',
             ['label' => 'oro.magento.magentotransport.admin_url.label', 'required' => false]
+        );
+
+        $builder->add(
+            $builder->create(
+                'sharedGuestEmailList',
+                'textarea',
+                [
+                    'label'    => 'oro.magento.magentotransport.shared_guest_email_list.label',
+                    'required' => false,
+                    'tooltip'  => 'oro.magento.magentotransport.shared_guest_email_list.tooltip',
+                ]
+            )->addViewTransformer(new EmailListToStringTransformer())
         );
     }
 
