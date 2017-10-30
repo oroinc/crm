@@ -12,6 +12,9 @@ use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
 class LoadRecentPurchasesData extends LoadMagentoChannel
 {
+    const ORDER_STATUS_OPEN = 'open';
+    const ORDER_STATUS_CANCELED = 'canceled';
+
     /**
      * {@inheritDoc}
      */
@@ -47,12 +50,14 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
         $cart = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
         $this->updateCartItem($cartItem, $cart);
 
+        $dateNow = new \DateTime('now', new \DateTimeZone('UTC'));
         $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $date->modify('-3 day');
 
         $order = $this->createOrder($cart, $customer);
         $order2 = $this->createOrder($cart, $customer, '100000505', $date, 2);
         $order3 = $this->createOrder($cart, $customer2, '100000602', $date, 3);
+        $order4 = $this->createOrder($cart, $customer, '100000777', $dateNow, 4, self::ORDER_STATUS_CANCELED);
 
         $creditMemo = $this->createCreditMemo($order);
 
@@ -77,6 +82,10 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
         $baseOrderItem3 = $this->createBaseOrderItem($order3, 'some sku3');
         $order3->setItems([$baseOrderItem3]);
         $this->em->persist($order3);
+
+        $baseOrderItem4 = $this->createBaseOrderItem($order4, 'some sku4');
+        $order4->setItems([$baseOrderItem4]);
+        $this->em->persist($order4);
 
         $cartAddress3 = $this->createGuestCartAddress($this->regions['US-AZ'], $this->countries['US'], null);
         $cartAddress4 = $this->createGuestCartAddress($this->regions['US-AZ'], $this->countries['US'], null);
@@ -105,6 +114,7 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
      * @param string            $incrementId
      * @param \DateTime|null    $createdAt
      * @param int               $originId
+     * @param string            $status
      *
      * @return Order
      */
@@ -113,14 +123,15 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
         Customer $customer,
         $incrementId = '100000307',
         \DateTime $createdAt = null,
-        $originId = 1
+        $originId = 1,
+        $status = self::ORDER_STATUS_OPEN
     ) {
         $createdAt = $createdAt ? $createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
 
         $order = new Order();
         $order->setChannel($this->integration);
         $order->setDataChannel($this->channel);
-        $order->setStatus('open');
+        $order->setStatus($status);
         $order->setOriginId($originId);
         $order->setIncrementId($incrementId);
         $order->setCreatedAt($createdAt);
