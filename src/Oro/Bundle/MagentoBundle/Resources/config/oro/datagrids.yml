@@ -2157,3 +2157,152 @@ datagrids:
                 hide: true
                 pagination:
                     hide: true
+
+    magento-customer-recent-purchases-grid:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\OrderItem
+        acl_resource: oro_magento_order_view
+        source:
+            type: orm
+            query:
+                select:
+                    - o.id as orderId
+                    - o.incrementId as orderOriginId
+                    - o.createdAt as orderDate
+                    - oi.name
+                    - oi.sku
+                    - oi.qty
+                    - oi.price
+                    - oi.originalPrice
+                    - oi.discountPercent
+                    - oi.discountAmount
+                    - oi.taxPercent
+                    - oi.taxAmount
+                    - oi.rowTotal
+                    - o.currency
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\OrderItem, alias: oi }
+                join:
+                    left:
+                        - { join: oi.order, alias: o }
+                where:
+                    and:
+                        - o.customer = :customerId
+                        - o.channel = :channelId
+                        - o.status != 'canceled'
+        columns:
+            orderOriginId:
+                label: oro.magento.order.increment_id.label
+            orderDate:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            sku:
+                label: oro.magento.datagrid.columns.sku
+            name:
+                label: oro.magento.datagrid.columns.name
+            qty:
+                label: oro.magento.datagrid.columns.qty
+                frontend_type: number
+            price:
+                label: oro.magento.datagrid.columns.price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            originalPrice:
+                label: oro.magento.datagrid.columns.originalPrice
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            discountPercent:
+                label: oro.magento.datagrid.columns.discountPercent
+                frontend_type: percent
+            discountAmount:
+                label: oro.magento.datagrid.columns.discountAmount
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            taxPercent:
+                label: oro.magento.datagrid.columns.taxPercent
+                frontend_type: percent
+            taxAmount:
+                label: oro.magento.datagrid.columns.taxAmount
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+            rowTotal:
+                label: oro.magento.datagrid.columns.rowTotal
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Oro\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align: right
+        sorters:
+            columns:
+                orderOriginId:       { data_name: o.incrementId}
+                orderDate:           { data_name: o.createdAt}
+                sku:                 { data_name: oi.sku }
+                name:                { data_name: oi.name }
+                qty:                 { data_name: oi.qty }
+                price:               { data_name: oi.price }
+                originalPrice:       { data_name: oi.originalPrice }
+                discountPercent:     { data_name: oi.discountPercent }
+                discountAmount:      { data_name: oi.discountAmount }
+                taxPercent:          { data_name: oi.taxPercent }
+                taxAmount:           { data_name: oi.taxAmount }
+                rowTotal:            { data_name: oi.rowTotal }
+            default:
+                orderDate:  DESC
+        properties:
+            orderId: ~
+            view_link:
+                type: url
+                route: oro_magento_order_view
+                params: { id: orderId }
+        actions:
+            view:
+                type:         navigate
+                label:        oro.grid.action.view
+                link:         view_link
+                icon:         eye
+                acl_resource: oro_magento_order_view
+                rowAction:    true
+        options:
+            entityHint: order items
+
+    magento-customer-recent-purchases-widget-grid:
+        extends: magento-customer-recent-purchases-grid
+        filters:
+            columns:
+                orderOriginId:
+                    type:        number-range
+                    data_name:   o.incrementId
+                orderDate:
+                    type:         datetime
+                    data_name:    o.createdAt
+                name:
+                    type:         string
+                    data_name:    oi.name
+                sku:
+                    type:         string
+                    data_name:    oi.sku
+                price:
+                    type:         currency
+                    data_name:    oi.price
+                originalPrice:
+                    type:         currency
+                    data_name:    oi.originalPrice
+                rowTotal:
+                    type:         currency
+                    data_name:    oi.rowTotal
+                discountAmount:
+                    label:            oro.magento.datagrid.columns.discount_amount
+                    type:             currency
+                    data_name:        oi.discountAmount
+                    enabled:          false
+                discountPercent:
+                    label:            oro.magento.datagrid.columns.discount_percent
+                    type:             percent
+                    data_name:        oi.discountPercent
+                    enabled:          false

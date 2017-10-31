@@ -26,10 +26,10 @@
                             'title' :        'oro.magento.customer.create_order'|trans,
                             'allowMaximize': true,
                             'allowMinimize': false,
+                            'resizable':     true,
                             'width':         1000,
                             'height':        600,
-                            'modal':         true,
-                            'autoResize':    true
+                            'modal':         true
                         }
                     }
                 }
@@ -86,6 +86,15 @@
                     'url': path(
                             'oro_magento_customer_orders_widget',
                             {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                },
+                {
+                    'alias': 'oro_magento_customer_recent_purchases',
+                    'widgetType': 'block',
+                    'label': "oro.magento.recent_purchases.label"|trans,
+                    'url': path(
+                        'oro_magento_customer_recent_purchases_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
                 },
                 {

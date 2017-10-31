@@ -521,6 +521,8 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-orders-widget-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-widget-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-recent-purchases-widget-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-recent-purchases-grid, method: onBuildAfter }
 
     oro_magento.event_listener.channel_owner_set:
         class: %oro_magento.event_listener.channel_owner_set.class%
@@ -572,6 +574,17 @@ services:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
             - { name: doctrine.event_listener, event: onClear }
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: onFinish }
+
+    # This listener implemented to enable/disable oro_magento.event_listener.delayed_search_reindex
+    # for Magento integration only
+    oro_magento.event_listener.alternative_search_index_switcher:
+        class: 'Oro\Bundle\MagentoBundle\EventListener\AlternativeSearchIndexSwitcherListener'
+        arguments:
+            - '@oro_platform.optional_listeners.manager'
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.event.sync_before, method: onStart }
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: onFinish }
 
     oro_magento.migration.demo_data_fixtures_listener.search_index:
         class: Oro\Bundle\MagentoBundle\EventListener\SearchIndexDemoDataFixturesListener
@@ -646,6 +659,14 @@ services:
         class: Oro\Bundle\MagentoBundle\Manager\CustomerAddressManager
         arguments:
             - "@doctrine.orm.entity_manager"
+        calls:
+            - ['setLogger',  ["@logger"]]
+
+    oro_magento.manager.customer_contact_manager:
+        class: Oro\Bundle\MagentoBundle\Manager\CustomerContactManager
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_workflow.listener.extension.process_trigger"
         calls:
             - ['setLogger',  ["@logger"]]
 
@@ -1176,6 +1197,11 @@ services:
         tags:
             - {name: oro_magento.rest_response.converter, type: region }
 
+    oro_magento.converter.rest.website_converter:
+        class: Oro\Bundle\MagentoBundle\Converter\Rest\WebsiteConverter
+        tags:
+            - {name: oro_magento.rest_response.converter, type: website }
+
     oro_magento.async.upgrade_relations_accounts_contacts_processor:
         class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49\UpdateRelationsAccountsAndContactsProcessor
         arguments:
@@ -1183,3 +1209,12 @@ services:
             - '@oro_entity.orm.native_query_executor_helper'
         tags:
             - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.upgrade_relations_accounts_contacts' }
+
+    oro_magento.async.schedule_stucked_jobs_processor:
+        class: Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50\ScheduleStuckedJobsProcessor
+        arguments:
+            - '@oro_message_queue.message_producer'
+            - '@oro_entity.orm.native_query_executor_helper'
+            - '@oro_workflow.process.logger'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.schedule_stucked_jobs' }

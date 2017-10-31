@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
@@ -26,6 +27,7 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
      * @param array     $clientExtraOptions
      *
      * @return void
+     * @throws TransportException
      */
     public function initWithExtraOptions(Transport $transportEntity, array $clientExtraOptions);
 

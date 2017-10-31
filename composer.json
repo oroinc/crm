@@ -1,7 +1,7 @@
 {
     "name": "oro/crm",
     "description": "OroCRM",
-    "homepage": "https://github.com/orocrm/crm.git",
+    "homepage": "https://github.com/oroinc/crm.git",
     "license": "OSL-3.0",
     "authors": [
         {
@@ -43,6 +43,10 @@
         "oro": {
             "type": "composer",
             "url": "https://packagist.orocrm.com"
+        },
+        "asset-packagist": {
+            "type": "composer",
+            "url": "https://asset-packagist.orocrm.com"
         }
     },
     "minimum-stability": "dev",

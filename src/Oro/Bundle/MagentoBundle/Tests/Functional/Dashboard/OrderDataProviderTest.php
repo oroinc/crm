@@ -25,6 +25,7 @@ class OrderDataProviderTest extends WebTestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped('Should be fixed in CRM-8594');
         parent::setUp();
         $this->initClient();
 

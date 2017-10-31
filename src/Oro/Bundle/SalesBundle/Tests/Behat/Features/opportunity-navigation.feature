@@ -15,7 +15,7 @@ Feature: Opportunity Navigation Items
     When I pin page
     And add page to favorites
     Then Opportunities link must be in pin holder
-    And Favorites must contain "Open Opportunities - Opportunities - Sales"
+    And Favorites must contain "Opportunities - Sales"
 
   Scenario: Pin and Add to favorites Opportunity Grid page
     Given I click View Opportunity 1 in grid

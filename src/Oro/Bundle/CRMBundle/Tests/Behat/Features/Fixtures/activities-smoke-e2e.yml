@@ -1,0 +1,48 @@
+Oro\Bundle\CurrencyBundle\Entity\Price(local):
+  price:
+   value: '1'
+   currency: 'USD'
+
+Oro\Bundle\OrganizationBundle\Entity\BusinessUnit:
+  businessUnit:
+    name: Common Business Unit
+    organization: '@organization'
+
+Oro\Bundle\UserBundle\Entity\User:
+  charlie:
+   firstName: Charlie
+   lastName: Sheen
+   username: charlie
+   organization: '@organization'
+   organizations: ['@organization']
+   roles: ['@userRole']
+   owner: '@business_unit'
+   businessUnits: ['@business_unit']
+   email: 'Charlie1@example.com'
+   password: 'BLDLpjJ3z4KgdMqEr0+vmdobfbcX+l+paqwBiICkEP+J83w2r0Ec47fLk1ZarAWJ0IMlWd29XUwBhESv2RUZPg=='
+   salt: 'eexx2a8mtsg8o4c8k4w08wo04ccsw8'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'mister customer 1'
+    organization: '@organization'
+
+Oro\Bundle\CustomerBundle\Entity\Customer:
+    customer:
+        name: 'Company A'
+        organization: '@organization'
+        owner: '@admin'
+
+Oro\Bundle\CustomerBundle\Entity\CustomerUser:
+    amanda:
+        email: 'AmandaRCole@example.org'
+        username: 'AmandaRCole@example.org'
+        password: 'gxP1L8r86hrdUMg9wKdfnsS/EZC4a7jOIdn6BMzegqL2S6e+KBIuHCrDVciMdiR/64osNnabmFonwK8l09vQxA=='
+        salt: 'fgswya1kzw0sck8ck48kosowckwo0ws'
+        firstName: 'Amanda'
+        lastName: 'Cole'
+        enabled: '1'
+        confirmed: '1'
+        customer: '@customer'
+        organization: '@organization'
+        owner: '@admin'

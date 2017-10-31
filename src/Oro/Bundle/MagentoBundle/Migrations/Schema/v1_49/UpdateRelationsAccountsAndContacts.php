@@ -3,17 +3,18 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UpdateRelationsAccountsAndContacts implements Migration, ContainerAwareInterface
 {
     /** @var ContainerInterface */
     protected $container;
+
+    /** @var bool */
+    public static $executed = false;
 
     /**
      * {@inheritdoc}
@@ -32,5 +33,7 @@ class UpdateRelationsAccountsAndContacts implements Migration, ContainerAwareInt
         // could have a lot of magento customers in system.
         $this->container->get('oro_message_queue.message_producer')
             ->send(UpdateRelationsAccountsAndContactsProcessor::TOPIC_NAME, '');
+
+        self::$executed = true;
     }
 }

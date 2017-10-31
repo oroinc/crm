@@ -1,5 +1,26 @@
 oro_behat_extension:
   elements:
+    Lead:
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Element
+      selector:
+        locator: '//ul[@class="context-items-dropdown dropdown-menu"]/li[contains(text(),"Lead")]'
+        type: xpath
+
+    Opportunity Form:
+      selector: 'form[name="oro_sales_opportunity_form"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Budget Amount: 'oro_sales_opportunity_form[budgetAmount][value]'
+
+    ImportLead:
+      selector: 'div[class="opportunity-card-view card-view ui-sortable-handle"]'
+
+    Closed Lost:
+      selector:
+        locator: '//div[7][@class="board-column ui-sortable"]'
+        type: xpath
+
     CustomerOpportunitiesGrid:
       selector: "div[id^='grid-sales-b2bcustomer-opportunities-grid-customer'] div.grid-container"
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
@@ -115,10 +136,8 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
-        - OroConfigBundle::FeatureContext
         - OroDataGridBundle::GridContext
         - OroFormBundle::FormContext
-        - OroApplicationBundle::CommerceMainContext
         - OroSecurityBundle::ACLContext
         - OroImportExportBundle::ImportExportContext:
           - '@oro_entity.entity_alias_resolver'
@@ -126,14 +145,7 @@ oro_behat_extension:
         - OroAddressBundle::AddressContext
         - OroSalesBundle::SalesContext
         - OroSalesBundle::FeatureContext
-        - OroProductBundle::FeatureContext
-        - OroRFPBundle::FeatureContext
-        - OroCheckoutBundle::FeatureContext
-        - OroShoppingListBundle::ShoppingListContext
-        - OroAuthorizeNetBundle::FeatureContext
-        - OroShoppingListBundle::FeatureContext
-        - OroSalesBundle::SalesFeatureToggleContext
         - OroNavigationBundle::FeatureContext
-        - OroProductBundle::QuickOrderFormContext
+        - OroSalesBundle::SalesFeatureToggleContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'

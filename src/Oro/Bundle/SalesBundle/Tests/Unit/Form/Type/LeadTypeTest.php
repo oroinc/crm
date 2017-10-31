@@ -4,6 +4,7 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Form\Type\LeadType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class LeadTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,7 +35,7 @@ class LeadTypeTest extends \PHPUnit_Framework_TestCase
             'customerAssociation' => 'oro_sales_customer',
             'companyName' => 'text',
             'website' => 'url',
-            'numberOfEmployees' => 'number',
+            'numberOfEmployees' => IntegerType::class,
             'industry' => 'text',
             'addresses' => 'oro_address_collection',
             'source' => 'oro_enum_select',

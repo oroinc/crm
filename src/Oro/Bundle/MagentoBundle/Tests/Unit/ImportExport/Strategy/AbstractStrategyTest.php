@@ -22,6 +22,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\NewEntitiesHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
+use Oro\Bundle\SecurityBundle\Owner\OwnerChecker;
 
 abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,6 +96,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $newEntitiesHelper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|OwnerChecker $channel
+     */
+    protected $ownerChecker;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->createMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -162,6 +168,8 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->ownerChecker = $this->createMock(OwnerChecker::class);
 
         $this->newEntitiesHelper = new NewEntitiesHelper();
         $this->logger = new NullLogger();

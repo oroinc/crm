@@ -33,6 +33,10 @@ Oro\Bundle\SalesBundle\Entity\Lead:
             - Valid: ~
         phones:
             - Valid: ~
+        numberOfEmployees:
+            - Regex: # For frontend validation
+                pattern: '/^[\d+]*$/'
+                message: "This value should contain only numbers."
 
 Oro\Bundle\SalesBundle\Entity\LeadAddress:
     constraints:
