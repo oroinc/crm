@@ -78,6 +78,7 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
                     'label'    => 'oro.magento.magentotransport.shared_guest_email_list.label',
                     'required' => false,
                     'tooltip'  => 'oro.magento.magentotransport.shared_guest_email_list.tooltip',
+                    'error_bubbling' => true
                 ]
             )->addViewTransformer(new EmailListToStringTransformer())
         );

@@ -794,6 +794,11 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: oro_magento.validator.unique_customer_email }
 
+    oro_magento.validator.email_address_list:
+        class: Oro\Bundle\MagentoBundle\Validator\EmailAddressListValidator
+        tags:
+            - { name: validator.constraint_validator, alias: oro_magento.validator.email_address_list }
+
     oro_magento.validator.start_sync_date:
         class: %oro_magento.validator.start_sync_date.class%
         arguments:
