@@ -99,6 +99,13 @@ abstract class MagentoTransport extends Transport
     protected $guestCustomerSync = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_display_order_comments", type="boolean", nullable=true, options={"default"=true})
+     */
+    protected $isDisplayOrderComments;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="admin_url", type="string", length=255, nullable=true)
@@ -351,6 +358,26 @@ abstract class MagentoTransport extends Transport
     public function getGuestCustomerSync()
     {
         return $this->guestCustomerSync;
+    }
+
+    /**
+     * @param boolean $isDisplayOrderComments
+     *
+     * @return MagentoTransport
+     */
+    public function setIsDisplayOrderComments($isDisplayOrderComments)
+    {
+        $this->isDisplayOrderComments = $isDisplayOrderComments;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsDisplayOrderComments()
+    {
+        return $this->isDisplayOrderComments;
     }
 
     /**

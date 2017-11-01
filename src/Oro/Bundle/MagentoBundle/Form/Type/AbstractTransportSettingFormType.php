@@ -77,6 +77,22 @@ abstract class AbstractTransportSettingFormType extends AbstractType
                 'required' => false
             ]
         );
+
+        $builder->add(
+            'isDisplayOrderComments',
+            'choice',
+            [
+                'label' => 'oro.magento.magentotransport.is_display_order_comments.label',
+                'tooltip' => 'oro.magento.magentotransport.is_display_order_comments.tooltip',
+                'choices' => [
+                    'oro.magento.magentotransport.is_display_order_comments.value.true.label' => true,
+                    'oro.magento.magentotransport.is_display_order_comments.value.false.label' => false,
+                ],
+                'placeholder' => false,
+                'choices_as_values' => true
+            ]
+        );
+
         $builder->add(
             'syncStartDate',
             'oro_date',
