@@ -228,17 +228,35 @@ Feature: Activities
     And click view "Joshua" in grid
     When click "Convert to Opportunity"
     And click "Submit"
+    Then I should see "This value should not be blank."
+    When I fill form with:
+      | Account | mister customer 1 |
+    And click "Submit"
+    Then should see "Converted to Opportunity"
+    And go to Activities/ Contact Requests
+    And click "Create Contact Request"
+    And fill form with:
+      | First name | Amanda               |
+      | Last name  | Cole                 |
+      | Email      | AmandaRCole@test.com |
+      | Comment    | Comment from Amanda  |
+      | Customer   | Amanda Cole          |
+    And save and close form
+    When click "Convert to Opportunity"
+    Then I should see "Company A"
+    When click "Submit"
     Then should see "Converted to Opportunity"
     And go to Sales/ Opportunities
     And I should see following grid:
       | Opportunity name | Status | Owner    |
+      | Amanda Cole      | Open   | John Doe |
       | Joshua Field     | Open   | John Doe |
     And go to Activities/ Contact Requests
     And click "Create Contact Request"
     And fill form with:
       |First name|Bob            |
       |Last name |Cornelius      |
-      |Email     |rest@test.com|
+      |Email     |rest@test.com  |
       |Comment   |restComment    |
     And save and close form
     When click "Convert to Lead"
@@ -253,7 +271,7 @@ Feature: Activities
     And fill form with:
       |First name|Janet           |
       |Last name |Graham          |
-      |Email     |trest@test.com|
+      |Email     |trest@test.com  |
       |Comment   |trestComment    |
     And save and close form
     When click "Resolve"
@@ -265,9 +283,10 @@ Feature: Activities
     Then I should see "Contact Request deleted" flash message
     And go to Activities/ Contact Requests
     And I should see following grid:
-      | First name | Last name | Email         | Step                     |
-      | Bob        | Cornelius | rest@test.com | Converted to Lead        |
-      | Joshua     | Field     | test@test.com | Converted to Opportunity |
+      | First name | Last name | Email                | Step                     |
+      | Bob        | Cornelius | rest@test.com        | Converted to Lead        |
+      | Amanda     | Cole      | AmandaRCole@test.com | Converted to Opportunity |
+      | Joshua     | Field     | test@test.com        | Converted to Opportunity |
 
   Scenario: Create a calendar event in the Calendar Events grid
     Given go to Activities/ Calendar Events

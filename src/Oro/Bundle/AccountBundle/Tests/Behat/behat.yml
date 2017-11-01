@@ -10,5 +10,6 @@ oro_behat_extension:
         - OroFormBundle::FormContext
         - OroQueryDesignerBundle::QueryDesignerContext
         - OroSecurityBundle::ACLContext
+        - OroEmailBundle::EmailContext
       paths:
         - '@OroAccountBundle/Tests/Behat/Features'
