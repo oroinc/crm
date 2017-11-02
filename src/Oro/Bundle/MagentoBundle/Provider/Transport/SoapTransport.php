@@ -202,6 +202,8 @@ class SoapTransport extends BaseSOAPTransport implements
         $this->isWsiMode = $wsiMode;
         $this->serverTime = null;
 
+        // Clear session id if init() method is called several times. Look to the call() method.
+        $this->sessionId = null;
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
 
