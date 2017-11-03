@@ -12,7 +12,7 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\B2bCustomer }
 
-    oro_sales.api.b2bcustomer.customize_loaded_data.map_primary_phone:
+    oro_sales.api.b2bcustomer.customize_form_data.map_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary phone number.', primaryPhone, phones, phone]
         tags:
@@ -24,7 +24,7 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\B2bCustomer }
 
-    oro_sales.api.b2bcustomer.customize_loaded_data.map_primary_email:
+    oro_sales.api.b2bcustomer.customize_form_data.map_primary_email:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:
@@ -36,7 +36,7 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
 
-    oro_sales.api.lead.customize_loaded_data.map_primary_phone:
+    oro_sales.api.lead.customize_form_data.map_primary_phone:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary phone number.', primaryPhone, phones, phone]
         tags:
@@ -48,7 +48,7 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\SalesBundle\Entity\Lead }
 
-    oro_sales.api.lead.customize_loaded_data.map_primary_email:
+    oro_sales.api.lead.customize_form_data.map_primary_email:
         class: Oro\Bundle\ApiBundle\Processor\CustomizeFormData\MapPrimaryField
         arguments: ['@property_accessor', 'Unknown primary email address.', primaryEmail, emails, email]
         tags:

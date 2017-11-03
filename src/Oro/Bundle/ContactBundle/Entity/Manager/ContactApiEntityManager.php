@@ -33,7 +33,6 @@ class ContactApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         $config = [
-            'excluded_fields' => ['email'],
             'fields'          => [
                 'source'       => ['fields' => 'name'],
                 'method'       => ['fields' => 'name'],
@@ -53,6 +52,9 @@ class ContactApiEntityManager extends ApiEntityManager
                         'primary' => 'DESC'
                     ]
                 ],
+                // use "_email" as the field name to prevent calling of Contact::getEmail()
+                // and removing "email" field is added in "post_serialize" handler from the result
+                '_email'       => ['exclude' => true, 'property_path' => 'email'],
                 'phones'       => [
                     'exclusion_policy' => 'all',
                     'fields'           => [
@@ -100,7 +102,7 @@ class ContactApiEntityManager extends ApiEntityManager
 
         if (!empty($result['picture'])) {
             $result['picture'] = $this->attachmentManager->getFileRestApiUrl(
-                $result['picture'],
+                $result['picture']['id'],
                 $this->class,
                 $result['id']
             );

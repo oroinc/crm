@@ -68,6 +68,14 @@
             'url': path('oro_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': customer.channel.id})
         }
     ]) %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'oro_magento_customer_recent_purchases' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'oro.magento.recent_purchases.label'|trans,
+            'url': path('oro_magento_widget_customer_recent_purchases', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
 {% endif %}
 {% if cartClassName in customer.dataChannel.entities %}
     {% set tabs = tabs|merge([

@@ -1,3 +1,10 @@
+## 2.5.0 (Unreleased)
+
+### Added
+#### MagentoBundle
+* Two new datagrids were added to show purchased products from magento orders for customer and account.
+[Documentation](./src/Oro/Bundle/MagentoBundle/Resources/doc/reference/purchased_products_datagrid.md)
+
 ## 2.4.0 (2017-09-29)
 [Show detailed list of changes](#incompatibilities-2-4.md)
 

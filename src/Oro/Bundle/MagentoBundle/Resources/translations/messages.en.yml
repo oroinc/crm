@@ -1134,6 +1134,9 @@ oro:
                 description:                      The name specified for a Magento credit memo item.
             owner.label:                          Owner
 
+        recent_purchases:
+            label:                                Recent Purchases
+
         #regions:
         #   entity_label:        Magento Region
         #   entity_plural_label: Magento Regions

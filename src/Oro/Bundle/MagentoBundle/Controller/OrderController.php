@@ -94,6 +94,25 @@ class OrderController extends Controller
 
     /**
      * @Route(
+     *        "/account-widget/customer-recent-purchases/{customerId}/{channelId}",
+     *        name="oro_magento_widget_customer_recent_purchases",
+     *        requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_order_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerRecentPurchasesAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
      *        "/customer-widget/customer-orders/{customerId}/{channelId}",
      *        name="oro_magento_customer_orders_widget",
      *        requirements={"customerId"="\d+", "channelId"="\d+"}
@@ -106,6 +125,24 @@ class OrderController extends Controller
      * @return array
      */
     public function customerOrdersWidgetAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
+     *        "/customer-widget/customer-recent-purchases/{customerId}/{channelId}",
+     *        name="oro_magento_customer_recent_purchases_widget",
+     *        requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerRecentPurchasesWidgetAction(Customer $customer, Channel $channel)
     {
         return ['customer' => $customer, 'channel' => $channel];
     }
