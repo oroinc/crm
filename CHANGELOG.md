@@ -4,6 +4,17 @@
 #### MagentoBundle
 * Two new datagrids were added to show purchased products from magento orders for customer and account.
 [Documentation](./src/Oro/Bundle/MagentoBundle/Resources/doc/reference/purchased_products_datagrid.md)
+* The new `sharedGuestEmailList` field was added to the `MagentoTransport` entity. During guest order synchronization, separate `MagentoCustomer` entities will be created for orders that have emails on the 'sharedGuestEmailList' (`email`, `firstName` and `lastName` fields are used for identification).
+* Class `EmailListToStringTransformer` was added. Use it to transform text with different delimiters between entries into the list of emails.
+* Class `EmailAddressListValidator` was added. Use it to validate array of emails.
+* Class `AbstractArrayToStringTransformer` was added. Use it to create your own transformers based on array to string transformation like `EmailListToStringTransformer`.
+* Class `GuestCustomerStrategyHelper` and its service `oro_magento.importexport.guest_customer_strategy_helper` were added.
+Use it to check if guest customer emails are on the 'sharedGuestEmailList', and retrieve identification data to search for existing guest customers.
+
+### Changed
+#### MagentoBundle
+* Methods `transformArrayToString` and `transformStringToArray` were moved from `ArrayToStringTransformer` to `AbstractArrayToStringTransformer` and changed their visibility to `protected`
+* Property `$delimiter` was moved from `ArrayToStringTransformer` to `AbstractArrayToStringTransformer` and changed its visibility to `protected`
 
 ## 2.4.0 (2017-09-29)
 [Show detailed list of changes](#incompatibilities-2-4.md)
