@@ -7,7 +7,9 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter;
 
 class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
@@ -23,6 +25,11 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
      */
     protected $databaseHelper;
 
+    /**
+     * @var GuestCustomerStrategyHelper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $guestCustomerStrategyHelper;
+
     protected function setUp()
     {
         $this->wrapped = $this
@@ -34,7 +41,10 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->guestCustomerStrategyHelper = $this->createMock(GuestCustomerStrategyHelper::class);
+
         $this->writer  = new ProxyEntityWriter($this->wrapped, $this->databaseHelper);
+        $this->writer->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
     }
 
     protected function tearDown()
@@ -138,15 +148,23 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $actualCustomersArray
      * @param $expectedCustomersArray
+     * @param bool $isInSharedGuestList
      *
      * @dataProvider customerProvider
      */
-    public function testMergeGuestCustomers($actualCustomersArray, $expectedCustomersArray)
-    {
+    public function testMergeGuestCustomers(
+        $actualCustomersArray,
+        $expectedCustomersArray,
+        $isInSharedGuestList = false
+    ) {
         $this->wrapped
             ->expects($this->once())
             ->method('write')
             ->with($expectedCustomersArray);
+
+        $this->guestCustomerStrategyHelper->expects($this->any())
+            ->method('isGuestCustomerEmailInSharedList')
+            ->willReturn($isInSharedGuestList);
 
         $this->writer->write($actualCustomersArray);
     }
@@ -156,19 +174,27 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
      * @param int $channelId
      * @param bool $isGuest
      * @param int $originId
+     * @param bool $isInSharedEmailList
+     * @param array $nameArray
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    public function getCustomer($customerEmail, $channelId, $isGuest = true, $originId = null)
-    {
+    public function getCustomer(
+        $customerEmail,
+        $channelId,
+        $isGuest = true,
+        $originId = null,
+        $isInSharedEmailList = false,
+        $nameArray = []
+    ) {
         $channel = $this
-            ->getMockBuilder('Oro\Bundle\ChannelBundle\Entity\Channel')
-            ->setMethods(['getId'])
+            ->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
+            ->setMethods(['getId', 'getTransport'])
             ->disableOriginalConstructor()
             ->getMock();
         $customer = $this
             ->getMockBuilder('Oro\Bundle\MagentoBundle\Entity\Customer')
-            ->setMethods(['getChannel', 'getOriginId'])
+            ->setMethods(['getChannel', 'getOriginId', 'getFirstName', 'getLastName'])
             ->disableOriginalConstructor()
             ->getMock();
         if ($channelId) {
@@ -180,6 +206,17 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->any())
                 ->method('getChannel')
                 ->will($this->returnValue($channel));
+        }
+
+        if ($isGuest && $isInSharedEmailList) {
+            if (!empty($nameArray)) {
+                $customer->expects($this->any())
+                    ->method('getFirstName')
+                    ->willReturn(array_shift($nameArray));
+                $customer->expects($this->any())
+                    ->method('getLastName')
+                    ->willReturn(array_shift($nameArray));
+            }
         }
 
         if (!$isGuest && $originId) {
@@ -238,6 +275,29 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
             [ //not guest mode. customers will be merged with originId
                 [$this->getCustomer('example@e.com', 1, false, 10), $this->getCustomer('example@e.com', 1, false, 10)],
                 [10 => $this->getCustomer('example@e.com', 1, false, 10)]
+            ],
+            'guest mode with email in shared list, wont be merged' => [
+                [
+                    $this->getCustomer('test@test.com', 1, true, null, true, ['First1', 'Last1']),
+                    $this->getCustomer('test@test.com', 1, true, null, true, ['First2', 'Last2'])
+                ],
+                [
+                    $this->getUniqueHash('test@test.com', 1, 'First1Last1') =>
+                        $this->getCustomer('test@test.com', 1, true, null, true, ['First1', 'Last1']),
+                    $this->getUniqueHash('test@test.com', 1, 'First2Last2') =>
+                        $this->getCustomer('test@test.com', 1, true, null, true, ['First2', 'Last2'])
+                ],
+                true
+            ],
+            'guest mode with email not in shared list, will be merged' => [
+                [
+                    $this->getCustomer('test@test.com', 1, true, null, true, ['First1', 'Last1']),
+                    $this->getCustomer('test@test.com', 1, true, null, true, ['First2', 'Last2'])
+                ],
+                [
+                    $this->getUniqueHash('test@test.com', 1) =>
+                        $this->getCustomer('test@test.com', 1, true, null, true, ['First2', 'Last2'])
+                ]
             ]
         ];
     }
@@ -245,15 +305,19 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $email
      * @param int $channelId
+     * @param null $fullName
      *
      * @return string
      */
-    public function getUniqueHash($email, $channelId = null)
+    public function getUniqueHash($email, $channelId = null, $fullName = null)
     {
         $string = $email;
 
         if ($channelId) {
             $string.=$channelId;
+            if ($fullName) {
+                $string.=$fullName;
+            }
         }
 
         return md5($string);

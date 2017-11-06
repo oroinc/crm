@@ -9,7 +9,6 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixtures\LoadGuestCustomerStrategyData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -46,6 +45,7 @@ class GuestCustomerStrategyTest extends WebTestCase
         ]);
 
         $this->strategy = $this->getContainer()->get(self::STRATEGY_SERVICE_NAME);
+        $this->strategy->setEntityName(Customer::class);
 
         $jobInstance = new JobInstance();
         $jobInstance->setRawConfiguration(['channel' => $this->getReference('integration')]);
@@ -75,7 +75,7 @@ class GuestCustomerStrategyTest extends WebTestCase
      * @dataProvider processDataProvider
      *
      * @param string[]|string   $customer
-     * @param string[]|null       $expected
+     * @param string[]|null     $expected
      */
     public function testProcess(array $customer, $expected)
     {
@@ -96,19 +96,39 @@ class GuestCustomerStrategyTest extends WebTestCase
         }
     }
 
-    public function testImportSameCustomer()
+    public function testImportCustomersInOneBatch()
     {
-        $customer = $this->createCustomer('Chief', 'Wiggum', 'piggy@springfield.com');
+        $customer = $this->createCustomer(
+            'Chief',
+            'Wiggum',
+            LoadGuestCustomerStrategyData::TEST_SHARED_EMAIL
+        );
 
-        $result = $this->strategy->process($customer);
+        $this->strategy->process($customer);
 
-        $this->assertEquals($customer, $result);
+        $sameCustomer = $this->createCustomer(
+            'Chief',
+            'Wiggum',
+            LoadGuestCustomerStrategyData::TEST_SHARED_EMAIL
+        );
 
-        $sameCustomer = $this->createCustomer('Chief1', 'Wiggum1', 'piggy@springfield.com');
+        $sameCustomerEntity = $this->strategy->process($sameCustomer);
 
-        $result = $this->strategy->process($sameCustomer);
+        $this->assertSame(
+            $customer,
+            $sameCustomerEntity
+        );
 
-        $this->assertNotEquals($customer, $result);
+        $customerWithNewFirstName = $this->createCustomer(
+            'Samuel',
+            'Wiggum',
+            LoadGuestCustomerStrategyData::TEST_SHARED_EMAIL
+        );
+
+        $this->assertNotSame(
+            $customer,
+            $customerWithNewFirstName
+        );
     }
 
     /**
@@ -133,7 +153,7 @@ class GuestCustomerStrategyTest extends WebTestCase
                 'customer' => [
                     'firstName' => 'John',
                     'lastName'  => 'Doe',
-                    'email'     => 'test@example.com'
+                    'email'     =>  LoadGuestCustomerStrategyData::NONE_SHARED_EMAIL
                 ],
                 'expected' => null
             ],
@@ -141,7 +161,7 @@ class GuestCustomerStrategyTest extends WebTestCase
                 'customer' => [
                     'firstName' => 'John',
                     'lastName'  => 'Doe',
-                    'email'     => LoadGuestCustomerStrategyData::JOHN_DOE_SHARED_EMAIL
+                    'email'     => LoadGuestCustomerStrategyData::TEST_SHARED_EMAIL
                 ],
                 'expected' => null
             ],
@@ -173,7 +193,11 @@ class GuestCustomerStrategyTest extends WebTestCase
         $customer->setFirstName($firstName);
         $customer->setLastName($lastName);
         $customer->setEmail($email);
-        $customer->setChannel($this->getReference(LoadMagentoChannel::INTEGRATION_ALIAS_REFERENCE_NAME));
+        $customer->setChannel(
+            $this->getReference(
+                LoadGuestCustomerStrategyData::INTEGRATION_ALIAS_REFERENCE_NAME
+            )
+        );
 
         return $customer;
     }

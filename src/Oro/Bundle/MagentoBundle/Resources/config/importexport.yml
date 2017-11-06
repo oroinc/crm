@@ -375,6 +375,8 @@ services:
     oro_magento.import.strategy.guest_customer.add_or_update:
         parent: oro_magento.import.strategy.abstract
         class: %oro_magento.import_strategy.guest_customer.add_or_update.class%
+        calls:
+            - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
 
     oro_magento.import.strategy.region.add_or_update:
         class: %oro_magento.import_strategy.region.add_or_update.class%
@@ -394,10 +396,14 @@ services:
     oro_magento.import.strategy.cart.add_or_update:
         class: %oro_magento.import_strategy.cart.add_or_update.class%
         parent: oro_magento.import.strategy.abstract
+        calls:
+            - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
 
     oro_magento.import.strategy.order.add_or_update:
         class: %oro_magento.import_strategy.order.add_or_update.class%
         parent: oro_magento.import.strategy.abstract
+        calls:
+            - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
 
     oro_magento.import.strategy.order_with_customer.add_or_update:
         parent: oro_magento.import.strategy.order.add_or_update
@@ -679,6 +685,7 @@ services:
             - "@oro_importexport.field.database_helper"
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
+            - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
 
     oro_magento.importexport.writer.abstract_export:
         class: %oro_magento.importexport.writer.abstract_export.class%

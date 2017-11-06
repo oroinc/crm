@@ -18,6 +18,7 @@ use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class ProxyEntityWriter implements
     ItemWriterInterface,
@@ -36,6 +37,9 @@ class ProxyEntityWriter implements
     /** @var StepExecution|null */
     protected $previousStepExecution;
 
+    /** @var  GuestCustomerStrategyHelper */
+    private $guestCustomerStrategyHelper;
+
     /**
      * @param ItemWriterInterface $writer
      * @param DatabaseHelper $databaseHelper
@@ -45,6 +49,14 @@ class ProxyEntityWriter implements
         $this->writer = $writer;
         $this->databaseHelper = $databaseHelper;
         $this->logger = new NullLogger();
+    }
+
+    /**
+     * @param GuestCustomerStrategyHelper $strategyHelper
+     */
+    public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
+    {
+        $this->guestCustomerStrategyHelper = $strategyHelper;
     }
 
     /**
@@ -60,13 +72,7 @@ class ProxyEntityWriter implements
             if ($item instanceof Customer) {
                 //GuestCustomerStrategy checks both email and channel
                 if ($item->isGuest()) {
-                    $channel = $item->getChannel();
-                    $identifier = strtolower($item->getEmail());
-                    //set unique identifier: email and channel id
-                    if ($channel) {
-                        $identifier.=$channel->getId();
-                    }
-                    $identifier = md5($identifier);
+                    $identifier = $this->getGuestCustomerIdentifier($item);
                 } else {
                     $identifier = $item->getOriginId();
                 }
@@ -142,5 +148,27 @@ class ProxyEntityWriter implements
         $this->logger->info(
             sprintf('[origin_id=%s] Item skipped because of newer version found', (string)$identifier)
         );
+    }
+
+    /**
+     * @param Customer $item
+     *
+     * @return string
+     */
+    private function getGuestCustomerIdentifier(Customer $item)
+    {
+        $channel = $item->getChannel();
+        $identifier = strtolower($item->getEmail());
+        //set unique identifier: email and channel id
+        if ($channel) {
+            $identifier .= $channel->getId();
+            if ($this->guestCustomerStrategyHelper->isGuestCustomerEmailInSharedList($item)) {
+                $identifier .= sprintf('%s%s', $item->getFirstName(), $item->getLastName());
+            }
+        }
+
+        $identifier = md5($identifier);
+
+        return $identifier;
     }
 }

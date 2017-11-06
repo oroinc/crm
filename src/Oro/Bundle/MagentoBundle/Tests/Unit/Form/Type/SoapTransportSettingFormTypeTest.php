@@ -66,11 +66,11 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->willReturn($builder);
 
-        $builder->expects($this->exactly(2))
+        $builder->expects($this->exactly(4))
             ->method('create')
             ->willReturn($builder);
 
-        $builder->expects($this->once())
+        $builder->expects($this->exactly(3))
             ->method('addViewTransformer')
             ->willReturn($builder);
 

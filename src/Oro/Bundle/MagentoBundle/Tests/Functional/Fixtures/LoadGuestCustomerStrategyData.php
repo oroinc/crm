@@ -43,7 +43,7 @@ class LoadGuestCustomerStrategyData extends LoadMagentoChannel
         $magentoAddressUSLA = $this->createMagentoAddress($this->regions['US-LA'], $this->countries['US']);
         $account         = $this->createAccount();
 
-        $customer = $this->createCustomer(1, $account, $magentoAddressUSAZ);
+        $customer = $this->createCustomer(1, $account, $magentoAddressUSAZ, self::NONE_SHARED_EMAIL);
         $customer2 = $this->createCustomer(2, $account, $magentoAddressUSLA, self::TEST_SHARED_EMAIL);
 
         $this->setReference(self::CUSTOMER_ALIAS_REFERENCE_NAME, $customer);
@@ -145,5 +145,4 @@ class LoadGuestCustomerStrategyData extends LoadMagentoChannel
             self::TEST_SHARED_EMAIL
         ];
     }
-
 }

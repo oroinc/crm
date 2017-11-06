@@ -12,6 +12,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class CartStrategy extends AbstractImportStrategy
 {
@@ -24,6 +25,19 @@ class CartStrategy extends AbstractImportStrategy
      * @var array
      */
     protected $existingCartItems;
+
+    /**
+     * @var GuestCustomerStrategyHelper
+     */
+    protected $guestCustomerStrategyHelper;
+
+    /**
+     * @param GuestCustomerStrategyHelper $strategyHelper
+     */
+    public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
+    {
+        $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
 
     /**
      * @param Cart $entity
@@ -152,7 +166,11 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         if (!$existingEntity && !$customer->getOriginId()) {
-            $existingEntity = $this->findExistingCustomerByContext($entity);
+            $searchContext = $this->getEntityCustomerSearchContext($entity);
+            $existingEntity = $this->guestCustomerStrategyHelper->findExistingGuestCustomerByContext(
+                $entity,
+                $searchContext
+            );
         }
 
         return $existingEntity;

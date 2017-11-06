@@ -7,12 +7,19 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class GuestCustomerStrategyTest extends AbstractStrategyTest
 {
+    const DEFAULT_CHANNEL_ID = 1;
+
+    /** @var  GuestCustomerStrategyHelper */
+    private $guestCustomerStrategyHelper;
+
     /**
      * @return GuestCustomerStrategy
      */
@@ -33,6 +40,12 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
         $strategy->setChannelHelper($this->channelHelper);
 
+        $this->guestCustomerStrategyHelper = $this->createMock(GuestCustomerStrategyHelper::class);
+        $this->guestCustomerStrategyHelper->expects($this->any())
+            ->method('getUpdatedSearchContextForGuestCustomers')
+            ->willReturn([]);
+        $strategy->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
+
         $this->databaseHelper->expects($this->any())->method('getEntityReference')
             ->will($this->returnArgument(0));
 
@@ -44,6 +57,15 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
         $strategy->setEntityName('Oro\Bundle\MagentoBundle\Entity\Customer');
 
         return $strategy;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        unset($this->guestCustomerStrategyHelper);
     }
 
     public function testProcessEmptyEntity()
@@ -124,7 +146,9 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
     private function getCustomer()
     {
         $customer = new Customer();
-        $customer->setChannel(new Channel());
+        $channel = $this->createMock(Channel::class);
+
+        $customer->setChannel($channel);
 
         return $customer;
     }
