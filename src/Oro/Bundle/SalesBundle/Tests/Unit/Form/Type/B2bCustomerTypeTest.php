@@ -16,12 +16,14 @@ use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\FormBundle\Form\Extension\AdditionalAttrExtension;
+use Oro\Bundle\FormBundle\Tests\Unit\Stub\StripTagsExtensionStub;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeStub;
+use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
@@ -98,7 +100,10 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     $regionEntityType->getName() => $regionEntityType,
                 ],
                 [
-                    'form' => [new AdditionalAttrExtension()]
+                    'form' => [
+                        new AdditionalAttrExtension(),
+                        new StripTagsExtensionStub($this->createMock(HtmlTagHelper::class))
+                    ]
                 ]
             )
         ];
@@ -167,8 +172,14 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                 (new B2bCustomer())
                     ->setName('name')
                     ->setContact($this->getEntity(Contact::class, ['first_name' => 'first name']))
-                    ->setShippingAddress($this->getEntity(Address::class, ['id' => '1', 'label' => 'shipping address']))
-                    ->setBillingAddress($this->getEntity(Address::class, ['id' => '2', 'label' => 'billing address']))
+                    ->setShippingAddress($this->getEntity(
+                        Address::class,
+                        ['id' => '1', 'label' => 'shipping address_stripped']
+                    ))
+                    ->setBillingAddress($this->getEntity(
+                        Address::class,
+                        ['id' => '2', 'label' => 'billing address_stripped']
+                    ))
             ],
             'existing entity' => [
                 (new B2bCustomer())
@@ -176,8 +187,8 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     ->setContact($this->getEntity(Contact::class, ['first_name' => 'first name']))
                     ->addEmail($baseEmail)
                     ->addPhone($basePhone)
-                    ->setShippingAddress($this->getEntity(Address::class, ['id' => 1, 'label' => 'shipping address']))
-                    ->setBillingAddress($this->getEntity(Address::class, ['id' => 2, 'label' => 'billing address'])),
+                    ->setShippingAddress($this->getEntity(Address::class, ['id' => '1', 'label' => 'shipping address']))
+                    ->setBillingAddress($this->getEntity(Address::class, ['id' => '2', 'label' => 'billing address'])),
                 [
                     'name' => 'name new',
                     'contact' => 2,
@@ -195,8 +206,14 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
                     ->addPhone($basePhone)
                     ->addPhone($this->getEntity(B2bCustomerPhone::class, ['phone' => '87654321']))
                     ->removePhone($basePhone)
-                    ->setShippingAddress($this->getEntity(Address::class, ['id' => 1, 'label' => 'shipping new']))
-                    ->setBillingAddress($this->getEntity(Address::class, ['id' => 2, 'label' => 'billing new']))
+                    ->setShippingAddress($this->getEntity(
+                        Address::class,
+                        ['id' => '1', 'label' => 'shipping new_stripped']
+                    ))
+                    ->setBillingAddress($this->getEntity(
+                        Address::class,
+                        ['id' => '2', 'label' => 'billing new_stripped']
+                    ))
             ]
         ];
     }
