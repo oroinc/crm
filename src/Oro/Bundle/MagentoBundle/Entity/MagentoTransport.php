@@ -433,7 +433,7 @@ abstract class MagentoTransport extends Transport
      *
      * @return MagentoTransport
      */
-    public function setSharedGuestEmailList(array $sharedGuestEmailList = null)
+    public function setSharedGuestEmailList(array $sharedGuestEmailList)
     {
         $this->sharedGuestEmailList = $sharedGuestEmailList;
 

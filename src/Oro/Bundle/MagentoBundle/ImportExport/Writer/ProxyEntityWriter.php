@@ -151,19 +151,19 @@ class ProxyEntityWriter implements
     }
 
     /**
-     * @param Customer $item
+     * @param Customer $customer
      *
      * @return string
      */
-    private function getGuestCustomerIdentifier(Customer $item)
+    private function getGuestCustomerIdentifier(Customer $customer)
     {
-        $channel = $item->getChannel();
-        $identifier = strtolower($item->getEmail());
+        $channel = $customer->getChannel();
+        $identifier = strtolower($customer->getEmail());
         //set unique identifier: email and channel id
         if ($channel) {
             $identifier .= $channel->getId();
-            if ($this->guestCustomerStrategyHelper->isGuestCustomerEmailInSharedList($item)) {
-                $identifier .= sprintf('%s%s', $item->getFirstName(), $item->getLastName());
+            if ($this->guestCustomerStrategyHelper->isGuestCustomerEmailInSharedList($customer)) {
+                $identifier .= sprintf('%s%s', $customer->getFirstName(), $customer->getLastName());
             }
         }
 

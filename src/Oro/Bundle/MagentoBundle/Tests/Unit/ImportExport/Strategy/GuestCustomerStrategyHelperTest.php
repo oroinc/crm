@@ -127,20 +127,20 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider parentEntityProvider
      *
-     * @param IntegrationAwareInterface $parentEntity
-     * @param $identityValues
-     * @param $guestCustomerEmailList
-     * @param $expectedResult
+     * @param IntegrationAwareInterface $entity
+     * @param array $identityValues
+     * @param array $guestCustomerEmailList
+     * @param array $expectedResult
      */
-    public function testUpdateIdentityValuesByParentEntity(
-        IntegrationAwareInterface $parentEntity,
-        $identityValues,
-        $guestCustomerEmailList,
-        $expectedResult
+    public function testUpdateIdentityValuesByCustomerOrParentEntity(
+        IntegrationAwareInterface $entity,
+        array $identityValues,
+        array $guestCustomerEmailList,
+        array $expectedResult
     ) {
         if (!empty($identityValues)) {
             $transport = $this->getTransport($guestCustomerEmailList);
-            $channel = $parentEntity->getChannel();
+            $channel = $entity->getChannel();
             $channel->setTransport($transport);
 
             $this->databaseHelper->expects($this->once())
@@ -152,15 +152,18 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
                 ->method('findOneBy');
         }
 
-        $result = $this->strategyHelper->updateIdentityValuesByParentEntity($parentEntity, $identityValues);
+        $result = $this->strategyHelper->updateIdentityValuesByCustomerOrParentEntity($entity, $identityValues);
         $this->assertEquals($result, $expectedResult);
     }
 
+    /**
+     * @return array
+     */
     public function parentEntityProvider()
     {
         return [
             'update context by order with firstname and email in context' => [
-                'parentEntity' => $this->getParentEntity(Order::class, ['firstName' => 'Joe']),
+                'parentEntity' => $this->getIntegrationAwareEntity(Order::class, ['firstName' => 'Joe']),
                 'context'                => ['email' => 'test@test.com'],
                 'guestCustomerEmailList' => ['test@test.com'],
                 'expectedIdentityValues' => [
@@ -169,7 +172,7 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'update context by cart with firstname and lastname and email in context' => [
-                'parentEntity' => $this->getParentEntity(
+                'parentEntity' => $this->getIntegrationAwareEntity(
                     Cart::class,
                     ['firstName' => 'Joe', 'lastName' => 'Doe']
                 ),
@@ -182,13 +185,13 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             'update context by order without email' => [
-                'parentEntity' => $this->getParentEntity(Order::class, ['firstName' => 'Joe']),
+                'parentEntity' => $this->getIntegrationAwareEntity(Order::class, ['firstName' => 'Joe']),
                 'context'                => [],
                 'guestCustomerEmailList' => ['test@test.com'],
                 'expectedIdentityValues' => []
             ],
             'update context by cart with email not in list' => [
-                'parentEntity' => $this->getParentEntity(
+                'parentEntity' => $this->getIntegrationAwareEntity(
                     Cart::class,
                     ['firstName' => 'Joe', 'lastName' => 'Doe']
                 ),
@@ -197,11 +200,41 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
                 'expectedIdentityValues' => [
                     'email'     => 'test@test.com'
                 ]
+            ],
+            'update context by customer not in list' => [
+                'parentEntity' => $this->getIntegrationAwareEntity(
+                    Customer::class,
+                    ['firstName' => 'Joe', 'lastName' => 'Doe']
+                ),
+                'context'                => ['email' => 'test@test.com'],
+                'guestCustomerEmailList' => ['test2@test.com'],
+                'expectedIdentityValues' => [
+                    'email'     => 'test@test.com'
+                ]
+            ],
+            'update context by customer in list' => [
+                'parentEntity' => $this->getIntegrationAwareEntity(
+                    Customer::class,
+                    ['firstName' => 'Joe', 'lastName' => 'Doe']
+                ),
+                'context'                => ['email' => 'test@test.com'],
+                'guestCustomerEmailList' => ['test@test.com'],
+                'expectedIdentityValues' => [
+                    'email'     => 'test@test.com',
+                    'firstName' => 'Joe',
+                    'lastName' => 'Doe'
+                ]
             ]
         ];
     }
 
-    private function getParentEntity($className, $attributes)
+    /**
+     * @param string $className
+     * @param array $attributes
+     *
+     * @return object
+     */
+    private function getIntegrationAwareEntity($className, array $attributes = [])
     {
         $channel = $this->getEntity(Channel::class, ['id' => 1]);
         $attributes = array_merge(['channel' => $channel], $attributes);
@@ -215,12 +248,13 @@ class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
      */
     private function getCustomer()
     {
+        /** @var Channel $channel */
+        $channel = $this->getEntity(Channel::class, ['id' => 1]);
         $customer = new Customer();
         $customer->setFirstName('John')
             ->setLastName('Doe')
-            ->setEmail('test@mail.com');
-        $channel = $this->getEntity(Channel::class, ['id' => 1]);
-        $customer->setChannel($channel);
+            ->setEmail('test@mail.com')
+            ->setChannel($channel);
 
         return $customer;
     }

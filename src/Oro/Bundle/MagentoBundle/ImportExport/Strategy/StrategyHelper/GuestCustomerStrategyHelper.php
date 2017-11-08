@@ -56,30 +56,32 @@ class GuestCustomerStrategyHelper
     }
 
     /**
-     * Update identity values for guest customer for entities containing customer like Order and Cart
+     * Update identification values for guest customer
+     * for entities containing customer like Order and Cart
+     * or for Customer entity
      *
      * @param IntegrationAwareInterface $entity
-     * @param array $identityValues
-     * @param null|string   $email
+     * @param array                     $identificationValues
+     * @param null|string               $email
      *
      * @return array
      */
-    public function updateIdentityValuesByParentEntity(
+    public function updateIdentityValuesByCustomerOrParentEntity(
         IntegrationAwareInterface $entity,
-        array $identityValues,
+        array $identificationValues,
         $email = null
     ) {
-        $email = $this->getEmail($identityValues, $email);
+        $email = $this->getEmail($identificationValues, $email);
         if (null === $email) {
-            return $identityValues;
+            return $identificationValues;
         }
 
         $channel = $entity->getChannel();
         if ($channel && $this->isEmailInSharedList($channel->getId(), $email)) {
-            $identityValues = $this->updateSearchContext($entity, $identityValues);
+            $identificationValues = $this->updateSearchContext($entity, $identificationValues);
         }
 
-        return $identityValues;
+        return $identificationValues;
     }
 
     /**
@@ -97,7 +99,7 @@ class GuestCustomerStrategyHelper
         array $searchContext,
         $email = null
     ) {
-        $searchContext = $this->updateIdentityValuesByParentEntity($entity, $searchContext, $email);
+        $searchContext = $this->updateIdentityValuesByCustomerOrParentEntity($entity, $searchContext, $email);
 
         /** @var Customer $existingEntity */
         $existingEntity = $this->databaseHelper->findOneBy(
@@ -155,18 +157,18 @@ class GuestCustomerStrategyHelper
 
     /**
      * @param null|string   $email
-     * @param array         $data
+     * @param array         $identificationData
      *
      * @return null|string
      */
-    private function getEmail(array $data, $email)
+    private function getEmail(array $identificationData, $email)
     {
         if ($email !== null) {
             return $email;
         }
 
-        if (isset($data['email'])) {
-            return $data['email'];
+        if (isset($identificationData['email'])) {
+            return $identificationData['email'];
         }
 
         return null;

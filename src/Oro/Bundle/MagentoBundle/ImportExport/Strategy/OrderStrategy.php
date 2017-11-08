@@ -247,8 +247,8 @@ class OrderStrategy extends AbstractImportStrategy
             && empty($identityValues['originId'])
             && $this->existingEntity
         ) {
-            $identityValues['email'] = $this->existingEntity->getCustomerEmail();
-            $identityValues = $this->guestCustomerStrategyHelper->updateIdentityValuesByParentEntity(
+            $identityValues += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $identityValues = $this->guestCustomerStrategyHelper->updateIdentityValuesByCustomerOrParentEntity(
                 $this->existingEntity,
                 $identityValues
             );
@@ -269,8 +269,8 @@ class OrderStrategy extends AbstractImportStrategy
     protected function combineIdentityValues($entity, $entityClass, array $searchContext)
     {
         if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
-            $searchContext['email'] = $this->existingEntity->getCustomerEmail();
-            $searchContext = $this->guestCustomerStrategyHelper->updateIdentityValuesByParentEntity(
+            $searchContext += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $searchContext = $this->guestCustomerStrategyHelper->updateIdentityValuesByCustomerOrParentEntity(
                 $this->existingEntity,
                 $searchContext
             );
