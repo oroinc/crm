@@ -117,7 +117,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                     } catch (\Exception $e) {
                         $isSuccess = false;
 
-                        $this->logger->critical($e->getMessage());
+                        $this->logger->critical($e->getMessage(), ['exception' => $e]);
                         break 2;
                     }
                 }
