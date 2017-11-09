@@ -5,6 +5,7 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
@@ -53,12 +54,13 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(2))
+        $builder->expects($this->exactly(3))
             ->method('addEventSubscriber')
             ->with($this->logicalOr(
                 $this->isInstanceOf(SettingsFormSubscriber::class),
-                $this->isInstanceOf(ConnectorsFormSubscriber::class)
-            ));
+                $this->isInstanceOf(ConnectorsFormSubscriber::class),
+                $this->isInstanceOf(SharedEmailListSubscriber::class)
+            ))->willReturnSelf();
 
         $builder->expects($this->any())
             ->method('add')
@@ -68,7 +70,7 @@ class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($builder);
 
-        $builder->expects($this->exactly(2))
+        $builder->expects($this->once())
             ->method('addViewTransformer')
             ->willReturn($builder);
 

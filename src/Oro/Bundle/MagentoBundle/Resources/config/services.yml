@@ -265,6 +265,11 @@ services:
         tags:
             - { name: form.type, alias: oro_magento_rest_transport_setting_form_type }
 
+    oro_magento.form.type.shared_guest_email_list:
+        class: Oro\Bundle\MagentoBundle\Form\Type\SharedGuestEmailListType
+        tags:
+           - { name: form.type, alias: oro_magento_shared_guest_email_list_type }
+
     oro_magento.form.type.transport_check:
         class: %oro_magento.form.type.transport_check.class%
         tags:

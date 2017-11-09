@@ -6,6 +6,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -55,12 +56,13 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(2))
+        $builder->expects($this->exactly(3))
             ->method('addEventSubscriber')
             ->with($this->logicalOr(
                 $this->isInstanceOf(SettingsFormSubscriber::class),
-                $this->isInstanceOf(ConnectorsFormSubscriber::class)
-            ));
+                $this->isInstanceOf(ConnectorsFormSubscriber::class),
+                $this->isInstanceOf(SharedEmailListSubscriber::class)
+            ))->willReturnSelf();
 
         $builder->expects($this->any())
             ->method('add')
@@ -70,7 +72,7 @@ class SoapTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($builder);
 
-        $builder->expects($this->exactly(3))
+        $builder->expects($this->exactly(1))
             ->method('addViewTransformer')
             ->willReturn($builder);
 
