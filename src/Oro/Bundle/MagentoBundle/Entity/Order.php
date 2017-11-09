@@ -61,6 +61,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Order extends ExtendOrder implements
     ChannelAwareInterface,
@@ -294,12 +296,27 @@ class Order extends ExtendOrder implements
     protected $syncedAt;
 
     /**
+     * @var OrderNote[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OrderNote", mappedBy="order", cascade={"all"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $orderNotes;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
     {
         parent::__construct();
         $this->creditMemos = new ArrayCollection();
+        $this->orderNotes  = new ArrayCollection();
     }
 
     /**
@@ -811,10 +828,73 @@ class Order extends ExtendOrder implements
     }
 
     /**
+     * @return ArrayCollection|OrderNote[]
+     */
+    public function getOrderNotes()
+    {
+        return $this->orderNotes;
+    }
+
+    /**
+     * @param OrderNote $orderNote
+     *
+     * @return Order
+     */
+    public function addOrderNote(OrderNote $orderNote)
+    {
+        if (!$this->hasOrderNote($orderNote)) {
+            $this->orderNotes->add($orderNote);
+            $orderNote->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param OrderNote $orderNote
+     *
+     * @return Order
+     */
+    public function removeOrderNote(OrderNote $orderNote)
+    {
+        if ($this->hasOrderNote($orderNote)) {
+            $this->orderNotes->removeElement($orderNote);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param OrderNote $orderNote
+     *
+     * @return bool
+     */
+    public function hasOrderNote(OrderNote $orderNote)
+    {
+        return $this->orderNotes->contains($orderNote);
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return (string)$this->getIncrementId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __clone()
+    {
+        parent::__clone();
+
+        if ($this->orderNotes) {
+            $this->orderNotes = clone $this->orderNotes;
+        }
+
+        if ($this->creditMemos) {
+            $this->creditMemos = clone $this->creditMemos;
+        }
     }
 }

@@ -102,6 +102,7 @@ class OroMagentoBundleInstaller implements
         $this->createOrocrmMagentoStoreTable($schema);
         $this->createOrocrmMagentoCartStatusTable($schema);
         $this->createOrocrmMagentoOrderItemsTable($schema);
+        $this->createOrocrmMagentoOrderNotesTable($schema);
         $this->createOrocrmMagentoNewslSubscrTable($schema);
         $this->createOrocrmMagentoCreditMemoTable($schema);
         $this->createOrocrmMagentoCreditMemoItemTable($schema);
@@ -129,6 +130,7 @@ class OroMagentoBundleInstaller implements
         $this->addOrocrmMagentoCartEmailsForeignKeys($schema);
         $this->addOrocrmMagentoStoreForeignKeys($schema);
         $this->addOrocrmMagentoOrderItemsForeignKeys($schema);
+        $this->addOrocrmMagentoOrderNotesForeignKeys($schema);
         $this->addOrocrmMagentoNewslSubscrForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
@@ -799,6 +801,47 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['order_id'], 'IDX_3135EFF68D9F6D38', []);
         $table->addIndex(['owner_id'], 'IDX_3135EFF67E3C61F9', []);
+        $table->setPrimaryKey(['id']);
+    }
+
+    /**
+     * Add oro_magento_order_notes table.
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmMagentoOrderNotesTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_magento_order_notes');
+        $table->addColumn('id', 'integer', ['precision' => 0, 'autoincrement' => true]);
+        $table->addColumn('order_id', 'integer', ['notnull' => false]);
+        $table->addColumn(
+            'origin_id',
+            'integer',
+            [
+                'notnull' => false,
+                'precision' => 0,
+                'unsigned' => true
+            ]
+        );
+        $table->addColumn('message', 'text');
+        $table->addColumn('created_at', 'datetime', ['precision' => 0]);
+        $table->addColumn('updated_at', 'datetime', ['precision' => 0]);
+        $table->addColumn(
+            'channel_id',
+            'integer',
+            [
+                'notnull' => false,
+                'precision' => 0,
+                'unsigned' => false
+            ]
+        );
+
+        $table->addIndex(['order_id'], 'IDX_D130A0378D9F6D38', []);
+        $table->addIndex(['origin_id'], 'IDX_D130A03756A273CC', []);
+        $table->addIndex(['channel_id'], 'IDX_D130A03772F5A1AA', []);
+
+        $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_order_note_origin_id_channel_id');
+
         $table->setPrimaryKey(['id']);
     }
 
@@ -1576,6 +1619,28 @@ class OroMagentoBundleInstaller implements
             ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
+        );
+    }
+
+    /**
+     * Add oro_magento_order_notes foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmMagentoOrderNotesForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_magento_order_notes');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_magento_order'),
+            ['order_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 

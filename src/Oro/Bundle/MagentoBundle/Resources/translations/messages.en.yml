@@ -690,6 +690,9 @@ oro:
             notes:
                 label:              Additional comments
                 description:        Additional information that a customer can leave for a Magento order.
+            order_notes:
+                label:              Order Notes
+                description:        Notes added by a store admin to an order on the Magento side.
             feedback:
                 label:              Feedback
                 description:        Feedback provided for a specific Magento order.
@@ -1135,6 +1138,30 @@ oro:
                 label:                            Name
                 description:                      The name specified for a Magento credit memo item.
             owner.label:                          Owner
+
+        ordernote:
+            entity_label:                         Magento Order Note
+            entity_plural_label:                  Magento Order Notes
+            entity_description:                   A note added by a store admin to an order on the Magento side.
+            id.label:                             Id
+            order:
+                label:                            Order
+                description:                      The order to which a specific Magento order note belongs.
+            message:
+                label:                            Message
+                description:                      Order note message
+            origin_id:
+                label:                            Origin Id
+                description:                      The Magento note ID specified on the Magento side.
+            updated_at:
+                label:                            Updated At
+                description:                      The date and time a Magento order note was updated.
+            created_at:
+                label:                            Created At
+                description:                      The date and time a Magento order note was created.
+            channel:
+                label:              Integration
+                description:        The integration via which information about a Magento order item is received.
 
         recent_purchases:
             label:                                Recent Purchases
