@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AccountBundle\Entity\Account;
@@ -70,6 +72,8 @@ use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  */
 class Customer extends ExtendCustomer implements
+    FirstNameInterface,
+    LastNameInterface,
     ChannelAwareInterface,
     RFMAwareInterface,
     OriginAwareInterface,

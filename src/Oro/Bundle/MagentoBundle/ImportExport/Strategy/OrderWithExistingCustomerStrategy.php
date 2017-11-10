@@ -93,7 +93,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             $existingEntity = parent::findExistingEntity($customer);
         }
         if (!$existingEntity && !$customer->getOriginId()) {
-            $existingEntity = $this->findExistingCustomerByContext($entity);
+            $existingEntity = $this->findGuestCustomer($entity);
         }
 
         return $existingEntity;
@@ -109,9 +109,24 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     protected function findExistingEntity($entity, array $searchContext = [])
     {
         if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
-            return $this->findExistingCustomerByContext($this->existingEntity);
+            return $this->findGuestCustomer($this->existingEntity, $searchContext);
         }
 
         return parent::findExistingEntity($entity, $searchContext);
+    }
+
+    /**
+     * @param Order $entity
+     * @param array $searchContext
+     *
+     * @return null|Customer
+     */
+    protected function findGuestCustomer(Order $entity, array $searchContext = [])
+    {
+        $searchContext += $this->getEntityCustomerSearchContext($entity);
+        return $this->guestCustomerStrategyHelper->findExistingGuestCustomerByContext(
+            $entity,
+            $searchContext
+        );
     }
 }

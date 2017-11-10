@@ -3,6 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class GuestCustomerStrategy extends AbstractImportStrategy
 {
@@ -10,6 +11,11 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      * ID of group for not logged customers
      */
     const NOT_LOGGED_IN_ID = 0;
+
+    /**
+     * @var GuestCustomerStrategyHelper
+     */
+    private $guestCustomerStrategyHelper;
 
     /**
      * {@inheritdoc}
@@ -24,7 +30,12 @@ class GuestCustomerStrategy extends AbstractImportStrategy
 
         $this->cachedEntities = [];
         $entity = $this->beforeProcessEntity($entity);
-        $entity = $this->processEntity($entity, true, true, $this->context->getValue('itemData'));
+        $entity = $this->processEntity(
+            $entity,
+            true,
+            true,
+            $this->context->getValue('itemData')
+        );
         $entity = $this->afterProcessEntity($entity);
         if ($entity) {
             $entity = $this->validateAndUpdateContext($entity);
@@ -34,9 +45,17 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     }
 
     /**
+     * @param GuestCustomerStrategyHelper $strategyHelper
+     */
+    public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
+    {
+        $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
+
+    /**
      * @param Customer $entity
      *
-     * @return Customer
+     * @return Customer|null
      */
     protected function checkExistingCustomer(Customer $entity)
     {
@@ -45,8 +64,9 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         }
 
         $searchContext = $this->getSearchContext($entity);
+        /** @var Customer $existingCustomer */
         $existingCustomer = $this->databaseHelper->findOneBy(
-            'Oro\Bundle\MagentoBundle\Entity\Customer',
+            Customer::class,
             $searchContext
         );
 
@@ -63,6 +83,11 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     {
         $searchContext = parent::getCustomerSearchContext($entity);
         $searchContext['email'] = $entity->getEmail();
+
+        $searchContext = $this->guestCustomerStrategyHelper->getUpdatedSearchContextForGuestCustomers(
+            $entity,
+            $searchContext
+        );
 
         return $searchContext;
     }
@@ -116,27 +141,19 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     }
 
     /**
-     * Specify Customer Email as identity field for Guest Customer
-     *
-     * Guest Customer created from Order data and not exist in Magento as entity so don't have originId
-     * Specified additional identity
-     *
-     * @param string $entityName
-     * @param array $identityValues
-     * @return null|object
+     * {@inheritdoc}
      */
-    protected function findEntityByIdentityValues($entityName, array $identityValues)
+    protected function findExistingEntityByIdentityFields($entity, array $searchContext = [])
     {
-        if (is_a($entityName, 'Oro\Bundle\MagentoBundle\Entity\Customer', true)
-            && empty($identityValues['originId'])
-        ) {
-            $data = $this->context->getValue('itemData');
-            if (isset($data['email'])) {
-                $identityValues['email'] = $data['email'];
-            }
+        if ($entity instanceof Customer && !$entity->getOriginId()) {
+            $searchContext['email'] = $entity->getEmail();
+            $searchContext = $this->guestCustomerStrategyHelper->getUpdatedSearchContextForGuestCustomers(
+                $entity,
+                $searchContext
+            );
         }
 
-        return parent::findEntityByIdentityValues($entityName, $identityValues);
+        return parent::findExistingEntityByIdentityFields($entity, $searchContext);
     }
 
     /**
@@ -153,6 +170,10 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     {
         if ($entity instanceof Customer && !$entity->getOriginId()) {
             $searchContext['email'] = $entity->getEmail();
+            $searchContext = $this->guestCustomerStrategyHelper->getUpdatedSearchContextForGuestCustomers(
+                $entity,
+                $searchContext
+            );
         }
 
         return parent::combineIdentityValues($entity, $entityClass, $searchContext);

@@ -7,6 +7,7 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
 
@@ -18,6 +19,17 @@ class OrderStrategy extends AbstractImportStrategy
      * @var Order
      */
     protected $existingEntity;
+
+    /** @var  GuestCustomerStrategyHelper */
+    protected $guestCustomerStrategyHelper;
+
+    /**
+     * @param GuestCustomerStrategyHelper $strategyHelper
+     */
+    public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
+    {
+        $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
 
     /**
      * @param Order $entity
@@ -231,11 +243,15 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
-        if (is_a($entityName, 'Oro\Bundle\MagentoBundle\Entity\Customer', true)
+        if (is_a($entityName, Customer::class, true)
             && empty($identityValues['originId'])
             && $this->existingEntity
         ) {
-            $identityValues['email'] = $this->existingEntity->getCustomerEmail();
+            $identityValues += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $identityValues = $this->guestCustomerStrategyHelper->updateIdentityValuesByCustomerOrParentEntity(
+                $this->existingEntity,
+                $identityValues
+            );
         }
 
         return parent::findEntityByIdentityValues($entityName, $identityValues);
@@ -253,7 +269,11 @@ class OrderStrategy extends AbstractImportStrategy
     protected function combineIdentityValues($entity, $entityClass, array $searchContext)
     {
         if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
-            $searchContext['email'] = $this->existingEntity->getCustomerEmail();
+            $searchContext += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $searchContext = $this->guestCustomerStrategyHelper->updateIdentityValuesByCustomerOrParentEntity(
+                $this->existingEntity,
+                $searchContext
+            );
         }
 
         return parent::combineIdentityValues($entity, $entityClass, $searchContext);
