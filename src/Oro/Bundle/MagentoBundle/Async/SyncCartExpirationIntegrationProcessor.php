@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Oro\Bundle\IntegrationBundle\Authentication\Token\IntegrationTokenAwareTrait;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
@@ -110,11 +111,17 @@ class SyncCartExpirationIntegrationProcessor implements MessageProcessorInterfac
             return self::REJECT;
         }
 
-        $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($integration) {
-            $this->setTemporaryIntegrationToken($integration);
-            $this->cartExpirationProcessor->process($integration);
-            return true;
-        });
+        try {
+            $result = $this->jobRunner->runUnique($ownerId, $jobName, function () use ($integration) {
+                $this->setTemporaryIntegrationToken($integration);
+                $this->cartExpirationProcessor->process($integration);
+                return true;
+            });
+        } catch (ExtensionRequiredException $e) {
+            $this->logger->warning($e->getMessage(), ['exception' => $e]);
+
+            return self::REJECT;
+        }
 
         return $result ? self::ACK : self::REJECT;
     }
