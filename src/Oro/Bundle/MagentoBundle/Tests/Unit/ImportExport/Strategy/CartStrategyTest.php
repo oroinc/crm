@@ -19,6 +19,7 @@ use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class CartStrategyTest extends AbstractStrategyTest
 {
@@ -42,6 +43,11 @@ class CartStrategyTest extends AbstractStrategyTest
      */
     protected $execution;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|GuestCustomerStrategyHelper
+     */
+    protected $guestCustomerStrategyHelper;
+
     protected function setUp()
     {
         parent::setUp();
@@ -56,6 +62,8 @@ class CartStrategyTest extends AbstractStrategyTest
         $this->channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->guestCustomerStrategyHelper = $this->createMock(GuestCustomerStrategyHelper::class);
 
         $this->execution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ExecutionContext')
             ->getMock();
@@ -82,6 +90,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setLogger($this->logger);
         $strategy->setChannelHelper($this->channelHelper);
         $strategy->setAddressHelper($this->addressHelper);
+        $strategy->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
 
         return $strategy;
     }
@@ -134,6 +143,10 @@ class CartStrategyTest extends AbstractStrategyTest
                     ]
                 )
             );
+
+        $this->guestCustomerStrategyHelper->expects($this->any())
+            ->method('findExistingGuestCustomerByContext')
+            ->willReturn($expected);
 
         $customer = null;
         if (is_object($databaseEntity)) {

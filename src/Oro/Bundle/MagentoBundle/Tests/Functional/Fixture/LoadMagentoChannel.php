@@ -41,6 +41,17 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     const CHANNEL_NAME = 'Magento channel';
     const CHANNEL_TYPE = 'magento';
 
+    const CUSTOMER_ALIAS_REFERENCE_NAME         = 'customer';
+    const INTEGRATION_ALIAS_REFERENCE_NAME      = 'integration';
+    const STORE_ALIAS_REFERENCE_NAME            = 'store';
+    const ORGANIZATION_ALIAS_REFERENCE_NAME     = 'organization';
+    const USER_ALIAS_REFERENCE_NAME             = 'user';
+    const CART_ALIAS_REFERENCE_NAME             = 'cart';
+    const ORDER_ALIAS_REFERENCE_NAME            = 'order';
+    const CREDIT_MEMO_ALIAS_REFERENCE_NAME      = 'creditMemo';
+    const GUEST_CART_ALIAS_REFERENCE_NAME       = 'guestCart';
+    const GUEST_ORDER_ALIAS_REFERENCE_NAME      = 'guestOrder';
+
     /** @var ObjectManager */
     protected $em;
 
@@ -122,14 +133,14 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $creditMemo = $this->createCreditMemo($order);
 
-        $this->setReference('customer', $customer);
-        $this->setReference('integration', $this->integration);
-        $this->setReference('store', $this->store);
-        $this->setReference('organization', $this->organization);
-        $this->setReference('user', $this->getUser());
-        $this->setReference('cart', $cart);
-        $this->setReference('order', $order);
-        $this->setReference('creditMemo', $creditMemo);
+        $this->setReference(self::CUSTOMER_ALIAS_REFERENCE_NAME, $customer);
+        $this->setReference(self::INTEGRATION_ALIAS_REFERENCE_NAME, $this->integration);
+        $this->setReference(self::STORE_ALIAS_REFERENCE_NAME, $this->store);
+        $this->setReference(self::ORGANIZATION_ALIAS_REFERENCE_NAME, $this->organization);
+        $this->setReference(self::USER_ALIAS_REFERENCE_NAME, $this->getUser());
+        $this->setReference(self::CART_ALIAS_REFERENCE_NAME, $cart);
+        $this->setReference(self::ORDER_ALIAS_REFERENCE_NAME, $order);
+        $this->setReference(self::CREDIT_MEMO_ALIAS_REFERENCE_NAME, $creditMemo);
 
         $baseOrderItem = $this->createBaseOrderItem($order);
         $order->setItems([$baseOrderItem]);
@@ -146,8 +157,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $this->updateCartItem($cartItem, $guestCart);
         $guestOrder = $this->createGuestOrder($guestCart);
 
-        $this->setReference('guestCart', $guestCart);
-        $this->setReference('guestOrder', $guestOrder);
+        $this->setReference(self::GUEST_CART_ALIAS_REFERENCE_NAME, $guestCart);
+        $this->setReference(self::GUEST_ORDER_ALIAS_REFERENCE_NAME, $guestOrder);
 
         $baseOrderItem = $this->createBaseOrderItem($guestOrder);
         $order->setItems([$baseOrderItem]);

@@ -265,6 +265,11 @@ services:
         tags:
             - { name: form.type, alias: oro_magento_rest_transport_setting_form_type }
 
+    oro_magento.form.type.shared_guest_email_list:
+        class: Oro\Bundle\MagentoBundle\Form\Type\SharedGuestEmailListType
+        tags:
+           - { name: form.type, alias: oro_magento_shared_guest_email_list_type }
+
     oro_magento.form.type.transport_check:
         class: %oro_magento.form.type.transport_check.class%
         tags:
@@ -675,6 +680,12 @@ services:
         arguments:
             - "@oro_magento.importexport.doctrine_helper"
 
+    oro_magento.importexport.guest_customer_strategy_helper:
+        public: false
+        class: Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper
+        arguments:
+            - '@oro_importexport.field.database_helper'
+
     oro_magento.importexport.doctrine_helper:
         class: %oro_magento.importexport.doctrine_helper.class%
         arguments:
@@ -795,6 +806,11 @@ services:
             - '@oro_integration.manager.types_registry'
         tags:
             - { name: validator.constraint_validator, alias: oro_magento.validator.unique_customer_email }
+
+    oro_magento.validator.email_address_list:
+        class: Oro\Bundle\MagentoBundle\Validator\EmailAddressListValidator
+        tags:
+            - { name: validator.constraint_validator, alias: oro_magento.validator.email_address_list }
 
     oro_magento.validator.start_sync_date:
         class: %oro_magento.validator.start_sync_date.class%

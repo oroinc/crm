@@ -12,7 +12,11 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use Oro\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class CartStrategy extends AbstractImportStrategy
 {
     /**
@@ -24,6 +28,19 @@ class CartStrategy extends AbstractImportStrategy
      * @var array
      */
     protected $existingCartItems;
+
+    /**
+     * @var GuestCustomerStrategyHelper
+     */
+    protected $guestCustomerStrategyHelper;
+
+    /**
+     * @param GuestCustomerStrategyHelper $strategyHelper
+     */
+    public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
+    {
+        $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
 
     /**
      * @param Cart $entity
@@ -152,7 +169,11 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         if (!$existingEntity && !$customer->getOriginId()) {
-            $existingEntity = $this->findExistingCustomerByContext($entity);
+            $searchContext = $this->getEntityCustomerSearchContext($entity);
+            $existingEntity = $this->guestCustomerStrategyHelper->findExistingGuestCustomerByContext(
+                $customer,
+                $searchContext
+            );
         }
 
         return $existingEntity;
@@ -297,7 +318,7 @@ class CartStrategy extends AbstractImportStrategy
 
     /**
      * @param Cart $entity
-     * @return null
+     * @return boolean
      */
     protected function hasContactInfo(Cart $entity)
     {
@@ -332,12 +353,38 @@ class CartStrategy extends AbstractImportStrategy
              * As guest customer entity not exist in Magento as separate entity and saved in order
              * find guest by customer email
              */
-            $existingEntity = $this->findExistingCustomerByContext($this->existingEntity);
+            $searchContext += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $existingEntity = $this->guestCustomerStrategyHelper->findExistingGuestCustomerByContext(
+                $entity,
+                $searchContext
+            );
         } else {
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
         }
 
         return $existingEntity;
+    }
+
+    /**
+     * Add special search context for entities not existing in Magento
+     * Add customer Email to search context for Order related entity Guest Customer
+     *
+     * @param object $entity
+     * @param string $entityClass
+     * @param array $searchContext
+     * @return array|null
+     */
+    protected function combineIdentityValues($entity, $entityClass, array $searchContext)
+    {
+        if ($entity instanceof Customer && !$entity->getOriginId() && $this->existingEntity) {
+            $searchContext += $this->getEntityCustomerSearchContext($this->existingEntity);
+            $searchContext = $this->guestCustomerStrategyHelper->updateIdentityValuesByCustomerOrParentEntity(
+                $entity,
+                $searchContext
+            );
+        }
+
+        return parent::combineIdentityValues($entity, $entityClass, $searchContext);
     }
 
     /**

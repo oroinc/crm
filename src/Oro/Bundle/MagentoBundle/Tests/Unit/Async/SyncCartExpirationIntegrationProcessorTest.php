@@ -10,6 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository as IntegrationRepository;
 use Oro\Bundle\MagentoBundle\Async\SyncCartExpirationIntegrationProcessor;
 use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Provider\CartExpirationProcessor;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
@@ -20,6 +21,9 @@ use Oro\Component\MessageQueue\Transport\Null\NullSession;
 use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Component\Testing\ClassExtensionTrait;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_TestCase
 {
     use ClassExtensionTrait;
@@ -189,6 +193,49 @@ class SyncCartExpirationIntegrationProcessorTest extends \PHPUnit_Framework_Test
             $this->createTokenStorageMock(),
             $logger
         );
+
+        $status = $processor->process($message, new NullSession());
+
+        $this->assertEquals(MessageProcessorInterface::REJECT, $status);
+    }
+
+    public function testShouldRejectIfBridgeExtensionNotEnabled()
+    {
+        $integration = new Integration();
+        $integration->setEnabled(true);
+        $integration->setConnectors(['cart']);
+        $integration->setOrganization(new Organization());
+
+        $repositoryMock = $this->createIntegrationRepositoryStub($integration);
+        $registryStub = $this->createRegistryStub($repositoryMock);
+
+        $syncProcessorMock = $this->createSyncProcessorMock();
+        $syncProcessorMock
+            ->expects($this->once())
+            ->method('process')
+            ->with(self::identicalTo($integration))
+            ->willThrowException(new ExtensionRequiredException);
+
+        $logger = $this->createLoggerMock();
+        $logger
+            ->expects($this->once())
+            ->method('warning')
+            ->with(
+                (new ExtensionRequiredException)->getMessage(),
+                ['exception' => new ExtensionRequiredException]
+            )
+        ;
+
+        $processor = new SyncCartExpirationIntegrationProcessor(
+            $registryStub,
+            $syncProcessorMock,
+            new JobRunner(),
+            $this->createTokenStorageMock(),
+            $logger
+        );
+
+        $message = new NullMessage();
+        $message->setBody(JSON::encode(['integrationId' => 'theIntegrationId']));
 
         $status = $processor->process($message, new NullSession());
 
