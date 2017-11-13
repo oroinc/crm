@@ -565,6 +565,9 @@ oro:
                 tooltip:  When this option is disabled the order comments can be viewed only on Magento Order view page. When enabled, the order comments will also be visible on the Magento Customer view and Account view page.
                 value.true.label:       'Yes'
                 value.false.label:      'No'
+            shared_guest_email_list:
+                label:   Split By Full Name
+                tooltip: Separate customer accounts will be created for Magento customers with the specified email(s) during import. To enter multiple emails use semicolons or commas.
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
                 outdated_bridge: OroBridge v.%extension_version% is used—outdated version

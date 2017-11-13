@@ -171,6 +171,11 @@ class OroMagentoBundleInstaller implements
                 'default' => true
             ]
         );
+        $table->addColumn(
+            'shared_guest_email_list',
+            'simple_array',
+            ['notnull' => false, 'comment' => '(DC2Type:simple_array)']
+        );
     }
 
     /**

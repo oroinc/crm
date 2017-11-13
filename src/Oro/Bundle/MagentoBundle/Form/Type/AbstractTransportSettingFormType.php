@@ -13,12 +13,14 @@ use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractTransportSettingFormType extends AbstractType
 {
     /** @var MagentoTransportInterface */
     const NAME = 'oro_magento_transport_setting_form_type';
+    const SHARED_GUEST_EMAIL_FIELD_NAME = 'sharedGuestEmailList';
 
     /** @var MagentoTransportInterface */
     protected $transport;
@@ -49,7 +51,10 @@ abstract class AbstractTransportSettingFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->subscriber);
+        $builder
+            ->addEventSubscriber($this->subscriber)
+            ->addEventSubscriber(new SharedEmailListSubscriber())
+        ;
 
         $builder->add(
             'apiUrl',
@@ -125,6 +130,13 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         $builder->add(
             $builder->create('websites', 'hidden')
                 ->addViewTransformer(new ArrayToJsonTransformer())
+        );
+
+        $builder->add(
+            $builder->create(
+                self::SHARED_GUEST_EMAIL_FIELD_NAME,
+                SharedGuestEmailListType::NAME
+            )
         );
 
         $builder->add(

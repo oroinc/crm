@@ -120,6 +120,13 @@ abstract class MagentoTransport extends Transport
     protected $newsletterSubscriberSyncedToId;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="shared_guest_email_list", type="simple_array", nullable=true)
+     */
+    protected $sharedGuestEmailList;
+
+    /**
      * @var ParameterBag
      */
     protected $settings;
@@ -436,6 +443,26 @@ abstract class MagentoTransport extends Transport
     public function setNewsletterSubscriberSyncedToId($newsletterSubscriberSyncedToId)
     {
         $this->newsletterSubscriberSyncedToId = $newsletterSubscriberSyncedToId;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSharedGuestEmailList()
+    {
+        return $this->sharedGuestEmailList;
+    }
+
+    /**
+     * @param array $sharedGuestEmailList
+     *
+     * @return MagentoTransport
+     */
+    public function setSharedGuestEmailList(array $sharedGuestEmailList)
+    {
+        $this->sharedGuestEmailList = $sharedGuestEmailList;
 
         return $this;
     }
