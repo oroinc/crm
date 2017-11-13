@@ -42,6 +42,10 @@ class LoadAccountAndContactToAccountManagerRole extends AbstractFixture implemen
      */
     public function load(ObjectManager $manager)
     {
+        if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
+            return;
+        }
+
         /** @var AclManager $aclManager */
         $aclManager = $this->container->get('oro_security.acl.manager');
         if (!$aclManager->isAclEnabled()) {
