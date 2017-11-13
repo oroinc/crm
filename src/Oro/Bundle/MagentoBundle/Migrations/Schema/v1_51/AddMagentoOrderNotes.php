@@ -46,10 +46,14 @@ class AddMagentoOrderNotes implements Migration
                 'unsigned' => false
             ]
         );
+        $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
 
         $table->addIndex(['order_id'], 'IDX_D130A0378D9F6D38', []);
         $table->addIndex(['origin_id'], 'IDX_D130A03756A273CC', []);
         $table->addIndex(['channel_id'], 'IDX_D130A03772F5A1AA', []);
+        $table->addIndex(['user_owner_id'], 'IDX_D130A0379EB185F9', []);
+        $table->addIndex(['organization_id'], 'IDX_D130A03732C8A3DE', []);
 
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'unq_order_note_origin_id_channel_id');
 
@@ -68,13 +72,29 @@ class AddMagentoOrderNotes implements Migration
             $schema->getTable('orocrm_magento_order'),
             ['order_id'],
             ['id'],
-            ['onDelete' => 'CASCADE']
+            ['onDelete' => 'CASCADE'],
+            'FK_D130A0378D9F6D38'
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_D130A03772F5A1AA'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['user_owner_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL'],
+            'FK_D130A0379EB185F9'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_D130A03732C8A3DE'
         );
     }
 }

@@ -1144,6 +1144,8 @@ oro:
             entity_plural_label:                  Magento Order Notes
             entity_description:                   A note added by a store admin to an order on the Magento side.
             id.label:                             Id
+            owner.label:                          Owner
+            organization.label:                   Organization
             order:
                 label:                            Order
                 description:                      The order to which a specific Magento order note belongs.
