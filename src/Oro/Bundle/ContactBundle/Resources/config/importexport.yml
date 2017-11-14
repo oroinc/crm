@@ -87,5 +87,7 @@ services:
 
     oro_contact.importexport.configuration_provider.contact:
         class: 'Oro\Bundle\ContactBundle\ImportExport\Configuration\ContactImportExportConfigurationProvider'
+        arguments:
+            - '@translator'
         tags:
             - { name: oro_importexport.configuration, alias: oro_contact }

@@ -45,7 +45,9 @@ oro:
         entity_label:        Contact
         entity_plural_label: Contacts
 
-        import: Import Contacts
+        import:
+            strategy:
+                tooltip: 'Add and Replace strategy. <br> Add strategy.'
 
         accounts:
             label:           Accounts
