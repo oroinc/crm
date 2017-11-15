@@ -90,6 +90,22 @@
         ]) %}
     {% endif %}
 
+    {% set orderNotesWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('oro_magento_order_notes_widget', {orderId: entity.id})
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([
+        {
+            'title': 'oro.magento.order.order_notes.label'|trans,
+            'subblocks': [
+                {'data' : [orderNotesWidget] }
+            ]
+        }
+    ]) %}
+
     {% set id = 'magentoOrderView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}

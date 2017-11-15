@@ -70,6 +70,14 @@
     ]) %}
     {% set tabs = tabs|merge([
         {
+            'alias': 'oro_magento_customer_order_notes' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'oro.magento.order.order_notes.label'|trans,
+            'url': path('oro_magento_widget_customer_order_notes', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
+    {% set tabs = tabs|merge([
+        {
             'alias': 'oro_magento_customer_recent_purchases' ~ uniqueSuffix,
             'widgetType': 'block',
             'label': 'oro.magento.recent_purchases.label'|trans,

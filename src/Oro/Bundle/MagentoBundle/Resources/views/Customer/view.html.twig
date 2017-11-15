@@ -89,6 +89,15 @@
                     )
                 },
                 {
+                    'alias': 'oro_magento_customer_order_notes',
+                    'widgetType': 'block',
+                    'label': "oro.magento.order.order_notes.label"|trans,
+                    'url': path(
+                        'oro_magento_customer_order_notes_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
+                    )
+                },
+                {
                     'alias': 'oro_magento_customer_recent_purchases',
                     'widgetType': 'block',
                     'label': "oro.magento.recent_purchases.label"|trans,
