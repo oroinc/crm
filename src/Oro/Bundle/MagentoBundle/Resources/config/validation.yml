@@ -17,6 +17,8 @@ Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
         websiteId:
           - NotBlank: ~
+        sharedGuestEmailList:
+          - Oro\Bundle\MagentoBundle\Validator\Constraints\EmailAddressListConstraint: ~
 
 Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport:
     constraints:
@@ -32,6 +34,8 @@ Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport:
           - Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
         websiteId:
           - NotBlank: ~
+        sharedGuestEmailList:
+          - Oro\Bundle\MagentoBundle\Validator\Constraints\EmailAddressListConstraint: ~
 
 Oro\Bundle\MagentoBundle\Entity\Website:
     properties:
