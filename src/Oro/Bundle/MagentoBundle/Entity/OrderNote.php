@@ -24,6 +24,7 @@ use Oro\Bundle\MagentoBundle\Model\ExtendOrderNote;
  *     }
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  *
  * @Config(
  *     defaultValues={
@@ -93,6 +94,16 @@ class OrderNote extends ExtendOrderNote implements
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setUpdatedAtValue()
+    {
+        if (null === $this->updatedAt) {
+            $this->updatedAt = $this->createdAt;
+        }
+    }
 
     /**
      * @return integer

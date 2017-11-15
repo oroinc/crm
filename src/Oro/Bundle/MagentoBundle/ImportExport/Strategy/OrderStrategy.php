@@ -85,6 +85,7 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processItems($entity);
         $this->processAddresses($entity);
         $this->processCustomer($entity, $entity->getCustomer());
+        $this->processNotes($entity);
 
         $this->addressHelper->resetMageRegionIdCache(OrderAddress::class);
         $this->existingEntity = null;
@@ -164,6 +165,29 @@ class OrderStrategy extends AbstractImportStrategy
         foreach ($order->getItems() as $item) {
             $item->setOwner($order->getOrganization());
             $item->setOrder($order);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Order $order
+     *
+     * @return OrderStrategy
+     */
+    private function processNotes(Order $order)
+    {
+        foreach ($order->getOrderNotes() as $orderNote) {
+            if (null !== $this->strategyHelper->validateEntity($orderNote)) {
+                $order->removeOrderNote($orderNote);
+                $this->doctrineHelper
+                    ->getEntityManager($orderNote)
+                    ->detach($orderNote);
+                unset($orderNote);
+            } else {
+                $orderNote->setOwner($order->getOwner());
+                $orderNote->setOrganization($order->getOrganization());
+            }
         }
 
         return $this;

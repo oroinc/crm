@@ -291,6 +291,13 @@ Oro\Bundle\MagentoBundle\Entity\OrderItem:
         qty:
             - NotBlank: ~
 
+Oro\Bundle\MagentoBundle\Entity\OrderNote:
+    properties:
+        originId:
+            - NotBlank: ~
+        message:
+            - NotBlank: ~
+
 Oro\Bundle\MagentoBundle\Entity\OrderAddress:
     properties:
         types:

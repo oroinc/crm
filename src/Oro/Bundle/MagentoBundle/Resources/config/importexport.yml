@@ -108,12 +108,16 @@ services:
     oro_magento.importexport.data_converter.order_item:
         class: %oro_magento.importexport.data_converter.order_item.class%
 
+    oro_magento.importexport.data_converter.order_notes:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderNotesDataConverter
+
     oro_magento.importexport.data_converter.order:
         class: %oro_magento.importexport.data_converter.order.class%
         calls:
             - [addNodeDataConverter, ['shipping_address', "@oro_magento.importexport.data_converter.order_address"]]
             - [addNodeDataConverter, ['billing_address', "@oro_magento.importexport.data_converter.order_address"]]
             - [addNodeDataConverter, ['items', "@oro_magento.importexport.data_converter.order_item", true]]
+            - [addNodeDataConverter, ['status_history', "@oro_magento.importexport.data_converter.order_notes", true]]
 
     oro_magento.importexport.data_converter.customer_address:
         class: %oro_magento.importexport.data_converter.customer_address.class%

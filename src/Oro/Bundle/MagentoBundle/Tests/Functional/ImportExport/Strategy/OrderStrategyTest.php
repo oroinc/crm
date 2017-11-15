@@ -96,4 +96,14 @@ class OrderStrategyTest extends WebTestCase
         $this->assertNull($processedAddress->getCountry());
         $this->assertSame('Test', $processedAddress->getCountryText());
     }
+
+    public function testProcessNotes()
+    {
+        //@TODO added functional test
+    }
+
+    public function testProcessNotesProvider()
+    {
+        //@TODO added functional test
+    }
 }
