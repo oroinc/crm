@@ -47,7 +47,7 @@ oro:
 
         import:
             strategy:
-                tooltip: 'Add and Replace strategy. <br> Add strategy.'
+                tooltip: '<b>Add and Replace</b> strategy adds new contact information from the imported file and updates the existing one. <br> <b>Add strategy</b> does not change existing records. All contacts are added as new records allowing duplicates.'
 
         accounts:
             label:           Accounts
