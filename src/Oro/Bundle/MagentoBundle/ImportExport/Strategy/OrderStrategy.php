@@ -10,6 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
 
 class OrderStrategy extends AbstractImportStrategy
 {
@@ -20,8 +21,11 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected $existingEntity;
 
-    /** @var  GuestCustomerStrategyHelper */
+    /** @var GuestCustomerStrategyHelper */
     protected $guestCustomerStrategyHelper;
+
+    /** @var HtmlTagHelper */
+    protected $htmlTagHelper;
 
     /**
      * @param GuestCustomerStrategyHelper $strategyHelper
@@ -29,6 +33,14 @@ class OrderStrategy extends AbstractImportStrategy
     public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
     {
         $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
+
+    /**
+     * @param HtmlTagHelper $htmlTagHelper
+     */
+    public function setHtmlTagHelper(HtmlTagHelper $htmlTagHelper)
+    {
+        $this->htmlTagHelper = $htmlTagHelper;
     }
 
     /**
@@ -187,6 +199,9 @@ class OrderStrategy extends AbstractImportStrategy
             } else {
                 $orderNote->setOwner($order->getOwner());
                 $orderNote->setOrganization($order->getOrganization());
+                $orderNote->setMessage(
+                    $this->htmlTagHelper->sanitize($orderNote->getMessage())
+                );
             }
         }
 

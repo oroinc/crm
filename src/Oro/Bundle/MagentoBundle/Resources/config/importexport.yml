@@ -408,6 +408,7 @@ services:
         parent: oro_magento.import.strategy.abstract
         calls:
             - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
+            - [setHtmlTagHelper, ["@oro_ui.html_tag_helper"]]
 
     oro_magento.import.strategy.order_with_customer.add_or_update:
         parent: oro_magento.import.strategy.order.add_or_update
