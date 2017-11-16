@@ -105,6 +105,7 @@ oro:
                 taxPercent:       Tax percent
                 taxAmount:        Tax amount
                 rowTotal:         Row total
+                message:          Message
                 billing_country:  Billing country
                 billing_region:   Billing state
                 customer_is_guest:

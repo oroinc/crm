@@ -2306,3 +2306,66 @@ datagrids:
                     type:             percent
                     data_name:        oi.discountPercent
                     enabled:          false
+
+    magento-order-notes-grid:
+        extended_entity_name: Oro\Bundle\MagentoBundle\Entity\OrderNote
+        acl_resource: oro_magento_order_view
+        source:
+            type: orm
+            query:
+                select:
+                    - o.id as orderId
+                    - on.message
+                    - on.createdAt as noteDate
+                    - on.updatedAt as noteUpdatedDate
+                from:
+                    - { table: Oro\Bundle\MagentoBundle\Entity\OrderNote, alias: on }
+                join:
+                    left:
+                        - { join: on.order, alias: o }
+        columns:
+            orderId:
+                label: oro.magento.order.increment_id.label
+            message:
+                label: oro.magento.datagrid.columns.message
+        sorters:
+            default:
+                noteDate:  DESC
+        filters:
+            columns:
+                noteDate:
+                    label:        oro.magento.ordernote.created_at.label
+                    type:         datetime
+                    data_name:    on.createdAt
+                noteUpdatedDate:
+                    label:        oro.magento.ordernote.updated_at.label
+                    type:         datetime
+                    data_name:    on.updatedAt
+        options:
+            entityHint: order notes
+
+    magento-customer-order-notes-widget-grid:
+        extends: magento-order-notes-grid
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId
+                        - o.channel = :channelId
+            bind_parameters:
+                - customerId
+                - channelId
+        properties:
+            orderId: ~
+            view_link:
+                type: url
+                route: oro_magento_order_view
+                params: { id: orderId }
+        actions:
+            view:
+                type:         navigate
+                label:        oro.grid.action.view
+                link:         view_link
+                icon:         eye
+                acl_resource: oro_magento_order_view
+                rowAction:    true
