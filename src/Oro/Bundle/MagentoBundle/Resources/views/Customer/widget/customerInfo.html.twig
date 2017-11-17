@@ -66,17 +66,7 @@
             'widgetType': 'block',
             'label': 'oro.magento.order.entity_plural_label'|trans,
             'url': path('oro_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': customer.channel.id})
-        }
-    ]) %}
-    {% set tabs = tabs|merge([
-        {
-            'alias': 'oro_magento_customer_order_notes' ~ uniqueSuffix,
-            'widgetType': 'block',
-            'label': 'oro.magento.order.order_notes.label'|trans,
-            'url': path('oro_magento_widget_customer_order_notes', {'customerId': customer.id, 'channelId': customer.channel.id})
-        }
-    ]) %}
-    {% set tabs = tabs|merge([
+        },
         {
             'alias': 'oro_magento_customer_recent_purchases' ~ uniqueSuffix,
             'widgetType': 'block',
@@ -85,6 +75,18 @@
         }
     ]) %}
 {% endif %}
+
+{% if oro_magento_order_notes_is_applicable(customer) %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'oro_magento_customer_order_notes' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'oro.magento.order.order_notes.label'|trans,
+            'url': path('oro_magento_widget_customer_order_notes', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
+{% endif %}
+
 {% if cartClassName in customer.dataChannel.entities %}
     {% set tabs = tabs|merge([
         {

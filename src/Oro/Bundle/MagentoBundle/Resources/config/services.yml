@@ -1234,3 +1234,9 @@ services:
             - '@oro_workflow.process.logger'
         tags:
             - { name: 'oro_message_queue.client.message_processor', topicName: 'oro_magento.schedule_stucked_jobs' }
+
+    oro_magento.twig.order_notes_extension:
+        class: Oro\Bundle\MagentoBundle\Twig\OrderNotesExtension
+        public: false
+        tags:
+            - { name: twig.extension }
