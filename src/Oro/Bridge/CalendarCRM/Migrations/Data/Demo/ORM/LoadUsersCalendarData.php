@@ -150,30 +150,25 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $events['weekend'][] = $event;
             }
         }
-
         foreach ($this->users as $index => $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
-            //recurring events
             $events['recurring_events'] = $this->getRecurringEvents();
             foreach ($events as $typeEvents) {
                 if (mt_rand(0, 1)) {
                     foreach ($typeEvents as $typeEvent) {
                         $event = clone $typeEvent;
-                        $event->setIsOrganizer(true)
-                            ->setOrganizerEmail($calendar->getOwner()->getEmail())
+                        $event->setIsOrganizer(true)->setOrganizerEmail($calendar->getOwner()->getEmail())
                             ->setOrganizerDisplayName(sprintf(
                                 '%s %s',
                                 $calendar->getOwner()->getFirstName(),
                                 $calendar->getOwner()->getLastName()
-                            ))
-                            ->setOrganizerUser($calendar->getOwner());
+                            ))->setOrganizerUser($calendar->getOwner());
                         $calendar->addEvent($event);
                     }
                 }
             }
-
             $this->em->persist($calendar);
             if ($index > 0 && $index % 5 === 0) {
                 $this->em->flush();
@@ -183,13 +178,11 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
             }
         }
-
         $this->em->flush();
         $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
         $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
-
         $this->addRecurringEventExceptions();
     }
 
