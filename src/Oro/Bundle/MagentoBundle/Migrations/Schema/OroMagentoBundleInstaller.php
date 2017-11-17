@@ -164,7 +164,7 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn(
-            'is_display_order_comments',
+            'is_display_order_notes',
             'boolean',
             [
                 'notnull' => false,

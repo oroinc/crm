@@ -561,9 +561,9 @@ oro:
             check_connection.label:       Check connection
             website_refresh.label:        Sync website list
             initial_sync_start_date.label: Initial sync start date
-            is_display_order_comments:
-                label:    Import Order Comments as Customer Notes
-                tooltip:  When this option is disabled the order comments can be viewed only on Magento Order view page. When enabled, the order comments will also be visible on the Magento Customer view and Account view page.
+            is_display_order_notes:
+                label:    Import Order Comments as Order Notes
+                tooltip:  When this option is disabled the order notes can be viewed only on Magento Order view page. When enabled, the order notes will also be visible on the Magento Customer view and Account view page.
                 value.true.label:       'Yes'
                 value.false.label:      'No'
             shared_guest_email_list:

@@ -53,13 +53,13 @@ class OrderNotesExtensionTest extends \PHPUnit_Framework_TestCase
      *
      * @param $entityClass
      * @param $isSupportedExtensionVersion
-     * @param $isDisplayOrderComments
+     * @param $isDisplayOrderNotes
      * @param $expectedResult
      */
     public function testIsOrderNotesApplicable(
         $entityClass,
         $isSupportedExtensionVersion,
-        $isDisplayOrderComments,
+        $isDisplayOrderNotes,
         $expectedResult
     ) {
         $entity = $this->getEntity($entityClass, ['channel' => $this->channel]);
@@ -69,8 +69,8 @@ class OrderNotesExtensionTest extends \PHPUnit_Framework_TestCase
 
         if (!$entity instanceof Order) {
             $this->transport->expects($this->any())
-                ->method('getIsDisplayOrderComments')
-                ->willReturn($isDisplayOrderComments);
+                ->method('getIsDisplayOrderNotes')
+                ->willReturn($isDisplayOrderNotes);
         }
 
         $result = $this->placeholder->isOrderNotesApplicable($entity);
@@ -87,43 +87,43 @@ class OrderNotesExtensionTest extends \PHPUnit_Framework_TestCase
             'On customer page with supported extension version and enabled order notes' => [
                 'entityClass' => Customer::class,
                 'isSupportedExtensionVersion' => true,
-                'isDisplayOrderComments' => true,
+                'isDisplayOrderNotes' => true,
                 'expectedResult' => true
             ],
             'On customer page with enabled order notes, but not supported extension version' => [
                 'entityClass' => Customer::class,
                 'isSupportedExtensionVersion' => false,
-                'isDisplayOrderComments' => true,
+                'isDisplayOrderNotes' => true,
                 'expectedResult' => false
             ],
             'On customer page with supported extension version and disabled order notes' => [
                 'entityClass' => Customer::class,
                 'isSupportedExtensionVersion' => true,
-                'isDisplayOrderComments' => false,
+                'isDisplayOrderNotes' => false,
                 'expectedResult' => false
             ],
             'On customer page with not supported extension version and disabled order notes' => [
                 'entityClass' => Customer::class,
                 'isSupportedExtensionVersion' => false,
-                'isDisplayOrderComments' => false,
+                'isDisplayOrderNotes' => false,
                 'expectedResult' => false
             ],
             'On order page with not supported extension version and disabled order notes' => [
                 'entityClass' => Customer::class,
                 'isSupportedExtensionVersion' => false,
-                'isDisplayOrderComments' => false,
+                'isDisplayOrderNotes' => false,
                 'expectedResult' => false
             ],
             'On order page page with supported extension version and enabled order notes' => [
                 'entityClass' => Order::class,
                 'isSupportedExtensionVersion' => true,
-                'isDisplayOrderComments' => true,
+                'isDisplayOrderNotes' => true,
                 'expectedResult' => true
             ],
             'On order page page with supported extension version, but disabled order notes' => [
                 'entityClass' => Order::class,
                 'isSupportedExtensionVersion' => true,
-                'isDisplayOrderComments' => true,
+                'isDisplayOrderNotes' => true,
                 'expectedResult' => true
             ]
         ];

@@ -84,14 +84,14 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         );
 
         $builder->add(
-            'isDisplayOrderComments',
+            'isDisplayOrderNotes',
             'choice',
             [
-                'label' => 'oro.magento.magentotransport.is_display_order_comments.label',
-                'tooltip' => 'oro.magento.magentotransport.is_display_order_comments.tooltip',
+                'label' => 'oro.magento.magentotransport.is_display_order_notes.label',
+                'tooltip' => 'oro.magento.magentotransport.is_display_order_notes.tooltip',
                 'choices' => [
-                    'oro.magento.magentotransport.is_display_order_comments.value.true.label' => true,
-                    'oro.magento.magentotransport.is_display_order_comments.value.false.label' => false,
+                    'oro.magento.magentotransport.is_display_order_notes.value.true.label' => true,
+                    'oro.magento.magentotransport.is_display_order_notes.value.false.label' => false,
                 ],
                 'placeholder' => false,
                 'choices_as_values' => true

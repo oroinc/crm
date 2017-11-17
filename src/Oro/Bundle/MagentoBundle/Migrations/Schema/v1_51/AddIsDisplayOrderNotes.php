@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddIsDisplayOrderComments implements Migration
+class AddIsDisplayOrderNotes implements Migration
 {
     /**
      * @param Schema   $schema
@@ -17,7 +17,7 @@ class AddIsDisplayOrderComments implements Migration
     {
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn(
-            'is_display_order_comments',
+            'is_display_order_notes',
             'boolean',
             [
                 'notnull' => false,

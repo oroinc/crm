@@ -101,9 +101,9 @@ abstract class MagentoTransport extends Transport
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_display_order_comments", type="boolean", nullable=true, options={"default"=true})
+     * @ORM\Column(name="is_display_order_notes", type="boolean", nullable=true, options={"default"=true})
      */
-    protected $isDisplayOrderComments;
+    protected $isDisplayOrderNotes;
 
     /**
      * @var string
@@ -368,13 +368,13 @@ abstract class MagentoTransport extends Transport
     }
 
     /**
-     * @param boolean $isDisplayOrderComments
+     * @param boolean $isDisplayOrderNotes
      *
      * @return MagentoTransport
      */
-    public function setIsDisplayOrderComments($isDisplayOrderComments)
+    public function setIsDisplayOrderNotes($isDisplayOrderNotes)
     {
-        $this->isDisplayOrderComments = $isDisplayOrderComments;
+        $this->isDisplayOrderNotes = $isDisplayOrderNotes;
 
         return $this;
     }
@@ -382,9 +382,9 @@ abstract class MagentoTransport extends Transport
     /**
      * @return boolean
      */
-    public function getIsDisplayOrderComments()
+    public function getIsDisplayOrderNotes()
     {
-        return $this->isDisplayOrderComments;
+        return $this->isDisplayOrderNotes;
     }
 
     /**
