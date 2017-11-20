@@ -1170,7 +1170,7 @@ oro:
                 description:        The integration via which information about a Magento order item is received.
 
         recent_purchases:
-            label:                                Recent Purchases
+            label:                                Magento Purchases
 
         #regions:
         #   entity_label:        Magento Region
