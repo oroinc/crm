@@ -48,6 +48,8 @@ class SoapTransport extends BaseSOAPTransport implements
 
     const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
+    const ORDER_NOTE_VERSION_REQUIRED = '1.2.19';
+
     const ACTION_ORO_REGION_LIST_VERSION_REQUIRED = '1.2.14';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
@@ -382,6 +384,16 @@ class SoapTransport extends BaseSOAPTransport implements
     public function isSupportedExtensionVersion()
     {
         return $this->isSupportedVersion($this->getExtensionVersion());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSupportedOrderNoteExtensionVersion()
+    {
+        return $this->isExtensionInstalledAndIsVersionSupported(
+            self::ORDER_NOTE_VERSION_REQUIRED
+        );
     }
 
     /**
@@ -774,6 +786,14 @@ class SoapTransport extends BaseSOAPTransport implements
     public function getRequiredExtensionVersion()
     {
         return self::REQUIRED_EXTENSION_VERSION;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrderNoteRequiredExtensionVersion()
+    {
+        return self::ORDER_NOTE_VERSION_REQUIRED;
     }
 
     /**

@@ -14,6 +14,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractTransportSettingFormType extends AbstractType
@@ -21,6 +22,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
     /** @var MagentoTransportInterface */
     const NAME = 'oro_magento_transport_setting_form_type';
     const SHARED_GUEST_EMAIL_FIELD_NAME = 'sharedGuestEmailList';
+    const IS_DISPLAY_ORDER_NOTES_FIELD_NAME = 'isDisplayOrderNotes';
 
     /** @var MagentoTransportInterface */
     protected $transport;
@@ -54,6 +56,7 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         $builder
             ->addEventSubscriber($this->subscriber)
             ->addEventSubscriber(new SharedEmailListSubscriber())
+            ->addEventSubscriber(new IsDisplayOrderNotesSubscriber())
         ;
 
         $builder->add(
@@ -80,21 +83,6 @@ abstract class AbstractTransportSettingFormType extends AbstractType
                 'label' => 'oro.magento.magentotransport.guest_customer_sync.label',
                 'tooltip' => 'oro.magento.magentotransport.guest_customer_sync.tooltip',
                 'required' => false
-            ]
-        );
-
-        $builder->add(
-            'isDisplayOrderNotes',
-            'choice',
-            [
-                'label' => 'oro.magento.magentotransport.is_display_order_notes.label',
-                'tooltip' => 'oro.magento.magentotransport.is_display_order_notes.tooltip',
-                'choices' => [
-                    'oro.magento.magentotransport.is_display_order_notes.value.true.label' => true,
-                    'oro.magento.magentotransport.is_display_order_notes.value.false.label' => false,
-                ],
-                'placeholder' => false,
-                'choices_as_values' => true
             ]
         );
 
@@ -134,6 +122,13 @@ abstract class AbstractTransportSettingFormType extends AbstractType
 
         $builder->add(
             $builder->create(
+                self::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
+                IsDisplayOrderNotesFormType::NAME
+            )
+        );
+
+        $builder->add(
+            $builder->create(
                 self::SHARED_GUEST_EMAIL_FIELD_NAME,
                 SharedGuestEmailListType::NAME
             )
@@ -146,7 +141,8 @@ abstract class AbstractTransportSettingFormType extends AbstractType
         );
 
         $builder->add('magentoVersion', 'hidden')
-            ->add('extensionVersion', 'hidden');
+            ->add('extensionVersion', 'hidden')
+            ->add('isOrderNoteSupportExtensionVersion', 'hidden', ['mapped' => false]);
     }
 
     /**
@@ -194,9 +190,17 @@ abstract class AbstractTransportSettingFormType extends AbstractType
                     'ge'
                 );
 
+            $isSupportedOrderNoteExtensionVersion = $isExtensionInstalled &&
+                version_compare(
+                    $transportEntity->getExtensionVersion(),
+                    $this->transport->getOrderNoteRequiredExtensionVersion(),
+                    'ge'
+                );
+
             $view->vars['oroBridgeExtension'] = [
                 'isExtensionInstalled' => $isExtensionInstalled,
                 'isSupportExtensionVersion' => $isSupportExtensionVersion,
+                'isOrderNoteSupportExtensionVersion' => $isSupportedOrderNoteExtensionVersion,
                 'extensionVersion' => $extensionVersion
             ];
         }

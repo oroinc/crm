@@ -72,4 +72,12 @@ class MagentoRestTransport extends MagentoTransport
     {
         return $this->apiToken;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSupportedOrderNoteExtensionVersion()
+    {
+        return false;
+    }
 }

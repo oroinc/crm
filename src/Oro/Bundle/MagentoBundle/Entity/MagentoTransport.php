@@ -317,14 +317,21 @@ abstract class MagentoTransport extends Transport
     }
 
     /**
-     * TODO: move required version to another class. According to CRM-8328
-     *
-     * @return bool
+     * @return boolean
      */
     public function isSupportedExtensionVersion()
     {
         return $this->getIsExtensionInstalled()
             && version_compare($this->getExtensionVersion(), SoapTransport::REQUIRED_EXTENSION_VERSION, 'ge');
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSupportedOrderNoteExtensionVersion()
+    {
+        return $this->isSupportedExtensionVersion() &&
+            version_compare($this->getExtensionVersion(), SoapTransport::ORDER_NOTE_VERSION_REQUIRED, 'ge');
     }
 
     /**

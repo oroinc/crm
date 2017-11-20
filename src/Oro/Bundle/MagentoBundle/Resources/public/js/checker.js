@@ -33,7 +33,9 @@ define([
             'connectorsEl',
             'extensionVersionEl',
             'magentoVersionEl',
-            'sharedGuestEmailListEl'
+            'sharedGuestEmailListEl',
+            'isDisplayOrderNotesEl',
+            'isOrderNoteSupportExtensionVersionEl'
         ],
 
         resultTemplate: _.template(
@@ -168,6 +170,7 @@ define([
                 this.handleAdminUrl(res);
                 this.handleConnectors(res);
                 this.handleExtensionVersion(res);
+                this.handleIsOrderNoteSupportExtensionVersion(res);
                 this.handleMagentoVersion(res);
                 this.handleSharedGuestEmailListEl(res);
 
@@ -238,6 +241,17 @@ define([
         handleIsExtensionInstalled: function(res) {
             $(this.options.isExtensionInstalledEl)
                 .val(res.isExtensionInstalled || false ? 1 : 0);
+        },
+
+        /**
+         * @param {Object} res
+         */
+        handleIsOrderNoteSupportExtensionVersion: function(res) {
+            var isOrderNoteSupportDisabledAttrValue = (res.isOrderNoteSupportExtensionVersion || false) === false;
+            $(this.options.isDisplayOrderNotesEl).inputWidget('disable', isOrderNoteSupportDisabledAttrValue);
+
+            $(this.options.isOrderNoteSupportExtensionVersionEl)
+                .val(res.isOrderNoteSupportExtensionVersion || false ? 1 : 0);
         },
 
         /**

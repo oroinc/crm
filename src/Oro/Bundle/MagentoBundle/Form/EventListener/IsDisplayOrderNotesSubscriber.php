@@ -11,7 +11,7 @@ use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType;
 
-class SharedEmailListSubscriber implements EventSubscriberInterface
+class IsDisplayOrderNotesSubscriber implements EventSubscriberInterface
 {
     /**
      * {@inheritdoc}
@@ -19,18 +19,18 @@ class SharedEmailListSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SET_DATA => 'processSharedGuestEmailListFieldOnPreSet',
-            FormEvents::PRE_SUBMIT   => 'processSharedGuestEmailListFieldOnPreSubmit'
+            FormEvents::PRE_SET_DATA => 'processIsDisplayOrderNotesFieldOnPreSet',
+            FormEvents::PRE_SUBMIT   => 'processIsDisplayOrderNotesOnPreSubmit'
         ];
     }
 
     /**
-     * Block field "sharedGuestEmailList" in case when extension is not installed
+     * Block field "isDisplayOrderNotes" in case when required version of extension isn't installed
      * or in case when we create new integration
      *
      * @param FormEvent $event
      */
-    public function processSharedGuestEmailListFieldOnPreSet(FormEvent $event)
+    public function processIsDisplayOrderNotesFieldOnPreSet(FormEvent $event)
     {
         $form = $event->getForm();
 
@@ -42,8 +42,8 @@ class SharedEmailListSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (null === $data->getId() || true !== $data->getIsExtensionInstalled()) {
-            $this->switchDisabledOptionSharedEmailField($form, true);
+        if (null === $data->getId() || true !== $data->isSupportedOrderNoteExtensionVersion()) {
+            $this->switchDisabledOptionIsDisplayOrderNotesField($form, true);
         }
     }
 
@@ -52,41 +52,32 @@ class SharedEmailListSubscriber implements EventSubscriberInterface
      *
      * @return mixed
      */
-    public function processSharedGuestEmailListFieldOnPreSubmit(FormEvent $event)
+    public function processIsDisplayOrderNotesOnPreSubmit(FormEvent $event)
     {
-        $data = (array)$event->getData();
         $form = $event->getForm();
 
         /**
          * We need to enable field, because another way we won't have possibility
-         * to save value to it in case when extension is exist on Magento side.
+         * to save value to it in case when extension is exist on Magento side
+         * and supports order note functionality.
          * We need do this because preSet event fires before preSubmit and it did block of this field.
          */
-        $this->switchDisabledOptionSharedEmailField($form, false);
-
-        /**
-         * Clear field value in case when extension is not accessible
-         */
-        if (empty($data['isExtensionInstalled'])) {
-            $data[AbstractTransportSettingFormType::SHARED_GUEST_EMAIL_FIELD_NAME] = '';
-        }
-
-        $event->setData($data);
+        $this->switchDisabledOptionIsDisplayOrderNotesField($form, false);
     }
 
     /**
      * @param FormInterface $form
      * @param boolean       $disabledOptionValue
      */
-    private function switchDisabledOptionSharedEmailField(FormInterface $form, $disabledOptionValue)
+    private function switchDisabledOptionIsDisplayOrderNotesField(FormInterface $form, $disabledOptionValue)
     {
-        if (!$form->has(AbstractTransportSettingFormType::SHARED_GUEST_EMAIL_FIELD_NAME)) {
+        if (!$form->has(AbstractTransportSettingFormType::IS_DISPLAY_ORDER_NOTES_FIELD_NAME)) {
             return;
         }
 
         FormUtils::replaceField(
             $form,
-            AbstractTransportSettingFormType::SHARED_GUEST_EMAIL_FIELD_NAME,
+            AbstractTransportSettingFormType::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
             [
                 'disabled' => $disabledOptionValue
             ]

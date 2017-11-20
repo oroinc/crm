@@ -270,6 +270,11 @@ services:
         tags:
            - { name: form.type, alias: oro_magento_shared_guest_email_list_type }
 
+    oro_magento.form.type.is_display_order_notes:
+        class: Oro\Bundle\MagentoBundle\Form\Type\IsDisplayOrderNotesFormType
+        tags:
+           - { name: form.type, alias: oro_magento_is_display_order_notes_type }
+
     oro_magento.form.type.transport_check:
         class: %oro_magento.form.type.transport_check.class%
         tags:
