@@ -72,7 +72,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_51';
+        return 'v1_52';
     }
 
     /**
