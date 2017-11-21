@@ -2307,7 +2307,7 @@ datagrids:
                     data_name:        oi.discountPercent
                     enabled:          false
 
-    magento-order-notes-grid:
+    magento-order-notes-base-grid:
         extended_entity_name: Oro\Bundle\MagentoBundle\Entity\OrderNote
         acl_resource: oro_magento_order_view
         source:
@@ -2324,28 +2324,41 @@ datagrids:
                     left:
                         - { join: on.order, alias: o }
         columns:
-            orderId:
-                label: oro.magento.order.increment_id.label
             message:
                 label: oro.magento.datagrid.columns.message
+                order: 20
+            noteDate:
+                label: oro.ui.created_at
+                frontend_type: datetime
+                order: 30
         sorters:
             default:
                 noteDate:  DESC
-        filters:
-            columns:
-                noteDate:
-                    label:        oro.magento.ordernote.created_at.label
-                    type:         datetime
-                    data_name:    on.createdAt
-                noteUpdatedDate:
-                    label:        oro.magento.ordernote.updated_at.label
-                    type:         datetime
-                    data_name:    on.updatedAt
         options:
             entityHint: order notes
 
-    magento-customer-order-notes-widget-grid:
-        extends: magento-order-notes-grid
+    magento-order-notes-widget-grid:
+        extends: magento-order-notes-base-grid
+        source:
+            query:
+                where:
+                    and:
+                        - o.id = :orderId
+            bind_parameters:
+                - orderId
+        filters:
+            columns:
+                noteDate:
+                    label:        oro.ui.created_at
+                    type:         datetime
+                    data_name:    on.createdAt
+                noteUpdatedDate:
+                    label:        oro.ui.updated_at
+                    type:         datetime
+                    data_name:    on.updatedAt
+
+    magento-account-order-notes-widget-grid:
+        extends: magento-order-notes-base-grid
         source:
             query:
                 where:
@@ -2355,6 +2368,10 @@ datagrids:
             bind_parameters:
                 - customerId
                 - channelId
+        columns:
+            orderId:
+                label: oro.magento.order.increment_id.label
+                order: 1
         properties:
             orderId: ~
             view_link:
@@ -2369,3 +2386,16 @@ datagrids:
                 icon:         eye
                 acl_resource: oro_magento_order_view
                 rowAction:    true
+
+    magento-customer-order-notes-widget-grid:
+        extends: magento-account-order-notes-widget-grid
+        filters:
+            columns:
+                noteDate:
+                    label:        oro.ui.created_at
+                    type:         datetime
+                    data_name:    on.createdAt
+                noteUpdatedDate:
+                    label:        oro.ui.updated_at
+                    type:         datetime
+                    data_name:    on.updatedAt

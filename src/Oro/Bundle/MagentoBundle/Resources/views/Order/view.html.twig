@@ -82,7 +82,7 @@
 
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'oro.magento.creditmemo.entity_plural_label'|trans,
+                'title': 'oro.magento.order.credit_memos.label'|trans,
                 'subblocks': [
                     {'data' : [orderCreditMemoWidget] }
                 ]
@@ -100,7 +100,7 @@
 
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'oro.magento.order.order_notes.label'|trans,
+                'title': 'oro.magento.order.order_notes.short_label'|trans,
                 'subblocks': [
                     {'data' : [orderNotesWidget] }
                 ]
@@ -110,5 +110,6 @@
 
     {% set id = 'magentoOrderView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
+
     {{ parent() }}
 {% endblock content_data %}

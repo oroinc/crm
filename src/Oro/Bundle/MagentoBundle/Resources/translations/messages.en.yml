@@ -696,6 +696,7 @@ oro:
                 description:        Additional information that a customer can leave for a Magento order.
             order_notes:
                 label:              Magento Order Notes
+                short_label:        Order Notes
                 description:        Notes added by a store admin to an order on the Magento side.
             feedback:
                 label:              Feedback
