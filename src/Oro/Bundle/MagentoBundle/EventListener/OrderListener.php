@@ -31,15 +31,13 @@ class OrderListener
     }
 
     /**
+     * @param Order              $entity
      * @param LifecycleEventArgs $event
      */
-    public function prePersist(LifecycleEventArgs $event)
+    public function prePersist(Order $entity, LifecycleEventArgs $event)
     {
-        /** @var Order $entity */
-        $entity = $event->getEntity();
-
         // if new order has valuable subtotal and status
-        if ($this->isOrderValid($entity)
+        if ($this->isOrderSupported($entity)
             && $entity->getSubtotalAmount()
             && !$entity->isCanceled()
         ) {
@@ -49,14 +47,13 @@ class OrderListener
     }
 
     /**
+     * @param Order              $entity
      * @param PreUpdateEventArgs $event
      */
-    public function preUpdate(PreUpdateEventArgs $event)
+    public function preUpdate(Order $entity, PreUpdateEventArgs $event)
     {
-        $entity = $event->getEntity();
-
         // if subtotal or status has been changed
-        if ($this->isOrderValid($entity)
+        if ($this->isOrderSupported($entity)
             && array_intersect(['subtotalAmount', 'discountAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
@@ -108,20 +105,19 @@ class OrderListener
         return array_filter(
             $entities,
             function ($entity) {
-                return $this->isOrderValid($entity);
+                return $entity instanceof Order && $this->isOrderSupported($entity);
             }
         );
     }
 
     /**
-     * @param Order|object $order
+     * @param Order $order
      *
      * @return bool
      */
-    protected function isOrderValid($order)
+    protected function isOrderSupported(Order $order)
     {
-        return $order instanceof Order
-        && $order->getCustomer() instanceof Customer;
+        return $order->getCustomer() instanceof Customer;
     }
 
     /**

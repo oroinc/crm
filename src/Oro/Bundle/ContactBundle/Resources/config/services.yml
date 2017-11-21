@@ -23,7 +23,6 @@ parameters:
     oro_contact.form.type.group.api.class:         Oro\Bundle\ContactBundle\Form\Type\GroupApiType
 
     oro_contact.contact_address.entity.class:      Oro\Bundle\ContactBundle\Entity\ContactAddress
-    oro_contact.subscriber.contact_listener.class: Oro\Bundle\ContactBundle\EventListener\ContactListener
     oro_contact.listener.prepare_result_item_listener.class: Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener
 
     oro_contact.email.owner.provider.class:        Oro\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
@@ -199,12 +198,12 @@ services:
             - { name: oro_email.owner.provider, order: 3 }
 
     oro_contact.subscriber.contact_listener:
-        class: %oro_contact.subscriber.contact_listener.class%
+        class: Oro\Bundle\ContactBundle\EventListener\ContactListener
         arguments:
             - "@security.token_storage"
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_contact.entity.class%', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_contact.entity.class%', event: preUpdate }
 
     oro_contact.social_url_formatter:
         class: %oro_contact.social_url_formatter.class%

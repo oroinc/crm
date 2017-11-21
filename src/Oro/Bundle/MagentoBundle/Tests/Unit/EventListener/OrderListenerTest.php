@@ -32,7 +32,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Order|object $order
+     * @param Order $order
      * @param float $expectedLifetime
      * @dataProvider prePersistDataProvider
      */
@@ -48,7 +48,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         }
 
         $listener = new OrderListener($this->listener);
-        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
+        $listener->prePersist($order, new LifecycleEventArgs($order, $entityManager));
     }
 
     /**
@@ -57,7 +57,6 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function prePersistDataProvider()
     {
         return [
-            'not an order'       => [new \DateTime()],
             'zero subtotal'      => [$this->createOrder(null, 0)],
             'no customer'        => [$this->createOrder(null)],
             'incorrect customer' => [$this->createOrder(new \DateTime())],
@@ -68,8 +67,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Order|object $order
-     * @param array        $changeSet
+     * @param Order $order
+     * @param array $changeSet
      *
      * @dataProvider preUpdateDataProvider
      */
@@ -84,7 +83,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         }
 
         $listener = new OrderListener($this->listener);
-        $listener->preUpdate(new PreUpdateEventArgs($order, $entityManager, $changeSet));
+        $listener->preUpdate($order, new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
         if ($isUpdateRequired) {
             $this->assertAttributeEquals([$order->getId() => true], 'ordersForUpdate', $listener);
@@ -92,7 +91,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             $this->assertAttributeEmpty('ordersForUpdate', $listener);
         }
 
-        $listener->preUpdate(new PreUpdateEventArgs($order, $entityManager, $changeSet));
+        $listener->preUpdate($order, new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
         $this->assertObjectHasAttribute('ordersForUpdate', $listener);
     }
@@ -103,7 +102,6 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function preUpdateDataProvider()
     {
         return [
-            'not an order'         => [new \DateTime()],
             'no customer'          => [$this->createOrder(null)],
             'incorrect customer'   => [$this->createOrder(new \DateTime())],
             'subtotal not changed' => [$this->createOrder($this->createCustomer())],
@@ -294,7 +292,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($customer), $this->equalTo($account), $this->equalTo($channel));
 
         $listener = new OrderListener($this->listener);
-        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
+        $listener->prePersist($order, new LifecycleEventArgs($order, $entityManager));
     }
 
     public function testNotScheduleLifetimeValueHistoryWithoutAccount()
@@ -314,6 +312,6 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->expects($this->never())->method('scheduleEntityUpdate');
 
         $listener = new OrderListener($this->listener);
-        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
+        $listener->prePersist($order, new LifecycleEventArgs($order, $entityManager));
     }
 }

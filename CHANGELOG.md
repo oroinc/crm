@@ -1,3 +1,13 @@
+## 2.6.0 (Unreleased)
+
+### Removed
+#### ContactBundle
+* The parameter `oro_contact.subscriber.contact_listener.class` was removed form the service container
+#### MagentoBundle
+* The parameter `oro_magento.event_listener.customer_currency.class` was removed form the service container
+* The parameter `oro_magento.event_listener.order.class` was removed form the service container
+* The parameter `oro_magento.integration_entity.remove_listener.class` was removed form the service container
+
 ## 2.5.0 (Unreleased)
 
 ### Added
