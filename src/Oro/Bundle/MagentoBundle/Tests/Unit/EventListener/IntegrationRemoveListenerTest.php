@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Oro\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener;
 
 class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
@@ -30,30 +31,17 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
         unset($this->listener, $this->wsdlManager);
     }
 
-    /**
-     * @dataProvider invalidEntityDataProvider
-     * @param object $entity
-     */
-    public function testIncorrectClass($entity)
+    public function testPreRemoveWithoutApiUrl()
     {
+        $entity = $this->getEntity();
+
         $this->wsdlManager->expects($this->never())
-            ->method($this->anything());
+            ->method('clearCacheForUrl');
 
-        $this->listener->preRemove($this->getEvent($entity));
+        $this->listener->preRemove($entity, $this->createMock(LifecycleEventArgs::class));
     }
 
-    /**
-     * @return array
-     */
-    public function invalidEntityDataProvider()
-    {
-        return [
-            [new \stdClass()],
-            [$this->getEntity()]
-        ];
-    }
-
-    public function testPreRemove()
+    public function testPreRemoveWithApiUrl()
     {
         $url = 'http://test.local';
         $entity = $this->getEntity($url);
@@ -62,7 +50,7 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
             ->method('clearCacheForUrl')
             ->with($url);
 
-        $this->listener->preRemove($this->getEvent($entity));
+        $this->listener->preRemove($entity, $this->createMock(LifecycleEventArgs::class));
     }
 
     /**
@@ -75,25 +63,9 @@ class IntegrationRemoveListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->atLeastOnce())
-            ->method('getWsdlUrl')
+            ->method('getApiUrl')
             ->will($this->returnValue($url));
 
         return $entity;
-    }
-
-    /**
-     * @param object $entity
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getEvent($entity)
-    {
-        $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue($entity));
-
-        return $event;
     }
 }

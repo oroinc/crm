@@ -60,8 +60,6 @@ parameters:
 
     # event listeners
     oro.magento.event_listener.account_widgets_data_grid_listener.class: Oro\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
-    oro_magento.event_listener.customer_currency.class:                  Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
-    oro_magento.event_listener.order.class:                              Oro\Bundle\MagentoBundle\EventListener\OrderListener
     oro_magento.event_listener.channel_owner_set.class:                  Oro\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     oro_magento.event_listener.writer_error.class:                       Oro\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     oro_magento.event_listener.integration_sync_after.class:             Oro\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
@@ -127,7 +125,6 @@ parameters:
 
     oro_magento.wsdl_manager.class:                                      Oro\Bundle\MagentoBundle\Service\WsdlManager
     oro_magento.wsdl.cache_clearer.class:                                Oro\Bundle\MagentoBundle\Cache\WsdlCacheClearer
-    oro_magento.integration_entity.remove_listener.class:                Oro\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener
     oro_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
     oro_magento.provider.big_number.class:                               Oro\Bundle\MagentoBundle\Provider\MagentoBigNumberProvider
@@ -507,19 +504,19 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.magento-order-grid, method: onBuildBefore }
 
     oro_magento.event_listener.customer_currency:
-        class: %oro_magento.event_listener.customer_currency.class%
-        calls:
-            - [setContainer, ["@service_container"]]
+        class: Oro\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
+        arguments:
+            - '@service_container'
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.customer.class%', event: prePersist }
 
     oro_magento.event_listener.order:
-        class: %oro_magento.event_listener.order.class%
+        class: Oro\Bundle\MagentoBundle\EventListener\OrderListener
         arguments:
             - "@oro_channel.event_listener.doctrine"
         tags:
-            - { name: doctrine.event_listener, event: prePersist }
-            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.order.class%', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_magento.entity.order.class%', event: preUpdate }
             - { name: doctrine.event_listener, event: postFlush, priority: 5 }
 
     oro_magento.event_listener.customer_order_grid_listener:
@@ -936,11 +933,11 @@ services:
             - { name: kernel.cache_clearer,  priority: 30 }
 
     oro_magento.integration_entity.remove_listener:
-        class: %oro_magento.integration_entity.remove_listener.class%
+        class: Oro\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener
         arguments:
             - "@oro_magento.wsdl_manager"
         tags:
-            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport, event: preRemove }
 
     oro_magento.model.channel_settings_provider:
         class: %oro_magento.model.channel_settings_provider.class%

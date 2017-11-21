@@ -28,28 +28,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
             ->with('oro_locale.settings')
             ->will($this->returnValue($this->localeSettings));
 
-        $this->listener = new CustomerCurrencyListener();
-        $this->listener->setContainer($container);
-    }
-
-    public function testPrePersistIncorrectEntity()
-    {
-        $entity = $this
-            ->getMockBuilder('\stdClass')
-            ->setMethods(['setCurrency'])
-            ->getMock()
-        ;
-        $entity->expects($this->never())
-            ->method('setCurrency');
-
-        $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue($entity));
-
-        $this->listener->prePersist($event);
+        $this->listener = new CustomerCurrencyListener($container);
     }
 
     public function testPrePersistEntityWithCurrency()
@@ -68,11 +47,8 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
             ->disableOriginalConstructor()
             ->getMock();
-        $event->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue($entity));
 
-        $this->listener->prePersist($event);
+        $this->listener->prePersist($entity, $event);
     }
 
     public function testPrePersistEntitySetCurrency()
@@ -95,10 +71,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
         $event = $this->getMockBuilder('Doctrine\ORM\Event\LifecycleEventArgs')
             ->disableOriginalConstructor()
             ->getMock();
-        $event->expects($this->once())
-            ->method('getEntity')
-            ->will($this->returnValue($entity));
 
-        $this->listener->prePersist($event);
+        $this->listener->prePersist($entity, $event);
     }
 }

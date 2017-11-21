@@ -28,12 +28,16 @@ class DefaultProbabilityListener
     }
 
     /**
+     * @param Opportunity        $entity
      * @param PreUpdateEventArgs $args
      */
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(Opportunity $entity, PreUpdateEventArgs $args)
     {
-        $entity = $args->getEntity();
-        if (!$entity instanceof Opportunity) {
+        if (null === $entity->getStatus()) {
+            return;
+        }
+
+        if (!$args->hasChangedField('status')) {
             return;
         }
 
@@ -41,16 +45,8 @@ class DefaultProbabilityListener
             return;
         }
 
-        if (null == $entity->getStatus()) {
-            return;
-        }
-
         $probability = $this->getDefaultProbability($entity->getStatus()->getId());
         if (null === $probability) {
-            return;
-        }
-
-        if (!$args->hasChangedField('status')) {
             return;
         }
 
