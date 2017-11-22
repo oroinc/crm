@@ -408,7 +408,7 @@ services:
         parent: oro_magento.import.strategy.abstract
         calls:
             - [setGuestCustomerStrategyHelper, ["@oro_magento.importexport.guest_customer_strategy_helper"]]
-            - [setHtmlTagHelper, ["@oro_ui.html_tag_helper"]]
+            - [setOrderNotesProcessor, ["@oro_magento.importexport.processor.order_notes.chain_processor"]]
 
     oro_magento.import.strategy.order_with_customer.add_or_update:
         parent: oro_magento.import.strategy.order.add_or_update
@@ -522,6 +522,26 @@ services:
             - [setStrategy, ["@oro_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update"]]
             - [setEntityName, [%oro_magento.entity.newsletter_subscriber.class%]]
             - [setContextRegistry, ["@oro_importexport.context_registry"]]
+
+    oro_magento.importexport.processor.order_notes.validation_note_processor:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ValidationNoteProcessor
+        public: false
+        arguments:
+            - '@oro_importexport.strategy.import.helper'
+            - '@oro_entity.doctrine_helper'
+
+    oro_magento.importexport.processor.order_notes.note_fields_processor:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\NoteFieldsProcessor
+        public: false
+        arguments:
+            - '@oro_ui.html_tag_helper'
+
+    oro_magento.importexport.processor.order_notes.chain_processor:
+        class: Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor
+        public: false
+        calls:
+            - [addProcessor, ['@oro_magento.importexport.processor.order_notes.validation_note_processor']]
+            - [addProcessor, ['@oro_magento.importexport.processor.order_notes.note_fields_processor']]
 
     oro_magento.importexport.normalizer.datetime:
         class: %oro_magento.importexport.normalizer.datetime.class%

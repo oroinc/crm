@@ -10,7 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
-use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
+use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor as OrderNotesProcessor;
 
 class OrderStrategy extends AbstractImportStrategy
 {
@@ -24,8 +24,10 @@ class OrderStrategy extends AbstractImportStrategy
     /** @var GuestCustomerStrategyHelper */
     protected $guestCustomerStrategyHelper;
 
-    /** @var HtmlTagHelper */
-    protected $htmlTagHelper;
+    /**
+     * @var OrderNotesProcessor
+     */
+    private $orderNotesProcessor;
 
     /**
      * @param GuestCustomerStrategyHelper $strategyHelper
@@ -36,11 +38,11 @@ class OrderStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param HtmlTagHelper $htmlTagHelper
+     * @param OrderNotesProcessor $orderNotesProcessor
      */
-    public function setHtmlTagHelper(HtmlTagHelper $htmlTagHelper)
+    public function setOrderNotesProcessor(OrderNotesProcessor $orderNotesProcessor)
     {
-        $this->htmlTagHelper = $htmlTagHelper;
+        $this->orderNotesProcessor = $orderNotesProcessor;
     }
 
     /**
@@ -97,7 +99,7 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processItems($entity);
         $this->processAddresses($entity);
         $this->processCustomer($entity, $entity->getCustomer());
-        $this->processNotes($entity);
+        $this->orderNotesProcessor->processNotes($entity);
 
         $this->addressHelper->resetMageRegionIdCache(OrderAddress::class);
         $this->existingEntity = null;
@@ -177,32 +179,6 @@ class OrderStrategy extends AbstractImportStrategy
         foreach ($order->getItems() as $item) {
             $item->setOwner($order->getOrganization());
             $item->setOrder($order);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Order $order
-     *
-     * @return OrderStrategy
-     */
-    private function processNotes(Order $order)
-    {
-        foreach ($order->getOrderNotes() as $orderNote) {
-            if (null !== $this->strategyHelper->validateEntity($orderNote)) {
-                $order->removeOrderNote($orderNote);
-                $this->doctrineHelper
-                    ->getEntityManager($orderNote)
-                    ->detach($orderNote);
-                unset($orderNote);
-            } else {
-                $orderNote->setOwner($order->getOwner());
-                $orderNote->setOrganization($order->getOrganization());
-                $orderNote->setMessage(
-                    $this->htmlTagHelper->sanitize($orderNote->getMessage())
-                );
-            }
         }
 
         return $this;
