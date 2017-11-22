@@ -52,6 +52,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     const GUEST_CART_ALIAS_REFERENCE_NAME       = 'guestCart';
     const GUEST_ORDER_ALIAS_REFERENCE_NAME      = 'guestOrder';
 
+    const DEFAULT_ORDER_INCREMENT_ID            = 100000307;
+
     /** @var ObjectManager */
     protected $em;
 
@@ -589,23 +591,29 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     /**
      * @param Cart     $cart
      * @param Customer $customer
+     * @param int      $incrementId
+     * @param int      $originId
      *
      * @return Order
      */
-    protected function createOrder(Cart $cart, Customer $customer)
-    {
+    protected function createOrder(
+        Cart $cart,
+        Customer $customer,
+        $incrementId = self::DEFAULT_ORDER_INCREMENT_ID,
+        $originId = 1
+    ) {
         $order = new Order();
         $order->setChannel($this->integration);
         $order->setDataChannel($this->channel);
         $order->setStatus('open');
-        $order->setOriginId(1);
-        $order->setIncrementId('100000307');
+        $order->setOriginId($originId);
+        $order->setIncrementId($incrementId);
         $order->setCreatedAt(new \DateTime('now'));
         $order->setUpdatedAt(new \DateTime('now'));
         $order->setCart($cart);
         $order->setStore($this->store);
         $order->setCustomer($customer);
-        $order->setCustomerEmail('customer@email.com');
+        $order->setCustomerEmail($customer->getEmail());
         $order->setDiscountAmount(4.40);
         $order->setTaxAmount(12.47);
         $order->setShippingAmount(5);

@@ -14,6 +14,9 @@ class LoadOrderNotesData extends LoadMagentoChannel
     const DEFAULT_ORIGIN_ID = 100000200;
     const DEFAULT_MESSAGE   = 'Default test message';
 
+    const OTHER_ORDER_NOTE_ORIGIN_ID = 10000022;
+    const OTHER_ORDER_NOTE_MESSAGE = 'test other message';
+
     const DEFAULT_ORDER_REFERENCE_ALIAS = 'default_order';
 
     /** {@inheritdoc} */
@@ -37,6 +40,10 @@ class LoadOrderNotesData extends LoadMagentoChannel
         $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
 
         $customer       = $this->createCustomer(1, $account, $magentoAddress);
+        $newCustomer    = $this->createCustomer(2, $account, $magentoAddress);
+
+        $this->setReference('customer', $customer);
+
         $cartAddress1   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
         $cartAddress2   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
         $cartItem       = $this->createCartItem();
@@ -47,6 +54,7 @@ class LoadOrderNotesData extends LoadMagentoChannel
         $cart = $this->createCart($cartAddress1, $cartAddress2, $customer, $items, $status);
         $this->updateCartItem($cartItem, $cart);
 
+        $newOrder = $this->createOrder($cart, $newCustomer, 123456789, 10);
         $order = $this->createOrder($cart, $customer);
 
         $baseOrderItem = $this->createBaseOrderItem($order);
@@ -66,13 +74,33 @@ class LoadOrderNotesData extends LoadMagentoChannel
 
         $baseOrderItem = $this->createBaseOrderItem($guestOrder);
         $order->setItems([$baseOrderItem]);
+        $newOrder->setItems([$baseOrderItem]);
         $this->em->persist($guestOrder);
 
-        $baseOrderNote = $this->createOrderNote();
+        $baseOrderNote = $this->createOrderNote($order);
         $order->addOrderNote($baseOrderNote);
         $this->em->persist($order);
 
+        $newOrderNote = $this->createOrderNote($newOrder, 123456789, 'new order message');
+        $newOrder->addOrderNote($newOrderNote);
+        $this->em->persist($newOrder);
+
+        $otherOrder = $this->createOrder($cart, $customer, 200000308, 2);
+        $otherOrderItem = $this->createBaseOrderItem($otherOrder);
+        $order->setItems([$otherOrderItem]);
+        $this->em->persist($otherOrder);
+        $otherOrderNotes = $this->createOrderNote(
+            $otherOrder,
+            self::OTHER_ORDER_NOTE_ORIGIN_ID,
+            self::OTHER_ORDER_NOTE_MESSAGE
+        );
+
+        $otherOrder->addOrderNote($otherOrderNotes);
+
+        $this->em->persist($otherOrderNotes);
+
         $this->setReference(self::DEFAULT_ORDER_REFERENCE_ALIAS, $order);
+        $this->setReference(self::DEFAULT_ORDER_INCREMENT_ID, $order);
 
         $this->em->flush();
     }
@@ -82,16 +110,20 @@ class LoadOrderNotesData extends LoadMagentoChannel
      * @param string            $message
      * @param \DateTime|null    $createdAt
      * @param \DateTime|null    $updatedAt
+     * @param Order|null        $order
      *
      * @return OrderNote
      */
     protected function createOrderNote(
+        Order $order,
         $originId = self::DEFAULT_ORIGIN_ID,
         $message = self::DEFAULT_MESSAGE,
         \DateTime $createdAt = null,
         \DateTime $updatedAt = null
     ) {
         $orderNote = new OrderNote();
+
+        $orderNote->setOrder($order);
 
         $orderNote->setOriginId($originId);
         $orderNote->setMessage($message);
@@ -106,6 +138,9 @@ class LoadOrderNotesData extends LoadMagentoChannel
 
         $orderNote->setCreatedAt($createdAt);
         $orderNote->setUpdatedAt($updatedAt);
+
+        $orderNote->setOwner($order->getOwner());
+        $orderNote->setOrganization($order->getOrganization());
 
         $orderNote->setChannel($this->integration);
 
