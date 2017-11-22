@@ -26,13 +26,13 @@ class IntegrationRemoveListener
     }
 
     /**
-     * @param LifecycleEventArgs $eventArgs
+     * @param MagentoSoapTransport $entity
+     * @param LifecycleEventArgs   $args
      */
-    public function preRemove(LifecycleEventArgs $eventArgs)
+    public function preRemove(MagentoSoapTransport $entity, LifecycleEventArgs $args)
     {
-        $entity = $eventArgs->getEntity();
-        if ($entity instanceof MagentoSoapTransport && $entity->getWsdlUrl()) {
-            $this->wsdlManager->clearCacheForUrl($entity->getWsdlUrl());
+        if ($entity->getApiUrl()) {
+            $this->wsdlManager->clearCacheForUrl($entity->getApiUrl());
         }
     }
 }

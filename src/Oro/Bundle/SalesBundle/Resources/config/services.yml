@@ -152,7 +152,7 @@ services:
             - '@oro_config.user'
             - '@oro_workflow.restriction.manager'
         tags:
-            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_sales.opportunity.class%', event: preUpdate }
 
     oro_sales.event_listener.config.default_probability:
         class: Oro\Bundle\SalesBundle\EventListener\Config\DefaultProbabilityListener

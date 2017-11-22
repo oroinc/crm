@@ -4,57 +4,40 @@ namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 
-class CustomerCurrencyListener implements ContainerAwareInterface
+class CustomerCurrencyListener
 {
-    /**
-     * @var LocaleSettings
-     */
-    protected $localeSettings;
+    /** @var ContainerInterface */
+    private $container;
 
     /**
-     * @var ContainerInterface|null
+     * @param ContainerInterface $container
      */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
     /**
+     * @param Customer           $entity
      * @param LifecycleEventArgs $event
      */
-    public function prePersist(LifecycleEventArgs $event)
+    public function prePersist(Customer $entity, LifecycleEventArgs $event)
     {
-        /** @var Customer $entity */
-        $entity = $event->getEntity();
-
-        if ($entity instanceof Customer && !$entity->getCurrency()) {
-            $localeSettings = $this->getLocaleSettings();
-            if ($localeSettings) {
-                $entity->setCurrency($localeSettings->getCurrency());
-            }
+        if (!$entity->getCurrency()) {
+            $entity->setCurrency($this->getLocaleSettings()->getCurrency());
         }
     }
 
     /**
      * @return LocaleSettings
      */
-    protected function getLocaleSettings()
+    private function getLocaleSettings()
     {
-        if (!$this->localeSettings) {
-            $this->localeSettings = $this->container->get('oro_locale.settings');
-        }
-
-        return $this->localeSettings;
+        return $this->container->get('oro_locale.settings');
     }
 }
