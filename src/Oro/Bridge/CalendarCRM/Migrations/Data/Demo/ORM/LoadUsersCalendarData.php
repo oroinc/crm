@@ -2,6 +2,10 @@
 
 namespace Oro\Bridge\CalendarCRM\Migrations\Data\Demo\ORM;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -12,16 +16,12 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
-
 use Oro\Bundle\CalendarBundle\Entity\Recurrence;
 use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 use Oro\Bundle\CalendarBundle\Model;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -150,21 +150,25 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $events['weekend'][] = $event;
             }
         }
-
         foreach ($this->users as $index => $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
-            //recurring events
             $events['recurring_events'] = $this->getRecurringEvents();
             foreach ($events as $typeEvents) {
                 if (mt_rand(0, 1)) {
                     foreach ($typeEvents as $typeEvent) {
-                        $calendar->addEvent(clone $typeEvent);
+                        $event = clone $typeEvent;
+                        $event->setIsOrganizer(true)->setOrganizerEmail($calendar->getOwner()->getEmail())
+                            ->setOrganizerDisplayName(sprintf(
+                                '%s %s',
+                                $calendar->getOwner()->getFirstName(),
+                                $calendar->getOwner()->getLastName()
+                            ))->setOrganizerUser($calendar->getOwner());
+                        $calendar->addEvent($event);
                     }
                 }
             }
-
             $this->em->persist($calendar);
             if ($index > 0 && $index % 5 === 0) {
                 $this->em->flush();
@@ -174,13 +178,11 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
             }
         }
-
         $this->em->flush();
         $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityOwner');
         $this->em->clear('Oro\Bundle\ActivityListBundle\Entity\ActivityList');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
-
         $this->addRecurringEventExceptions();
     }
 

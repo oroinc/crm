@@ -91,7 +91,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * Get existing registered customer or existing guest customer
+     * Get existing registered customer
      * Find existing customer using entity data for entities containing customer like Order and Cart
      *
      * @param object $entity
@@ -177,7 +177,7 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
             $mageRegionId = $entity->getCode();
         }
 
-        /** @var Region $magentoRegion */
+        /** @var MagentoRegion $magentoRegion */
         $magentoRegion = $this->databaseHelper->findOneBy(
             'Oro\Bundle\MagentoBundle\Entity\Region',
             [

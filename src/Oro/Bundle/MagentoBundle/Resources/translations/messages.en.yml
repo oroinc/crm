@@ -560,6 +560,9 @@ oro:
             check_connection.label:       Check connection
             website_refresh.label:        Sync website list
             initial_sync_start_date.label: Initial sync start date
+            shared_guest_email_list:
+                label:   Split By Full Name
+                tooltip: Separate customer accounts will be created for Magento customers with the specified email(s) during import. To enter multiple emails use semicolons or commas.
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
                 outdated_bridge: OroBridge v.%extension_version% is used—outdated version
@@ -1132,7 +1135,7 @@ oro:
             owner.label:                          Owner
 
         recent_purchases:
-            label:                                Recent Purchases
+            label:                                Magento Purchases
 
         #regions:
         #   entity_label:        Magento Region

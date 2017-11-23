@@ -11,6 +11,7 @@ use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 
 class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
 {
@@ -28,6 +29,11 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
      * @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel
      */
     protected $channel;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|GuestCustomerStrategyHelper
+     */
+    protected $guestCustomerStrategyHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext $execution
@@ -49,6 +55,8 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->guestCustomerStrategyHelper = $this->createMock(GuestCustomerStrategyHelper::class);
+
         $this->execution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ExecutionContext')
             ->getMock();
     }
@@ -58,7 +66,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
      */
     protected function getStrategy()
     {
-        return new OrderWithExistingCustomerStrategy(
+        $strategy = new OrderWithExistingCustomerStrategy(
             $this->eventDispatcher,
             $this->strategyHelper,
             $this->fieldHelper,
@@ -69,6 +77,10 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->doctrineHelper,
             $this->ownerChecker
         );
+
+        $strategy->setGuestCustomerStrategyHelper($this->guestCustomerStrategyHelper);
+
+        return $strategy;
     }
 
     /**

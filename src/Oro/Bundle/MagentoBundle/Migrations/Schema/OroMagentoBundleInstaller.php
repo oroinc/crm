@@ -72,7 +72,7 @@ class OroMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_50_4';
+        return 'v1_51';
     }
 
     /**
@@ -161,6 +161,11 @@ class OroMagentoBundleInstaller implements
         $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
         $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('api_token', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn(
+            'shared_guest_email_list',
+            'simple_array',
+            ['notnull' => false, 'comment' => '(DC2Type:simple_array)']
+        );
     }
 
     /**
