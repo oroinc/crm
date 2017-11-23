@@ -99,6 +99,21 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
+    OpportunityStatusFilter:
+       selector:
+           type: xpath
+           locator: '//div[text()[contains(.,"Status")]]'
+
+    OpportunityStatusFilerSelectButton:
+       selector:
+           type: xpath
+           locator: '//button[text()[contains(.,"is not any of")]]'
+
+    OpportunityStatusFilerSelectField:
+       selector:
+           type: xpath
+           locator: '//button[text()[contains(.,"is not any of")]]/ancestor::div[contains(@class, "choice-filter")]/div[contains(@class, "value-field-frame")]/div/ul'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
