@@ -418,6 +418,16 @@ Example:
 
 Remove records of items assigned to a specific Magento order record.
 
+### orderNotes
+
+#### get_subresource
+
+Retrieve the records of notes are assigned to a specific Magento order.
+
+#### get_relationship
+
+Retrieve the IDs of the notes assigned to a specific Magento order record.
+
 ### cart
 
 #### get_subresource
