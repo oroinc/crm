@@ -259,7 +259,7 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function getRequiredExtensionVersion();
 
     /**
-     * Retrieve required extension version from magento is supported by order note functionality
+     * Retrieve the required extension version from Magento that supports the order note functionality
      *
      * @return mixed
      */

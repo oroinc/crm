@@ -7,6 +7,28 @@
 * The parameter `oro_magento.event_listener.customer_currency.class` was removed form the service container
 * The parameter `oro_magento.event_listener.order.class` was removed form the service container
 * The parameter `oro_magento.integration_entity.remove_listener.class` was removed form the service container
+* Traits `CreatedAtTrait` and `UpdatedAtTrait` were added. Use them instead of adding new `updatedAt` and `createdAt` fields to the entity.
+* Interface `CreatedAtAwareInterface` and `UpdatedAtAwareInterface` were added. Use them with the `CreatedAtTrait` and `UpdatedAtTrait` traits.
+* Entity `MagentoTransport` was changed:
+    * The new `isDisplayOrderNotes` field was added. It tells whether order notes are to be displayed on the `Magento Customer` and `Account` view pages.
+    * Method `isSupportedOrderNoteExtensionVersion`. Use it to find out if channel configuration supports the synchronization of `Order Notes`.
+* The new relation `orderNotes` was added to the `Order` entity. It contains a collection of notes attached to the current `Order`.
+* The new entity `OrderNote` was added. It contains a single record of an `Order Note`.
+* Class `IsDisplayOrderNotesSubscriber` was added. It blocks the `isDisplayOrderNotes` field when the current channel does not support the order notes functionality.
+* Class `IsDisplayOrderNotesFormType` and its service `oro_magento_is_display_order_notes_type` were added to define all options required by the `isDisplayOrderNotes` field in one place.
+* Class `OrderNotesDataConverter` and its service `oro_magento.importexport.data_converter.order_notes` were added to specify the converting logic for order notes from raw data to the data that is ready for deserialization.
+* Interface `MagentoTransportInterface` was changed:
+    * Added method `isSupportedOrderNoteExtensionVersion`. It uses to check that retrieved extension version from magento is supported order note functionality.
+    * Added method `getOrderNoteRequiredExtensionVersion`. It is used to retrieve the required extension version from Magento that supports the order note functionality.
+* Classes `RestTransport` and `SoapTransport` were changed. They introduced implementation of the new methods that were added to `MagentoTransportInterface`.
+* Four datagrids were added to show order notes for customer, account, order.
+[Documentation](./src/Oro/Bundle/MagentoBundle/Resources/doc/reference/order_notes_datagrid.md)
+* Class `OrderNotesExtension` and its service `oro_magento.twig.order_notes_extension`. Use them to check if the notes tab or grid are allowed to be shown.
+* Class `Context` was added. Use it to deliver data from `ChainProcessor` to its sub-processors.
+* Class `ChainProcessor` and its service `oro_magento.importexport.processor.order_notes.chain_processor` were added. Use them to prepare `Order Note` collection for import.
+* Interface `ProcessorInterface` was added. It is a contract for the sub-processors of `ChainProcessor`.
+* Class `ValidationNoteProcessor` and its service `oro_magento.importexport.processor.order_notes.validation_note_processor` were added. It's a sub-processor of `ChainProcessor` that was added to filter invalid `Order Notes`.
+* Class `NoteFieldsProcessor` and its service `oro_magento.importexport.processor.order_notes.note_fields_processor` were added. It's a sub-processor of `ChainProcessor` that was added to map selected fields from the `Order` to the `Order Note` entity and apply specific transformation functions to data that is kept in the `Order Note` fields.
 
 ## 2.5.0 (Unreleased)
 
