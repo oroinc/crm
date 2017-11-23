@@ -114,6 +114,21 @@ oro_behat_extension:
            type: xpath
            locator: '//button[text()[contains(.,"is not any of")]]/ancestor::div[contains(@class, "choice-filter")]/div[contains(@class, "value-field-frame")]/div/ul'
 
+    ConfigurationLocalizationForm:
+      selector: 'form[name="localization"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Locale Use Default: 'localization[oro_locale___locale][use_parent_scope_value]'
+          Locale: 'localization[oro_locale___locale][value]'
+          Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
+          Primary Location: 'localization[oro_locale___country][value]'
+
+    EuroAsDefaultValue:
+      selector:
+          type: xpath
+          locator: '//td[text()[contains(.,"EUR")]]/parent::tr/*[1]//input'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
@@ -152,6 +167,7 @@ oro_behat_extension:
       contexts:
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\OroMainContext
         - Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\FixturesContext
+        - OroConfigBundle::FeatureContext
         - OroDataGridBundle::GridContext
         - OroFormBundle::FormContext
         - OroSecurityBundle::ACLContext

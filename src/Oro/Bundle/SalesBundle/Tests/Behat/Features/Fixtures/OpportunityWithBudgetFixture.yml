@@ -1,0 +1,18 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'mister customer 1'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  mrcustomer:
+    account: '@account1'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity1:
+    name: 'Opportunity 1'
+    customerAssociation: '@mrcustomer'
+    organization: '@organization'
+    status: in_progress
+    owner: '@admin'
+    budgetAmountCurrency: USD
+    budgetAmountValue: 50.00
