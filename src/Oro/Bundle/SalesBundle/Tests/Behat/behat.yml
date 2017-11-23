@@ -99,6 +99,36 @@ oro_behat_extension:
       selector: '.oro-grid-table'
       class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\FrontendTableGrid
 
+    ConfigurationLocalizationForm:
+      selector: 'form[name="localization"]'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Locale Use Default: 'localization[oro_locale___locale][use_parent_scope_value]'
+          Locale: 'localization[oro_locale___locale][value]'
+          Primary Location Use Default: 'localization[oro_locale___country][use_parent_scope_value]'
+          Primary Location: 'localization[oro_locale___country][value]'
+
+    EuroAsDefaultValue:
+      selector:
+          type: xpath
+          locator: '//td[text()[contains(.,"EUR")]]/parent::tr/*[1]//input'
+
+    OpportunityStatusFilter:
+       selector:
+           type: xpath
+           locator: '//div[text()[contains(.,"Status")]]'
+
+    OpportunityStatusFilerSelectButton:
+       selector:
+           type: xpath
+           locator: '//button[text()[contains(.,"is not any of")]]'
+
+    OpportunityStatusFilerSelectField:
+       selector:
+           type: xpath
+           locator: '//button[text()[contains(.,"is not any of")]]/ancestor::div[contains(@class, "choice-filter")]/div[contains(@class, "value-field-frame")]/div/ul'
+
   pages:
     Opportunity Index:
       route: 'oro_sales_opportunity_index'
@@ -148,5 +178,6 @@ oro_behat_extension:
         - OroSalesBundle::FeatureContext
         - OroNavigationBundle::FeatureContext
         - OroSalesBundle::SalesFeatureToggleContext
+        - OroConfigBundle::FeatureContext
       paths:
         - '@OroSalesBundle/Tests/Behat/Features'
