@@ -31,9 +31,9 @@ class OrderNotesExtension extends \Twig_Extension
         if ($entity instanceof IntegrationAwareInterface) {
             /** @var MagentoTransport $magentoTransport */
             $magentoTransport = $entity->getChannel()->getTransport();
-            $isExtensionInstalled = $magentoTransport->isSupportedOrderNoteExtensionVersion();
+            $isSupportedOrderNoteFunctionality = $magentoTransport->isSupportedOrderNoteExtensionVersion();
             $isDisplayOnAccountOrCustomerPage = $magentoTransport->getIsDisplayOrderNotes();
-            if ($isExtensionInstalled && ($isDisplayOnAccountOrCustomerPage || $entity instanceof Order)) {
+            if ($isSupportedOrderNoteFunctionality && ($isDisplayOnAccountOrCustomerPage || $entity instanceof Order)) {
                 return true;
             }
         }

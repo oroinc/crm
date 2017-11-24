@@ -516,7 +516,7 @@ class RestTransport implements
     }
 
     /**
-     * {@inheritdoc}
+     * @throws RuntimeException
      */
     public function getOrderNoteRequiredExtensionVersion()
     {

@@ -7,7 +7,7 @@ use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConv
 class OrderDataConverter extends AbstractTreeDataConverter
 {
     /** @var string[] */
-    protected $normalizeKeys = [
+    protected $arrayNodeKeys = [
         'items',
         'status_history'
     ];
@@ -56,9 +56,9 @@ class OrderDataConverter extends AbstractTreeDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        foreach ($this->normalizeKeys as $key) {
+        foreach ($this->arrayNodeKeys as $key) {
             if (!empty($importedRecord[$key])) {
-                $this->normalizedRow($importedRecord, $key);
+                $this->fixNodeWithSingleRecord($importedRecord, $key);
             }
         }
 
@@ -97,7 +97,7 @@ class OrderDataConverter extends AbstractTreeDataConverter
      * @param mixed[]   $importedRecord
      * @param string    $key
      */
-    private function normalizedRow(array &$importedRecord, $key)
+    private function fixNodeWithSingleRecord(array &$importedRecord, $key)
     {
         // normalize order rows if single is passed
         if (!empty($importedRecord[$key])) {

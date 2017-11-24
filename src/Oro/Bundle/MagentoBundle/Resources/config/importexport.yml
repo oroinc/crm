@@ -110,6 +110,7 @@ services:
 
     oro_magento.importexport.data_converter.order_notes:
         class: Oro\Bundle\MagentoBundle\ImportExport\Converter\OrderNotesDataConverter
+        public: false
 
     oro_magento.importexport.data_converter.order:
         class: %oro_magento.importexport.data_converter.order.class%

@@ -86,7 +86,7 @@ abstract class AbstractMagentoGridTest extends WebTestCase
      * @param string    $gridName
      * @param string    $user
      */
-    public function testGridIfUserAclNotAllowed($gridName, $user = LoadUserACLData::SIMPLE_USER_2_ROLE_LOCAL)
+    public function testGridIfUserAclNotAllowed($gridName, $user)
     {
         $this->loginUser($user);
 

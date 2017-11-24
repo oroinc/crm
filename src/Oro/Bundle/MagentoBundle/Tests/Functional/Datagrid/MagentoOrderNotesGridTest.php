@@ -90,9 +90,18 @@ class MagentoOrderNotesGridTest extends AbstractMagentoGridTest
     public function gridAclDataProvider()
     {
         return [
-            ['gridName' => 'magento-order-notes-widget-grid'],
-            ['gridName' => 'magento-account-order-notes-widget-grid'],
-            ['gridName' => 'magento-customer-order-notes-widget-grid']
+            "Test ACL on widget 'magento-order-notes-widget-grid'" => [
+                'gridName' => 'magento-order-notes-widget-grid',
+                'user' => LoadUserACLData::SIMPLE_USER_2_ROLE_LOCAL
+            ],
+            "Test ACL on widget 'magento-account-order-notes-widget-grid'" => [
+                'gridName' => 'magento-account-order-notes-widget-grid',
+                'user' => LoadUserACLData::SIMPLE_USER_2_ROLE_LOCAL
+            ],
+            "Test ACL on widget 'magento-customer-order-notes-widget-grid'" => [
+                'gridName' => 'magento-customer-order-notes-widget-grid',
+                'user' => LoadUserACLData::SIMPLE_USER_2_ROLE_LOCAL
+            ]
         ];
     }
 
