@@ -8,7 +8,7 @@
 * The parameter `oro_magento.event_listener.order.class` was removed form the service container
 * The parameter `oro_magento.integration_entity.remove_listener.class` was removed form the service container
 
-## 2.5.0 (Unreleased)
+## 2.5.0 (2017-11-30)
 
 ### Added
 #### ACL
