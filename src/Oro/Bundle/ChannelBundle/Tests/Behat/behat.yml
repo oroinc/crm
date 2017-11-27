@@ -6,5 +6,5 @@ oro_behat_extension:
       options:
         mapping:
           Entities Select:
-            locator: '//input[@class="select2-focusser select2-offscreen"]'
+            locator: '//input[@class="select2-focusser select2-offscreen" and @id="s2id_autogen3"]'
             type: xpath
