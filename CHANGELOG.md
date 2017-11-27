@@ -7,6 +7,8 @@
 * The parameter `oro_magento.event_listener.customer_currency.class` was removed form the service container
 * The parameter `oro_magento.event_listener.order.class` was removed form the service container
 * The parameter `oro_magento.integration_entity.remove_listener.class` was removed form the service container
+#### ContactUsBundle
+* Field `emailAddress` now have `"contact_information"="email"` entity property
 
 ## 2.5.0 (Unreleased)
 
