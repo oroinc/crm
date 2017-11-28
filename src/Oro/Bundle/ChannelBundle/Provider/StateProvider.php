@@ -95,8 +95,7 @@ class StateProvider
     }
 
     /**
-     * Event listener subscribed  on 'oro_channel.channel.save_succeed' and on
-     * 'oro_channel.channel.delete_succeed' event.
+     * Delete cache for channel
      */
     public function processChannelChange()
     {
