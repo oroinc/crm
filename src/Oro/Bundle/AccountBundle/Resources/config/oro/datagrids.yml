@@ -101,6 +101,9 @@ datagrids:
                 route:      oro_api_delete_account
                 params:     [ id ]
         columns:
+            id:
+                label:         oro.account.id.label
+                renderable:    false
             name:
                 label:         oro.account.name.label
             contactName:
@@ -145,6 +148,8 @@ datagrids:
                     data_name: a.updatedAt
         sorters:
             columns:
+                id:
+                    data_name: a.id
                 name:
                     data_name: a.name
                 contactName:

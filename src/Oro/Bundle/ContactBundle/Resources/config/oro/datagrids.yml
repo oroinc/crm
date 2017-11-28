@@ -220,6 +220,9 @@ datagrids:
         inline_editing:
             enable: true
         columns:
+            id:
+                label:         oro.contact.id.label
+                renderable:    false
             firstName:
                 label:         oro.contact.first_name.label
             lastName:
@@ -344,6 +347,8 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
+                id:
+                    data_name: c.id
                 firstName:
                     data_name: c.firstName
                 lastName:
