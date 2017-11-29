@@ -1,4 +1,5 @@
 @fixture-OroAccountBundle:crud-account.yml
+@ticket-BAP-15992
 Feature: CRUD Account
   In order to have ability create, view, update and delete accounts
   As a administrator
@@ -56,3 +57,11 @@ Scenario: Delete Account
   When confirm deletion
   Then I should see "item deleted" flash message
   And there is no records in grid
+
+Scenario: Search for owner by email when create Account
+  Given I login as administrator
+  And I go to Customers/Accounts
+  And I press "Create Account"
+  When I type "email" in "Owner"
+  Then I should see "test.email1@example.com"
+  And I should see "test.email2@example.com"

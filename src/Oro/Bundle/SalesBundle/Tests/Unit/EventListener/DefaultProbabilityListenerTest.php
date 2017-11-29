@@ -13,18 +13,6 @@ use Oro\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
 
 class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testShouldApplyOnlyToOpportunityOnUpdate()
-    {
-        $object = new \stdClass();
-        $object->probability = 0.7;
-
-        $eventArguments = $this->getPreUpdateEventArguments($object);
-        $listener = $this->getListener();
-        $listener->preUpdate($eventArguments);
-
-        $this->assertEquals(0.7, $object->probability);
-    }
-
     /**
      * @dataProvider statusDataProvider
      *
@@ -41,7 +29,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $listener = $this->getListener();
-        $listener->preUpdate($eventArguments);
+        $listener->preUpdate($opportunity, $eventArguments);
 
         $this->assertEquals($expectedProbability, $opportunity->getProbability());
     }
@@ -57,7 +45,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $listener = $this->getListener();
-        $listener->preUpdate($eventArguments);
+        $listener->preUpdate($opportunity, $eventArguments);
 
         $this->assertEquals(0.25, $opportunity->getProbability());
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
@@ -70,7 +58,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
             'probability' => [0.1, 0.25]
         ]);
         $listener = $this->getListener();
-        $listener->preUpdate($eventArguments);
+        $listener->preUpdate($opportunity, $eventArguments);
 
         $this->assertEquals(0.25, $opportunity->getProbability());
         $this->assertEquals(0.25, $eventArguments->getNewValue('probability'));
@@ -86,7 +74,7 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
         $listener = $this->getListener($restricted = true);
-        $listener->preUpdate($eventArguments);
+        $listener->preUpdate($opportunity, $eventArguments);
 
         $this->assertEquals(0.25, $opportunity->getProbability());
     }

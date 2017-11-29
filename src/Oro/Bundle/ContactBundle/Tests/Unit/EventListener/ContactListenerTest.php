@@ -34,15 +34,13 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param object $entity
+     * @param Contact $entity
      * @param bool $mockToken
      * @param bool $mockUser
      * @dataProvider prePersistAndPreUpdateDataProvider
      */
     public function testPrePersist($entity, $mockToken = false, $mockUser = false)
     {
-        $initialEntity = clone $entity;
-
         $user = $mockUser ? new User() : null;
         $this->mockSecurityContext($mockToken, $mockUser, $user);
 
@@ -57,12 +55,7 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
 
         $args = new LifecycleEventArgs($entity, $em);
 
-        $this->contactListener->prePersist($args);
-
-        if (!$entity instanceof Contact) {
-            $this->assertEquals($initialEntity, $entity);
-            return;
-        }
+        $this->contactListener->prePersist($entity, $args);
 
         $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
@@ -90,14 +83,14 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
 
         $args = new LifecycleEventArgs($entity, $em);
 
-        $this->contactListener->prePersist($args);
+        $this->contactListener->prePersist($entity, $args);
 
         $this->assertSame($createdAt, $entity->getCreatedAt());
         $this->assertSame($createdBy, $entity->getCreatedBy());
     }
 
     /**
-     * @param object $entity
+     * @param Contact $entity
      * @param bool $mockToken
      * @param bool $mockUser
      * @param bool $detachedUser
@@ -114,10 +107,8 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         $oldDate = new \DateTime('2012-12-12 12:12:12');
         $oldUser = new User();
         $oldUser->setFirstName('oldUser');
-        if ($entity instanceof Contact) {
-            $entity->setUpdatedAt($oldDate);
-            $entity->setUpdatedBy($oldUser);
-        }
+        $entity->setUpdatedAt($oldDate);
+        $entity->setUpdatedBy($oldUser);
 
         $initialEntity = clone $entity;
 
@@ -140,33 +131,24 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getUnitOfWork')
             ->will($this->returnValue($unitOfWork));
 
-        if ($entity instanceof Contact) {
-            $callIndex = 0;
-            if (null !== $detachedUser) {
-                $unitOfWork->expects($this->at($callIndex++))
-                    ->method('getEntityState')
-                    ->with($newUser)
-                    ->will($this->returnValue($detachedUser ? UnitOfWork::STATE_DETACHED : UnitOfWork::STATE_MANAGED));
-            }
+        $callIndex = 0;
+        if (null !== $detachedUser) {
             $unitOfWork->expects($this->at($callIndex++))
-                ->method('propertyChanged')
-                ->with($entity, 'updatedAt', $oldDate, $this->isInstanceOf('\DateTime'));
-            $unitOfWork->expects($this->at($callIndex))
-                ->method('propertyChanged')
-                ->with($entity, 'updatedBy', $oldUser, $newUser);
-        } else {
-            $unitOfWork->expects($this->never())->method($this->anything());
+                ->method('getEntityState')
+                ->with($newUser)
+                ->will($this->returnValue($detachedUser ? UnitOfWork::STATE_DETACHED : UnitOfWork::STATE_MANAGED));
         }
+        $unitOfWork->expects($this->at($callIndex++))
+            ->method('propertyChanged')
+            ->with($entity, 'updatedAt', $oldDate, $this->isInstanceOf('\DateTime'));
+        $unitOfWork->expects($this->at($callIndex))
+            ->method('propertyChanged')
+            ->with($entity, 'updatedBy', $oldUser, $newUser);
 
         $changeSet = array();
         $args = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        $this->contactListener->preUpdate($args);
-
-        if (!$entity instanceof Contact) {
-            $this->assertEquals($initialEntity, $entity);
-            return;
-        }
+        $this->contactListener->preUpdate($entity, $args);
 
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
         if ($mockToken && $mockUser) {
@@ -182,11 +164,6 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
     public function prePersistAndPreUpdateDataProvider()
     {
         return array(
-            'not a contact' => array(
-                'entity'    => new \DateTime('now'),
-                'mockToken' => false,
-                'mockUser'  => false,
-            ),
             'no token' => array(
                 'entity'    => new Contact(),
                 'mockToken' => false,

@@ -26,41 +26,22 @@ class ContactListener
     }
 
     /**
+     * @param Contact            $entity
      * @param LifecycleEventArgs $args
      */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(Contact $entity, LifecycleEventArgs $args)
     {
-        $entity = $args->getEntity();
-        if (!$this->isContactEntity($entity)) {
-            return;
-        }
-
-        /** @var Contact $entity */
         $this->setCreatedProperties($entity, $args->getEntityManager());
         $this->setUpdatedProperties($entity, $args->getEntityManager());
     }
 
     /**
+     * @param Contact            $entity
      * @param PreUpdateEventArgs $args
      */
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(Contact $entity, PreUpdateEventArgs $args)
     {
-        $entity = $args->getEntity();
-        if (!$this->isContactEntity($entity)) {
-            return;
-        }
-
-        /** @var Contact $entity */
         $this->setUpdatedProperties($entity, $args->getEntityManager(), true);
-    }
-
-    /**
-     * @param object $entity
-     * @return bool
-     */
-    protected function isContactEntity($entity)
-    {
-        return $entity instanceof Contact;
     }
 
     /**

@@ -52,7 +52,7 @@
         <div class="responsive-block">
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
             {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes, entity, 'notes') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes|oro_tag_filter, entity, 'notes') }}
         </div>
     </div>
 </div>

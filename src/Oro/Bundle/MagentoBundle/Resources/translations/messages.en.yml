@@ -1135,7 +1135,7 @@ oro:
             owner.label:                          Owner
 
         recent_purchases:
-            label:                                Recent Purchases
+            label:                                Magento Purchases
 
         #regions:
         #   entity_label:        Magento Region
