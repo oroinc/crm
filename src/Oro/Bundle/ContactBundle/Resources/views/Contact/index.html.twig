@@ -4,13 +4,8 @@
 {% set pageTitle = 'oro.contact.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
-        entity_class: entity_class,
-        exportProcessor: 'oro_contact',
-        exportTemplateProcessor: 'oro_contact',
-        importProcessor: 'oro_contact.add_or_replace',
-        importTitle: 'oro.contact.import'|trans,
-        dataGridName: gridName
+    {% include 'OroImportExportBundle:ImportExport:buttons_from_configuration.html.twig' with {
+        'alias': 'oro_contact'
     } %}
 
     {% if is_granted('oro_contact_create') %}
