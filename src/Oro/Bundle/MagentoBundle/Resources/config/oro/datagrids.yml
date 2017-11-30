@@ -2314,7 +2314,7 @@ datagrids:
             type: orm
             query:
                 select:
-                    - o.id as orderId
+                    - o.incrementId as incrementId
                     - on.message
                     - on.createdAt as noteDate
                     - on.updatedAt as noteUpdatedDate
@@ -2361,6 +2361,8 @@ datagrids:
         extends: magento-order-notes-base-grid
         source:
             query:
+                select:
+                    - o.id as orderId
                 where:
                     and:
                         - o.customer = :customerId
@@ -2369,7 +2371,7 @@ datagrids:
                 - customerId
                 - channelId
         columns:
-            orderId:
+            incrementId:
                 label: oro.magento.order.increment_id.label
                 order: 1
         properties:
