@@ -210,9 +210,6 @@ services:
             - "@doctrine"
             - "@oro_security.token_accessor"
             - "@oro_security.acl_helper"
-        tags:
-            - { name: kernel.event_listener, event: 'oro_channel.channel.save_succeed', method: processChannelChange}
-            - { name: kernel.event_listener, event: 'oro_channel.channel.delete_succeed', method: processChannelChange}
 
     oro_channel.provider.utils.entity_state_provider:
         class: %oro_channel.provider.utils.entity_state_provider.class%
@@ -288,6 +285,14 @@ services:
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
+    oro_channel.event_listener.refresh_channel_cache_listener:
+          class: Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener
+          arguments:
+              - '@oro_channel.provider.state_provider'
+          tags:
+            - { name: doctrine.orm.entity_listener, entity: '%oro_channel.entity.class%', event: prePersist }
+            - { name: doctrine.orm.entity_listener, entity: '%oro_channel.entity.class%', event: postRemove }
 
     oro_channel.event_listener.timezone_change:
       class: 'Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener'

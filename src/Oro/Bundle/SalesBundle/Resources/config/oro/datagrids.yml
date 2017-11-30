@@ -44,6 +44,9 @@ datagrids:
         inline_editing:
             enable: true
         columns:
+            id:
+                label:         oro.sales.opportunity.id.label
+                renderable:    false
             name:
                 label:         oro.sales.opportunity.name.label
             createdAt:
@@ -165,6 +168,8 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
+                id:
+                    data_name: o.id
                 name:
                     data_name: o.name
                 createdAt:
@@ -363,6 +368,9 @@ datagrids:
         inline_editing:
             enable: true
         columns:
+            id:
+                label:         oro.sales.lead.id.label
+                renderable:    false
             name:
                 label:         oro.sales.lead.name.label
             status:
@@ -495,6 +503,8 @@ datagrids:
                 params:     [ id ]
         sorters:
             columns:
+                id:
+                    data_name: l.id
                 name:
                     data_name: l.name
                 status:

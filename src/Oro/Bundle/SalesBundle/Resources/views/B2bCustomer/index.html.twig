@@ -5,12 +5,8 @@
 {% set pageTitle = 'oro.sales.b2bcustomer.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
-        entity_class: entity_class,
-        exportProcessor: 'oro_sales_b2bcustomer',
-        exportTemplateProcessor: 'oro_sales_b2bcustomer',
-        importProcessor: 'oro_sales_b2bcustomer',
-        datagridName: gridName
+    {% include 'OroImportExportBundle:ImportExport:buttons_from_configuration.html.twig' with {
+        'alias': 'oro_b2b_customer'
     } %}
 
     {% if is_granted('oro_sales_b2bcustomer_create') %}

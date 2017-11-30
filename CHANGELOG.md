@@ -30,7 +30,7 @@
 * Class `ValidationNoteProcessor` and its service `oro_magento.importexport.processor.order_notes.validation_note_processor` were added. It's a sub-processor of `ChainProcessor` that was added to filter invalid `Order Notes`.
 * Class `NoteFieldsProcessor` and its service `oro_magento.importexport.processor.order_notes.note_fields_processor` were added. It's a sub-processor of `ChainProcessor` that was added to map selected fields from the `Order` to the `Order Note` entity and apply specific transformation functions to data that is kept in the `Order Note` fields.
 
-## 2.5.0 (Unreleased)
+## 2.5.0 (2017-11-30)
 
 ### Added
 #### ACL
@@ -46,11 +46,19 @@
 Use it to check if guest customer emails are on the `sharedGuestEmailList`, and retrieve identification data to search for existing guest customers.
 * Class `SharedEmailListSubscriber` is added to the `sharedGuestEmailList` block field when OroBridge extension is not installed on the Magento side.
 * Class `SharedGuestEmailListType` and its service `oro_magento_shared_guest_email_list_type` were added to define all options required by the `sharedGuestEmailList` field in one place.
+#### ChannelBundle
+* Class `RefreshChannelCacheListener` was added. Use it to refresh cache after channel create or delete.
 
 ### Changed
 #### MagentoBundle
 * Methods `transformArrayToString` and `transformStringToArray` were moved from `ArrayToStringTransformer` to `AbstractArrayToStringTransformer` and changed their visibility to `protected`
 * Property `$delimiter` was moved from `ArrayToStringTransformer` to `AbstractArrayToStringTransformer` and changed its visibility to `protected`
+
+### Removed
+#### ChannelBundle
+* Remove listener from `StateProvider` on next events:
+    - `oro_channel.channel.save_succeed`
+    - `oro_channel.channel.delete_succeed`
 
 ## 2.4.0 (2017-09-29)
 [Show detailed list of changes](#incompatibilities-2-4.md)
