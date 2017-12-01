@@ -1,5 +1,6 @@
 @ticket-BAP-14322
 Feature: Unknown Entity namespace alias 'OroSegmentBundle' during import
+  ToDo: BAP-16103 Add missing descriptions to the Behat features
 
   Scenario: Import contacts
     Given I login as administrator

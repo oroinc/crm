@@ -45,6 +45,13 @@ abstract class AbstractContactRequest implements
      * @var string
      *
      * @ORM\Column(name="email_address", type="string", length=100, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "contact_information"="email"
+     *          }
+     *      }
+     * )
      */
     protected $emailAddress;
 
