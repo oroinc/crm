@@ -16,7 +16,31 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     owner: '@admin'
     organization: '@organization'
     createdAt: <dateTimeBetween('now', 'now')>
-  contact-{2..15}:
+  contact-2:
+    namePrefix: Mr
+    firstName: John
+    lastName: Smith
+    gender: male
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-2']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('-30 days', '-10 days')>
+  contact-3:
+    namePrefix: Mr
+    firstName: John
+    lastName: Kowalkski
+    gender: male
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-3']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('-30 days', '-10 days')>
+  contact-{4..15}:
     namePrefix: <titleMale()>
     firstName: <firstNameMale()>
     lastName: <lastName()>
