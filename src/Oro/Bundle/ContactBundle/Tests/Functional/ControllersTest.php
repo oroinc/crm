@@ -153,7 +153,13 @@ class ControllersTest extends WebTestCase
             'DELETE',
             $this->getUrl(
                 'oro_datagrid_mass_action',
-                array('gridName' => 'contacts-grid', 'actionName' => 'delete', 'values' => $id, 'inset' => 1)
+                [
+                    'gridName' => 'contacts-grid',
+                    'actionName' => 'delete',
+                    'values' => $id,
+                    'inset' => 1,
+                    'token' => $this->getCsrfToken('delete')->getValue(),
+                ]
             )
         );
 
