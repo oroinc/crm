@@ -29,6 +29,8 @@
 * Interface `ProcessorInterface` was added. It is a contract for the sub-processors of `ChainProcessor`.
 * Class `ValidationNoteProcessor` and its service `oro_magento.importexport.processor.order_notes.validation_note_processor` were added. It's a sub-processor of `ChainProcessor` that was added to filter invalid `Order Notes`.
 * Class `NoteFieldsProcessor` and its service `oro_magento.importexport.processor.order_notes.note_fields_processor` were added. It's a sub-processor of `ChainProcessor` that was added to map selected fields from the `Order` to the `Order Note` entity and apply specific transformation functions to data that is kept in the `Order Note` fields.
+#### ContactUsBundle
+* Field `emailAddress` now have `"contact_information"="email"` entity property
 
 ## 2.5.0 (2017-11-30)
 

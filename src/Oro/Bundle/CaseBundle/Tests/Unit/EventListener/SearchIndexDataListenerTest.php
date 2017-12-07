@@ -2,11 +2,12 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\EventListener;
 
-use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
-use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
-
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\EventListener\SearchIndexDataListener;
+use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
+use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
+use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,10 +19,18 @@ class SearchIndexDataListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mapper = $this->getMockBuilder(ObjectMapper::class)
-            ->disableOriginalConstructor()
-            ->setMethodsExcept(['buildAllDataField'])
-            ->getMock();
+        /** @var HtmlTagHelper|\PHPUnit_Framework_MockObject_MockObject $htmlTagHelper */
+        $htmlTagHelper = $this->createMock(HtmlTagHelper::class);
+        $htmlTagHelper->expects($this->any())
+            ->method('stripTags')
+            ->willReturnCallback(
+                function ($value) {
+                    return trim(strip_tags($value));
+                }
+            );
+
+        $this->mapper = new ObjectMapper($this->createMock(EventDispatcherInterface::class), []);
+        $this->mapper->setHtmlTagHelper($htmlTagHelper);
 
         $this->listener = new SearchIndexDataListener($this->mapper);
     }

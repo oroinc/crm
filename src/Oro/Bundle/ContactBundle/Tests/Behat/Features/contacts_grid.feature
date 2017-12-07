@@ -53,3 +53,15 @@ Scenario: Filter grid by date time range
   And Zyta Zywiec must be first record
   But when I filter Created At as not between "25 Jun 2015" and "30 Jun 2015"
   Then number of records should be 29
+  And I reset Created At filter
+
+Scenario: Mass delete action while filter is set
+  Given I select 50 records per page
+  And I filter First Name as Contains "John"
+  And sort grid by Email
+  When I check first 2 records in grid
+  And I click "Delete" link from mass action dropdown
+  And I click "Yes, Delete"
+  Then I should see "2 entities were deleted" flash message
+  And I reset First Name filter
+  And number of records should be 28
