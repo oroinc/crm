@@ -21,4 +21,4 @@ simplifies initial project setup and configuration.
 
 ## Documentation
   
-The documentation for the OroCRM can be found on [www.orocrm.com](http://www.orocrm.com/documentation/) website.
+The documentation for the OroCRM can be found on [www.orocrm.com](http://www.oroinc.com/doc/orocrm/) website.
