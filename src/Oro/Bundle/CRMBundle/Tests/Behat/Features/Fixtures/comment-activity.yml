@@ -3,8 +3,8 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     firstName: Charlie
     lastName: Sheen
     email: charlie@sheen.com
-    owner: @admin
-    organization: @organization
+    owner: '@admin'
+    organization: '@organization'
 
 OroEntityProxy\OroEmailBundle\EmailAddressProxy:
   charlieAddress:
@@ -20,34 +20,34 @@ Oro\Bundle\EmailBundle\Entity\EmailBody:
 Oro\Bundle\EmailBundle\Entity\Email:
   email:
     subject: 'Merry Christmas'
-    emailBody: @emailBody
+    emailBody: '@emailBody'
     sentAt: '<dateTimeBetween("2015-12-25", "2015-12-25")>'
     fromName: '"Charlie Sheen" <charlie@sheen.com>'
     fromEmailAddress: '@charlieAddress'
     internalDate: '<dateTimeBetween("-200 days", "now")>'
     messageId: fsdfasdf
-    emailUsers: [@adminEmailUser]
+    emailUsers: ['@adminEmailUser']
 
 Oro\Bundle\EmailBundle\Entity\EmailUser:
   adminEmailUser:
-    email: @email
+    email: '@email'
     receivedAt: '<dateTimeBetween("-200 days", "now")>'
-    owner: @admin
-    organization: @organization
+    owner: '@admin'
+    organization: '@organization'
 
 Oro\Bundle\NoteBundle\Entity\Note:
   note:
     message: 'Charlie works hard'
-    addActivityTarget: [@contactCharlie]
+    addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
-    owner: @admin
-    organization: @organization
+    owner: '@admin'
+    organization: '@organization'
 
 Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
   calendarEvent:
     title: 'Contract sign in'
-    addActivityTarget: [@contactCharlie]
+    addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     start: '<dateTimeBetween($createdAt, $createdAt)>'
@@ -57,18 +57,18 @@ Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
 Oro\Bundle\CallBundle\Entity\Call:
   call:
     subject: 'Proposed Charlie to star in new film'
-    addActivityTarget: [@contactCharlie]
+    addActivityTarget: ['@contactCharlie']
     phoneNumber: <e164PhoneNumber()>
     notes: '<sentence(6, true)>'
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
-    organization: @organization
+    organization: '@organization'
 
 Oro\Bundle\TaskBundle\Entity\Task:
   task:
     subject: 'Contact with Charlie'
-    addActivityTarget: [@contactCharlie]
+    addActivityTarget: ['@contactCharlie']
     createdAt: '<dateTimeBetween("-200 days", "now")>'
     updatedAt: '<dateTimeBetween($createdAt, "now")>'
     dueDate: '<dateTimeBetween($updatedAt, "now")>'
