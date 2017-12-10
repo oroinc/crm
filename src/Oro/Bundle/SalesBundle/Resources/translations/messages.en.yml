@@ -524,15 +524,16 @@ oro:
             leads:
                 label:                  Leads
                 description:            The leads that a business customer is assigned to.
+                select:                 Select leads
             opportunities:
                 label:                  Opportunities
                 description:            The opportunities that a business customer is assigned to.
+                select:                 Select opportunities
             owner.label:                Owner
             tags.label:                 Tags
             ownership:
                 label:                  Ownership
                 description:            The type of legal ownership of the business customer.
-            phones.label:               Phones
             rating:
                 label:                  Rating
                 description:            The rating of the business customer.
@@ -549,12 +550,6 @@ oro:
                 label:                  Employees
                 description:            The number of employees of the business customer.
             organization.label:         Organization
-            opportunities:
-                select:                 Select opportunities
-                description:
-            leads:
-                select:                 Select leads
-                description:            asd
             primary_phone.label:        Primary Phone
             primary_email.label:        Primary Email
             datagrid:
