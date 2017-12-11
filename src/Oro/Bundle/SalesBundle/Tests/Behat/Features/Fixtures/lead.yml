@@ -6,7 +6,7 @@ Oro\Bundle\AccountBundle\Entity\Account:
 
 Oro\Bundle\SalesBundle\Entity\Lead:
   Bruce:
-    owner: @admin
+    owner: '@admin'
     name: Bruce
     firstName: Bruce
     lastName: Willis
