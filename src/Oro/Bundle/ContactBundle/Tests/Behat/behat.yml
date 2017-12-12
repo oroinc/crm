@@ -1,4 +1,23 @@
 oro_behat_extension:
+  elements:
+    Share With Form:
+      selector: 'form.oropro_share_form'
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
+      options:
+        mapping:
+          Share with:
+            type: 'css'
+            locator: 'input[name="oropro_share_form[entities]"]'
+            element: Select2Share
+    Select Share With Grid:
+      selector: 'div[data-page-component-name="share-with-users-datagrid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+    Shared Grid:
+      selector: 'div[data-page-component-name="shared-datagrid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
+    Select2Share:
+      selector: '.select2-offscreen[data-bound-component="oro/select2-share-component"]'
+      class: Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Share
   suites:
     OroContactBundle:
       contexts:
