@@ -10,26 +10,15 @@
         <button type="submit" class="btn btn-success">{{ 'Done'|trans }}</button>
     </div>
 
-    <script type="text/javascript">
-        require(['jquery', 'oroui/js/mediator', 'oroui/js/widget-manager'],
-        function($, mediator, widgetManager) {
-            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function (widget) {
-                mediator.on('integrationFormReload:before', function(event) {
-                    event.reloadManually = false;
-                    widget.loadContent($.param(event.data), event.formEl.attr('method'));
-                });
+    {% set wid = app.request.get('_wid') %}
 
-                widget.on('contentLoad', function(event) {
-                    var dataField = $('[data-ftid=oro_channel_form_dataSource_data]');
-                    var apiKeyField = $('[data-ftid=oro_integration_channel_form_transport_apiKey]');
-                    if (dataField.val() && !apiKeyField.val()) {
-                        data = JSON.parse(dataField.val());
-                        if (data.transport.apiKey) {
-                            apiKeyField.val(data.transport.apiKey);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+    <div {{ UI.renderPageComponentAttributes({
+        view: 'orochannel/js/app/views/configure-integration-view',
+        options: {
+            _sourceElement: '[data-wid="' ~ wid ~ '"]',
+            wid: wid,
+            dataFieldSelector: '[data-ftid=oro_channel_form_dataSource_data]',
+            apiKeyFieldSelector: '[data-ftid=oro_integration_channel_form_transport_apiKey]'
+        },
+    }) }}></div>
 {% endblock content_data %}
