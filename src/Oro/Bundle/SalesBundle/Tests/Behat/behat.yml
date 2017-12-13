@@ -154,10 +154,6 @@ oro_behat_extension:
       route: 'oro_sales_lead_view'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadView
 
-    Lead Index:
-      route: 'oro_sales_lead_index'
-      class: Oro\Bundle\SalesBundle\Tests\Behat\Page\LeadIndex
-
     Customer Quotes List:
       route: 'oro_sale_frontend_quote'
       class: Oro\Bundle\SalesBundle\Tests\Behat\Page\CustomerQuotes
