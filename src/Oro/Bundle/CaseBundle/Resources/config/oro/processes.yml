@@ -85,7 +85,7 @@ processes:
                                 - '@add_email_activity_target':
                                     email:              $.email
                                     target_entity:      $.caseEntity
-                                - '@copy_tagging':
+                                - '@copy_tagging_to_new_entity':
                                     source: $.mailbox.processSettings
                                     destination: $.caseEntity
                                     organization: $.mailbox.organization
