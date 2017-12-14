@@ -56,10 +56,9 @@ class RecentPurchasesGridTest extends WebTestCase
      * @dataProvider gridDataProvider
      *
      * @param string    $gridName
-     * @param bool      $hasChannel,
-     * @param bool      $hasCustomer,
-     * @param array     $gridFilters,
-     * @param array     $asserts,
+     * @param bool      $hasChannel
+     * @param bool      $hasCustomer
+     * @param array     $asserts
      * @param int       $expectedResultCount
      */
     public function testGrid(
@@ -140,7 +139,6 @@ class RecentPurchasesGridTest extends WebTestCase
     }
 
     /**
-     *
      * @return array
      */
     public function gridDataProvider()

@@ -148,6 +148,61 @@ class OrderController extends Controller
     }
 
     /**
+     * @Route(
+     *        "/account-widget/order-notes/{customerId}/{channelId}",
+     *        name="oro_magento_widget_customer_order_notes",
+     *        requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_order_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerOrderNotesAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
+     *        "/customer-widget/order-notes/{customerId}/{channelId}",
+     *        name="oro_magento_customer_order_notes_widget",
+     *        requirements={"customerId"="\d+", "channelId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_order_view")
+     * @ParamConverter("customer", class="OroMagentoBundle:Customer", options={"id"="customerId"})
+     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
+     * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     */
+    public function customerOrderNotesWidgetAction(Customer $customer, Channel $channel)
+    {
+        return ['customer' => $customer, 'channel' => $channel];
+    }
+
+    /**
+     * @Route(
+     *        "/widget/order_notes/{orderId}",
+     *         name="oro_magento_order_notes_widget",
+     *         requirements={"orderId"="\d+"}
+     * )
+     * @AclAncestor("oro_magento_order_view")
+     * @ParamConverter("order", class="OroMagentoBundle:Order", options={"id" = "orderId"})
+     * @Template
+     * @param Order $order
+     * @return array
+     */
+    public function orderNotesWidgetAction($order)
+    {
+        return ['order' => $order];
+    }
+
+    /**
      * @Route("/actualize/{id}", name="oro_magento_order_actualize", requirements={"id"="\d+"}))
      * @AclAncestor("oro_magento_order_view")
      * @param Order $order

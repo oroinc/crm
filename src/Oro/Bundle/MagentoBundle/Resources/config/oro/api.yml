@@ -34,10 +34,28 @@ api:
 #        Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
         Oro\Bundle\MagentoBundle\Entity\Order:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order.md'
+            subresources:
+                orderNotes:
+                    actions:
+                        update_relationship: false
+                        add_relationship: false
+                        delete_relationship: false
         Oro\Bundle\MagentoBundle\Entity\OrderAddress:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_address.md'
         Oro\Bundle\MagentoBundle\Entity\OrderItem:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_item.md'
+        Oro\Bundle\MagentoBundle\Entity\OrderNote:
+            actions:
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+                get_subresource: false
+                get_relationship: false
+                update_relationship: false
+                add_relationship: false
+                delete_relationship: false
+            documentation_resource: '@OroMagentoBundle/Resources/doc/api/order_note.md'
         Oro\Bundle\MagentoBundle\Entity\CreditMemo:
             documentation_resource: '@OroMagentoBundle/Resources/doc/api/credit_memo.md'
         Extend\Entity\EV_Creditmemo_Status:

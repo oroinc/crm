@@ -37,6 +37,7 @@ channels:
               - Oro\Bundle\MagentoBundle\Entity\Region
               - Oro\Bundle\MagentoBundle\Entity\Store
               - Oro\Bundle\MagentoBundle\Entity\Website
+              - Oro\Bundle\MagentoBundle\Entity\OrderNote
           navigation_items:
               - application_menu.sales_tab.magento_order
           belongs_to:

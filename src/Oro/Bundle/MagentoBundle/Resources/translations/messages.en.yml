@@ -105,6 +105,7 @@ oro:
                 taxPercent:       Tax percent
                 taxAmount:        Tax amount
                 rowTotal:         Row total
+                message:          Message
                 billing_country:  Billing country
                 billing_region:   Billing state
                 customer_is_guest:
@@ -560,6 +561,11 @@ oro:
             check_connection.label:       Check connection
             website_refresh.label:        Sync website list
             initial_sync_start_date.label: Initial sync start date
+            is_display_order_notes:
+                label:    Import Order Comments as Order Notes
+                tooltip:  When this option is disabled the order notes can be viewed only on Magento Order view page. When enabled, the order notes will also be visible on the Magento Customer view and Account view page.
+                value.true.label:       'Yes'
+                value.false.label:      'No'
             shared_guest_email_list:
                 label:   Split By Full Name
                 tooltip: Separate customer accounts will be created for Magento customers with the specified email(s) during import. To enter multiple emails use semicolons or commas.
@@ -688,6 +694,10 @@ oro:
             notes:
                 label:              Additional comments
                 description:        Additional information that a customer can leave for a Magento order.
+            order_notes:
+                label:              Magento Order Notes
+                short_label:        Order Notes
+                description:        Notes added by a store admin to an order on the Magento side.
             feedback:
                 label:              Feedback
                 description:        Feedback provided for a specific Magento order.
@@ -1133,6 +1143,32 @@ oro:
                 label:                            Name
                 description:                      The name specified for a Magento credit memo item.
             owner.label:                          Owner
+
+        ordernote:
+            entity_label:                         Magento Order Note
+            entity_plural_label:                  Magento Order Notes
+            entity_description:                   A note added by a store admin to an order on the Magento side.
+            id.label:                             Id
+            owner.label:                          Owner
+            organization.label:                   Organization
+            order:
+                label:                            Order
+                description:                      The order to which a specific Magento order note belongs.
+            message:
+                label:                            Message
+                description:                      Order note message
+            origin_id:
+                label:                            Origin Id
+                description:                      The Magento note ID specified on the Magento side.
+            updated_at:
+                label:                            Updated At
+                description:                      The date and time a Magento order note was updated.
+            created_at:
+                label:                            Created At
+                description:                      The date and time a Magento order note was created.
+            channel:
+                label:              Integration
+                description:        The integration via which information about a Magento order item is received.
 
         recent_purchases:
             label:                                Magento Purchases

@@ -99,6 +99,13 @@ abstract class MagentoTransport extends Transport
     protected $guestCustomerSync = true;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_display_order_notes", type="boolean", nullable=true, options={"default"=true})
+     */
+    protected $isDisplayOrderNotes;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="admin_url", type="string", length=255, nullable=true)
@@ -310,14 +317,21 @@ abstract class MagentoTransport extends Transport
     }
 
     /**
-     * TODO: move required version to another class. According to CRM-8328
-     *
-     * @return bool
+     * @return boolean
      */
     public function isSupportedExtensionVersion()
     {
         return $this->getIsExtensionInstalled()
             && version_compare($this->getExtensionVersion(), SoapTransport::REQUIRED_EXTENSION_VERSION, 'ge');
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSupportedOrderNoteExtensionVersion()
+    {
+        return $this->isSupportedExtensionVersion() &&
+            version_compare($this->getExtensionVersion(), SoapTransport::ORDER_NOTE_VERSION_REQUIRED, 'ge');
     }
 
     /**
@@ -358,6 +372,26 @@ abstract class MagentoTransport extends Transport
     public function getGuestCustomerSync()
     {
         return $this->guestCustomerSync;
+    }
+
+    /**
+     * @param boolean $isDisplayOrderNotes
+     *
+     * @return MagentoTransport
+     */
+    public function setIsDisplayOrderNotes($isDisplayOrderNotes)
+    {
+        $this->isDisplayOrderNotes = $isDisplayOrderNotes;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getIsDisplayOrderNotes()
+    {
+        return $this->isDisplayOrderNotes;
     }
 
     /**

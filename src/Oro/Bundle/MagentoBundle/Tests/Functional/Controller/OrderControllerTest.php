@@ -6,7 +6,7 @@ class OrderControllerTest extends AbstractController
 {
     protected function getMainEntityId()
     {
-        return $this->getReference('order')->getid();
+        return $this->getReference('order')->getId();
     }
 
     public function testView()
@@ -21,7 +21,7 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('Sync Data', $result->getContent());
         $this->assertContains('$4.40', $result->getContent());
         $this->assertContains('open', $result->getContent());
-        $this->assertContains('customer@email.com', $result->getContent());
+        $this->assertContains('test@example.com', $result->getContent());
         $this->assertContains('$12.47', $result->getContent());
         $this->assertContains('$5.00', $result->getContent());
         $this->assertContains('$17.85', $result->getContent());

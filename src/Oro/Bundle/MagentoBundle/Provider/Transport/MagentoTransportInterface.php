@@ -233,6 +233,13 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
     public function isSupportedExtensionVersion();
 
     /**
+     * Check that retrieved extension version from magento is supported order note functionality.
+     *
+     * @return boolean
+     */
+    public function isSupportedOrderNoteExtensionVersion();
+
+    /**
      * Retrieve extension version.
      *
      * @return string
@@ -252,6 +259,13 @@ interface MagentoTransportInterface extends TransportInterface, ServerTimeAwareI
      * @return string
      */
     public function getRequiredExtensionVersion();
+
+    /**
+     * Retrieve the required extension version from Magento that supports the order note functionality
+     *
+     * @return string | null
+     */
+    public function getOrderNoteRequiredExtensionVersion();
 
     /**
      * Revert initial state. Use for action check connection to execute request

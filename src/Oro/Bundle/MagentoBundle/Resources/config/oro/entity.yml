@@ -87,3 +87,6 @@ oro_entity:
         Extend\Entity\EV_Creditmemo_Status:
             alias:        magentocreditmemostatus
             plural_alias: magentocreditmemostatuses
+        Oro\Bundle\MagentoBundle\Entity\OrderNote:
+            alias:        magentoordernote
+            plural_alias: magentoordernotes
