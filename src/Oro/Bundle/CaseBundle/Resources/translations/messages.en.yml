@@ -175,3 +175,4 @@ oro:
             priority.label:                 Priority
             status.label:                   Status
             mailbox.label:                  Mailbox
+            tags.label:                     Tags
