@@ -3,7 +3,7 @@ config:
         orosales/js/datagrid/inline-editing/save-api-accessor: 'bundles/orosales/js/datagrid/inline-editing/save-api-accessor.js'
         orosales/js/app/views/board/opportunity-card-view: 'bundles/orosales/js/app/views/board/opportunity-card-view.js'
         orosales/js/app/views/update-page-view: 'bundles/orosales/js/app/views/update-page-view.js'
-        orosales/js/app/views/create-customr-view: 'bundles/orosales/js/app/views/create-customer-view.js'
+        orosales/js/app/views/create-customer-view: 'bundles/orosales/js/app/views/create-customer-view.js'
         orosales/js/app/components/customer-component: 'bundles/orosales/js/app/components/customer-component.js'
         orosales/js/app/views/account-multicustomer-view: 'bundles/orosales/js/app/views/account-multicustomer-view.js'
         orosales/js/app/views/opportunity-status-select-view: 'bundles/orosales/js/app/views/opportunity-status-select-view.js'

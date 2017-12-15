@@ -15,12 +15,21 @@ define(function(require) {
 
         dialogWidget: null,
 
+        initialize: function(options) {
+            CustomerView.__super__.initialize.apply(this, arguments);
+
+            this.options = _.defaults(options || {}, this.options);
+        },
+
         onCreate: function() {
             var customer = this.$('[data-customer]').data('customer');
+            var routeParams = this.$el.parents()
+                .find(this.options.inputSelector)
+                .data('select2_query_additional_params') || {};
 
             this.dialogWidget = new DialogWidget({
                 title: __('Create {{ entity }}', {'entity': this.$el.text()}),
-                url: routing.generate(customer.routeCreate),
+                url: routing.generate(customer.routeCreate, routeParams),
                 stateEnabled: false,
                 incrementalPosition: true,
                 dialogOptions: {
