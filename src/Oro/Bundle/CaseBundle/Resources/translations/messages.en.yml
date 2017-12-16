@@ -87,7 +87,7 @@ oro:
                 updated_by:                 Updated by {{ user }} at {{ date }}
             public:
                 label:                      Make Public
-                description:                Defiens wether the comment must be public on Zendesk.
+                description:                Defines whether the comment must be public on Zendesk.
             contact:
                 label:                      Contact Author
                 description:                The author of the case comment. If the value is not specified, the user who is the case comment owner is considered the case comment author.
