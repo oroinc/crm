@@ -1,5 +1,8 @@
 oro_behat_extension:
   elements:
+    Send Email Form:
+      selector: "form[name='oro_email_email']"
+      class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
     Share With Form:
       selector: 'form.oropro_share_form'
       class: Oro\Bundle\TestFrameworkBundle\Behat\Element\Form
