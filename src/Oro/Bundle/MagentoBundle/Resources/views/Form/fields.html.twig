@@ -92,16 +92,6 @@
         'url': path('oro_magento_orderplace_cart', {id: cartId}),
         'loadingMaskEnabled': true
     }) }}
-
-    <script type="text/javascript">
-        require(['underscore', 'oroui/js/widget-manager'], function(_, widgetManager) {
-            widgetManager.getWidgetInstanceByAlias('order-place-widget', function(widget) {
-                widget._showLoading();
-
-                widget.once('externalContentLoaded', _.bind(widget._hideLoading, widget));
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block oro_magento_customer_addresses_widget %}

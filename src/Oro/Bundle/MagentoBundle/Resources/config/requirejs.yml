@@ -3,3 +3,5 @@ config:
         'oro/magento/checker': 'bundles/oromagento/js/checker.js'
         'oromagento/js/app/components/subscription-manager': 'bundles/oromagento/js/app/components/subscription-manager.js'
         'oromagento/js/app/components/customer-registration-manager': 'bundles/oromagento/js/app/components/customer-registration-manager.js'
+        'oromagento/js/app/components/place-order-component': 'bundles/oromagento/js/app/components/place-order-component.js'
+        'oromagento/js/app/views/place-order-view': 'bundles/oromagento/js/app/views/place-order-view.js'
