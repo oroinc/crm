@@ -1,0 +1,18 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+  account1:
+    name: 'Mister customer'
+    organization: '@organization'
+    owner: '@admin'
+
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+    contactEmail1:
+        email: 'some_email@armyspy.com'
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact1:
+    namePrefix: 'Mrs.'
+    firstName: 'July'
+    lastName: 'Robertson'
+    addEmail: ['@contactEmail1']
+    accounts: ['@account1']
+    owner: '@admin'
