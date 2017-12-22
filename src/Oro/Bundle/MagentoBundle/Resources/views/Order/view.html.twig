@@ -82,7 +82,7 @@
 
         {% set dataBlocks = dataBlocks|merge([
             {
-                'title': 'oro.magento.creditmemo.entity_plural_label'|trans,
+                'title': 'oro.magento.order.credit_memos.label'|trans,
                 'subblocks': [
                     {'data' : [orderCreditMemoWidget] }
                 ]
@@ -90,7 +90,26 @@
         ]) %}
     {% endif %}
 
+    {% if oro_magento_order_notes_is_applicable(entity) %}
+        {% set orderNotesWidget %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('oro_magento_order_notes_widget', {orderId: entity.id})
+            }) }}
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title': 'oro.magento.order.order_notes.short_label'|trans,
+                'subblocks': [
+                    {'data' : [orderNotesWidget] }
+                ]
+            }
+        ]) %}
+    {% endif %}
+
     {% set id = 'magentoOrderView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
+
     {{ parent() }}
 {% endblock content_data %}

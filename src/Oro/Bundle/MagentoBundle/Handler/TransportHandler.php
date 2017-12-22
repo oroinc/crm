@@ -12,6 +12,7 @@ use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -64,10 +65,15 @@ class TransportHandler
     public function getCheckResponse()
     {
         $transport = $this->getMagentoTransport();
+        $transportEntity = $this->getMagentoTransportEntity($transport);
+
+        $this->initMagentoTransport($transport, $transportEntity);
 
         $integrationTypeName = $this->request->get(self::INTEGRATION_TYPE, false);
         $isExtensionInstalled = $transport->isExtensionInstalled();
         $isSupportedVersion = $transport->isSupportedExtensionVersion();
+        $extensionVersion = $transport->getExtensionVersion();
+        $isOrderNoteSupportExtensionVersion = $transport->isSupportedOrderNoteExtensionVersion();
         $allowedTypesChoices = $this
             ->connectorProvider
             ->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion, $integrationTypeName);
@@ -77,12 +83,29 @@ class TransportHandler
             'websites' => $this->websiteProvider->formatWebsiteChoices($transport),
             'isExtensionInstalled' => $isExtensionInstalled,
             'magentoVersion' => $transport->getMagentoVersion(),
-            'extensionVersion' => $transport->getExtensionVersion(),
+            'extensionVersion' => $extensionVersion,
             'requiredExtensionVersion' => $transport->getRequiredExtensionVersion(),
+            'isOrderNoteSupportExtensionVersion' => $isOrderNoteSupportExtensionVersion,
             'isSupportedVersion' => $isSupportedVersion,
             'connectors' => $allowedTypesChoices,
             'adminUrl' => $transport->getAdminUrl()
         ];
+    }
+
+    /**
+     * @param MagentoTransportInterface $transport
+     * @param MagentoTransport          $transportEntity
+     */
+    protected function initMagentoTransport(
+        MagentoTransportInterface $transport,
+        MagentoTransport $transportEntity
+    ) {
+        if ($transport instanceof TransportCacheClearInterface) {
+            $transport->cacheClear($transportEntity->getWsdlUrl());
+        }
+
+        $transport->initWithExtraOptions($transportEntity, MultiAttemptsConfigTrait::getMultiAttemptsDisabledConfig());
+        $transport->resetInitialState();
     }
 
     /**
@@ -100,15 +123,16 @@ class TransportHandler
             throw new UnexpectedTypeException($transport, MagentoTransportInterface::class);
         }
 
-        $transportEntity = $this->transportEntityProvider->getTransportEntityByRequest($transport, $this->request);
-
-        if ($transport instanceof TransportCacheClearInterface) {
-            $transport->cacheClear($transportEntity->getWsdlUrl());
-        }
-
-        $transport->initWithExtraOptions($transportEntity, MultiAttemptsConfigTrait::getMultiAttemptsDisabledConfig());
-        $transport->resetInitialState();
-
         return $transport;
+    }
+
+    /**
+     * @param MagentoTransportInterface $transport
+     *
+     * @return MagentoTransport
+     */
+    private function getMagentoTransportEntity(MagentoTransportInterface $transport)
+    {
+        return $this->transportEntityProvider->getTransportEntityByRequest($transport, $this->request);
     }
 }

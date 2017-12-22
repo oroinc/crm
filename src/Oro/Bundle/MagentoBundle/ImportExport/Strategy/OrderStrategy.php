@@ -10,6 +10,7 @@ use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
 use Oro\Bundle\MagentoBundle\Provider\Connector\MagentoConnectorInterface;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
+use Oro\Bundle\MagentoBundle\ImportExport\Processor\OrderNotes\ChainProcessor as OrderNotesProcessor;
 
 class OrderStrategy extends AbstractImportStrategy
 {
@@ -20,8 +21,13 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected $existingEntity;
 
-    /** @var  GuestCustomerStrategyHelper */
+    /** @var GuestCustomerStrategyHelper */
     protected $guestCustomerStrategyHelper;
+
+    /**
+     * @var OrderNotesProcessor
+     */
+    private $orderNotesProcessor;
 
     /**
      * @param GuestCustomerStrategyHelper $strategyHelper
@@ -29,6 +35,14 @@ class OrderStrategy extends AbstractImportStrategy
     public function setGuestCustomerStrategyHelper(GuestCustomerStrategyHelper $strategyHelper)
     {
         $this->guestCustomerStrategyHelper = $strategyHelper;
+    }
+
+    /**
+     * @param OrderNotesProcessor $orderNotesProcessor
+     */
+    public function setOrderNotesProcessor(OrderNotesProcessor $orderNotesProcessor)
+    {
+        $this->orderNotesProcessor = $orderNotesProcessor;
     }
 
     /**
@@ -85,6 +99,7 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processItems($entity);
         $this->processAddresses($entity);
         $this->processCustomer($entity, $entity->getCustomer());
+        $this->orderNotesProcessor->processNotes($entity);
 
         $this->addressHelper->resetMageRegionIdCache(OrderAddress::class);
         $this->existingEntity = null;

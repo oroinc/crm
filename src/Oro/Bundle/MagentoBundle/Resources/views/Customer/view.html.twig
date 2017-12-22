@@ -84,8 +84,8 @@
                     'widgetType': 'block',
                     'label': "oro.magento.order.entity_plural_label"|trans,
                     'url': path(
-                            'oro_magento_customer_orders_widget',
-                            {'customerId': entity.id, 'channelId': entity.channel.id}
+                        'oro_magento_customer_orders_widget',
+                        {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
                 },
                 {
@@ -96,7 +96,24 @@
                         'oro_magento_customer_recent_purchases_widget',
                         {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
-                },
+                }
+            ] %}
+
+            {% if oro_magento_order_notes_is_applicable(entity) %}
+                {% set tabs = tabs|merge([
+                    {
+                        'alias': 'oro_magento_customer_order_notes',
+                        'widgetType': 'block',
+                        'label': "oro.magento.order.order_notes.label"|trans,
+                        'url': path(
+                            'oro_magento_customer_order_notes_widget',
+                            {'customerId': entity.id, 'channelId': entity.channel.id}
+                        )
+                    }
+                ]) %}
+            {% endif %}
+
+            {% set tabs = tabs|merge([
                 {
                     'alias': 'oro_magento_customer_carts',
                     'widgetType': 'block',
@@ -115,7 +132,7 @@
                         {'customerId': entity.id, 'channelId': entity.channel.id}
                     )
                 }
-            ] %}
+            ]) %}
             {{ tabPanel(tabs) }}
         </div>
     {% endset %}

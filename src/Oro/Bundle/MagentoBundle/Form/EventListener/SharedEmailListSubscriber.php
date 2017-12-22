@@ -59,8 +59,8 @@ class SharedEmailListSubscriber implements EventSubscriberInterface
 
         /**
          * We need to enable field, because another way we won't have possibility
-         * to save value to it in case when extension is installed, because preSet
-         * event fires before preSubmit and it blocked this field.
+         * to save value to it in case when extension is exist on Magento side.
+         * We need do this because preSet event fires before preSubmit and it did block of this field.
          */
         $this->switchDisabledOptionSharedEmailField($form, false);
 

@@ -55,9 +55,9 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
         $date->modify('-3 day');
 
         $order = $this->createOrder($cart, $customer);
-        $order2 = $this->createOrder($cart, $customer, '100000505', $date, 2);
-        $order3 = $this->createOrder($cart, $customer2, '100000602', $date, 3);
-        $order4 = $this->createOrder($cart, $customer, '100000777', $dateNow, 4, self::ORDER_STATUS_CANCELED);
+        $order2 = $this->createOrder($cart, $customer, '100000505', 2, $date);
+        $order3 = $this->createOrder($cart, $customer2, '100000602', 3, $date);
+        $order4 = $this->createOrder($cart, $customer, '100000777', 4, $dateNow, self::ORDER_STATUS_CANCELED);
 
         $creditMemo = $this->createCreditMemo($order);
 
@@ -122,8 +122,8 @@ class LoadRecentPurchasesData extends LoadMagentoChannel
         Cart $cart,
         Customer $customer,
         $incrementId = '100000307',
-        \DateTime $createdAt = null,
         $originId = 1,
+        \DateTime $createdAt = null,
         $status = self::ORDER_STATUS_OPEN
     ) {
         $createdAt = $createdAt ? $createdAt : new \DateTime('now', new \DateTimeZone('UTC'));

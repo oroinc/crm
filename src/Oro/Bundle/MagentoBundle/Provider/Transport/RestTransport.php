@@ -415,6 +415,14 @@ class RestTransport implements
     /**
      * {@inheritdoc}
      */
+    public function isSupportedOrderNoteExtensionVersion()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getExtensionVersion()
     {
         return $this->getTransportEntity()->getExtensionVersion();
@@ -430,7 +438,7 @@ class RestTransport implements
 
 
     /**
-     * @return MagentoTransport
+     * @return MagentoRestTransport
      */
     protected function getTransportEntity()
     {
@@ -505,6 +513,14 @@ class RestTransport implements
     public function getRequiredExtensionVersion()
     {
         return self::REQUIRED_EXTENSION_VERSION;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function getOrderNoteRequiredExtensionVersion()
+    {
+        throw new RuntimeException('This functionality not supported !');
     }
 
     /**

@@ -26,6 +26,7 @@ use Oro\Bundle\MagentoBundle\Entity\CreditMemo;
 use Oro\Bundle\MagentoBundle\Entity\CreditMemoItem;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\MagentoBundle\Entity\OrderAddress;
 use Oro\Bundle\MagentoBundle\Entity\OrderItem;
@@ -137,6 +138,8 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $transport->setIsExtensionInstalled(true);
         $transport->setMagentoVersion('1.9.1.0');
+        $transport->setExtensionVersion('1.2.19');
+        $transport->setIsDisplayOrderNotes(true);
         $transport->setWsdlUrl('http://magento.domain');
         $om->persist($transport);
 
@@ -306,6 +309,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 $i++
             );
             $this->generateOrderItem($om, $order, $cart);
+            $this->generateOrderNote($om, $order);
             $orders[] = $order;
         }
 
@@ -421,6 +425,35 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $om->persist($order);
 
         return $orderItems;
+    }
+
+    /**
+     * @param ObjectManager $om
+     * @param Order $order
+     *
+     * @return OrderNote[]
+     */
+    protected function generateOrderNote(ObjectManager $om, Order $order)
+    {
+        $orderNotes = [];
+        $notesCount = rand(1, 5);
+        for (; $notesCount > 0; $notesCount--) {
+            $orderNote = new OrderNote();
+            $originId = $order->getIncrementId() * 10 + $notesCount;
+            $orderNote->setOriginId($originId);
+            $orderNote->setOrder($order);
+            $orderNote->setMessage(sprintf('Order Note Message %d', $notesCount));
+            $orderNote->setCreatedAt(new \DateTime('now'));
+            $orderNote->setUpdatedAt(new \DateTime('now'));
+            $orderNote->setChannel($order->getChannel());
+            $orderNotes[] = $orderNote;
+
+            $om->persist($orderNote);
+        }
+
+        $om->persist($order);
+
+        return $orderNotes;
     }
 
     /**

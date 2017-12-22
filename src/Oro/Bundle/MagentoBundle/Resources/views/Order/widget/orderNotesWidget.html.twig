@@ -1,0 +1,10 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+<div class="widget-content">
+    {{ dataGrid.renderGrid(
+        'magento-order-notes-widget-grid',
+        {
+            'orderId': order.id,
+        }
+    ) }}
+</div>

@@ -6,6 +6,12 @@ use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConv
 
 class OrderDataConverter extends AbstractTreeDataConverter
 {
+    /** @var string[] */
+    protected $arrayNodeKeys = [
+        'items',
+        'status_history'
+    ];
+
     /**
      * {@inheritdoc}
      */
@@ -41,6 +47,7 @@ class OrderDataConverter extends AbstractTreeDataConverter
             'updated_at'          => 'updatedAt',
             'customer_email'      => 'customerEmail',
             'coupon_code'         => 'couponCode',
+            'status_history'      => 'orderNotes'
         ];
     }
 
@@ -49,16 +56,9 @@ class OrderDataConverter extends AbstractTreeDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        // normalize order items if single is passed
-        if (!empty($importedRecord['items'])) {
-            /** @var array $items */
-            $items = $importedRecord['items'];
-            foreach ($items as $item) {
-                if (!is_array($item)) {
-                    $importedRecord['items'] = [$items];
-
-                    break;
-                }
+        foreach ($this->arrayNodeKeys as $key) {
+            if (!empty($importedRecord[$key])) {
+                $this->fixNodeWithSingleRecord($importedRecord, $key);
             }
         }
 
@@ -77,7 +77,9 @@ class OrderDataConverter extends AbstractTreeDataConverter
             $importedRecord['paymentMethod'] = null;
         }
 
-        unset($importedRecord['paymentDetails']['method']);
+        if (isset($importedRecord['paymentDetails']['method'])) {
+            unset($importedRecord['paymentDetails']['method']);
+        }
 
         return $importedRecord;
     }
@@ -89,5 +91,24 @@ class OrderDataConverter extends AbstractTreeDataConverter
     {
         // will be implemented for bidirectional sync
         throw new \Exception('Normalization is not implemented!');
+    }
+
+    /**
+     * @param mixed[]   $importedRecord
+     * @param string    $key
+     */
+    private function fixNodeWithSingleRecord(array &$importedRecord, $key)
+    {
+        // normalize order rows if single is passed
+        if (!empty($importedRecord[$key])) {
+            /** @var array $data */
+            $data = $importedRecord[$key];
+            foreach ($data as $item) {
+                if (!is_array($item)) {
+                    $importedRecord[$key] = [$data];
+                    break;
+                }
+            }
+        }
     }
 }

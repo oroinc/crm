@@ -44,6 +44,7 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
         $builder->remove('check');
         $builder->remove('websiteId');
         $builder->remove(self::SHARED_GUEST_EMAIL_FIELD_NAME);
+        $builder->remove(self::IS_DISPLAY_ORDER_NOTES_FIELD_NAME);
 
         // added because of field orders
         $builder->add(
@@ -66,6 +67,13 @@ class SoapTransportSettingFormType extends AbstractTransportSettingFormType
             'adminUrl',
             'text',
             ['label' => 'oro.magento.magentotransport.admin_url.label', 'required' => false]
+        );
+
+        $builder->add(
+            $builder->create(
+                self::IS_DISPLAY_ORDER_NOTES_FIELD_NAME,
+                IsDisplayOrderNotesFormType::NAME
+            )
         );
 
         $builder->add(
