@@ -9,6 +9,7 @@ oro_behat_extension:
         - OroFormBundle::FormContext
         - OroSecurityBundle::ACLContext
         - OroCalendarBundle::FeatureContext
+        - OroSearchBundle::SearchContext
       paths:
         - '@OroCRMBundle/Tests/Behat/Features'
 
