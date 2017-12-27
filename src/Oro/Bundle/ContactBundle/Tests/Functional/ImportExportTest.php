@@ -9,6 +9,7 @@ use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
 use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTest;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * @dbIsolationPerTest
@@ -27,9 +28,11 @@ class ImportExportTest extends AbstractImportExportTest
 
     public function testExportTemplate()
     {
+        $exportTemplateFileName = $this->getExportTemplateFileName();
+
         $this->assertExportTemplateWorks(
             $this->getExportImportConfiguration(),
-            $this->getFullPathToDataFile('export_template.csv')
+            $this->getFullPathToDataFile($exportTemplateFileName)
         );
     }
 
@@ -39,7 +42,9 @@ class ImportExportTest extends AbstractImportExportTest
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('export.csv'),
             [
-                'Id'
+                'Id',
+                'Organization Name',
+                'Owner Username'
             ]
         );
     }
@@ -166,6 +171,28 @@ class ImportExportTest extends AbstractImportExportTest
             ->locateResource('@OroContactBundle/Tests/Functional/DataFixtures/Data');
 
         return $dataDir . DIRECTORY_SEPARATOR . $fileName;
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportTemplateFileName()
+    {
+        $organizationRepository = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass(Organization::class)
+            ->getRepository(Organization::class);
+
+        /**
+         * @var $organization Organization
+         */
+        $organization = $organizationRepository->getFirst();
+
+        return sprintf(
+            'export_template_with_%s_org.csv',
+            strtolower($organization->getName())
+        );
     }
 
     /**
