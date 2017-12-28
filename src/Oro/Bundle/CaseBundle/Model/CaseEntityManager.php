@@ -107,7 +107,7 @@ class CaseEntityManager
      */
     public function getCaseComments(CaseEntity $case, $order = 'DESC')
     {
-        $order = (strtoupper($order) == 'ASC') ? $order : 'DESC';
+        $order = (strtoupper($order) === 'ASC') ? 'ASC' : 'DESC';
         /** @var EntityRepository $repository */
         $repository   = $this->registry->getRepository('OroCaseBundle:CaseComment');
         $queryBuilder = $repository->createQueryBuilder('comment')
