@@ -136,28 +136,6 @@ class LeadController extends Controller
     }
 
     /**
-     * @Route("/datagrid/lead-with-datachannel/{channelIds}", name="oro_sales_datagrid_lead_datachannel_aware")
-     * @Template("OroSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
-     * @AclAncestor("oro_sales_lead_view")
-     */
-    public function leadWithDataChannelGridAction($channelIds, Request $request)
-    {
-        $gridName = $request->query->get('gridName');
-
-        if (!$gridName) {
-            return $this->createNotFoundException('`gridName` Should be defined.');
-        }
-
-        return [
-            'channelId'    => $channelIds,
-            'gridName'     => $gridName,
-            'params'       => $request->query->get('params', []),
-            'renderParams' => $request->query->get('renderParams', []),
-            'multiselect'  => $request->query->get('multiselect', false)
-        ];
-    }
-
-    /**
      * Change status for lead
      *
      * @Route("/disqualify/{id}", name="oro_sales_lead_disqualify", requirements={"id"="\d+"})
