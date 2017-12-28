@@ -90,8 +90,6 @@ class ImportExportTest extends AbstractImportExportTest
 
     public function testImportContactWithEmails()
     {
-        $this->markTestSkipped("");
-
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('import_contact_with_emails.csv')
