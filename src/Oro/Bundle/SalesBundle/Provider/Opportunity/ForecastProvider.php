@@ -16,6 +16,7 @@ use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FilterProcessor;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ForecastProvider
@@ -209,12 +210,12 @@ class ForecastProvider
     ) {
         if ($start) {
             $qb
-                ->andWhere(sprintf('%s >= :start', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s >= :start', $field))
                 ->setParameter('start', $start, Type::DATE);
         }
         if ($end) {
             $qb
-                ->andWhere(sprintf('%s <= :end', $field))
+                ->andWhere(QueryBuilderUtil::sprintf('%s <= :end', $field))
                 ->setParameter('end', $end, Type::DATE);
         }
     }

@@ -784,13 +784,13 @@ class OpportunityRepository extends EntityRepository
         $qb     = $this->createQueryBuilder($alias);
         $baBaseCurrencyQuery = $qbTransformer->getTransformSelectQuery('budgetAmount', $qb, $alias);
         $qb->select([
-            sprintf('COUNT(%s.id) as inProgressCount', $alias),
+            QueryBuilderUtil::sprintf('COUNT(%s.id) as inProgressCount', $alias),
             sprintf('SUM(%s) as budgetAmount', $baBaseCurrencyQuery),
             sprintf('SUM((%s) * %s.probability) as weightedForecast', $baBaseCurrencyQuery, $alias)
         ]);
 
         if ($excludedStatuses) {
-            $qb->andWhere($qb->expr()->notIn(sprintf('%s.status', $alias), $excludedStatuses));
+            $qb->andWhere($qb->expr()->notIn(QueryBuilderUtil::getField($alias, 'status'), $excludedStatuses));
         }
 
         return $qb;

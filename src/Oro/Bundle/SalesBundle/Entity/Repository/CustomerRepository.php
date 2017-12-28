@@ -7,6 +7,7 @@ use Doctrine\ORM\Query\Expr;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class CustomerRepository extends EntityRepository
 {
@@ -20,7 +21,7 @@ class CustomerRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('c')
             ->select('c')
-            ->where(sprintf('IDENTITY(c.%s) = :targetId', $targetField));
+            ->where(QueryBuilderUtil::sprintf('IDENTITY(c.%s) = :targetId', $targetField));
 
         return $qb->setParameter('targetId', $targetId)
             ->getQuery()
@@ -42,7 +43,7 @@ class CustomerRepository extends EntityRepository
             ->select('c')
             ->where('c.account = :account');
         foreach ($customersFields as $customersField) {
-            $qb->andWhere($qb->expr()->isNull(sprintf('c.%s', $customersField)));
+            $qb->andWhere($qb->expr()->isNull(QueryBuilderUtil::getField('c', $customersField)));
         }
 
         return $qb->setParameter('account', $account)

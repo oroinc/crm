@@ -9,6 +9,7 @@ use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class RFMBuilder implements AnalyticsBuilderInterface
 {
@@ -138,6 +139,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 $qb = $em->createQueryBuilder();
                 $qb->update($entityFQCN, 'e');
                 foreach ($value as $metricName => $metricValue) {
+                    QueryBuilderUtil::checkIdentifier($metricName);
                     $qb->set('e.' . $metricName, ':' . $metricName);
                     $qb->setParameter($metricName, $metricValue);
                 }
