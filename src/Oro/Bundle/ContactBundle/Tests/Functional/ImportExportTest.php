@@ -77,22 +77,11 @@ class ImportExportTest extends AbstractImportExportTest
 
     public function testImportDuplicateRecord()
     {
+        $this->markTestSkipped("Unskip after BAP-16301");
+
         $this->assertImportWorks(
             $this->getExportImportConfiguration(),
             $this->getFullPathToDataFile('contact_with_duplicate_records.csv')
-        );
-
-        static::assertCount(
-            5,
-            $this->getContactRepository()->findAll()
-        );
-    }
-
-    public function testImportContactWithEmails()
-    {
-        $this->assertImportWorks(
-            $this->getExportImportConfiguration(),
-            $this->getFullPathToDataFile('import_contact_with_emails.csv')
         );
 
         static::assertCount(
