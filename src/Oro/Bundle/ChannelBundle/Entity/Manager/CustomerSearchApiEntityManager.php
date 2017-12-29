@@ -155,12 +155,13 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             ->addSelect('entityClass', 'entity')
             ->addSelect('accountName', 'accountName');
         foreach ($this->getCustomerListFilters($searchResult) as $customerClass => $customerIds) {
-            $subQb = $em->getRepository($customerClass)->createQueryBuilder('e')
+            $subQb = $em->getRepository($customerClass)->createQueryBuilder('e');
+            $subQb
                 ->select(
-                    sprintf(
-                        'channel.id AS channelId, e.id AS entityId, \'%s\' AS entityClass, account.name as accountName',
-                        $customerClass
-                    )
+                    'channel.id as channelId',
+                    'e.id as entityId',
+                    $subQb->expr()->literal($customerClass) . ' as entityClass',
+                    'account.name as accountName'
                 )
                 ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel')
                 ->leftJoin('e.account', 'account');

@@ -86,6 +86,10 @@ class OpportunityRepository extends EntityRepository
         $orderBy = 'budget',
         $direction = 'DESC'
     ) {
+        QueryBuilderUtil::checkIdentifier($alias);
+        QueryBuilderUtil::checkField($orderBy);
+        QueryBuilderUtil::checkIdentifier($direction);
+
         $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
         $repository  = $this->getEntityManager()->getRepository($statusClass);
 
