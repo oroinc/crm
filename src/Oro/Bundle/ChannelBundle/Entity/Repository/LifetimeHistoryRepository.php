@@ -33,22 +33,25 @@ class LifetimeHistoryRepository extends EntityRepository
             ->setParameter('account', $account->getId());
 
         $selectFields = [];
-        $channelConditions = [];
+        $orX = $qb->expr()->orX();
         foreach ($customerIdentities as $customerClass => $customerLifetimeField) {
             $customerAlias = QueryBuilderUtil::generateParameterName('customer');
             $qb
                 ->leftJoin(
-                    sprintf('c.%s', AccountCustomerManager::getCustomerTargetField($customerClass)),
+                    QueryBuilderUtil::getField('c', AccountCustomerManager::getCustomerTargetField($customerClass)),
                     $customerAlias
                 );
-            $selectFields[] = sprintf('COALESCE(SUM(%s.%s), 0)', $customerAlias, $customerLifetimeField);
-
-            $channelConditions[] = sprintf('%s.dataChannel = :channel', $customerAlias);
+            $selectFields[] = QueryBuilderUtil::sprintf(
+                'COALESCE(SUM(%s.%s), 0)',
+                $customerAlias,
+                $customerLifetimeField
+            );
+            $orX->add(sprintf('%s.dataChannel = :channel', $customerAlias));
         }
 
         if ($channel) {
             $qb
-                ->andWhere(call_user_func_array([$qb->expr(), 'orX'], $channelConditions))
+                ->andWhere($orX)
                 ->setParameter('channel', $channel->getId());
         }
 
@@ -98,15 +101,15 @@ class LifetimeHistoryRepository extends EntityRepository
                 $qb->andWhere($qb->expr()->isNull('l.dataChannel'));
             }
 
-            $criteria = [];
+            $orX = $qb->expr()->orX();
             foreach ($pairs as $k => $pair) {
                 list($account, $excludeEntry) = $pair;
 
-                $criteria[] = $expr->andX('l <> :eid' . $k, 'l.account = :aid' . $k);
+                $orX->add($expr->andX('l <> :eid' . $k, 'l.account = :aid' . $k));
                 $qb->setParameter('eid' . $k, $excludeEntry);
                 $qb->setParameter('aid' . $k, $account);
             }
-            $qb->andWhere(call_user_func_array([$expr, 'orX'], $criteria));
+            $qb->andWhere($orX);
             $qb->getQuery()->execute();
         }
     }

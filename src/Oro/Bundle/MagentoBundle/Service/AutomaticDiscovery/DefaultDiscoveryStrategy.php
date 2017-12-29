@@ -4,6 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class DefaultDiscoveryStrategy extends AbstractDiscoveryStrategy
@@ -17,7 +18,7 @@ class DefaultDiscoveryStrategy extends AbstractDiscoveryStrategy
         $fieldValue = $propertyAccessor->getValue($entity, $field);
 
         $parameterName = ':' . $field;
-        $qbFieldName = $rootAlias . '.' . $field;
+        $qbFieldName = QueryBuilderUtil::getField($rootAlias, $field);
 
         $qb->andWhere($this->getFieldExpr($qb, $qbFieldName, $parameterName, $configuration))
             ->setParameter($parameterName, $fieldValue);
