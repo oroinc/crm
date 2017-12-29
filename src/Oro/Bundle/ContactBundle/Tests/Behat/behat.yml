@@ -36,5 +36,7 @@ oro_behat_extension:
             - '@oro_importexport.processor.registry'
         - OroEmailBundle::EmailContext
         - OroContactBundle::FeatureContext
+        - OroActivityListBundle::ActivityContext
+        - OroUIBundle::ContextSelectorContext
       paths:
         - '@OroContactBundle/Tests/Behat/Features'
