@@ -88,7 +88,6 @@ class OpportunityRepository extends EntityRepository
     ) {
         QueryBuilderUtil::checkIdentifier($alias);
         QueryBuilderUtil::checkField($orderBy);
-        QueryBuilderUtil::checkIdentifier($direction);
 
         $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
         $repository  = $this->getEntityManager()->getRepository($statusClass);
@@ -116,7 +115,7 @@ class OpportunityRepository extends EntityRepository
         )
         ->leftJoin('OroSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
         ->groupBy('s.name')
-        ->orderBy($orderBy, $direction);
+        ->orderBy($orderBy, QueryBuilderUtil::getSortOrder($direction));
 
         return $qb;
     }
