@@ -359,7 +359,8 @@ class CartRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->createQueryBuilder($alias);
         $this->joinWorkflowStep($qb, 'workflowStep');
-        $qb->select(
+        $qb
+            ->select(
                 'workflowStep.name as workflowStepName',
                 QueryBuilderUtil::sprintf('SUM(%s.grandTotal) as total', $alias)
             )
