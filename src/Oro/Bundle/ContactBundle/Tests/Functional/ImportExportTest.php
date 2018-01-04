@@ -2,330 +2,198 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
-use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\EntityBundle\Helper\FieldHelper;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\ImportExportBundle\Configuration\ImportExportConfiguration;
+use Oro\Bundle\ImportExportBundle\Tests\Functional\AbstractImportExportTest;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Form;
-
-class ImportExportTest extends WebTestCase
+/**
+ * @dbIsolationPerTest
+ */
+class ImportExportTest extends AbstractImportExportTest
 {
-    use MessageQueueExtension;
-
-    /**
-     * @var string
-     */
-    protected $file;
-
     protected function setUp()
     {
-        $this->initClient([], $this->generateBasicAuthHeader());
-    }
-
-    public function strategyDataProvider()
-    {
-        return [
-            'add'            => ['oro_contact.add', 1, 0],
-            'add or replace' => ['oro_contact.add_or_replace', 0, 1],
-        ];
-    }
-
-    /**
-     * @param string $strategy
-     * @param int $added
-     * @param int $replaced
-     * @dataProvider strategyDataProvider
-     */
-    public function testImportExport($strategy, $added, $replaced)
-    {
-        $this->markTestSkipped(
-            'This test will be completely removed and replaced with a set of smaller functional tests
-            (see BAP-13063 and BAP-13064)'
+        parent::setUp();
+        $this->loadFixtures(
+            [
+                LoadContactEntitiesData::class,
+            ]
         );
-        $this->file = $this->getImportTemplate();
-        $this->assertTrue(file_exists($this->file));
-
-        $this->validateImportFile($strategy);
-        $this->doImport($strategy, $added, $replaced);
-
-        $this->doExport();
-        $this->validateExportResult();
     }
 
-    public function testAddOrReplaceStrategyWithDuplicateRecordsImport()
+    public function testExportTemplate()
     {
-        $this->markTestSkipped(
-            'This test will be completely removed and replaced with a set of smaller functional tests
-            (see BAP-13063 and BAP-13064)'
-        );
-        $dataDir = $this->getContainer()
-            ->get('kernel')
-            ->locateResource('@OroContactBundle/Tests/Functional/DataFixtures/Data');
-        $this->file = $dataDir . DIRECTORY_SEPARATOR . 'contact_with_duplicate_records.csv';
+        $exportTemplateFileName = $this->getExportTemplateFileName();
 
-        $this->validateImportFile('oro_contact.add_or_replace');
-        $this->doImport('oro_contact.add_or_replace', 1, 1);
+        $this->assertExportTemplateWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile($exportTemplateFileName)
+        );
     }
 
-    /**
-     * @param string $strategy
-     */
-    protected function validateImportFile($strategy)
+    public function testExport()
     {
-        $crawler = $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_importexport_import_form',
-                [
-                    'entity'           => 'Oro\Bundle\ContactBundle\Entity\Contact',
-                    '_widgetContainer' => 'dialog'
-                ]
-            )
+        $this->assertExportWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('export.csv'),
+            [
+                'Id',
+                'Organization Name',
+                'Owner Username'
+            ]
         );
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($strategy, $result->getContent());
+    }
 
-        /** @var Form $form */
-        $form = $crawler->selectButton('Submit')->form();
-
-        /** TODO Change after BAP-1813 */
-        $form->getFormNode()->setAttribute(
-            'action',
-            $form->getFormNode()->getAttribute('action') . '&_widgetContainer=dialog'
+    public function testImportRecordWithAddStrategy()
+    {
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration('oro_contact.add'),
+            $this->getFullPathToDataFile('import_one_record.csv')
         );
 
-        $form['oro_importexport_import[file]']->upload($this->file);
-        $form['oro_importexport_import[processorAlias]'] = $strategy;
-
-        $this->client->followRedirects(true);
-        $this->client->submit($form);
-
-        $result = $this->client->getResponse();
-
-        $this->assertJsonResponseStatusCodeEquals($result, 200);
-
-        $crawler = $this->client->getCrawler();
-        $this->assertEquals(0, $crawler->filter('.import-errors')->count());
+        static::assertCount(
+            5,
+            $this->getContactRepository()->findAll()
+        );
     }
 
-    /**
-     * @param string $strategy
-     * @param int $added
-     * @param int $replaced
-     */
-    protected function doImport($strategy, $added, $replaced)
+    public function testImportRecordWithAddOrReplaceStrategy()
     {
-        // test import
-        $this->client->followRedirects(false);
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_importexport_import_process',
-                [
-                    'processorAlias' => $strategy,
-                    '_format'        => 'json'
-                ]
-            )
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('import_one_record.csv')
         );
 
-        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
-
-        $this->assertEquals(['success' => true], $data);
+        static::assertCount(
+            5,
+            $this->getContactRepository()->findAll()
+        );
     }
 
-    protected function doExport()
+    public function testImportDuplicateRecord()
     {
-        $this->client->followRedirects(false);
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'oro_importexport_export_instant',
-                [
-                    'processorAlias' => 'oro_contact',
-                    '_format'        => 'json'
-                ]
-            )
+        $this->markTestSkipped("Unskip after BAP-16301");
+
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('contact_with_duplicate_records.csv')
         );
 
-        $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        static::assertCount(
+            5,
+            $this->getContactRepository()->findAll()
+        );
+    }
 
-        $this->assertCount(1, $data);
-        $this->assertTrue($data['success']);
+    public function testUpdateIfNoneEmptyStrategyOnLastName()
+    {
+        $configManager = $this->getConfigManager();
+        $importExportFieldConfig = $configManager
+            ->getFieldConfig('importexport', Contact::class, 'lastName');
+        $importExportFieldConfig->set('identity', FieldHelper::IDENTITY_ONLY_WHEN_NOT_EMPTY);
+        $configManager->flush();
 
-        $this->assertEquals(1, $data['readsCount']);
-        $this->assertEquals(0, $data['errorsCount']);
-
-        $this->client->request(
-            'GET',
-            $data['url']
+        $this->assertImportWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('update_name_prefix.csv')
         );
 
-        $result = $this->client->getResponse();
-        $this->assertResponseStatusCodeEquals($result, 200);
-        $this->assertResponseContentTypeEquals($result, 'text/csv');
+        static::assertCount(
+            4,
+            $this->getContactRepository()->findAll()
+        );
+
+        /**
+         * @var $updatedContact Contact
+         */
+        $updatedContact = $this->getReference('Contact_' . LoadContactEntitiesData::FIRST_ENTITY_NAME);
+        $this->assertNotEmpty($updatedContact->getLastName());
+        $this->assertSame('Ms.', $updatedContact->getNamePrefix());
     }
 
-    protected function validateExportResult()
+    public function testImportValidate()
     {
-        $importTemplate = $this->getFileContents($this->file);
-        $exportedData = $this->getFileContents($this->getExportFile());
-
-        $commonFields = array_intersect($importTemplate[0], $exportedData[0]);
-
-        $importTemplateValues = $this->extractFieldValues($commonFields, $importTemplate);
-        $exportedDataValues = $this->extractFieldValues($commonFields, $exportedData);
-
-        $this->assertExportResults($importTemplateValues, $exportedDataValues);
-    }
-
-    /**
-     * @param array $expected
-     * @param array $actual
-     */
-    protected function assertExportResults(array $expected, array $actual)
-    {
-        $this->assertCollectionData($expected, $actual, ['Emails 2 Email', 'Emails 3 Email']);
-        $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
-        $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
-        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/Postal Code', 'Addresses 3 Zip/Postal Code']);
-        $this->assertArrayData($expected, $actual, 'Tags');
-
-        $this->assertEquals($expected, $actual);
+        $this->assertImportValidateWorks(
+            $this->getExportImportConfiguration(),
+            $this->getFullPathToDataFile('import_wrong_data.csv'),
+            $this->getFullPathToDataFile('import_validation_errors.json')
+        );
     }
 
     /**
-     * @param array $expected
-     * @param array $actual
-     * @param string $key
+     * @return ContactRepository
      */
-    protected function assertArrayData(array &$expected, array &$actual, $key)
+    private function getContactRepository()
     {
-        $this->assertArrayHasKey($key, $expected);
-        $this->assertArrayHasKey($key, $actual);
-
-        $e = $this->stringToArray($expected[$key]);
-        $a = $this->stringToArray($actual[$key]);
-        sort($e);
-        sort($a);
-
-        $this->assertEquals($e, $a);
-
-        unset($expected[$key]);
-        unset($actual[$key]);
-    }
-
-    protected function stringToArray($string)
-    {
-        return explode(', ', $string);
+        return static::getContainer()
+            ->get('doctrine')
+            ->getManagerForClass(Contact::class)
+            ->getRepository(Contact::class);
     }
 
     /**
-     * Order of elements in collection is not important, except the first (primary) element
-     *
-     * @param array $expected
-     * @param array $actual
-     * @param array $keys
+     * @return ConfigManager
      */
-    protected function assertCollectionData(array &$expected, array &$actual, array $keys)
+    private function getConfigManager()
     {
-        $expectedValues = [];
-        $actualValues = [];
-
-        foreach ($keys as $key) {
-            $this->assertArrayHasKey($key, $expected);
-            $this->assertArrayHasKey($key, $actual);
-            $expectedValues[] = $expected[$key];
-            $actualValues[] = $actual[$key];
-            unset($expected[$key]);
-            unset($actual[$key]);
-        }
-
-        sort($expectedValues);
-        sort($actualValues);
-
-        $this->assertEquals($expectedValues, $actualValues);
-    }
-
-    /**
-     * @param array $fields
-     * @param array $data
-     * @return array
-     */
-    protected function extractFieldValues(array $fields, array $data)
-    {
-        // ID is changed
-        // birthdays have different timestamps
-        $skippedFields = ['Id', 'Birthday'];
-
-        $values = [];
-        foreach ($fields as $field) {
-            if (!in_array($field, $skippedFields)) {
-                $key = array_search($field, $data[0]);
-                if (false !== $key) {
-                    $values[$field] = $data[1][$key];
-                }
-            }
-        }
-
-        return $values;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getImportTemplate()
-    {
-        $result = $this
+        return $config = $this
             ->getContainer()
-            ->get('oro_importexport.handler.export')
-            ->getExportResult(
-                JobExecutor::JOB_EXPORT_TEMPLATE_TO_CSV,
-                'oro_contact',
-                ProcessorRegistry::TYPE_EXPORT_TEMPLATE
-            );
-
-        $chains = explode('/', $result['url']);
-        return $this
-            ->getContainer()
-            ->get('oro_importexport.file.file_system_operator')
-            ->getTemporaryFile(end($chains))
-            ->getRealPath();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getExportFile()
-    {
-        $result = $this
-            ->getContainer()
-            ->get('oro_importexport.handler.export')
-            ->handleExport(
-                JobExecutor::JOB_EXPORT_TO_CSV,
-                'oro_contact',
-                ProcessorRegistry::TYPE_EXPORT
-            );
-
-        $result = json_decode($result->getContent(), true);
-        $chains = explode('/', $result['url']);
-        return $this
-            ->getContainer()
-            ->get('oro_importexport.file.file_system_operator')
-            ->getTemporaryFile(end($chains))
-            ->getRealPath();
+            ->get('oro_entity_config.config_manager');
     }
 
     /**
      * @param string $fileName
-     * @return array
+     *
+     * @return string
      */
-    protected function getFileContents($fileName)
+    private function getFullPathToDataFile($fileName)
     {
-        $content = file_get_contents($fileName);
-        $content = explode("\n", $content);
-        $content = array_filter($content, 'strlen');
-        return array_map('str_getcsv', $content);
+        $dataDir = $this->getContainer()
+            ->get('kernel')
+            ->locateResource('@OroContactBundle/Tests/Functional/DataFixtures/Data');
+
+        return $dataDir . DIRECTORY_SEPARATOR . $fileName;
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportTemplateFileName()
+    {
+        $organizationRepository = $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManagerForClass(Organization::class)
+            ->getRepository(Organization::class);
+
+        /**
+         * @var $organization Organization
+         */
+        $organization = $organizationRepository->getFirst();
+
+        return sprintf(
+            'export_template_with_%s_org.csv',
+            strtolower($organization->getName())
+        );
+    }
+
+    /**
+     * @param string $fieldImportProcessorAlias
+     *
+     * @return ImportExportConfiguration
+     */
+    private function getExportImportConfiguration($fieldImportProcessorAlias = 'oro_contact.add_or_replace')
+    {
+        return new ImportExportConfiguration([
+            ImportExportConfiguration::FIELD_ENTITY_CLASS => Contact::class,
+            ImportExportConfiguration::FIELD_EXPORT_PROCESSOR_ALIAS => 'oro_contact',
+            ImportExportConfiguration::FIELD_EXPORT_TEMPLATE_PROCESSOR_ALIAS => 'oro_contact',
+            ImportExportConfiguration::FIELD_IMPORT_PROCESSOR_ALIAS => $fieldImportProcessorAlias
+        ]);
     }
 }
