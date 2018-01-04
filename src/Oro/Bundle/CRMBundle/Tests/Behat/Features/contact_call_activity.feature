@@ -19,7 +19,7 @@ Feature: Contact call activity
     And fill form with:
       | Subject             | Proposed Charlie to star in new film |
       | Additional comments | Charlie was in a good mood           |
-      | Call date & time    | <DateTime:August 24 11:00 AM>        |
+      | Call date & time    | 2017-08-24 11:00:00                  |
       | Phone number        | (310) 475-0859                       |
       | Duration            | 00:05:30                             |
     When I press "Log call"
@@ -61,7 +61,7 @@ Feature: Contact call activity
       | Owner               | Theresa                         |
       | Subject             | Offered Charlie a drink with me |
       | Additional comments | Charlie was in a bad mood       |
-      | Call date & time    | <DateTime:September 1 9:30 PM>  |
+      | Call date & time    | 2017-09-01 21:30:00             |
       | Phone number        | (323) 879-6520                  |
       | Duration            | 00:03:25                        |
     When I press "Update call"
