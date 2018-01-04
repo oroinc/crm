@@ -53,7 +53,7 @@ class ContactEntityNameProvider extends EntityNameProvider
                 $field
             );
         }
-        $subQuery = join(', ', $subSelects);
+        $subQuery = implode(', ', $subSelects);
 
         return sprintf('COALESCE(NULLIF(%s, \'\'), %s)', $nameDQL, $subQuery);
     }
