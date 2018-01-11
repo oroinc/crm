@@ -5,7 +5,7 @@
     "keywords": ["CRM", "Magento", "Customers"],
     "license": "MIT",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "symfony/symfony": "2.8.*, !=2.8.10",
         "doctrine/orm": ">=2.3,<2.4-dev",
         "oro/log": "dev-master",
