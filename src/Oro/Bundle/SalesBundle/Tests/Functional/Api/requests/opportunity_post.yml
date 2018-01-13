@@ -9,7 +9,7 @@ data:
         timesContactedOut: null
         name: 'New Opportunity'
         closeDate: null
-        probability: 100
+        probability: 1
         budgetAmountCurrency: USD
         budgetAmountValue: '50.0000'
         closeRevenueCurrency: USD
