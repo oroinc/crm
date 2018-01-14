@@ -2,3 +2,7 @@ api:
     entities:
         Oro\Bundle\AccountBundle\Entity\Account:
             documentation_resource: '@OroAccountBundle/Resources/doc/api/account.md'
+            filters:
+                fields:
+                    name:
+                        allow_array: false
