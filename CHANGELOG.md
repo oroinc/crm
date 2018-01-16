@@ -32,6 +32,10 @@
 #### ContactUsBundle
 * Field `emailAddress` now have `"contact_information"="email"` entity property
 
+### Changed
+#### SalesBundle
+* If you use REST API to manage the `Opportunity` entity, keep in mind that the `probability` field is limited by the range of values from 0 to 1. Validation was added. In PATCH and POST requests it is not transformed as before (it was divided by 100). So, if you add an opportunity via API with the 0.5 probability, you will receive the same value in GET request.
+
 ## 2.5.0 (2017-11-30)
 
 ### Added

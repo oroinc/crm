@@ -67,7 +67,7 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
         $opportunity->setCustomerAssociation($this->getReference('customer_association'));
         $opportunity->setBudgetAmount(MultiCurrency::create(50, 'USD'));
         $opportunity->setCloseRevenue(MultiCurrency::create(100, 'USD'));
-        $opportunity->setProbability(100);
+        $opportunity->setProbability(1);
         $opportunity->setCloseDate(new \DateTime('2017-01-01', new \DateTimeZone('UTC')));
         $opportunity->setStatus(
             $this->em->getReference(
