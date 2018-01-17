@@ -1,3 +1,5 @@
+var ORO_ORDER_EMBED_API = {};
+
 define(function(require) {
     'use strict';
 
@@ -27,7 +29,8 @@ define(function(require) {
         it('Initialize', function() {
             expect(ORO_ORDER_EMBED_API).toEqual({});
 
-            var placeOrderComponent = new PlaceOrderComponent({
+            /*jshint nonew: false */
+            new PlaceOrderComponent({
                 _sourceElement: $('#container'),
                 wid: 'wid-123',
                 cartSyncURL: 'http://cartSyncURL',
@@ -41,7 +44,8 @@ define(function(require) {
         it('Handle Error', function() {
             var errorMessage = 'Custom Error message.';
 
-            var placeOrderComponent = new PlaceOrderComponent({
+            /*jshint nonew: false */
+            new PlaceOrderComponent({
                 el: '#container',
                 errorMessage: errorMessage
             });
