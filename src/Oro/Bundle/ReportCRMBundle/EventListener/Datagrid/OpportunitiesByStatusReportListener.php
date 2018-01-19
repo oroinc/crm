@@ -120,8 +120,8 @@ class OpportunitiesByStatusReportListener
 
         // readd join parts and append filter conditions to the appropriate joins
         foreach ($joinParts as $joins) {
+            /** @var \Doctrine\ORM\Query\Expr\Join $join */
             foreach ($joins as $join) {
-                /** @var \Doctrine\ORM\Query\Expr\Join $join */
                 $alias = $join->getAlias();
                 $fieldCondition = '';
                 // check if there is a column with a join filter on this alias
