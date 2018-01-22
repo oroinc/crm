@@ -5,7 +5,7 @@
     "keywords": ["Oro"],
     "license": "MIT",
     "require": {
-        "php": ">=7.0",
+        "php": "7.1.*",
         "symfony/symfony": "2.8.*, !=2.8.10",
 
         "oro/ui-bundle": "dev-master",
