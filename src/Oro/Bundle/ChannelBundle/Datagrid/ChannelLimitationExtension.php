@@ -97,6 +97,7 @@ class ChannelLimitationExtension extends AbstractExtension
 
         if (!$joinAlias) {
             $joinAlias = uniqid($relationPath);
+            QueryBuilderUtil::checkIdentifier($joinAlias);
             $queryBuilder->leftJoin($fullJoinPath, $joinAlias);
         }
 
