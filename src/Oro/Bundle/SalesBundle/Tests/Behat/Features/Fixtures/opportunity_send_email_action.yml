@@ -1,0 +1,65 @@
+Oro\Bundle\ContactBundle\Entity\ContactEmail:
+  contact-email-1:
+    email: contactEmail1@example.com
+    primary: true
+  contact-email-2:
+    email: contactEmail2@example.com
+    primary: true
+
+Oro\Bundle\ContactBundle\Entity\Contact:
+  contact-w-name-email:
+    firstName: 'test Contact'
+    lastName: 'with Email'
+    emails: ['@contact-email-1']
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('now', 'now')>
+  contact-wo-name:
+    emails: ['@contact-email-2']
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('now', 'now')>
+  contact-wo-email:
+    firstName: 'test Contact'
+    lastName: 'without Email'
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('now', 'now')>
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account-1:
+    name: 'test Account'
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  customer-1:
+    account: '@account-1'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity-wo-contact:
+    name: 'opportunity wo contact'
+    customerAssociation: '@customer-1'
+    organization: '@organization'
+    owner: '@admin'
+
+  opportunity-w-contact:
+    name: 'opportunity w contact name and email'
+    customerAssociation: '@customer-1'
+    contact: '@contact-w-name-email'
+    organization: '@organization'
+    owner: '@admin'
+
+  opportunity-w-contact-no-name:
+    name: 'opportunity w contact no name'
+    customerAssociation: '@customer-1'
+    contact: '@contact-wo-name'
+    organization: '@organization'
+    owner: '@admin'
+
+  opportunity-w-contact-no-email:
+    name: 'opportunity w contact no email'
+    customerAssociation: '@customer-1'
+    contact: '@contact-wo-email'
+    organization: '@organization'
+    owner: '@admin'
