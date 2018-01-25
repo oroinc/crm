@@ -893,7 +893,12 @@ class Opportunity extends ExtendOpportunity implements
             return null;
         }
 
-        return $contact->getEmail();
+        $contactFullName = $contact->__toString();
+        $contactEmail = $contact->getEmail();
+
+        return $contactFullName && $contactEmail
+            ? "\"{$contactFullName}\" <{$contactEmail}>"
+            : $contactEmail;
     }
 
     public function __toString()
