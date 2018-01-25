@@ -114,6 +114,14 @@ class ImportExportTest extends AbstractImportExportTest
         $updatedContact = $this->getReference('Contact_' . LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertNotEmpty($updatedContact->getLastName());
         $this->assertSame('Ms.', $updatedContact->getNamePrefix());
+
+        /**
+         * Assert that update not clear snapshot field
+         */
+        $this->assertNotEmpty(
+            $updatedContact->getTestMultiEnumSnapshot(),
+            "Update through the import-export functionality mustn't clear the system fields !"
+        );
     }
 
     public function testImportValidate()
