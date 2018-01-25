@@ -51,8 +51,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * @type {Object.<string, *>}
          */
         events: {
-            'click [data-purpose="open-form-widget"]':          'openDialog',
-            'click [data-purpose="remove-integration-data"]':  'onRemoveIntegrationData'
+            'click [data-purpose="open-form-widget"]': 'openDialog',
+            'click [data-purpose="remove-integration-data"]': 'onRemoveIntegrationData'
         },
 
         /**
@@ -136,13 +136,13 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         render: function() {
             var name = this._getValue('name');
             var templateContext = {
-                name: name ,
+                name: name,
                 title: name ? __('edit') : __('Configure integration')
             };
 
             this.$el
                 .find('.integration-widget-link-container')
-                    .remove()
+                .remove()
                 .end()
                 .append(this.linkTemplate(templateContext));
         },

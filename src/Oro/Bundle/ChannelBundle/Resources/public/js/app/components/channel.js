@@ -41,7 +41,7 @@ define([
         entityComponentView.render();
         $storageEl.after(entityComponentView.$el);
         entitiesCollection = entityComponentView.collection;
-        entitiesCollection.on('add remove reset', function updateStorage () {
+        entitiesCollection.on('add remove reset', function updateStorage() {
             $storageEl.val(JSON.stringify(entitiesCollection.pluck('name')));
         });
     }
@@ -93,7 +93,7 @@ define([
 
             if (event.reloadManually) {
                 mediator.execute('submitPage', {
-                    url:  $form.attr('action'),
+                    url: $form.attr('action'),
                     type: $form.attr('method'),
                     data: $.param(data)
                 });
@@ -103,8 +103,8 @@ define([
         $el.on('change', function changeTypeHandler(e) {
             var prevEl = e.removed;
             var confirm = new DeleteConfirmation({
-                title:   __('oro.channel.confirmation.title'),
-                okText:  __('oro.channel.confirmation.agree'),
+                title: __('oro.channel.confirmation.title'),
+                okText: __('oro.channel.confirmation.agree'),
                 content: __('oro.channel.confirmation.text')
             });
 
@@ -127,7 +127,6 @@ define([
      * @param {Object} options
      */
     return function(options) {
-
         var lockedEntities = [];
 
         if (!_.isArray(options.customerIdentity)) {
