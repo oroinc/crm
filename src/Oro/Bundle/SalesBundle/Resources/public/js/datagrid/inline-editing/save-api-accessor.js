@@ -1,4 +1,3 @@
-/** @lends CollectionApiAccessor */
 define(function(require) {
     'use strict';
 
@@ -7,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var ApiAccessor = require('oroui/js/tools/api-accessor');
 
-    CollectionApiAccessor = ApiAccessor.extend(/** @exports CollectionApiAccessor.prototype */{
+    CollectionApiAccessor = ApiAccessor.extend(/** @lends CollectionApiAccessor.prototype */{
         /**
          * Validates url parameters
          *
