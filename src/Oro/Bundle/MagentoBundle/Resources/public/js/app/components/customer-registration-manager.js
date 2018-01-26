@@ -1,4 +1,3 @@
-/*jshint devel: true*/
 define(function(require) {
     'use strict';
 

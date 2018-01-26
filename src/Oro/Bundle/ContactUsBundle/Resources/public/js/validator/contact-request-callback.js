@@ -2,8 +2,8 @@ define(['jquery', 'underscore'], function($, _) {
     'use strict';
 
     var NotBlank = {
-        'message': 'This value should not be blank.',
-        'payload': null
+        message: 'This value should not be blank.',
+        payload: null
     };
 
     var getField = function(name) {

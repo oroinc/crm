@@ -1,4 +1,3 @@
-/** @lends ContactApiAccessor */
 define(function(require) {
     'use strict';
 
@@ -7,7 +6,7 @@ define(function(require) {
     var _ = require('underscore');
     var ApiAccessor = require('oroui/js/tools/api-accessor');
 
-    ContactApiAccessor = ApiAccessor.extend(/** @exports ContactApiAccessor.prototype */{
+    ContactApiAccessor = ApiAccessor.extend(/** @lends ContactApiAccessor.prototype */{
         /**
          * Validates url parameters
          *

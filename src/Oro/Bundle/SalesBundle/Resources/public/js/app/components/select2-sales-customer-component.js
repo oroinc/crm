@@ -8,7 +8,7 @@ define(function(require) {
         setConfig: function(config) {
             config.formatContext = function() {
                 return {
-                    'account': config.accountLabel
+                    account: config.accountLabel
                 };
             };
             config = Select2SalesCustomerComponent.__super__.setConfig.apply(this, arguments);
