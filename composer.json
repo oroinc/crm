@@ -15,11 +15,11 @@
     },
     "require": {
         "php": "7.1.*",
-        "oro/platform": "2.6.x-dev",
-        "oro/crm-task-bundle": "2.6.x-dev",
-        "oro/crm-call-bundle": "2.6.x-dev",
-        "oro/calendar-bundle": "2.6.x-dev",
-        "oro/marketing": "2.6.x-dev"
+        "oro/platform": "2.6.*",
+        "oro/crm-task-bundle": "2.6.*",
+        "oro/crm-call-bundle": "2.6.*",
+        "oro/calendar-bundle": "2.6.*",
+        "oro/marketing": "2.6.*"
     },
     "require-dev": {
         "sensio/generator-bundle": "3.1.2",
