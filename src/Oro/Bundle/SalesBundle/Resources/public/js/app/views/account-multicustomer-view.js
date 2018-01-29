@@ -16,7 +16,7 @@ define(function(require) {
 
         events: {
             'shown.bs.tab .tab-content': 'onTabShown',
-            'shown.bs.tab >.oro-tabs>ul': 'onCustomerShown',
+            'shown.bs.tab >.oro-tabs>ul': 'onCustomerShown'
         },
 
         listen: {

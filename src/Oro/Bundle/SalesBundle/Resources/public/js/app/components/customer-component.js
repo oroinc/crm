@@ -40,15 +40,15 @@ define(function(require) {
             var routeParams = this.$el.find(this.inputSelector).data('select2_query_additional_params') || {};
             widget.options.routeParams = routeParams;
 
-            var widgetUrl =  widget.options.url;
+            var widgetUrl = widget.options.url;
             var widgetUrlRoot = widgetUrl.substring(0, widgetUrl.indexOf('?'));
             var widgetUrlParts = tools.unpackFromQueryString(
                 widgetUrl.substring(widgetUrl.indexOf('?'), widgetUrl.length)
             );
             if (!_.isEmpty(routeParams)) {
-                routeParams = _.extend({}, widgetUrlParts, {'params': routeParams}, routeParams);
+                routeParams = _.extend({}, widgetUrlParts, {params: routeParams}, routeParams);
                 widgetUrl = widgetUrlRoot || widgetUrl + '?' + tools.packToQueryString(routeParams);
-                widget.options.url =  widgetUrl;
+                widget.options.url = widgetUrl;
             }
         },
 

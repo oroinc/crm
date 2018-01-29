@@ -21,6 +21,9 @@ oro_behat_extension:
     Select2Share:
       selector: '.select2-offscreen[data-bound-component="oro/select2-share-component"]'
       class: Oro\Bundle\FormBundle\Tests\Behat\Element\Select2Share
+    Contact Accounts Grid:
+      selector: 'div[data-page-component-name="contact-accounts-grid"]'
+      class: Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid
   suites:
     OroContactBundle:
       contexts:

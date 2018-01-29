@@ -1,4 +1,5 @@
 ## 2.6.0 (Unreleased)
+[Show detailed list of changes](incompatibilities-2-6.md)
 
 ### Removed
 #### ContactBundle
@@ -37,6 +38,7 @@
 * If you use REST API to manage the `Opportunity` entity, keep in mind that the `probability` field is limited by the range of values from 0 to 1. Validation was added. In PATCH and POST requests it is not transformed as before (it was divided by 100). So, if you add an opportunity via API with the 0.5 probability, you will receive the same value in GET request.
 
 ## 2.5.0 (2017-11-30)
+[Show detailed list of changes](#incompatibilities-2-5.md)
 
 ### Added
 #### ACL
