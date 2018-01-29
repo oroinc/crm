@@ -6,7 +6,7 @@ define(function(require) {
 
     PlaceOrderView = BaseView.extend({
         events: {
-            'load': 'onFrameLoad'
+            load: 'onFrameLoad'
         },
 
         initialize: function() {
@@ -21,7 +21,7 @@ define(function(require) {
             var $frame = this.$el;
             var offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
 
-            $frame.addClass('loaded').parent().css({'top': offset});
+            $frame.addClass('loaded').parent().css({top: offset});
 
             this.trigger('frameLoaded');
         }

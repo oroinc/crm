@@ -12,11 +12,13 @@ define(function(require) {
         var messenger;
 
         beforeEach(function() {
+            /* eslint-disable indent */
             window.setFixtures([
                 '<div id="container">',
                     '<iframe data-src="test"></iframe>',
                 '</div>'
             ].join(''));
+            /* eslint-enable */
 
             messenger = jasmine.createSpyObj('messenger', ['notificationFlashMessage']);
             exposure.substitute('messenger').by(messenger);
@@ -29,7 +31,7 @@ define(function(require) {
         it('Initialize', function() {
             expect(ORO_ORDER_EMBED_API).toEqual({});
 
-            /*jshint nonew: false */
+            /* jshint nonew: false */
             new PlaceOrderComponent({
                 _sourceElement: $('#container'),
                 wid: 'wid-123',
@@ -44,7 +46,7 @@ define(function(require) {
         it('Handle Error', function() {
             var errorMessage = 'Custom Error message.';
 
-            /*jshint nonew: false */
+            /* jshint nonew: false */
             new PlaceOrderComponent({
                 el: '#container',
                 errorMessage: errorMessage

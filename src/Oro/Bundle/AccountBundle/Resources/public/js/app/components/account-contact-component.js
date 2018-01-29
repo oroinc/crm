@@ -13,12 +13,12 @@ define(function(require) {
         _getExtraData: function(model) {
             return [
                 {
-                    'label': 'Phone',
-                    'value': model.get('primaryPhone')
+                    label: 'Phone',
+                    value: model.get('primaryPhone')
                 },
                 {
-                    'label': 'Email',
-                    'value': model.get('primaryEmail')
+                    label: 'Email',
+                    value: model.get('primaryEmail')
                 }
             ];
         }
