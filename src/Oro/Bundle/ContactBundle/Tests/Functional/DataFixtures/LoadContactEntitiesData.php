@@ -2,9 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 class LoadContactEntitiesData extends AbstractFixture
 {
@@ -22,6 +24,7 @@ class LoadContactEntitiesData extends AbstractFixture
         [
             'firstName' => self::FIRST_ENTITY_NAME,
             'lastName'  => 'Bradley',
+            'testMultiEnum' => 'bob_marley'
         ],
         [
             'firstName' => self::SECOND_ENTITY_NAME,
@@ -35,7 +38,6 @@ class LoadContactEntitiesData extends AbstractFixture
             'firstName' => self::FOURTH_ENTITY_NAME,
             'lastName'  => 'Church',
         ],
-
     ];
 
     /**
@@ -52,6 +54,21 @@ class LoadContactEntitiesData extends AbstractFixture
             $contact->setOrganization($organization);
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
+
+            if (isset($contactData['testMultiEnum'])) {
+                $testMultiEnumValue = $manager->getRepository(
+                    ExtendHelper::buildEnumValueClassName('test_multi_enum')
+                )->find($contactData['testMultiEnum']);
+
+                $contact->setTestMultiEnum(
+                    new ArrayCollection(
+                        [
+                            $testMultiEnumValue,
+                        ]
+                    )
+                );
+            }
+
             $this->setReference('Contact_' . $contactData['firstName'], $contact);
             $manager->persist($contact);
         }

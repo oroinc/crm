@@ -86,32 +86,32 @@ The phone number that should be set as the primary one.
 
 **Please note:** The primary phone number will be added to **phones** collection if it does not contain it yet.
 
-###firstName
+### firstName
 
-####create
+#### create
 
 {@inheritdoc}
 
 **Conditionally required field:**
 *At least one of the fields First name, Last name, Emails or Phones must be defined.*
  
-####update
+#### update
  
 {@inheritdoc}
  
 **Please note:**
 *At least one of the fields First name, Last name, Emails or Phones must remain defined.*
 
-###lastName
+### lastName
 
-####create
+#### create
 
 {@inheritdoc}
 
 **Conditionally required field:**
 *At least one of the fields First name, Last name, Emails or Phones must be defined.*
  
-####update
+#### update
  
 {@inheritdoc}
  
@@ -321,7 +321,7 @@ Example:
 
 Remove account records from a specific contact.
 
-###addresses
+### addresses
 
 #### get_subresource
 
