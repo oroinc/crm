@@ -1,0 +1,8 @@
+api:
+    entities:
+        Oro\Bundle\ContactBundle\Entity\Contact:
+            fields:
+                test_multi_enum:
+                    exclude: true
+
+        Extend\Entity\EV_Test_Multi_Enum: { exclude: true}
