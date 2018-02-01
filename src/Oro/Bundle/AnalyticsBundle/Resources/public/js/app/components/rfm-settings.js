@@ -7,18 +7,18 @@ define(function(require) {
     var types = ['recency', 'frequency', 'monetary'];
     var rows = 0;
     var rowTemplate = _.template(
-            '<tr>' +
-                '<td class="rfm-cell-index"></td>' +
-                '<td class="rfm-cell-recency"></td>' +
-                '<td class="rfm-cell-frequency"></td>' +
-                '<td class="rfm-cell-monetary"></td>' +
-                '<td class="action-cell">' +
-                    '<a href="#" class="action-delete" title="<%= _.__("oro.analytics.delete_row") %>">' +
-                        '<i class="fa-close hide-text"></i>' +
-                    '</a>' +
-                '</td>' +
-            '</tr>'
-        );
+        '<tr>' +
+            '<td class="rfm-cell-index"></td>' +
+            '<td class="rfm-cell-recency"></td>' +
+            '<td class="rfm-cell-frequency"></td>' +
+            '<td class="rfm-cell-monetary"></td>' +
+            '<td class="action-cell">' +
+                '<a href="#" class="action-delete" title="<%= _.__("oro.analytics.delete_row") %>">' +
+                    '<i class="fa-close hide-text"></i>' +
+                '</a>' +
+            '</td>' +
+        '</tr>'
+    );
 
     return function(options) {
         var $el = options._sourceElement;
@@ -31,9 +31,9 @@ define(function(require) {
             var typeEl = $el.find('.rfm-' + type);
 
             rfmElements[type] = {
-                'el': typeEl,
-                'template': typeEl.data('prototype'),
-                'isIncreasing': typeEl.data('increasing')
+                el: typeEl,
+                template: typeEl.data('prototype'),
+                isIncreasing: typeEl.data('increasing')
             };
         }
 

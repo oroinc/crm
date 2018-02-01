@@ -11,17 +11,17 @@ define([
 
     return Backbone.View.extend({
         events: {
-            'click': 'processClick'
+            click: 'processClick'
         },
 
         /**
          * Check url
          * @property string
          */
-        route:           'oro_magento_integration_check',
-        url:             null,
-        id:              null,
-        form:            null,
+        route: 'oro_magento_integration_check',
+        url: null,
+        id: null,
+        form: null,
         /**
          * Use in case we edit existed integration
          * and element type is disabled
@@ -284,10 +284,10 @@ define([
                     if (connectors.hasOwnProperty(key)) {
                         $connectorsEl.append(
                             this.connectorTemplate({
-                                name:    key,
-                                label:   connectors[key],
+                                name: key,
+                                label: connectors[key],
                                 checked: checked[key] || '',
-                                i:       i
+                                i: i
                             })
                         );
                         i++;

@@ -121,35 +121,35 @@ define(function(require) {
          */
         _initializeForm: function() {
             var configs = {
-                    placeholder:        __('oro.channel.form.entity'),
-                    result_template:    entitySelectResultTemplate,
-                    selection_template: entitySelectSelectionTemplate,
-                    data: _.bind(function() {
-                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
-                        var options = _.map(notSelected, function(entityMetadata) {
-                            return {
-                                id: entityMetadata.name,
-                                text: entityMetadata.label,
-                                icon: entityMetadata.icon,
-                                type: entityMetadata.type
-                            };
-                        });
-                        var optionGroups = _.groupBy(options, function(entityMetadata) {
-                            return entityMetadata.type;
-                        });
-                        var results = [];
+                placeholder: __('oro.channel.form.entity'),
+                result_template: entitySelectResultTemplate,
+                selection_template: entitySelectSelectionTemplate,
+                data: _.bind(function() {
+                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
+                    var options = _.map(notSelected, function(entityMetadata) {
+                        return {
+                            id: entityMetadata.name,
+                            text: entityMetadata.label,
+                            icon: entityMetadata.icon,
+                            type: entityMetadata.type
+                        };
+                    });
+                    var optionGroups = _.groupBy(options, function(entityMetadata) {
+                        return entityMetadata.type;
+                    });
+                    var results = [];
 
-                        _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
-                            results.push({
-                                text: __('oro.channel.entity_owner.' + groupName),
-                                icon: null,
-                                children: optionGroups[groupName]
-                            });
+                    _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
+                        results.push({
+                            text: __('oro.channel.entity_owner.' + groupName),
+                            icon: null,
+                            children: optionGroups[groupName]
                         });
+                    });
 
-                        return {results: results};
-                    }, this)
-                };
+                    return {results: results};
+                }, this)
+            };
             var $el = this.$formContainer.find('[data-purpose="entity-selector"]');
             var select2Component = new Select2Component({
                 configs: configs,
@@ -168,9 +168,9 @@ define(function(require) {
          */
         _initializeList: function() {
             this.$listContainer.find('tbody').itemsManagerTable({
-                collection:   this.collection,
+                collection: this.collection,
                 itemTemplate: this.itemTemplate,
-                itemRender: function itemRenderer(template, data) {
+                itemRender: function itemRender(template, data) {
                     var context = _.extend({__: __}, data);
 
                     return template(context);
@@ -231,13 +231,13 @@ define(function(require) {
             } else if (this.options.mode === modes.VIEW_MODE) {
                 actions.push({
                     title: 'View',
-                    icon:  'fa-eye',
-                    url:   entityMetadata.view_link
+                    icon: 'fa-eye',
+                    url: entityMetadata.view_link
                 });
                 actions.push({
                     title: 'Edit',
-                    icon:  'fa-pencil-square-o',
-                    url:   entityMetadata.edit_link
+                    icon: 'fa-pencil-square-o',
+                    url: entityMetadata.edit_link
                 });
             }
 

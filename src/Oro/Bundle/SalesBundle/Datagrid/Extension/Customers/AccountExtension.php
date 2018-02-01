@@ -49,7 +49,8 @@ class AccountExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
-            $config->isOrmDatasource()
+            parent::isApplicable($config)
+            && $config->isOrmDatasource()
             && !$this->isDisabled()
             && !$this->isUnsupportedGridPrefix($config)
             && $config->getOrmQuery()->getRootAlias()

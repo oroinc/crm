@@ -7,15 +7,15 @@ define([
 
     CommentModel = BaseModel.extend({
         defaults: {
-            id: null,
-            message: null,
-            briefMessage: null,
+            'id': null,
+            'message': null,
+            'briefMessage': null,
             'public': false,
-            createdAt: null,
-            updatedAt: null,
-            permissions: null,
-            createdBy: null,
-            updatedBy: null
+            'createdAt': null,
+            'updatedAt': null,
+            'permissions': null,
+            'createdBy': null,
+            'updatedBy': null
         }
     });
 

@@ -28,7 +28,7 @@ define(function(require) {
                 .data('select2_query_additional_params') || {};
 
             this.dialogWidget = new DialogWidget({
-                title: __('Create {{ entity }}', {'entity': this.$el.text()}),
+                title: __('Create {{ entity }}', {entity: this.$el.text()}),
                 url: routing.generate(customer.routeCreate, routeParams),
                 stateEnabled: false,
                 incrementalPosition: true,
@@ -46,7 +46,7 @@ define(function(require) {
 
                 mediator.trigger(
                     'customer-dialog:select',
-                    JSON.stringify({'entityClass': customer.className,  'entityId': id})
+                    JSON.stringify({entityClass: customer.className, entityId: id})
                 );
             }, this));
 
