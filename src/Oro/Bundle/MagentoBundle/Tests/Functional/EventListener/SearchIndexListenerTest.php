@@ -79,9 +79,16 @@ class SearchIndexListenerTest extends WebTestCase
         $this->listener->onFinish(new SyncEvent('magento_test_job', []));
 
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
-            ['class' => Contact::class, 'id' => $customer->getContact()->getId()],
-            ['class' => Customer::class, 'id' => $customer->getId()],
-            ['class' => Account::class, 'id' => $customer->getAccount()->getId()],
+            'class' => Contact::class,
+            'entityIds' => [$customer->getContact()->getId() => $customer->getContact()->getId()]
+        ]);
+        self::assertMessageSent(Topics::INDEX_ENTITIES, [
+            'class' => Customer::class,
+            'entityIds' => [$customer->getId() => $customer->getId()]
+        ]);
+        self::assertMessageSent(Topics::INDEX_ENTITIES, [
+            'class' => Account::class,
+            'entityIds' => [$customer->getAccount()->getId() => $customer->getAccount()->getId()]
         ]);
     }
 
@@ -103,9 +110,16 @@ class SearchIndexListenerTest extends WebTestCase
         $this->listener->onFinish(new SyncEvent('magento_test_job', []));
 
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
-            ['class' => Customer::class, 'id' => $customer->getId()],
-            ['class' => Contact::class, 'id' => $customer->getContact()->getId()],
-            ['class' => Account::class, 'id' => $customer->getAccount()->getId()],
+            'class' => Contact::class,
+            'entityIds' => [$customer->getContact()->getId() => $customer->getContact()->getId()]
+        ]);
+        self::assertMessageSent(Topics::INDEX_ENTITIES, [
+            'class' => Customer::class,
+            'entityIds' => [$customer->getId() => $customer->getId()]
+        ]);
+        self::assertMessageSent(Topics::INDEX_ENTITIES, [
+            'class' => Account::class,
+            'entityIds' => [$customer->getAccount()->getId() => $customer->getAccount()->getId()]
         ]);
     }
 
@@ -126,7 +140,8 @@ class SearchIndexListenerTest extends WebTestCase
         $this->listener->onFinish(new SyncEvent('magento_test_job', []));
 
         self::assertMessageSent(Topics::INDEX_ENTITIES, [
-            ['class' => Customer::class, 'id' => $customerId]
+            'class' => Customer::class,
+            'entityIds' => [$customerId => $customerId]
         ]);
     }
 }
