@@ -92,10 +92,11 @@ class LeadApiTest extends RestJsonApiTestCase
 
     public function testPostWithoutAccountAndCustomer()
     {
-        $response = $this->request(
-            'POST',
-            $this->getUrl('oro_rest_api_post', ['entity' => 'leads']),
-            $this->getRequestData('lead_post_no_account_and_customer.yml')
+        $response = $this->post(
+            ['entity' => 'leads'],
+            $this->getRequestData('lead_post_no_account_and_customer.yml'),
+            [],
+            false
         );
 
         self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
@@ -113,10 +114,11 @@ class LeadApiTest extends RestJsonApiTestCase
 
     public function testPostWithInconsistentCustomer()
     {
-        $response = $this->request(
-            'POST',
-            $this->getUrl('oro_rest_api_post', ['entity' => 'leads']),
-            $this->getRequestData('lead_post_inconsistent_customer.yml')
+        $response = $this->post(
+            ['entity' => 'leads'],
+            $this->getRequestData('lead_post_inconsistent_customer.yml'),
+            [],
+            false
         );
 
         self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
@@ -334,10 +336,11 @@ class LeadApiTest extends RestJsonApiTestCase
     public function testPatchWithInconsistentCustomer()
     {
         $leadId = $this->getReference('lead1')->getId();
-        $response = $this->request(
-            'PATCH',
-            $this->getUrl('oro_rest_api_patch', ['entity' => 'leads', 'id' => $leadId]),
-            $this->getRequestData('lead_patch_inconsistent_customer.yml')
+        $response = $this->patch(
+            ['entity' => 'leads', 'id' => $leadId],
+            $this->getRequestData('lead_patch_inconsistent_customer.yml'),
+            [],
+            false
         );
 
         self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
@@ -405,15 +408,11 @@ class LeadApiTest extends RestJsonApiTestCase
     public function testPatchAccountAsRelationshipWithNullValue()
     {
         $leadId = $this->getReference('lead1')->getId();
-        $response = $this->request(
-            'PATCH',
-            $this->getUrl(
-                'oro_rest_api_patch_relationship',
-                ['entity' => 'leads', 'id' => $leadId, 'association' => 'account']
-            ),
-            [
-                'data' => null
-            ]
+        $response = $this->patchRelationship(
+            ['entity' => 'leads', 'id' => $leadId, 'association' => 'account'],
+            ['data' => null],
+            [],
+            false
         );
 
         self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
@@ -432,15 +431,11 @@ class LeadApiTest extends RestJsonApiTestCase
     public function testPatchCustomerAsRelationshipWithNullValue()
     {
         $leadId = $this->getReference('lead1')->getId();
-        $response = $this->request(
-            'PATCH',
-            $this->getUrl(
-                'oro_rest_api_patch_relationship',
-                ['entity' => 'leads', 'id' => $leadId, 'association' => 'customer']
-            ),
-            [
-                'data' => null
-            ]
+        $response = $this->patchRelationship(
+            ['entity' => 'leads', 'id' => $leadId, 'association' => 'customer'],
+            ['data' => null],
+            [],
+            false
         );
 
         self::assertResponseStatusCodeEquals($response, Response::HTTP_BAD_REQUEST);
