@@ -62,6 +62,6 @@ Scenario: Mass delete action while filter is set
   When I check first 2 records in grid
   And I click "Delete" link from mass action dropdown
   And I click "Yes, Delete"
-  Then I should see "2 entities were deleted" flash message
+  Then I should see "2 entities have been deleted successfully" flash message
   And I reset First Name filter
   And number of records should be 28
