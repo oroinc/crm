@@ -41,26 +41,19 @@ class CreditMemoApiTest extends RestJsonApiTestCase
         $creditMemo = $this->getReference('creditMemo');
 
         $entityType = $this->getEntityType(CreditMemo::class);
-        $data = [
-            'data' => [
-                'type' => $entityType,
-                'id' => (string) $creditMemo->getId(),
-                'attributes' =>
-                [
-                    'transactionId' => '100000XT',
-                ],
+        $this->patch(
+            ['entity' => $entityType, 'id' => $creditMemo->getId()],
+            [
+                'data' => [
+                    'type' => $entityType,
+                    'id' => (string) $creditMemo->getId(),
+                    'attributes' => [
+                        'transactionId' => '100000XT'
+                    ]
+                ]
             ]
-        ];
-        $response = $this->request(
-            'PATCH',
-            $this->getUrl(
-                'oro_rest_api_patch',
-                ['entity' => $entityType, 'id' => $creditMemo->getId()]
-            ),
-            $data
         );
 
-        $this->assertResponseStatusCodeEquals($response, Response::HTTP_OK);
         $creditMemo = $this->getCreditMemoRepository()->find($creditMemo->getId());
         $this->assertEquals('100000XT', $creditMemo->getTransactionId());
     }

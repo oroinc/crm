@@ -21,7 +21,8 @@ class ChannelLimitationExtension extends AbstractExtension
     public function isApplicable(DatagridConfiguration $config)
     {
         return
-            $config->isOrmDatasource()
+            parent::isApplicable($config)
+            && $config->isOrmDatasource()
             && $this->getParameters()->get('channelIds', false);
     }
 

@@ -29,7 +29,7 @@ Scenario: Delete few manually selected records
 	When I check first 2 records in grid
 	And I click "Delete" link from mass action dropdown
 	And confirm deletion
-	Then I should see "2 entities were deleted" flash message
+	Then I should see "2 entities have been deleted successfully" flash message
 	And the number of records decreased by 2
 
 Scenario: Cancel Delete records

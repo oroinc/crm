@@ -29,7 +29,7 @@ Scenario: User can delete only his records but view all
 	And check all records in grid
 	And click Delete mass action
 	And confirm deletion
-	Then I should see "5 entities were deleted" flash message
+	Then I should see "5 entities have been deleted successfully" flash message
 
 #@not-automated
 #Scenario: Check limitation on Delete action
@@ -49,5 +49,5 @@ Scenario: User can delete more records than can view
 	And I check all records in grid
 	And click Delete mass action
 	And confirm deletion
-	Then I should see "17 entities were deleted" flash message
+	Then I should see "17 entities have been deleted successfully" flash message
 	And there is no records in grid
