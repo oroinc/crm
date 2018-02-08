@@ -176,7 +176,7 @@ The list of records that will be deleted, could be limited by filters.
 
 **The required field**
 
-###status
+### status
 
 #### create
 
@@ -192,7 +192,7 @@ The list of records that will be deleted, could be limited by filters.
 
 *This field is **required** and must remain defined.*
 
-###dataChannel
+### dataChannel
 
 #### create
 
@@ -208,7 +208,7 @@ The list of records that will be deleted, could be limited by filters.
 
 *This field is **required** and must remain defined.*
 
-###name
+### name
 
 #### create
 
@@ -308,7 +308,7 @@ The marketing campaign as a result of which the Lead was created
 
 ## SUBRESOURCES
 
-###addresses
+### addresses
 
 #### get_subresource
 

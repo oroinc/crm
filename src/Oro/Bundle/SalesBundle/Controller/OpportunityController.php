@@ -138,31 +138,6 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route(
-     *     "/datagrid/opportunity-with-datachannel/{channelIds}",
-     *     name="oro_sales_datagrid_opportunity_datachannel_aware"
-     * )
-     * @Template("OroSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
-     * @AclAncestor("oro_sales_opportunity_view")
-     */
-    public function opportunityWithDataChannelGridAction($channelIds, Request $request)
-    {
-        $gridName = $request->query->get('gridName');
-
-        if (!$gridName) {
-            return $this->createNotFoundException('`gridName` Should be defined.');
-        }
-
-        return [
-            'channelId'    => $channelIds,
-            'gridName'     => $gridName,
-            'params'       => $request->query->get('params', []),
-            'renderParams' => $request->query->get('renderParams', []),
-            'multiselect'  => $request->query->get('multiselect', false)
-        ];
-    }
-
-    /**
      * @param  Opportunity $entity
      * @return array
      */
