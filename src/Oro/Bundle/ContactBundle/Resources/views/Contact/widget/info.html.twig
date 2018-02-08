@@ -85,7 +85,7 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderHtmlProperty('oro.contact.description.label'|trans, entity.description) }}
+            {{ ui.renderSwitchableHtmlProperty('oro.contact.description.label'|trans, entity.description) }}
             {{ ui.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ ui.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ ui.renderHtmlProperty('oro.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
@@ -123,21 +123,16 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {%- set reportsToData -%}
-                {%- if entity.reportsTo -%}
-                    <a href="{{ path('oro_contact_view', {'id': entity.reportsTo.id}) }}">
-                        {{ entity.reportsTo }}
-                    </a>
-                {%- endif -%}
-            {%- endset -%}
-
             {{ ui.renderProperty('oro.contact.job_title.label'|trans, entity.jobTitle) }}
             {{ ui.renderHtmlProperty('oro.contact.accounts.label'|trans, accountsData) }}
             {{ ui.renderProperty('oro.contact.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('oro.contact.gender.label'|trans, oro_gender(entity.gender)) }}
             {{ ui.renderProperty('oro.contact.source.label'|trans, entity.source) }}
             {{ ui.renderHtmlProperty('oro.contact.assigned_to.label'|trans, assignedToData) }}
-            {{ ui.renderHtmlProperty('oro.contact.reports_to.label'|trans, reportsToData) }}
+            {{ ui.renderHtmlProperty(
+                'oro.contact.reports_to.label'|trans,
+                ui.entityViewLink(entity.reportsTo, entity.reportsTo|oro_format_name, 'oro_contact_view')
+            ) }}
             {{ ui.renderProperty('oro.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
         </div>
     </div>

@@ -33,26 +33,22 @@
 
                 <div class="responsive-block">
                     {{ sales.render_customer_info(entity) }}
-                    {%- if entity.contact and is_granted('VIEW', entity.contact) -%}
-                        {% set contactView = ui.renderUrl(path('oro_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
-                    {%- else -%}
-                        {% set contactView = entity.contact ? entity.contact|oro_format_name|escape : '' %}
-                    {%- endif -%}
-                    {{ ui.renderHtmlProperty('oro.sales.opportunity.contact.label'|trans, contactView, entity, 'contact') }}
+                    {{ ui.renderHtmlProperty(
+                        'oro.sales.opportunity.contact.label'|trans,
+                        ui.entityViewLink(entity.contact, entity.contact|oro_format_name, 'oro_contact_view')
+                    ) }}
 
-                    {%- if is_granted('oro_sales_lead_view') and entity.lead -%}
-                        {% set leadView = '<a href="' ~ path('oro_sales_lead_view', {'id': entity.lead.id}) ~ '">' ~ entity.lead|escape ~ '</a>' %}
-                    {%- else -%}
-                        {% set leadView = entity.lead ? entity.lead|escape : '' %}
-                    {%- endif -%}
-                    {{ ui.renderHtmlProperty('oro.sales.opportunity.lead.label'|trans, leadView, entity, 'lead') }}
+                    {{ ui.renderHtmlProperty(
+                        'oro.sales.opportunity.lead.label'|trans,
+                        ui.entityViewLink(entity.lead, entity.lead ? entity.lead.name : null, 'oro_sales_lead_view')
+                    ) }}
                 </div>
             </div>
         </div>
         <div class="responsive-block">
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed, entity, 'customerNeed') }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution, entity, 'proposedSolution') }}
-            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes|oro_tag_filter, entity, 'notes') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.customer_need.label'|trans, entity.customerNeed|oro_html_sanitize, entity, 'customerNeed') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution|oro_html_sanitize, entity, 'proposedSolution') }}
+            {{ ui.renderCollapsibleHtmlProperty('oro.sales.opportunity.notes.label'|trans, entity.notes|oro_html_sanitize, entity, 'notes') }}
         </div>
     </div>
 </div>

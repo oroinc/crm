@@ -6,13 +6,10 @@
     <div class="row-fluid">
         {% include 'OroAnalyticsBundle::label.html.twig' with {entity: customer, vertical: true} %}
         <div class="responsive-block">
-            {% set customer_name_link %}
-                <a href="{{ path('oro_magento_customer_view', {'id':customer.id}) }}">
-                    {{ customer|oro_format_name|escape }}
-                </a>
-            {% endset %}
-
-            {{ UI.renderHtmlProperty('oro.magento.customer.name.label'|trans, customer_name_link) }}
+            {{ UI.renderHtmlProperty(
+                'oro.magento.customer.name.label'|trans,
+                UI.entityViewLink(customer, customer|oro_format_name, 'oro_magento_customer_view')
+            ) }}
 
             {{ UI.renderHtmlProperty('oro.magento.customer.email.label'|trans, EmailActions.sendEmailLink(customer.email, customer)) }}
             {% if customer.group %}
