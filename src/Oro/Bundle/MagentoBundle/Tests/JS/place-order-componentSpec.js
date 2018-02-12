@@ -12,13 +12,11 @@ define(function(require) {
         var messenger;
 
         beforeEach(function() {
-            /* eslint-disable indent */
-            window.setFixtures([
-                '<div id="container">',
-                    '<iframe data-src="test"></iframe>',
+            window.setFixtures(
+                '<div id="container">' +
+                    '<iframe data-src="test"></iframe>' +
                 '</div>'
-            ].join(''));
-            /* eslint-enable */
+            );
 
             messenger = jasmine.createSpyObj('messenger', ['notificationFlashMessage']);
             exposure.substitute('messenger').by(messenger);
