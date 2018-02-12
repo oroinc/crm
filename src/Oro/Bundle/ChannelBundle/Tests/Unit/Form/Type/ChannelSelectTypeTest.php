@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
+use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormFactory;
@@ -47,7 +47,10 @@ class ChannelSelectTypeTest extends OrmTestCase
             ->will($this->returnValue($em));
 
         $entityType = new EntityType($registry);
-        $genemuType = new Select2Type('entity');
+        $select2Type = new Select2Type(
+            'Symfony\Bridge\Doctrine\Form\Type\EntityType',
+            'oro_select2_entity'
+        );
 
         $channelsProvider = $this
             ->getMockBuilder('Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
@@ -63,7 +66,7 @@ class ChannelSelectTypeTest extends OrmTestCase
                         [
                             $entityType->getName() => $entityType,
                             $this->type->getName() => $this->type,
-                            $genemuType->getName() => $genemuType
+                            $select2Type->getName() => $select2Type
                         ],
                         []
                     )
@@ -88,7 +91,7 @@ class ChannelSelectTypeTest extends OrmTestCase
     public function testGetParent()
     {
         $this->assertEquals(
-            'genemu_jqueryselect2_entity',
+            'oro_select2_entity',
             $this->type->getParent()
         );
     }

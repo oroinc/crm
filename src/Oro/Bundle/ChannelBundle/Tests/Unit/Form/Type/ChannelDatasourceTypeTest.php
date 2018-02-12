@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
+use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Validator\Validator;
@@ -142,8 +142,14 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                         $searchRegistry
                     ),
                     'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp),
-                    'genemu_jqueryselect2_choice'        => new Select2Type('choice'),
-                    'genemu_jqueryselect2_hidden'        => new Select2Type('hidden')
+                    'oro_select2_choice' => new Select2Type(
+                        'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
+                        'oro_select2_choice'
+                    ),
+                    'oro_select2_hidden' => new Select2Type(
+                        'Symfony\Component\Form\Extension\Core\Type\HiddenType',
+                        'oro_select2_hidden'
+                    )
                 ],
                 [
                     'form'                         => [

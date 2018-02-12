@@ -63,7 +63,7 @@ class B2bCustomerTypeTest extends FormIntegrationTestCase
             1 => $this->getEntity(Contact::class, ['first_name' => 'first name']),
             2 => $this->getEntity(Contact::class, ['first_name' => 'first name new']),
         ], 'oro_contact_select');
-        $channelEntityType = new EntityType([], 'genemu_jqueryselect2_entity');
+        $channelEntityType = new EntityType([], 'oro_select2_entity');
         $emailEntityType = new EntityType([
             1 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test@email.com']),
             2 => $this->getEntity(B2bCustomerEmail::class, ['email' => 'test_new@email.com']),

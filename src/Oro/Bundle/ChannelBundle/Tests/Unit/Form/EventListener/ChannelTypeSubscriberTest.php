@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\EventListener;
 
-use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
+use Oro\Bundle\FormBundle\Form\Type\Select2Type;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -190,7 +190,10 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                     'oro_channel_entities'                => new ChannelEntityType(),
                     'oro_channel.form.type.entity_choice' => new ChannelEntityType($provider),
                     'oro_channel_entity_choice_form'      => new ChannelEntityType($provider),
-                    'genemu_jqueryselect2_choice'            => new Select2Type('choice')
+                    'oro_select2_choice'                  => new Select2Type(
+                        'Symfony\Component\Form\Extension\Core\Type\ChoiceType',
+                        'oro_select2_choice'
+                    )
                 ],
                 []
             )

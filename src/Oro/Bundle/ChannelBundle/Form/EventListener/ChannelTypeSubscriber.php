@@ -72,7 +72,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             $form->remove('channelType');
             $form->add(
                 'channelType',
-                'genemu_jqueryselect2_choice',
+                'oro_select2_choice',
                 [
                     'choices'  => $this->settingsProvider->getNonSystemChannelTypeChoiceList(),
                     'required' => true,
