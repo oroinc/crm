@@ -52,7 +52,7 @@ class ChannelType extends AbstractType
         $builder->add('entities', 'oro_channel_entities');
         $builder->add(
             'channelType',
-            'genemu_jqueryselect2_choice',
+            'oro_select2_choice',
             [
                 'choices'  => $this->settingsProvider->getChannelTypeChoiceList(),
                 'required' => true,

@@ -64,7 +64,7 @@ class ChannelTypeTest extends \PHPUnit_Framework_TestCase
             [
                 'name'             => 'text',
                 'entities'         => 'oro_channel_entities',
-                'channelType'      => 'genemu_jqueryselect2_choice',
+                'channelType'      => 'oro_select2_choice',
                 'status'           => 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
             ],
             $fields
