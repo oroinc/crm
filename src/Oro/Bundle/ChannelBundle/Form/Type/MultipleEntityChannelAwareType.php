@@ -4,14 +4,14 @@ namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MultipleEntityChannelAwareType extends AbstractChannelAwareType
 {
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['extra_config' => 'channel_aware', 'channel_field' => 'dataChannel']);
     }

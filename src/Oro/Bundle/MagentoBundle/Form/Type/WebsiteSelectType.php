@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WebsiteSelectType extends AbstractType
 {
@@ -36,7 +36,7 @@ class WebsiteSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['tooltip' => 'oro.magento.magentotransport.website_id.tooltip']);
     }

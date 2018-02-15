@@ -16,12 +16,12 @@ class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('choice', $type->getParent());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
         $type = new WebsiteSelectType();
 
         $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
         $this->assertArrayHasKey('tooltip', $options);

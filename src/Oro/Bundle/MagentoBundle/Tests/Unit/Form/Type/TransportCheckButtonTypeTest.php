@@ -17,12 +17,12 @@ class TransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Symfony\Component\Form\Extension\Core\Type\ButtonType', $type);
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
         $type = new TransportCheckButtonType();
 
         $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
+        $type->configureOptions($resolver);
 
         $options = $resolver->resolve();
         $this->assertArrayHasKey('attr', $options);

@@ -65,14 +65,14 @@ class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('oro_case_entity', $this->formType->getName());
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
 
         $resolver
             ->expects($this->once())
             ->method('setDefaults');
 
-        $this->formType->setDefaultOptions($resolver);
+        $this->formType->configureOptions($resolver);
     }
 }

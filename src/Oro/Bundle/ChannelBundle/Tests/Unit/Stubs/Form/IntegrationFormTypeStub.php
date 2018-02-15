@@ -6,7 +6,7 @@ use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension\IntegrationTypeExtensionT
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IntegrationFormTypeStub extends AbstractType
 {
@@ -34,7 +34,7 @@ class IntegrationFormTypeStub extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [

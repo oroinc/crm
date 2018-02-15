@@ -4,7 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
 {
@@ -37,7 +37,7 @@ class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setOptional(['channel_id']);
         $resolver->setDefaults(['channel_field' => 'dataChannel', 'channel_required' => true]);

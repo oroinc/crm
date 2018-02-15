@@ -3,7 +3,7 @@
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\AbstractType;
 
 class CartItemCollectionType extends AbstractType
@@ -11,7 +11,7 @@ class CartItemCollectionType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setNormalizers(
             [

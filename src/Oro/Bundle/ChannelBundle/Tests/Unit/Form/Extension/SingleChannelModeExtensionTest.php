@@ -44,6 +44,9 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider testBuildFormDataProvider
+     * @param array $entities
+     * @param array $channels
+     * @param callable $callback
      */
     public function testBuildForm(array $entities, array $channels, callable $callback = null)
     {
@@ -64,6 +67,10 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider testBuildViewDataProvider
+     * @param array $entities
+     * @param array $channels
+     * @param bool $readOnly
+     * @param bool $hide
      */
     public function testBuildView(array $entities, array $channels, $readOnly = false, $hide = false)
     {
@@ -87,16 +94,19 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testSetDefaultOptions()
+    public function testConfigureOptions()
     {
-        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver = $this->createMock('Symfony\Component\OptionsResolver\OptionsResolver');
         $resolver->expects($this->once())
             ->method('setDefaults')
             ->with(['single_channel_mode' => true]);
 
-        $this->extension->setDefaultOptions($resolver);
+        $this->extension->configureOptions($resolver);
     }
 
+    /**
+     * @return array
+     */
     public function testBuildFormDataProvider()
     {
         $channel = new Channel();
@@ -116,6 +126,9 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testBuildViewDataProvider()
     {
         return [

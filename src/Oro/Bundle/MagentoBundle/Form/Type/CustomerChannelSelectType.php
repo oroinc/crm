@@ -4,7 +4,7 @@ namespace Oro\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
@@ -70,7 +70,7 @@ class CustomerChannelSelectType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         if (!$this->channelClass) {
             throw new \InvalidArgumentException('Channel class is missing');
