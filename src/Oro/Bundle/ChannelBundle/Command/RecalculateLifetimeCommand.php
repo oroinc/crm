@@ -5,7 +5,7 @@ namespace Oro\Bundle\ChannelBundle\Command;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
-use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,6 +20,11 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
     const READ_BATCH_SIZE = 1000;
     const WRITE_BATCH_SIZE = 200;
     const STATUS_UPDATE_BATCH_SIZE = 50;
+
+    /**
+     * @var ProgressBar
+     */
+    protected $progressBar;
 
     /**
      * {@inheritdoc}
@@ -40,6 +45,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->progressBar = new ProgressBar($output);
         $channelSettings = $this->getChannelSettings($this->getChannelType());
         if (false === $channelSettings) {
             $output->writeln(sprintf('The "%s" channel does not exist.', $this->getChannelType()));
@@ -114,7 +120,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
         $output->writeln(
             sprintf(' Found %d customer(s) for "%s" channel.', $customerDataIterator->count(), $this->getChannelType())
         );
-        $this->startProcess($input, $output, $customerDataIterator->count());
+        $this->startProcess($input, $customerDataIterator->count());
 
         $customerRepo     = $em->getRepository($customerClass);
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
@@ -141,6 +147,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
         }
 
         $this->finishProcess($input);
+        $output->writeln(''); // Adding a new line after progress bar
     }
 
     /**
@@ -178,17 +185,14 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
      * Starts the progress output.
      *
      * @param InputInterface  $input  An Input instance
-     * @param OutputInterface $output An Output instance
      * @param int|null        $max    Maximum steps
      */
-    protected function startProcess(InputInterface $input, OutputInterface $output, $max)
+    protected function startProcess(InputInterface $input, $max)
     {
         if ($input->isInteractive()) {
-            /** @var ProgressHelper $progress */
-            $progress = $this->getHelper('progress');
-            $progress->setFormat(' [%bar%] %percent%%');
-            $progress->start($output, $max);
-            $progress->display();
+            $this->progressBar->start($max);
+            $this->progressBar->setFormat(' [%bar%] %percent%%');
+            $this->progressBar->display();
         }
     }
 
@@ -201,9 +205,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
     protected function advanceProcess(InputInterface $input, $step)
     {
         if ($input->isInteractive()) {
-            /** @var ProgressHelper $progress */
-            $progress = $this->getHelper('progress');
-            $progress->advance($step);
+            $this->progressBar->advance($step);
         }
     }
 
@@ -215,9 +217,7 @@ abstract class RecalculateLifetimeCommand extends ContainerAwareCommand
     protected function finishProcess(InputInterface $input)
     {
         if ($input->isInteractive()) {
-            /** @var ProgressHelper $progress */
-            $progress = $this->getHelper('progress');
-            $progress->finish();
+            $this->progressBar->finish();
         }
     }
 
