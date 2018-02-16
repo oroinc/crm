@@ -2,32 +2,31 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Handler;
 
+use Oro\Bundle\MagentoBundle\Entity\CartItem;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Bundle\MagentoBundle\Entity\CartItem;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartItemHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var RegistryInterface */
     protected $manager;
 
     /**
      * @param FormInterface     $form
-     * @param Request           $request
+     * @param RequestStack      $requestStack
      * @param RegistryInterface $registry
      */
-    public function __construct(FormInterface $form, Request $request, RegistryInterface $registry)
+    public function __construct(FormInterface $form, RequestStack $requestStack, RegistryInterface $registry)
     {
-        $this->form    = $form;
-        $this->request = $request;
+        $this->form = $form;
+        $this->requestStack = $requestStack;
         $this->manager = $registry->getManager();
     }
 
@@ -42,8 +41,9 @@ class CartItemHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);

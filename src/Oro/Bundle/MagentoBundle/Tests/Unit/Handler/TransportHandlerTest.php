@@ -13,6 +13,7 @@ use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\MagentoTransportProviderStub;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class TransportHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,6 +52,9 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
         $this->magentoTransport         = new MagentoTransportProviderStub();
         $this->request                  = $this->createMock(Request::class);
 
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+
         $this->transportEntity          = $this->getEntity(MagentoSoapTransport::class);
 
         $this->transportHandler = new TransportHandler(
@@ -58,7 +62,7 @@ class TransportHandlerTest extends \PHPUnit_Framework_TestCase
             $this->transportEntityProvider,
             $this->websiteChoicesProvider,
             $this->connectorChoicesProvider,
-            $this->request
+            $requestStack
         );
     }
 

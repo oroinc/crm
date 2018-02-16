@@ -3,41 +3,39 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Form\Handler\CartHandler;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartHandlerTest extends AbstractHandlerTest
 {
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
-
-        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->form = $this->createMock(Form::class);
+        $this->request = $this->createMock(Request::class);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $registry = $this->createMock(RegistryInterface::class);
+        $this->manager = $this->createMock(ObjectManager::class);
 
         $registry->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($this->manager));
 
         $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
-        $organization = $this->getMockBuilder('Oro\Bundle\OrganizationBundle\Entity\Organization')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $organization = $this->createMock(Organization::class);
         $tokenAccessor->expects($this->once())
             ->method('getOrganization')
             ->will($this->returnValue($organization));
 
         $this->entity  = new Cart();
-        $this->handler = new CartHandler($this->form, $this->request, $registry, $tokenAccessor);
+        $this->handler = new CartHandler($this->form, $requestStack, $registry, $tokenAccessor);
     }
 
     public function testProcessOnSuccess()

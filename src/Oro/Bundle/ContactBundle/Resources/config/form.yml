@@ -9,8 +9,7 @@ parameters:
 services:
     oro_contact.form.type.contact_phone:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_phone", "oro_contact_phone", null]
 
     oro_contact.form.type.contact_phone.type:
@@ -20,18 +19,16 @@ services:
 
     oro_contact.form.type.contact_phone.handler:
         class: %oro_contact.form.handler.contact_phone.class%
-        scope: request
         arguments:
             - "@oro_contact.form.type.contact_phone"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_contact.validator.contact_phone_delete"
             - "@security.authorization_checker"
 
     oro_contact.form.type.contact_email:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_email", "oro_contact_email", null]
 
     oro_contact.form.type.contact_email.type:
@@ -41,10 +38,9 @@ services:
 
     oro_contact.form.type.contact_email.handler:
         class: %oro_contact.form.handler.contact_email.class%
-        scope: request
         arguments:
             - "@oro_contact.form.type.contact_email"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
             - "@oro_contact.validator.contact_email_delete"
             - "@security.authorization_checker"

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OrderAddressApiHandler extends ApiFormHandler
 {
@@ -18,17 +19,17 @@ class OrderAddressApiHandler extends ApiFormHandler
 
     /**
      * @param FormInterface          $form
-     * @param Request                $request
+     * @param RequestStack           $requestStack
      * @param ObjectManager          $entityManager
      * @param TokenAccessorInterface $security
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $entityManager,
         TokenAccessorInterface $security
     ) {
-        parent::__construct($form, $request, $entityManager);
+        parent::__construct($form, $requestStack, $entityManager);
         $this->organization = $security->getOrganization();
     }
 

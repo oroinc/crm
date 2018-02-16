@@ -49,14 +49,12 @@ parameters:
 services:
     oro_contact.form.contact:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_form", "oro_contact", null]
 
     oro_contact.form.group:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["oro_contact_group_form", "oro_contact_group"]
 
     oro_contact.form.type.contact:
@@ -69,10 +67,9 @@ services:
 
     oro_contact.form.handler.contact:
         class: %oro_contact.handler.contact.class%
-        scope: request
         arguments:
             - "@oro_contact.form.contact"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.contact.manager:
@@ -90,10 +87,9 @@ services:
 
     oro_contact.form.handler.group:
         class: %oro_contact.handler.group.class%
-        scope: request
         arguments:
             - "@oro_contact.form.group"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.form.type.group:
@@ -127,16 +123,14 @@ services:
 
     oro_contact.form.contact.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["contact", "contact", null]
 
     oro_contact.form.handler.contact.api:
         class: %oro_contact.handler.contact.class%
-        scope: request
         arguments:
             - "@oro_contact.form.contact.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     # Group API
@@ -154,22 +148,19 @@ services:
 
     oro_contact.form.group.api:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments: ["contact_group", "contact_group", null]
 
     oro_contact.form.handler.group.api:
         class: %oro_contact.handler.group.class%
-        scope: request
         arguments:
             - "@oro_contact.form.group.api"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.contact_address.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_contact_address_form"
             - "oro_typed_address"
@@ -178,10 +169,9 @@ services:
 
     oro_contact.form.handler.contact_address:
         class: %oro_address.form.handler.address.class%
-        scope: request
         arguments:
             - "@oro_contact.contact_address.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact.form.autocomplete.contact.search_handler:

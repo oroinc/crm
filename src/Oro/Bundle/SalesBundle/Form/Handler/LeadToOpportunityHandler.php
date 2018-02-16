@@ -12,7 +12,7 @@ use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProviderInterface;
 
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class LeadToOpportunityHandler extends OpportunityHandler
 {
@@ -24,14 +24,14 @@ class LeadToOpportunityHandler extends OpportunityHandler
 
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
         LeadToOpportunityProviderInterface $leadToOpportunityProvider,
         LoggerInterface $logger
     ) {
         $this->leadToOpportunityProvider = $leadToOpportunityProvider;
-        parent::__construct($form, $request, $manager, $requestChannelProvider, $logger);
+        parent::__construct($form, $requestStack, $manager, $requestChannelProvider, $logger);
     }
 
     /**
@@ -40,7 +40,7 @@ class LeadToOpportunityHandler extends OpportunityHandler
     public function process(Opportunity $entity)
     {
         $processResult = parent::process($entity);
-        if ($processResult && in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+        if ($processResult && in_array($this->requestStack->getCurrentRequest()->getMethod(), ['POST', 'PUT'], true)) {
             return $this->leadToOpportunityProvider->saveOpportunity($entity, $this->errorMessageCallback);
         }
         return $processResult;
@@ -61,8 +61,9 @@ class LeadToOpportunityHandler extends OpportunityHandler
         callable $errorMessageCallback
     ) {
         $this->errorMessageCallback = $errorMessageCallback;
-        $isGetRequest = $this->request->getMethod() === 'GET';
+        $isGetRequest = $this->requestStack->getCurrentRequest()->getMethod() === 'GET';
         $opportunity = $this->leadToOpportunityProvider->prepareOpportunityForForm($lead, $isGetRequest);
+
         return $handler->update($opportunity, $this->form, $saveMessage, $this);
     }
 

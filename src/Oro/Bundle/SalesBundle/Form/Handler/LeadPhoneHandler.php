@@ -5,7 +5,7 @@ namespace Oro\Bundle\SalesBundle\Form\Handler;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\FormFactory;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -18,8 +18,8 @@ class LeadPhoneHandler
     /** @var FormFactory */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var EntityManagerInterface */
     protected $manager;
@@ -29,18 +29,18 @@ class LeadPhoneHandler
 
     /**
      * @param FormFactory $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormFactory $form,
-        Request $request,
+        RequestStack $requestStack,
         EntityManagerInterface $manager,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
         $this->authorizationChecker = $authorizationChecker;
     }
@@ -58,15 +58,16 @@ class LeadPhoneHandler
     {
         $form = $this->form->create('oro_sales_lead_phone', $entity);
 
+        $request = $this->requestStack->getCurrentRequest();
         $submitData = [
-            'phone' => $this->request->request->get('phone'),
-            'primary' => $this->request->request->get('primary')
+            'phone' => $request->request->get('phone'),
+            'primary' => $request->request->get('primary')
         ];
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             $form->submit($submitData);
 
-            $leadId = $this->request->request->get('entityId');
+            $leadId = $request->request->get('entityId');
             if ($form->isValid() && $leadId) {
                 $lead = $this->manager->find(
                     'OroSalesBundle:Lead',
@@ -76,7 +77,7 @@ class LeadPhoneHandler
                     throw new AccessDeniedException();
                 }
 
-                if ($lead->getPrimaryPhone() && $this->request->request->get('primary') === true) {
+                if ($lead->getPrimaryPhone() && $request->request->get('primary') === true) {
                     return false;
                 }
 

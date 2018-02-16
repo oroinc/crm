@@ -3,10 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
-use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider;
+use Oro\Component\DependencyInjection\ServiceLink;
 
 class SalesFunnelEntityNameProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,13 +21,9 @@ class SalesFunnelEntityNameProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->nameFormatterLink = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
-            ->disableOriginalConstructor()->getMock();
+        $this->nameFormatterLink = $this->createMock(ServiceLink::class);
 
-        $this->dqlNameFormatterLink = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink')
-            ->disableOriginalConstructor()->getMock();
+        $this->dqlNameFormatterLink = $this->createMock(ServiceLink::class);
 
         $this->provider = new SalesFunnelEntityNameProvider($this->nameFormatterLink, $this->dqlNameFormatterLink);
     }

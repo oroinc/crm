@@ -3,22 +3,20 @@
 namespace Oro\Bundle\ChannelBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelHandler
 {
     const UPDATE_MARKER = 'formUpdateMarker';
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var RegistryInterface */
     protected $registry;
@@ -30,20 +28,20 @@ class ChannelHandler
     protected $dispatcher;
 
     /**
-     * @param Request                  $request
-     * @param FormInterface            $form
-     * @param RegistryInterface        $registry
+     * @param RequestStack $requestStack
+     * @param FormInterface $form
+     * @param RegistryInterface $registry
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
-        Request $request,
+        RequestStack $requestStack,
         FormInterface $form,
         RegistryInterface $registry,
         EventDispatcherInterface $dispatcher
     ) {
-        $this->request    = $request;
-        $this->form       = $form;
-        $this->registry   = $registry;
+        $this->requestStack = $requestStack;
+        $this->form = $form;
+        $this->registry = $registry;
         $this->dispatcher = $dispatcher;
     }
 
@@ -57,10 +55,11 @@ class ChannelHandler
         $this->handleRequestChannelType($entity);
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->form->submit($request);
 
-            if (!$this->request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
+            if (!$request->get(self::UPDATE_MARKER, false) && $this->form->isValid()) {
                 $this->doSave($entity);
 
                 return true;
@@ -79,7 +78,9 @@ class ChannelHandler
             return;
         }
 
-        $channelType = $this->request->get(sprintf('%s[channelType]', ChannelType::NAME), null, true);
+        $channelType = $this->requestStack
+            ->getCurrentRequest()
+            ->get(sprintf('%s[channelType]', ChannelType::NAME), null, true);
 
         if (!$channelType) {
             return;
@@ -108,7 +109,9 @@ class ChannelHandler
      */
     public function getFormView()
     {
-        $isUpdateOnly = $this->request->get(self::UPDATE_MARKER, false);
+        $isUpdateOnly = $this->requestStack
+            ->getCurrentRequest()
+            ->get(self::UPDATE_MARKER, false);
 
         $form = $this->form;
         // take different form due to JS validation should be shown even in case when it was not validated on backend

@@ -2,41 +2,43 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\MagentoBundle\Form\Handler\CartAddressHandler;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CartAddressHandlerTest extends AbstractHandlerTest
 {
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->form = $this->createMock(Form::class);
 
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Request::class);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
 
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock(RegistryInterface::class);
 
-        $this->manager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->manager = $this->createMock(ObjectManager::class);
 
         $registry->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($this->manager));
 
         $tokenAccessor = $this->createMock(TokenAccessorInterface::class);
-        $organization = $this->getMockBuilder('Oro\Bundle\OrganizationBundle\Entity\Organization')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $organization = $this->createMock(Organization::class);
         $tokenAccessor->expects($this->once())
             ->method('getOrganization')
             ->will($this->returnValue($organization));
 
         $this->entity  = new CartAddress();
-        $this->handler = new CartAddressHandler($this->form, $this->request, $registry, $tokenAccessor);
+        $this->handler = new CartAddressHandler($this->form, $requestStack, $registry, $tokenAccessor);
     }
 
     public function testAddCartAddressOnSuccess()

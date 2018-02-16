@@ -13,8 +13,7 @@ services:
 
     oro_contact_us.contact_request.form:
         class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
+        factory: ['@form.factory', createNamed]
         arguments:
             - "oro_contactus_contact_request"
             - "oro_contactus_contact_request"
@@ -22,10 +21,9 @@ services:
 
     oro_contact_us.contact_request.form.handler:
         class: %oro_contact_us.contact_request.form.handler.class%
-        scope: request
         arguments:
             - "@oro_contact_us.contact_request.form"
-            - "@request"
+            - "@request_stack"
             - "@doctrine.orm.entity_manager"
 
     oro_contact_us.provider.phone.abstract_contact_request:

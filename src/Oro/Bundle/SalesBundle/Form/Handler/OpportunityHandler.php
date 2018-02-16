@@ -2,23 +2,21 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
-use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class OpportunityHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var ObjectManager */
     protected $manager;
@@ -31,20 +29,20 @@ class OpportunityHandler
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param ObjectManager $manager
      * @param RequestChannelProvider $requestChannelProvider
      * @param LoggerInterface $logger
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
         LoggerInterface $logger
     ) {
         $this->form                   = $form;
-        $this->request                = $request;
+        $this->requestStack           = $requestStack;
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
         $this->logger                 = $logger;
@@ -59,9 +57,10 @@ class OpportunityHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             try {
-                $this->form->submit($this->request);
+                $this->form->submit($request);
 
                 if ($this->form->isValid()) {
                     $this->onSuccess($entity);

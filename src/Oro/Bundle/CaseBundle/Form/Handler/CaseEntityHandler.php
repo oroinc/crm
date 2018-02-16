@@ -3,14 +3,12 @@
 namespace Oro\Bundle\CaseBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\CaseBundle\Event\Events;
 use Oro\Bundle\CaseBundle\Event\FormHandlerEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class CaseEntityHandler extends ApiFormHandler
 {
@@ -21,17 +19,17 @@ class CaseEntityHandler extends ApiFormHandler
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param ObjectManager $manager
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         ObjectManager $manager,
         EventDispatcherInterface $dispatcher
     ) {
-        parent::__construct($form, $request, $manager);
+        parent::__construct($form, $requestStack, $manager);
         $this->dispatcher = $dispatcher;
     }
 

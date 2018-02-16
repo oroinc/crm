@@ -2,15 +2,14 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Handler;
 
-use Doctrine\Common\Persistence\ObjectManager;
-
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,16 +40,14 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->form = $this->createMock(Form::class);
         $this->request = new Request();
-        $this->manager = $this->getMockBuilder('Doctrine\ORM\EntityManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $this->manager = $this->createMock(EntityManagerInterface::class);
 
-        $this->entity  = new Contact();
-        $this->handler = new ContactHandler($this->form, $this->request, $this->manager);
+        $this->entity = new Contact();
+        $this->handler = new ContactHandler($this->form, $requestStack, $this->manager);
     }
 
     public function testProcessUnsupportedRequest()

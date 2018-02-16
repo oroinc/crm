@@ -3,33 +3,31 @@
 namespace Oro\Bundle\ContactUsBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\ContactUsBundle\Entity\ContactRequest;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ContactRequestHandler
 {
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var EntityManager */
     protected $em;
 
     /**
      * @param FormInterface $form
-     * @param Request       $request
+     * @param RequestStack  $requestStack
      * @param EntityManager $em
      */
-    public function __construct(FormInterface $form, Request $request, EntityManager $em)
+    public function __construct(FormInterface $form, RequestStack $requestStack, EntityManager $em)
     {
-        $this->form    = $form;
-        $this->request = $request;
-        $this->em      = $em;
+        $this->form = $form;
+        $this->requestStack = $requestStack;
+        $this->em = $em;
     }
 
     /**
@@ -43,8 +41,9 @@ class ContactRequestHandler
     {
         $this->getForm()->setData($entity);
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->getForm()->submit($this->request);
+        $request = $this->requestStack->getCurrentRequest();
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
+            $this->getForm()->submit($request);
 
             if ($this->getForm()->isValid()) {
                 $this->em->persist($entity);

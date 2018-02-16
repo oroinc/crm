@@ -3,29 +3,27 @@
 namespace Oro\Bundle\ChannelBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestChannelProvider
 {
     /** @var RegistryInterface */
     protected $registry;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /**
-     * @param Request           $request
+     * @param RequestStack      $requestStack
      * @param RegistryInterface $registry
      */
-    public function __construct(Request $request, RegistryInterface $registry)
+    public function __construct(RequestStack $requestStack, RegistryInterface $registry)
     {
         $this->registry = $registry;
-        $this->request  = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -45,7 +43,7 @@ class RequestChannelProvider
      */
     protected function getChannelReference()
     {
-        $channelId = $this->request->query->get('channelId');
+        $channelId = $this->requestStack->getCurrentRequest()->query->get('channelId');
 
         if (!empty($channelId)) {
             /** @var EntityManager $em */

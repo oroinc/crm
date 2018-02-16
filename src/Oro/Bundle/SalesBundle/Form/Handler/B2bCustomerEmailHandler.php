@@ -8,7 +8,7 @@ use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -19,8 +19,8 @@ class B2bCustomerEmailHandler
     /** @var FormInterface */
     protected $form;
 
-    /** @var Request */
-    protected $request;
+    /** @var RequestStack */
+    protected $requestStack;
 
     /** @var EntityManagerInterface */
     protected $manager;
@@ -33,20 +33,20 @@ class B2bCustomerEmailHandler
 
     /**
      * @param FormInterface $form
-     * @param Request $request
+     * @param RequestStack $requestStack
      * @param EntityManagerInterface $manager
      * @param B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator
      * @param AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         FormInterface $form,
-        Request $request,
+        RequestStack $requestStack,
         EntityManagerInterface $manager,
         B2bCustomerEmailDeleteValidator $b2bCustomerEmailDeleteValidator,
         AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->form    = $form;
-        $this->request = $request;
+        $this->requestStack = $requestStack;
         $this->manager = $manager;
         $this->b2bCustomerEmailDeleteValidator = $b2bCustomerEmailDeleteValidator;
         $this->authorizationChecker = $authorizationChecker;
@@ -65,15 +65,16 @@ class B2bCustomerEmailHandler
     {
         $this->form->setData($entity);
 
+        $request = $this->requestStack->getCurrentRequest();
         $submitData = [
-            'email' => $this->request->request->get('email'),
-            'primary' => $this->request->request->get('primary')
+            'email' => $request->request->get('email'),
+            'primary' => $request->request->get('primary')
         ];
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+        if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             $this->form->submit($submitData);
 
-            $b2bCustomerId = $this->request->request->get('entityId');
+            $b2bCustomerId = $request->request->get('entityId');
             if ($this->form->isValid() && $b2bCustomerId) {
                 $customer = $this->manager->find(
                     'OroSalesBundle:B2bCustomer',
@@ -83,7 +84,7 @@ class B2bCustomerEmailHandler
                     throw new AccessDeniedException();
                 }
 
-                if ($customer->getPrimaryEmail() && $this->request->request->get('primary') === true) {
+                if ($customer->getPrimaryEmail() && $request->request->get('primary') === true) {
                     return false;
                 }
 
