@@ -665,6 +665,8 @@ services:
     oro_sales.b2bcustomer_virtual_relations.provider:
         class: Oro\Bundle\SalesBundle\Provider\B2bCustomerVirtualRelationProvider
         public: false
+        arguments:
+            - '%oro_sales.b2bcustomer.entity.class%'
         tags:
            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 

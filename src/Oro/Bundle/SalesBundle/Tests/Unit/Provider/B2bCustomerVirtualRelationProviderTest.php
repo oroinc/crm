@@ -7,6 +7,8 @@ use Oro\Bundle\SalesBundle\Provider\B2bCustomerVirtualRelationProvider;
 
 class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 {
+    const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
+
     /** @var B2bCustomerVirtualRelationProvider */
     protected $provider;
 
@@ -64,7 +66,7 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->provider = new B2bCustomerVirtualRelationProvider();
+        $this->provider = new B2bCustomerVirtualRelationProvider(self::CLASS_NAME);
     }
 
     /**

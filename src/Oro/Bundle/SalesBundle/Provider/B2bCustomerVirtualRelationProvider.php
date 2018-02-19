@@ -5,7 +5,6 @@ namespace Oro\Bundle\SalesBundle\Provider;
 use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\RelationType;
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
@@ -19,11 +18,26 @@ class B2bCustomerVirtualRelationProvider implements VirtualRelationProviderInter
     const LEAD_TARGET_ALIAS = 'virtualLead';
 
     /**
+     * Class name which should has opportunity and load as relations.
+     *
+     * @var string
+     */
+    protected $sourceClass;
+
+    /**
+     * @param string $sourceClass
+     */
+    public function __construct(string $sourceClass)
+    {
+        $this->sourceClass = $sourceClass;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isVirtualRelation($className, $fieldName)
     {
-        return is_a($className, B2bCustomer::class, true) &&
+        return is_a($className, $this->sourceClass, true) &&
             in_array($fieldName, [self::OPPORTUNITY_RELATION_NAME, self::LEAD_RELATION_NAME], true);
     }
 
@@ -32,7 +46,7 @@ class B2bCustomerVirtualRelationProvider implements VirtualRelationProviderInter
      */
     public function getVirtualRelations($className)
     {
-        if (!is_a($className, B2bCustomer::class, true)) {
+        if (!is_a($className, $this->sourceClass, true)) {
             return [];
         }
 
@@ -83,7 +97,7 @@ class B2bCustomerVirtualRelationProvider implements VirtualRelationProviderInter
      */
     protected function getQueryPart($targetClass, $targetAlias)
     {
-        $fieldName = AccountCustomerManager::getCustomerTargetField(B2bCustomer::class);
+        $fieldName = AccountCustomerManager::getCustomerTargetField($this->sourceClass);
         $customerAlias = $targetAlias . '_c';
 
         return [

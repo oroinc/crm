@@ -1,0 +1,108 @@
+Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+  magentoSoapTransport:
+    api_url: 'http://test.magento.host/index.php/api/v2_soap/index/?wsdl=1'
+    api_user: 'api_user'
+    api_key: '69EeYPV8Xyp5SukvUyafDKmndNIyUDwBiAdCWPnuN+E='
+    sync_start_date: '2015-08-01'
+    website_id: -1
+    websites:
+      -
+        id: -1
+        label: 'All web sites'
+      -
+        id: 1
+        label: 'Website ID: 1, Stores: Store view 1 - website_id_1 - group_id_1'
+
+Oro\Component\Config\Common\ConfigObject(local):
+  magentoSynchronizationSettings:
+    __construct: { create: [isTwoWaySyncEnabled: false, syncPriority: remote] }
+
+Oro\Bundle\IntegrationBundle\Entity\Channel:
+  magentoIntegration:
+    type: 'magento'
+    name: 'Magento Integration'
+    enabled: true
+    editMode: 2
+    synchronizationSettings: '@magentoSynchronizationSettings'
+    connectors:
+      - website_dictionary
+      - store_dictionary
+      - customer_group_dictionary
+      - region_dictionary
+      - customer_initial
+      - order_initial
+      - credit_memo_initial
+      - customer
+      - order
+      - credit_memo
+    transport: '@magentoSoapTransport'
+    defaultUserOwner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\ChannelBundle\Entity\Channel:
+  magentoChannel:
+    name: 'Magento Channel'
+    status: true
+    dataSource: '@magentoIntegration'
+    data:
+      rfm_enabled: false
+    channelType: magento
+    customerIdentity: 'Oro\Bundle\MagentoBundle\Entity\Customer'
+    owner: '@organization'
+
+Oro\Bundle\ChannelBundle\Entity\EntityName:
+  channel-entity-customer:
+    __construct: ['Oro\Bundle\MagentoBundle\Entity\Customer']
+    channel: '@magentoChannel'
+  channel-entity-lead:
+    __construct: ['Oro\Bundle\MagentoBundle\Entity\Cart']
+    channel: '@magentoChannel'
+  channel-entity-opportunity:
+    __construct: ['Oro\Bundle\MagentoBundle\Entity\Order']
+    channel: '@magentoChannel'
+  channel-entity-customer:
+    __construct: ['Oro\Bundle\MagentoBundle\Entity\CreditMemo']
+    channel: '@magentoChannel'
+  channel-entity-lead:
+    __construct: ['Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber']
+    channel: '@magentoChannel'
+  channel-entity-opportunity:
+    __construct: ['Oro\Bundle\AbandonedCartBundle\Entity\AbandonedCartCampaign']
+    channel: '@magentoChannel'
+
+Oro\Bundle\AccountBundle\Entity\Account:
+  account{1..10}:
+    name: 'Customer <current()>'
+    organization: '@organization'
+
+Oro\Bundle\MagentoBundle\Entity\Customer:
+  magentoCustomer{1..10}:
+    firstName: 'Magento Customer FN<current()>'
+    lastName: 'Magento Customer LN<current()>'
+    owner: '@admin'
+    organization: '@organization'
+    account: '@account<current()>'
+    dataChannel: 1
+    createdAt: <dateTimeThisMonth('now')>
+    updatedAt: <dateTimeThisMonth('now')>
+
+Oro\Bundle\SalesBundle\Entity\Customer:
+  customer{1..10}:
+    account: '@account<current()>'
+    customerTarget: '@magentoCustomer<current()>'
+
+Oro\Bundle\SalesBundle\Entity\Opportunity:
+  opportunity{1..5}:
+    customerAssociation: '@customer<current()>'
+    name: 'Opportunity <current()>'
+    status: in_progress
+    owner: '@admin'
+    organization: '@organization'
+
+Oro\Bundle\SalesBundle\Entity\Lead:
+  lead{6..10}:
+    customerAssociation: '@customer<current()>'
+    name: 'Lead <current()>'
+    status: new
+    owner: '@admin'
+    organization: '@organization'
