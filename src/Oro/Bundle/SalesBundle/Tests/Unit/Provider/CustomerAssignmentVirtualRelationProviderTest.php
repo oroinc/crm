@@ -3,20 +3,22 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\SalesBundle\Provider\B2bCustomerVirtualRelationProvider;
+use Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider;
 
-class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerAssignmentVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var B2bCustomerVirtualRelationProvider */
+    const CLASS_NAME = 'Oro\Bundle\SalesBundle\Entity\B2bCustomer';
+
+    /** @var CustomerAssignmentVirtualRelationProvider */
     protected $provider;
 
     /** @var array */
     protected $config = [
-        B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME => [
+        CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME => [
             'label' => 'oro.sales.opportunity.entity_label',
             'relation_type' => 'oneToMany',
             'related_entity_name' => 'Oro\Bundle\SalesBundle\Entity\Opportunity',
-            'target_join_alias' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS,
+            'target_join_alias' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS,
             'query' =>[
                 'join' => [
                     'left' => [
@@ -36,11 +38,11 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ],
-        B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME => [
+        CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME => [
             'label' => 'oro.sales.lead.entity_label',
             'relation_type' => 'oneToMany',
             'related_entity_name' => 'Oro\Bundle\SalesBundle\Entity\Lead',
-            'target_join_alias' => B2bCustomerVirtualRelationProvider::LEAD_TARGET_ALIAS,
+            'target_join_alias' => CustomerAssignmentVirtualRelationProvider::LEAD_TARGET_ALIAS,
             'query' =>[
                 'join' => [
                     'left' => [
@@ -64,7 +66,7 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->provider = new B2bCustomerVirtualRelationProvider();
+        $this->provider = new CustomerAssignmentVirtualRelationProvider(self::CLASS_NAME);
     }
 
     /**
@@ -87,12 +89,12 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
         return [
             'not supported class with Opportunity field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
                 'expected' => false
             ],
             'not supported class with Lead field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
                 'expected' => false
             ],
             'supported class with not supported field' => [
@@ -102,12 +104,12 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'supported class with Opportunity field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
                 'expected' => true
             ],
             'supported class with Lead field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
                 'expected' => true
             ],
         ];
@@ -161,12 +163,12 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
         return [
             'not supported class with Opportunity field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
                 'expected' => []
             ],
             'not supported class with Lead field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
                 'expected' => []
             ],
             'supported class with not supported field' => [
@@ -176,13 +178,14 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'supported class with Opportunity field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
-                'expected' => $this->config[B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME]['query']
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'expected' =>
+                    $this->config[CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME]['query']
             ],
             'supported class with Lead field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
-                'expected' => $this->config[B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME]['query']
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
+                'expected' => $this->config[CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME]['query']
             ],
         ];
     }
@@ -207,13 +210,13 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
         return [
             'not supported class with Opportunity field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
-                'expected' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'expected' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME
             ],
             'not supported class with Lead field' => [
                 'class' => \stdClass::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
-                'expected' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
+                'expected' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME
             ],
             'supported class with not supported field' => [
                 'class' => B2bCustomer::class,
@@ -222,13 +225,13 @@ class B2bCustomerVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'supported class with Opportunity field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
-                'expected' => B2bCustomerVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS
+                'field' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_RELATION_NAME,
+                'expected' => CustomerAssignmentVirtualRelationProvider::OPPORTUNITY_TARGET_ALIAS
             ],
             'supported class with Lead field' => [
                 'class' => B2bCustomer::class,
-                'field' => B2bCustomerVirtualRelationProvider::LEAD_RELATION_NAME,
-                'expected' => B2bCustomerVirtualRelationProvider::LEAD_TARGET_ALIAS
+                'field' => CustomerAssignmentVirtualRelationProvider::LEAD_RELATION_NAME,
+                'expected' => CustomerAssignmentVirtualRelationProvider::LEAD_TARGET_ALIAS
             ],
         ];
     }

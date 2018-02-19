@@ -1225,3 +1225,11 @@ services:
         public: false
         tags:
             - { name: twig.extension }
+
+    oro_magento.customer_virtual_relations.provider:
+        class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
+        public: false
+        arguments:
+            - '%oro_magento.entity.customer.class%'
+        tags:
+           - { name: oro_entity.virtual_relation_provider, priority: 150 }

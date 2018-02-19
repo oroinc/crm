@@ -663,8 +663,10 @@ services:
           - [setSourceClass, [%oro_sales.opportunity.class%]]
 
     oro_sales.b2bcustomer_virtual_relations.provider:
-        class: Oro\Bundle\SalesBundle\Provider\B2bCustomerVirtualRelationProvider
+        class: Oro\Bundle\SalesBundle\Provider\CustomerAssignmentVirtualRelationProvider
         public: false
+        arguments:
+            - '%oro_sales.b2bcustomer.entity.class%'
         tags:
            - { name: oro_entity.virtual_relation_provider, priority: 150 }
 
