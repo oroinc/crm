@@ -16,4 +16,12 @@ class TranslationPackagesProviderExtensionTest extends TranslationPackagesProvid
             'fileToLocate' => 'Oro/Bundle/CRMBundle/OroCRMBundle.php'
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPackageName()
+    {
+        return 'crm';
+    }
 }
