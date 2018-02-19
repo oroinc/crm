@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
@@ -20,11 +21,14 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunitiesByLeadSource.html.twig")
+     * @param Request $request
+     * @param mixed $widget
+     * @return array
      */
-    public function opportunitiesByLeadSourceAction($widget)
+    public function opportunitiesByLeadSourceAction(Request $request, $widget)
     {
         $options = $this->get('oro_dashboard.widget_configs')->getWidgetOptions(
-            $this->getRequest()->query->get('_widgetId', null)
+            $request->query->get('_widgetId', null)
         );
 
         // prepare chart data
@@ -68,11 +72,14 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:opportunityByStatus.html.twig")
+     * @param Request $request
+     * @param mixed $widget
+     * @return array
      */
-    public function opportunityByStatusAction($widget)
+    public function opportunityByStatusAction(Request $request, $widget)
     {
         $options = $this->get('oro_dashboard.widget_configs')
-            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null));
+            ->getWidgetOptions($request->query->get('_widgetId', null));
         if ($options->get('useQuantityAsData')) {
             $valueOptions = [
                 'field_name' => 'quantity'
@@ -110,11 +117,14 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroSalesBundle:Dashboard:salesFlowChart.html.twig")
+     * @param Request $request
+     * @param mixed $widget
+     * @return array
      */
-    public function mySalesFlowB2BAction($widget)
+    public function mySalesFlowB2BAction(Request $request, $widget)
     {
         $dateRange = $this->get('oro_dashboard.widget_configs')
-            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
 
         $dateTo   = $dateRange['end'];

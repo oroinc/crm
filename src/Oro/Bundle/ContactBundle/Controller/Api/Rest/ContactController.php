@@ -10,6 +10,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
@@ -88,13 +89,14 @@ class ContactController extends RestController implements ClassResourceInterface
      * )
      * @AclAncestor("oro_contact_view")
      *
+     * @param Request $request
      * @throws \Exception
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page  = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page  = (int)$request->get('page', 1);
+        $limit = (int)$request->get('limit', self::ITEMS_PER_PAGE);
 
         $dateParamFilter  = new HttpDateTimeParameterFilter();
         $userIdFilter     = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User');
@@ -227,7 +229,8 @@ class ContactController extends RestController implements ClassResourceInterface
     protected function fixRequestAttributes($entity)
     {
         $formAlias = $this->getFormAlias();
-        $contactData = $this->getRequest()->request->get($formAlias);
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $contactData = $request->request->get($formAlias);
 
         if (array_key_exists('accounts', $contactData)) {
             $accounts = $contactData['accounts'];
@@ -250,7 +253,7 @@ class ContactController extends RestController implements ClassResourceInterface
             $contactData['removeAccounts'] = $removeAccounts;
             unset($contactData['accounts']);
 
-            $this->getRequest()->request->set($formAlias, $contactData);
+            $request->request->set($formAlias, $contactData);
         }
 
         // @todo: just a temporary workaround until new API is implemented
@@ -262,7 +265,7 @@ class ContactController extends RestController implements ClassResourceInterface
             foreach ($contactData['addresses'] as &$address) {
                 AddressApiUtils::fixAddress($address, $this->get('doctrine.orm.entity_manager'));
             }
-            $this->getRequest()->request->set($formAlias, $contactData);
+            $request->request->set($formAlias, $contactData);
         }
 
         parent::fixRequestAttributes($entity);

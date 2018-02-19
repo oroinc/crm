@@ -10,6 +10,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -41,12 +42,13 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @AclAncestor("oro_contact_group_view")
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page = (int)$request->get('page', 1);
+        $limit = (int)$request->get('limit', self::ITEMS_PER_PAGE);
 
         return $this->handleGetListRequest($page, $limit);
     }

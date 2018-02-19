@@ -4,6 +4,7 @@ namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
 use Doctrine\ORM\EntityNotFoundException;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -64,13 +65,14 @@ class ChannelController extends RestController
      *      resource=true
      * )
      * @AclAncestor("oro_channel_view")
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page     = (int)$this->getRequest()->get('page', 1);
-        $limit    = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
-        $entities = $this->getRequest()->get('entity', null);
+        $page     = (int)$request->get('page', 1);
+        $limit    = (int)$request->get('limit', self::ITEMS_PER_PAGE);
+        $entities = $request->get('entity', null);
 
         $filterParameters = [
             'entity' => new ChainParameterFilter(

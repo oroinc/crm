@@ -15,6 +15,7 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -42,12 +43,13 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @AclAncestor("oro_sales_b2bcustomer_view")
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page = (int) $this->getRequest()->get('page', 1);
-        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page = (int) $request->get('page', 1);
+        $limit = (int) $request->get('limit', self::ITEMS_PER_PAGE);
 
         return $this->handleGetListRequest($page, $limit);
     }
@@ -154,7 +156,8 @@ class B2bCustomerController extends RestController implements ClassResourceInter
     protected function fixRequestAttributes($entity)
     {
         $formAlias = 'b2bcustomer';
-        $customerData = $this->getRequest()->request->get($formAlias);
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $customerData = $request->request->get($formAlias);
 
         // @todo: just a temporary workaround until new API is implemented
         // - convert country name to country code (as result we accept both the code and the name)
@@ -163,11 +166,11 @@ class B2bCustomerController extends RestController implements ClassResourceInter
         // - move region name to region_text field for unknown region
         if (array_key_exists('shippingAddress', $customerData)) {
             AddressApiUtils::fixAddress($customerData['shippingAddress'], $this->get('doctrine.orm.entity_manager'));
-            $this->getRequest()->request->set($formAlias, $customerData);
+            $request->request->set($formAlias, $customerData);
         }
         if (array_key_exists('billingAddress', $customerData)) {
             AddressApiUtils::fixAddress($customerData['billingAddress'], $this->get('doctrine.orm.entity_manager'));
-            $this->getRequest()->request->set($formAlias, $customerData);
+            $request->request->set($formAlias, $customerData);
         }
 
         parent::fixRequestAttributes($entity);

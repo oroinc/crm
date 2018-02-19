@@ -27,6 +27,7 @@ class IntegrationFormTypeStub extends AbstractType
     {
         $builder->add('type', 'choice', [
             'choices' => IntegrationTypeExtensionTest::$allChoices,
+            // TODO: Remove 'choices_as_values' option in scope of BAP-15236
             'choices_as_values' => true
         ]);
     }

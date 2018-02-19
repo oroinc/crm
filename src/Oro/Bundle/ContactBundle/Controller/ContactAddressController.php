@@ -3,6 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,10 +39,13 @@ class ContactAddressController extends Controller
      * @Template("OroContactBundle:ContactAddress:update.html.twig")
      * @AclAncestor("oro_contact_create")
      * @ParamConverter("contact", options={"id" = "contactId"})
+     * @param Request $request
+     * @param Contact $contact
+     * @return array|RedirectResponse
      */
-    public function createAction(Contact $contact)
+    public function createAction(Request $request, Contact $contact)
     {
-        return $this->update($contact, new ContactAddress());
+        return $this->update($request, $contact, new ContactAddress());
     }
 
     /**
@@ -52,26 +57,30 @@ class ContactAddressController extends Controller
      * @Template
      * @AclAncestor("oro_contact_update")
      * @ParamConverter("contact", options={"id" = "contactId"})
+     * @param Request $request
+     * @param Contact $contact
+     * @return array|RedirectResponse
      */
-    public function updateAction(Contact $contact, ContactAddress $address)
+    public function updateAction(Request $request, Contact $contact, ContactAddress $address)
     {
-        return $this->update($contact, $address);
+        return $this->update($request, $contact, $address);
     }
 
     /**
+     * @param Request $request
      * @param Contact $contact
      * @param ContactAddress $address
      * @return array
      * @throws BadRequestHttpException
      */
-    protected function update(Contact $contact, ContactAddress $address)
+    protected function update(Request $request, Contact $contact, ContactAddress $address)
     {
         $responseData = array(
             'saved' => false,
             'contact' => $contact
         );
 
-        if ($this->getRequest()->getMethod() == 'GET' && !$address->getId()) {
+        if ($request->isMethod('GET') && !$address->getId()) {
             $address->setFirstName($contact->getFirstName());
             $address->setLastName($contact->getLastName());
             if (!$contact->getAddresses()->count()) {

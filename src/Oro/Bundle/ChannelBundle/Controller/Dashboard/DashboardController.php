@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/dashboard")
@@ -19,11 +20,14 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroChannelBundle:Dashboard:averageLifetimeSales.html.twig")
+     * @param Request $request
+     * @param string $widget
+     * @return array
      */
-    public function averageLifetimeSalesAction($widget)
+    public function averageLifetimeSalesAction(Request $request, $widget)
     {
         $dateRange = $this->get('oro_dashboard.widget_configs')
-            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
         $data = $this->get('oro_channel.provider.lifetime.average_widget_provider')->getChartData($dateRange);
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);

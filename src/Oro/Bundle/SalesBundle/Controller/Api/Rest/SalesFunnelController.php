@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SalesBundle\Controller\Api\Rest;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -44,12 +45,13 @@ class SalesFunnelController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @AclAncestor("oro_sales_salesfunnel_view")
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page = (int) $this->getRequest()->get('page', 1);
-        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page = (int) $request->get('page', 1);
+        $limit = (int) $request->get('limit', self::ITEMS_PER_PAGE);
 
         return $this->handleGetListRequest($page, $limit);
     }

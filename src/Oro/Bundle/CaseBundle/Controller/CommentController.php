@@ -14,6 +14,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class CommentController extends Controller
 {
@@ -24,10 +26,13 @@ class CommentController extends Controller
      *      requirements={"id"="\d+", "_format"="json"}, defaults={"_format"="json"}
      * )
      * @AclAncestor("oro_case_comment_view")
+     * @param Request $request
+     * @param CaseEntity $case
+     * @return JsonResponse
      */
-    public function commentsListAction(CaseEntity $case)
+    public function commentsListAction(Request $request, CaseEntity $case)
     {
-        $order = $this->getRequest()->get('sorting', 'DESC');
+        $order = $request->get('sorting', 'DESC');
         $comments = $this->get('oro_case.manager')->getCaseComments($case, $order);
 
         return new JsonResponse(
@@ -60,14 +65,17 @@ class CommentController extends Controller
      * @ParamConverter("case", options={"id"="caseId"})
      * @AclAncestor("oro_case_comment_create")
      * @Template("OroCaseBundle:Comment:update.html.twig")
+     * @param Request $request
+     * @param CaseEntity $case
+     * @return array|RedirectResponse
      */
-    public function createAction(CaseEntity $case)
+    public function createAction(Request $request, CaseEntity $case)
     {
         $comment = $this->get('oro_case.manager')->createComment($case);
         $comment->setOwner($this->getUser());
 
         $formAction = $this->get('oro_entity.routing_helper')
-            ->generateUrlByRequest('oro_case_comment_create', $this->getRequest(), ['caseId' => $case->getId()]);
+            ->generateUrlByRequest('oro_case_comment_create', $request, ['caseId' => $case->getId()]);
 
         return $this->update($comment, $formAction);
     }

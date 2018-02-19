@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\ChannelBundle\Controller\Api\Rest;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -55,16 +56,17 @@ class CustomerSearchController extends RestGetController
      *      resource=true
      * )
      *
+     * @param Request $request
      * @return Response
      */
-    public function cgetAction()
+    public function cgetAction(Request $request)
     {
-        $page     = (int) $this->getRequest()->get('page', 1);
-        $limit    = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
-        $search   = $this->getRequest()->get('search', '');
+        $page     = (int) $request->get('page', 1);
+        $limit    = (int) $request->get('limit', self::ITEMS_PER_PAGE);
+        $search   = $request->get('search', '');
         $criteria = null;
 
-        if ($this->getRequest()->get('dataChannel')) {
+        if ($request->get('dataChannel')) {
             $criteria = $this->getFilterCriteria(
                 $this->getSupportedQueryParameters(__FUNCTION__),
                 [

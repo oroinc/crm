@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -38,13 +39,16 @@ class CommentController extends RestController implements ClassResourceInterface
      *     resource=true
      * )
      * @AclAncestor("oro_case_comment_view")
+     * @param Request $request
+     * @param CaseEntity $case
+     * @return Response
      */
-    public function cgetAction(CaseEntity $case)
+    public function cgetAction(Request $request, CaseEntity $case)
     {
         $comments = $this->get('oro_case.manager')
             ->getCaseComments(
                 $case,
-                $this->getRequest()->get('order', 'DESC')
+                $request->get('order', 'DESC')
             );
 
         return $this->handleView(
