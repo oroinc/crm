@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\EventListener;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Form\FormEvents;
-
 use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
+use Symfony\Component\Form\FormEvents;
 
 class CartApiFormSubscriberTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,11 +4,9 @@ namespace Oro\Bundle\TestFrameworkCRMBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class EnableSalesFeatures extends AbstractFixture implements ContainerAwareInterface
 {

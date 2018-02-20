@@ -3,14 +3,12 @@
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
-use Oro\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class UpdateIntegrationConnectorsListener
 {

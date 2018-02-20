@@ -2,11 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
 class OrderAddressApiType extends AbstractApiAddressType

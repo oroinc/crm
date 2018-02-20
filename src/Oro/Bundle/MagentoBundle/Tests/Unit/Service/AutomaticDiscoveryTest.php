@@ -4,11 +4,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use Doctrine\ORM\Query\Expr;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProviderInterface;
 
 class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 {

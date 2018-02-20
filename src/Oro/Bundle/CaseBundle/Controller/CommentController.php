@@ -2,18 +2,15 @@
 
 namespace Oro\Bundle\CaseBundle\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
-use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

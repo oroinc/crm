@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -9,10 +12,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
-use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 class SingleChannelModeExtension extends AbstractTypeExtension
 {

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
 use Oro\Bundle\MagentoBundle\Entity\Website;
 
 class MagentoTransportRepository extends EntityRepository

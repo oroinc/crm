@@ -3,15 +3,14 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\Entity\Website;
-use Oro\Bundle\MagentoBundle\Entity\Store;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
+use Oro\Bundle\MagentoBundle\Entity\Store;
+use Oro\Bundle\MagentoBundle\Entity\Website;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class CustomerControllerTest extends WebTestCase
 {

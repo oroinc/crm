@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
+use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\ExecutionContextInterface;
-
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Oro\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator;
-use Oro\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint;
 
 class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
 {

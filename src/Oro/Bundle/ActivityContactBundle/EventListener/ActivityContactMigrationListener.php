@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ActivityContactBundle\EventListener;
 
-use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
-use Oro\Bundle\MigrationBundle\Event\PostMigrationEvent;
 use Oro\Bundle\ActivityContactBundle\Migration\ActivityContactMigration;
 use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
+use Oro\Bundle\MigrationBundle\Event\PostMigrationEvent;
 
 class ActivityContactMigrationListener
 {

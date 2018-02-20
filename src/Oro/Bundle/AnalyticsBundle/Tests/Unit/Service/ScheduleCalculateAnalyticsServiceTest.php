@@ -1,12 +1,12 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\Service;
 
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 
 class ScheduleCalculateAnalyticsServiceTest extends \PHPUnit_Framework_TestCase
 {

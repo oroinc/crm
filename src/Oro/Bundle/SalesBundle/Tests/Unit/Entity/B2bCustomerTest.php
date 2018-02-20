@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 

@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
-
 use Oro\Bundle\WorkflowBundle\Form\Type\WorkflowTransitionType;
+use Symfony\Component\Form\AbstractType;
 
 class OrderPlaceType extends AbstractType
 {

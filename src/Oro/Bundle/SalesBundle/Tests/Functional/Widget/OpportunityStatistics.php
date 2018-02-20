@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Widget;
 
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Crawler;
-
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Form;
 
 /**
  * @dbIsolationPerTest

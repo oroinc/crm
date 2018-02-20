@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 class EmbeddedFormTypeExtension extends AbstractTypeExtension
 {

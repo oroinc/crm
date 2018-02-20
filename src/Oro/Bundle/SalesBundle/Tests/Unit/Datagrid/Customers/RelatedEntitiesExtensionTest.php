@@ -3,15 +3,11 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Datagrid\Extension\Customers;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-
 use Oro\Bundle\EntityBundle\Tests\Unit\ORM\Fixtures\TestEntity;
-
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
 use Oro\Bundle\SalesBundle\Datagrid\Extension\Customers\RelatedEntitiesExtension;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;

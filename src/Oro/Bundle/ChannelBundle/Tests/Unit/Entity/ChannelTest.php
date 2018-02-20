@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\Collection;
-
 use Oro\Bundle\ChannelBundle\Entity\EntityName;
 
 class ChannelTest extends AbstractEntityTestCase

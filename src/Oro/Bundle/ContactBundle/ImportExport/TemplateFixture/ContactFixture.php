@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ContactBundle\ImportExport\TemplateFixture;
 
-use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
-use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
@@ -11,6 +9,8 @@ use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\ContactBundle\Entity\Method;
 use Oro\Bundle\ContactBundle\Entity\Source;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 class ContactFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {

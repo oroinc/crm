@@ -3,12 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_37;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-
 use Oro\Bundle\EntityConfigBundle\Migration\RemoveFieldQuery;
 use Oro\Bundle\EntityConfigBundle\Migration\RemoveTableQuery;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class RemoveDeprecatedTablesAndFields implements Migration
 {

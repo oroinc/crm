@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use Oro\Bundle\MagentoBundle\Service\WsdlManager;
 

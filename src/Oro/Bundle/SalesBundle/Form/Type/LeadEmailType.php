@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
 
 class LeadEmailType extends AbstractType
 {

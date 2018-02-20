@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Builder;
 
-use Symfony\Bridge\Doctrine\ManagerRegistry;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 class BuilderFactory
 {

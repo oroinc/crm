@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\Range;
-
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType;
 
 class OpportunityStatusEnumValueTypeTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 

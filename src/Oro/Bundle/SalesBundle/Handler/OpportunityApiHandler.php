@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Handler;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class OpportunityApiHandler extends AbstractEntityApiHandler
 {

@@ -1,11 +1,10 @@
 <?php
 namespace Oro\Bundle\ContactUsBundle\Form\Type;
 
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {

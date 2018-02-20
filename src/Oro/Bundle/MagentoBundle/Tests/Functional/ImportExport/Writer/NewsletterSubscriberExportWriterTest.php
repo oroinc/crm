@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
-
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Entity\Store;
 

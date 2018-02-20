@@ -5,12 +5,10 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Form\IntegrationFormTypeStub;
-
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class IntegrationTypeExtensionTest extends FormIntegrationTestCase
 {

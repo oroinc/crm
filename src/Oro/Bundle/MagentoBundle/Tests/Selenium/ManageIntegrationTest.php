@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\IntegrationBundle\Tests\Selenium\Pages\Integrations;
 use Oro\Bundle\MagentoBundle\Tests\Selenium\Pages\Integration;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class CreateIntegrationTest

@@ -3,16 +3,14 @@
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomerEmail;
 use Oro\Bundle\SalesBundle\Validator\B2bCustomerEmailDeleteValidator;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class B2bCustomerEmailHandler
 {

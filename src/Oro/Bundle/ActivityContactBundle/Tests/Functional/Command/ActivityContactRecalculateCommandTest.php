@@ -3,13 +3,11 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Functional\Command;
 
 use Doctrine\ORM\EntityManager;
-
 use Monolog\Registry;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ActivityContactBundle\Command\ActivityContactRecalculateCommand;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\DotmailerBundle\Entity\Contact;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class ActivityContactRecalculateCommandTest extends WebTestCase
 {

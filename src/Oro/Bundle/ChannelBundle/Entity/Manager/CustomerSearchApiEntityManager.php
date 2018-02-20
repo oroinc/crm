@@ -2,22 +2,20 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity\Manager;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
-
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Component\DoctrineUtils\ORM\SqlQueryBuilder;
-use Oro\Component\DoctrineUtils\ORM\UnionQueryBuilder;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
+use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
 use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
-use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Component\DoctrineUtils\ORM\SqlQueryBuilder;
+use Oro\Component\DoctrineUtils\ORM\UnionQueryBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CustomerSearchApiEntityManager extends ApiEntityManager
 {

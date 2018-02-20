@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
+use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase

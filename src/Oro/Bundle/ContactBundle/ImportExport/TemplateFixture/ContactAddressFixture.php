@@ -4,8 +4,8 @@ namespace Oro\Bundle\ContactBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\AddressFixture;
-use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 class ContactAddressFixture extends AddressFixture implements TemplateFixtureInterface
 {

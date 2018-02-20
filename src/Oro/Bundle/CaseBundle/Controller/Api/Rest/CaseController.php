@@ -2,19 +2,16 @@
 
 namespace Oro\Bundle\CaseBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Rest\RouteResource("case")

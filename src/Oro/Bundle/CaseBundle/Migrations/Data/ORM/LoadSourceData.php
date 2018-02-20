@@ -3,7 +3,6 @@
 namespace Oro\Bundle\CaseBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\TranslationBundle\DataFixtures\AbstractTranslatableEntityFixture;
 

@@ -1,20 +1,18 @@
 <?php
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
-
+use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
-use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
-use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData;
 
 class LoadUserData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

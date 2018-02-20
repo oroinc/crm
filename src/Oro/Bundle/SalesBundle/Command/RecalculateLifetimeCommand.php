@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Command;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;

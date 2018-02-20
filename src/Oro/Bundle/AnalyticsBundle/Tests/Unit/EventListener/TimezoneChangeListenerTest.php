@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
-use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {

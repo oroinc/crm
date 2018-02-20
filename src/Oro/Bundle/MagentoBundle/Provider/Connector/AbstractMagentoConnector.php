@@ -3,11 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Connector;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Psr\Log\LoggerAwareInterface;
-
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Exception\RuntimeException;
@@ -20,6 +17,7 @@ use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Psr\Log\LoggerAwareInterface;
 
 abstract class AbstractMagentoConnector extends AbstractConnector implements MagentoConnectorInterface
 {

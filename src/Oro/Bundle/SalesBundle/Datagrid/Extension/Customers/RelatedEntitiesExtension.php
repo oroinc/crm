@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr;
-
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;

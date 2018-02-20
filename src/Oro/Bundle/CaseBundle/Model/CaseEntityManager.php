@@ -2,15 +2,14 @@
 
 namespace Oro\Bundle\CaseBundle\Model;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
 use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\CaseBundle\Entity\CasePriority;
 use Oro\Bundle\CaseBundle\Entity\CaseSource;
 use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CaseEntityManager
 {

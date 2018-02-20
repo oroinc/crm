@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\MagentoBundle\Form\DataTransformer\EmailListToStringTransformer;
 
 class SharedGuestEmailListType extends AbstractType
 {

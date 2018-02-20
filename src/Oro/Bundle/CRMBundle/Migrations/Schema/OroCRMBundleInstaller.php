@@ -2,13 +2,7 @@
 
 namespace Oro\Bundle\CRMBundle\Migrations\Schema;
 
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_1\MigrateRelations;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_2\MigrateGridViews;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3\EmbededFormType;
@@ -16,6 +10,10 @@ use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3\TaggingEntityName;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_3_1\WorkflowItemEntityClass;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_4\NotificationEntityName;
 use Oro\Bundle\CRMBundle\Migrations\Schema\v1_6\ReminderEntityName;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class OroCRMBundleInstaller implements Installation, ContainerAwareInterface
 {

@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\CaseBundle\EventListener;
 
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 use Oro\Bundle\SearchBundle\Event\PrepareEntityMapEvent;
 use Oro\Bundle\SearchBundle\Query\Query;
-
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
  * Listener cuts amount of data for search index in some fields

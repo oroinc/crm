@@ -7,28 +7,26 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Entity\LeadPhone;
-use Oro\Bundle\SalesBundle\Entity\LeadEmail;
-use Oro\Bundle\SalesBundle\Entity\LeadAddress;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {

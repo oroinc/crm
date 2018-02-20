@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\DataTransformer;
 
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormFactoryInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class DatasourceDataTransformer implements DataTransformerInterface
 {

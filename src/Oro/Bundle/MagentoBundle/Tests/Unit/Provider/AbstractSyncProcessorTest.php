@@ -4,9 +4,6 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
-
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -18,6 +15,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;

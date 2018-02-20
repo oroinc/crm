@@ -2,14 +2,14 @@
 namespace Oro\Bundle\AnalyticsBundle\Async;
 
 use Oro\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class CalculateAllChannelsAnalyticsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {

@@ -6,14 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
-
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
 use Oro\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 
 class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormView;
-
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
-use Oro\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension;
-use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
 {

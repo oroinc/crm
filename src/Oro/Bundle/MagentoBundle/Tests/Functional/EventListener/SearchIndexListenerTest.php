@@ -2,18 +2,17 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\IntegrationBundle\Event\SyncEvent;
-use Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData;
-use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerContact;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\EventListener\SearchIndexListener;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerContact;
+use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueAssertTrait;
 use Oro\Bundle\SearchBundle\Async\Topics;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @group search

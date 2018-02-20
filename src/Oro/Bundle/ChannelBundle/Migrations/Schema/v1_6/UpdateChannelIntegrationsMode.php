@@ -4,12 +4,10 @@ namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-
-use Psr\Log\LoggerInterface;
-
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Psr\Log\LoggerInterface;
 
 class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
 {

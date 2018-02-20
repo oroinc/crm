@@ -6,10 +6,10 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\AddressTypeFixture;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\CountryFixture;
 use Oro\Bundle\AddressBundle\ImportExport\TemplateFixture\RegionFixture;
-use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateEntityRegistry;
-use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
 use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\ImportExport\TemplateFixture\ContactAddressFixture;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateEntityRegistry;
+use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateManager;
 
 class ContactAddressFixtureTest extends \PHPUnit_Framework_TestCase
 {

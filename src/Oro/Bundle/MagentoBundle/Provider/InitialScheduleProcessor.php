@@ -3,18 +3,17 @@
 namespace Oro\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
+use Oro\Bundle\MagentoBundle\Async\Topics;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\Connector\AbstractMagentoConnector;
+use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Bundle\MagentoBundle\Async\Topics;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 /**
  * Schedule initial synchronization if it is required.

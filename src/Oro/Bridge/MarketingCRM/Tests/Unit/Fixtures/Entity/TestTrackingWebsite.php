@@ -2,8 +2,8 @@
 
 namespace Oro\Bridge\MarketingCRM\Tests\Unit\Fixtures\Entity;
 
-use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 
 class TestTrackingWebsite extends TrackingWebsite
 {

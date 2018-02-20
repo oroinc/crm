@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class TestDirectionProvider implements DirectionProviderInterface

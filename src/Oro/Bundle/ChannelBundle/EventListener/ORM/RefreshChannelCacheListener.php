@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\EventListener\ORM;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 

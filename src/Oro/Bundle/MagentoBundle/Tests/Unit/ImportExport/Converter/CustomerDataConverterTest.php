@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Converter;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 
 use Oro\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter;
 

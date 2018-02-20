@@ -3,12 +3,11 @@
 namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ContactBundle\Model\ExtendGroup;
 
 /**
  * @ORM\Entity

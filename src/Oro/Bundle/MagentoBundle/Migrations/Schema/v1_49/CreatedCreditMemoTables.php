@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49;
 
 use Doctrine\DBAL\Schema\Schema;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -27,7 +26,7 @@ class CreatedCreditMemoTables implements
     /** @var ActivityListExtension */
     protected $activityListExtension;
 
-     /** @var ExtendExtension */
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**

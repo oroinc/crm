@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use DateTime;
-
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\MagentoBundle\Dashboard\OrderDataProvider;

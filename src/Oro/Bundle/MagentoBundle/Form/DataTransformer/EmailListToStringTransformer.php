@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\DataTransformer;
 
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
-
 use Oro\Bundle\FormBundle\Form\DataTransformer\AbstractArrayToStringTransformer;
+use Symfony\Component\Form\Exception\UnexpectedTypeException;
 
 class EmailListToStringTransformer extends AbstractArrayToStringTransformer
 {

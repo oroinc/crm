@@ -3,8 +3,8 @@
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;

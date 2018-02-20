@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
 use Oro\Bundle\MagentoBundle\Acl\Voter\CustomerVoter;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
 {

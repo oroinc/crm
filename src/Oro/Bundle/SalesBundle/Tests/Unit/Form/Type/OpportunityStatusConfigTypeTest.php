@@ -3,20 +3,18 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Metadata\MetadataFactory;
-
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormInterface;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Audit\AuditManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigCache;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager as EntityConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityConfigBundle\Tests\Unit\ConfigProviderBagMock;
 use Oro\Bundle\EntityExtendBundle\Form\EventListener\EnumFieldConfigSubscriber;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormInterface;
 
 class OpportunityStatusConfigTypeTest extends \PHPUnit_Framework_TestCase
 {

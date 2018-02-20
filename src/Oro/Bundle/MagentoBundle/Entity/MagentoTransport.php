@@ -3,11 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class MagentoTransport. Used as base class for REST and SOAP transport entities

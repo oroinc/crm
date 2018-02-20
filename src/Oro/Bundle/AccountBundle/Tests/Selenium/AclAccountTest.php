@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
+use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 
 class AclAccountTest extends Selenium2TestCase
 {

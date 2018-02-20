@@ -3,10 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManager;
-
+use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\TestFrameworkCRMBundle\Entity\TestCustomer1;
 use Oro\Bundle\TestFrameworkCRMBundle\Entity\TestCustomer2;
 

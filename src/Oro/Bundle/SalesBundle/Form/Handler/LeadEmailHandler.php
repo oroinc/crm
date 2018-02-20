@@ -3,15 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SalesBundle\Entity\LeadEmail;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 
 class LeadEmailHandler
 {

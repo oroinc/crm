@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
-use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class WebsiteChoicesProviderTest extends \PHPUnit_Framework_TestCase
 {

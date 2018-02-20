@@ -3,9 +3,9 @@
 namespace Oro\Bundle\CaseBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\CaseBundle\Event\Events;
 use Oro\Bundle\CaseBundle\Event\FormHandlerEvent;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;

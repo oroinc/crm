@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
+use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
-use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 class AclLeadTest extends Selenium2TestCase
 {

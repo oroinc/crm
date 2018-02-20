@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ContactBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
-
-use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\FormBundle\Entity\PrimaryItem;
 
 class ContactImportHelper
 {

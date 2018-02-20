@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class CreateContactRequestTest

@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\DataTransformer;
 
+use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 
 class DatasourceDataTransformerTest extends \PHPUnit_Framework_TestCase
 {

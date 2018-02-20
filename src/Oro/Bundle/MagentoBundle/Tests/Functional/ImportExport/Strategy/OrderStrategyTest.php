@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 
-use Oro\Component\Testing\Unit\EntityTrait;
-
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
@@ -15,6 +13,7 @@ use Oro\Bundle\MagentoBundle\Entity\OrderNote;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy;
 use Oro\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 /**
  * @dbIsolationPerTest

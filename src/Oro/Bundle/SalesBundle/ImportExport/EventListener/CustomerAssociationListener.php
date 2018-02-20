@@ -2,19 +2,14 @@
 
 namespace Oro\Bundle\SalesBundle\ImportExport\EventListener;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Lead;
-
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
-
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class CustomerAssociationListener
 {

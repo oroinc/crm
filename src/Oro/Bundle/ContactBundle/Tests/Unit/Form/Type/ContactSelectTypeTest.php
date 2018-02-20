@@ -1,9 +1,8 @@
 <?php
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\ContactBundle\Form\Type\ContactSelectType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContactSelectTypeTest extends \PHPUnit_Framework_TestCase
 {

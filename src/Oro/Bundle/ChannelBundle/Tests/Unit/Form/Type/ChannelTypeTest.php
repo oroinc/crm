@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormBuilder;
-
+use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelType;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormView;
 
 class ChannelTypeTest extends \PHPUnit_Framework_TestCase
 {

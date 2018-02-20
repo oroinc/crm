@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
 use Oro\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
+use Oro\Bundle\EmbeddedFormBundle\Tests\Selenium\Pages\EmbeddedForms;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class ManageEmbeddedFormTest

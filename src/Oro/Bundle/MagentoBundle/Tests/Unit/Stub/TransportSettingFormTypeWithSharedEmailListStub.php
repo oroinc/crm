@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Stub;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-
 use Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Form\Type\SharedGuestEmailListType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class TransportSettingFormTypeWithSharedEmailListStub extends AbstractType
 {

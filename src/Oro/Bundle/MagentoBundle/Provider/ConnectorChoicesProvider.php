@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ConnectorChoicesProvider
 {

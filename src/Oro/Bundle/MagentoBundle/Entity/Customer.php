@@ -5,20 +5,19 @@ namespace Oro\Bundle\MagentoBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
+use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use Oro\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\MagentoBundle\Model\ExtendCustomer;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * Class Customer

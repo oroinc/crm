@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;

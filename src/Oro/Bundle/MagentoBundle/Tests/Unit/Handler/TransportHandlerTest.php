@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Test\Unit\Handler;
 
-use Symfony\Component\HttpFoundation\Request;
-
-use Oro\Component\Testing\Unit\EntityTrait;
-
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
-use Oro\Bundle\MagentoBundle\Handler\TransportHandler;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Stub\MagentoTransportProviderStub;
+use Oro\Component\Testing\Unit\EntityTrait;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class TransportHandlerTest extends \PHPUnit_Framework_TestCase

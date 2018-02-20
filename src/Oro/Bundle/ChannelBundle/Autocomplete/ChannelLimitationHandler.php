@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Autocomplete;
 
-use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
 
 class ChannelLimitationHandler extends SearchHandler
 {

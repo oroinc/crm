@@ -1,19 +1,18 @@
 <?php
 
-namespace Oro\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
+namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Processor;
 
-use Symfony\Component\Serializer\SerializerInterface;
-
+use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\Entity\TestTransport;
-use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\MagentoBundle\Entity\Address;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\ImportExport\Processor\CustomerAddressExportProcessor;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Service\CustomerStateHandler;
 use Oro\Bundle\MagentoBundle\Service\StateManager;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CustomerAddressExportProcessorTest extends \PHPUnit_Framework_TestCase
 {

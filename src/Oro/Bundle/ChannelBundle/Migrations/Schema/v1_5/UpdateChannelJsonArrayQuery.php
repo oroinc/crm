@@ -3,11 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_5;
 
 use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
-
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Psr\Log\LoggerInterface;
 
 class UpdateChannelJsonArrayQuery extends ParametrizedMigrationQuery
 {

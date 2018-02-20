@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\AccountBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 
 class LoadDashboardData extends AbstractDashboardFixture implements DependentFixtureInterface

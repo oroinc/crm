@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\ImportExport\EventListener;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
-use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\CurrencyBundle\Provider\CurrencyProviderInterface;
-
+use Oro\Bundle\ImportExportBundle\Event\StrategyEvent;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class OpportunityListener
 {

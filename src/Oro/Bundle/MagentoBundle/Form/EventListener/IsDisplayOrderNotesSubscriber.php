@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Form\Type\AbstractTransportSettingFormType;
 
 class IsDisplayOrderNotesSubscriber implements EventSubscriberInterface
 {

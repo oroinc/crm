@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\MagentoBundle\Entity\Order;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;

@@ -4,17 +4,12 @@ namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\PreloadedExtension;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
-
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCountryAndRegionSubscriber;
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
 use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\FormBundle\Form\Extension\AdditionalAttrExtension;
 use Oro\Bundle\FormBundle\Tests\Unit\Stub\StripTagsExtensionStub;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -24,10 +19,12 @@ use Oro\Bundle\SalesBundle\Form\Type\B2bCustomerType;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\EmailCollectionTypeStub;
 use Oro\Bundle\SalesBundle\Tests\Unit\Form\Type\Stub\PhoneCollectionTypeStub;
 use Oro\Bundle\UIBundle\Tools\HtmlTagHelper;
-
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Component\Testing\Unit\Form\Type\Stub\EntityType;
 use Oro\Component\Testing\Unit\FormIntegrationTestCase;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class B2bCustomerTypeTest extends FormIntegrationTestCase
 {

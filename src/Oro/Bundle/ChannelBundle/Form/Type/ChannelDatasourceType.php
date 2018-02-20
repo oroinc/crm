@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
+use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
+use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
-use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-use Oro\Bundle\ChannelBundle\Form\DataTransformer\DatasourceDataTransformer;
 
 class ChannelDatasourceType extends AbstractType
 {

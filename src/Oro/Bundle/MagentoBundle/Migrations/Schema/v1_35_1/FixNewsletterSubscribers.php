@@ -3,11 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_35_1;
 
 use Doctrine\DBAL\Schema\Schema;
-
+use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
-use Oro\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
 
 class FixNewsletterSubscribers implements Migration
 {

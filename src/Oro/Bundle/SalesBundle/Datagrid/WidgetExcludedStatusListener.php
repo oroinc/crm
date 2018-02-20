@@ -3,10 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Datagrid;
 
 use Doctrine\ORM\Query;
-
-use Oro\Bundle\DataGridBundle\Event\OrmResultBefore;
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Event\OrmResultBefore;
 
 class WidgetExcludedStatusListener
 {

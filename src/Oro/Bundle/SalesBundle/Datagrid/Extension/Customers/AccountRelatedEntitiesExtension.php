@@ -3,9 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Datagrid\Extension\Customers;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-
-use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 
 class AccountRelatedEntitiesExtension extends RelatedEntitiesExtension
 {

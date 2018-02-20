@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-use Symfony\Component\DomCrawler\Field\InputFormField;
-
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+use Symfony\Component\DomCrawler\Field\InputFormField;
+use Symfony\Component\DomCrawler\Form;
 
 class LeadControllersTest extends AbstractDatagridTestCase
 {

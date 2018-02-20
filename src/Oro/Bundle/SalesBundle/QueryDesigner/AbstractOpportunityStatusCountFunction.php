@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\SalesBundle\QueryDesigner;
 
-use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FunctionInterface;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\AbstractQueryConverter;
+use Oro\Bundle\QueryDesignerBundle\QueryDesigner\FunctionInterface;
 
 abstract class AbstractOpportunityStatusCountFunction implements FunctionInterface
 {

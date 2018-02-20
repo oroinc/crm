@@ -3,11 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CustomerCurrencyListener
 {

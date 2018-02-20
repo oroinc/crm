@@ -3,7 +3,6 @@
 namespace Oro\Bundle\CaseBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\CommentBundle\Entity\BaseComment;
 
 class ExtendCaseComment extends BaseComment

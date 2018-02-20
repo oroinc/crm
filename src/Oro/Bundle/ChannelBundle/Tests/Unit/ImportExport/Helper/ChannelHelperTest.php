@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\ImportExport\Helper;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\Common\Annotations\AnnotationReader;
-
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 use Oro\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 class ChannelHelperTest extends OrmTestCase
 {

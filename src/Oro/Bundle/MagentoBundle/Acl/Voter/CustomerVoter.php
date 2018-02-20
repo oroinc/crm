@@ -17,7 +17,8 @@ class CustomerVoter extends AbstractTwoWaySyncVoter
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
         if (is_a($this->object, $this->className, true)
-            && ($attribute === self::ATTRIBUTE_EDIT
+            && (
+                $attribute === self::ATTRIBUTE_EDIT
                 && (!$this->object->getOriginId() && !$this->object->isGuest())
             )
         ) {

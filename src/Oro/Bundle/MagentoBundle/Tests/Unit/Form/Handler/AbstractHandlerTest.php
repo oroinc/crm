@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 abstract class AbstractHandlerTest extends \PHPUnit_Framework_TestCase
 {

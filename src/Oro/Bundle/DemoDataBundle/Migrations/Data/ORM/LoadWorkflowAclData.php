@@ -3,7 +3,6 @@
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\WorkflowBundle\Model\Filter\WorkflowDefinitionFilters;
 
 /**

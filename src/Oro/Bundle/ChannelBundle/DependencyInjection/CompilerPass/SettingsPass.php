@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\DependencyInjection\CompilerPass;
 
+use Oro\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
+use Oro\Component\Config\Loader\CumulativeConfigLoader;
+use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Oro\Component\Config\Loader\CumulativeConfigLoader;
-use Oro\Component\Config\Loader\YamlCumulativeFileLoader;
-use Oro\Bundle\ChannelBundle\DependencyInjection\ChannelConfiguration;
 
 class SettingsPass implements CompilerPassInterface
 {

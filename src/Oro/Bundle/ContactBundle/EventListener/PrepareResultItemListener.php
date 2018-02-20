@@ -3,9 +3,9 @@
 namespace Oro\Bundle\ContactBundle\EventListener;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 
 class PrepareResultItemListener
 {

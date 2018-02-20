@@ -3,15 +3,14 @@
 namespace Oro\Bundle\MagentoBundle\Dashboard;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Oro\Bundle\ChartBundle\Model\ConfigProvider;
+use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
-use Oro\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CustomerDataProvider
 {

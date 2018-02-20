@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\ImportExport\Helper;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 class ChannelHelper
 {

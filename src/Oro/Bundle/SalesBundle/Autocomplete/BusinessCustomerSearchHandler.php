@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Autocomplete;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 

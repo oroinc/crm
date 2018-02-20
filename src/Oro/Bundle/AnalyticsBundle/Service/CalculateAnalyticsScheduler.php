@@ -1,10 +1,10 @@
 <?php
 namespace Oro\Bundle\AnalyticsBundle\Service;
 
+use Oro\Bundle\AnalyticsBundle\Async\Topics;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Oro\Bundle\AnalyticsBundle\Async\Topics;
 
 class CalculateAnalyticsScheduler
 {

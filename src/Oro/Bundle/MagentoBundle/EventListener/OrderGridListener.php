@@ -3,10 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper;
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
-
-use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 

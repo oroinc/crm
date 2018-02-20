@@ -5,13 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Validator;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
-
-use Symfony\Component\Validator\ExecutionContextInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 use Oro\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class StartSyncDateValidatorTest extends \PHPUnit_Framework_TestCase
 {

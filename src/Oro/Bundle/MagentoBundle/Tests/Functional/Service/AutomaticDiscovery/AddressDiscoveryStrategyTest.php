@@ -3,12 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Service\AutomaticDiscovery;
 
 use Doctrine\Common\Collections\Criteria;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class AddressDiscoveryStrategyTest extends WebTestCase
 {

@@ -2,18 +2,17 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
+use Oro\Bundle\ActionBundle\Model\Attribute;
+use Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
+use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type\TestForm;
+use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\PropertyAccess\PropertyPath;
-
-use Oro\Bundle\ActionBundle\Model\Attribute;
-use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
-use Oro\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
-use Oro\Bundle\SalesBundle\Form\Type\OpportunitySelectType;
-use Oro\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType;
-use Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type\TestForm;
 
 class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
 {

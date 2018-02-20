@@ -3,9 +3,9 @@
 namespace Oro\Bundle\ContactBundle\Tests\Functional\ApiOld;
 
 use FOS\RestBundle\Util\Codes;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEmailData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestContactEmailApiTest extends WebTestCase
 {

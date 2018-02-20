@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-
 use Symfony\Component\DomCrawler\Crawler;
 
 class ContactPaginationTest extends AbstractContactPaginationTestCase

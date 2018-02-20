@@ -3,15 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Range;
-
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 use Oro\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Range;
 
 class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
 {

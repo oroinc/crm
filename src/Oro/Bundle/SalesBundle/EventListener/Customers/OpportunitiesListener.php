@@ -3,15 +3,13 @@
 namespace Oro\Bundle\SalesBundle\EventListener\Customers;
 
 use Doctrine\Common\Util\ClassUtils;
-
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\Customer\ConfigProvider as CustomerConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class OpportunitiesListener
 {

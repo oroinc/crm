@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 class WidgetOpportunityStatusSelectType extends AbstractType
 {

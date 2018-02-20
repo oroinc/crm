@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use Psr\Log\LoggerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\FormBundle\Model\UpdateHandler;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
-use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use Oro\Bundle\SalesBundle\Entity\Lead;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\LeadToOpportunityProviderInterface;
-
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

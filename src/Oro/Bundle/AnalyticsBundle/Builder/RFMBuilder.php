@@ -3,12 +3,11 @@
 namespace Oro\Bundle\AnalyticsBundle\Builder;
 
 use Doctrine\Common\Collections\Criteria;
-
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
-use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class RFMBuilder implements AnalyticsBuilderInterface

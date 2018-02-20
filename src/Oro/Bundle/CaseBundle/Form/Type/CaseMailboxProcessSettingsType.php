@@ -3,18 +3,16 @@
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
-
+use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use Oro\Bundle\CaseBundle\Entity\CasePriority;
+use Oro\Bundle\CaseBundle\Entity\CaseStatus;
+use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
-
-use Oro\Bundle\EmailBundle\Entity\Mailbox;
-use Oro\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
-use Oro\Bundle\CaseBundle\Entity\CaseStatus;
-use Oro\Bundle\CaseBundle\Entity\CasePriority;
 
 class CaseMailboxProcessSettingsType extends AbstractType
 {

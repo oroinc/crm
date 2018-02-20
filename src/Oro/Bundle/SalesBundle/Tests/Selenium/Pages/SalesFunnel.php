@@ -13,7 +13,7 @@ class SalesFunnel extends AbstractPageEntity
 {
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $startDate;
-      /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
+    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $lead;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $opportunity;

@@ -3,9 +3,8 @@
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 abstract class ChannelRepositoryAbstract extends EntityRepository implements ChannelRepositoryInterface
 {

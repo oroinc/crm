@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use Symfony\Component\DependencyInjection\Container;
-
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Translation\Translator;
 
 abstract class WebsiteChartProviderTest extends \PHPUnit_Framework_TestCase

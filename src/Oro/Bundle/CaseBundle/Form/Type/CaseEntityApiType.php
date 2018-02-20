@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\CaseBundle\Form\Type;
 
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
 class CaseEntityApiType extends AbstractType
 {

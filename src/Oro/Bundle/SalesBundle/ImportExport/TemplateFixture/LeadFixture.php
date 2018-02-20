@@ -2,15 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
-use Oro\Bundle\SalesBundle\Entity\LeadPhone;
-use Oro\Bundle\SalesBundle\Entity\LeadEmail;
 use Oro\Bundle\SalesBundle\Entity\LeadAddress;
+use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {

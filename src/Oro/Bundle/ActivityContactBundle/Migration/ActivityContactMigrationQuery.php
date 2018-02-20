@@ -2,22 +2,20 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Migration;
 
-use Psr\Log\LoggerInterface;
-
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Comparator;
-
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Types\Type;
+use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
-use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
-use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use Psr\Log\LoggerInterface;
 
 class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 {

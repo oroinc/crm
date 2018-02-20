@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
-use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 
 /**
  * Hide menu items that were not enabled it config

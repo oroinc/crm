@@ -3,8 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;

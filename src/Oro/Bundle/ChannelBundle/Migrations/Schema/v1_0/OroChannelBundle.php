@@ -3,12 +3,11 @@
 namespace Oro\Bundle\ChannelBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 
 class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
 {
@@ -23,9 +22,9 @@ class OroChannelBundle implements Migration, ExtendExtensionAwareInterface
         $this->extendExtension = $extendExtension;
     }
 
-     /**
-     * {@inheritdoc}
-     */
+    /**
+    * {@inheritdoc}
+    */
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/

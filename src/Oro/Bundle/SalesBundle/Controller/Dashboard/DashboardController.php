@@ -2,14 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\Controller\Dashboard;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller

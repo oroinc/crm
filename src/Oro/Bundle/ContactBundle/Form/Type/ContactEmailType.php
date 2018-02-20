@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
 
 class ContactEmailType extends AbstractType
 {

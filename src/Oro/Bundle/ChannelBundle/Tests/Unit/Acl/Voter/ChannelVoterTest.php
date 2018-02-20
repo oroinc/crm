@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Acl\Voter;
 
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ChannelBundle\Acl\Voter\ChannelVoter;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ChannelVoterTest extends \PHPUnit_Framework_TestCase
 {

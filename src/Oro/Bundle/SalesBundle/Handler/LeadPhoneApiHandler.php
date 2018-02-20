@@ -3,12 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Handler;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
+use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
 
 class LeadPhoneApiHandler extends AbstractEntityApiHandler
 {

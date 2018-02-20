@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Updates old Query Designer definitions for opportunities and leads to new virtual fields to

@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Provider\Analytics;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider;
 use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider;
 use Oro\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CustomerRFMProviderTest extends WebTestCase
 {

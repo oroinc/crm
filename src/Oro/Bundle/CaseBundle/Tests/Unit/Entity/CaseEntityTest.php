@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\CaseBundle\Entity\CaseEntity;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Util\ClassUtils;
+use Oro\Bundle\CaseBundle\Entity\CaseEntity;
 
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
 {

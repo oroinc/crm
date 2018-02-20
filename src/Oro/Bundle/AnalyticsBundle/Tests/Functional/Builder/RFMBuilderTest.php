@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\Builder;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadOrderData;
 use Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadRFMMetricCategoryData;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RFMBuilderTest extends WebTestCase
 {

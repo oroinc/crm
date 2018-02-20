@@ -4,11 +4,10 @@ namespace Oro\Bundle\MagentoBundle\Datagrid;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\CustomerGroup;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class MagentoDatagridHelper
 {

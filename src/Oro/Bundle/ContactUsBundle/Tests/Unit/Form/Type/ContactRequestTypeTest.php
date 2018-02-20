@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\Test\TypeTestCase;
-
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
 use Oro\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
+use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 class ContactRequestTypeTest extends TypeTestCase
 {

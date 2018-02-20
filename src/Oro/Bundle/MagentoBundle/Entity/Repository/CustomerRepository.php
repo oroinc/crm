@@ -3,12 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Order;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CustomerRepository extends ChannelAwareEntityRepository
 {

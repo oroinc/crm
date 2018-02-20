@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Tests\Unit\EventListener;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
@@ -12,6 +10,7 @@ use Oro\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestDirectionProvider;
 use Oro\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestTarget;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ActivityListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
-use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use Oro\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
+use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
+use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Component\DependencyInjection\ServiceLink;
 
 class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase

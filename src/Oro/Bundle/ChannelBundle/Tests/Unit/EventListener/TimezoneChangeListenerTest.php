@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Oro\Component\MessageQueue\Client\Message;
-use Oro\Component\MessageQueue\Client\MessagePriority;
 use Oro\Bundle\ChannelBundle\Async\Topics;
 use Oro\Bundle\ChannelBundle\EventListener\TimezoneChangeListener;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\MessageQueueBundle\Test\Unit\MessageQueueExtension;
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessagePriority;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {

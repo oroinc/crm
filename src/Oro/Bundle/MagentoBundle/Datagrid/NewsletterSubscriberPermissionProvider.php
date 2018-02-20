@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Datagrid;
 
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {

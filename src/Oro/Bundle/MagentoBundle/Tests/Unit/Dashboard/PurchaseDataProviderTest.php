@@ -3,13 +3,11 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Dashboard;
 
 use DateTime;
-
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
 {

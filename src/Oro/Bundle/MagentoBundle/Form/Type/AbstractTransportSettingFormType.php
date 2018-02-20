@@ -2,20 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
-use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractTransportSettingFormType extends AbstractType
 {

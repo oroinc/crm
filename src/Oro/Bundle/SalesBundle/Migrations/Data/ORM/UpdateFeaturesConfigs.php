@@ -2,16 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\Type;
-
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Types\Type;
 use Oro\Bundle\ConfigBundle\Config\GlobalScopeManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class UpdateFeaturesConfigs extends AbstractFixture implements ContainerAwareInterface
 {

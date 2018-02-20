@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ActivityContactBundle\Placeholder;
 
-use Oro\Bundle\ActivityListBundle\Placeholder\PlaceholderFilter as BasePlaceholder;
 use Oro\Bundle\ActivityContactBundle\Model\TargetExcludeList;
+use Oro\Bundle\ActivityListBundle\Placeholder\PlaceholderFilter as BasePlaceholder;
 
 class PlaceholderFilter extends BasePlaceholder
 {

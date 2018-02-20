@@ -3,10 +3,9 @@
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Extension;
 
 use Oro\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension;
-
+use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 
 class EmbeddedFormTypeExtensionTest extends FormIntegrationTestCase
 {

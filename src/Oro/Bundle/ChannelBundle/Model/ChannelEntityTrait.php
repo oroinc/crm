@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Model;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 trait ChannelEntityTrait
 {

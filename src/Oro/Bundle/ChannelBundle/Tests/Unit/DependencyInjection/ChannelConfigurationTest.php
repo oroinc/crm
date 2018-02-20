@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Component\Config\CumulativeResourceManager;
 use Oro\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
 use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;
+use Oro\Component\Config\CumulativeResourceManager;
 
 class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
 {

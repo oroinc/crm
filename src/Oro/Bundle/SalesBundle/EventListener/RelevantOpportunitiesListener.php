@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\SalesBundle\EventListener;
 
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Provider\Opportunity\DisplaySettingsConfigProvider;
 use Oro\Bundle\UIBundle\Event\BeforeViewRenderEvent;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class RelevantOpportunitiesListener
 {

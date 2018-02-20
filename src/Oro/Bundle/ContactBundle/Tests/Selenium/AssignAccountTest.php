@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class AssignAccountTest

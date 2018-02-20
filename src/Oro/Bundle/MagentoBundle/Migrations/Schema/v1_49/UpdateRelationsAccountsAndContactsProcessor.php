@@ -3,14 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_49;
 
 use Doctrine\DBAL\Connection;
-
+use Oro\Bundle\EntityBundle\ORM\NativeQueryExecutorHelper;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-
-use Oro\Bundle\EntityBundle\ORM\NativeQueryExecutorHelper;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 
 class UpdateRelationsAccountsAndContactsProcessor implements MessageProcessorInterface
 {

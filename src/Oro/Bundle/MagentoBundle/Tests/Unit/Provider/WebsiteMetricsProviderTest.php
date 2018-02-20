@@ -3,8 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\MagentoBundle\Provider\TrackingCustomerIdentificationEvents as TCI;
-use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 use Oro\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider;
+use Oro\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteMetricsProvider;
 
 class WebsiteMetricsProviderTest extends \PHPUnit_Framework_TestCase

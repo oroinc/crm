@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Type;
 
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
 class OpportunityApiType extends OpportunityType
 {

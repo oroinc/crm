@@ -4,11 +4,9 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LoadChannelData extends AbstractFixture
 {

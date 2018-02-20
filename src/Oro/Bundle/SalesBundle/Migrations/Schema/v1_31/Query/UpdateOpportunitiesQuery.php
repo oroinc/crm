@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31\Query;
 
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Psr\Log\LoggerInterface;
 
 class UpdateOpportunitiesQuery extends ParametrizedMigrationQuery
 {

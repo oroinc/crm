@@ -2,23 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
-use FOS\RestBundle\Util\Codes;
-
 use Doctrine\ORM\EntityManager;
-
-use Psr\Log\NullLogger;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
-
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
+use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Test\FakeRestClient;
 use Oro\Bundle\IntegrationBundle\Test\FakeRestResponse;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
-use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
+use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Psr\Log\NullLogger;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class RestTokenProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,6 @@ namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\EventListener\ORM\RefreshChannelCacheListener;
 use Oro\Bundle\ChannelBundle\Provider\StateProvider;

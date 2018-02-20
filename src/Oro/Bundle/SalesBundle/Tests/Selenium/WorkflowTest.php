@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Selenium\Sales;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
 use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesHelperTrait;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
  * Class WorkflowTest

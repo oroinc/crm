@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContactExtension extends \Twig_Extension
 {

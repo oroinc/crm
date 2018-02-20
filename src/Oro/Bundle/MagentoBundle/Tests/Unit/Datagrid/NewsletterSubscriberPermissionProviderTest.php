@@ -2,15 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
-use Oro\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
 {

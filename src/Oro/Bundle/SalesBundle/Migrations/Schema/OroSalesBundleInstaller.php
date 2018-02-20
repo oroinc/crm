@@ -15,7 +15,6 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtension;
 use Oro\Bundle\MigrationBundle\Migration\Extension\RenameExtensionAwareInterface;
-use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Migration\Extension\CustomerExtensionAwareInterface;
@@ -27,6 +26,7 @@ use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadInheritance;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_25\AddLeadAddressTable;
 use Oro\Bundle\SalesBundle\Migrations\Schema\v1_29\AddCustomersTable;
+use Oro\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)

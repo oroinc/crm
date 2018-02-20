@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
+use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
-use Oro\Bundle\MagentoBundle\Form\EventListener\CartApiFormSubscriber;
 
 class CartApiType extends AbstractType
 {

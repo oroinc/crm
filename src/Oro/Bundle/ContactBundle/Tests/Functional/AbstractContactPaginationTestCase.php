@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Functional;
 
-use Symfony\Component\DomCrawler\Crawler;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class AbstractContactPaginationTestCase extends WebTestCase
 {

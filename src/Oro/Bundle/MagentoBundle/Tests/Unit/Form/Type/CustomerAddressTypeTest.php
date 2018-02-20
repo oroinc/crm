@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\FormBuilder;
-
 use Oro\Bundle\MagentoBundle\Form\Type\CustomerAddressType;
+use Symfony\Component\Form\FormBuilder;
 
 class CustomerAddressTypeTest extends \PHPUnit_Framework_TestCase
 {

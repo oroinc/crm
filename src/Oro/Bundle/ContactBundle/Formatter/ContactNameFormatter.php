@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Formatter;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 
 class ContactNameFormatter
 {

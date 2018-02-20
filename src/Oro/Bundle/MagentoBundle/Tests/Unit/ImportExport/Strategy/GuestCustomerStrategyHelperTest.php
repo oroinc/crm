@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
-use Oro\Component\Testing\Unit\EntityTrait;
-
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Entity\Order;
-use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Oro\Component\Testing\Unit\EntityTrait;
 
 class GuestCustomerStrategyHelperTest extends \PHPUnit_Framework_TestCase
 {

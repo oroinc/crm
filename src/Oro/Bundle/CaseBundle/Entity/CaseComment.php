@@ -3,10 +3,9 @@
 namespace Oro\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\CaseBundle\Model\ExtendCaseComment;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity()

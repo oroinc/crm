@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\EventListener;
 
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Listener for grid "magento-customers-group-by-channel-grid".

@@ -3,16 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Provider\Transport;
 
 use FOS\RestBundle\Util\Codes;
-
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\PingableInterface;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
-use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\FactoryInterface as RestClientFactoryInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestResponseInterface;
+use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\MagentoBundle\Converter\Rest\ResponseConverterManager;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
@@ -21,11 +17,13 @@ use Oro\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
 use Oro\Bundle\MagentoBundle\Model\OroBridgeExtension\Config;
-use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\BaseMagentoRestIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Rest\LoadableRestIterator;
+use Oro\Bundle\MagentoBundle\Provider\RestTokenProvider;
 use Oro\Bundle\MagentoBundle\Provider\Transport\Provider\OroBridgeExtensionConfigProvider;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

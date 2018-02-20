@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Placeholder;
 
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class RFMAwareFilter
 {

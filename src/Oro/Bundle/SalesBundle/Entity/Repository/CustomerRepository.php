@@ -4,7 +4,6 @@ namespace Oro\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\SalesBundle\Entity\Customer;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;

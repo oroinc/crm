@@ -2,16 +2,14 @@
 
 namespace Oro\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
+use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
-use Oro\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {

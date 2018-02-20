@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Entity\Group;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ContactBundle\Entity\ContactAddress;
-use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)

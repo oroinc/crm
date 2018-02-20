@@ -3,7 +3,9 @@
 namespace Oro\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -11,10 +13,6 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
-use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountType extends AbstractType
 {

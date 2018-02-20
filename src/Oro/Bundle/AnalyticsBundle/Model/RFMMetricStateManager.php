@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\AnalyticsBundle\Model;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 class RFMMetricStateManager
 {

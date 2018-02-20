@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\AbstractType;
 
 class CartItemCollectionType extends AbstractType
 {

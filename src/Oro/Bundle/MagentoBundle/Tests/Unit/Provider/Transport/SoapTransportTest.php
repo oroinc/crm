@@ -2,22 +2,21 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Transport;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CartsBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerGroupSoapIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerSoapIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CustomerBridgeIterator;
 use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\NewsletterSubscriberBridgeIterator;
-use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\CreditMemoSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\OrderSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionBridgeIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\RegionSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\StoresSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Iterator\Soap\WebsiteSoapIterator;
+use Oro\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SoapTransportTest extends \PHPUnit_Framework_TestCase
 {

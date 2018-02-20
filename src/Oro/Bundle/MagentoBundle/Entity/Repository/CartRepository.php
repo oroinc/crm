@@ -4,14 +4,13 @@ namespace Oro\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedIdentityQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
+use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
-use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class CartRepository extends ChannelAwareEntityRepository

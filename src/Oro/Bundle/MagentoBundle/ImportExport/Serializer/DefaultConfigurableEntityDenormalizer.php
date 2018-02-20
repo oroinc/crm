@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\EntityBundle\Helper\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
+use Psr\Log\LoggerInterface;
 
 class DefaultConfigurableEntityDenormalizer implements DenormalizerInterface
 {

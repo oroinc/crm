@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Model;
 
-use Oro\Component\Config\Common\ConfigObject;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Component\Config\Common\ConfigObject;
 
 class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,23 +3,20 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
-
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartAddress;
 use Oro\Bundle\MagentoBundle\Entity\CartItem;
-use Oro\Bundle\MagentoBundle\Entity\Cart;
 use Oro\Bundle\MagentoBundle\Entity\CartStatus;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
-use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
+use Oro\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
 use Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\GuestCustomerStrategyHelper;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class CartStrategyTest extends AbstractStrategyTest
 {

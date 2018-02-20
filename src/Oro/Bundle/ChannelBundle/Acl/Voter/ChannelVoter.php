@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\ChannelBundle\Acl\Voter;
 
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\SecurityBundle\Acl\Voter\AbstractEntityVoter;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ChannelVoter extends AbstractEntityVoter
 {

@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\Type;
 
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
-use Oro\Bundle\MagentoBundle\Provider\MagentoChannelType;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 class CustomerChannelSelectType extends AbstractType
 {

@@ -3,12 +3,10 @@
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Oro\Bundle\AccountBundle\Form\Type\AccountType;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
-use Oro\Bundle\AccountBundle\Form\Type\AccountType;
 
 class AccountTypeTest extends \PHPUnit_Framework_TestCase
 {

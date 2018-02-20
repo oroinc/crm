@@ -4,27 +4,25 @@ namespace Oro\Bundle\SalesBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ChannelBundle\Builder\BuilderFactory;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\CurrencyBundle\Entity\MultiCurrency;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Entity\LeadEmail;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Oro\Bundle\SecurityBundle\Authentication\Token\OrganizationToken;
-
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareInterface
 {

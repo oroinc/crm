@@ -3,11 +3,10 @@
 namespace Oro\Bundle\ActivityContactBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroActivityContactBundle implements Migration
 {

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormEvents;
-
-use Oro\Bundle\MagentoBundle\Form\Type\CustomerType;
 
 class CustomerTypeTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,7 +4,6 @@ namespace Oro\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Oro\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Validator;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class ContactEmailDeleteValidator
 {

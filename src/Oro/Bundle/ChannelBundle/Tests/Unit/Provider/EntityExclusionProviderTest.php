@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\ChannelBundle\Provider\EntityExclusionProvider;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 class EntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
 {

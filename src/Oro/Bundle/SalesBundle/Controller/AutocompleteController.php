@@ -2,18 +2,16 @@
 
 namespace Oro\Bundle\SalesBundle\Controller;
 
+use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
+use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolation;
-
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SalesBundle\Autocomplete\CustomerSearchHandler;
-use Oro\Bundle\FormBundle\Model\AutocompleteRequest;
 
 /**
  * @Route("/sales")

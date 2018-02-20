@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 
-use Symfony\Component\PropertyAccess\PropertyPath;
-
-use Oro\Component\ConfigExpression\ContextAccessor;
 use Oro\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
+use Oro\Component\ConfigExpression\ContextAccessor;
+use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 {

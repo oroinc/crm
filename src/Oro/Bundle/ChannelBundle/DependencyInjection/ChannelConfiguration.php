@@ -3,7 +3,6 @@
 namespace Oro\Bundle\ChannelBundle\DependencyInjection;
 
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

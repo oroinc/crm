@@ -3,9 +3,8 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class RemoveOpportunityStatusFK implements Migration, OrderedMigrationInterface

@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Symfony\Component\DomCrawler\Form;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
+use Symfony\Component\DomCrawler\Form;
 
 class OpportunityControllersTest extends AbstractDatagridTestCase
 {
@@ -97,12 +96,12 @@ class OpportunityControllersTest extends AbstractDatagridTestCase
         return $name;
     }
 
-     /**
-     * @param string $name
-     * @depends testCreate
-     *
-     * @return string
-     */
+    /**
+    * @param string $name
+    * @depends testCreate
+    *
+    * @return string
+    */
     public function testUpdate($name)
     {
         $response = $this->client->requestGrid(

@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
-use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
 class GuestCustomerStrategyHelper
 {

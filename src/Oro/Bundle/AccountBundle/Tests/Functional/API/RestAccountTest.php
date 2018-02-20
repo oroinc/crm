@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Functional\API;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class RestAccountTest extends WebTestCase
 {

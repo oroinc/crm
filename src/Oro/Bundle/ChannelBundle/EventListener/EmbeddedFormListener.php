@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\EventListener;
 
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
 use Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class EmbeddedFormListener

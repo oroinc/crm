@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Oro\Bundle\ContactBundle\Model\Social;
+use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 {

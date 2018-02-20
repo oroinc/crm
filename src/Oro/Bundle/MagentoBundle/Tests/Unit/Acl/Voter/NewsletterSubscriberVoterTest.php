@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-
-use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use Oro\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter;
+use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
 {

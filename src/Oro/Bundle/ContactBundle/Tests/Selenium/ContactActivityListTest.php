@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Call;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 class ContactActivityListTest extends Selenium2TestCase
 {

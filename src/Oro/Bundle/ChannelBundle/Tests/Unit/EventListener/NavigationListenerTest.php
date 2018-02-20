@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Knp\Menu\MenuItem;
 use Knp\Menu\MenuFactory;
-
-use Oro\Component\Config\Resolver\ResolverInterface;
-use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Knp\Menu\MenuItem;
 use Oro\Bundle\ChannelBundle\EventListener\NavigationListener;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
+use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
+use Oro\Component\Config\Resolver\ResolverInterface;
 
 class NavigationListenerTest extends \PHPUnit_Framework_TestCase
 {

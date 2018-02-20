@@ -2,12 +2,10 @@
 
 namespace Oro\Bundle\SalesBundle\Model;
 
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SalesBundle\Entity\Lead;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ChangeLeadStatus
 {

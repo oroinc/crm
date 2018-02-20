@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\MagentoBundle\Form\Type\TransportCheckButtonType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TransportCheckButtonTypeTest extends \PHPUnit_Framework_TestCase
 {

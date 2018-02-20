@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\ChannelBundle\Provider;
 
-use Symfony\Component\Routing\RouterInterface;
-
-use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Symfony\Component\Routing\RouterInterface;
 
 class MetadataProvider implements MetadataProviderInterface
 {

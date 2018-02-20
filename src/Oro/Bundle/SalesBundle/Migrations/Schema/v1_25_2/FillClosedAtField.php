@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_25_2;
 
-use Psr\Log\LoggerInterface;
-
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-
+use Oro\Bundle\MigrationBundle\Exception\UnsupportedDatabasePlatformException;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
-use Oro\Bundle\MigrationBundle\Exception\UnsupportedDatabasePlatformException;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Psr\Log\LoggerInterface;
 
 class FillClosedAtField extends ParametrizedMigrationQuery
 {

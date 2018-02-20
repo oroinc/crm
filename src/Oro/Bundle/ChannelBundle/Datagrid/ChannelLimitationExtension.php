@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ChannelBundle\Datagrid;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-
-use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 
 class ChannelLimitationExtension extends AbstractExtension

@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Extension;
 
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IntegrationTypeExtension extends AbstractTypeExtension

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
-use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
-use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
-
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\ChannelBundle\Provider\RequestChannelProvider;
+use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

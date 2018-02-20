@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Analytics;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
 {

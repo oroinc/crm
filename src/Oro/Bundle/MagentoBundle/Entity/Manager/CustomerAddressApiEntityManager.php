@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Entity\Manager;
 
 use Doctrine\ORM\QueryBuilder;
-
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\MagentoBundle\Entity\Address;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class CustomerAddressApiEntityManager extends ApiEntityManager
 {

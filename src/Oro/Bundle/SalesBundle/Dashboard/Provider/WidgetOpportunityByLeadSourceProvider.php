@@ -2,14 +2,13 @@
 
 namespace Oro\Bundle\SalesBundle\Dashboard\Provider;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Provides chart data for 'Opportunity By Lead Source' dashboard widget

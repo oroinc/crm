@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Provider;
 
-use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
-
 use Oro\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use Oro\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
 class LeadActionsAccessProvider
 {

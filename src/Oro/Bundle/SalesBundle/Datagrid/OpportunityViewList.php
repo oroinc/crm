@@ -3,9 +3,9 @@
 namespace Oro\Bundle\SalesBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Entity\GridView;
+use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
-use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
 
 class OpportunityViewList extends AbstractViewsList
 {

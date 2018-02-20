@@ -2,17 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Form\Type;
 
-use Symfony\Component\Form\FormView;
+use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
+use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
-use Oro\Bundle\ChannelBundle\Provider\SettingsProvider;
-use Oro\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelType extends AbstractType
 {

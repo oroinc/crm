@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
+use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
-use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class AclContactTest extends Selenium2TestCase
 {

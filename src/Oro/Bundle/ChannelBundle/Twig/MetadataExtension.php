@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Oro\Bundle\ChannelBundle\Provider\MetadataProviderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MetadataExtension extends \Twig_Extension
 {

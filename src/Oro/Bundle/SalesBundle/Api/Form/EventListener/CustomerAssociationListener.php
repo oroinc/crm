@@ -3,18 +3,16 @@
 namespace Oro\Bundle\SalesBundle\Api\Form\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
-
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ApiBundle\Form\FormUtil;
+use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
+use Oro\Bundle\SecurityBundle\Form\FieldAclHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
-
-use Oro\Bundle\ApiBundle\Form\FormUtil;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\SalesBundle\Entity\Customer;
-use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
-use Oro\Bundle\SecurityBundle\Form\FieldAclHelper;
 
 /**
  * The form event listener responsible for save the customer association related fields.

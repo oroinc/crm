@@ -3,9 +3,8 @@
 namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Oro\Bundle\AddressBundle\Migrations\Data\ORM\LoadCountryData;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadMagentoCountryData extends LoadCountryData implements ContainerAwareInterface
 {

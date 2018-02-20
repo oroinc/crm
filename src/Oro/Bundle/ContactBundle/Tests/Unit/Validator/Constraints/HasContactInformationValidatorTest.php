@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\Validator\Constraints;
 
-use Symfony\Component\Validator\ExecutionContextInterface;
-
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformation;
 use Oro\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 class HasContactInformationValidatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,10 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Migrations\Schema\v1_31;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ActivityListBundle\Helper\ActivityInheritanceTargetsHelper;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
@@ -16,6 +12,8 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class UpdateInheritanceActivityTargets implements
     ActivityListExtensionAwareInterface,

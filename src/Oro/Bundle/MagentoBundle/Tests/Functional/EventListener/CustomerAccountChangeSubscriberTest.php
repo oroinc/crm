@@ -3,11 +3,10 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\EventListener;
 
 use Doctrine\ORM\EntityManager;
-
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\MagentoBundle\Entity\Customer as MagentoCustomer;
 use Oro\Bundle\SalesBundle\Entity\Customer;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CustomerAccountChangeSubscriberTest extends WebTestCase
 {

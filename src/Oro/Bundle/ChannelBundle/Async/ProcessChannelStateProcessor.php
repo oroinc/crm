@@ -1,11 +1,11 @@
 <?php
 namespace Oro\Bundle\ChannelBundle\Async;
 
+use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Bundle\ChannelBundle\Provider\StateProvider;
 
 class ProcessChannelStateProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {

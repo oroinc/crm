@@ -3,15 +3,12 @@
 namespace Oro\Bundle\ChannelBundle\Entity\Repository;
 
 use Carbon\Carbon;
-
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
-
-use Symfony\Component\Security\Core\Util\ClassUtils;
-
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
+use Symfony\Component\Security\Core\Util\ClassUtils;
 
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {

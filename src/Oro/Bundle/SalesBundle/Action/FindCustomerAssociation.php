@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\SalesBundle\Action;
 
-use Symfony\Component\PropertyAccess\PropertyPathInterface;
-
 use Oro\Bundle\SalesBundle\Entity\Manager\AccountCustomerManager;
 use Oro\Component\Action\Action\AbstractAction;
 use Oro\Component\Action\Exception\InvalidParameterException;
 use Oro\Component\ConfigExpression\ContextAccessor;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 class FindCustomerAssociation extends AbstractAction
 {

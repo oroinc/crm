@@ -5,11 +5,11 @@ namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
 use Oro\Bundle\MagentoBundle\Form\EventListener\ConnectorsFormSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
+use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 use Oro\Bundle\MagentoBundle\Form\EventListener\SharedEmailListSubscriber;
 use Oro\Bundle\MagentoBundle\Form\Type\RestTransportSettingFormType;
-use Oro\Bundle\MagentoBundle\Form\EventListener\IsDisplayOrderNotesSubscriber;
 use Oro\Bundle\MagentoBundle\Provider\Transport\RestTransport;
-use Oro\Bundle\MagentoBundle\Form\EventListener\SettingsFormSubscriber;
 
 class RestTransportSettingFormTypeTest extends \PHPUnit_Framework_TestCase
 {

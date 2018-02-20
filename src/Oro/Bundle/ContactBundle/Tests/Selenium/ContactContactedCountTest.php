@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
-use Oro\Bundle\EmailBundle\Tests\Selenium\Pages\Email;
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Call;
 use Oro\Bundle\CallBundle\Tests\Selenium\Pages\Calls;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\EmailBundle\Tests\Selenium\Pages\Email;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 class ContactContactedCountTest extends Selenium2TestCase
 {

@@ -2,36 +2,34 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\Select2Type;
-
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Validator\Validator;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
-use Symfony\Component\Form\PreloadedExtension;
-use Symfony\Component\Validator\DefaultTranslator;
-use Symfony\Component\Form\Test\FormIntegrationTestCase;
-use Symfony\Component\Validator\Mapping\Loader\LoaderChain;
-use Symfony\Component\Validator\ConstraintValidatorFactory;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
-use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
-use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
-
-use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
-use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
-use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
-use Oro\Bundle\FormBundle\Form\Extension\TooltipFormExtension;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
-use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationTypeSelectType;
-use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
-use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
-use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
 use Oro\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension;
+use Oro\Bundle\ChannelBundle\Form\Type\ChannelDatasourceType;
+use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
+use Oro\Bundle\FormBundle\Form\Extension\TooltipFormExtension;
+use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
+use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
+use Oro\Bundle\FormBundle\Form\Type\Select2Type;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Form\EventListener\ChannelFormSubscriber;
 use Oro\Bundle\IntegrationBundle\Form\EventListener\DefaultOwnerSubscriber;
+use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
+use Oro\Bundle\IntegrationBundle\Form\Type\IntegrationTypeSelectType;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SettingsProvider;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
+use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
+use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\FormIntegrationTestCase;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Validator\ConstraintValidatorFactory;
+use Symfony\Component\Validator\DefaultTranslator;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\LoaderChain;
+use Symfony\Component\Validator\Validator;
 
 class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 {

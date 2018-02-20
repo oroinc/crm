@@ -3,11 +3,10 @@
 namespace Oro\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\SalesBundle\Model\ExtendCustomer;
 
 /**
  * @ORM\Table("orocrm_sales_customer")

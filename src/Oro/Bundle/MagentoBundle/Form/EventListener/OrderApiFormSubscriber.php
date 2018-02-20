@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\Form\EventListener;
 
+use Oro\Bundle\MagentoBundle\Entity\Order;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-
-use Oro\Bundle\MagentoBundle\Entity\Order;
 
 class OrderApiFormSubscriber implements EventSubscriberInterface
 {

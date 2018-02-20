@@ -2,11 +2,10 @@
 
 namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
+use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-
-use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
 
 class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 {

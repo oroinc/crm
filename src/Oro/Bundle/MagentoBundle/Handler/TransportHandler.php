@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\MagentoBundle\Handler;
 
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\TransportCacheClearInterface;
+use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
+use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Oro\Bundle\MagentoBundle\Provider\ConnectorChoicesProvider;
+use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use Oro\Bundle\MagentoBundle\Provider\TransportEntityProvider;
 use Oro\Bundle\MagentoBundle\Provider\WebsiteChoicesProvider;
-use Oro\Bundle\IntegrationBundle\Utils\MultiAttemptsConfigTrait;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use Oro\Bundle\MagentoBundle\Entity\MagentoTransport;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 

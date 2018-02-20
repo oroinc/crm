@@ -2,12 +2,10 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Converter;
 
+use Doctrine\Common\Util\Inflector;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use ReflectionClass;
 use ReflectionProperty;
-
-use Doctrine\Common\Util\Inflector;
-
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 class AttributesConverterHelper
 {

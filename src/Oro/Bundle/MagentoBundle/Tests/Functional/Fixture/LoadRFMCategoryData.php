@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
-use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use Oro\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Oro\Bundle\ChannelBundle\Entity\Channel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {

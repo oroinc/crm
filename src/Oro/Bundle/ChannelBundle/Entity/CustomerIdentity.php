@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\ChannelBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use Oro\Bundle\ChannelBundle\Model\ExtendCustomerIdentity;
-
-use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity()

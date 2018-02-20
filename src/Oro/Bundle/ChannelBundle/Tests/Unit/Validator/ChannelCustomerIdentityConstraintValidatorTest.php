@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Validator;
 
-use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
 use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraint;
+use Oro\Bundle\ChannelBundle\Validator\ChannelCustomerIdentityConstraintValidator;
 
 class ChannelCustomerIdentityConstraintValidatorTest extends \PHPUnit_Framework_TestCase
 {

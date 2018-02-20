@@ -2,13 +2,11 @@
 
 namespace Oro\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper;
 
-use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-
-use Symfony\Component\Security\Core\Util\ClassUtils;
-
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use Symfony\Component\Security\Core\Util\ClassUtils;
 
 class DoctrineHelper
 {

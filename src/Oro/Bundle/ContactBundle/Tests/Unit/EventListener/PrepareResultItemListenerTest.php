@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Unit\EventListener;
 
+use Doctrine\Common\Persistence\ObjectRepository;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
+use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Oro\Bundle\ContactBundle\Formatter\ContactNameFormatter;
-use Oro\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
-use Doctrine\Common\Persistence\ObjectRepository;
 
 class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,10 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\MagentoBundle\Model\ExtendCartItem;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\MagentoBundle\Model\ExtendCartItem;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * Class CartItem

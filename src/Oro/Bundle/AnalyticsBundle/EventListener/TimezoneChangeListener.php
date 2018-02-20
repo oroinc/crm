@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\AnalyticsBundle\EventListener;
 
-use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Oro\Bundle\AnalyticsBundle\Service\CalculateAnalyticsScheduler;
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListener
 {

@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\AccountBundle\ImportExport\TemplateFixture;
 
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use Oro\Bundle\AccountBundle\Entity\Account;
 
 class AccountFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {

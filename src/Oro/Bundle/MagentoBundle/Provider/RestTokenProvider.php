@@ -2,22 +2,19 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
-
 use FOS\RestBundle\Util\Codes;
-
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Client\RestClientInterface;
 use Oro\Bundle\IntegrationBundle\Provider\Rest\Exception\RestException;
 use Oro\Bundle\MagentoBundle\Entity\MagentoRestTransport;
-use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
+use Oro\Bundle\MagentoBundle\Exception\RuntimeException;
 use Oro\Bundle\MagentoBundle\Utils\ValidationUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class RestTokenProvider implements LoggerAwareInterface
 {

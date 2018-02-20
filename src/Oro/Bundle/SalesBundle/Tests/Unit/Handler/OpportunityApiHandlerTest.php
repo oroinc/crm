@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Doctrine\ORM\EntityManager;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\SalesBundle\Entity\Opportunity;

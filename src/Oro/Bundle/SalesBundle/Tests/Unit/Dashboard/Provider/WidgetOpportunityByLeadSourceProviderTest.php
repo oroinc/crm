@@ -3,15 +3,13 @@
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
 use Oro\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestCase
 {

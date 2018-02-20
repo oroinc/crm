@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\Autocomplete;
 
+use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
-use Oro\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 
 class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,9 +3,9 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Model;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class NewsletterSubscriberManagerTest extends WebTestCase
 {

@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Form\Handler;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\SalesBundle\Entity\SalesFunnel;
 use Symfony\Component\Form\FormInterface;
-
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

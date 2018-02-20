@@ -2,13 +2,12 @@
 
 namespace Oro\Bundle\MagentoBundle\Provider\Iterator;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
-
 use Oro\Bundle\MagentoBundle\Entity\Website;
 use Oro\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use Oro\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

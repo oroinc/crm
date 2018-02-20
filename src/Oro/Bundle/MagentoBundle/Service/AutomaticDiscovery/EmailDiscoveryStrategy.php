@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Component\DoctrineUtils\ORM\QueryBuilderUtil;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 

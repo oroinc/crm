@@ -2,10 +2,9 @@
 
 namespace Oro\Bundle\SalesBundle\Tests\Unit\Builder;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-
 use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SalesBundle\Builder\OpportunityRelationsBuilder;
 use Oro\Bundle\SalesBundle\Entity\B2bCustomer;
 use Oro\Bundle\SalesBundle\Tests\Unit\Fixture\CustomerStub;

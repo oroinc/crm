@@ -3,7 +3,6 @@
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Oro\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use Oro\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use Oro\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;

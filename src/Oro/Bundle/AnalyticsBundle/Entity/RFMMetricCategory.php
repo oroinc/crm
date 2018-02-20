@@ -3,10 +3,9 @@
 namespace Oro\Bundle\AnalyticsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Oro\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")

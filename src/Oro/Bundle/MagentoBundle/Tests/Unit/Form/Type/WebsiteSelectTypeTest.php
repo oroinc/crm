@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Oro\Bundle\MagentoBundle\Form\Type\WebsiteSelectType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WebsiteSelectTypeTest extends \PHPUnit_Framework_TestCase
 {

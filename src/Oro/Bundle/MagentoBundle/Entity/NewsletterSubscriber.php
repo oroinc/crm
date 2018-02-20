@@ -3,13 +3,12 @@
 namespace Oro\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\ChannelBundle\Model\ChannelAwareInterface;
-use Oro\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 
 /**
  * @ORM\Entity

@@ -2,17 +2,16 @@
 
 namespace Oro\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
-use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
-use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
+use Doctrine\ORM\UnitOfWork;
 use Oro\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
-use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
+use Oro\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use Oro\Bundle\MagentoBundle\Entity\Customer as CustomerEntity;
+use Oro\Bundle\SalesBundle\Entity\Repository\CustomerRepository;
+use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
 {

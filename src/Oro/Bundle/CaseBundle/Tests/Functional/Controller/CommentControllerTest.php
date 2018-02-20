@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\CaseBundle\Tests\Functional\Controller;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\CaseBundle\Entity\CaseComment;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 class CommentControllerTest extends WebTestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Tests\Selenium;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 class CreateContactTest extends Selenium2TestCase
 {

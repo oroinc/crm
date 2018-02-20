@@ -2,17 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-use Oro\Bundle\UserBundle\Entity\UserManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\MagentoBundle\Entity\Customer;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\UserBundle\Entity\UserManager;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadCustomerContact extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {

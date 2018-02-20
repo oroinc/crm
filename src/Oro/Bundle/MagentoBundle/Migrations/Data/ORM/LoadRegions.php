@@ -2,15 +2,13 @@
 
 namespace Oro\Bundle\MagentoBundle\Migrations\Data\ORM;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-
-use Oro\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\MagentoBundle\Entity\Region;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LoadRegions extends AbstractFixture implements ContainerAwareInterface
 {

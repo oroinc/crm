@@ -4,7 +4,6 @@ namespace Oro\Bundle\ContactUsBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-
 use Oro\Bundle\ContactUsBundle\Entity\ContactReason;
 
 class ContactReasonRepository extends EntityRepository

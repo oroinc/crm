@@ -2,16 +2,15 @@
 
 namespace Oro\Bundle\MagentoBundle\Migrations\Schema\v1_50;
 
+use Oro\Bundle\EntityBundle\ORM\NativeQueryExecutorHelper;
+use Oro\Bundle\WorkflowBundle\Async\Topics;
+use Oro\Bundle\WorkflowBundle\Entity\ProcessJob;
+use Oro\Bundle\WorkflowBundle\Model\ProcessLogger;
 use Oro\Component\MessageQueue\Client\Message;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-
-use Oro\Bundle\EntityBundle\ORM\NativeQueryExecutorHelper;
-use Oro\Bundle\WorkflowBundle\Async\Topics;
-use Oro\Bundle\WorkflowBundle\Entity\ProcessJob;
-use Oro\Bundle\WorkflowBundle\Model\ProcessLogger;
 
 class ScheduleStuckedJobsProcessor implements MessageProcessorInterface
 {
