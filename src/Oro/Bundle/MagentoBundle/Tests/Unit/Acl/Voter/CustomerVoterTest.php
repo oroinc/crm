@@ -2,21 +2,33 @@
 
 namespace Oro\Bundle\MagentoBundle\Tests\Unit\Acl\Voter;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\MagentoBundle\Acl\Voter\CustomerVoter;
 use Oro\Bundle\MagentoBundle\Entity\Customer;
+use Oro\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
+class CustomerVoterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
+     */
+    private $doctrineHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelSettingsProvider
+     */
+    private $settingsProvider;
+
     /**
      * @var CustomerVoter
      */
-    protected $voter;
+    private $voter;
 
     protected function setUp()
     {
-        parent::setUp();
-
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
+        $this->settingsProvider = $this->createMock(ChannelSettingsProvider::class);
         $this->voter = new CustomerVoter($this->doctrineHelper);
         $this->voter->setSettingsProvider($this->settingsProvider);
     }

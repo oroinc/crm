@@ -45,54 +45,6 @@ class ChannelVoterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $class
-     * @param string $actualClass
-     * @param bool $expected
-     * @dataProvider supportsClassDataProvider
-     */
-    public function testSupportsClass($class, $actualClass, $expected)
-    {
-        $this->voter->setClassName($actualClass);
-
-        $this->assertEquals($expected, $this->voter->supportsClass($class));
-    }
-
-    /**
-     * @return array
-     */
-    public function supportsClassDataProvider()
-    {
-        return [
-            'supported class' => ['stdClass', 'stdClass', true],
-            'not supported class' => ['NotSupportedClass', 'stdClass', false]
-        ];
-    }
-
-    /**
-     * @param string $attribute
-     * @param bool $expected
-     * @dataProvider supportsAttributeDataProvider
-     */
-    public function testSupportsAttribute($attribute, $expected)
-    {
-        $this->assertEquals($expected, $this->voter->supportsAttribute($attribute));
-    }
-
-    /**
-     * @return array
-     */
-    public function supportsAttributeDataProvider()
-    {
-        return [
-            'VIEW' => ['VIEW', false],
-            'CREATE' => ['CREATE', true],
-            'EDIT' => ['EDIT', false],
-            'DELETE' => ['DELETE', true],
-            'ASSIGN' => ['ASSIGN', false]
-        ];
-    }
-
-    /**
      * @param object $object
      * @param string $className
      * @param array $attributes
