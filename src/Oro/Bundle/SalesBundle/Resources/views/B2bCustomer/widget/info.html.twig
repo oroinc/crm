@@ -17,15 +17,12 @@
                 {% set accountView = UI.renderEntityViewLabel(entity.account, 'name') %}
             {%- endif -%}
             {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.account.label'|trans, accountView) }}
-
-            {%- if is_granted('oro_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
-            {%- else -%}
-                {% set contactView = entity.contact ? entity.contact : '' %}
-            {%- endif -%}
             {{ UI.renderHtmlProperty('oro.contact.phones.label'|trans, entity.phones.count ? sales.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ UI.renderHtmlProperty('oro.contact.emails.label'|trans, entity.emails.count ? sales.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
-            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.contact.label'|trans, contactView) }}
+            {{ UI.renderHtmlProperty(
+                'oro.sales.b2bcustomer.contact.label'|trans,
+                UI.entityViewLink(entity.contact, entity.contact ? entity.contact|oro_format_name : '', 'oro_contact_view')
+            ) }}
 
             {% if entity.billingAddress is not empty %}
                 {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(entity.billingAddress)) }}

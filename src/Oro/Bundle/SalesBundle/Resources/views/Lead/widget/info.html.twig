@@ -23,13 +23,10 @@
                 {{ channel.renderChannelProperty(entity, 'oro.sales.lead.data_channel.label') }}
             {% endif %}
 
-            {%- if is_granted('oro_contact_view') and entity.contact -%}
-                {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name|escape ~ '</a>' %}
-            {%- else -%}
-                {% set contactView = entity.contact ? entity.contact : '' %}
-            {%- endif -%}
-
-            {{ ui.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
+            {{ ui.renderHtmlProperty(
+                'oro.sales.lead.contact.label'|trans,
+                ui.entityViewLink(entity.contact, entity.contact ? entity.contact|oro_format_name : '', 'oro_contact_view')
+            ) }}
             {{ ui.renderProperty('oro.sales.lead.job_title.label'|trans, entity.jobTitle) }}
 
             {%- set opportunitiesData -%}

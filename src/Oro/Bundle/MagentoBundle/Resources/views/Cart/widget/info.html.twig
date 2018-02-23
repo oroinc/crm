@@ -38,7 +38,7 @@
                 {{ ui.renderHtmlProperty('oro.magento.cart.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
             {% if entity.notes is not empty %}
-                {{ ui.renderHtmlProperty('oro.magento.cart.notes.label'|trans, entity.notes) }}
+                {{ ui.renderHtmlProperty('oro.magento.cart.notes.label'|trans, entity.notes|oro_html_sanitize) }}
             {% endif %}
         </div>
     </div>

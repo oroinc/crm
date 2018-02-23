@@ -6,19 +6,15 @@
 {% set customer_general_info %}
     <div class="row-fluid">
         <br>
-        {% set customer_name_link %}
-            <a href="{{ path('oro_sales_b2bcustomer_view', {'id':customer.id}) }}">
-                {{ customer.name|escape }}
-            </a>
-        {% endset %}
-        {%- if is_granted('oro_contact_view') and customer.contact -%}
-            {% set contactView = '<a href="' ~ path('oro_contact_view', {'id': customer.contact.id}) ~ '">' ~ customer.contact|oro_format_name|escape ~ '</a>' %}
-        {%- else -%}
-            {% set contactView = customer.contact ? customer.contact|oro_format_name : '' %}
-        {%- endif -%}
         <div class="responsive-block">
-            {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.name.label'|trans, customer_name_link) }}
-            {{ UI.renderHtmlProperty('oro.sales.lead.contact.label'|trans, contactView) }}
+            {{ UI.renderHtmlProperty(
+                'oro.sales.b2bcustomer.name.label'|trans,
+                UI.entityViewLink(customer, customer.name, 'oro_sales_b2bcustomer_view')
+            ) }}
+            {{ UI.renderHtmlProperty(
+                'oro.sales.lead.contact.label'|trans,
+                UI.entityViewLink(customer.contact, customer.contact|oro_format_name, 'oro_contact_view')
+            ) }}
         </div>
         <div class="responsive-block">
             {{ UI.renderHtmlProperty('oro.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress)) }}

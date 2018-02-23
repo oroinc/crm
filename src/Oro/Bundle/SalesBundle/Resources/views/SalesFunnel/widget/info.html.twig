@@ -6,25 +6,15 @@
         <div class="responsive-block">
             {{ ui.renderProperty('oro.sales.salesfunnel.start_date.label'|trans, entity.startDate|oro_format_date) }}
 
-            {%- if entity.lead and is_granted('VIEW', entity.lead) -%}
-                {% set leadView = ui.renderUrl(
-                    path('oro_sales_lead_view', {'id': entity.lead.id}),
-                    entity.lead.name)
-                %}
-            {%- else -%}
-                {% set leadView = entity.lead ? entity.lead.name : '' %}
-            {%- endif -%}
-            {{ ui.renderHtmlProperty('oro.sales.salesfunnel.lead.label'|trans, leadView) }}
+            {{ ui.renderHtmlProperty(
+                'oro.sales.salesfunnel.lead.label'|trans,
+                ui.entityViewLink(entity.lead, entity.lead ? entity.lead.name : null, 'oro_sales_lead_view')
+            ) }}
 
-            {%- if entity.opportunity and is_granted('VIEW', entity.opportunity) -%}
-                {% set opportunityView = ui.renderUrl(
-                    path('oro_sales_opportunity_view', {'id': entity.opportunity.id}),
-                    entity.opportunity.name)
-                %}
-            {%- else -%}
-                {% set opportunityView = entity.opportunity ? entity.opportunity.name : '' %}
-            {%- endif -%}
-            {{ ui.renderHtmlProperty('oro.sales.salesfunnel.opportunity.label'|trans, opportunityView) }}
+            {{ ui.renderHtmlProperty(
+                'oro.sales.salesfunnel.opportunity.label'|trans,
+                ui.entityViewLink(entity.opportunity, entity.opportunity ? entity.opportunity.name : null, 'oro_sales_opportunity_view')
+            ) }}
         </div>
     </div>
 </div>
