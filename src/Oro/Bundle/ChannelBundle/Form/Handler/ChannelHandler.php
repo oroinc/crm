@@ -78,9 +78,8 @@ class ChannelHandler
             return;
         }
 
-        $channelType = $this->requestStack
-            ->getCurrentRequest()
-            ->get(sprintf('%s[channelType]', ChannelType::NAME), null, true);
+        $formData = $this->requestStack->getCurrentRequest()->get(ChannelType::NAME);
+        $channelType = $formData['channelType'] ?? null;
 
         if (!$channelType) {
             return;
